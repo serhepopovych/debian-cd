@@ -63,7 +63,7 @@ libc6.1-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -186,7 +186,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -315,7 +315,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -501,7 +501,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -680,7 +680,7 @@ libc6.1-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -865,7 +865,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -1054,7 +1054,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -1188,7 +1188,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -1372,7 +1372,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -1558,7 +1558,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb
@@ -1693,7 +1693,7 @@ libc6-udeb
 libcrypto0.9.7-udeb
 libdebian-installer-extra4-udeb
 libdebian-installer4-udeb
-libdevmapper1.00-udeb
+libdevmapper1.01-udeb
 libdirectfb-0.9-20-udeb
 libiw27-udeb
 libnss-dns-udeb

@@ -93,6 +93,8 @@ debian-cd (2.2.21) unstable; urgency=low
     - Also make the README link to the manual on the Debian web site if
       OMIT_MANUAL=1.
     - Update the README to mention manual translations are available.
+    - libdevmapper1.00 renamed to libdevmapper1.01, update debian-installer
+      task. Closes: #298724
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
     - add ramdisk_size=16384 to palo call in post-boot-hppa 
