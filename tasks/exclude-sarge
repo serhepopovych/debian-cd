@@ -131,9 +131,15 @@ kernel-pcmcia-modules-2.4.28-1-586tsc
 kernel-pcmcia-modules-2.4.28-1-k6
 kernel-pcmcia-modules-2.4.28-1-k7
 kernel-pcmcia-modules-2.4.28-1-k7-smp
+kernel-headers-2.4.27-1-k7
+kernel-headers-2.4.27-1-k6
+kernel-headers-2.4.27-1-586tsc
+kernel-headers-2.4.27-1-k7-smp
 python2.1
 smail
 tcl8.0
 tk8.0
+exim
 xserver-xfree86-dbg
 zmailer
+xmail

@@ -22,7 +22,6 @@ cupsys-client
 exim4
 gnome-desktop-environment
 jfbterm
-kde
 language-env
 locales
 manpages-de
@@ -46,3 +45,11 @@ xfonts-thai
 xiterm+thai
 zhcon
 t1-cyrillic
+kde-core
+kdeadmin
+kdeartwork
+kdegraphics
+kdemultimedia
+kdenetwork
+kdeutils
+kdepim

@@ -27,6 +27,14 @@ gnome-desktop-environment
 hspell-gui
 imhangul
 imhangul-status-applet
+kde-core
+kdeadmin
+kdeartwork
+kdegraphics
+kdemultimedia
+kdenetwork
+kdeutils
+kdepim
 kde
 kde-i18n-ca
 kde-i18n-da
@@ -175,7 +183,6 @@ samba-doc
 smbclient
 smbfs
 swat
-libecpg4
 pgaccess
 postgresql
 postgresql-client
@@ -210,6 +217,7 @@ kde-i18n-ca
 koffice-i18n-ca
 language-env
 mozilla-locale-ca
+mozilla-xft
 myspell-ca
 openoffice.org-l10n-ca
 util-linux-locales

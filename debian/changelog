@@ -5,6 +5,9 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
     - Add network-console-config to forcd1 since it's needed by the
       network-console udeb. Closes: #279238
+    - Exclude xmail from CD1 (new MTA), and exim (old MTA)
+    - Exclude some kernel-headers with no matching kernel-images from CD1.
+    - Update task lists to reflect tasksel changes.
   * Steve McIntyre
     - Substantially updated update-cd:
        - Cope with Woody r3 updates taking more than 1 CD per
