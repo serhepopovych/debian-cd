@@ -12,6 +12,8 @@ debian-cd (2.2.9) unstable; urgency=low
   * Synced tasks/base-woody with debootstrap 0.1.15.8.
     Closes: #119099
   * Add kludgy yaboot.conf for potato's broken yaboot.
+  * ia64, only first disk is bootable, and use symlinks in /install
+    to save space.  rescue.bin is 10MB on ia64.  (Richard Hirst)
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Sep 2001 14:57:22 +0200
 

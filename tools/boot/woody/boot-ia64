@@ -13,28 +13,21 @@ BOOTDIR=
 
 cd $CDDIR/..
 
-#
-# This script is called with $1 (now $N) as the CD to 
-# make bootable.  N may be in the form "n" or "n_NONUS"
-# There may be more than 4 disks...support extras.
+# Only disc 1 bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then 
+	echo "-J" > $N.mkisofs_opts
+	exit 0; 
+fi
 
-# Put boot images on CD1...CD(N)
-#
-:> $N.mkisofs_opts
 mkdir -p boot$N/boot
 cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin boot$N/boot/
 echo -n "-no-emul-boot -J -b boot/rescue.bin -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
 
-# Only disk one gets the extra files installed
-#
-if [ $N == "1" ] ; then
-
-# populate the install directory as well
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -f images-1.44/resc*.bin $CDDIR/install ; \
-	cp -f linux $CDDIR/install/linux ; \
-	cp -f root.bin $CDDIR/install )
-
-fi
+# populate the install directory as well, with symlinks to save space
+# rescue.bin is 10MB on ia64
+(cd CD1/install; \
+	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin . ; \
+	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/linux . ; \
+	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/root.bin . )
 
 # th,th, thats all
