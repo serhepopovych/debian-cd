@@ -294,11 +294,7 @@ expect5.24-dev: Tasks: Admin,  Profiles: Admin,
 exuberant-ctags: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
 f2c: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
 fakeroot: Tasks: Debian,  Profiles: Admin, Devel_comp, 
-[POWERPC:
-[M68K:
 fbset: Tasks:  Profiles: Admin,
-:M68K]
-:POWERPC]
 [I386:
 [ALPHA:
 fdflush: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
