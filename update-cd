@@ -13,13 +13,13 @@
 MIRROR=${MIRROR:-/mirror/debian}
 
 # If you have a non-US mirror, where is it? Leave blank if you don't have one.
-NONUS=${NONUS:-$MIRROR/non-US}
+NONUS=${NONUS:-/mirror/debian-non-US}
 
 # Do you want non-free? 1 for yes, 0 for no
-NONFREE=1
+NONFREE=0
 
 # What release version is this?
-VER=3.0r1
+VER=3.0r2
 
 # Path to use with mkisofs/mkhybrid
 MKISOFS=${MKISOFS:-"mkhybrid"}
@@ -31,12 +31,12 @@ TDIR=/mirror/debian-cd
 CODENAME=woody
 
 # Path where the images will be written
-OUT=/mirror/debian-cd
+OUT=/mirror/woody-update/r2
 
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/mirror/lists/$CODENAME/r0-r1.diff #~/r2.diff
+DIFF=/mirror/lists/$CODENAME/r0-r2.diff #~/r2.diff
 
 REL=Debian"$VER"
 CLOG=dists/$CODENAME/ChangeLog
@@ -133,8 +133,8 @@ create_control_files () {
                     mkdir -p $CDDIR/dists/$CODENAME/$SECT/binary-$ARCH
                     mkdir -p $CDDIR/dists/$CODENAME/non-US/$SECT/binary-$ARCH
                 done
-                ARCH=$ARCH $scanpackages scan $CDDIR >/dev/null 2>&1
-                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR >/dev/null 2>&1
+                ARCH=$ARCH $scanpackages scan $CDDIR > /dev/null 2>&1
+                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR > /dev/null 2>&1
                 rm -f $CDDIR/*.Packages* #>/dev/null 2>&1
                 ;;
         esac
@@ -154,7 +154,7 @@ if [ -e $DIFF ] ; then
 	egrep -e \\.deb$ $UPD/list >$UPD/bin-list
 	egrep -e \\.gz$ -e \\.dsc$ $UPD/list >$UPD/src-list
 else
-	egrep -e ^dists.*\\.deb$ $CLOG >$UPD/bin-list
+	egrep -e \\.deb$ $CLOG >$UPD/bin-list
 	egrep -e \\.gz$ -e \\.dsc$ $CLOG >$UPD/src-list
 fi
 if [ "$NONFREE"x != "1"x ] ; then
@@ -171,10 +171,10 @@ if [ "$NONUS"x != ""x ] ; then
 	if [ -e $DIFF ] ; then
 		grep non-US $DIFF >$UPD/nu-list
 		egrep -e \\.deb$ $UPD/nu-list >$UPD/bin-nu-list
-		egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $UPD/nu-list >$UPD/src-nu-list
+		egrep -e \\.gz$ -e \\.dsc$ $UPD/nu-list >$UPD/src-nu-list
 	else
-		egrep -e ^dists.*\\.deb$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/bin-nu-list
-		egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/src-nu-list
+		egrep -e \\.deb$ $NUCLOG | sed 's?^stable?dists/woody?g' > $UPD/bin-nu-list
+		egrep -e \\.gz$ -e \\.dsc$ $NUCLOG | sed 's?^stable?dists/woody?g' > $UPD/src-nu-list
 	fi
 
 	if [ "$NONFREE"x != "1"x ] ; then
