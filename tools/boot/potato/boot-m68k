@@ -66,6 +66,9 @@ cd $CDDIR/install
 # Tools
 cp $DISKSROOT/rawrite2.exe $CDDIR/install
 cp $DISKSROOT/rawwrite.ttp $CDDIR/install
+wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg.readme -O dmesg.readme
+wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg        -O dmesg
+chmod a+x dmesg
 
 for TYPE in amiga atari bvme6000 mac mvme16x
 do
