@@ -119,13 +119,11 @@ export ISOLINUX=1
 # the proper official CD run does not work
 #ATTEMPT_FALLBACK=yes
 
-# Set the default sizes of the images we want to create, in MB
-# Use these for CD
-export DEFSRCSIZE=640
+# Set your disk size here in MB. Used in calculating package and
+# source file layouts in build.sh and build_all.sh. Defaults are for
+# CD-R, try ~4600 for DVD-R.
 export DEFBINSIZE=630
-# Use these for DVD
-#export DEFSRCSIZE=4600
-#export DEFBINSIZE=4600
+export DEFSRCSIZE=635
 
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE="$BASEDIR"/tasks/exclude-potato
