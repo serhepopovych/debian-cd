@@ -76,7 +76,7 @@ initrd-tools
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-ia64/Packages |tail -n 4 \
+  $MIRROR/dists/$CODENAME/main/binary-ia64/Packages | grep 2.4 | tail -n 4 \
   >> debian-installer+kernel
 
 cat >> debian-installer+kernel << EOF
