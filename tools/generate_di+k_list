@@ -37,6 +37,7 @@ wireless-tools
 xfsprogs
 jfsutils
 reiserfsprogs
+libfribidi0
 #ifdef ARCH_i386
 discover
 discover1
