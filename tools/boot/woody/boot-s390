@@ -24,6 +24,7 @@ CDDIR=$2
 cd $CDDIR/..
 
 if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
+	echo "-J" > $N.mkisofs_opts
 	exit 0
 fi
 
@@ -116,4 +117,4 @@ EOF
 
 # include boot$N/-tree into iso-image
 
-echo -n "boot$N "  >> $N.mkisofs_opts
+echo -n "-J boot$N "  >> $N.mkisofs_opts
