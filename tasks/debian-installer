@@ -601,10 +601,7 @@ fat-modules-2.4.25-amiga-di
 fbset-udeb
 hw-detect-full
 ipv6-modules-2.2.25-mac-di
-<<<<<<< debian-installer
 ipv6-modules-2.4.25-amiga-di
-=======
->>>>>>> 1.13
 iso-3166-udeb
 jfs-modules-2.4.25-amiga-di
 jfsutils-udeb
