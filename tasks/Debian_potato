@@ -27,6 +27,20 @@ task-sgml-dev
 task-tcltk
 task-fortran
 task-objc-dev
+task-database-pg
+task-news-server
+task-x-window-system-core
+task-x-window-system
+task-dns-server
+task-imap
+task-science
+task-python
+task-python-dev
+task-python-bundle
+task-python-web
+task-tcltk-dev
+task-parallel-computing-node
+task-parallel-computing-dev
 
 /* Well I don't know if task for specific countries should be included
    on the first CD ... 
@@ -34,6 +48,7 @@ task-objc-dev
 */
    
 task-german
+task-spanish
 task-chinese-s
 task-chinese-t
 task-japanese

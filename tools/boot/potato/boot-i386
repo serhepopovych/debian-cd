@@ -18,20 +18,18 @@ BOOTDIR=
 
 cd $CDDIR/..
 
-# There's no more tecra disk in Debian potato
-# Tecra image for disk 2
-#if [ $N == 2 ]; then
-#	:> 2.mkisofs_opts
-#	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/resc1440tecra.bin ] 
-#	then
-#		mkdir -p boot2/boot
-#		cp 1/dists/$CODENAME/main/disks-$ARCH/current/resc1440tecra.bin \
-#			boot2/boot
-#		echo -n "-J -b boot/resc1440tecra.bin -c boot/boot.catalog boot2" \
-#		        > 2.mkisofs_opts
-#	fi
-#	exit 0;
-#fi
+# Compact image for disk 2
+if [ $N == 2 ]; then
+	:> 2.mkisofs_opts
+	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/disks-2.88/compact/rescue.bin ] 
+	then
+	  mkdir -p boot2/boot
+	  cp 1/dists/$CODENAME/main/disks-$ARCH/current/disks-2.88/compact/rescue.bin boot2/boot/
+	  echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot2" \
+		        > 2.mkisofs_opts
+	fi
+	exit 0;
+fi
 
 # Disks != 1 and not 2
 if [ $N != 1 ]; then 
@@ -51,7 +49,6 @@ echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
 
 mkdir -p boot1/boot
 
-#cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/resc2880.bin boot1/boot
 cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/disks-2.88/rescue.bin boot1/boot
 
 

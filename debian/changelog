@@ -1,5 +1,6 @@
 debian-cd (2.1.92) unstable; urgency=low
 
+  * Make the second CD bootable on i386 with the "compact" image.
   * Changes to installtools.sh, change to check for documentation
     directory name by $ARCH.
     -> This change will have to be removed when all arch will have synced
