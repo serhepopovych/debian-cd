@@ -1,0 +1,12 @@
+project
+doc
+README.*
+dists/potato/main/source/admin
+dists/potato/main/source/base
+dists/potato/main/source/comm
+dists/potato/main/source/devel
+dists/potato/main/source/doc
+dists/potato/main/source/editors
+dists/potato/main/source/electronics
+dists/potato/main/source/games
+dists/potato/main/source/graphics

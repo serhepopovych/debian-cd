@@ -1,0 +1,5 @@
+doc
+README.*
+dists/potato/non-free/binary-ARCH
+dists/potato/non-free/binary-all
+dists/potato/non-free/source

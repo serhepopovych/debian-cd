@@ -1,8 +1,10 @@
 #!/bin/bash
-# slink_cd v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# debian_cd v pre1.14 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
 # Released under GPL 31 Mar 1999
 # See the file COPYING for license details
 # Greatly influenced by the older Makefile system in the Hamm debian-cd package
+#
+# Changes for using $CODENAME (C) 1999 Jens Ritter <grimaldi@debian.org>
 #
 ##############################################################################
 #
@@ -11,8 +13,16 @@
 ##############################################################################
 
 # Version number, to be used later
-SLINKCD_VERSION=1.13
-SLINKCD_SITE="http://www.chiark.greenend.org.uk/~stevem/DebianCD/"
+DEBIANCD_VERSION=pre1.14
+DEBIANCD_SITE="http://cvs.debian.org/cgi-bin/cvs-web/debian-boot/debian-cd/"
+
+# For which branch of the ftp archive do you want to generate images?
+# Note: This two do have to correspond with your mirror!!  
+#       In addition CODENAME determines which master config file 
+#       subdirectory is used, when generating the file lists of the CDs.
+
+CODENAME=${CODENAME:-potato}
+CODENAME_STATUS=${CODENAME_STATUS:-unstable} 
 
 ###########################################################################
 # Default options - we check for these in the environment first, so it
@@ -22,10 +32,10 @@ SLINKCD_SITE="http://www.chiark.greenend.org.uk/~stevem/DebianCD/"
 # environment appropriately, then calls this for each architecture,
 # something like:
 # 
-# ARCH=i386 TDIR=~/i386-tmp OUT=~/i386-out ./slink_cd <options>
-# ARCH=m68k TDIR=~/m68k-tmp OUT=~/m68k-out ./slink_cd <options>
-# ARCH=alpha TDIR=~/alpha-tmp OUT=~/alpha-out ./slink_cd <options>
-# ARCH=sparc TDIR=~/sparc-tmp OUT=~/sparc-out ./slink_cd <options>
+# ARCH=i386 TDIR=~/i386-tmp OUT=~/i386-out ./debian_cd <options>
+# ARCH=m68k TDIR=~/m68k-tmp OUT=~/m68k-out ./debian_cd <options>
+# ARCH=alpha TDIR=~/alpha-tmp OUT=~/alpha-out ./debian_cd <options>
+# ARCH=sparc TDIR=~/sparc-tmp OUT=~/sparc-out ./debian_cd <options>
 #
 # It's not pretty but it should work... (TM) :-) - look at the included 
 # "arch" script for an example.
@@ -59,15 +69,23 @@ MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -F -T"} # For sym-link farmers.
 
 # TDIR must be on the same partition as the mirror for hard links trick 
 # to work
-TDIR=${TDIR:-~stevem/slinkcd}
+TDIR=${TDIR:-/mnt/mirror/jens/potatocd}
 
 # Target directory for output ISO images
-OUT=${OUT:-$MIRROR/local/images}
+OUT=${OUT:-/mnt/mirror/jens/images}
 
 # Sparc (maybe other?) boot directory from where to grab the SILO boot loader
 BOOTDIR=${BOOTDIR:-/boot}
 
 . $BASEDIR/vecho # Local definitions for vecho, vvecho, vvvecho
+
+
+# I patch dpkg-scanpackages to ignore zero length files, 
+# because I don't mirror slink any more (only potato). I have a script 
+# which touches every file a symlink from potato points to (in slink). 
+# By changing only one line in dpkg-scanpackages I am able to generate 
+# potato only cds.  
+SCANPACKAGES=${SCANPACKAGES:-$BASEDIR/dpkg-scanpackages}
 
 # Default debug level
 VERBOSE=0
@@ -264,10 +282,10 @@ vecho SINGLE_DISK=$SINGLE_DISK
 
 # Sort out non-US link - this should be done better...
 if [ "$NU"x = "1"x ] ; then
-	vecho Checking for non-US link in $MIRROR/dists/slink
-    if [ ! -L $MIRROR/dists/slink/non-US -a ! -d $MIRROR/dists/slink/non-US ] ; then
+	vecho Checking for non-US link in $MIRROR/dists/$CODENAME
+    if [ ! -L $MIRROR/dists/$CODENAME/non-US -a ! -d $MIRROR/dists/$CODENAME/non-US ] ; then
 		vecho "Does not exist; trying to make one"
-        (cd $MIRROR/dists/slink && ln -s $NONUS/dists/slink/non-US >/dev/null 2>&1 ) # Redirect errors - people may have a read-only mirror...
+        (cd $MIRROR/dists/$CODENAME && ln -s $NONUS/dists/$CODENAME/non-US >/dev/null 2>&1 ) # Redirect errors - people may have a read-only mirror...
     fi
 fi
 
@@ -431,58 +449,58 @@ if [ $error -eq 0 ] ; then
 fi	
 
 vecho "Making working copies of config files, converting ARCH to $ARCH"
-if [ -e $TDIR/slink1.list ] ; then
+if [ -e $TDIR/cd1.list ] ; then
     vecho "You already appear to have them. I therefore assume the ones in"
     vecho "$TDIR are correct and I will leave them alone. If you"
-    vecho "want to generate new ones, delete the file \"slink1.list\" in"
+    vecho "want to generate new ones, delete the file \"cd1.list\" in"
     vecho "$TDIR and try again."
 else
     for i in $DISKLIST
     do
         for TYPE in list info volid extras optional
         do
-			if [ -e slink$i.$TYPE ] ; then
-				vecho "    slink$i.$TYPE"
-				cat slink$i.$TYPE | sed "s/ARCH/$ARCH/g" >$TDIR/slink$i.$TYPE
+			if [ -e $CODENAME/cd$i.$TYPE ] ; then
+				vecho "    cd$i.$TYPE"
+				cat $CODENAME/cd$i.$TYPE | sed "s/ARCH/$ARCH/g" >$TDIR/cd$i.$TYPE
 			fi
         done
     done
 	vecho "    mkisofsrc"
 	cat mkisofsrc | sed "s/ARCH/$ARCH/g" >$TDIR/.mkisofs
 	ln -s .mkisofs $TDIR/.mkisofsrc
-	vecho "    slink1.needed" 
+	vecho "    cd1.needed" 
 	slice master
 	if [ $? -gt 0 ] ; then
 		echo "\"slice master\" failed - do you have the slice package installed?"
 		echo Exit.
 		exit 1
 	fi
-	echo "# Do not edit this file - it is automatically generated." >$TDIR/slink1.needed
-	echo "# Edit \"master\" instead." >>$TDIR/slink1.needed
+	echo "# Do not edit this file - it is automatically generated." >$TDIR/cd1.needed
+	echo "# Edit \"master\" instead." >>$TDIR/cd1.needed
 	cat master.$ARCH | awk -F':' '
 	/Packages:/ {packages++; next} 
 	/.+.+/      {if(packages) {print $1}}
-	' |sort |uniq >>$TDIR/slink1.needed
+	' |sort |uniq >>$TDIR/cd1.needed
 	rm master.*
 
-	vecho "    slink1.useful" 
+	vecho "    cd1.useful" 
 	slice useful
 	if [ $? -gt 0 ] ; then
 		echo "\"slice useful\" failed - do you have the slice package installed?"
 		echo Exit.
 		exit 1
 	fi
-	echo "# Do not edit this file - it is automatically generated." >$TDIR/slink1.useful
-	echo "# Edit \"useful\" instead." >>$TDIR/slink1.useful
+	echo "# Do not edit this file - it is automatically generated." >$TDIR/cd1.useful
+	echo "# Edit \"useful\" instead." >>$TDIR/cd1.useful
 	cat useful.$ARCH | awk -F':' '
 	/.+.+/      {print $1}
-	' |sort |uniq >>$TDIR/slink1.useful
+	' |sort |uniq >>$TDIR/cd1.useful
 	rm useful.*
 
 	# Check for non-US entries in these files - if we mention it then fix it...
 	if [ "$NU"x != "1"x ] ; then
 		vecho "non-US option not given, so removing non-US references from file lists"
-		for file in $TDIR/slink*.list
+		for file in $TDIR/cd*.list
 		do
 			mv $file $file.1
 			vecho "    $file"
@@ -494,13 +512,14 @@ fi
 if [ $error -eq 0 ] ; then
     if [ "$GENLIST"x = "1"x ] ; then
 		echo GENLIST:
-        $BASEDIR/mklist "$MIRROR" "$BASEDIR" "$TDIR" "$ARCH" "$VERBOSE"
+        $BASEDIR/mklist "$MIRROR" "$BASEDIR" "$TDIR" "$ARCH" "$CODENAME" \
+                        "$CODENAME_STATUS" "$SCANPACKAGES" "$VERBOSE" 
         
         cd $TDIR
 
         # Now combine the lists
-		if [ ! -e slink1.list ] ; then
-			echo mklist step failed - $TDIR/slink1.list not found
+		if [ ! -e cd1.list ] ; then
+			echo mklist step failed - $TDIR/cd1.list not found
 			echo Exit.
 			exit 1
 		fi
@@ -509,15 +528,15 @@ if [ $error -eq 0 ] ; then
 			echo Exit.
 			exit 1
 		fi
-        mv slink1.list slink1.list.orig
-        cat slink1.list.orig | grep -v main/binary- >slink1.list
-        cat list/OUT1 | sed 's/dists\/frozen/dists\/slink/g;s/dists\/stable/dists\/slink/g' >>slink1.list
-        rm slink1.list.orig
+        mv cd1.list cd1.list.orig
+        cat cd1.list.orig | grep -v main/binary- >cd1.list
+        cat list/OUT1 | sed 's/dists\/frozen/dists\/$CODENAME/g;s/dists\/$CODENAME_STATUS/dists\/$CODENAME/g' >>cd1.list
+        rm cd1.list.orig
 
 		if [ "$SINGLE_DISK"x != "1"x ] ; then
 			# Now combine the lists
-			if [ ! -e slink2.list ] ; then
-				echo mklist step failed - $TDIR/slink2.list not found
+			if [ ! -e cd2.list ] ; then
+				echo mklist step failed - $TDIR/cd2.list not found
 				echo Exit.
 				exit 1
 			fi
@@ -526,10 +545,10 @@ if [ $error -eq 0 ] ; then
 				echo Exit.
 				exit 1
 			fi
-			mv slink2.list slink2.list.orig
-			cat slink2.list.orig | grep -v main/binary- >slink2.list
-			cat list/OUT2 | sed 's/dists\/frozen/dists\/slink/g;s/dists\/stable/dists\/slink/g' >>slink2.list
-			rm slink2.list.orig
+			mv cd2.list cd2.list.orig
+			cat cd2.list.orig | grep -v main/binary- >cd2.list
+			cat list/OUT2 | sed "s/dists\/frozen/dists\/$CODENAME/g;s/dists\/$CODENAME_STATUS/dists\/$CODENAME/g" >>cd2.list
+			rm cd2.list.orig
 	    fi
     fi
 fi	
@@ -545,14 +564,14 @@ if [ $error -eq 0 ] ; then
 		cp -pRs $MIRROR/dists $MIRROR/doc $MIRROR/README* $MIRROR/hamm $MIRROR/indices $MIRROR/ls* $MIRROR/project $MIRROR/tools .
 
 		# Copy non-US separately if necessary...
-		if [ -L $MIRROR/dists/slink/non-US ] ; then
+		if [ -L $MIRROR/dists/$CODENAME/non-US ] ; then
 			vecho Adding non-US
-			rm dists/slink/non-US
-			mkdir dists/slink/non-US
-			cp -dpRs $NONUS/slink/* dists/slink/non-US
+			rm dists/$CODENAME/non-US
+			mkdir dists/$CODENAME/non-US
+			cp -dpRs $NONUS/$CODENAME/* dists/$CODENAME/non-US
 		fi
 
-		cd dists/slink
+		cd dists/$CODENAME
 		vecho Putting binary-all links in
 		find . | $BASEDIR/mklinks $VERBOSE
 		MIRROR=$TDIR/tmp-mirror
@@ -570,45 +589,45 @@ if [ $error -eq 0 ] ; then
         do
 			vecho Disk $i
 			vecho "   Make directories"
-			mkdir -p $TDIR/slink$i/dists/slink
-			mkdir -p $TDIR/slink$i/.disk
+			mkdir -p $TDIR/$CODENAME$i/dists/$CODENAME
+			mkdir -p $TDIR/$CODENAME$i/.disk
 
 			# Oops. We're copying the dists stuff into the root
 			# directory, the boot-floppies install stuff wants it in
 			# /debian. Simple fix...
-			cd $TDIR/slink$i
+			cd $TDIR/$CODENAME$i
 			ln -s . debian 
 
 			# Set up symlinks so things may work.
 			cd dists 
-			ln -s slink stable 
+			ln -s $CODENAME $CODENAME_STATUS 
 #           Frozen no longer needed
-#			ln -s slink frozen
+#			ln -s $CODENAME frozen
 
-			cd stable 
 
 			cd $TDIR			
 			vecho "   Copy info file"
-			(cat slink$i.info | awk '{printf("%s",$0)}'; echo $DATE) \
-					>slink$i/.disk/info
+			(cat cd$i.info | awk '{printf("%s",$0)}'; echo $DATE) \
+					>$CODENAME$i/.disk/info
 			vecho "   Copy release notes"
-			cp $MIRROR/dists/slink/main/Release-Notes slink$i
+			cp $MIRROR/dists/$CODENAME/main/Release-Notes $CODENAME$i
 			vecho "   Copy README.1ST"
-			echo "This Debian CD was created by slink_cd version $SLINKCD_VERSION on $DATE" >slink$i/README.1ST
-			echo "slink_cd is available from $SLINKCD_SITE">>slink$i/README.1ST
-			echo "This disc is labelled" >>slink$i/README.1ST
-			echo "" >>slink$i/README.1ST
-			cat slink$i/.disk/info >>slink$i/README.1ST
+			echo "This Debian CD was created by debian_cd version $DEBIANCD_VERSION on $DATE" >$CODENAME$i/README.1ST
+			echo "debian_cd is available from $DEBIANCD_SITE">>$CODENAME$i/README.1ST
+			echo "This disc is labelled" >>$CODENAME$i/README.1ST
+			echo "" >>$CODENAME$i/README.1ST
+			cat $CODENAME$i/.disk/info >>$CODENAME$i/README.1ST
 			if [ -e $BASEDIR/README.multicd ] ; then
 				vecho "   Copy README.multicd"
-				cat $BASEDIR/README.multicd >>slink$i/README.multicd
+				cat $BASEDIR/README.multicd >>$CODENAME$i/README.multicd
 			fi
-			todos slink$i/README.1ST
+			todos $CODENAME$i/README.1ST
 			cd $MIRROR
 			vecho "   Create tree"
-			for file in `cat $TDIR/slink$i.list`
+			for file in `cat $TDIR/cd$i.list`
 			do 
-				cp -dpRPl $file $TDIR/slink$i
+			        vecho "cp -dpRPl $file $TDIR/$CODENAME$i"
+				cp -dpRPl $file $TDIR/$CODENAME$i
 			done
         done
 
@@ -621,17 +640,17 @@ if [ $error -eq 0 ] ; then
 			vecho "   Make binary directories"
 			for SECT in $SECTLIST
 			do
-				mkdir -p slink$i/dists/slink/$SECT/binary-$ARCH
-				mkdir -p slink$i/dists/slink/$SECT/binary-all
+				mkdir -p $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH
+				mkdir -p $CODENAME$i/dists/$CODENAME/$SECT/binary-all
 			done
 			vecho "   Finish README.1ST"
-			echo "" >>slink$i/README.1ST
+			echo "" >>$CODENAME$i/README.1ST
 			if [ -e $BASEDIR/README.1ST.$ARCH ] ; then
-				cat $BASEDIR/README.1ST.$ARCH >>slink$i/README.1ST
+				cat $BASEDIR/README.1ST.$ARCH >>$CODENAME$i/README.1ST
 			fi
 			if [ -e $BASEDIR/README.$ARCH ] ; then
 				vecho "   Copy README.$ARCH"
-				cat $BASEDIR/README.$ARCH >>slink$i/README.$ARCH
+				cat $BASEDIR/README.$ARCH >>$CODENAME$i/README.$ARCH
 			fi
         done
 
@@ -642,15 +661,15 @@ if [ $error -eq 0 ] ; then
 			vecho "   add Release files"
 			for SECT in $SECTLIST
 			do
-				if [ -e slink$i/dists/slink/$SECT/binary-$ARCH/Release ] ; then
-					rm -f slink$i/dists/slink/$SECT/binary-$ARCH/Release
+				if [ -e $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH/Release ] ; then
+					rm -f $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH/Release
 				fi
 				
-				if [ -d slink$i/dists/slink/$SECT/binary-$ARCH ] ; then
-					if [ -e slink$i/dists/slink/$SECT/binary-$ARCH/Release ] ; then
-						cat $MIRROR/dists/slink/$SECT/binary-$ARCH/Release \
+				if [ -d $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH ] ; then
+					if [ -e $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH/Release ] ; then
+						cat $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
 							| sed 's/frozen/stable/g' \
-							> slink$i/dists/slink/$SECT/binary-$ARCH/Release
+							> $CODENAME$i/dists/$CODENAME/$SECT/binary-$ARCH/Release
 					fi
 				fi
 			done
@@ -660,9 +679,9 @@ if [ $error -eq 0 ] ; then
 		if [ "$ARCH"x = "i386"x ] ; then
 			vecho "Disk 1"
 			vecho "   upgrade-2.0-i386"
-			(cd $TDIR/slink1 && ln -s dists/stable/main/upgrade-2.0-i386)
+			(cd $TDIR/cd1 && ln -s dists/$CODENAME_STATUS/main/upgrade-2.0-i386)
 			vecho "   upgrade-older-i386"
-			(cd $TDIR/slink1 && ln -s dists/stable/main/upgrade-older-i386)
+			(cd $TDIR/cd1 && ln -s dists/$CODENAME_STATUS/main/upgrade-older-i386)
 		fi
     fi
 fi
@@ -670,7 +689,7 @@ fi
 # Fix the crypt++el_2.84-2.deb brokenness in non-US - temporary workaround...
 if [ "$NU"x = "1"x ] ; then
 	vecho "Looking for broken crypt++el_2.84-2.deb link in non-US..."
-    cd $TDIR/slink2/dists/slink/non-US/binary-$ARCH
+    cd $TDIR/cd2/dists/$CODENAME/non-US/binary-$ARCH
 	if [ -L crypt++el_2.84-2.deb ] ; then
 	    link=`ls -l crypt++el_2.84-2.deb | awk '{print $11}'`
 		if [ "$link"x != "../binary-all/crypt++el_2.84-2.deb"x ] ; then
@@ -698,29 +717,29 @@ vecho Generating file list:
 vecho '   *.deb'
 for i in $BINLIST
 do
-	vecho "      slink$i"
-	find slink$i -name *.deb >>binary
+	vecho "      $CODENAME$i"
+	find $CODENAME$i -name *.deb >>binary
 done
 
 vecho '   *.tar.gz'
 for i in $DISKLIST
 do
-	vecho "      slink$i"
-	find slink$i -name *.tar.gz >>targz
+	vecho "      $CODENAME$i"
+	find $CODENAME$i -name *.tar.gz >>targz
 done
 
 vecho '   *.diff.gz'
 for i in $DISKLIST
 do
-	vecho "      slink$i"
-	find slink$i -name *.diff.gz >>diffgz
+	vecho "      $CODENAME$i"
+	find $CODENAME$i -name *.diff.gz >>diffgz
 done
 
 vecho '   *.dsc'
 for i in $DISKLIST
 do
-	vecho "      slink$i"
-	find slink$i -name *.dsc >>dsc
+	vecho "      $CODENAME$i"
+	find $CODENAME$i -name *.dsc >>dsc
 done
 
 # Now we need to flatten out links pointing outside the tree
@@ -743,7 +762,7 @@ if [ $error -eq 0 ] ; then
 		echo MD5CHECK:
         # First grab all the details from the appropriate Packages files
 		vecho Creating MD5 list of packages for comparison
-        cd $MIRROR/dists/slink
+        cd $MIRROR/dists/$CODENAME
 
 		# build the list of packages files to read (either compressed or not)
 		for SECT in $SECTLIST
@@ -884,31 +903,31 @@ if [ $error -eq 0 ] ; then
         for i in $BINLIST
         do
 			echo Creating Packages-main for disc $i
-			if [ ! -e $MIRROR/indices/override.slink.gz ] ; then
-				echo "Override file $MIRROR/indices/override.slink.gz not found. We cannot" 
+			if [ ! -e $MIRROR/indices/override.$CODENAME.gz ] ; then
+				echo "Override file $MIRROR/indices/override.$CODENAME.gz not found. We cannot" 
 				echo "generate our Packages file(s) without this file. Check you are mirroring the"
 				echo "indices/ directory"
 				echo "Exit."
 				exit 1
 			fi
-			(cd $TDIR/slink$i/dists/stable/main && \
-				dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
-				binary-$ARCH $MIRROR/indices/override.slink.gz \
-				dists/stable/main/ > $TDIR/Packages-main.$i)
+			(cd $TDIR/$CODENAME$i/dists/$CODENAME_STATUS/main && \
+				$SCANPACKAGES -m "`cat $TDIR/$CODENAME$i/.disk/info`" \
+				binary-$ARCH $MIRROR/indices/override.$CODENAME.gz \
+				dists/$CODENAME_STATUS/main/ > $TDIR/Packages-main.$i)
 
 			if [ "$SINGLE_DISK"x != "1"x ] ; then
 				echo Creating Packages-contrib for disc $i
-				if [ ! -e $MIRROR/indices/override.slink.contrib.gz ] ; then
-					echo "Override file $MIRROR/indices/override.slink.contrib.gz not found. We cannot" 
+				if [ ! -e $MIRROR/indices/override.$CODENAME.contrib.gz ] ; then
+					echo "Override file $MIRROR/indices/override.$CODENAME.contrib.gz not found. We cannot" 
 					echo "generate our Packages file(s) without this file. Check you are mirroring the"
 					echo "indices/ directory"
 					echo "Exit."
 					exit 1
 				fi
-				(cd $TDIR/slink$i/dists/stable/contrib && \
-					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
-					binary-$ARCH $MIRROR/indices/override.slink.contrib.gz \
-					dists/stable/contrib/ > $TDIR/Packages-contrib.$i)
+				(cd $TDIR/$CODENAME$i/dists/$CODENAME_STATUS/contrib && \
+					$SCANPACKAGES -m "`cat $TDIR/$CODENAME$i/.disk/info`" \
+					binary-$ARCH $MIRROR/indices/override.$CODENAME.contrib.gz \
+					dists/$CODENAME_STATUS/contrib/ > $TDIR/Packages-contrib.$i)
 			fi
 
 			if [ "$NU"x = "1"x ] ; then
@@ -918,14 +937,14 @@ if [ $error -eq 0 ] ; then
 				# $MIRROR/indices (and with a different filename!!!)
 				# Check for both in turn...
 				OVER_NU=/foo # default catch-all
-				if [ -e $NONUS/indices/override.slink.nonus ] ; then
-					OVER_NU=$NONUS/indices/override.slink.nonus
-				elif [ -e $NONUS/indices/override.slink.nonus.gz ] ; then
-					OVER_NU=$NONUS/indices/override.slink.nonus.gz
-				elif [ -e $MIRROR/indices/override.non-us.slink ] ; then
-					OVER_NU=$MIRROR/indices/override.non-us.slink
-				elif [ -e $MIRROR/indices/override.non-us.slink.gz ] ; then
-					OVER_NU=$MIRROR/indices/override.non-us.slink.gz
+				if [ -e $NONUS/indices/override.$CODENAME.nonus ] ; then
+					OVER_NU=$NONUS/indices/override.$CODENAME.nonus
+				elif [ -e $NONUS/indices/override.$CODENAME.nonus.gz ] ; then
+					OVER_NU=$NONUS/indices/override.$CODENAME.nonus.gz
+				elif [ -e $MIRROR/indices/override.non-us.$CODENAME ] ; then
+					OVER_NU=$MIRROR/indices/override.non-us.$CODENAME
+				elif [ -e $MIRROR/indices/override.non-us.$CODENAME.gz ] ; then
+					OVER_NU=$MIRROR/indices/override.non-us.$CODENAME.gz
 				fi
 				if [ ! -e "$OVER_NU" ] ; then
 					echo "Override file "$OVER_NU" not found. We cannot" 
@@ -934,31 +953,31 @@ if [ $error -eq 0 ] ; then
 					echo "Exit."
 					exit 1
 				fi
-				(cd $TDIR/slink$i/dists/stable/non-US && \
-					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
+				(cd $TDIR/$CODENAME$i/dists/$CODENAME_STATUS/non-US && \
+					$SCANPACKAGES -m "`cat $TDIR/$CODENAME$i/.disk/info`" \
 					binary-$ARCH $OVER_NU \
-					dists/stable/non-US/ > $TDIR/Packages-non-US.$i)
+					dists/$CODENAME_STATUS/non-US/ > $TDIR/Packages-non-US.$i)
 			fi
 
 			if [ "$NF"x = "1"x ] ; then
 				echo Creating Packages-non-free for disc $i
-				if [ ! -e $MIRROR/indices/override.slink.non-free.gz ] ; then
-					echo "Override file $MIRROR/indices/override.slink.non-free.gz not found. We cannot" 
+				if [ ! -e $MIRROR/indices/override.$CODENAME.non-free.gz ] ; then
+					echo "Override file $MIRROR/indices/override.$CODENAME.non-free.gz not found. We cannot" 
 					echo "generate our Packages file(s) without this file. Check you are mirroring the"
 					echo "indices/ directory"
 					echo "Exit."
 					exit 1
 				fi
-				(cd $TDIR/slink$i/dists/stable/non-free && \
-					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
-					binary-$ARCH $MIRROR/indices/override.slink.non-free.gz \
-					dists/stable/non-free/ > $TDIR/Packages-non-free.$i)
+				(cd $TDIR/$CODENAME$i/dists/$CODENAME_STATUS/non-free && \
+					$SCANPACKAGES -m "`cat $TDIR/$CODENAME$i/.disk/info`" \
+					binary-$ARCH $MIRROR/indices/override.$CODENAME.non-free.gz \
+					dists/$CODENAME_STATUS/non-free/ > $TDIR/Packages-non-free.$i)
 			fi
         done
 
 		echo "Checking dependencies"
 		echo "   CD #1"
-		>/tmp/foo
+#		>/tmp/foo
 		$BASEDIR/pkg-order --nocheck-conflicts --nooutput-order --installed-packages /tmp/foo $TDIR/Packages-main.1 >$TDIR/pkg-order.1 2>&1 
 		if [ $? -gt 0 ] ; then
 			echo "Dependencies of CD #1 cannot be met:"
@@ -1000,16 +1019,16 @@ if [ $error -eq 0 ] ; then
 			# First of all, create normal-type Packages files
 			for SECT in $SECTLIST
 			do
-				rm -f slink$i/dists/stable/$SECT/binary-$ARCH/Packages*
+				rm -f $CODENAME$i/dists/$CODENAME_STATUS/$SECT/binary-$ARCH/Packages*
 				cat Packages-$SECT.$i | \
 					grep -v ^X-Medium \
-					>slink$i/dists/stable/$SECT/binary-$ARCH/Packages
+					>$CODENAME$i/dists/$CODENAME_STATUS/$SECT/binary-$ARCH/Packages
 				cat Packages-$SECT.$i | grep -v ^X-Medium | \
-					gzip -9 >slink$i/dists/stable/$SECT/binary-$ARCH/Packages.gz
+					gzip -9 >$CODENAME$i/dists/$CODENAME_STATUS/$SECT/binary-$ARCH/Packages.gz
 			done
 			
 			# Now the Packages.cd files
-			vecho slink$i
+			vecho $CODENAME$i
 			
 			# Be slightly clever here - only copy Packages data for
 			# disc nos. less than or equal to the one we're on - disc
@@ -1026,16 +1045,16 @@ if [ $error -eq 0 ] ; then
 						if [ -e Packages-$SECT.$j ] ; then
 							vecho "   Packages-$SECT.$j"
 							cat Packages-$SECT.$j >> \
-								slink$i/dists/stable/$SECT/binary-$ARCH/Packages.cd
+								$CODENAME$i/dists/$CODENAME_STATUS/$SECT/binary-$ARCH/Packages.cd
 							cat Packages-$SECT.$j | gzip -9 >> \
-								slink$i/dists/stable/$SECT/binary-$ARCH/Packages.cd.gz
+								$CODENAME$i/dists/$CODENAME_STATUS/$SECT/binary-$ARCH/Packages.cd.gz
 						fi
 					done
 				fi
 			done
 
 			vecho "   Contents-$ARCH.gz"
-			cp -pl $MIRROR/dists/slink/Contents-$ARCH.gz slink$i/dists/stable
+			cp -pl $MIRROR/dists/$CODENAME/Contents-$ARCH.gz $CODENAME$i/dists/$CODENAME_STATUS
         done
     fi
 fi
@@ -1048,11 +1067,11 @@ if [ $error -eq 0 ] ; then
         vecho "Making bootable images for $ARCH..."
         cd $TDIR
 
-        mkdir -m 755 slink1/install
-        (cd slink1/dists/stable/main/disks-$ARCH/current/ ; \
-			cp *.txt *.html $TDIR/slink1/install )
+        mkdir -m 755 cd1/install
+        (cd cd1/dists/$CODENAME_STATUS/main/disks-$ARCH/current/ ; \
+			cp *.txt *.html $TDIR/cd1/install )
 
-		(cd slink1/doc; 
+		(cd cd1/doc; 
 			for file in ../install/*.{html,txt}; do	ln -s $file; done)
 
         # Hack for bootable disks
@@ -1080,7 +1099,7 @@ fi
 
 # define extra mkisofs flags for CD image creation
 # (this part cannot fit in the above section because it is not required to run
-# slink_cd with *both* BOOT & IMAGEx options enabled at one time)
+# debian_cd with *both* BOOT & IMAGEx options enabled at one time)
 cd $TDIR
 case "$ARCH"x in
 	"i386"x)
@@ -1095,10 +1114,10 @@ case "$ARCH"x in
 		if [ -d boot1 ]; then
 			MKISOFS_OPTS_DISC1="boot1"
 			# move install tree to correct location
-			if [ -d $TDIR/slink1/install ] ; then
+			if [ -d $TDIR/cd1/install ] ; then
 				vecho "Moving install to boot1"
 				rm -rf $TDIR/boot1/install || true
-				mv $TDIR/slink1/install $TDIR/boot1
+				mv $TDIR/cd1/install $TDIR/boot1
 			fi
 		fi
 		;;
@@ -1123,12 +1142,12 @@ if [ $error -eq 0 ] ; then
         cd $TDIR
         for i in $DISKLIST
         do
-			if [ -f $TDIR/slink$i.extras ] ; then
-				vecho "   slink$i extras:"
-				mkdir slink$i/extras
-				cp -R `cat $TDIR/slink$i.extras` slink$i/extras
+			if [ -f $TDIR/cd$i.extras ] ; then
+				vecho "   $CODENAME$i extras:"
+				mkdir $CODENAME$i/extras
+				cp -R `cat $TDIR/cd$i.extras` $CODENAME$i/extras
 			else
-				vecho "   slink$i has no extras"
+				vecho "   $CODENAME$i has no extras"
 			fi
         done
     fi
@@ -1140,9 +1159,9 @@ if [ $error -eq 0 ] ; then
         vecho "Generating md5sums for contents of each disk:"
         for i in $DISKLIST
         do
-			cd $TDIR/slink$i
+			cd $TDIR/$CODENAME$i
 			vecho "   Disk $i"
-			find . -follow -type f | grep -v "\./md5sum" | grep -v "/dists/stable" | xargs md5sum > md5sum.txt
+			find . -follow -type f | grep -v "\./md5sum" | grep -v "/dists/$CODENAME_STATUS" | xargs md5sum > md5sum.txt
 		done
 		# Generate some sizes here. Unfortunately no use at all if we're
 		# using a sym-link farm...
@@ -1169,53 +1188,53 @@ if [ $error -eq 0 ] ; then
 
     if [ "$IMAGE1"x = "1"x ] ; then
 		echo IMAGE1:
-		VOLID1=`cat $TDIR/slink1.volid`
-        vecho "Making image of slink1 to $OUT/slink1-$ARCH.raw"
+		VOLID1=`cat $TDIR/cd1.volid`
+        vecho "Making image of cd1 to $OUT/$(CODENAME)1-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/slink1-$ARCH.raw $MKISOFS_OPTS_DISC1 slink1 
+			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 cd1 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/slink1-$ARCH.raw $MKISOFS_OPTS_DISC1 slink1
+			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 cd1
     fi
 
     if [ "$IMAGE2"x = "1"x ] ; then
 		echo IMAGE2:
-		VOLID2=`cat $TDIR/slink2.volid`
-        vecho "Making image of slink2 to $OUT/slink2-$ARCH.raw"
+		VOLID2=`cat $TDIR/cd2.volid`
+        vecho "Making image of cd2 to $OUT/$(CODENAME)2-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/slink2-$ARCH.raw $MKISOFS_OPTS_DISC2 slink2
+	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 cd2
         $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/slink2-$ARCH.raw $MKISOFS_OPTS_DISC2 slink2
+	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 cd2
     fi
 
     if [ "$IMAGE3"x = "1"x ] ; then
 		echo IMAGE3:
-		VOLID3=`cat $TDIR/slink3.volid`
-        vecho "Making image of slink3 to $OUT/slink3.raw"
+		VOLID3=`cat $TDIR/cd3.volid`
+        vecho "Making image of cd3 to $OUT/$(CODENAME)3.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/slink3.raw $MKISOFS_OPTS_DISC3 slink3 
+	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 cd3 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/slink3.raw $MKISOFS_OPTS_DISC3 slink3
+	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 cd3
     fi
 
     if [ "$IMAGE4"x = "1"x ] ; then
 		echo IMAGE4:
-		VOLID4=`cat $TDIR/slink4.volid`
-        vecho "Making image of slink4 to $OUT/slink4.raw"
+		VOLID4=`cat $TDIR/cd4.volid`
+        vecho "Making image of cd4 to $OUT/$(CODENAME)4.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/slink4.raw $MKISOFS_OPTS_DISC4 slink4 
+	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 cd4 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/slink4.raw $MKISOFS_OPTS_DISC4 slink4
+	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 cd4
     fi
 
     if [ "$IMAGE5"x = "1"x ] ; then
 		echo IMAGE5:
-		VOLID5=`cat $TDIR/slink5.volid`
-        vecho "Making image of slink5 to $OUT/slink5-$ARCH.raw"
+		VOLID5=`cat $TDIR/cd5.volid`
+        vecho "Making image of cd5 to $OUT/$(CODENAME)5-$ARCH.raw"
 		if [ "$NF"x = "1"x ] ; then
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/slink5-$ARCH.raw $MKISOFS_OPTS_DISC5 slink5 
+	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 cd5
         $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/slink5-$ARCH.raw $MKISOFS_OPTS_DISC5 slink5
+	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 cd5
         fi
     fi
 fi
@@ -1224,21 +1243,21 @@ fi
 if [ $error -eq 0 ] ; then
 	if [ "$IMAGE1"x = "1"x ] ; then
 		if [ "$ARCH"x = "alpha"x ] ; then
-			vecho "Making slink1 image bootable"
-			isomarkboot $OUT/slink1-$ARCH.raw /boot/bootlx /dists/slink/main/disks-al/1999-03-/root1440.bin
-        fi
+		  vecho "Making $CODNAME1 image bootable"
+		  isomarkboot $OUT/$(CODENAME)1-$ARCH.raw /boot/bootlx /dists/$CODENAME/main/disks-al/1999-03-/root1440.bin
+		fi
 		if [ "$ARCH"x = "sparc"x ] ; then
 			# temporary mount point (eg. for silo to create the
 			# bootable CD image) only needed for Sparc so far...
 			vecho Checking for temporary mount point for SILO
-			mountpoint=/var/tmp/slink_cd.mnt
+			mountpoint=/var/tmp/$(CODENAME)_cd.mnt
 			if [ -d $mountpoint ]; then
 					umount $mountpoint || true
 			else
 					mkdir -p $mountpoint
 			fi
 
-			vecho "Making slink1 image bootable"
+			vecho "Making $(CODENAME)1 image bootable"
 			EXECARCH=`dpkg --print-installation-architecture`
 			if [ "$EXECARCH"x = "sparc"x ]; then
 				siloprog=silo
@@ -1251,11 +1270,11 @@ if [ $error -eq 0 ] ; then
 				cd3=/install/linux-2.2.1-a.out
 				cd4=/install/linux-2.2.1-sun4u-a.out
 				cd5=/install/root.bin
-				echo "mount -o loop $OUT/slink1-$ARCH.raw $mountpoint"
-				mount -o loop $OUT/slink1-$ARCH.raw $mountpoint
-				vecho $siloprog -r $mountpoint -c $OUT/slink1-$ARCH.raw \
+				echo "mount -o loop $OUT/$(CODENAME)1-$ARCH.raw $mountpoint"
+				mount -o loop $OUT/$(CODENAME)1-$ARCH.raw $mountpoint
+				vecho $siloprog -r $mountpoint -c $OUT/$(CODENAME)1-$ARCH.raw \
 					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
-				$siloprog -r $mountpoint -c $OUT/slink1-$ARCH.raw \
+				$siloprog -r $mountpoint -c $OUT/$(CODENAME)1-$ARCH.raw \
 					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
 				umount $mountpoint
 			else

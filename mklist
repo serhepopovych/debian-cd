@@ -8,10 +8,13 @@
 # $2 is start directory location (where the scripts live)
 # $3 is tmpdir location
 # $4 is the binary arch
-# $5 is debug level
+# $5 is codename of branch of archive. 
+# $6 is status of branch of archive
+# $7 is the scanpackages binary. 
+# $8 is debug level
 
-VERBOSE=$5
 
+VERBOSE=$8
 . $2/vecho # Local definitions for vecho, vvecho, vvvecho
 
 vecho Creating file lists for CDs 1 and 2
@@ -21,10 +24,10 @@ cd $3
 rm -rf list
 mkdir list
 
-if [ -f $1/dists/slink/main/binary-$4/Packages.gz ]; then
-	PACKAGES=$1/dists/slink/main/binary-$4/Packages.gz
-elif [ -f $1/dists/slink/main/binary-$4/Packages ]; then
-	PACKAGES=$1/dists/slink/main/binary-$4/Packages
+if [ -f $1/dists/$5/main/binary-$4/Packages.gz ]; then
+	PACKAGES=$1/dists/$5/main/binary-$4/Packages.gz
+elif [ -f $1/dists/$5/main/binary-$4/Packages ]; then
+	PACKAGES=$1/dists/$5/main/binary-$4/Packages
 else
 	echo "$0: Could not find packages file. Exit."
 	exit 1
@@ -36,7 +39,7 @@ fi
 # purposes. Warn the user a _lot_, as this may be a symptom of a
 # really broken setup...
 
-find $1/dists/slink/main/binary-$4 -type f -follow -newer $PACKAGES >$TDIR/newer.packages
+find $1/dists/$5/main/binary-$4 -type f -follow -newer $PACKAGES >$3/newer.packages
 if [ -s $3/newer.packages ] ; then
 	PACKAGES=$3/Packages.regenerated
 	echo "   Awooga!"
@@ -49,15 +52,15 @@ if [ -s $3/newer.packages ] ; then
 	echo "   Awooga!"
 	echo "   Awooga!"
 	echo "   Awooga!"
-	(cd $1/dists/slink/main && \
-		dpkg-scanpackages binary-$4 $1/indices/override.slink.gz \
-		dists/stable/main/ > $PACKAGES)
+	(cd $1/dists/$5/main && \
+		$7 binary-$4 $1/indices/override.$5.gz \
+		dists/$6/main/ > $PACKAGES)
 	ls -al $PACKAGES
 fi
 
 # optional/extra packages that should be on disc 1 should be listed in
-# slink1.needed. Important/required/standard packages will
-# automatically go there, and duplication is OK. slink1.needed no
+# cd1.needed. Important/required/standard packages will
+# automatically go there, and duplication is OK. cd1.needed no
 # longer needs to be up-to-date with the boot-floppies package, as we
 # generate it from their master file now.
 
@@ -68,7 +71,7 @@ fi
 # the third is the Packages file, i.e. the raw data that we're going to use.
 # Output will go to list1 for CD 1, list2 for CD 2, EXCLUDED for removed.
 
-zcat -f $3/slink1.needed $3/slink1.useful $2/EOP $2/exclude-$4 $2/EOP $PACKAGES | grep -v '^#' | awk -v verbose=$VERBOSE '
+zcat -f $3/cd1.needed $3/cd1.useful $2/EOP $2/exclude-$4 $2/EOP $PACKAGES | grep -v '^#' | awk -v verbose=$VERBOSE '
 
 /END_OF_PROCESSING/       {leave_done++}
 
@@ -173,7 +176,7 @@ cd $1
 for i in 1 2
 do
 	vecho "Filling in binary-all links... $i"
-    for file in `cat $3/list/list$i | sed 's/frozen/slink/g;s/stable/slink/g' | awk -v ARCH=$4 '{print $2; REPL=sprintf("binary-%s/",ARCH);gsub(REPL,"binary-all/",$2); print $2}'`
+    for file in `cat $3/list/list$i | sed "s/frozen/$CODENAME/g;s/$6/$5/g" | awk -v ARCH=$4 '{print $2; REPL=sprintf("binary-%s/",ARCH);gsub(REPL,"binary-all/",$2); print $2}'`
     do
 	if [ -f $file ] ; then
 		vvecho $file
