@@ -65,6 +65,11 @@ export APTTMP=/ftp/tmp/apt
 # containing dists/$CODENAME/local/binary-$ARCH
 # export LOCALDEBS=/home/joey/debian/va/debian
 
+# If you want a <codename>-secured tree with a copy of the signed
+# Release.gpg and files listed by this Release file, then
+# uncomment this line
+# export SECURED=1
+
 # Sparc only : bootdir (location of cd.b and second.b)
 # export BOOTDIR=/boot
 

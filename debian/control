@@ -1,6 +1,6 @@
 Source: debian-cd
 Section: contrib/admin
-Priority: extra
+Priority: optional
 Maintainer: Raphael Hertzog <hertzog@debian.org>
 Build-Depends: debhelper
 Standards-Version: 3.5.2

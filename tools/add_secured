@@ -44,6 +44,8 @@ fi
 # Create the $CODENAME-secured tree by copying files from the mirror
 # And including the Release file and its signature 
 
+if [ -n "$SECURED" ]; then
+
 test -d "dists/$CODENAME-secured" || mkdir dists/$CODENAME-secured
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     # Copy Release and Release.gpg files
@@ -88,3 +90,5 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     ln -sf ../files.list.gz dists/$CODENAME-secured/non-US/files.list.gz
 fi
 
+
+fi # if secured
