@@ -41,9 +41,9 @@ if [ $N == "6_NONUS" ] || [ $N == "6" ] ; then NN=6 ; fi
 # a null "" value will use the default boot-disk kernel
 #
 KTYPE[1]=""
-KTYPE[2]=compact
-KTYPE[3]=idepci
-KTYPE[4]="udma66"
+KTYPE[2]="compact"
+KTYPE[3]="idepci"
+KTYPE[4]="ide"
 KTYPE[5]=""
 KTYPE[6]=""
 
@@ -68,8 +68,8 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 	cp -f images-1.44/resc*.bin $CDDIR/install ; \
 	cp -f linux $CDDIR/install/linux ; \
 	cp -f compact/linux $CDDIR/install/lincompt ; \
-	cp -f idepci/linux $CDDIR/install/linide ; \
-	cp -f udma66/linux $CDDIR/install/linudma ; \
+	cp -f idepci/linux $CDDIR/install/linpci ; \
+	cp -f ide/linux $CDDIR/install/linide ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
 
@@ -107,7 +107,7 @@ echo Please choose a linux kernel now
 echo 1= standard kernel (2.2)
 echo 2= compact kernel  (2.2)
 echo 3= IDEPCI kernel   (2.2)
-echo 4= UDMA66 kernel   (2.2)
+echo 4= IDE kernel      (2.2)
 
 choice /c:1234
 if errorlevel 4 goto FOUR
@@ -128,11 +128,11 @@ loadlin.exe lincompt root=/dev/ram ro initrd=root.bin
 
 :THREE
 echo using IDEPCI kernel
-loadlin.exe linide root=/dev/ram ro initrd=root.bin
+loadlin.exe linpci root=/dev/ram ro initrd=root.bin
 
 :FOUR
-echo using UDMA66 kernel
-loadlin.exe linudma root=/dev/ram ro initrd=root.bin
+echo using IDE kernel
+loadlin.exe linide root=/dev/ram ro initrd=root.bin
 EOF
 ) |todos > $CDDIR/install/boot.bat
 
