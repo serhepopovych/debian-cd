@@ -18,4 +18,9 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
     exit 0
 fi
 
-isomarkboot $CDIMAGE /boot/bootlx $CDROOT/images-1.44/root.bin
+# isomarkboot can't resolve symlinks within the ISO image, so we do it
+# manually.
+BOOTVER=`readlink $CDROOT/dists/$CODENAME/main/disks-alpha/current`
+BOOTDISKS=dists/$CODENAME/main/disks-alpha/$BOOTVER
+
+isomarkboot $CDIMAGE $BOOTDISKS/bootlx $BOOTDISKS/images-1.44/root.bin
