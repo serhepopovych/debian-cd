@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# We are in the temp directory of a CD image
+# aka $[SB]DIR/CD<x>/
+# Everything is already in place (just md5sum.txt missing)
+
+
+# Complete the "Release" file if it exists
+
+if [ -e "dists/$CODENAME/Release" ]; then 
+    find dists/$CODENAME/ -name 'Packages' -o -name 'Packages.gz' \
+    -o -name 'Sources' -o -name 'Sources.gz' | grep -v non-US/ | \
+    sed -e "s#^dists/$CODENAME/##" | \
+    (while read file; do \
+    	c=`wc -c < $file`; \
+	m=`md5sum < $file`; \
+	printf " %s %8d %s\n" $m $c $file; \
+    done) >> dists/$CODENAME/Release
+fi
+
+if [ -n "$NONUS" -a -e "dists/$CODENAME/non-US/Release" ]; then
+    find dists/$CODENAME/non-US/ -name 'Packages' -o -name 'Packages.gz' \
+    -o -name 'Sources' -o -name 'Sources.gz' | \
+    sed -e "s#^dists/$CODENAME/non-US/##" | \
+    (while read file; do \
+    	c=`wc -c < $file`; \
+	m=`md5sum < $file`; \
+	printf " %s %8d %s\n" $m $c $file; \
+    done) >> dists/$CODENAME/non-US/Release
+fi
+
+# Create the $CODENAME-secured tree by copying files from the mirror
+# And including the Release file and its signature 
+
+test -d "dists/$CODENAME-secured" || mkdir dists/$CODENAME-secured
+if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
+    # Copy Release and Release.gpg files
+    cp $MIRROR/dists/$CODENAME/Release dists/$CODENAME-secured/
+    if [ -e "$MIRROR/dists/$CODENAME/Release.gpg" ]; then
+	cp $MIRROR/dists/$CODENAME/Release.gpg dists/$CODENAME-secured/
+    fi
+    # Include files listed in Release that corresponds to our arch
+    grep "^ " dists/$CODENAME-secured/Release | \
+    egrep "binary-$ARCH/|source/" | \
+    (while read m s file; do \
+        dir="dists/$CODENAME-secured/`dirname $file`"; \
+	test -d "$dir" || mkdir -p $dir; \
+	cp $MIRROR/dists/$CODENAME/$file $dir/; \
+    done)
+fi
+    
+if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
+    if [ ! -d "dists/$CODENAME-secured/non-US" ]; then
+        mkdir dists/$CODENAME-secured/non-US
+    fi
+    # Copy Release and Release.gpg files
+    cp $NONUS/dists/$CODENAME/non-US/Release dists/$CODENAME-secured/non-US/
+    if [ -e "$NONUS/dists/$CODENAME/non-US/Release.gpg" ]; then
+	cp $NONUS/dists/$CODENAME/non-US/Release.gpg \
+		dists/$CODENAME-secured/non-US/
+    fi
+    # Include files listed in Release that corresponds to our arch
+    grep "^ " dists/$CODENAME-secured/non-US/Release | \
+    egrep "binary-$ARCH/|source/" | \
+    (while read m s file; do \
+        dir="dists/$CODENAME-secured/non-US/`dirname $file`"; \
+	test -d "$dir" || mkdir -p $dir; \
+	cp $NONUS/dists/$CODENAME/non-US/$file $dir/; \
+    done)
+fi
+

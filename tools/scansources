@@ -34,6 +34,16 @@ for i in `cd dists; echo *; cd ..`; do
         fi
     fi
 done
+
+if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
+    sed -e "/^ /d" $MIRROR/dists/$CODENAME/Release \
+    > dists/$CODENAME/Release
+fi
+if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
+    sed -e "/^ /d" $NONUS/dists/$CODENAME/non-US/Release \
+    > dists/$CODENAME/non-US/Release
+fi
+
 for SECT in $SECTIONS; do
 
 	if [ -d "pool/$SECT" ]; then

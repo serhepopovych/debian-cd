@@ -13,8 +13,11 @@ debian-cd (2.2.4) unstable; urgency=low
   * Corrected tools/apt-selection. Closes: #79903
   * Does correctly manage pools wrt Packages files. 
   * Now depends on grep-dctrl.
+  * Now creates a $CODENAME-secured tree with Release and Release.gpg
+    files from the archive. Closes: #93612
+  * Some esthetic corrections to the Makefile.
 
- -- Raphael Hertzog <hertzog@debian.org>  Sat, 27 Jan 2001 18:19:21 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
  
 debian-cd (2.2.3) unstable; urgency=low
 

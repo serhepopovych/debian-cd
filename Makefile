@@ -68,14 +68,15 @@ list2cds=$(BASEDIR)/tools/list2cds
 cds2src=$(BASEDIR)/tools/cds2src
 master2tasks=$(BASEDIR)/tools/master2tasks
 mirrorcheck=$(BASEDIR)/tools/mirror_check
-addpackages=$(BASEDIR)/tools/add_packages
-adddirs=$(BASEDIR)/tools/add_dirs
+add_packages=$(BASEDIR)/tools/add_packages
+add_dirs=$(BASEDIR)/tools/add_dirs
 add_bin_doc=$(BASEDIR)/tools/add-bin-doc
 scanpackages=$(BASEDIR)/tools/scanpackages
 scansources=$(BASEDIR)/tools/scansources
-addfiles=$(BASEDIR)/tools/add_files
+add_files=$(BASEDIR)/tools/add_files
 set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 strip_nonus_bin=$(BASEDIR)/tools/strip-nonUS-bin
+add_secured=$(BASEDIR)/tools/add_secured
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
 ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
@@ -327,7 +328,7 @@ $(BDIR)/CD1/debian:
 		dir=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$dir; \
 		mkdir -p $$dir; \
-		$(adddirs) $$dir; \
+		$(add_dirs) $$dir; \
 	done
 
 src-tree: ok src-list $(SDIR)/CD1/debian
@@ -339,7 +340,7 @@ $(SDIR)/CD1/debian:
 		dir=$${dir##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$dir; \
 		mkdir -p $$dir; \
-		$(adddirs) $$dir; \
+		$(add_dirs) $$dir; \
 	done
 
 # CD labels / volume ids / disk info
@@ -417,7 +418,7 @@ $(BDIR)/packages-stamp:
 		n=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$n; \
 		echo "$$n ... "; \
-	  	cat $$i | xargs -n 200 -r $(addpackages) $$dir; \
+	  	cat $$i | xargs -n 200 -r $(add_packages) $$dir; \
 		if [ -x "$(HOOK)" ]; then \
 		   cd $(BDIR) && $(HOOK) $$n before-scanpackages; \
 		fi; \
@@ -446,17 +447,17 @@ $(SDIR)/sources-stamp:
 		echo -n "main ... "; \
 		grep -vE "(non-US/|/local/)" $$i > $$i.main || true ; \
 		if [ -s $$i.main ] ; then \
-			cat $$i.main | xargs $(addfiles) $$dir $(MIRROR); \
+			cat $$i.main | xargs $(add_files) $$dir $(MIRROR); \
 		fi ; \
 		if [ -n "$(LOCAL)" ]; then \
 			echo -n "local ... "; \
 			grep "/local/" $$i > $$i.local || true ; \
 			if [ -s $$i.local ] ; then \
 				if [ -n "$(LOCALDEBS)" ] ; then \
-					cat $$i.local | xargs $(addfiles) \
+					cat $$i.local | xargs $(add_files) \
 						$$dir $(LOCALDEBS); \
 			    else \
-					cat $$i.local | xargs $(addfiles) \
+					cat $$i.local | xargs $(add_files) \
 						$$dir $(MIRROR); \
 				fi; \
 		    fi; \
@@ -465,7 +466,7 @@ $(SDIR)/sources-stamp:
 			echo -n "non-US ... "; \
 			grep "non-US/" $$i > $$i.nonus || true ; \
 			if [ -s $$i.nonus ] ; then \
-				cat $$i.nonus | xargs $(addfiles) $$dir $(NONUS); \
+				cat $$i.nonus | xargs $(add_files) $$dir $(NONUS); \
 			fi; \
 		fi; \
 		$(scansources) $$dir; \
@@ -502,7 +503,7 @@ $(BDIR)/CD1/doc:
 	@echo "Adding the documentation (bin) ..."
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
-		$(addfiles) $(BDIR)/$$DISK $(MIRROR) doc; \
+		$(add_files) $(BDIR)/$$DISK $(MIRROR) doc; \
 	done
 	@for DISK in $(FIRSTDISKS) ; do \
 		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \
@@ -543,7 +544,7 @@ $(BDIR)/CD1/tools:
 	@echo "Adding install tools and documentation ..."
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
-		$(addfiles) $(BDIR)/$$DISK $(MIRROR) tools ; \
+		$(add_files) $(BDIR)/$$DISK $(MIRROR) tools ; \
 		mkdir $(BDIR)/$$DISK/install ; \
 		if [ -x "$(BASEDIR)/tools/$(CODENAME)/installtools.sh" ]; then \
 			$(BASEDIR)/tools/$(CODENAME)/installtools.sh $(BDIR)/$$DISK ; \
@@ -557,7 +558,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
 		mkdir -p $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) ; \
-		$(addfiles) \
+		$(add_files) \
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
 		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
@@ -593,14 +594,14 @@ bin-extras: ok
 	  false; \
 	fi
 	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/CD$(CD)'" ...
-	$(Q)$(addfiles) $(BDIR)/CD$(CD) $(ROOTSRC) $(DIR)
+	$(Q)$(add_files) $(BDIR)/CD$(CD) $(ROOTSRC) $(DIR)
 src-extras:
 	$(Q)if [ -z "$(DIR)" -o -z "$(CD)" -o -z "$(ROOTSRC)" ]; then \
 	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
 	  false; \
 	fi
 	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(SDIR)/CD$(CD)'" ...
-	$(Q)$(addfiles) $(SDIR)/CD$(CD) $(ROOTSRC) $(DIR)
+	$(Q)$(add_files) $(SDIR)/CD$(CD) $(ROOTSRC) $(DIR)
 
 ## IMAGE BUILDING ##
 
@@ -617,7 +618,7 @@ src-imagesinfo: ok
 
 # Generate a md5sum.txt file listings all files on the CD
 md5list: bin-md5list src-md5list
-bin-md5list: ok packages $(BDIR)/CD1/md5sum.txt
+bin-md5list: ok packages bin-secured $(BDIR)/CD1/md5sum.txt
 $(BDIR)/CD1/md5sum.txt:
 	@echo "Generating md5sum of files from all the binary CDs ..."
 	$(Q)set -e; \
@@ -631,7 +632,7 @@ $(BDIR)/CD1/md5sum.txt:
 		"dists/stable" | grep -v "dists/frozen" | \
 		grep -v "dists/unstable" | xargs md5sum > md5sum.txt ; \
 	done
-src-md5list: ok sources $(SDIR)/CD1/md5sum.txt
+src-md5list: ok sources src-secured $(SDIR)/CD1/md5sum.txt
 $(SDIR)/CD1/md5sum.txt:
 	@echo "Generating md5sum of files from all the source CDs ..."
 	$(Q)set -e; \
@@ -644,6 +645,35 @@ $(SDIR)/CD1/md5sum.txt:
 		"dists/stable" | grep -v "dists/frozen" | \
 		grep -v "dists/unstable" | xargs md5sum > md5sum.txt ; \
 	done
+
+# Generate $CODENAME-secured tree with Packages and Release(.gpg) files
+# from the official tree
+# Complete the Release file from the normal tree
+secured: bin-secured src-secured
+bin-secured: $(BDIR)/CD1/dists/$(CODENAME)-secured
+$(BDIR)/CD1/dists/$(CODENAME)-secured:
+	@echo "Generating $(CODENAME)-secured on all the binary CDs ..."
+	$(Q)set -e; \
+	 for file in $(BDIR)/*.packages; do \
+		dir=$${file%%.packages}; \
+		n=$${dir##$(BDIR)/}; \
+		dir=$(BDIR)/CD$$n; \
+		cd $$dir; \
+		$(add_secured); \
+	done
+	
+src-secured: $(SDIR)/CD1/dists/$(CODENAME)-secured
+$(SDIR)/CD1/dists/$(CODENAME)-secured:
+	@echo "Generating $(CODENAME)-secured on all the source CDs ..."
+	$(Q)set -e; \
+	 for file in $(SDIR)/*.sources; do \
+		dir=$${file%%.sources}; \
+		dir=$${dir##$(SDIR)/}; \
+		dir=$(SDIR)/CD$$dir; \
+		cd $$dir; \
+		$(add_secured); \
+	done
+
 
 # Generates all the images
 images: bin-images src-images

@@ -33,10 +33,14 @@ cd "$2"
 if [ "$1" = "install" ]; then
 
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
-    cp $MIRROR/dists/$CODENAME/Release* dists/$CODENAME/
+    sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
+    $MIRROR/dists/$CODENAME/Release \
+    > dists/$CODENAME/Release
 fi
 if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
-    cp $NONUS/dists/$CODENAME/non-US/Release* dists/$CODENAME/non-US/
+    sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
+    $NONUS/dists/$CODENAME/non-US/Release \
+    > dists/$CODENAME/non-US/Release
 fi
 
 for SECT in $SECTIONS; do
