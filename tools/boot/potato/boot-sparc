@@ -7,9 +7,7 @@
 # See the file COPYING for license details
 # Released as part of the slink_cd package, not much use standalone
 #
-# Mar 2000: Converted to an ext2 CD partition for the first CD
-#
-# Do install stuff for sparc, including making bootable CDs
+# Do install stuff for sparc, including making first CD bootable
 
 set -e
 
@@ -32,7 +30,8 @@ inst=boot1
 mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
 # put the relevant parts of SILO boot loader
-cp -p $BOOTDIR/{cd,second}.b $inst/boot/
+(ar p $CDDIR/dists/$CODENAME/main/binary-sparc/base/silo_* data.tar.gz | \
+	tar zxf - -C $inst/ boot/{cd,second}.b)
 
 # Some custom etc files
 cp -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
