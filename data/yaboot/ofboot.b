@@ -6,6 +6,8 @@ MacRISC
 Debian GNU/Linux 2.2 (potato) PowerPC bootloader
 </DESCRIPTION>
 <BOOT-SCRIPT>
-boot cd:2,\install\powermac\yaboot
+" screen" output
+load-base release-load-area
+boot cd:,\install\powermac\yaboot
 </BOOT-SCRIPT>
 </CHRP-BOOT>
