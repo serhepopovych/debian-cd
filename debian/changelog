@@ -6,6 +6,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Update path to ia64 cdrom/boot.img.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
+    - Bump m68k 2.4 kernels to 2.4.27.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 

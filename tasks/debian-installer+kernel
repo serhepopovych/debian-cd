@@ -116,10 +116,15 @@ kernel-image-2.4.26-sparc64
 kernel-image-2.4.26-sparc64-smp
 #endif
 #ifdef ARCH_m68k
+kernel-image-2.2.25-atari
+kernel-image-2.2.25-bvme6000
 kernel-image-2.2.25-mac
-kernel-image-2.4.26-atari
-kernel-image-2.4.26-bvme6000
-kernel-image-2.4.26-mvme147
-kernel-image-2.4.26-mvme16x
-kernel-image-2.4.26-q40
+kernel-image-2.2.25-mvme147
+kernel-image-2.2.25-mvme16x
+kernel-image-2.4.27-amiga
+kernel-image-2.4.27-atari
+kernel-image-2.4.27-bvme6000
+kernel-image-2.4.27-mvme147
+kernel-image-2.4.27-mvme16x
+kernel-image-2.4.27-q40
 #endif
