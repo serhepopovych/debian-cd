@@ -35,10 +35,14 @@ ifndef SRCDISKINFOND
 SRCDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num"
 endif
 ifndef BINVOLID
-BINVOLID="Debian $(DEBVERSION) $(ARCH) Binary-$$num"
+ifeq ($(ARCH),powerpc)
+BINVOLID="Debian $(DEBVERSION) ppc Bin-$$num"
+else
+BINVOLID="Debian $(DEBVERSION) $(ARCH) Bin-$$num"
+endif
 endif
 ifndef SRCVOLID
-SRCVOLID="Debian $(DEBVERSION) Source-$$num"
+SRCVOLID="Debian $(DEBVERSION) Src-$$num"
 endif
 ifndef MKISOFS
 MKISOFS=/usr/bin/mkhybrid
@@ -332,7 +336,7 @@ infos: bin-infos src-infos
 bin-infos: bin-tree $(BDIR)/CD1/.disk/info
 $(BDIR)/CD1/.disk/info:
 	@echo "Generating the binary CD labels and their volume ids ..."
-	@nb=`ls -l $(BDIR)/*.packages | wc -l | tr -d " "`; num=0;\
+	@nb=`ls -l $(BDIR)/?.packages | wc -l | tr -d " "`; num=0;\
 	 DATE=`date +%Y%m%d`; \
 	for i in $(BDIR)/*.packages; do \
 		num=$${i%%.packages}; num=$${num##$(BDIR)/}; \
@@ -362,7 +366,7 @@ $(BDIR)/CD1/.disk/info:
 src-infos: src-tree $(SDIR)/CD1/.disk/info
 $(SDIR)/CD1/.disk/info:
 	@echo "Generating the source CD labels and their volume ids ..."
-	@nb=`ls -l $(SDIR)/*.sources | wc -l | tr -d " "`; num=0;\
+	@nb=`ls -l $(SDIR)/?.sources | wc -l | tr -d " "`; num=0;\
 	 DATE=`date +%Y%m%d`; \
 	for i in $(SDIR)/*.sources; do \
 		num=$${i%%.sources}; num=$${num##$(SDIR)/}; \
