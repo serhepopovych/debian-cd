@@ -1,0 +1,84 @@
+#!/bin/bash
+#
+# Do install stuff for i386, including making bootable CDs
+# Works with debian-installer
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
+set -e
+
+N=$1
+CDDIR=$2
+INSTALLDIR=$CDDIR/install
+WWW_HOME="http://people.debian.org/~tsauter/"
+
+cd $CDDIR/..
+
+# Only disk 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then
+    # we don't need HFS cruft on anything but CD 1
+	:> $N.mkisofs_opts
+	exit 0
+fi
+
+install_languages $CDDIR
+
+echo -n "--netatalk -hfs -probe -map $BASEDIR/data/hfs.map" \
+        > $N.mkisofs_opts
+# We are still missing this for prep
+#echo -n " -prep-boot install/prep/boot.bin" >> $N.mkisofs_opts
+# For newworld Mac booting  - Note, no spaces in volid!
+echo -n " -part -no-desktop -hfs-bless CD$N/install/powermac -hfs-volid Debian/PowerPC_${CODENAME}" \
+	>> $N.mkisofs_opts
+
+cd $INSTALLDIR
+# create directories for different sub-archs
+mkdir {apus,chrp,powermac,prep}
+
+# Extract yaboot from the archive
+if [ -z "$YABOOT_DEBUG" ]; then
+    YADEB="$($BASEDIR/tools/apt-selection cache show yaboot | \
+	   grep ^Filename | awk '{print $2}')"
+    (ar p "${MIRROR}/${YADEB}" data.tar.gz | \
+	tar zxf - -C powermac ./usr/lib/yaboot/yaboot)
+    mv powermac/usr/lib/yaboot/yaboot powermac/yaboot
+    rm -rf powermac/usr
+else
+ cp -f $YABOOT_DEBUG powermac/yaboot
+fi
+
+#
+# generate/download images for "powermac"
+# (missing: bootvars1.3b.sit.hqx, BootX_1.2.2.sit, boot-floppy-hfs.img)
+cd $INSTALLDIR/powermac
+cat $BASEDIR/data/sarge/yaboot/boot.msg \
+ | sed "s/CODENAME/${CODENAME}/g" > boot.msg
+cat $BASEDIR/data/sarge/yaboot/yaboot.conf \
+ | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
+cp $BASEDIR/data/yaboot/ofboot.b ofboot.b
+wget -O vmlinux $WWW_HOME/d-i/images-powerpc/daily/vmlinux
+wget -O root.bin $WWW_HOME/d-i/images-powerpc/daily/cdrom-initrd.gz
+
+#
+# generate/download images for "apus"
+# (missing: linux.bin)
+cd $INSTALLDIR/apus
+cp -lf ../powermac/root.bin .
+
+#
+# generate/download images for "chrp"
+# (missing: linux.bin)
+cd $INSTALLDIR/chrp
+cp -lf ../powermac/root.bin .
+
+#
+# generate/download images for "prep"
+# (missing: linux.bin, boot.bin)
+cd $INSTALLDIR/prep
+cp -lf ../powermac/root.bin .
+
+
+exit 0

@@ -118,7 +118,7 @@ cp -f $DISKSROOT/powermac/bootvars* powermac/
 
 # New-world bootability
 # This works in a subdirectory via an ugly hack; fix yaboot.
-cat $BASEDIR/data/yaboot/yaboot.conf \
+cat $BASEDIR/data/woody/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > powermac/yaboot.conf
 cp -f $BASEDIR/data/yaboot/ofboot.b powermac/
 
@@ -133,7 +133,7 @@ if [ -z "$YABOOT_DEBUG" ]; then
 else
  cp -f $YABOOT_DEBUG powermac/yaboot
 fi
-cp -f $BASEDIR/data/yaboot/boot.msg powermac/
+cp -f $BASEDIR/data/woody/yaboot/boot.msg powermac/
 
 #--------------- PReP - Stuff -------------------------------
 echo Installing PReP files
