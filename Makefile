@@ -757,11 +757,11 @@ $(TDIR)/jigdofilelist: $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.
 		     $(MIRROR)//doc $(MIRROR)//indices \
 		     $(MIRROR)//pool $(MIRROR)//project $(MIRROR)//tools \
 		     -type f \
-		| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
+		| egrep -v '/Contents|/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
 		> $(TDIR)/jigdofilelist; \
 		if [ -n "$(NONUS)" ]; then \
 			find $(NONUS)//dists/$(CODENAME) $(NONUS)// -type f \
-			| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
+			| egrep -v '/Contents|/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
 			>> $(TDIR)/jigdofilelist; \
 		fi; \
 	fi
