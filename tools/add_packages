@@ -27,7 +27,7 @@ while (defined($_ = <LIST>)) {
 	m/^Architecture: (\S+)/m and $arch = $1;
 	m/^Section: (\S+)/m and $section = $1;
 
-	$source = ($section =~ /non-US/) ? $nonus : $mirror;
+	$source = ($section =~ /non-US/i) ? $nonus : $mirror;
 
 	# This is a hack to allow the local debs to be located elsewhere.
 	$source=$localdebs if $file=~m:local/:;
