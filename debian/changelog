@@ -4,14 +4,18 @@ debian-cd (2.2.0) frozen unstable; urgency=low
   * Changes to tools/potato/boot-sparc for new bootdisk
     organization. --jwest
   * Changes to /tools/boot/potato/boot-i386 for new bootdisks --jwest
-    Closes: #59250
+    Closes: #59250, #64124
   * Added missing semi-colon in the target pi-makelist.
   * /install/boot.bat not working because of missing loadlin.exe fixed
   * Updates to sparc bootable
   * Updates to woody/boot-i386 --jwest
   * Add powerpc support for potato (dan).
+  * Incorporated some documentation (courtesy of J.A. Bezemer) :
+    README.html & README.txt 
+  * Make translated documentation more easily available. Closes: #64276
+  * Added arm support (easy, they don't have bootable CD). 
 
- -- Raphael Hertzog <hertzog@debian.org>  Mon, 13 Mar 2000 13:15:11 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 18 May 2000 23:59:49 +0200
 
 debian-cd (2.1.92) frozen unstable; urgency=low
 

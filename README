@@ -24,6 +24,7 @@ Software :
 - dpkg-multicd package (for dpkg-scanpackages with -m option)
 - the perl MD5 module
 - dpkg-dev (>= 1.4.1.6) (for dpkg-scansources)
+- lynx (for text version of README.html)
 Other :
 - lots of free space on your disks
 - a Debian mirror (on a partition where you can write, if you can't write

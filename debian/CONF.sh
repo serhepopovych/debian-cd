@@ -1,8 +1,18 @@
-# The YACS dir
-export BASEDIR=`pwd`
+# The debian-cd dir
+export BASEDIR=/usr/share/debian-cd
 
 # Building potato cd set ...
 export CODENAME=potato
+
+# Version number, 2.2 or 2.2_r3 etc.
+export DEBVERSION="2.2"
+
+# Official or non-official set.
+# NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
+# ON THE OFFICIAL DEBIAN CD WEBSITE http://cdimage.debian.org
+export OFFICIAL="Unofficial"
+#export OFFICIAL="Official"
+#export OFFICIAL="Official Beta"
 
 # ... for arch  
 export ARCH=`dpkg --print-installation-architecture`
@@ -22,7 +32,7 @@ export MIRROR=/home/ftp/debian
 export TDIR=/home/ftp/tmp
 
 # Path where the images will be written
-export OUT=/home
+export OUT=/home/ftp/debian-cd
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.

@@ -1,0 +1,714 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML lang="en">
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<TITLE>Debian GNU/Linux -- The Universal Operating System</TITLE>
+<META NAME="Description" CONTENT="Debian GNU/Linux is a free distribution of the GNU/Linux operating system. It is maintained and updated through the work of many users who volunteer their time and effort.">
+<META NAME="Keywords" CONTENT="debian, GNU, linux, unix, open source, free, DFSG">
+<META NAME="Language" CONTENT="English">
+<meta name="Author" content="J.A. Bezemer, costar@panic.et.tudelft.nl">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+
+        <!-- The HTML and TEXT file are NOT the actual source code... -->
+#if 0
+        If you read THIS, you're viewing the actual source file ;-)
+#endif
+
+#undef i386
+#undef alpha
+#undef powerpc
+#undef ppc
+#undef sparc
+#undef ultrasparc
+#undef m68k
+#undef arm
+#undef binary
+#undef bin
+#undef source
+#undef src
+
+#if OUTPUTtext
+#define	  href  nothing
+#endif
+
+#include <README.diskdefines>
+
+
+<TABLE border="0" cellpadding="3" cellspacing="0" width="100%">
+<TR>
+<TD>
+
+<div align=right>
+#if OUTPUThtml
+<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt="" width="50" height="61" align="left">
+<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0" alt="Debian" width="179" height="61" align="left">
+(<a href="README.txt">Text version</a>)
+#endif 
+#if OUTPUTtext
+(HTML version in README.html)
+#endif
+</div>
+
+</TD>
+</TR>
+<TR>
+<TD bgcolor="#DF0451">
+
+ <CENTER>
+ <TABLE border="0" cellpadding="2" cellspacing="0" align="center">
+ <TR><TD bgcolor="#000084">
+ <CENTER><FONT COLOR="#FFFFFF" FACE="helvetica,arial"><B>&nbsp;&nbsp;
+#if 0
+ Debian GNU/Linux 2.2 "Potato" - Official i386 Binary-1 CD
+#endif
+ DISKNAME CD
+ &nbsp;&nbsp;</B></FONT></CENTER>
+ </TD><TR>
+ </TABLE>
+ </CENTER>
+
+</TD>
+</TR>
+</TABLE>
+<TABLE border="0" cellpadding="5" cellspacing="0" width="100%">
+<TR>
+<TD valign="TOP" width="140" bgcolor="#BBDDFF">
+
+<BR>
+
+<FONT face="Arial,Helvetica">
+
+#if OUTPUThtml
+<P><B><A href="http://www.debian.org/">Debian homepage</A></B></P>
+#endif
+
+&nbsp;<BR>
+<P>
+
+#if OUTPUTtext
+&nbsp;<BR>
+CONTENTS:
+<BR>
+&nbsp;<BR>
+<UL>
+#endif
+
+#if OUTPUTtext
+<LI>
+#endif
+
+<A href="#intro">Intro</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+<A href="#thiscd">About This CD</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+<A href="#install">Installing</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
+ <A href="#upgrade">Upgrading</A>
+ <P>
+
+#if OUTPUTtext
+  </LI><LI>
+#endif
+#endif
+
+<A href="#lastmin">Last-Minute Notes</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+#if TYPEbinary
+ <A href="#apt">Using CDs with Dselect and Apt</A>
+ <P>
+
+#if OUTPUTtext
+  </LI><LI>
+#endif
+#endif
+
+<A href="#nonfree">Non-free/Non-US</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+<A href="#cdmanuf">CD Manufacturers</A>
+<P>
+
+#if OUTPUTtext
+</LI><LI>
+#endif
+
+<A href="#other">More Information</A>
+
+<P>
+
+#if OUTPUThtml
+&nbsp;<P>
+<A href=".">Browse this CD-ROM</A></P>
+#endif
+
+
+</FONT>
+
+#if OUTPUTtext
+</LI>
+</UL>
+&nbsp;<BR>
+&nbsp;<BR>
+#endif
+
+</TD>
+
+<TD valign="TOP">
+<BR>
+
+<CENTER>
+<FONT SIZE="+2"><B><I>
+Welcome to the exciting world of
+</I></B></FONT>
+<BR>
+<FONT SIZE="+3"><B><I>
+Debian GNU/Linux!
+</I></B></FONT>
+</CENTER>
+
+<A name="intro">
+<P><H2>
+Intro
+#if OUTPUTtext
+<BR>
+=====
+#endif
+</H2>
+</a>
+
+This is one of the CD-ROMs of the
+<a href="http://www.debian.org/">Debian GNU/Linux</a>
+distribution. Debian is a
+very extensive collection of software. But it is more. It is a complete
+Operating System (OS) for your computer. And it is
+<A href="http://www.debian.org/intro/free">free</A>
+(as in &quot;freedom&quot;).
+<P>
+An operating system is the set of basic programs
+and utilities that make your computer run. At the core of an operating
+system is the kernel. The kernel is the most fundamental program on the
+computer, does all the basic housekeeping and lets you start other programs.
+Debian is kernel independent. It currently uses the
+<A href="http://www.linux.org/">Linux</A> kernel but work is
+in progress to provide Debian for other kernels, using
+<A href="http://www.gnu.org/software/hurd/hurd.html"> the Hurd</A>.
+<P>
+
+Debian is available for various kinds of computers
+(&quot;architectures&quot;), like
+&quot;IBM-compatible&quot; PCs (<i>i386</i>),
+Compaq's <i>Alpha</i>,
+Motorola's 680x0 (<i>m68k</i>),
+Sun's <i>Sparc</i>,
+Motorola/IBM's <i>PowerPC</i>, and <i>(Strong)ARM</i> processors.
+Check the <A href="http://www.debian.org/ports">ports</A> page
+#if OUTPUTtext
+(http://www.debian.org/ports)
+#endif
+for more information.
+<P>
+
+#if OUTPUTtext
+Read more at <P>
+&nbsp; http://www.debian.org/intro/about
+#endif
+#if OUTPUThtml
+<A href="http://www.debian.org/intro/about">Read more...</A>
+#endif
+
+<A name="thiscd">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+About This CD
+#if OUTPUTtext
+<BR>
+=============
+#endif
+</H2>
+</a>
+
+This CD-ROM is labeled
+<P>
+<tt>&nbsp;
+  DISKNAME
+</tt>
+<P>
+which means that this CD is number DISKNUM of totally TOTALNUM CDs containing
+#if TYPEbinary
+programs ("binaries") for `ARCH' computers.
+<P>
+The programs on the Binary CDs are ordered by popularity. The Binary-1 CD
+contains the most popular programs and the installation tools; it is possible
+to install and run Debian with only the Binary-1 CD. The other CDs, up to
+Binary-TOTALNUM, contain mostly special-interest programs.
+#endif
+#if TYPEsource
+the source code of programs in the Debian OS.
+<P>
+The source packages on the Source CDs are ordered alphabetically by
+section name. So for example the `admin' section is on the Source-1 CD,
+and the `x11%%'' section is on the Source-TOTALNUM CD.
+#endif
+
+<A name="install">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+Installing
+#if OUTPUTtext
+<BR>
+==========
+#endif
+</H2>
+</a>
+
+#if DISKNUM1 && TYPEbinary
+
+ Because Debian is a complete Operating System, the installation procedure
+ may seem a bit unusual. You can install Debian GNU/Linux either
+ <i>next to</i> your current OS, or as <i>only</i> OS on your computer.
+
+ <P>
+ Read the <i>Installation Manual</i>, on this CD at
+ <P>
+ <tt>&nbsp;
+ <A href="install/doc/install.en.html">/install/doc/install.en.html</a> &nbsp;&nbsp;&nbsp; </tt>
+					(English version).
+ <P>
+ Translations of the <i>Installation Manual</i>, various other documents, 
+ and just everything else needed for the installation can be found on
+ this CD under
+ <P>
+ <tt>&nbsp;
+ <A href=%%""dists/potato/main/disks-ARCH/%%"">/dists/potato/main/disks-ARCH</a>
+ </tt>
+
+#if ARCHi386 || ARCHalpha || ARCHpowerpc || ARCHsparc
+  <P>
+  For the impatient ones:
+#endif
+
+#if ARCHi386 || ARCHalpha || ARCHsparc
+  You can start the installation program easily by booting off this CD-ROM.
+  Note that not all (esp. older) systems support this. 
+  <P>
+#endif
+
+#if ARCHi386 || ARCHpowerpc
+#if ARCHi386
+   You can also
+#else
+   you can
+#endif
+  examine the
+  <P>
+  <tt>&nbsp;
+  <a href="install/">/install</a>
+  </tt>
+  <P>
+  directory; you might be able to start the installation system directly
+  from there. 
+#endif
+
+#else
+ The installation tools of the Debian Operating System are located on the
+ Binary-1 CD.
+ See the README on that CD for more info.
+#endif
+
+#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
+ <A name="upgrade">
+#if OUTPUTtext
+  <P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+  <P><HR><P><H2>
+#endif
+ Upgrading
+#if OUTPUTtext
+  <BR>
+  =========
+#endif
+ </H2>
+ </a>
+
+#if DISKNUM1 && TYPEbinary
+
+  If you are already running an older version of the Debian GNU/Linux
+  Operating System, you may want to upgrade to version 2.2.
+  <P>
+  Upgrading procedures, and things needed for the upgrade, can be found on
+  this CD in the
+  <P>
+  <tt>&nbsp;
+  <A href="upgrade/">/upgrade</a>
+  </tt>
+  <P>
+  directory.
+
+  <P>
+  <B>Note:</B> if this directory is not present on this CD, see
+  <P>
+  <tt>&nbsp;
+  <A href="http://panic.et.tudelft.nl/~costar/potato/">http://panic.et.tudelft.nl/~costar/potato</a>
+  </tt>
+  <P>
+  (You might want to look there anyway, because there may be more
+  recent information.)
+  
+#else
+  Procedures describing the upgrade from an older version of the Debian
+  Operating System are also located on the Binary-1 CD.
+  See the README on that CD for more info.
+#endif
+#endif
+
+<A name="lastmin">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+Last-Minute Notes
+#if OUTPUTtext
+<BR>
+=================
+#endif
+</H2>
+</a>
+
+<UL>
+
+<LI>
+The version of `apt' in this release has some known problems with CD
+handling. This shows itself sometimes in random deadlocks when a CD-ROM is
+being accessed. In that case, use the "pstree" command on another
+terminal, and then kill the last command in the `apt' line.
+<BR>
+You may wish to install the newest version of apt, which is likely to be
+in <a href="http://incoming.debian.org">http://incoming.debian.org</a> or
+<a href=%%""http://ftp.debian.org/debian/dists/potato/main/binary-ARCH/base/%%"">http://ftp.debian.org/debian/dists/potato/main/binary-ARCH/base/</a>
+</LI>
+
+<BR>&nbsp;<BR>
+
+<LI>
+More last-minutes notes for these testing images may be available on
+<a href="http://cdimage.debian.org/potato_pre.html">http://cdimage.debian.org/potato_pre.html</a>
+</LI>
+
+</UL>
+
+
+#if TYPEbinary
+ <A name="apt">
+#if OUTPUTtext
+  <P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+  <P><HR><P><H2>
+#endif
+ Using CDs with Dselect and Apt
+#if OUTPUTtext
+  <BR>
+  ==============================
+#endif
+ </H2>
+ </a>
+
+ After installing or upgrading, Debian's packaging system can use CD-ROMs,
+ local collections, or networked servers (FTP, HTTP) to automatically
+ install software from (<tt>.deb</tt> <i>packages</i>). This is done
+ preferably with the `apt' and `dselect' programs. If you do not already
+ know how to setup these, here is a brief explanation.
+ <P>
+
+#define CDROMreadme	1
+#include "apt-setup.html.in"
+
+ <P>
+
+ Once this is done, you can install packages from the commandline using
+ <tt>apt-get</tt>. For example, if you want to install the packages
+ `commprog' and `maxgame', you can give the command
+ <P>
+ <tt>&nbsp;
+   apt-get install commprog maxgame
+ </tt>
+ <P>
+ Note that you don't have to enter the complete path, or the
+ `<tt>.deb</tt>' extension. `Apt' will figure this out itself. 
+
+ <P>
+
+ `<tt>Dselect</tt>' is also able to use `apt' to fetch the packages. To set
+ up `<tt>dselect</tt>', choose [A]ccess in the main menu, and then select
+ `apt'. The <tt>sources.list</tt> file should be okay already, so don't let
+ the program make a new one. Then, after an [U]pdate, the configuration is
+ ready. You can just keep using [S]elect and [I]nstall to install packages. 
+ <P>
+ See <tt>dselect</tt>'s online help screens for more information (use the
+ `<tt>?</tt>' key).
+
+#endif
+
+
+<A name="nonfree">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+Non-free and Non-US
+#if OUTPUTtext
+<BR>
+===================
+#endif
+</H2>
+</a>
+
+The package sections `non-free' and `non-US' contain packages that either
+have a restrictive license, or can't be exported from the US (like `pgp'
+or `ssh'). It may well be that this CD does not contain (all of) these
+packages. You can get them from our FTP/HTTP mirror sites.
+
+<P>
+`Non-free' packages are on our "regular" mirrors, listed in
+<a href="README.mirrors.html">README.mirrors.html</a> on this CD, or on
+<a href="http://www.debian.org/distrib/ftplist">http://www.debian.org/distrib/ftplist</a> ("Full list of mirrors").
+
+<P>
+`Non-US' packages are on special mirrors outside the US, listed in
+<a href="README.non-US">README.non-US</a> on this CD, or on
+<a href="http://www.debian.org/misc/README.non-US">http://www.debian.org/misc/README.non-US</a>.
+
+<P>
+Note that you <i>are</i> allowed to <i>import</i> non-US packages into the US.
+
+<A name="cdmanuf">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+CD Manufacturers
+#if OUTPUTtext
+<BR>
+================
+#endif
+</H2>
+</a>
+
+You are completely free to manufacture and (re-)distribute CD-ROMs of the
+Debian GNU/Linux Operating System, like this one. There is no charge from
+us (but of course donations are always welcome). 
+
+<P>
+
+For all needed information, and contact addresses, please refer to
+<P>
+<tt>&nbsp;
+  <a href="http://cdimage.debian.org/">http://cdimage.debian.org</a>
+</tt>
+
+
+<A name="other">
+#if OUTPUTtext
+<P>&nbsp;<P><H2>
+#endif
+#if OUTPUThtml
+<P><HR><P><H2>
+#endif
+More Information
+#if OUTPUTtext
+<BR>
+=================
+#endif
+</H2>
+</a>
+
+#if DISKNUM1 && TYPEbinary
+
+There is much more information present on this CD. Besides the already
+mentioned installation and upgrading procedures, this is the most
+interesting:  <P>
+
+<UL>
+<LI>
+
+#if OUTPUTtext
+/doc/FAQ
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="doc/FAQ/">Debian FAQ</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+/doc/constitution.txt
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="doc/constitution.txt">The Debian Constitution</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+/doc/debian-manifesto
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="doc/debian-manifesto">The Debian Manifesto</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+/doc/social-contract.txt
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="doc/social-contract.txt">Debian's Social Contract</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+/doc/bug-reporting.txt
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="doc/bug-reporting.txt">Bug reporting instructions</a>
+
+</LI>
+</UL>
+
+#else
+
+The Binary-1 CD contains much more information about various aspects
+of the Debian Operating System and the Debian organization.
+ See the README on that CD for more info.
+
+#endif
+
+<P>
+Also on the Internet are many resources. To name a few:
+<P>
+
+<UL>
+<LI>
+
+#if OUTPUTtext
+http://www.debian.org
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="http://www.debian.org/">The Debian homepage</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+http://www.debian.org/doc
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="http://www.debian.org/doc/">Debian Documentation</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+http://www.debian.org/support
+ &nbsp;
+#endif
+<A href="http://www.debian.org/support">Debian User Support</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+http://www.linuxdoc.org
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="http://www.linuxdoc.org/">The Linux Documentation Project</a>
+
+</LI>
+<LI>
+
+#if OUTPUTtext
+http://www.linux.org
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#endif
+<A href="http://www.linux.org/">General Linux homepage</a>
+
+</LI>
+</UL>
+
+<P>
+
+<DIV align="center">
+
+#if OUTPUTtext
+&nbsp;<br>
+&nbsp;<br>
+#endif
+#if OUTPUThtml
+<HR>
+#endif
+
+<SMALL>See the Debian
+<A href="http://www.debian.org/contact">contact page</A>
+
+#if OUTPUTtext
+(http://www.debian.org/contact)
+#endif
+
+for information on contacting us.
+	</SMALL><P>
+<SMALL>
+
+Last Modified: Wed May 17 23:37:10 CEST 2000
+
+<BR></SMALL>
+</DIV>
+
+</TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

@@ -13,7 +13,7 @@ DOCDIR=doc
 # Put the install documentation in /install
 cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
 mkdir $BDIR/1/install/$DOCDIR
-cp *.{html,txt} $BDIR/1/install/$DOCDIR/
+cp -a * $BDIR/1/install/$DOCDIR/
 ln -sf install.en.html $BDIR/1/install/$DOCDIR/index.html
 
 # Put the boot-disk documentation in /doc too

@@ -2,12 +2,22 @@
 # This file will have to be sourced where needed
 #
 
-# The YACS dir
-# Where I am (hoping I'm in the yacs dir)
+# The debian-cd dir
+# Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
 # Building potato cd set ...
 export CODENAME=potato
+
+# Version number
+export DEBVERSION="2.2"
+
+# Official or non-official set.
+# NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
+# ON THE OFFICIAL DEBIAN CD WEBSITE http://cdimage.debian.org
+export OFFICIAL="Unofficial"
+#export OFFICIAL="Official"
+#export OFFICIAL="Official Beta"
 
 # ... for arch  
 export ARCH=`dpkg --print-installation-architecture`
@@ -54,5 +64,5 @@ export APTTMP=/ftp/tmp/apt
 
 # Options
 # export MKISOFS=/usr/bin/mkhybrid
-export MKISOFS_OPTS="-a -r -T"		#For normal users
+# export MKISOFS_OPTS="-a -r -T"	#For normal users
 # export MKISOFS_OPTS="-a -r -F -T"	#For symlink farmers
