@@ -46,8 +46,10 @@ cp -f -p $BASEDIR/data/sparc/etc/{debian.txt,silo.conf} \
 
 cp ../../dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/vmlinuz \
 	$inst/boot/sparc32.gz
-cp ../../dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
-	$inst/boot/sparc64.gz
+# Sparc64 kernel is so big, that uncompressing it corrupts SILO memory, so
+# uncompress it before hand.
+zcat ../../dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
+	$inst/boot/sparc64
 
 # no longer need this
 rm -rf $tmp
