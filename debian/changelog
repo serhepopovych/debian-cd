@@ -16,6 +16,7 @@ debian-cd (2.2.4) unstable; urgency=low
   * Now creates a $CODENAME-secured tree with Release and Release.gpg
     files from the archive. Closes: #93612
   * Some esthetic corrections to the Makefile.
+  * Updated the popularity-contest file.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
  
