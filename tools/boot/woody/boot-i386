@@ -12,22 +12,25 @@
 #
 # $1 is the CD number
 # $2 is the temporary CD build dir
+# CODENAME1 used temporarly to point to potato boot disks -- jwest
 
 set -e
 
 N=$1
 CDDIR=$2
 BOOTDIR=
+# set bootdisks to potato for the moment.
+CODENAME1=potato
 
 cd $CDDIR/..
 
 # Compact image for disk 2
 if [ $N == 2 ]; then
 	:> 2.mkisofs_opts
-	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] 
+	if [ -e $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] 
 	then
 	  mkdir -p boot2/boot
-	  cp 1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin boot2/boot/
+	  cp $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/images-2.88/compact/rescue.bin boot2/boot/
 	  echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot2" \
 		        > 2.mkisofs_opts
 	fi
@@ -45,21 +48,21 @@ fi
 
 echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
 
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+(cd $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/ ; \
 	cp images-1.44/resc*.bin  $CDDIR/install ; \
 	cp linux  $CDDIR/install ; \
 	cp images-1.44/root.bin $CDDIR/install )
 
 mkdir -p boot1/boot
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/boot
+cp $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/boot
 
 
 #Extracting tools for disc 1
 
 mkdir -p $CDDIR/install/dosutils
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/dosutils/
+cp $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/dosutils/* $CDDIR/install/dosutils/
 
 
 (echo "Tools for DOS :" ; \
