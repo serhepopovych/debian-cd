@@ -197,19 +197,19 @@ goto ONE
 
 :ONE
 echo using IDEPCI kernel
-loadlin.exe linpci root=/dev/ram ro initrd=root.bin ramdisk_size=16384 flavor=idepci
+loadlin.exe linpci root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44 flavor=idepci
 
 :TWO
 echo using compact (SCSI) kernel
-loadlin.exe lincompt root=/dev/ram ro initrd=compact.bin ramdisk_size=16384 flavor=compact
+loadlin.exe lincompt root=/dev/ram ro initrd=compact.bin ramdisk_size=16384 disksize=1.44 flavor=compact
 
 :THREE
 echo using 2.4.x kernel
-loadlin.exe lin24 root=/dev/ram ro initrd=bf24.bin ramdisk_size=16384 flavor=bf2.4
+loadlin.exe lin24 root=/dev/ram ro initrd=bf24.bin ramdisk_size=16384 disksize=1.44 flavor=bf2.4
 
 :FOUR
 echo using standard (vanilla) kernel
-loadlin.exe linux root=/dev/ram ro initrd=root.bin ramdisk_size=16384
+loadlin.exe linux root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44
 
 EOF
 ) |todos > $CDDIR/install/boot.bat
