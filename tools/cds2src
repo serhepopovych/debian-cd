@@ -85,7 +85,7 @@ while (defined($_ = <SOURCES>)) {
 	next if not m/^Package: (\S+)\s*$/m;
 	$p = $1;
 	$included{$p} = 0;
-        $sources{$p}{"Package"} = $p;
+	 $sources{$p}{"Package"} = $p;
 	foreach $re (qw/Binary Version Section Directory/) {
 		(m/^$re: (.*?)\s*$/m and $sources{$p}{$re} = $1)
 		|| msg(1, "Header field '$re' missing for source '$p'\n");
@@ -172,7 +172,7 @@ if ($extranonfree and (! $nonfree))
 	my ($p, @toinclude);
 	
 	# Finally accept non-free packages
-	foreach $p (grep { $excluded{$p} eq "nonfree" } (keys %sources))
+	foreach $p (grep { $excluded{$_} eq "nonfree" } (keys %sources))
 	{
 		$excluded{$p} = 0;
 		push @toinclude, $p;
