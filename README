@@ -12,9 +12,9 @@ work on slink_cd/debian_cd. Some ideas come from his script.
 
 Thanks to all the contributors on the debian-cd mailing list.
 
-What is needed ?
-================
-Software :
+What is needed?
+===============
+Software:
 - the apt-get (>= 0.3.11.1) tool
 - apt-utils (for apt-ftparchive)
 - perl (>= 5.004)
@@ -27,44 +27,46 @@ Software :
 - if you want to generate .list files: tempfile, as included in debianutils
   >= 1.6 (not absolutely necessary, workaround described in tools/pi-makelist)
 - if you want to generate jigdo files: jigdo-file (see below)
-Other :
+Other:
 - lots of free space on your disks
-- a Debian mirror (on a partition where you can write, if you can't write
-  on it then you may try to use a symlink farm but it's not the
-  recommended way to build Debian CDs)
+- a Debian mirror, on a partition where you can write.
+  If you can't write on it then you may try to use a symlink farm,
+  but it's not the recommended way to build Debian CDs.
+
 
 		-------------------------------
 		- GENERATING DEBIAN CD IMAGES -
 		-------------------------------
 
 
-For people that do not have time, here's the quick explanation :
-================================================================
+For the people that don't have time, here's the quick explanation:
+==================================================================
 
 Edit the CONF.sh and change the PATHs for the mirror and so on.
-$ vim CONF.sh
+$ sensible-editor CONF.sh
 $ . CONF.sh
 $ make distclean
 $ make status
 $ make list COMPLETE=1 SIZELIMIT1=555000000 SRCSIZELIMIT=665000000
 $ make official_images
-[ or if you want only binary images :
+[ alternatively, if you only want binary images:
   $ make bin-official_images ]
 
-But you really should consider reading further for more information.
-You can also give a look at build.sh and build_all.sh for an automatized
+However, you really should consider reading further for more information.
+You can also take a look at build.sh and build_all.sh for an automatized
 way of building CD images. 
 
 How to build a CD set - step by step
 ====================================
 
-If not yet done, cd to the /usr/share/debian-cd/ directory.
+If you haven't already, change to the /usr/share/debian-cd/ directory.
 
-The process of building a CD is decomposed as follow :
+The process of building a CD is composed of the following steps:
 
-- first configure what is needed in CONF.sh and source it
-  in your shell
-  $ . CONF.sh
+- first configure what is needed in CONF.sh and source it in your shell:
+
+    $ . CONF.sh
+
   The exported environment variables will be used by all the
   tools involved here (Makefiles, perl scripts, shell scripts).
 
@@ -79,37 +81,50 @@ The process of building a CD is decomposed as follow :
 
   Keep in mind that the environment variables will stay in the
   environment after your debian-cd run, and may interfere with
-  other program using the same variables (kernel-package for
-  example ...). So if you want to be 100% safe, run debian-cd in a
-  separate shell that you exit afterwards.
+  other program using the same variables (e.g. kernel-package).
+  So if you want to be 100% safe, run debian-cd in a
+  separate shell that you can leave after you're done.
   
-- let's clean everything that may still be there from previous runs :
-  $ make distclean
+- then we clean everything that may still be there from previous runs:
 
-- now we'll check if your mirror is ok (with good Packages files) :
-  $ make mirrorcheck
+    $ make distclean
 
-- then you will have to launch this for initializing the
-  temporary directory used for the build :
-  $ make status
-  If this has failed then this will be automatically launched :
-  $ make correctstatus
-  However note that make status should never fail if it is
-  used for building a CD set for the stable release ...
+- now we'll check if your mirror is ok (with good Packages files):
+
+    $ make mirrorcheck
+
+- then we initialize the temporary directory used for the build:
+
+    $ make status
+
+  If this has failed then this will be automatically launched:
+
+    $ make correctstatus
+
+  Note however that "make status" should never fail if it is
+  used for building a CD set for the stable release...
 
 - now you can decide what you want on your CDs
-  $ make list TASK=tasks/debian-2.2 COMPLETE=1
+
+    $ make list TASK=tasks/debian-2.2 COMPLETE=1
+
   or
-  $ make list TASK=tasks/gnome COMPLETE=0 SIZELIMIT=576716800
+
+    $ make list TASK=tasks/gnome COMPLETE=0 SIZELIMIT=576716800
+
   or
-  $ export NONFREE=1; make list TASK=tasks/your-task-here COMPLETE=1
+
+    $ export NONFREE=1; make list TASK=tasks/your-task-here COMPLETE=1
+
   or for something like an official image for the USA (without non-US &
   non-free) :
-  $ make list COMPLETE=1 SIZELIMIT1=576716800
+
+    $ make list COMPLETE=1 SIZELIMIT1=576716800
+
   .... take a look at the file tasks/* to see the options you can have :)
   
   You can change the behaviour of this command with the following
-  variables :
+  variables:
   - if NONUS is set, then packages from non-US will be allowed (the value
     of NONUS must be the path to the non-US mirror if you have one)
   - if FORCENONUSONCD1 is set also, then packages will be
@@ -138,9 +153,11 @@ The process of building a CD is decomposed as follow :
   This target calls the targets "bin-list" and "src-list" that can be used to
   build only binary CDs or only source CDs.
 
-- it may be time to add the disks-arch stuff and to make the CDs bootable
-  $ make bootable
-  This does affect only the binary CDs.
+- it may be time to add the disks-arch stuff and to make the CDs bootable:
+
+    $ make bootable
+
+  This affects only the binary CDs.
 
   If you want to use boot-floppies built by yourself you can give
   a parameter BOOTDISKS=<dir> giving the directory where
@@ -155,48 +172,63 @@ The process of building a CD is decomposed as follow :
   manually SIZELIMIT1 following the size of the boot-floppies set that
   you're using.
 
-- now, we'll add the binary packages to the temporary tree :
-  $ make packages
+- now, we'll add the binary packages to the temporary tree:
 
-- and we'll add the sources to the temporary tree :
-  $ make sources
+    $ make packages
 
-- if you want to install additional files :
-  make bin-extras CD=1 ROOTSRC=/home/ftp/ DIR=goodies/wordperfect
-  make src-extras CD=3 ROOTSRC=/home/ftp/ DIR=goodies/kernel-2.3
+- and we'll add the sources to the temporary tree:
 
-  The first will copy /home/ftp/goodies/wordperfect/ on the first binary
-  CD. It will be in <root of the cd>/goodies/wordperfect ... you can call
-  make extras multiple times if you need more. Please note that
-  the files to be copied should be on the same partition than
-  your mirror (unless you use a symlink farm).
+    $ make sources
+
+- if you want to install additional files:
+
+    $ make bin-extras CD=1 ROOTSRC=/home/ftp/ DIR=goodies/wordperfect
+    $ make src-extras CD=3 ROOTSRC=/home/ftp/ DIR=goodies/kernel-2.3
+
+  The first will copy /home/ftp/goodies/wordperfect/ to the first binary
+  CD. It will be in <root of the cd>/goodies/wordperfect/. You can call
+  make extras multiple times if you need more.
+
+  Please note that the files to be copied should be on the same partition
+  than your mirror (unless you use a symlink farm).
 
   If you want to do customize your CD even more, you can use the hook
-  system. Read below about them.
+  system. Read more about that below.
 
 - We can add an md5sum.txt file on each CD to enable users to check their
-  files :
-  $ make md5list
-  This does call the targets 'bin-md5list' and 'src-md5list'. You can
+  files:
+
+    $ make md5list
+
+  This calls the targets 'bin-md5list' and 'src-md5list'. You can
   choose to call only bin-md5list if you're building only binary images.
 
-- now we can create the images
-  $ make images
-  If you don't have enough space for all images, you can generate 
-  only one image (of the second binary CD for example) with :
-  $ make bin-image CD=2
-  Of course if you want to build all binary images you'll use :
-  $ make bin-images
-  And "make src-images" will generate the sources images.
+- now we can create the images:
 
-  Note: I use here make images, but you could as well use make
-  official_images since the latter is the same as the former with
-  some dependencies on targets that you already launched
+    $ make images
+
+  If you don't have enough space for all images, you can generate 
+  only one image (of the second binary CD for example) with:
+
+    $ make bin-image CD=2
+
+  Of course if you want to build all binary images you'll use:
+
+    $ make bin-images
+
+  The following will generate the source images:
+
+    $ make src-images
+
+  Note: here we use "make images", but you could as well use
+  "make official_images" since the latter is the same as the former
+  with some dependencies on targets that you already launched
   (make bootable packages sources).
 
 - if you want to generate a MD5SUMS file with the md5sums of the
-  images you can do it with :
-  $ make imagesums
+  images you can do it with:
+
+    $ make imagesums
 
 
 Official images
@@ -219,6 +251,7 @@ with all Debian tools, only the label is different. That means you
 can use build.sh and build_all.sh to build your "Unofficial" images
 without modifying anything.
 
+
 Local packages
 ==============
 
@@ -228,15 +261,16 @@ $MIRROR/dists/$CODENAME/local/binary-$ARCH/<section>.
 The organization of this sub-tree is the same than what you can find
 in the main, contrib or non-free part. You may use different section
 names if you want. Be sure to create Packages files (and Sources.gz if you
-include sources). You can also put your local packages under
-$MIRROR/pool/local (just a new facility for people not wanting packages
-under dists).
+include sources).
 
-To include local packages, the LOCAL environment variable must be set
-to "1" while building the CDs.
+You can also put your local packages under $MIRROR/pool/local (just a new
+facility for people who don't want packages under dists/). To include local
+packages, the LOCAL environment variable must be set to "1" while building
+the CDs.
 
 You can also set the LOCALDEBS environment variable, and it will be used
 instead of MIRROR when looking for local packages.
+
 
 Additional targets
 ==================
@@ -244,8 +278,10 @@ Additional targets
 Pseudo Image Kit
 ----------------
 Those of you who will make images available to people for download may
-consider using the Pseudo Image Kit (cf http://www.debian.org/CD/ for more
-information). That's why you can launch "make pi-makelist" that will generate
+consider using the Pseudo Image Kit. See http://www.debian.org/CD/pik/
+for more information on the PIK.
+
+You can launch "make pi-makelist" in order to generate
 the *.list files for the images you've just generated.
 
 The tools/pi-makelist script needs the isoinfo binary. You can get the
@@ -256,17 +292,17 @@ isoinfo binary is in the mkisofs package (since Debian potato at least).
 
 Jigdo
 -----
-People wanting to offer the CD images in jigdo format (Jigsaw Download,
-the successor to the Pseudo-Image Kit), can indicate so by setting the
-DOJIGDO and related variables in CONF.sh. So this is not a target itself,
-but a modification of the "images" targets. You can choose only iso
-generation (default), only jigdo generation (for highly reduced disk
-usage), or both iso and jigdo generation.
+You may also want to make the CD images available in jigdo format.
+Jigsaw Download, the successor to the Pseudo-Image Kit.
+See http://www.debian.org/CD/jigdo-cd/ for more information on jigdo.
 
-Information on jigdo is available at  http://www.debian.org/CD/jigdo-cd/
+Set the DOJIGDO and related variables in CONF.sh. This is no separate target
+for jigdo, merely a modification of the "images" targets. You can choose
+only .iso generation (default), only .jigdo generation (for highly reduced
+disk usage), or both .iso and .jigdo generation.
 
-To generate the jigdo files and templates, the "jigdo-file" program is
-needed, which is available via that same URL.
+To generate the jigdo files and templates, you need the "jigdo-file" program,
+which is available via the same URL.
 
 Jigdo-file creates and maintains a cache/database file with checksums of
 all files on your Debian mirror. The first time, this may take hours to be
@@ -281,6 +317,7 @@ checksums of all generated images, regardless of the DOJIGDO setting. If
 no full iso image is available, the MD5sum will be extracted from the
 .template file. A note in the Makefile shows how the original file size
 can be extracted from the .template in a similar way.
+
 
 About the hook system
 =====================
