@@ -194,6 +194,8 @@ include sources).
 To include local packages, the LOCAL environment variable must be set
 to "1" while building the CDs.
 
+You can also set the LOCALDEBS environment variable, and it will be used
+instead of MIRROR when looking for local packages.
 
 Additionnal targets
 ===================

@@ -9,6 +9,7 @@ if (! -d $dir) {
 }
 
 my $mirror  = $ENV{'MIRROR'}  || die "Set the MIRROR var ...\n";
+my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
 my $nonus   = $ENV{'NONUS'}   || '';
 my $basedir = $ENV{'BASEDIR'} || die "Set the BASEDIR var ...\n";
 
@@ -27,6 +28,9 @@ while (defined($_ = <LIST>)) {
 	m/^Section: (\S+)/m and $section = $1;
 
 	$source = ($section =~ /non-US/) ? $nonus : $mirror;
+
+	# This is a hack to allow the local debs to be located elsewhere.
+	$source=$localdebs if $file=~m:local/:;
 
 	# If arch=all and filename is a symbolic link
 	# we suppose that the link points to .../binary-all/...

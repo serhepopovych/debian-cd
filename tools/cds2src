@@ -27,6 +27,7 @@ my $sdir = "$ENV{'TDIR'}/$ENV{'CODENAME'}-src";
 my $verbose = $ENV{'VERBOSE'} || 0;
 
 my $mirror = $ENV{'MIRROR'};
+my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
 my $codename = $ENV{'CODENAME'};
 
 $| = 1;
@@ -70,9 +71,9 @@ if ($nonus and ($codename eq "slink")) {
 	push @SOURCES, "$nonus/dists/$codename/non-US/source/Sources.gz";
 }
 
-if ($local and -e "$mirror/dists/$codename/local/source/Sources.gz")
+if ($local and -e "$localdebs/dists/$codename/local/source/Sources.gz")
 {
-	push @SOURCES, "$mirror/dists/$codename/local/source/Sources.gz";
+	push @SOURCES, "$localdebs/dists/$codename/local/source/Sources.gz";
 }
 
 foreach (@SOURCES) {

@@ -74,7 +74,7 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 	     >dists/$CODENAME/non-US/binary-$ARCH/Packages
 	grep -v ^X-Medium $PREFIX.Packages-non-US | gzip --best \
 	     >dists/$CODENAME/non-US/binary-$ARCH/Packages.gz
-	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+	for i in $TDIR/$CODENAME-$ARCH/?.packages; do
 		dir=${i%%.packages}
 		n=${dir##$TDIR/$CODENAME-$ARCH/}
 		if [ $n -le $NUM ]; then
@@ -87,8 +87,8 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 fi
 
 if [ -n "$LOCAL" ]; then
-	if [ -e $MIRROR/dists/$CODNAME/local/binary-$ARCH/Release ]; then
-	   cp $MIRROR/dists/$CODENAME/local/binary-$ARCH/Release \
+	if [ -e ${LOCALDEBS:-MIRROR}/dists/$CODNAME/local/binary-$ARCH/Release ]; then
+	   cp ${LOCALDEBS:-MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release \
    		dists/$CODENAME/local/binary-$ARCH/
 	fi
 	grep -v ^X-Medium $PREFIX.Packages-local \
@@ -96,7 +96,7 @@ if [ -n "$LOCAL" ]; then
 	grep -v ^X-Medium $PREFIX.Packages-local | gzip --best \
 	     >dists/$CODENAME/local/binary-$ARCH/Packages.gz
 
-	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+	for i in $TDIR/$CODENAME-$ARCH/?.packages; do
 		dir=${i%%.packages}
 		n=${dir##$TDIR/$CODENAME-$ARCH/}
 		if [ $n -le $NUM ]; then

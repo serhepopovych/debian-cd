@@ -60,6 +60,11 @@ export APTTMP=/ftp/tmp/apt
 # uncomment the following line 
 # export LOCAL=1
 
+# If your local packages are not under $MIRROR, but somewhere else, 
+# you can uncomment this line and edit to to point to a directory
+# containing dists/$CODENAME/local/binary-$ARCH
+# export LOCALDEBS=/home/joey/debian/va/debian
+
 # Sparc only : bootdir (location of cd.b and second.b)
 # export BOOTDIR=/boot
 

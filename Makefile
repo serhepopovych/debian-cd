@@ -78,6 +78,9 @@ SDIR=$(TDIR)/$(CODENAME)-src
 FIRSTDISKS=CD1 
 ifdef FORCENONUSONCD1
 FIRSTDISKS=CD1 CD1_NONUS
+forcenonusoncd1=1
+else
+forcenonusoncd1=0
 endif
 
 ## DEBUG STUFF ##
@@ -294,7 +297,7 @@ ifdef FORCENONUSONCD1
 endif
 	@perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
 	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
-	     -DFORCENONUSONCD1=$(FORCENONUSONCD1) \
+	     -DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist
 
 ## DIRECTORIES && PACKAGES && INFOS ##
