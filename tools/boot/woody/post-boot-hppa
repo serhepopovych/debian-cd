@@ -21,7 +21,7 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0
 fi
 
-palo --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk" \
+palo --commandline="0/vmlinux ramdisk_size=8192 root=/dev/ram initrd=0/ramdisk" \
      --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/32/linux.bin \
      --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/64/linux.bin \
      --bootloader=CD1/install/iplboot \
