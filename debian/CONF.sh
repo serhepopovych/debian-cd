@@ -6,6 +6,7 @@ unset EXTRANONFREE
 unset LOCAL
 unset LOCALDEBS
 unset SECURED
+unset SECURITY
 unset BOOTDIR
 unset SYMLINK
 unset COPYLINK
@@ -93,6 +94,10 @@ export APTTMP=/home/ftp/tmp/apt
 # Release.gpg and files listed by this Release file, then
 # uncomment this line
 # export SECURED=1
+
+# Where to find the security patches.  This directory should be the
+# top directory of a security.debian.org mirror.
+#export SECURITY="$TOPDIR"/debian/debian-security
 
 # Sparc only : bootdir (location of cd.b and second.b)
 # export BOOTDIR=/boot

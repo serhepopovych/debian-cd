@@ -13,7 +13,8 @@ debian-cd (2.2.15) unstable; urgency=low
   * Protect the call to add_secured by a stamp file. Closes: #147105
   * Provide a customised isolinux image. We don't need to
     recommend syslinux now.
-
+  * Apply patch from Petter Reinholdtsen to put security updates on the cd.
+  
  -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
 
 debian-cd (2.2.14) unstable; urgency=high

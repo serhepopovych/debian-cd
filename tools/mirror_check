@@ -4,6 +4,7 @@ use Digest::MD5;
 
 my $mirror = shift || $ENV{'MIRROR'};
 my $nonus = shift || $ENV{'NONUS'};
+my $security = shift || $ENV{'SECURITY'};
 my ($p, $filename, $size, $md5sum, $file) = ('', '', 0, '', '');
 
 my $ok = 1;
@@ -20,8 +21,9 @@ while (defined($_ = <>)) {
 
 	next if not $p;
 	
-	$file = ( -e "$mirror/$filename" ) ? "$mirror/$filename" :
-	            "$nonus/$filename";
+	$file = ( ( -e "$mirror/$filename" ) ? "$mirror/$filename" :
+		  ( -e "$nonus/$filename" ) ? "$nonus/$filename" :
+		  "$security/$filename" );
 	
 	# Check if the file exists
 	if (! -e $file) {

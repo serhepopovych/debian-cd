@@ -122,6 +122,9 @@ for SECT in $SECTIONS; do
     if [ -d "pool/$SECT" ]; then
 	find pool/$SECT >>$PREFIX.filelist_$SECT
     fi
+    if [ -n "$SECURITY" -a -d "pool/updates/$SECT" ]; then
+	find pool/updates/$SECT >>$PREFIX.filelist_$SECT
+    fi
     for DIST in $DISTS; do
 	if [ -d "dists/$DIST/$SECT/binary-$ARCH" ]; then
 	    find dists/$DIST/$SECT/binary-$ARCH >>$PREFIX.filelist_$SECT
