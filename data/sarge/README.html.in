@@ -18,6 +18,7 @@
 #endif
 
 #undef i386
+#undef amd64
 #undef alpha
 #undef powerpc
 #undef ppc
@@ -355,7 +356,7 @@ Installing
  <A href=%%""install/floppy/%%"">/install/floppy/</a>
  </tt>
 
-#if ARCHi386 || ARCHalpha || ARCHpowerpc || ARCHsparc
+#if ARCHi386 || ARCHamd64 || ARCHalpha || ARCHpowerpc || ARCHsparc
   <P>
   For the impatient ones:
 #endif
@@ -366,7 +367,7 @@ Installing
   <P>
 #endif
 
-#if ARCHi386 || ARCHpowerpc
+#if ARCHi386 || ARCHamd64 || ARCHpowerpc
 #if ARCHi386
    You can also
 #else
