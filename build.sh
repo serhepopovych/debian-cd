@@ -2,7 +2,10 @@
 
 # Script to build one arch
 
-. CONF.sh
+if [ -z "$CF" ] ; then
+    CF=CONF.sh
+fi
+. $CF
 
 if [ -n "$1" ] ; then
     export ARCH=$1

@@ -57,6 +57,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Try to create $(OUT) instead of just bailing out if it is missing.
     - Missing b-f documentation is not a fatal error.  Keep
       building if it is missing.
+    - Make it possible to give different CONF.sh files to build.sh.
   * Stephen R. Marenka
     - Update m68k support for sarge.
         - Fix m68k/amiga icons.
