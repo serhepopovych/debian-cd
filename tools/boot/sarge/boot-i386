@@ -129,7 +129,7 @@ LABEL cdrom
   kernel /install/vmlinuz
 LABEL linux26
   kernel /install/2.6/vmlinuz
-APPEND $KERNEL_PARAMS vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append $KERNEL_PARAMS vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL expert
   kernel /install/vmlinuz
   append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
