@@ -28,7 +28,10 @@ while (defined($_ = <LIST>)) {
 
 	$source = ($section =~ /non-US/) ? $nonus : $mirror;
 
-	if ($arch eq "all") {
+	# If arch=all and filename is a symbolic link
+	# we suppose that the link points to .../binary-all/...
+	# and we reproduce a similar setup on the CD
+	if ($arch eq "all" and -l "$source/$file") {
 		if ($section =~ /non-US/) {
 			$file =~ m#/([^/]+)$# and $name = $1;
 			symlink ("../binary-all/$name", "$dir/$file");
@@ -37,12 +40,10 @@ while (defined($_ = <LIST>)) {
 			symlink ("../../binary-all/$name", "$dir/$file");
 		}
 		$file =~ s#/binary-$ENV{'ARCH'}/#/binary-all/#g;
-		$realfile = real_file ("$source/$file");
-		good_link ($realfile, "$dir/$file");
-	} else {
-		$realfile = real_file ("$source/$file");
-		good_link ($realfile, "$dir/$file");
 	}
+	# And we put the file in the CD tree (with a (hard) link)
+	$realfile = real_file ("$source/$file");
+	good_link ($realfile, "$dir/$file");
 }
 
 close LIST or die "Something went wrong with apt-cache : $@ ($!)\n";
