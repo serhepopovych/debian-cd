@@ -480,9 +480,12 @@ $(SDIR)/sources-stamp:
 $(MIRROR)/doc: need-complete-mirror
 $(MIRROR)/tools: need-complete-mirror
 need-complete-mirror:
-	@echo "You need a Debian mirror with the doc, tools and"
-	@echo "indices directories ! "
-	exit 1
+	@# Why the hell is this needed ??
+	@if [ ! -d $(MIRROR)/doc -o ! -d $(MIRROR)/tools ]; then \
+	    echo "You need a Debian mirror with the doc, tools and"; \
+	    echo "indices directories ! "; \
+	    exit 1; \
+	fi
     
 # Add everything that is needed to make the CDs bootable
 bootable: ok disks installtools $(BDIR)/bootable-stamp

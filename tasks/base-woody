@@ -1,20 +1,22 @@
 
-# This file lists the packages needed by debootstrap
-#
-# Those should be on CD1 to be able to bootstrap a woody system
-# with debootstrap.
-# It's a pity but this file is not automatically generated, so it
-# needs to be manually updated from time to time with the
-# source information from /usr/lib/debootstrap/scripts/woody
-#
-# Latest update : in sync with debootstrap 0.1.11
-#
-# -- Raphael Hertzog
+/*
+ * This file lists the packages needed by debootstrap
+ *
+ * Those should be on CD1 to be able to bootstrap a woody system
+ * with debootstrap.
+ * It's a pity but this file is not automatically generated, so it
+ * needs to be manually updated from time to time with the
+ * source information from /usr/lib/debootstrap/scripts/woody
+ *
+ * Latest update : in sync with debootstrap 0.1.11
+ *
+ * -- Raphael Hertzog
+ *
+ * Required packages
+ * They are already automatically included
+ */
 
-# Required packages
-# They are already automatically included
-
-# Base packages
+/* Base packages */
 adduser
 perl
 perl-modules
@@ -63,27 +65,27 @@ tasksel
 tcpd
 telnet
 
-# Arch specific for the base system
+/* Arch specific for the base system */
 
-#if (@ARCH@ = alpha)
+#ifdef ARCH_alpha
 setserial
 aboot
 pciutils
 #endif
 
-#if (@ARCH@ = arm)
+#ifdef ARCH_arm
 setserial
 libgpmg1
 #endif
 
-#if (@ARCH@ = i386)
+#ifdef ARCH_i386
 lo
 pciutils
 setserial
 syslinux
 #endif
 
-#if (@ARCH@ = m68k)
+#ifdef ARCH_m68k
 atari-bootstrap
 atari-fdisk
 amiga-fdisk
@@ -94,7 +96,7 @@ setserial
 vmelilo
 #endif
 
-#if (@ARCH@ = powerpc)
+#ifdef ARCH_powerpc
 quik
 mac-fdisk
 amiga-fdisk
@@ -106,26 +108,26 @@ hfsutils
 yaboot
 #endif
 
-#if (@ARCH@ = sparc)
+#ifdef ARCH_sparc
 silo
 eject
 pciutils
 sparc-utils
 #endif
 
-#if (@ARCH@ = mips)
+#ifdef ARCH_mips
 dvhtool
 pciutils
 setserial
 #endif
 
-#if (@ARCH@ = mipsel)
+#ifdef ARCH_mipsel
 delo
 pciutils
 setserial
 #endif
 
-#if (@ARCH@ = hppa)
+#ifdef ARCH_hppa
 palo
 #endif
 
