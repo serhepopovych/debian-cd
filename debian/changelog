@@ -6,7 +6,13 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     It is already on CD1 of a normal CD set.
   * Kenshi Muto
     - Add jfbterm, unifont into forcd1 (second stage of debian-installer needs
-    them).
+      them).
+  * Joey Hess
+    - Merge in d-i iso/syslinux help files from d-i CVS to data/sarge.
+      Expand ${DEBIAN_VERSION}, ${MEDIA_TYPE}, and ${BUILD_DATE}
+      Only f3.txt varies (due to net boot type).
+      Closes: #220612, #221186
+    - Add "expert" mode to isolinux.cfg for sarge.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 

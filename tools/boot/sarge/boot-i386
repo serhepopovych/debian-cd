@@ -90,8 +90,15 @@ gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
 # Keep the original file timestamp
 touch -r $BASEDIR/data/$CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
 cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
-# Isolinux config files
-cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
+# Isolinux help files come from the d-i tree (mostly).
+BUILD_DATE=$(date +%Y%m%d)
+for file in $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt; do
+	sed -e "s/\${MEDIA_TYPE}/CDROM/" \
+	    -e "s/\${DEBIAN_VERSION}/${CODENAME}/" \
+	    -e "s/\${BUILD_DATE}/${BUILD_DATE}/" \
+		< $file > boot$N/isolinux/$(basename $file)
+done
+# Isolinux config file.
 cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
 APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
@@ -99,6 +106,9 @@ LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
+LABEL expert
+  kernel /install/vmlinuz
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL net
   kernel /install/vmlinuz
   append vga=normal initrd=/install/net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw

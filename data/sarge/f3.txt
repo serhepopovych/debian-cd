@@ -1,11 +1,23 @@
 0fBOOT METHODS07
 
+
 0fAvailable boot methods:07
-0flinux07 or 0fcdrom07
-  Start the installation -- this is the default CDROM install.
+
+0flinux07
+  Start the installation -- this is the default ${MEDIA_TYPE} install.
 0fnet07
   Start the installation for a network install.
+0fexpert07
+  Start the installation in expert mode, for maximum control.
 
-Press <09ENTER07> or type boot method, arguments, and <09ENTER07> to boot.
+
+
+
+
+
+
+
+
+Press <09ENTER07> or type boot method, parameters, and <09ENTER07> to boot.
 Press function key <09F107> for the help index.
 
