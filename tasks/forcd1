@@ -28,3 +28,6 @@ libterm-stool-perl
 libterm-readline-gnu-perl
 whiptail
 dialog
+grub
+libsasl-modules
+util-linux-locales

@@ -220,6 +220,12 @@ if [ -n "$LOCAL" ]; then
 	dpkg-scanpackages -m "`cat .disk/info`" \
 	     dists/$CODENAME/local/binary-$ARCH \
 	     /dev/null > $PREFIX.Packages-local
+
+	if [ -d pool/local ]
+	then
+	    dpkg-scanpackages -m "`cat .disk/info`" \
+		 pool/local /dev/null >> $PREFIX.Packages-local
+	fi
 fi
 
 exit 0

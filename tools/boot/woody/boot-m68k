@@ -26,7 +26,7 @@ fi
 
 # Get real name of current disks directory
 DISKSDIR=$CDDIR/dists/$CODENAME/main/disks-$ARCH
-DISKSVER=$(readlink $DISKSDIR/current)
+DISKSVER=$(if ! readlink $DISKSDIR/current; then echo current; fi)
 
 # Put CD boot image	into place
 mkdir -p boot1/boot

@@ -10,8 +10,7 @@ available in the CVS.
 
 http://cvs.debian.org/debian-cd/
 
-$ export CVSROOT=anonymous@cvs.debian.org:/cvs/debian-boot
-$ cvs co debian-cd
+$ cvs -d :pserver:anonymous@cvs.debian.org:/cvs/debian-boot co debian-cd
 
 If you want to discuss anything related to the debian-cd development, you
 can contact me directly or, better, you can mail the
@@ -54,9 +53,6 @@ Log files :
 TODO list :
 -----------
 + put the doc directory only on the first binary CD
-+ be able to use an alternate location for the boot disks
-  (in order to use i18ned boot disks and to more easily
-   test debian-cd with CVS version of the boot-floppies)
 + a way to force the inclusion of packages (even broken)
 + possibility to add project/* to the last CD
 + check the source files on the mirror (with Sources.gz)
