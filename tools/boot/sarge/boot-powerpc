@@ -56,8 +56,12 @@ fi
 # generate/download images for "powermac"
 # (missing: bootvars1.3b.sit.hqx, BootX_1.2.2.sit, boot-floppy-hfs.img)
 cd $INSTALLDIR/powermac
+BUILD_DATE=$(date +%Y%m%d)
 cat $BASEDIR/data/sarge/yaboot/boot.msg \
- | sed "s/CODENAME/${CODENAME}/g" > boot.msg
+ | sed "s/\${MEDIA_TYPE}/CDROM/" \
+ | sed "s/\$(DEBIAN_VERSION)/${CODENAME}/g" \
+ | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
+ > boot.msg
 cat $BASEDIR/data/sarge/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
 cp $BASEDIR/data/yaboot/ofboot.b ofboot.b

@@ -31,6 +31,7 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Switch from netcfg-static/dhcp to just netcfg.
     - Split udeb_includes for businesscard and netinst; netinst does not
       need choose-mirror, while businesscard does.
+    - Substitute into yaboot.msg the same as is done for isolinux.txt.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
