@@ -13,9 +13,9 @@ not supported.
 
 Popularity contest results:
 
- wget http://people.debian.org/~ballombe/popcon/main/by_vote
- wget http://people.debian.org/~ballombe/popcon/contrib/by_vote
- awk '/^[0-9]+ +[0-9a-z]/ {print $4 " " $2}' by_vote by_vote.1 | sort -nr | cut -d\  -f2
+ wget http://people.debian.org/~ballombe/popcon/main/by_inst
+ wget http://people.debian.org/~ballombe/popcon/contrib/by_inst
+ grep -h '^[^#]' by_inst* | egrep -v '(Total|-----)' | sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $2}'
 
 -----
 
