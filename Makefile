@@ -594,7 +594,8 @@ $(SDIR)/CD1/md5sum.txt:
 images: bin-images src-images
 bin-images: ok bin-md5list $(OUT)
 	@echo "Generating the binary iso images ..."
-	@for file in $(BDIR)/*.packages; do \
+	@set -e; \
+	 for file in $(BDIR)/*.packages; do \
 		dir=$${file%%.packages}; \
 		n=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$n; \
@@ -611,7 +612,8 @@ bin-images: ok bin-md5list $(OUT)
 	done
 src-images: ok src-md5list $(OUT)
 	@echo "Generating the source iso images ..."
-	@for file in $(SDIR)/*.sources; do \
+	@set -e; \
+	 for file in $(SDIR)/*.sources; do \
 		dir=$${file%%.sources}; \
 		n=$${dir##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$n; \
@@ -625,7 +627,8 @@ src-images: ok src-md5list $(OUT)
 
 # Generate the *.list files for the Pseudo Image Kit
 pi-makelist:
-	@cd $(OUT); for file in `find * -name \*.raw`; do \
+	@set -e; \
+	 cd $(OUT); for file in `find * -name \*.raw`; do \
 		$(BASEDIR)/tools/pi-makelist \
 			$$file > $${file%%.raw}.list; \
 	done
@@ -635,14 +638,18 @@ image: bin-image
 bin-image: ok bin-md5list $(OUT)
 	@echo "Generating the binary iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
-	cd $(BDIR); opts=`cat $(CD).mkisofs_opts`; \
+	set -e; cd $(BDIR); opts=`cat $(CD).mkisofs_opts`; \
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
-	  $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD)
+	 $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
+	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD); \
+	 if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+		$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
+		 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+	 fi
 src-image: ok src-md5list $(OUT)
 	@echo "Generating the source iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
-	cd $(SDIR); opts=`cat $(CD).mkisofs_opts`; \
+	set -e; cd $(SDIR); opts=`cat $(CD).mkisofs_opts`; \
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-src-$(CD).raw; \
          $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 	  -o $(OUT)/$(CODENAME)-src-$(CD).raw $$opts CD$(CD)
