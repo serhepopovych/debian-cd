@@ -57,6 +57,12 @@ then
   export DI_CODENAME=$CODENAME
 fi
 
+# If set, controls where the d-i components are downloaded from.
+# This may be an url, or "default", which will make it use the default url
+# for the daily d-i builds. If not set, uses the official d-i images from
+# the Debian mirror.
+#export DI_WWW_HOME=default
+
 # Version number, "2.2 r0", "2.2 r1" etc.
 export DEBVERSION="3.0"
 
