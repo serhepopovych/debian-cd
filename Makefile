@@ -125,6 +125,7 @@ realclean: distclean
 distclean: ok bin-distclean src-distclean
 bin-distclean:
 	@-rm -rf $(BDIR)
+	@-rm -rf $(ADIR)
 src-distclean:
 	@-rm -rf $(SDIR)
 

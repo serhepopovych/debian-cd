@@ -34,8 +34,3 @@ do
 	ln -s $file
 done
 
-# now make sure that the /doc directory is NOT on cd 2,3,4.etc
-       rm -r $BDIR/2/doc        #remove doc dir on cd 2 
-       rm -r $BDIR/3/doc        #remove doc dir on cd 3 
-       rm -r $BDIR/4/doc        #remove doc dir on cd 4 
-

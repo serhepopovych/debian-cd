@@ -24,7 +24,6 @@ cd $CDDIR/..
 # Compact image for disk 2
 if [ $N == 2 ]; then
 	:> 2.mkisofs_opts
-	rm -r $CDDIR/doc        #remove doc dir on #2,#3,#4
 	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] 
 	then
 	  mkdir -p boot2/boot
@@ -38,7 +37,6 @@ fi
 # Disks != 1 and not 2
 if [ $N != 1 ]; then 
 	echo -n "-J" > $N.mkisofs_opts
-        rm -r $CDDIR/doc        #remove doc dir on #2,#3,#4
 	exit 0; 
 fi
 
