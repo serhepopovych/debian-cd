@@ -34,22 +34,27 @@ mkdir -p boot$N/boot
 
 # image for booting from VM-reader
 
-ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/s390/linux \
+ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/vmrdr/kernel.debian \
 	boot$N/boot/linux_vm
 
 # image for booting from tape
 
-ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/s390-tape/linux \
+ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/tape/kernel.debian \
 	boot$N/boot/linux_tp
+
+# image for booting from emulated tape (nolabel)
+
+ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/tape/kernel.debian-nolabel \
+	boot$N/boot/linux_nl
 
 # initrd
 
-ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/root.bin \
+ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/tape/initrd.debian \
 	boot$N/boot/root.bin
 
 # parmfile
 
-ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/parmfile \
+ln $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/tape/parmfile.debian \
 	boot$N/boot/parmfile
 
 
