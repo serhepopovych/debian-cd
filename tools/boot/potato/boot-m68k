@@ -29,9 +29,7 @@ DISKSDIR=$CDDIR/dists/$CODENAME/main/disks-$ARCH
 DISKSVER=$(readlink $DISKSDIR/current)
 
 # Put CD boot image	into place
-if [ ! -d boot1/boot ] ; then
-    mkdir -p boot1/boot
-fi
+mkdir -p boot1/boot
 cp -f $DISKSDIR/current/bvme6000/images-2.88/rescue.bin boot1/boot
 
 echo -n " -b boot/rescue.bin -c boot/boot.catalog boot1" \
@@ -50,15 +48,10 @@ ln -s ../../../../install $DISKSDIR/$DISKSVER
 
 cd $CDDIR/install
 
-# Tools
-cp -f $DISKSROOT/rawrite2.exe $CDDIR/install
-cp -f $DISKSROOT/rawwrite.ttp $CDDIR/install
 # Redo work of installtools.sh
 ln -sf install.en.html doc/index.html
 
-# Extra tools not yet in boot floppies
-wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg.readme -O dmesg.readme
-wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg        -O dmesg
+# Dmesg needs to be executable
 chmod a+x dmesg
 
 # Amiboot needs to be executable
@@ -67,64 +60,4 @@ chmod a+x amiga/amiboot-5.6
 # Need a .info file for the install directory (AmigaOS)
 cp -f amiga.info  $CDDIR/install.info
 
-for TYPE in amiga atari bvme6000 mac mvme16x
-do
-	#vecho Installing $TYPE files
-	if [ ! -d $TYPE/images-1.44 ] ; then
-	    mkdir -p $TYPE/images-1.44
-	fi
-
-	cp -f $DISKSROOT/$TYPE/images-1.44/* $TYPE/images-1.44
-done
-
-# Atari extras
-D=atari
-S=$DISKSROOT/$D
-cp -f $S/bootargs          $D
-cp -f $S/bootstra.prg      $D
-cp -f $S/install.doc       $D
-cp -f $S/linux             $D
-cp -f $S/root.bin          $D
-
-# Amiga extras
-D=amiga
-S=$DISKSROOT/$D
-cp -f $S/ReadMe_First*     $D
-cp -f $S/StartInstall*     $D
-cp -f $S/*.txt             $D
-cp -f $S/*.txt.info        $D
-cp -f $S/install.*         $D
-cp -f $S/linux             $D
-cp -f $S/root.bin          $D
-cp -f $S/amiboot-5.6       $D
-# Needs to be executable
-chmod a+x $D/amiboot-5.6
-cp -f $DISKSROOT/amiga.info     $CDDIR/install
-cp -f $DISKSROOT/amiga.info     $CDDIR/install.info
-
-# BVME6000 extras
-D=bvme6000
-S=$DISKSROOT/$D
-cp -f $S/linuxbvme6000     $D
-cp -f $S/rootbvme6000.bin  $D
-cp -f $S/tftplilo.*        $D
-cp -f $S/install.txt       $D
-cp -f $S/bvmbug*           $D
-
-# MVME16x extras
-D=mvme16x
-S=$DISKSROOT/$D
-cp -f $S/linuxmvme16x      $D
-cp -f $S/rootmvme16x.bin   $D
-cp -f $S/tftplilo.*        $D
-cp -f $S/install.txt       $D
-
-# Mac extras
-D=mac
-S=$DISKSROOT/$D
-cp -f $S/linux             $D
-cp -f $S/root.bin          $D
-cp -f $S/*.img             $D
-cp -f $S/install/*         $D
- 
 ##-----------------------------< end of file >------------------------------##
