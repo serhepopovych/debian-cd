@@ -35,7 +35,7 @@ mkdir -p boot1/boot
 FLOPPIES=$CDDIR/dists/$CODENAME/main/disks-alpha/current/
 
 # Use the generic linux image
-cp -f $FLOPPIES/linux boot1/boot/linux
+cp -f $FLOPPIES/linux.bin boot1/boot/linux
 
 # Copy over the subarch boot-loaders
 mkdir -p boot1/milo

@@ -38,10 +38,10 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 # what kernel-type to put on what disk?
 # a null "" value will use the default boot-disk kernel
 #
-KTYPE[1]=""
+KTYPE[1]="idepci"
 KTYPE[2]="compact"
 KTYPE[3]="bf2.4"
-KTYPE[4]="idepci"
+KTYPE[4]=""
 KTYPE[5]=""
 KTYPE[6]=""
 KTYPE[7]=""
@@ -49,7 +49,7 @@ KTYPE[8]=""
 
 # Show user what is going on.
 #
-echo "Using ${KTYPE[$NN]} boot-disks image on CD$N"
+echo "Using ${${KTYPE[$NN]}:-vanilla} boot-disks image on CD$N"
 
 # Put boot images on CD1...CD(N)
 #
@@ -71,7 +71,7 @@ if [ "$N" = "1" ] || [ "$N" = "1_NONUS" ] ; then
 # The next chunk of code is only used if MULTIBOOT=yes
 # Make disk1 a multi-boot image
 # ElTorito supports multiple boot images
-# Setup all boot-disk images (currently 5)
+# Setup all boot-disk images (currently 4)
 
 
 if [ "$MULTIBOOT" = "yes" ] ; then
@@ -80,11 +80,11 @@ if [ "$MULTIBOOT" = "yes" ] ; then
     for i in 2 3 4 ; do
 	
         # first copy/link the next boot block to the disk.
-        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$i]}/rescue.bin boot$N/boot/${KTYPE[$i]}.bin
+        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$i]}/rescue.bin boot$N/boot/${${KTYPE[$i]}:-vanilla}.bin
         # then the eltorito-alt-boot cmd to mkisofs_opts
         echo -n "-eltorito-alt-boot " >> $N.mkisofs_opts
         # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n "-b boot/${KTYPE[$i]}.bin "  >> $N.mkisofs_opts
+        echo -n "-b boot/${${KTYPE[$i]}:-vanilla}.bin "  >> $N.mkisofs_opts
 
     done
 fi

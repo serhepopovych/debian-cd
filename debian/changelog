@@ -12,8 +12,14 @@ debian-cd (2.2.14) unstable; urgency=low
     Change has been made for arches where the latest bf are
     available. More may need to come for arches like sparc
     which are catching up with bf.
+  * More changes of kernel name in anticipation of the upcoming
+    boot floppies for sparc & alpha.
+  * Change the order of flavors in the i386 CD set. First is "idepci",
+    second "compact", third "bf2.4" and fourth the old default one. At
+    least we have the language chooser on the first CD but it's still
+    2.2 based. Reworked the MULTIBOOT code to take this into account.
 
- -- Raphael Hertzog <hertzog@debian.org>  Mon, 25 Mar 2002 10:53:01 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Sat,  6 Apr 2002 10:26:42 +0200
 
 debian-cd (2.2.13) unstable; urgency=low
 
