@@ -37,6 +37,12 @@ export BASEDIR=/usr/share/debian-cd
 # Building woody cd set ...
 export CODENAME=woody
 
+# By default use Debian installer packages from $CODENAME
+if [ ! "$DI_CODENAME" ]
+then
+  export DI_CODENAME=$CODENAME
+fi
+
 # Version number, "2.2 r0", "2.2 r1" etc.
 export DEBVERSION="3.0"
 

@@ -65,12 +65,12 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
         fi
 	# Debian-installer
-	if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
-	  echo "deb file:$MIRROR $CODENAME main/debian-installer" \
+	if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
+	  echo "deb file:$MIRROR $DI_CODENAME main/debian-installer" \
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	fi
-	if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
-	  echo "deb file:${LOCALDEBS:-$MIRROR} $CODENAME local/debian-installer" \
+	if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
+	  echo "deb file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	fi
 fi

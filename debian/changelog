@@ -54,6 +54,9 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       data.
     - Avoid acorn-fdisk, cfdisk-utf8 and lots of kernels on the first CD.
       It should be enough with one kernel package on the first CD.
+  * Santiago Garcia
+    - Add DI_CODENAME variable make it posible to build cds with a special
+      debian-installer version.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 

@@ -91,8 +91,8 @@ if [ -n "$LOCALDEBS" -a -n "$LOCAL" ]; then
     fi
 fi
 
-if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer/binary-$ARCH/Release" ]; then
-    cp $MIRROR/dists/$CODENAME/main/debian-installer/binary-$ARCH/Release \
+if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Release" ]; then
+    cp $MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Release \
        dists/$CODENAME/main/debian-installer/binary-$ARCH/
 fi
 
@@ -101,7 +101,7 @@ apt-ftparchive generate $PREFIX.generate-binary
 if [ -n "$NONUS" ]; then
     apt-ftparchive generate $PREFIX.generate-binary-non-US
 fi
-if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
     apt-ftparchive generate $PREFIX.generate-binary-debian-installer
 fi
 
@@ -214,7 +214,7 @@ Tree "dists/$CODENAME/main" {
     Packages::Extensions ".udeb";
 }
 EOF
-if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
+if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 cat >>$PREFIX.generate-binary-debian-installer <<EOF
 
 Tree "dists/$CODENAME/local" {
@@ -243,10 +243,10 @@ if [ ! -d "$BDIR/indices" ]; then
 	touch $BDIR/indices/override.$CODENAME.extra.$SECT
 	touch $BDIR/indices/override.$CODENAME.$SECT.src
     done
-    if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+    if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
 	touch $BDIR/indices/override.$CODENAME.main.debian-installer
     fi
-    if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
+    if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 	touch $BDIR/indices/override.$CODENAME.local.debian-installer
 	touch $BDIR/indices/override.$CODENAME.extra.local
 	touch $BDIR/indices/override.$CODENAME.local.src
