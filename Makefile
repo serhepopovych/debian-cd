@@ -125,60 +125,52 @@ PrintVars:
 	echo SRCVOLID: ; \
         echo $(SRCVOLID) ; \
 
-## CHECKS ##
-
-# Basic checks in order to avoid problems
-ok=true
-ifndef TDIR
-ok=false
-endif
-ifndef BASEDIR
-ok=false
-endif
-ifndef MIRROR
-ok=false
-endif
-ifndef ARCH
-ok=false
-endif
-ifndef CODENAME
-ok=false
-endif
-ifndef OUT
-ok=false
-endif
-# Never use NONFREE and EXTRANONFREE at the same time
-ifdef NONFREE
-ifdef EXTRANONFREE
-ok=false
-endif
-endif
-# If we have FORCENONUSONCD1 set, we must also have NONUS set
-ifdef FORCENONUSONCD1
-ifndef NONUS
-ok=false
-endif
-endif
-# If we do jigdo, we need a command and a URL. If not, make sure we won't.
-ifneq "$(DOJIGDO)" "0"
-ifndef JIGDOCMD
-ok=false
-endif
-ifndef JIGDOTEMPLATEURL
-ok=false
-endif
-else
-export JIGDOCMD=false
-endif
-
 default:
 	@echo "Please refer to the README file for more information"
 	@echo "about the different targets available."
 
+## CHECKS ##
+
+# Basic checks in order to avoid problems
 ok:
-	@$(ok) || (echo \
-	 "ERROR: Bad configuration. Please edit CONF.sh and source it ..." \
-	 && false)
+ifndef TDIR
+	@echo TDIR undefined; false
+endif
+ifndef BASEDIR
+	@echo BASEDIR undefined; false
+endif
+ifndef MIRROR
+	@echo MIRROR undefined; false
+endif
+ifndef ARCH
+	@echo ARCH undefined; false
+endif
+ifndef CODENAME
+	@echo CODENAME undefined; false
+endif
+ifndef OUT
+	@echo OUT undefined; false
+endif
+ifdef NONFREE
+ifdef EXTRANONFREE
+	@echo Never use NONFREE and EXTRANONFREE at the same time; false
+endif
+endif
+ifdef FORCENONUSONCD1
+ifndef NONUS
+	@echo If we have FORCENONUSONCD1 set, we must also have NONUS set; false
+endif
+endif
+ifneq "$(DOJIGDO)" "0"
+ifndef JIGDOCMD
+	@echo JIGDOCMD undefined; false
+endif
+ifndef JIGDOTEMPLATEURL
+	@echo JIGDOTEMPLATEURL undefined; false
+endif
+else
+export JIGDOCMD=false
+endif
 
 ## INITIALIZATION ##
 
