@@ -480,6 +480,12 @@ $(BDIR)/CD1/doc:
 	 for DISK in $(FIRSTDISKS) ; do \
 		$(addfiles) $(BDIR)/$$DISK $(MIRROR) doc; \
 	done
+	@for DISK in $(FIRSTDISKS) ; do \
+		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \
+		cd $(BDIR)/$$DISK/doc/FAQ/html ; \
+		tar xzvf ../debian-faq.html.tar.gz ; \
+		rm ../debian-faq.html.tar.gz ; \
+	done
 	$(Q)$(add_bin_doc) # Common stuff for all disks
 
 src-doc: ok src-infos $(SDIR)/CD1/README.html
