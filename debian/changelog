@@ -104,7 +104,7 @@ debian-cd (2.2.21) unstable; urgency=low
     - Disable CD timeout on powerpc.
     - Add localechooser to exclude-udebs.
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 20 Feb 2005 21:35:43 +0000
+ -- Steve McIntyre <93sam@debian.org>  Mon, 21 Mar 2005 22:07:51 +0000
 
 debian-cd (2.2.20) unstable; urgency=medium
 
