@@ -3,7 +3,7 @@ debian-cd (2.2.18) unstable; urgency=medium
   * Steve McIntyre
     - Final medium-urgency upload to get a recent debian-cd in before
       the sarge release.
-    - Update default version to 3.1 for a sarge release.
+    - Update default version to sarge/3.1 for a sarge release.
     - Sarge is going to have more than 9 CDs; make sure we clean up all of
       the working dirs.
     - Removed the -T option to mkisofs. We don't need the TRANS.TBL files
@@ -12,6 +12,8 @@ debian-cd (2.2.18) unstable; urgency=medium
       sizes. Best use is on m68k and powerpc images where HFS hybrid
       metadata seems to add ~10% to the size of the image.
     - Various updates to update-cd to cope with changes r0->r2.
+    - Updated copy of CONF.sh in debian directory to match the working copy in .
+    - Small lintian fixes.
   * Santiago Garcia Mantinan
     - Generate PPC CD 1 with -chrp-boot. Closes: #252667
     - Reduce the size of the catalogue size on PPC DVDs. Closes: #252652
@@ -408,7 +410,7 @@ debian-cd (2.2.10) unstable; urgency=low
   * first test of multi-boot cdimage for i386 disk #1
     You must export MULTIBOOT="yes" in CONF.sh  to enable this feature. -jwest
   * Removed "ide" boot floppy's flavor. Closes: #120415
-  * Added support for s390 (Jochen Röhrig <jr@debian.org>).
+  * Added support for s390 (Jochen RÃ¶hrig <jr@debian.org>).
   * Documentation about the fact the environment variables may
     pollute your environment after a debian-cd run. Closes: #123289
 
