@@ -5,6 +5,7 @@
 # Greatly influenced by the older Makefile system in the Hamm debian-cd package
 #
 # Changes for using $CODENAME (C) 1999 Jens Ritter <grimaldi@debian.org>
+# 06-13-99 updated locations for override.potato.gz in non-US <jwest@debian.org>
 #
 ##############################################################################
 #
@@ -946,6 +947,8 @@ if [ $error -eq 0 ] ; then
 				OVER_NU=/foo # default catch-all
 				if [ -e $NONUS/indices/override.$CODENAME.nonus ] ; then
 					OVER_NU=$NONUS/indices/override.$CODENAME.nonus
+                                elif [ -e $NONUS/indices-non-US/override.$CODENAME.gz ] ; then
+                                        OVER_NU=$NONUS/indices-non-US/override.$CODENAME.gz
 				elif [ -e $NONUS/indices/override.$CODENAME.nonus.gz ] ; then
 					OVER_NU=$NONUS/indices/override.$CODENAME.nonus.gz
 				elif [ -e $MIRROR/indices/override.non-us.$CODENAME ] ; then
