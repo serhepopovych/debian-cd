@@ -42,6 +42,10 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Add the debian-edu udebs to the exclude list for netinst CDs, and
       remove the deleted di-utils-devicefiles.
     - Update boot/sarge/boot-i386 to use the new d-i image names.
+    - Use d-i boot screens from the debian-cd_info.tar.gz.
+    - Remove the netboot initrd from netinst CDs, since d-i builds a mini-iso
+      with this initrd on it, and since the d-i help screen does not mention
+      the net type.
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)
