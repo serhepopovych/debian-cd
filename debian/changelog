@@ -14,6 +14,8 @@ debian-cd (2.1.91) unstable; urgency=low
     differ from one dist to another ...
   * Removed some cruft which is no more needed (master for potato,
     status.i386).
+  * Updated README to explain that the mkhybrid package in Debian
+    does support the -F option. Closes: #50141
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 11 Nov 1999 20:50:26 +0100
 

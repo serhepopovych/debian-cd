@@ -181,3 +181,5 @@ Note that you will also need a patched mkhybrid that does support the
 -F option. Have a look here about it :
 http://www.chiark.greenend.org.uk/~stevem/DebianCD/
 
+The mkhybrid package in Debian does support this -F option since 
+potato (Debian 2.2).
