@@ -1,3 +1,10 @@
+debian-cd (2.2.18) UNRELEASED; urgency=low
+
+  * Remove debian-keyring.tar.gz from the doc dir.
+  * Don't include Contents-$ARCH.gz on netinst/businesscard CD.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
+
 debian-cd (2.2.17) unstable; urgency=low
 
   * Removed debian/conffiles (useless with debhelper 4).

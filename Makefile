@@ -612,6 +612,8 @@ $(BDIR)/CD1/doc:
 		$(add_files) $(BDIR)/$$DISK $(MIRROR) doc; \
 		find $(BDIR)/$$DISK/doc -name "dedication-*" | \
 		grep -v $DEBVERSION | xargs rm -f; \
+		find $(BDIR)/$$DISK/doc -name "debian-keyring.tar.gz" | \
+		xargs rm -f; \
 	done
 	@for DISK in $(FIRSTDISKS) ; do \
 		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \
