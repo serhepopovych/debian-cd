@@ -627,7 +627,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 		mkdir -p $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) ; \
 		if [ ! -e "$(BOOTDISKS)" ]; then \
 		    break; \
-		done; \
+		fi; \
 		$(add_files) \
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
