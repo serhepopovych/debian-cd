@@ -1,35 +1,15 @@
-#!/bin/bash
-#
-# boot-sparc v 1.13 (c) Steve Dunham <dunham@cse.msu.edu>, Eric
+#!/bin/bash -e
+# 
+# boot-sparc v 2.00 (c) Steve Dunham <dunham@cse.msu.edu>, Eric
 # Delaunay <delaunay@lix.polytechnique.fr>, Steve McIntyre
-# <stevem@chiark.greenend.org.uk>
+# <stevem@chiark.greenend.org.uk>, Ben Collins <bcollins@debian.org>
 # Released under GPL 31 Mar 1999
 # See the file COPYING for license details
 # Released as part of the slink_cd package, not much use standalone
 #
+# Mar 2000: Converted to an ext2 CD partition for the first CD
+#
 # Do install stuff for sparc, including making bootable CDs
-
-# -----------------------------------------------------------------
-#
-# 13MAR00	jwest@d.o	Hummph, I do not beleive this 
-# is currently working as I do NOT see a call to slilo or 
-# intelslilo anwhere.
-#
-# I have cleaned it up a bit, and changed the paths to match the
-# sparc boot-disks 2.2.8 file structure, but me thinks that one
-# still has to make a call (baised on the hardware it is on) to
-# intelslilo or slilo to create the cd.b and second.b ????????
-#
-# I will do a bit more investigation, and begging for help.
-#
-# Note that intelslilo is not currently a debian package,
-# and you can get it from http://www.cse.msu.edu/~dunham/debian/silo/ 
-# and was made by Steve    dunham@cse.msu.edu   
-#
-# I have found another writeup about making bootable sparc cd's at:
-# http://ultra.penguin.cz/ultrapenguin-1.1/ultrapenguin-7.html
-#
-# -------------------------------------------------------------------
 
 set -e
 
@@ -38,71 +18,57 @@ CDDIR=$2
 
 cd $CDDIR/..
 
+:> $N.mkisofs_opts
+
 # Disk 1 only
-if [ $N != 1 ]; then
-	:> $N.mkisofs_opts
-	exit 0;
-fi
+[ "$N" = 1 ] || exit 0
 
-echo -n "boot1" > $N.mkisofs_opts
+echo "-B boot/cd.b boot1" > $N.mkisofs_opts
+rm -rf boot1
 
-rm -fr boot1
+inst=boot1
 
-# temporary mount point (eg. for silo to create the bootable CD image)
-# only needed for Sparc so far...
-#vecho Checking for temporary mount point for SILO
-mountpoint=/var/tmp/debian_cd.mnt
-if [ -d $mountpoint ]; then
-	umount $mountpoint || true
-else
-	mkdir -p $mountpoint
-fi
+<<<<<<< boot-sparc
+# Setup directories
+mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
 # put the relevant parts of SILO boot loader
-mkdir -p boot1/boot
-#the below moved to after the mount
-#cp -p $BOOTDIR/cd.b $BOOTDIR/second.b boot1/boot
+cp -p $BOOTDIR/{cd,second}.b $inst/boot/
 
-cat - > boot1/boot/silo.conf << __EOF__
-message=!cd1
-timeout=300
-root=/dev/ram
-image[sun4c,sun4d,sun4m]=!cd2
-   label=linux
-   initrd=!cd5
-image[sun4u]=!cd4
-   label=linux
-   initrd=!cd5
-image[sun4c,sun4d,sun4m]=!cd3
-   label=linux-2.2
-   initrd=!cd5
-image[sun4u]=!cd4
-   label=linux-2.2
-   initrd=!cd5
-__EOF__
+# Some custom etc files
+cp -p $BASEDIR/tools/boot/potato/sparc-etc/* $inst/etc/
 
-# linux kernel & co are fetched directly from the install dir
-# ... put the message banner in boot/debian.txt
+# linux kernel & co are fetched directly from the rescue disks
+tmp=/var/tmp/debian_cd
+mnt=$tmp/mnt
+if [ -d $mnt/ ]; then
+    umount $mnt >/dev/null 2>&1 || true
+else
+    mkdir -p $mnt
+fi
+for suba in sun4cdm sun4u; do
+  cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/$suba/images-1.44/rescue.bin \
+	$tmp/rescue.bin
+  mount -o loop,ro $tmp/rescue.bin $mnt
+  cp $mnt/linux $inst/boot/$suba/linux
+  umount $mnt
+  rm -f $tmp/rescue.bin
+done
 
+# Unpack the root tree into the directory. we use the tftp root.tar.gz
+tar zxf $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/root.tar.gz -C $tmp/
+cp -a $tmp/debian-sparc-root/* $inst/.
 
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -p sun4cdm/linux-a.out $CDDIR/install ; \
-	cp -p sun4u/linux-a.out $CDDIR/install/linux-4u-a.out ; \
-	cp -p sun4c/linux-a.out $CDDIR/install/linux-4c-a.out ; \
-	cp -p images-1.44/root.bin $CDDIR/install ; \
-	cp -p doc/sparc_release_note.txt $CDDIR/install )
+# no longer need this
+rm -rf $tmp
 
+# make this as a cdrom root. this gives dbootstrap a heads up
+echo $CODENAME > $inst/cdrom_image
 
-#echo mount -r -o loop \
-#	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/resc1440.bin \
-#	$mountpoint
+# Get rid of some junk
+rm -f $inst/{boot_message,release_notes,type.txt}
 
-mount -r -o loop \
-	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/images-1.44/rescue.bin \
-	$mountpoint
-cp -p $mountpoint/debian.txt boot1/boot/debian.txt
-cp -p $mountpoint/boot/cd.b boot1/boot
-cp -p $mountpoint/boot/second.b boot1/boot
-umount $mountpoint
-
-
+# Make writable areas point to /tmp
+rmdir $inst/var/{log,run}
+ln -s ../tmp $inst/var/log
+ln -s ../tmp $inst/var/run
