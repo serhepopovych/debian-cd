@@ -35,6 +35,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         kernel-pcmcia-modules-2.4.22-xfs-386,
         kernel-pcmcia-modules-2.4.22-xfs-686-smp,
         kernel-source-2.2.20, timidity-patches, tcl8.2 and tk8.2.
+  * Stephen R. Marenka
+  	- m68k support.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 

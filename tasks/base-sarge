@@ -680,6 +680,7 @@ pmac-fdisk-cross
 setserial
 vmelilo
 ipchains
+filesutils
 #endif
 
 #ifdef ARCH_powerpc

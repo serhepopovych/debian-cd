@@ -129,4 +129,18 @@ EOF
 
 cat >> debian-installer+kernel << EOF
 #endif
+#ifdef ARCH_m68k
+EOF
+
+# Get all the 2.2 kernels
+/bin/sed -n 's/Package: \(kernel-image-2.2.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-m68k/Packages | tail -n 6 \
+  >> debian-installer+kernel
+# Get the latest 2.4 kernel for amiga
+/bin/sed -n 's/Package: \(kernel-image-2.4.*-amiga\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-m68k/Packages | tail -n 1 \
+  >> debian-installer+kernel
+
+cat >> debian-installer+kernel << EOF
+#endif
 EOF
