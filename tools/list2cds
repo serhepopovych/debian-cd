@@ -210,9 +210,8 @@ if ($complete) {
     # Try to sort them by section even if packages from
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
-    my $p;
-    foreach $p (sort { ($packages{$a}{"Section"} cmp $packages{$b}{"Section"})
-                    || ($a cmp $b) }
+    foreach my $p (sort { ($packages{$a}{"Section"} cmp $packages{$b}{"Section"})
+                       || ($a cmp $b) }
              grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
 	add_package ($p, 0, 0);
     }
@@ -599,8 +598,7 @@ sub add_missing {
 sub is_in {
 	my $value = shift;
 	my $array = shift;
-	my $key;
-	foreach $key (@{$array}) {
+	foreach my $key (@{$array}) {
 		return 1 if ($key eq $value);
 	}
 	return 0;		
@@ -642,8 +640,7 @@ sub check_list {
 		  next;
 		}
 	}
-	my $removed;
-	foreach $removed (@to_remove) {
+	foreach my $removed (@to_remove) {
 		msg(2, "  Removing $removed ...\n");
 		@{$ref} = grep { $_ ne $removed } @{$ref};
 	}
