@@ -18,6 +18,9 @@ case "$ARCH" in
   i386) 
     OPTS="-J"
     ;;
+  amd64) 
+    OPTS="-J"
+    ;;
   alpha)
     OPTS="-J"
     ;;
