@@ -140,6 +140,9 @@ for SECT in $SECTIONS; do
     if [ -d "pool/$SECT" ]; then
 	find pool/$SECT >>$PREFIX.filelist_$SECT
     fi
+    if [ -d "pool/unstable/$SECT" ]; then
+	find pool/unstable/$SECT >>$PREFIX.filelist_$SECT
+    fi
     if [ -n "$SECURITY" -a -d "pool/updates/$SECT" ]; then
 	find pool/updates/$SECT >>$PREFIX.filelist_$SECT
     fi
