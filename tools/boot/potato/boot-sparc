@@ -35,7 +35,8 @@ mkdir -p $inst/{boot/sun4{u,cdm},etc}
 cp -p $BOOTDIR/{cd,second}.b $inst/boot/
 
 # Some custom etc files
-cp -p $BASEDIR/tools/boot/potato/sparc-etc/* $inst/etc/
+cp -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
+	$inst/etc/
 
 # linux kernel & co are fetched directly from the rescue disks
 tmp=/var/tmp/debian_cd
@@ -61,13 +62,20 @@ cp -a $tmp/debian-sparc-root/* $inst/.
 # no longer need this
 rm -rf $tmp
 
-# make this as a cdrom root. this gives dbootstrap a heads up
+# make this a cdrom root, this gives dbootstrap a heads up
 echo $CODENAME > $inst/cdrom_image
 
 # Get rid of some junk
-rm -f $inst/{boot_message,release_notes,type.txt}
+rm -f $inst/{boot_message,type.txt}
 
 # Make writable areas point to /tmp
 rmdir $inst/var/{log,run}
-ln -s ../tmp $inst/var/log
-ln -s ../tmp $inst/var/run
+ln -s ../tmp/log $inst/var/log
+ln -s ../tmp/run $inst/var/run
+
+# Hack...need a better way
+ln -s ../tmp/resolv.conf $inst/etc/resolv.conf
+ln -s ../target/etc/modules.conf $inst/etc/modules.conf
+ln -s ../../target/usr/bin/whiptail $inst/usr/bin/whiptail
+rmdir $inst/lib/modules
+ln -s ../target/lib/modules $inst/lib/modules
