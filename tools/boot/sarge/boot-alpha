@@ -25,8 +25,11 @@ set -e
 N=$1
 CDDIR=$2
 BOOTDIR=
-if [ ! "$WWW_HOME" ];then
-   WWW_HOME="http://people.debian.org/~vorlon/d-i/images/daily"
+if [ "$DI_WWW_HOME" = "default" ];then
+   DI_WWW_HOME="http://people.debian.org/~vorlon/d-i/images/daily/cdrom/"
+fi
+if [ ! "$DI_DIST" ]; then
+   DI_DIST="$DI_CODENAME"
 fi
 
 cd $CDDIR/..
@@ -41,28 +44,36 @@ cd $CDDIR/..
 #
 NN=`echo $N | sed -e 's/_NONUS//'`
 
+mkdir boot$N
+ab_deb=`ls $MIRROR/pool/main/a/aboot/aboot-base_*.deb | tail -1`
+ar p $ab_deb data.tar.gz | tar zxf - -C boot$N/ ./boot/bootlx
+
 # Download boot images
 # XXX: Driver floppies?  Any alpha that /has/ a CDROM should be able to
 # boot from it, so this would be pure convenience of distribution.
 #for image in cd_drivers-image.img cdrom-image.img cdrom-initrd.gz floppy-image.img floppy-initrd.gz net_drivers-image.img netboot-initrd.gz vmlinuz ; do
 
-for image in bootlx cdrom-initrd.gz cdrom-linux; do
+for image in initrd.gz vmlinuz; do
     if [ ! -e "$image" ]; then
+	if [ ! "$DI_WWW_HOME" ];then
+		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom/$image" .
+	else
 	# XXX: not really 'daily'...
-	wget $WWW_HOME/$image
+		wget "$DI_WWW_HOME/$image"
+	fi
     fi
 done
 
 if [ $NN = 1 ]; then
     echo "Using $THISTYPE boot-disks image on CD$N"
     mkdir -p boot$N/boot
-    cp bootlx cdrom-initrd.gz cdrom-linux boot$N/boot/
+    cp initrd.gz vmlinuz boot$N/boot/
 
     mkdir -p boot$N/etc
     cat <<EOF > boot$N/etc/aboot.conf
-0:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall
-1:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
-2:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
+0:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall
+1:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
+2:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
 EOF
 
     echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
@@ -80,7 +91,6 @@ EOF
     echo -n "boot$N " >> $N.mkisofs_opts
 
 else
-    mkdir boot$N
     echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
 fi
 
