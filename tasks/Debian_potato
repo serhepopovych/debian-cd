@@ -40,6 +40,7 @@ task-japanese
 task-polish
 
 /* List of packages that may still fit on the first CD */
+#include <popularity-contest>
 
 /* Other packages to put on the others CDs */
 

@@ -2,13 +2,20 @@ debian-cd (2.1.92) unstable; urgency=low
 
   * Changes to installtools.sh, change to check for documentation
     directory name by $ARCH.
-  * Changes to  potato/boot-i386 for support of the 2.2.3 bootdisks. 
+    -> This change will have to be removed when all arch will have synced
+    boot floppies.
+  * Changes to tools/potato/boot-i386 for support of the 2.2.3 bootdisks.
+    Closes: #53529
   * In Makefile, if there are multiple versions of the
-    bootdisks in the source tree, the section "boot:" seems to get 
-    confuzed.  Not fixed. Temporary solution, move old i386 boot
-    disks out of the source archive. 
+    bootdisks in the source tree, the section "boot:" seems to get
+    confused. Not fixed. Temporary solution, move old i386 boot
+    disks out of the source archive.
+  * Added a file tasks/popularity-contest listing packages by order of
+    usefulness (results given by the popularity contest of course). This
+    file is included at the end of the Debian_potato task in order to
+    include the packages that are widely used on the first CD if possible.
 
- -- Jim Westveer <jwest@netnw.com>  Mon, 27 Dec 1999 08:00:00 -0700
+ -- Raphael Hertzog <hertzog@debian.org>  Tue, 28 Dec 1999 00:03:18 +0100
 
 debian-cd (2.1.91) unstable; urgency=low
 
