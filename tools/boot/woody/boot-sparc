@@ -31,12 +31,13 @@ inst=boot1
 # Setup directories
 mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
+silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 # put the relevant parts of SILO boot loader
-(ar p $MIRROR/dists/$CODENAME/main/binary-sparc/base/silo_* data.tar.gz | \
+(ar p $silo_deb data.tar.gz | \
 	tar zxf - -C $inst/ ./boot/{cd,second}.b)
 
 # Some custom etc files
-cp -f -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
+cp -f -p $BASEDIR/tools/boot/$CODENAME/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
 	$inst/etc/
 
 tmp=$TDIR/sparc-root
