@@ -1,5 +1,20 @@
-debian-cd (2.2.18) UNRELEASED; urgency=low
+debian-cd (2.2.18) unstable; urgency=medium
 
+  * Steve McIntyre
+    - Final medium-urgency upload to get a recent debian-cd in before
+      the sarge release.
+    - Update default version to 3.1 for a sarge release.
+    - Sarge is going to have more than 9 CDs; make sure we clean up all of
+      the working dirs.
+    - Removed the -T option to mkisofs. We don't need the TRANS.TBL files
+      any more, and we should save the space.
+    - Added support for SIZE_MULT_x when calculating full disc
+      sizes. Best use is on m68k and powerpc images where HFS hybrid
+      metadata seems to add ~10% to the size of the image.
+    - Various updates to update-cd to cope with changes r0->r2.
+  * Santiago Garcia Mantinan
+    - Generate PPC CD 1 with -chrp-boot. Closes: #252667
+    - Reduce the size of the catalogue size on PPC DVDs. Closes: #252652
   * Raphael Hertzog
     - Add missing Build-Depends-Indep. Closes: #258018
     - Remove debian-keyring.tar.gz from the doc dir.
