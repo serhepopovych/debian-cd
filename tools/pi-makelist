@@ -1,0 +1,63 @@
+#! /bin/sh
+
+if [ "$1" == "" ] ; then
+  echo ""
+  echo 'Usage: pi-makelist cdimage.iso > cdimage.iso.list'
+  echo ""
+  echo "Will print on stdout the ordered list of files in the ISO 9660 image."
+  echo ""
+  echo 'Copyright (C) 1999 J.A. Bezemer           <costar@panic.et.tudelft.nl>' 
+  echo "Released under GNU GPL     NO WARRANTY AT ALL     USE AT YOUR OWN RISK" 
+  echo ""
+
+  exit
+fi
+
+# In my testing situation, isoinfo was in . but . wasn't in the PATH.
+PATH="$PATH":.
+export PATH
+
+# The rest is one long pipe. The best way to find out why it works is
+# to comment out all but the first command, and then remove one hash
+# each run.
+
+isoinfo -i "$1" -R -l -f		\
+  | grep -B 1 '^-'			\
+  | grep -v '^--$'			\
+  | (
+      while read ThisFile; do
+	read ThisInfoLine
+
+	echo "$ThisInfoLine" ["$ThisFile"]
+      done
+    )					\
+  | tr ']' '['				\
+  | cut -d '[' -f 2,4			\
+  | sort				\
+  | cut -d '[' -f 2			\
+  | grep -v -e '/Packages'		\
+	    -e '/Sources'		\
+	    -e 'TRANS.TBL$'		\
+	    -e '^/md5sum.txt$'		\
+	    -e '^/Release-Notes$'	\
+	    -e '^/README.1ST$'		\
+	    -e '^/README.multicd$'	\
+	    -e '^/.disk/'		\
+	    -e '^/boot/'		\
+	    -e '^/install/'		\
+	    -e '^/tools/.*/'		\
+	    -e '^/tools/README.tools$'	\
+	    -e '.info$'			\
+	    -e '.m68k$'			\
+	    -e '^/m68k-faq/'		\
+	    -e '^/m68k-tools/'		\
+	    -e '^/extras/'
+
+# Note: we grep /install/ out because contents are also on other places
+# on the CD; rsync will duplicate them. Same with /boot/resc1440.bin
+# (/boot/boot.catalog is made during image generation).
+# Packages[.cd][.gz] are usually not the same as those on FTP. Same with
+# Sources[.gz].
+# And the /tools are only zipped on FTP.
+# /xxx.info is only on the m68k CDs and not on FTP.
+# *.m68k is not on FTP; m68k-faq and -tools are not on the Debian FTPs.

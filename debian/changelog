@@ -17,8 +17,8 @@ debian-cd (2.1.92) frozen unstable; urgency=low
     file is included at the end of the Debian_potato task in order to
     include the packages that are widely used on the first CD if possible.
   * Added a bunch of set -e.
-  * Added pi-makelist to generate the *.list files used by the Pseudo
-    Image Kit.
+  * Added pi-makelist target to generate the *.list files used by the
+    Pseudo Image Kit. Needs isoinfo in the cdwrite package.
   * Updated README and README.devel. Explained that the main source
     is on CVS and that patch should apply on the CVS tree not on the
     source package available on the Debian FTP.

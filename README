@@ -19,7 +19,8 @@ Software :
 - perl (>= 5.004)
 - bash (or another POSIX shell)
 - make
-- mkisofs/mkhybrid
+- mkisofs/mkhybrid (mkisofs also provides the isoinfo binary used by the
+  Pseudo Image Kit)
 - dpkg-multicd package (for dpkg-scanpackages with -m option)
 - the perl MD5 module
 - dpkg-dev (>= 1.4.1.6) (for dpkg-scansources)
@@ -32,7 +33,8 @@ Other :
 		-------------------------------
 		- GENERATING DEBIAN CD IMAGES -
 		-------------------------------
-		
+
+
 For people that do not have time, here's the quick explanation :
 ================================================================
 
@@ -46,6 +48,7 @@ $ make official_images
   $ make bin-official_images ]
 
 But you really should consider reading further for more information.
+
 
 How to build a CD set - step by step
 ====================================
@@ -156,7 +159,24 @@ The process of building a CD is decomposed as follow :
   images you can do it with :
   $ make imagesums
 
-  
+
+Additionnal targets
+===================
+
+Pseudo Image Kit
+----------------
+Those of you, who will make images available to people for download may
+consider using the Pseudo Image Kit (cf http://cdimage.debian.org for more
+information). That's why you can launch "make pi-makelist" that will generate
+the *.list files for the images you've just generated.
+
+The tools/pi-makelist script needs the isoinfo binary. You can get the
+sources from http://www.fokus.gmd.de/research/cc/glone/employees/joerg.schilling/private/cdrecord.html
+
+Alternatively (and certainly simpler for people using Debian system), the
+isoinfo binary is in the mkisofs package (since Debian potato at least).
+
+
 About the hook system
 =====================
 

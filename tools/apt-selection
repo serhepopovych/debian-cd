@@ -3,7 +3,9 @@
 # This is a little shell script that will launch apt-get in dry-run mode
 # to find all the dependencies of a specific package
 
-set -e
+# There's not set -e here because this script may fail !
+# Apt doesn't always work ... 
+# set -e
 
 # Get the configuration information if necessary
 if [ -z "$TDIR" -o -z "$CODENAME" -o -z "$ARCH" ]; then
