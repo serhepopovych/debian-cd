@@ -1,8 +1,6 @@
-# These udebs build the d-i cdrom initrd. As such, there is no reason
-# to keep another copy of them on the CD in udeb form.
-#
-# This duplicates data found in the file build/pkg-lists/cdrom/i386,
-# in d-i cvs.
+# These udebs are in the d-i cdrom initrd and the hd-media initrd. 
+# As such, there is no reason to keep another copy of them on the CD
+# in udeb form.
 isa-pnp-modules-*
 socket-modules-*
 console-keymaps-at
@@ -11,7 +9,6 @@ discover-data-udeb
 discover-udeb
 discover1-data-udeb
 discover1-udeb
-floppy-modules-*
 fat-modules-*
 cdrom-core-modules-*
 cdrom-modules-*
@@ -21,7 +18,6 @@ input-modules-*
 fb-modules-*
 kbd-chooser
 usb-modules-*
-firewire-core-modules-*
 usb-storage-modules-*
 scsi-core-modules-*
 # Not needed with the 2.4 kernel on i386.

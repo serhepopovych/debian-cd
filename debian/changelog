@@ -32,6 +32,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       priority mode. I only implemented it for i386 so far.
     - Add MAXCDS config variable, which forces debian-cd to stop after a given
       number of binary CDs.
+    - Only exclude udebs from the CD that are in both the cd initrd and the
+      hd-media initrd, since both use the CD. This adds back floppy-modules
+      and firewire-core-modules.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
