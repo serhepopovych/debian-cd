@@ -638,14 +638,14 @@ bin-image: ok bin-md5list $(OUT)
 	cd $(BDIR); opts=`cat $(CD).mkisofs_opts`; \
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
 	  $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts $(CD)
+	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD)
 src-image: ok src-md5list $(OUT)
 	@echo "Generating the source iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 	cd $(SDIR); opts=`cat $(CD).mkisofs_opts`; \
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-src-$(CD).raw; \
          $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/$(CODENAME)-src-$(CD).raw $$opts $(CD)
+	  -o $(OUT)/$(CODENAME)-src-$(CD).raw $$opts CD$(CD)
 
 
 #Calculate the md5sums for the images
