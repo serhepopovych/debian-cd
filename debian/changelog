@@ -1,12 +1,9 @@
 debian-cd (2.2.18) UNRELEASED; urgency=low
 
-  * Sven Luther
-    - fixed powerpc list so it includes the 2.6 kernels too as well as the
-      power3 and power4 2.4 kernels.
-  * Remove debian-keyring.tar.gz from the doc dir.
-  * Don't include Contents-$ARCH.gz on netinst/businesscard CD.
   * Raphael Hertzog
     - Add missing Build-Depends-Indep. Closes: #258018
+    - Remove debian-keyring.tar.gz from the doc dir.
+    - Don't include Contents-$ARCH.gz on netinst/businesscard CD.
   * Joey Hess
     - Include sarge installation manual on sarge CDs.
     - Remove install/doc, and just use doc/install.
@@ -62,29 +59,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
       are currently using 2.4.25.
-    - Remove packages not in testing from exclude-sarge:
-        kernel-image-2.2.20, kernel-image-2.2.20-compact,
-        kernel-image-2.2.20-idepci, kernel-image-2.2.20-reiserfs,
-        kernel-image-2.4.18-bf2.4, kernel-image-2.4.20-3-386,
-        kernel-image-2.4.20-3-586tsc, kernel-image-2.4.20-3-686,
-        kernel-image-2.4.20-3-686-smp, kernel-image-2.4.20-3-k6,
-        kernel-image-2.4.20-3-k7, kernel-image-2.4.20-3-k7-smp,
-        kernel-image-2.4.22-1-386, kernel-image-2.4.22-1-586tsc,
-        kernel-image-2.4.22-1-686, kernel-image-2.4.22-1-686-smp,
-        kernel-image-2.4.22-1-k6, kernel-image-2.4.22-1-k7,
-        kernel-image-2.4.22-1-k7-smp, kernel-image-2.4.22-speakup,
-        kernel-image-2.4.22-xfs-386, kernel-image-2.4.22-xfs-686-smp,
-        kernel-image-2.4.23-1-386, kernel-image-2.4.23-1-586tsc,
-        kernel-image-2.4.23-1-686, kernel-image-2.4.23-1-686-smp,
-        kernel-image-2.4.23-1-k6, kernel-image-2.4.23-1-k7,
-        kernel-image-2.4.23-1-k7-smp, kernel-image-2.6.0-1-386,
-        kernel-image-2.6.0-1-686, kernel-image-2.6.0-1-686-smp,
-        kernel-image-2.6.0-1-k7, kernel-image-2.6.0-1-k7-smp,
-        kernel-image-2.6.0-test11-1-386,
-        kernel-image-2.6.0-test9-1-386,
-        kernel-pcmcia-modules-2.4.22-xfs-386,
-        kernel-pcmcia-modules-2.4.22-xfs-686-smp,
-        kernel-source-2.2.20, timidity-patches, tcl8.2 and tk8.2.
+    - Remove packages not in testing from exclude-sarge.
     - Update list2cds to allow #-comments in the exclude file.
     - Try to create $(OUT) instead of just bailing out if it is missing.
     - Missing b-f documentation is not a fatal error.  Keep
@@ -140,6 +115,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       installs it.
     - Bump initrd-size to 10MB for powerpc 2.4. Current d-i initrds exceed
       that.
+  * Sven Luther
+    - fixed powerpc list so it includes the 2.6 kernels too as well as the
+      power3 and power4 2.4 kernels.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
