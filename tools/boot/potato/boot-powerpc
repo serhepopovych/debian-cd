@@ -104,10 +104,14 @@ cat $BASEDIR/data/yaboot/yaboot.conf \
 cp $BASEDIR/data/yaboot/ofboot.b powermac/
 
 # Extract yaboot from the archive
-(ar p $MIRROR/dists/$CODENAME/main/binary-powerpc/base/yaboot_* data.tar.gz | \
+if [ -z "$YABOOT_DEBUG" ]; then
+ (ar p $MIRROR/dists/$CODENAME/main/binary-powerpc/base/yaboot_* data.tar.gz | \
 	tar zxf - -C powermac ./boot/yaboot)
-mv powermac/boot/yaboot powermac/yaboot
-rmdir powermac/boot
+ mv powermac/boot/yaboot powermac/yaboot
+ rmdir powermac/boot
+else
+ cp $YABOOT_DEBUG powermac/yaboot
+fi
 
 #--------------- PReP - Stuff -------------------------------
 echo Installing PReP files
