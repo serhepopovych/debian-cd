@@ -32,6 +32,9 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Split udeb_includes for businesscard and netinst; netinst does not
       need choose-mirror, while businesscard does.
     - Substitute into yaboot.msg the same as is done for isolinux.txt.
+  * Steve Langasek
+    - Add fdisk-udeb to the list of needed debs for alpha
+    - Use /dev/ram as the root device for aboot (alpha)
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
