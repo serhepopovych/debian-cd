@@ -1077,6 +1077,7 @@ telnet
 libtext-iconv-perl
 wget
 dvhtool
+arcboot
 pciutils
 setserial
 iptables

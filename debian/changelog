@@ -48,6 +48,10 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Try to fix powerpc DVD builds via -hfs-parms MAX_XTCSIZE.
     - Add prep powerpc support.
     - Update debian-installer tasks.
+  * Thiemo Seufer
+    - Add arcboot to the mips tasks/base-sarge list, like it is done for
+      other bootloaders.
+    - Add a default bootfile named sashARCS for mips, aliased to r4k-ip22.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
