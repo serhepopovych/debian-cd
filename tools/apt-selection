@@ -25,6 +25,7 @@ options=" -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
           -o Dir::State=$APTTMP/$CODENAME-$ARCH/apt-state/ \
 	  -o Dir::Cache=$APTTMP/$CODENAME-$ARCH/apt-cache/ \
 	  -o Dir::Etc=$APTTMP/$CODENAME-$ARCH/apt/ \
+	  -o APT::Cache::AllVersions=0 \
 	  -o APT::Architecture=$ARCH "
 
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then

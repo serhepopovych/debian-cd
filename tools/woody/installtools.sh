@@ -22,12 +22,12 @@ fi
 
 # Put the install documentation in /install
 cd $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/$DOCDIR
-mkdir $DIR/install/$DOCDIR
+mkdir -p $DIR/install/$DOCDIR
 cp -a * $DIR/install/$DOCDIR/
 ln -sf install.en.html $DIR/install/$DOCDIR/index.html
 
 # Put the boot-disk documentation in /doc too
-mkdir $DIR/doc/install
+mkdir -p $DIR/doc/install
 cd $DIR/doc/install
 for file in ../../install/$DOCDIR/*.{html,txt}
 do

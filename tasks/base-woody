@@ -1,0 +1,131 @@
+
+# This file lists the packages needed by debootstrap
+#
+# Those should be on CD1 to be able to bootstrap a woody system
+# with debootstrap.
+# It's a pity but this file is not automatically generated, so it
+# needs to be manually updated from time to time with the
+# source information from /usr/lib/debootstrap/scripts/woody
+#
+# Latest update : in sync with debootstrap 0.1.11
+#
+# -- Raphael Hertzog
+
+# Required packages
+# They are already automatically included
+
+# Base packages
+adduser
+perl
+perl-modules
+apt
+apt-utils
+at
+base-config
+bsdmainutils
+console-common
+console-tools
+console-tools-libs
+console-data
+cpio
+cron
+dhcp-client
+ed
+exim
+fdutils
+gettext-base
+groff
+ifupdown
+info
+ipchains
+klogd
+libident
+libldap2
+liblockfile1
+libncurses4
+libpcre3
+libsasl7
+libwrap0
+logrotate
+mailx
+man-db
+manpages
+modconf
+nano
+net-tools
+netbase
+netkit-inetd
+netkit-ping
+nvi
+ppp
+sysklogd
+tasksel
+tcpd
+telnet
+
+# Arch specific for the base system
+
+#if (@ARCH@ = alpha)
+setserial
+aboot
+pciutils
+#endif
+
+#if (@ARCH@ = arm)
+setserial
+libgpmg1
+#endif
+
+#if (@ARCH@ = i386)
+lo
+pciutils
+setserial
+syslinux
+#endif
+
+#if (@ARCH@ = m68k)
+atari-bootstrap
+atari-fdisk
+amiga-fdisk
+eject
+mac-fdisk
+pmac-fdisk-cross
+setserial
+vmelilo
+#endif
+
+#if (@ARCH@ = powerpc)
+quik
+mac-fdisk
+amiga-fdisk
+psmisc
+powerpc-utils
+setserial
+pciutils
+hfsutils
+yaboot
+#endif
+
+#if (@ARCH@ = sparc)
+silo
+eject
+pciutils
+sparc-utils
+#endif
+
+#if (@ARCH@ = mips)
+dvhtool
+pciutils
+setserial
+#endif
+
+#if (@ARCH@ = mipsel)
+delo
+pciutils
+setserial
+#endif
+
+#if (@ARCH@ = hppa)
+palo
+#endif
+

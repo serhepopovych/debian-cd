@@ -3,6 +3,9 @@ debian-cd (2.2.5) unstable; urgency=low
   * UNRELEASED
   * Remove (obsolete) -a from mkhybrid call. Changed mkhybrid to mkisofs
     since mkhybrid has been superseded by mkisofs. Closes: #97439
+  * Only includes latest version of a package if a newer version
+    is provided in a local repository.
+  * Includes on CD1 packages needed by debootstrap. Closes: #100353
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 19 May 2001 15:15:29 +0200
 

@@ -24,3 +24,7 @@ twm
 menu
 wmaker
 wmakerconf
+libterm-stool-perl
+libterm-readline-gnu-perl
+whiptail
+dialog
