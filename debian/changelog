@@ -117,6 +117,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       that.
     - Remove -safe options from powerpc yaboot menu, as they caused
       combinatorial explosion. Instead, document video=ofonly in boot.msg.
+    - Clarify powerpc boot.msg a bit.
   * Sven Luther
     - fixed powerpc list so it includes the 2.6 kernels too as well as the
       power3 and power4 2.4 kernels.
