@@ -30,7 +30,7 @@ inst=boot1
 mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
 # put the relevant parts of SILO boot loader
-(ar p $CDDIR/dists/$CODENAME/main/binary-sparc/base/silo_* data.tar.gz | \
+(ar p $MIRROR/dists/$CODENAME/main/binary-sparc/base/silo_* data.tar.gz | \
 	tar zxf - -C $inst/ boot/{cd,second}.b)
 
 # Some custom etc files
