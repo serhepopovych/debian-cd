@@ -1,0 +1,47 @@
+#!/bin/bash -e
+# 
+# boot-sparc sarge+
+#
+# Do install stuff for sparc, including making first CD bootable
+
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
+set -e
+
+N=$1
+CDDIR=$2
+
+cd $CDDIR/..
+
+:> $N.mkisofs_opts
+
+# Only disc 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then 
+	exit 0; 
+fi
+
+install_languages $CDDIR
+
+echo "-G boot1/boot/isofs.b -B ... boot1" > $N.mkisofs_opts
+rm -rf boot1
+
+inst=boot1
+
+# Setup directories
+mkdir -p $inst/boot
+
+silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
+# put the relevant parts of SILO boot loader
+(ar p $silo_deb data.tar.gz | \
+	tar zxf - -C $inst/ ./boot/{isofs,second}.b)
+
+# Some custom etc files
+cp -f -p $BASEDIR/data/sparc/etc/{debian.txt,silo.conf} \
+	$inst/boot/
+
+cp CD1/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/vmlinuz \
+	$inst/boot/sparc32.gz
+# Sparc64 kernel is so big, that uncompressing it corrupts SILO memory, so
+# uncompress it before hand.
+zcat CD1/dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
+	> $inst/boot/sparc64
