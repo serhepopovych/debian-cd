@@ -637,8 +637,8 @@ $(SDIR)/CD1/README.html:
 		dir=$${dir##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$dir; \
 		cp -d $(MIRROR)/README* $$dir/; \
-		rm -f $$dir/README $$dir/README.1ST \
-			$$dir/README.CD-manufacture $$dir/README.multicd \
+		rm -f $$dir/README $$dir/README.html \
+			$$dir/README.CD-manufacture \
 			$$dir/README.pgp ; \
 		cpp -traditional -undef -P -C -Wall -nostdinc -I $$dir/ \
 		    -D OUTPUTtext $(BASEDIR)/data/$(CODENAME)/README.html.in \
