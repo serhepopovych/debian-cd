@@ -63,4 +63,4 @@ Bugs / Problems :
 * make list will not add contrib packages if you do not
   select NONFREE too. That's because contrib is broken
   without non-free. And the building process only allow
-  functionnal packages to be added.
+  functional packages to be added.
