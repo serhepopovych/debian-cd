@@ -48,6 +48,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Updated tasks/README with new location of popularity-contest results.
     - Regenereated tasks/popularity-contest-sarge based on the current
       data.
+    - Avoid acorn-fdisk, cfdisk-utf8 and lots of kernels on the first CD.
+      It should be enough with one kernel package on the first CD.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
