@@ -13,7 +13,9 @@ set -e
 N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
-WWW_HOME="http://people.debian.org/~tsauter/"
+if [ ! "$WWW_HOME" ];then
+   WWW_HOME="http://people.debian.org/~tsauter/d-i/images-powerpc/daily"
+fi
 
 cd $CDDIR/..
 
@@ -59,8 +61,8 @@ cat $BASEDIR/data/sarge/yaboot/boot.msg \
 cat $BASEDIR/data/sarge/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
 cp $BASEDIR/data/yaboot/ofboot.b ofboot.b
-wget -O vmlinux $WWW_HOME/d-i/images-powerpc/daily/vmlinux
-wget -O root.bin $WWW_HOME/d-i/images-powerpc/daily/cdrom-initrd.gz
+wget -O vmlinux $WWW_HOME/vmlinux
+wget -O root.bin $WWW_HOME/cdrom-initrd.gz
 
 #
 # generate/download images for "apus"

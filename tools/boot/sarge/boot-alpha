@@ -25,6 +25,9 @@ set -e
 N=$1
 CDDIR=$2
 BOOTDIR=
+if [ ! "$WWW_HOME" ];then
+   WWW_HOME="http://people.debian.org/~vorlon/d-i/images/daily"
+fi
 
 cd $CDDIR/..
 
@@ -46,7 +49,7 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 for image in bootlx cdrom-initrd.gz cdrom-linux; do
     if [ ! -e "$image" ]; then
 	# XXX: not really 'daily'...
-	wget -q http://people.debian.org/~vorlon/d-i/images/daily/$image
+	wget $WWW_HOME/$image
     fi
 done
 

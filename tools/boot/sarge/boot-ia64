@@ -13,6 +13,9 @@ set -x
 N=$1
 CDDIR=$2
 BOOTDIR=
+if [ ! "$WWW_HOME" ];then
+   WWW_HOME="http://people.debian.org/~jbailey/ia64"
+fi
 
 cd $CDDIR/..
 
@@ -25,7 +28,7 @@ fi
 # Download boot images
 for image in cdrom-image.img; do
     if [ ! -e "$image" ]; then
-	wget -q http://people.debian.org/~jbailey/ia64/$image
+	wget $WWW_HOME/$image
     fi
 done
 

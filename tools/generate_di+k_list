@@ -54,8 +54,8 @@ cat >> debian-installer+kernel << EOF
 EOF
 
 #This is just temporary, they are going to change it all for 2.4.22
-/bin/sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages \
+/bin/sed -n 's/Package: \(kernel-image-.*-powerpc.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages |tail -n 2 \
   >> debian-installer+kernel
 
 cat >> debian-installer+kernel << EOF

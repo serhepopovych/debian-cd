@@ -13,6 +13,9 @@ set -e
 N=$1
 CDDIR=$2
 BOOTDIR=
+if [ ! "$WWW_HOME" ];then
+   WWW_HOME="http://people.debian.org/~sjogren/d-i/images/daily"
+fi
 
 cd $CDDIR/..
 
@@ -45,7 +48,7 @@ THISTYPE=${KTYPE[$NN]}
 # XXX add net-image.img back when it's fixed
 for image in cd_drivers-image.img cdrom-image.img cdrom-initrd.gz floppy-image.img floppy-initrd.gz net_drivers-image.img netboot-initrd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
-	wget -q http://people.debian.org/~sjogren/d-i/images/daily/$image
+	wget $WWW_HOME/$image
     fi
 done
 
