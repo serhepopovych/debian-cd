@@ -48,7 +48,7 @@ $ sensible-editor CONF.sh
 $ . CONF.sh
 $ make distclean
 $ make status
-$ make list COMPLETE=1 SIZELIMIT1=555000000 SRCSIZELIMIT=665000000
+$ make list COMPLETE=1 SIZELIMIT1=625000000 SRCSIZELIMIT=665000000
 $ make official_images
 [ alternatively, if you only want binary images:
   $ make bin-official_images ]
@@ -167,11 +167,9 @@ The process of building a CD is composed of the following steps:
   mirror). Your boot-floppies must also be on the same partiton than
   your mirror & temporary dir (hardlinks are used here too).
 
-  All CD1 of officials images are bootable (CD for ARM are the exception)
-  and the space required for this stuff may not always be taken into
-  account in the size calculation. That's why you may need to adjust
-  manually SIZELIMIT1 following the size of the boot-floppies set that
-  you're using.
+  Size calculation is imprecise for bootable CDs (usually the first CDs
+  in the set), so you may need to manually adjust SIZELIMIT* variables
+  to account for the size of the booting stuff used.
 
 - now, we'll add the binary packages to the temporary tree:
 
