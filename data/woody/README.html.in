@@ -498,7 +498,7 @@ bugs may be present anywhere in the system.
 -------- This can't be an official image, so also no official notes.
 <LI>
 Last-minutes notes for this CD may be available on
-<a href="http://cdimage.debian.org/lastmin.html">http://cdimage.debian.org/lastmin.html</a>
+<a href="http://www.debian.org/CD/releases/">http://www.debian.org/CD/releases/</a>
 </LI>
 #endif
 
@@ -615,10 +615,10 @@ us (but of course donations are always welcome).
 
 <P>
 
-For all needed information, and contact addresses, please refer to
+For all needed information and contact addresses, please refer to
 <P>
 <tt>&nbsp;
-  <a href="http://cdimage.debian.org/">http://cdimage.debian.org</a>
+  <a href="http://www.debian.org/CD/">http://www.debian.org/CD/</a>
 </tt>
 #endif
 

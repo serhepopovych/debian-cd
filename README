@@ -238,13 +238,13 @@ to "1" while building the CDs.
 You can also set the LOCALDEBS environment variable, and it will be used
 instead of MIRROR when looking for local packages.
 
-Additionnal targets
-===================
+Additional targets
+==================
 
 Pseudo Image Kit
 ----------------
-Those of you, who will make images available to people for download may
-consider using the Pseudo Image Kit (cf http://cdimage.debian.org for more
+Those of you who will make images available to people for download may
+consider using the Pseudo Image Kit (cf http://www.debian.org/CD/ for more
 information). That's why you can launch "make pi-makelist" that will generate
 the *.list files for the images you've just generated.
 

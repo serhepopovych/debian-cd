@@ -513,7 +513,7 @@ to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
 
 <LI>
 More last-minutes notes for this CD may be available on
-<a href="http://cdimage.debian.org/lastmin.html">http://cdimage.debian.org/lastmin.html</a>
+<a href="http://www.debian.org/CD/releases/">http://www.debian.org/CD/releases/</a>
 </LI>
 
 </UL>
@@ -632,7 +632,7 @@ us (but of course donations are always welcome).
 For all needed information, and contact addresses, please refer to
 <P>
 <tt>&nbsp;
-  <a href="http://cdimage.debian.org/">http://cdimage.debian.org</a>
+  <a href="http://www.debian.org/CD/">http://www.debian.org/CD/</a>
 </tt>
 #endif
 
