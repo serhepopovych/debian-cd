@@ -43,7 +43,7 @@ THISTYPE=${KTYPE[$NN]}
 # Download boot images
 for image in cdrom-2880.img cdrom-initrd.gz cdrom144-1440.img cdrom144-initrd.gz net-1440.img net-initrd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
-	wget http://people.debian.org/~joeyh/debian-installer/daily/images/$image
+	wget -q http://people.debian.org/~joeyh/debian-installer/daily/images/$image
     fi
 done
 
