@@ -69,7 +69,7 @@ for i in $BDIR/*.packages; do
 	    cat $dir/.disk/info >>$dir/README.1ST
 	    echo -e "\n\n" >>$dir/README.1ST
 	    cat $BASEDIR/data/$CODENAME/README.1ST.$ARCH > $dir/README.1ST
-	    todos $dir/README.1ST; 
+	    todos $dir/README.1ST
 	fi
 
 	if [ -e $BASEDIR/data/$CODENAME/README.multicd ]; then 
