@@ -28,10 +28,12 @@ options=" -q -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
 	  -o APT::Cache::AllVersions=0 \
 	  -o APT::Architecture=$ARCH "
 
+sections=main
 if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ]; then
-	sections="main contrib non-free"
-else
-	sections="main contrib"
+	sections="$sections non-free"
+fi
+if [ "${CONTRIB:-0}" != "0" ]; then
+	sections="$sections contrib"
 fi
 
 # Check for the necessary dirs and files ...

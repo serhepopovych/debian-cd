@@ -11,8 +11,10 @@ debian-cd (2.2.16) unstable; urgency=low
     task mechanism, cf tasks/debian-installer for the current list)
   * Added all files for sarge (in tasks/ data/ and tools/).
   * Updated isolinux.bin from syslinux 1.75-1.
+  * Make it possible to exclude contrib from the CDs.  Useful if you only
+    have a mirror of main.
 
- -- Raphael Hertzog <hertzog@debian.org>  Thu, 10 Oct 2002 14:52:15 +0200
+ -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
 
 debian-cd (2.2.15) unstable; urgency=low
 

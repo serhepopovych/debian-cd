@@ -13,12 +13,15 @@ BDIR=$TDIR/$CODENAME-$ARCH
 
 PREFIX=`echo $2 | sed "s?$BDIR/CD?$BDIR/?"`
 
+SECTIONS="main"
+SECTIONSNONUS="non-US/main"
 if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ]; then
-  SECTIONS="main contrib non-free"
-  SECTIONSNONUS="non-US/main non-US/contrib non-US/non-free"
-else
-  SECTIONS="main contrib"
-  SECTIONSNONUS="non-US/main non-US/contrib"
+  SECTIONS="${SECTIONS} non-free"
+  SECTIONSNONUS="${SECTIONSNONUS} non-US/non-free"
+fi
+if [ "${CONTRIB:-0}" != "0" ]; then
+  SECTIONS="${SECTIONS} contrib"
+  SECTIONSNONUS="${SECTIONSNONUS} non-US/contrib"
 fi
 
 if [ -n "$LOCAL" ]; then
