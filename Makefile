@@ -169,11 +169,13 @@ $(ADIR):
 # CLeans the current arch tree (but not packages selection info)
 clean: ok bin-clean src-clean
 bin-clean:
-	$(Q)-rm -rf $(BDIR)/[1234567890]
+	$(Q)-rm -rf $(BDIR)/CD[1234567890]
+	$(Q)-rm -rf $(BDIR)/*_NONUS
 	$(Q)-rm -f  $(BDIR)/packages-stamp $(BDIR)/bootable-stamp \
 	         $(BDIR)/upgrade-stamp
 src-clean:
-	$(Q)-rm -rf $(SDIR)/[1234567890]
+	$(Q)-rm -rf $(SDIR)/CD[1234567890]
+	$(Q)-rm -rf $(SDIR)/*_NONUS
 	$(Q)-rm -rf $(SDIR)/sources-stamp
 
 # Completely cleans the current arch tree
@@ -302,8 +304,9 @@ $(BDIR)/list: $(BDIR)/rawlist
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
 ifdef FORCENONUSONCD1
-	$(Q)find $(NONUS)/dists/$(CODENAME) | grep binary-.*/.*deb | \
-	 sed 's/.*\///g;s/_.*//g' | sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
+	$(Q)$(apt) cache dumpavail | \
+		grep-dctrl -FSection -n -sPackage -e '^non-US' - | \
+		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
 	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \

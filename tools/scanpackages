@@ -20,7 +20,7 @@ BDIR=$TDIR/$CODENAME-$ARCH
 
 PREFIX=`echo $2 | sed "s?$BDIR/CD?$BDIR/?"`
 
-NUM=${PREFIX##$TDIR/$CODENAME-$ARCH/}
+NUM=${PREFIX##$BDIR/}
 NUM=`echo $NUM | sed 's/_NONUS//g'`
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
@@ -123,20 +123,66 @@ fi
 # Creates the temp Packages-$SECT files
 if [ "$1" != "scan" ]; then exit 0; fi
 
-for SECT in $SECTIONS; do
 
-	dpkg-scanpackages -m "`cat .disk/info`" \
-	          dists/$CODENAME/$SECT/binary-$ARCH \
-                  $MIRROR/indices/override.$CODENAME.$SECT.gz \
-		  > $PREFIX.Packages-$SECT
-   
+if [ ! -e "../overrides" ]; then
+    # Create an override file with all sections
+    for SECT in $SECTIONS; do
+	zcat $MIRROR/indices/override.$CODENAME.$SECT.gz >> ../overrides
 	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
- 		 dpkg-scanpackages -m "`cat .disk/info`" \
-		        dists/$CODENAME/non-US/$SECT/binary-$ARCH \
-                  	$NONUS/indices-non-US/override.$CODENAME.$SECT.gz \
-		  	> $PREFIX.Packages-non-US-$SECT
+	    zcat $NONUS/indices-non-US/override.$CODENAME.$SECT.gz \
+	    	 >> ../overrides
 	fi
-	
+    done
+fi
+
+#
+# Create a Packages file for all packages on the CD
+#
+if [ -d pool ]; then
+    dpkg-scanpackages -m "`cat .disk/info`" pool ../overrides \
+	    > $PREFIX.Packages-BOTH
+fi
+# We have to scan all possible dists where packages can be
+DISTS=""
+DISTSNONUS=""
+for i in `cd dists; echo *; cd ..`; do
+    if [ ! -L "dists/$i" -a -d "dists/$i" ]; then
+	if [ -d "dists/$i/main/binary-$ARCH" ]; then
+	    DISTS="$DISTS $i"
+	fi
+	if [ -d "dists/$i/non-US/main/binary-$ARCH" ]; then
+	    DISTSNONUS="$DISTSNONUS $i"
+	fi
+    fi
+done
+for SECT in $SECTIONS; do
+    for DIST in $DISTS; do
+	dpkg-scanpackages -m "`cat .disk/info`" dists/$DIST/$SECT/binary-$ARCH \
+		../overrides >> $PREFIX.Packages-BOTH
+    done
+    for DIST in $DISTSNONUS; do
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	    dpkg-scanpackages -m "`cat .disk/info`" \
+		    dists/$DIST/non-US/$SECT/binary-$ARCH \
+		    ../overrides >> $PREFIX.Packages-BOTH
+	fi
+    done
+done
+# Separate non-US from the rest
+grep-dctrl -FFilename -e '/non-[Uu][Ss]/' $PREFIX.Packages-BOTH \
+	> $PREFIX.Packages-ALLNONUS
+grep-dctrl -v -FFilename -e '/non-[Uu][Ss]/' $PREFIX.Packages-BOTH \
+	> $PREFIX.Packages-ALL
+
+# Split the Packages file by section
+for SECT in $SECTIONS; do
+    grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALL \
+    	> $PREFIX.Packages-$SECT
+    
+    if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALLNONUS \
+		> $PREFIX.Packages-non-US-$SECT
+    fi
 done
 
 # Slink special case

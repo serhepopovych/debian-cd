@@ -1,6 +1,6 @@
 /* Comment 
  *
- * This file will be used to build official complete set of Woody CD
+ * This file will be used to build complete set of Sid CD (unstable)
  *
  */
 
@@ -8,7 +8,7 @@
    to select the packages in the initial installation */
 
 #if (FORCENONUSONCD1 == 1)
-#include "Debian_woody_nonUS"
+#include "Debian_sid_nonUS"
 #endif
 
 task-dialup

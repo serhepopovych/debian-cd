@@ -11,6 +11,8 @@ debian-cd (2.2.4) unstable; urgency=low
     Closes: #79902
   * Include a new interactive boot.bat. Closes: #83471
   * Corrected tools/apt-selection. Closes: #79903
+  * Does correctly manage pools wrt Packages files. 
+  * Now depends on grep-dctrl.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 27 Jan 2001 18:19:21 +0100
  

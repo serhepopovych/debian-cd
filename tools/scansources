@@ -17,14 +17,40 @@ fi
 
 cd $PREFIX
 
+# We have to scan all possible dists where sources can be
+DISTS=""
+DISTSNONUS=""
+for i in `cd dists; echo *; cd ..`; do
+    if [ ! -L "dists/$i" -a -d "dists/$i" ]; then
+        if [ -d "dists/$i/main/source" ]; then
+            DISTS="$DISTS $i"
+        fi
+        if [ -d "dists/$i/non-US/main/source" ]; then
+            DISTSNONUS="$DISTSNONUS $i"
+        fi
+    fi
+done
 for SECT in $SECTIONS; do
 
-	dpkg-scansources dists/$CODENAME/$SECT/source \
-        | gzip --best > dists/$CODENAME/$SECT/source/Sources.gz 
+	if [ -d "pool/$SECT" ]; then
+	    dpkg-scansources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
+	fi
+	for DIST in $DISTS; do
+	    dpkg-scansources dists/$DIST/$SECT/source \
+		>> dists/$CODENAME/$SECT/source/Sources
+	done
+        gzip --best dists/$CODENAME/$SECT/source/Sources
    
 	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
- 		 dpkg-scansources dists/$CODENAME/non-US/$SECT/source \
-                 | gzip --best > dists/$CODENAME/non-US/$SECT/source/Sources.gz
+	    if [ -d "pool/non-US/$SECT" ]; then
+		dpkg-scansources pool/non-US/$SECT \
+			> dists/$CODENAME/$SECT/source/Sources
+	    fi
+	    for DIST in $DISTSNONUS; do
+		dpkg-scansources dists/$DIST/non-US/$SECT/source \
+			>> dists/$CODENAME/$SECT/source/Sources
+	    done
+	    gzip --best dists/$CODENAME/non-US/$SECT/source/Sources
 	fi
 	
 done
