@@ -230,7 +230,7 @@ In case of upgrading from a set of CD-ROMs (also possible for a single,
 
   to add the data of each individual CD-ROM to apt's internal database.
   This command will ask for one CD-ROM per run, and mount/unmount the
-  CD-ROM automatically. You should repeat this command for all 2.2 `Binary'
+  CD-ROM automatically. You should repeat this command for all `Binary'
   CD-ROMs you have.
 
 #if UPGRADING
