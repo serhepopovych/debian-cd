@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # Example script to use with slink_cd - this will create trees for
-# i386, m68k, sparc and alpha. 
+# i386, m68k, sparc, alpha and powerpc. 
 # (c) Steve McIntyre 11 Feb 1999, released under GPL
 
-for ARCH in m68k i386 alpha sparc
+for ARCH in alpha i386 m68k powerpc sparc
 do
-        echo TDIR=/debian/local/slinkcd-$ARCH OUT=/debian/local/OUT-$ARCH \
+        echo TDIR=/debian/local/debiancd-$ARCH OUT=/debian/local/OUT-$ARCH \
 		MIRROR=/debian NONUS=/debian/Debian-non-US \
-		./slink_cd \
+		./debian_cd \
 		clean genlist tree flatten md5check packages boot \
 		extras $ARCH md5list images imagesums
 
-        TDIR=/debian/local/slinkcd-$ARCH OUT=/debian/local/OUT-$ARCH \
+        TDIR=/debian/local/debiancd-$ARCH OUT=/debian/local/OUT-$ARCH \
 		MIRROR=/debian NONUS=/debian/Debian-non-US \
 		BOOTDIR=/usr/lib/silo \
-		./slink_cd \
+		./debian_cd \
 		clean genlist tree flatten md5check packages boot \
 		extras $ARCH md5list images imagesums
 done
