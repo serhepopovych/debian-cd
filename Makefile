@@ -371,7 +371,7 @@ endif
 		| tr ' ' '\n' >>$(BDIR)/rawlist; \
 	fi
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
-	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
+	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(subst -,_,$(ARCH)) \
 	     -U $(ARCH) -U i386 -U linux -U unix \
 	     -DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist
@@ -380,7 +380,7 @@ endif
 $(BDIR)/rawlist-exclude:
 	$(Q)if [ -n "$(EXCLUDE)" ]; then \
 	 	perl -npe 's/\@ARCH\@/$(ARCH)/g' $(EXCLUDE) | \
-			cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
+			cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(subst -,_,$(ARCH)) \
 				-U $(ARCH) -U i386 -U linux -U unix \
 	     			-DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     			-I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist-exclude; \

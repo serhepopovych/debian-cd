@@ -20,7 +20,8 @@ EOF
 my @common_excludes = read_exclude("exclude-udebs");
 
 foreach my $arch (@ARCHES) {
-	print OUT "#ifdef ARCH_$arch\n";
+	(my $cpparch = $arch) =~ s/-/_/g;
+	print OUT "#ifdef ARCH_$cpparch\n";
 	my @exclude = @common_excludes;
 	push @exclude, read_exclude("exclude-udebs-$arch")
 		if -e exclude_path("exclude-udebs-$arch");
@@ -33,7 +34,7 @@ UDEB:	foreach my $udeb (map { chomp; $_ } `grep-dctrl -n -s Package '' $packagef
 		}
 		print OUT "$udeb\n";
 	}
-	print OUT "#endif /* ARCH_$arch */\n";
+	print OUT "#endif /* ARCH_$cpparch */\n";
 }
 
 sub read_exclude {

@@ -72,6 +72,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Make it possible to change which images to build using CONF.sh.
     - Use DI_CODENAME to locate the installation system.  This make it
       possible to use debian-installer with Woody CDs.
+    - Avoid illegal dash (-) in cpp architecture defines.  Patch
+      from Colin Watson.
   * Stephen R. Marenka
     - Update m68k support for sarge.
         - Fix m68k/amiga icons.
