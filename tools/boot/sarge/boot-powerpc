@@ -100,6 +100,14 @@ do
 		rm -f "$subarch/vmlinuz-prep.initrd"
 	fi
   fi
+
+  # Save some space with hardlinks; these kernels are identical.
+  if [ -e powerpc/vmlinux ] && [ -e powerpc/minimal/vmlinux ]; then
+	ln -f powerpc/vmlinux powerpc/minimal/vmlinux
+  fi
+  if [ -e powerpc/2.4/vmlinux ] && [ -e powerpc/minimal/2.4/vmlinux ]; then
+	ln -f powerpc/2.4/vmlinux powerpc/minimal/2.4/vmlinux
+  fi
 done
 
 exit 0

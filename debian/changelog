@@ -36,6 +36,8 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
       netboot.
     - Remove 2.6 PReP images from power3 and power4, as no such machines
       exist.
+    - Hardlink powerpc and powerpc/minimal vmlinux files together, since
+      they're identical.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
