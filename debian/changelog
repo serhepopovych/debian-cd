@@ -1,6 +1,5 @@
-debian-cd (2.2.16) unstable; urgency=low
+debian-cd (2.2.16) UNRELEASED; urgency=low
 
-  * UNRELEASED
   * Updated standards-version to 3.5.7.
   * Use debhelper 4 (build-depends on it, updated DH_COMPAT).
   * WARNING: potato is now mostly unsupported, some cruft has been
@@ -13,6 +12,8 @@ debian-cd (2.2.16) unstable; urgency=low
   * Updated isolinux.bin from syslinux 1.75-1.
   * Make it possible to exclude contrib from the CDs.  Useful if you only
     have a mirror of main.
+  * Petter Reinholdtsen:
+    - Add CONTRIB flag to debian/CONF.sh.
 
  -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
 

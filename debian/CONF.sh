@@ -2,6 +2,7 @@
 unset NONUS             || true
 unset FORCENONUSONCD1   || true
 unset NONFREE           || true
+unset CONTRIB           || true
 unset EXTRANONFREE      || true
 unset LOCAL             || true
 unset LOCALDEBS         || true
@@ -75,6 +76,9 @@ export APTTMP=/home/ftp/tmp/apt
 
 # Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
+
+# Do I want to have CONTRIB merged in the CD set
+export CONTRIB=1
 
 # Do I want to have NONFREE on a separate CD (the last CD of the CD set)
 # WARNING: Don't use NONFREE and EXTRANONFREE at the same time !
