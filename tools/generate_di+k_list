@@ -58,6 +58,8 @@ EOF
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_alpha
+aboot
+aboot-base
 discover1
 EOF
 
@@ -106,6 +108,7 @@ done
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_mipsel
+delo
 EOF
 
 # Only include mipsel kernels that d-i base-installer installs.
