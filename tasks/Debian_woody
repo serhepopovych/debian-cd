@@ -19,6 +19,7 @@ task-tex
 task-samba
 task-games
 task-laptop
+task-debian-devel
 task-devel-common
 task-c-dev
 task-c++-dev
@@ -41,6 +42,9 @@ task-python-web
 task-tcltk-dev
 task-parallel-computing-node
 task-parallel-computing-dev
+
+/* Packages that should really be on CD1 */
+#include <forcd1>
 
 /* Well I don't know if task for specific countries should be included
    on the first CD ... 
