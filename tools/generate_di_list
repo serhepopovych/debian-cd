@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Generate a list of packages required for debian-installer
+
+MIRROR=/var/ftp
+DIST=sarge
+ARCHS="alpha arm hppa hurd-i386 i386 ia64 m68k mips mipsel powerpc s390 sparc sh"
+DATE=`date`
+cat > debian-installer << EOF
+/*  List of udebs to be included so that debian-installer works fine 
+ *
+ * This list can be generated with the command:
+ * ../utils/generate_di_list
+ *
+ * Last update: $DATE
+ */
+
+EOF
+
+for arch in $ARCHS ; do
+cat >> debian-installer << EOF
+#ifdef ARCH_$arch
+EOF
+
+
+grep-dctrl -s Package -n -e '.*' $MIRROR/debian/dists/$DIST/main/debian-installer/binary-$arch/Packages >> debian-installer
+
+cat >> debian-installer << EOF 
+#endif
+
+EOF
+
+done
