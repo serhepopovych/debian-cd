@@ -41,6 +41,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       include ethdetect and netcfg, to make network configuration happen in
       first stage, since the second stage cannot currently do any.
       Closes: #240458
+    - Include debian-installer+kernel into Debian_sarge task to ensure all
+      debs as well as udebs used by d-i are included.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
