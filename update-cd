@@ -1,13 +1,13 @@
 #!/bin/sh
 #
-# update-cd v 0.1
+# update-cd v 0.2
 # 
 # (c) Steve McIntyre <stevem@chiark.greenend.org.uk> Released under
-# GNU GPL v2 5th December 2000
+# GNU GPL v2 1st January 2001
 #
 # Quick and dirty script to create update CDs for people to upgrade
 # from potato (2.2r0) to the latest release level
-
+#
 # Configuration goes here.
 # Where is your mirror?
 MIRROR=${MIRROR:-/debian}
@@ -33,6 +33,11 @@ CODENAME=potato
 # Path where the images will be written
 OUT=/scratch/debian-cd
 
+# Location of the diff file to use to determine the changes. If you leave
+# this blank, we'll try to determine the changes from the ChangeLog files,
+# which is probably less accurate. 
+DIFF=~/r2.diff
+
 REL=Debian"$VER"
 CLOG=dists/$REL/ChangeLog
 NUCLOG=dists/$REL/non-US/ChangeLog
@@ -50,6 +55,7 @@ scanpackages=$BASEDIR/tools/scanpackages
 scansources=$BASEDIR/tools/scansources
 set_mkisofs_opts=$BASEDIR/tools/set_mkisofs_opts
 adddirs=$BASEDIR/tools/add_dirs
+addfiles=$BASEDIR/tools/add_files
 
 echo Cleaning up
 rm -rf $UPD
@@ -72,7 +78,11 @@ cd $MIRROR
 
 echo Creating main-section list
 
-egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/list
+if [ -e $DIFF ] ; then
+	grep -v non-US ~/r2.diff >$UPD/list
+else
+	egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/list
+fi
 if [ "$NONFREE"x != "1"x ] ; then
 	echo Removing non-free
 	grep -v non-free $UPD/list > $UPD/list1
@@ -80,16 +90,17 @@ if [ "$NONFREE"x != "1"x ] ; then
 fi
 
 echo Creating trees
-for FILE in `cat $UPD/list`
-do
-	cp --parents -dpRl $FILE $UPD/CD1 2>/dev/null
-	cp --parents -dpRl $FILE $UPD/CD2 2>/dev/null
-done
+cat $UPD/list | xargs $addfiles $UPD/CD1 $MIRROR
+cat $UPD/list | xargs $addfiles $UPD/CD2 $MIRROR
 
 if [ "$NONUS"x != ""x ] ; then
 	echo Creating non-US list
 	cd $NONUS
-	egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/nu-list
+	if [ -e $DIFF ] ; then
+		grep non-US ~/r2.diff >$UPD/nu-list
+	else
+		egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/nu-list
+	fi
 
 	if [ "$NONFREE"x != "1"x ] ; then
 		echo Removing non-free
@@ -98,11 +109,8 @@ if [ "$NONUS"x != ""x ] ; then
 	fi
 
 	echo Creating non-US trees
-	for FILE in `cat $UPD/nu-list`
-	do
-		cp --parents -dpRl $FILE $UPD/CD1 2>/dev/null
-		cp --parents -dpRl $FILE $UPD/CD2 2>/dev/null
-	done
+	cat $UPD/nu-list | xargs $addfiles $UPD/CD1 $MIRROR
+	cat $UPD/nu-list | xargs $addfiles $UPD/CD2 $MIRROR
 fi
 
 # The full update will not fit on a single CD, so split it by architecture, arbitrarily
@@ -131,7 +139,9 @@ do
 	for CAT in *
 	do
 		if [ $CAT != '*' ] ; then
-			cd $CAT
+			if [ -d $CAT ] ; then
+				cd $CAT
+			fi
 			for FILE in *.deb
 			do
 				if [ $FILE != '*.deb' ] ; then
@@ -146,7 +156,9 @@ do
 					done
 				fi
 			done
-			cd ..
+			if [ -d ../$CAT ] ; then
+				cd ..
+			fi
 		fi
 	done
 	cd $UPD
