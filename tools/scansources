@@ -6,7 +6,7 @@
 # This script will create the Sources.gz files
 # First arg = directory of the CD
 
-#set -e
+set -e
 
 PREFIX=$1
 if [ -n "$NONFREE" ]; then

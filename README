@@ -1,5 +1,6 @@
 YACS - Yet Another CD Script :-)
 ================================
+(better known as debian-cd)
 
 Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
 This set of tools is licensed under the General Public License
@@ -8,6 +9,8 @@ version 2 or any later version. You can find it in
 
 Thanks to Steve McIntyre <stevem@chiark.greenend.org.uk> for his
 work on slink_cd/debian_cd. Some ideas come from his script.
+
+Thanks to all the contributors on the debian-cd mailing list.
 
 What is needed ?
 ================
@@ -148,6 +151,10 @@ The process of building a CD is decomposed as follow :
   Of course if you want to build all binary images you'll use :
   $ make bin-images
   And "make src-images" will generate the sources images.
+
+- if you want to generate a MD5SUMS file with the md5sums of the
+  images you can do it with :
+  $ make imagesums
 
   
 About the hook system

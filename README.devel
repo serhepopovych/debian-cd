@@ -1,5 +1,25 @@
-README for those who want to hack on yacs
------------------------------------------
+README for those who want to hack on yacs/debian-cd
+---------------------------------------------------
+
+Organisation :
+--------------
+
+The main source is in the Debian CVS. If you want to hack on debian-cd
+and if you want to send me patches, please work on the latest version
+available in the CVS.
+
+http://cvs.debian.org/debian-cd/
+
+$ export CVSROOT=anonymous@cvs.debian.org:/cvs/debian-boot
+$ cvs co debian-cd
+
+If you want to discuss anything related to the debian-cd development, you
+can contact me directly or, better, you can mail the
+debian-cd@lists.debian.org mailing list where all people interested in the
+debian-cd development are subscribed.
+
+Technical details :
+-------------------
 
 The Makefile which is the main directory will be used to launch
 each step of the install process. Try to comment each target of

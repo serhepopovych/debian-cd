@@ -1,5 +1,6 @@
-debian-cd (2.1.92) unstable; urgency=low
+debian-cd (2.1.92) frozen unstable; urgency=low
 
+  * Added files for woody (yes, people already burn woody CD images)
   * Make the second CD bootable on i386 with the "compact" image.
   * Changes to installtools.sh, change to check for documentation
     directory name by $ARCH.
@@ -15,8 +16,14 @@ debian-cd (2.1.92) unstable; urgency=low
     usefulness (results given by the popularity contest of course). This
     file is included at the end of the Debian_potato task in order to
     include the packages that are widely used on the first CD if possible.
+  * Added a bunch of set -e.
+  * Added pi-makelist to generate the *.list files used by the Pseudo
+    Image Kit.
+  * Updated README and README.devel. Explained that the main source
+    is on CVS and that patch should apply on the CVS tree not on the
+    source package available on the Debian FTP.
 
- -- Raphael Hertzog <hertzog@debian.org>  Tue, 28 Dec 1999 00:03:18 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 19 Feb 2000 18:32:22 +0100
 
 debian-cd (2.1.91) unstable; urgency=low
 

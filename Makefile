@@ -465,6 +465,9 @@ bin-images: ok bin-md5list $(OUT)
 		rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
 		$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 		  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts $$n ; \
+		$(BASEDIR)/tools/pi-makelist \
+			$(OUT)/$(CODENAME)-$(ARCH)-$$n.raw > \
+			$(OUT)/$(CODENAME)-$(ARCH)-$$n.list; \
 	done
 src-images: ok src-md5list $(OUT)
 	@echo "Generating the source iso images ..."
@@ -477,6 +480,9 @@ src-images: ok src-md5list $(OUT)
 		rm -f $(OUT)/$(CODENAME)-src-$$n.raw; \
 		$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 		  -o $(OUT)/$(CODENAME)-src-$$n.raw $$opts $$n ; \
+		$(BASEDIR)/tools/pi-makelist \
+			$(OUT)/$(CODENAME)-src-$$n.raw > \
+			$(OUT)/$(CODENAME)-src-$$n.list; \
 	done
 
 

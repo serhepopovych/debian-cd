@@ -1,0 +1,4 @@
+debian-cd
+files
+postinst.debhelper
+prerm.debhelper
