@@ -5,8 +5,6 @@
   Start the installation -- this is the default CDROM install.
 0fnet07
   Start the installation for a network install.
-0fcdrom14407
-  Start the installation with the cdrom144 flavor.
 
 Press <09ENTER07> or type boot method, arguments, and <09ENTER07> to boot.
 Press function key <09F107> for the help index.

@@ -31,7 +31,7 @@ KTYPE[1]="" #isolinux multiboot in fact
 KTYPE[2]="cdrom-image"
 # XXX add net-image back when it's fixed
 KTYPE[3]=""
-KTYPE[4]="cdrom144-image"
+KTYPE[4]=""
 KTYPE[5]=""
 KTYPE[6]=""
 KTYPE[7]=""
@@ -43,9 +43,9 @@ THISTYPE=${KTYPE[$NN]}
 
 # Download boot images
 # XXX add net-image.img back when it's fixed
-for image in cdrom-image.img cdrom-initrd.gz cdrom144-image.img cdrom144-initrd.gz net-initrd.gz vmlinuz ; do
+for image in cd_drivers-image.img cdrom-image.img cdrom-initrd.gz floppy-image.img floppy-initrd.gz net_drivers-image.img netboot-initrd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
-	wget -q http://people.debian.org/~tfheen/d-i/images/daily/$image
+	wget -q http://people.debian.org/~sjogren/d-i/images/daily/$image
     fi
 done
 
@@ -55,8 +55,7 @@ if [ "$NN" = "1" ]; then
     cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
     cp -lf vmlinuz $CDDIR/install/
     cp -lf cdrom-initrd.gz $CDDIR/install/cdrom.gz
-    cp -lf cdrom144-initrd.gz $CDDIR/install/cdrom144.gz
-    cp -lf net-initrd.gz $CDDIR/install/net.gz
+    cp -lf netboot-initrd.gz $CDDIR/install/net.gz
     echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 else
     if [ -n "$THISTYPE" ]; then
@@ -79,6 +78,7 @@ if [ "$NN" = "1" ]; then
 
 # populate the install directory as well
 cp -lf *.img $CDDIR/install
+cp -lf floppy-initrd.gz $CDDIR/install
 
 # ISOLINUX setup
 
@@ -96,9 +96,6 @@ LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
-LABEL cdrom144
-  kernel /install/vmlinuz
-  append vga=normal initrd=/install/cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL net
   kernel /install/vmlinuz
   append vga=normal initrd=/install/net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
@@ -132,11 +129,9 @@ smartdrv /c
 
 echo Please choose an install method now
 echo 1= CDROM install
-echo 2= CDROM install (1.44Mb image)
-echo 3= NET install
+echo 2= NET install
 
-choice /c:123
-if errorlevel 3 goto THREE
+choice /c:12
 if errorlevel 2 goto TWO
 if errorlevel 1 goto ONE
 
@@ -148,10 +143,6 @@ echo using CDROM install
 loadlin.exe vmlinuz vga=normal initrd=cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 
 :TWO
-echo using CDROM (1.44Mb) install
-loadlin.exe vmlinuz vga=normal initrd=cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
-:THREE
 echo using NET install
 loadlin.exe vmlinuz vga=normal initrd=net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 

@@ -8,6 +8,11 @@
 #include <debian-installer>
 cramfsprogs
 dash
+discover
+eject
+grub
 initrd-tools
-kernel-image-2.4.19-386
+kernel-image-2.4.21-4-386
+locales
+lvm10
 zlib1g
