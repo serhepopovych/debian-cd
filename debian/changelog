@@ -60,6 +60,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Add support for booting 2.6 as well as 2.4 to the first i386 cd.
     - Add dirty temporal workaround for saving space on netinst images.
       This should be fixed in a proper way when time permits.
+    - Make fast_sums ignore md5sums of files not in the pool directory.
+      Closes: #247889
   * Bdale Garbee
     - shorten the command line in post-boot-hppa for sarge, as palo can't
       handle a command line longer than 127 chars right now

@@ -12,7 +12,8 @@
 use strict;
 use Digest::MD5;
 
-# load up all the md5sums we need
+# We load the md5sums of all the files in the pool dir, we don't want to use
+# the others because the files on the cds can be different (like README.html)
 my %md5 ;
 my $BDIR = shift @ARGV ;
 
@@ -20,12 +21,11 @@ foreach my $sumsfile ($BDIR . "/indices/md5sums", $BDIR . "/indices-non-US/md5su
   if (open(MD5SUMS, $sumsfile)) {
     while (<MD5SUMS>) {
       chomp;
-      next if /Packages/ ;
-      next if /Sources/ ;
-      next if /Release/ ;
       my ( $sum, $name ) = split(' ') ;
-      # printf "[%s] [%s]\n", $sum, $name ;
-      $md5{$name} = $sum ;
+      if ($name =~ /^pool/) {
+        # printf "[%s] [%s]\n", $sum, $name ;
+        $md5{$name} = $sum ;
+      }
     }
     close(MD5SUMS);
   } else {
