@@ -442,9 +442,9 @@ $(BDIR)/packages-stamp:
 	@# and create .disk/base_installable if yes
 	@# Also create .disk/base_components
 	$(Q)for DISK in $(FIRSTDISKS); do \
+	    DISK=$${DISK##CD}; \
 	    if [ -x "/usr/sbin/debootstrap" ]; then \
 	        ok=yes; \
-	        DISK=$${DISK##CD}; \
 	        for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
 		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
 		        ok=no; \
