@@ -33,6 +33,7 @@ xfsprogs
 reiserfsprogs
 #ifdef ARCH_i386
 discover
+discover1
 grub
 lilo
 EOF
@@ -50,7 +51,7 @@ EOF
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_alpha
-discover
+discover1
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
@@ -60,7 +61,7 @@ EOF
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_hppa
-discover
+discover1
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
@@ -70,7 +71,7 @@ EOF
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_ia64
-discover
+discover1
 initrd-tools
 EOF
 
@@ -108,7 +109,7 @@ done
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_powerpc
-discover
+discover1
 EOF
 
 # Only include powerpc kernels that d-i base-installer installs.
@@ -123,7 +124,7 @@ done
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_sparc
-discover
+discover1
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*-sparc.*\)$/\1/p' \
