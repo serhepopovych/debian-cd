@@ -206,7 +206,6 @@ bin-distclean:
 src-distclean:
 	$(Q)-rm -rf $(SDIR)
 
-
 ## STATUS and APT ##
 
 # Regenerate the status file with only packages that
@@ -751,7 +750,7 @@ $(TDIR)/jigdofilelist: $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.
 	$(Q)set -e; \
 	if [ "$(DOJIGDO)" != 0 ]; then \
 		mkdir -p $(TDIR); \
-		find $(MIRROR)//dists/$(CODENAME)/main/disks-i386 \
+		find $(MIRROR)//dists/$(CODENAME)/main/disks-$(ARCH) \
 		     $(MIRROR)//dists/$(CODENAME) \
 		     $(MIRROR)//doc $(MIRROR)//indices \
 		     $(MIRROR)//pool $(MIRROR)//project $(MIRROR)//tools \
@@ -927,15 +926,15 @@ imagesums:
 		$(md5sum) $$file >>MD5SUMS; \
 	done; \
 	for file in `find * -name \*.template`; do \
-		if [ "`tail --bytes=29 "$$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 01 ]; then \
+		if [ "`tail --bytes=33 "$$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 05 ]; then \
 			echo "Possibly invalid template $$file"; exit 1; \
 		fi; \
 		grep -q " $${file%%.template}.raw"'$$' MD5SUMS \
-		 || echo "`tail --bytes=22 "$$file" | head --bytes=16 | od -tx1 -An | sed -e 's/ //g'`  $${file%%.template}.raw" >>MD5SUMS; \
+		 || echo "`tail --bytes=26 "$$file" | head --bytes=16 | od -tx1 -An | sed -e 's/ //g'`  $${file%%.template}.raw" >>MD5SUMS; \
 	done
 
 # Likewise, the file size can be extracted from the .template with:
-# tail --bytes=28 $$file | head --bytes=6 | od -tx1 -An \
+# tail --bytes=32 $$file | head --bytes=6 | od -tx1 -An \
 #  | tr ' abcdef' '\nABCDEF' | tac | tr '\n' ' ' \
 #  | sed -e 's/ //g; s/^.*$/ibase=16 & /' | tr ' ' '\n' | bc
 
