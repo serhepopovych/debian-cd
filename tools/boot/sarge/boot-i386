@@ -29,7 +29,8 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 # List of boot image for each CD
 KTYPE[1]="" #isolinux multiboot in fact
 KTYPE[2]="cdrom-image"
-KTYPE[3]="net-image"
+# XXX add net-image back when it's fixed
+KTYPE[3]=""
 KTYPE[4]="cdrom144-image"
 KTYPE[5]=""
 KTYPE[6]=""
@@ -41,7 +42,8 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 # Download boot images
-for image in cdrom-image.img cdrom-initrd.gz cdrom144-image.img cdrom144-initrd.gz net-image.img net-initrd.gz vmlinuz ; do
+# XXX add net-image.img back when it's fixed
+for image in cdrom-image.img cdrom-initrd.gz cdrom144-image.img cdrom144-initrd.gz net-initrd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
 	wget -q http://people.debian.org/~tfheen/d-i/images/daily/$image
     fi
