@@ -1,6 +1,6 @@
 #! /bin/sh
 
-if [ "$1" == "" ] ; then
+if [ "$1" = "" ] ; then
   echo ""
   echo 'Usage: pi-makelist cdimage.iso > cdimage.list'
   echo ""

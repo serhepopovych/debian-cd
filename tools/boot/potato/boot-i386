@@ -29,12 +29,12 @@ cd $CDDIR/..
 
 # Strip stupid NONUS sutff
 #
-if [ $N == "1_NONUS" ] || [ $N == "1" ] ; then NN=1 ; fi
-if [ $N == "2_NONUS" ] || [ $N == "2" ] ; then NN=2 ; fi
-if [ $N == "3_NONUS" ] || [ $N == "3" ] ; then NN=3 ; fi
-if [ $N == "4_NONUS" ] || [ $N == "4" ] ; then NN=4 ; fi
-if [ $N == "5_NONUS" ] || [ $N == "5" ] ; then NN=5 ; fi
-if [ $N == "6_NONUS" ] || [ $N == "6" ] ; then NN=6 ; fi
+if [ $N = "1_NONUS" ] || [ $N = "1" ] ; then NN=1 ; fi
+if [ $N = "2_NONUS" ] || [ $N = "2" ] ; then NN=2 ; fi
+if [ $N = "3_NONUS" ] || [ $N = "3" ] ; then NN=3 ; fi
+if [ $N = "4_NONUS" ] || [ $N = "4" ] ; then NN=4 ; fi
+if [ $N = "5_NONUS" ] || [ $N = "5" ] ; then NN=5 ; fi
+if [ $N = "6_NONUS" ] || [ $N = "6" ] ; then NN=6 ; fi
 # NN is now 1...N so it can be used as an index
 
 # what kernel-type to put on what disk?
@@ -61,7 +61,7 @@ echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
 
 # Only disk one gets the extra files installed
 #
-if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
+if [ $N = "1" ] || [ $N = "1_NONUS" ] ; then
 
 # populate the install directory as well
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \

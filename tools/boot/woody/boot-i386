@@ -61,7 +61,7 @@ echo -n "-J -b boot/rescue.bin "  > $N.mkisofs_opts
 
 # Only disk one gets the extra files installed
 #
-if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
+if [ $N = "1" ] || [ $N = "1_NONUS" ] ; then
 
 
 
@@ -72,7 +72,7 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 # Setup all boot-disk images (currently 5)
 
 
-if [ $MULTIBOOT == "yes" ] ; then
+if [ $MULTIBOOT = "yes" ] ; then
         echo "Adding additional boot images to CD1"
 
     for i in 2 3 4 5 ; do

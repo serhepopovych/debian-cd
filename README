@@ -101,7 +101,7 @@ The process of building a CD is decomposed as follow :
   or
   $ make list TASK=tasks/gnome COMPLETE=0 SIZELIMIT=576716800
   or
-  $ export NONFREE=1; make list TASK=tasks/kde COMPLETE=1
+  $ export NONFREE=1; make list TASK=tasks/your-task-here COMPLETE=1
   or for something like an official image for the USA (without non-US &
   non-free) :
   $ make list COMPLETE=1 SIZELIMIT1=576716800
@@ -109,9 +109,8 @@ The process of building a CD is decomposed as follow :
   
   You can change the behaviour of this command with the following
   variables :
-  - if NONUS is set, then packages from non-US will be allowed (remember
-    that the value of NONUS must be the path to the non-US mirror
-    if you have one)
+  - if NONUS is set, then packages from non-US will be allowed (the value
+    of NONUS must be the path to the non-US mirror if you have one)
   - if FORCENONUSONCD1 is set also, then packages will be
     rearranged so that non-US packages are all on CD#1. This
     includes the non-free ones if you specify NONFREE. Then 2 separate
