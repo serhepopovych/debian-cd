@@ -79,6 +79,6 @@ reiserfsprogs-udeb
 # These are not really needed, the regular netcfg subsumes them.
 netcfg-static
 netcfg-dhcp
-# This will be leaving the archive soon, for now, disable it as it breaks
-# the installer.
-di-utils-devicefiles
+# skolelinux stuff, not for the stock CDs
+debian-edu-install-udeb
+debian-edu-profile-udeb
