@@ -23,6 +23,8 @@ grub
 locales
 lvm10
 aptitude
+jfbterm
+unifont
 #ifdef ARCH_i386
 EOF
 
