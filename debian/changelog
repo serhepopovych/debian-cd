@@ -31,6 +31,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
       floppy/cyrillic-root.img to EXTRA_DISK_IMAGES (but may it be treated
       as DISK_IMAGES?)
     - Fix typo in test evaluation. (tools/boot/sarge/boot-i386)
+    - Add localization-config.
   * Colin Watson
     - Add "--" end of installer kernel params markers to yaboot.conf.
     - Drop compatibility with old powerpc 2.4/2.6 d-i image layout, since

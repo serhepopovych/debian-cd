@@ -30,6 +30,7 @@ xfsprogs
 jfsutils
 reiserfsprogs
 libfribidi0
+localization-config
 #ifdef ARCH_i386
 discover
 discover1
