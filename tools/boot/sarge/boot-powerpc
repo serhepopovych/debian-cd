@@ -86,22 +86,10 @@ do
 	fi
   else
 	wget -r -nd --no-parent --level=1 -P "$subarch" "-R index* $DI_WWW_HOME/$subarch/cdrom/"
-	# One of these two wgets will fail; the price of maintaining
-	# compatibility. The 2.4/2.6 duplication can go away once the new
-	# debian-installer image layout reaches sarge.
 	wget -r -nd --no-parent --level=1 -P "$subarch/2.4" -R index* "$DI_WWW_HOME/$subarch/cdrom/2.4/"
-	wget -r -nd --no-parent --level=1 -P "$subarch/2.6" -R index* "$DI_WWW_HOME/$subarch/cdrom/2.6/"
 	if [ $subarch = powerpc ]; then
 		wget -r -nd --no-parent --level=1 -P "$subarch/minimal" -R index* "$DI_WWW_HOME/$subarch/cdrom-minimal/"
 		wget -r -nd --no-parent --level=1 -P "$subarch/minimal/2.4" -R index* "$DI_WWW_HOME/$subarch/cdrom-minimal/2.4/"
-	fi
-	if [ -d "$subarch/2.6" ]; then
-	    # Cope with old debian-installer image layout from before 2.6
-	    # became the default.
-	    mkdir -p "$subarch/2.4"
-	    find "$subarch" -type f -maxdepth 1 | xargs -r mv --target-directory="$subarch/2.4"
-	    find "$subarch/2.6" -type f -maxdepth 1 | xargs -r mv --target-directory="$subarch"
-	    rm -rf "$subarch/2.6"
 	fi
   fi
 done
