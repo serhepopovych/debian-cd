@@ -23,7 +23,7 @@ fi
 cd $DOCS
 mkdir -p $DIR/install/$DOCDIR
 if cp -a * $DIR/install/$DOCDIR/ ; then
-    ln -f $DIR/install/$DOCDIR/install.en.html $DIR/install/$DOCDIR/index.html
+    ln -f $DIR/install/$DOCDIR/index.en.html $DIR/install/$DOCDIR/index.html
 else
     echo "ERROR: Unable to copy installer documentation to CD."
 fi
@@ -31,12 +31,12 @@ fi
 # Put the installer documentation in /doc too
 mkdir -p $DIR/doc/install
 cd $DIR/doc/install
-for file in ../../install/$DOCDIR/*.{html,txt}
+for file in ../../install/$DOCDIR/*.html
 do
     ln $file
 done
 if [ -e ../../install/$DOCDIR/INSTALLATION-HOWTO ]; then
-    ln ../../install/$DOCDIR/INSTALLATION-HOWTO
+    ln -f ../../install/$DOCDIR/INSTALLATION-HOWTO
 fi
 
 # FIXME: why does it have to be in two places?
