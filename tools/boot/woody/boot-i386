@@ -54,12 +54,50 @@ echo "Using ${KTYPE[$NN]} boot-disks image on CD$N"
 :> $N.mkisofs_opts
 mkdir -p boot$N/boot
 cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$NN]}/rescue.bin boot$N/boot/
-echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
+echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot$N "  > $N.mkisofs_opts
+
 
 
 # Only disk one gets the extra files installed
 #
 if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
+
+
+
+# # new new new # #
+# The next chunk of code is only used if MULTIBOOT=yes
+# Make disk1 a multi-boot image
+# ElTorito supports multiple boot images
+
+if [ $MULTIBOOT == "yes" ] ; then
+        echo "Adding additional boot images to CD1"
+
+        # first copy/link the next boot block to the disk.
+        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[2]}/rescue.bin boot$N/boot/${KTYPE[2]}.bin
+        # then the eltorito-alt-boot cmd to mkisofs_opts
+        echo -n " -eltorito-alt-boot " >> $N.mkisofs_opts
+        # then copy the mkisofs command for this image to the mkisofs_opts
+        echo -n " -b boot/${KTYPE[2]}.bin "  >> $N.mkisofs_opts
+
+
+
+        # first copy/link the next boot block to the disk.
+        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[3]}/rescue.bin boot$N/boot/${KTYPE[3]}.bin
+        # then the eltorito-alt-boot cmd to mkisofs_opts
+        echo -n " -eltorito-alt-boot " >> $N.mkisofs_opts
+        # then copy the mkisofs command for this image to the mkisofs_opts
+        echo -n " -b boot/${KTYPE[3]}.bin "  >> $N.mkisofs_opts
+
+
+
+
+
+
+#...and so on...or loop 2-n???
+fi
+
+
+
 
 # populate the install directory as well
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
@@ -69,7 +107,6 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 	cp -f idepci/linux $CDDIR/install/linpci ; \
 	cp -f ide/linux $CDDIR/install/linide ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
-
 
 
 # Tools for disc 1
