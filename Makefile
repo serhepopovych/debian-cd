@@ -410,7 +410,7 @@ $(BDIR)/1/doc:
 			| sed -e 's/%%.//g' > $$dir/README.html ; \
 		rm -f $$dir/README.diskdefines ; \
 		mkdir -p $$dir/pics ; \
-		cp $(BASEDIR)/data/pics/* $$dir/pics/ ; \
+		cp $(BASEDIR)/data/pics/*.jpg $$dir/pics/ ; \
 		if [ -e $(MIRROR)/dists/$(CODENAME)/main/Release-Notes ]; then \
 		   cp $(MIRROR)/dists/$(CODENAME)/main/Release-Notes $$dir/; \
 		fi; \
@@ -455,7 +455,7 @@ $(SDIR)/1/README.html:
 			| sed -e 's/%%.//g' > $$dir/README.html ; \
 		rm -f $$dir/README.diskdefines ; \
 		mkdir -p $$dir/pics ; \
-		cp $(BASEDIR)/data/pics/* $$dir/pics/ ; \
+		cp $(BASEDIR)/data/pics/*.jpg $$dir/pics/ ; \
 	done
 
 # Add the install stuff on the first CD
