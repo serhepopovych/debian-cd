@@ -61,6 +61,9 @@ endif
 ifndef BOOTDISKS
 export BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
 endif
+ifndef DOJIGDO
+export DOJIGDO=0
+endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
@@ -141,6 +144,17 @@ ifdef FORCENONUSONCD1
 ifndef NONUS
 ok=false
 endif
+endif
+# If we do jigdo, we need a command and a URL. If not, make sure we won't.
+ifneq "$(DOJIGDO)" "0"
+ifndef JIGDOCMD
+ok=false
+endif
+ifndef JIGDOTEMPLATEURL
+ok=false
+endif
+else
+export JIGDOCMD=false
 endif
 
 default:
@@ -688,40 +702,151 @@ $(SDIR)/CD1/dists/$(CODENAME)-secured:
 		$(add_secured); \
 	done
 
+# Make file list for jigdo (if DOJIGDO>0)
+# "Fake" depend on the unstable Packages.gz to make sure we only regenerate
+# this list when really necessary (saves many minutes per run).
+# Don't depend on anything else as this will not work as intended, so
+# make $(TDIR) ourselves just to be sure.
+$(TDIR)/jigdofilelist: $(MIRROR)/dists/unstable/main/binary-i386/Packages.gz
+	@echo "Generating file list for jigdo (if requested) ..."
+	$(Q)set -e; \
+	if [ "$(DOJIGDO)" != 0 ]; then \
+		mkdir -p $(TDIR); \
+		find $(MIRROR)//dists $(MIRROR)//doc $(MIRROR)//indices \
+		     $(MIRROR)//pool $(MIRROR)//project $(MIRROR)//tools \
+		     -type f \
+		| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
+		> $(TDIR)/jigdofilelist; \
+		if [ -n "$(NONUS)" ]; then \
+			find $(NONUS)// -type f \
+			| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
+			>> $(TDIR)/jigdofilelist; \
+		fi; \
+	fi
 
 # Generates all the images
 images: bin-images src-images
-bin-images: ok bin-md5list $(OUT)
+
+# DOJIGDO postboot actions   (source has the appropriate subset)
+#    0      no     isofile
+#    0      yes    isofile  post
+#    1      no     isofile        jigdo            jigdoadd
+#    1      yes    isofile  post  jigdo            jigdoadd
+#    2      no                           isojigdo  jigdoadd
+#    2      yes    isofile  post  jigdo            jigdoadd  rmiso 
+#
+bin-images: ok bin-md5list $(OUT) $(TDIR)/jigdofilelist
 	@echo "Generating the binary iso images ..."
 	$(Q)set -e; \
 	 for file in $(BDIR)/*.packages; do \
 		dir=$${file%%.packages}; \
 		n=$${dir##$(BDIR)/}; \
+		num=$$n; \
 		dir=$(BDIR)/CD$$n; \
 		cd $$dir/..; \
 		opts=`cat $(BDIR)/$$n.mkisofs_opts`; \
 		volid=`cat $(BDIR)/$$n.volid`; \
 		rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
-		$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-		  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts CD$$n ; \
-		if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
-			$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
-			 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
-		fi \
+		if [ "$(DOJIGDO)" != "2" -o -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
+			  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts CD$$n ; \
+			if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+				$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
+				 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+			fi; \
+			if [ "$(DOJIGDO)" != "0" ]; then \
+				$(JIGDOCMD) make-template --force \
+				  --files-from=$(TDIR)/jigdofilelist \
+				  --image=$(OUT)/$(CODENAME)-$(ARCH)-$$n.raw \
+				  --jigdo=$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo \
+				  --template=$(OUT)/$(CODENAME)-$(ARCH)-$$n.template \
+				  --label Non-US="$(NONUS)" \
+				  --label Debian="$(MIRROR)" \
+				  --no-image-section --no-servers-section \
+				  --report=noprogress; \
+			fi; \
+		else \
+			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
+			  $$opts CD$$n \
+			| $(JIGDOCMD) make-template --force \
+				  --files-from=$(TDIR)/jigdofilelist \
+				  --image=- \
+				  --jigdo=$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo \
+				  --template=$(OUT)/$(CODENAME)-$(ARCH)-$$n.template \
+				  --label Non-US="$(NONUS)" \
+				  --label Debian="$(MIRROR)" \
+				  --no-image-section --no-servers-section \
+				  --report=noprogress; \
+		fi; \
+		if [ "$(DOJIGDO)" != "0" ]; then \
+			echo "" >> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+			echo "[Image]" \
+				>> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+			echo "Filename=debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-$(ARCH)-binary-$$n.iso" \
+				>> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+			echo "Template=`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`/$(CODENAME)-$(ARCH)-$$n.template" \
+				>> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+			echo "ShortInfo='"$(BINDISKINFOND)" CD'" \
+				>> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+			echo "Info='Generated on `date -R`'" \
+				>> $(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo; \
+		fi; \
+		if [ "$(DOJIGDO)" = "2" ]; then \
+			rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+		fi; \
 	done
-src-images: ok src-md5list $(OUT)
+src-images: ok src-md5list $(OUT) $(TDIR)/jigdofilelist
 	@echo "Generating the source iso images ..."
 	$(Q)set -e; \
 	 for file in $(SDIR)/*.sources; do \
 		dir=$${file%%.sources}; \
 		n=$${dir##$(SDIR)/}; \
+		num=$$n; \
 		dir=$(SDIR)/CD$$n; \
 		cd $$dir/..; \
 		opts=`cat $(SDIR)/$$n.mkisofs_opts`; \
 		volid=`cat $(SDIR)/$$n.volid`; \
 		rm -f $(OUT)/$(CODENAME)-src-$$n.raw; \
-		$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-		  -o $(OUT)/$(CODENAME)-src-$$n.raw $$opts CD$$n ; \
+		if [ "$(DOJIGDO)" != "2" ]; then \
+			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
+			  -o $(OUT)/$(CODENAME)-src-$$n.raw $$opts CD$$n ; \
+			if [ "$(DOJIGDO)" != "0" ]; then \
+				$(JIGDOCMD) make-template --force \
+				  --files-from=$(TDIR)/jigdofilelist \
+				  --image=$(OUT)/$(CODENAME)-src-$$n.raw \
+				  --jigdo=$(OUT)/$(CODENAME)-src-$$n.jigdo \
+				  --template=$(OUT)/$(CODENAME)-src-$$n.template \
+				  --label Non-US="$(NONUS)" \
+				  --label Debian="$(MIRROR)" \
+				  --no-image-section --no-servers-section \
+				  --report=noprogress; \
+			fi; \
+		else \
+			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
+			  $$opts CD$$n \
+			| $(JIGDOCMD) make-template --force \
+				  --files-from=$(TDIR)/jigdofilelist \
+				  --image=- \
+				  --jigdo=$(OUT)/$(CODENAME)-src-$$n.jigdo \
+				  --template=$(OUT)/$(CODENAME)-src-$$n.template \
+				  --label Non-US="$(NONUS)" \
+				  --label Debian="$(MIRROR)" \
+				  --no-image-section --no-servers-section \
+				  --report=noprogress; \
+		fi; \
+		if [ "$(DOJIGDO)" != "0" ]; then \
+			echo "" >> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+			echo "[Image]" \
+				>> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+			echo "Filename=debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-source-$$n.iso" \
+				>> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+			echo "Template=`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|source|g'`/$(CODENAME)-src-$$n.template" \
+				>> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+			echo "ShortInfo='"$(SRCDISKINFOND)" CD'" \
+				>> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+			echo "Info='Generated on `date -R`'" \
+				>> $(OUT)/$(CODENAME)-src-$$n.jigdo; \
+		fi; \
 	done
 
 # Generate the *.list files for the Pseudo Image Kit
@@ -754,11 +879,23 @@ src-image: ok src-md5list $(OUT)
 	  -o $(OUT)/$(CODENAME)-src-$(CD).raw $$opts CD$(CD)
 
 
-#Calculate the md5sums for the images
+#Calculate the md5sums for the images (if available), or get from templates
 imagesums:
 	$(Q)cd $(OUT); :> MD5SUMS; for file in `find * -name \*.raw`; do \
-	      md5sum $$file >>MD5SUMS; \
-	 done
+		md5sum $$file >>MD5SUMS; \
+	done; \
+	for file in `find * -name \*.template`; do \
+		if [ "`tail --bytes=29 "$$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 01 ]; then \
+			echo "Possibly invalid template $$file"; exit 1; \
+		fi; \
+		grep -q " $${file%%.template}.raw"'$$' MD5SUMS \
+		 || echo "`tail --bytes=22 "$$file" | head --bytes=16 | od -tx1 -An | sed -e 's/ //g'`  $${file%%.template}.raw" >>MD5SUMS; \
+	done
+
+# Likewise, the file size can be extracted from the .template with:
+# tail --bytes=28 $$file | head --bytes=6 | od -tx1 -An \
+#  | tr ' abcdef' '\nABCDEF' | tac | tr '\n' ' ' \
+#  | sed -e 's/ //g; s/^.*$/ibase=16 & /' | tr ' ' '\n' | bc
 
 ## MISC TARGETS ##
 

@@ -18,13 +18,16 @@ unset MKISOFS_OPTS
 unset EXCLUDE
 unset SRCEXCLUDE
 unset NORECOMMENDS
+unset DOJIGDO
+unset JIGDOCMD
+unset JIGDOTEMPLATEURL
 
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building potato cd set ...
+# Building woody cd set ...
 export CODENAME=woody
 
 # Version number, "2.2 r0", "2.2 r1" etc.
@@ -124,3 +127,24 @@ export APTTMP=/ftp/tmp/apt
 # Set this if only the required (and NOT the recommended/suggested) packages
 # should be added on CDs when a package is added on the CD.
 #export NORECOMMENDS=1
+
+# Produce jigdo files:
+# 0/unset = Don't do jigdo at all, produce only the full iso image.
+# 1 = Produce both the iso image and jigdo stuff.
+# 2 = Produce ONLY jigdo stuff by piping mkisofs directly into jigdo-file,
+#     no temporary iso image is created (saves lots of disk space).
+#     NOTE: The no-temp-iso will not work for (at least) alpha and powerpc
+#     since they need the actual .iso to make it bootable. For these archs,
+#     the temp-iso will be generated, but deleted again immediately after the
+#     jigdo stuff is made; needs temporary space as big as the biggest image.
+#export DOJIGDO=2
+#
+# jigdo-file command & options
+# Note: building the cache takes hours, so keep it around for the next run
+#export JIGDOCMD="/usr/local/bin/jigdo-file --cache=$HOME/jigdo-cache.db"
+#
+# HTTP/FTP URL for directory where you intend to make the templates available.
+# %ARCH%, if present, will be replaced by $ARCH (or "source"). This only goes
+# in the .jigdo files, which you can edit easily if you want.
+# No trailing slash.
+#export JIGDOTEMPLATEURL="http://this-guy-didnt-configure-debiancd-correctly.com/debian-cd/templates/3.0BETA/%ARCH%"
