@@ -68,9 +68,8 @@ cat >> debian-installer+kernel << EOF
 #ifdef ARCH_powerpc
 EOF
 
-#This is just temporary, they are going to change it all for 2.4.22
 /bin/sed -n 's/Package: \(kernel-image-.*-powerpc.*\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages |tail -n 2 \
+  $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages \
   >> debian-installer+kernel
 
 cat >> debian-installer+kernel << EOF
