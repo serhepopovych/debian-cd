@@ -19,7 +19,7 @@ NONUS=${NONUS:-$MIRROR/non-US}
 NONFREE=1
 
 # What release version is this?
-VER=2.2r4
+VER=2.2r6
 
 # Path to use with mkisofs/mkhybrid
 MKISOFS=${MKISOFS:-"mkhybrid"}
@@ -36,7 +36,7 @@ OUT=/mirror/debian-cd
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/mirror/lists/r0-r4.diff #~/r2.diff
+DIFF=/mirror/lists/r0-r6.diff #~/r2.diff
 
 REL=Debian"$VER"
 CLOG=dists/potato/ChangeLog
@@ -44,11 +44,20 @@ NUCLOG=dists/potato/non-US/ChangeLog
 UPD=$TDIR/potato-update
 DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
-INFO1="Debian GNU/Linux $VER Update CD $DATE for Alpha, Arm and i386"
-INFO2="Debian GNU/Linux $VER Update CD $DATE for M68k, PowerPC and Sparc"
-INFO3="Debian GNU/Linux $VER Update CD $DATE source"
-ARCH1="alpha arm i386"
-ARCH2="m68k powerpc sparc"
+
+
+# The full update will not fit on a single CD, so split it arbitrarily
+# CD 1 gets arm/i386/source
+# CD 2 gets alpha/m68k/powerpc
+# CD 3 gets sparc
+# binary-all goes on all 3
+
+INFO1="Debian GNU/Linux $VER Update CD $DATE: Arm, I386 and source"
+INFO2="Debian GNU/Linux $VER Update CD $DATE: Alpha, M68k and PowerPc"
+INFO3="Debian GNU/Linux $VER Update CD $DATE: Sparc"
+ARCH1="arm i386 src all"
+ARCH2="alpha m68k powerpc all"
+ARCH3="sparc all"
 
 export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
 
@@ -58,27 +67,83 @@ set_mkisofs_opts=$BASEDIR/tools/set_mkisofs_opts
 adddirs=$BASEDIR/tools/add_dirs
 addfiles=$BASEDIR/tools/add_files
 
+copy_trees () {
+    CDDIR=$1
+    shift
+    SRCLIST=$1
+    shift
+    BINLIST=$1
+    shift
+    ARCHES=$*
+    echo "  Copying \"$ARCHES\" files into $UPD/$CDDIR"
+    for ARCH in $ARCHES
+    do
+        if [ "$ARCH" = "src" ] ; then
+            cat $SRCLIST | xargs $addfiles $UPD/$CDDIR $MIRROR
+        else
+            cat $BINLIST | grep binary-$ARCH | xargs $addfiles $UPD/$CDDIR $MIRROR
+        fi
+    done
+}
+
+remove_unwanted () {
+    CDDIR=$1
+    shift
+    ARCHES=$*
+    echo "  Removing \"$ARCHES\" from $CDDIR"
+    for ARCH in $ARCHES
+    do
+        case "$ARCH" in
+            src)
+                find $CDDIR -type d | grep source$ | xargs rm -rf
+                ;;
+            all)
+                ;;
+            *)
+                find $CDDIR -type d | egrep -e binary-$ARCH$ | xargs rm -rf
+                ;;
+        esac
+    done
+}
+
+create_control_files () {
+    CDDIR=$1
+    shift
+    ARCHES=$*
+    echo "  Creating control files for \"$ARCHES\" on $CDDIR"
+    for ARCH in $ARCHES
+    do
+        case "$ARCH" in
+            src)
+                echo "    src"
+                $scansources $CDDIR >/dev/null 2>&1
+                ;;
+            all)
+                ;;
+            *)
+                echo "    $ARCH"
+                ARCH=$ARCH $scanpackages scan $CDDIR >/dev/null 2>&1
+                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR >/dev/null 2>&1
+                rm -f $CDDIR/*.Packages* >/dev/null 2>&1
+                ;;
+        esac
+    done
+}
+
 echo Cleaning up
 rm -rf $UPD
 mkdir $UPD $UPD/CD1 $UPD/CD2 $UPD/CD3
 
 echo Creating directory trees
-for ARCH in $ARCH1
+for ARCH in $ARCH1 $ARCH2 $ARCH3
 do
 	export ARCH
 	$adddirs $UPD/CD1
-done
-
-for ARCH in $ARCH2
-do
-	export ARCH
 	$adddirs $UPD/CD2
+	$adddirs $UPD/CD3
 done
-
-$adddirs $UPD/CD3
 
 cd $MIRROR
-
 echo Creating main-section list
 
 if [ -e $DIFF ] ; then
@@ -98,9 +163,10 @@ if [ "$NONFREE"x != "1"x ] ; then
 fi
 
 echo Creating trees
-cat $UPD/bin-list | xargs $addfiles $UPD/CD1 $MIRROR
-cat $UPD/bin-list | xargs $addfiles $UPD/CD2 $MIRROR
-cat $UPD/src-list | xargs $addfiles $UPD/CD3 $MIRROR
+
+copy_trees CD1 $UPD/src-list $UPD/bin-list $ARCH1
+copy_trees CD2 $UPD/src-list $UPD/bin-list $ARCH2
+copy_trees CD3 $UPD/src-list $UPD/bin-list $ARCH3
 
 if [ "$NONUS"x != ""x ] ; then
 	echo Creating non-US list
@@ -123,40 +189,19 @@ if [ "$NONUS"x != ""x ] ; then
 	fi
 
 	echo Creating non-US trees
-	cat $UPD/bin-nu-list | xargs $addfiles $UPD/CD1 $MIRROR
-	cat $UPD/bin-nu-list | xargs $addfiles $UPD/CD2 $MIRROR
-	cat $UPD/src-nu-list | xargs $addfiles $UPD/CD3 $MIRROR
+    copy_trees CD1 $UPD/src-nu-list $UPD/bin-nu-list $ARCH1
+    copy_trees CD2 $UPD/src-nu-list $UPD/bin-nu-list $ARCH2
+    copy_trees CD3 $UPD/src-nu-list $UPD/bin-nu-list $ARCH3
 fi
 
-# The full update will not fit on a single CD, so split it by architecture, arbitrarily
-# CD 1 gets alpha/arm/i386
-# CD 2 gets m68k/sparc/powerpc
-# binary-all goes on both
-# CD 3 gets source
-
 cd $UPD
-
 echo Splitting binary dirs between trees
 
-for ARCH in $ARCH2
-do
-	find CD1 -type d | egrep -e binary-$ARCH$ | xargs rm -r
-done
-find CD1 -type d | grep source$ | xargs rm -r
-
-for ARCH in $ARCH1
-do
-	find CD2 -type d | egrep -e binary-$ARCH$ | xargs rm -r
-done
-find CD2 -type d | grep source$ | xargs rm -r
-
-for ARCH in $ARCH1 $ARCH2 all
-do
-	find CD3 -type d | grep -e binary-$ARCH$ | xargs rm -r >/dev/null 2>&1
-done
+remove_unwanted CD1 $ARCH2 $ARCH3
+remove_unwanted CD2 $ARCH1 $ARCH3
+remove_unwanted CD3 $ARCH1 $ARCH2
 
 # Now create the binary-all symlinks
-
 echo Creating binary-all symlinks
 for DIR in `find . -name binary-all`
 do
@@ -194,28 +239,18 @@ echo $INFO1 >CD1/.disk/info
 echo $INFO2 >CD2/.disk/info
 echo $INFO3 >CD3/.disk/info
 
-echo Creating Packages files
-for ARCH in $ARCH1
-do
-	echo $ARCH
-	ARCH=$ARCH $scanpackages scan CD1
-	ARCH=$ARCH $scanpackages -noPackages.cd install CD1
-	rm -f CD1/*.Packages*
-done
+echo Creating Packages and Sources files
+create_control_files CD1 $ARCH1
+create_control_files CD2 $ARCH2
+create_control_files CD3 $ARCH3
 
-for ARCH in $ARCH2
-do
-	echo $ARCH
-	ARCH=$ARCH $scanpackages scan CD2
-	ARCH=$ARCH $scanpackages -noPackages.cd install CD2
-	rm -f CD2/*.Packages*
-done
+echo Creating images
+echo "  CD1:"
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-1.raw CD1 2>&1 | grep "extents written"
+echo "  CD2:"
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-2.raw CD2 2>&1 | grep "extents written"
+echo "  CD3:"
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-3.raw CD3 2>&1 | grep "extents written"
 
-echo Creating Sources files
-$scansources CD3
 
-rm CD?/CD?.*
 
-${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-1.raw CD1
-${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-2.raw CD2
-${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-3.raw CD3
