@@ -10,10 +10,6 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Add console-cyrillic, console-terminus, hotplug into forcd1,
       d-i+kernel.
   * Joey Hess
-    - Merge in d-i iso/syslinux help files from d-i CVS to data/sarge.
-      Expand ${DEBIAN_VERSION}, ${MEDIA_TYPE}, and ${BUILD_DATE}
-      Only f3.txt varies (due to net boot type).
-      Closes: #220612, #221186
     - Add "expert" mode to isolinux.cfg for sarge.
     - Remove pump-udeb from all udeb_includes; netcfg depends on and
       uses dhcp-client-udeb.
@@ -33,7 +29,6 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Switch from netcfg-static/dhcp to just netcfg.
     - Split udeb_includes for businesscard and netinst; netinst does not
       need choose-mirror, while businesscard does.
-    - Substitute into yaboot.msg the same as is done for isolinux.txt.
     - Add wireless-tool-udeb to udeb_include for i386 and powerpc netinst
       and businesscard images.
     - Add pcmcia-cs onto the generate-di+k_list, now that is is not
@@ -42,7 +37,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Add the debian-edu udebs to the exclude list for netinst CDs, and
       remove the deleted di-utils-devicefiles.
     - Update boot/sarge/boot-i386 to use the new d-i image names.
-    - Use d-i boot screens from the debian-cd_info.tar.gz.
+    - Use d-i boot screens from the debian-cd_info.tar.gz. 
+      Closes: #220612, #221186
     - Remove the netboot initrd from netinst CDs, since d-i builds a mini-iso
       with this initrd on it, and since the d-i help screen does not mention
       the net type.
