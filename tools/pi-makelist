@@ -62,7 +62,6 @@ isoinfo -i "$1" -R -l -f			\
 	    -e '^/README\.html$'		\
 	    -e '^/README\.txt$'			\
 	    -e '^/pics/'			\
-	    -e '^/doc/package-developer/hello'	\
 	    -e '^/milo/'			\
 	    -e '^/apb/'				\
 	    -e '^/linux$'			\
