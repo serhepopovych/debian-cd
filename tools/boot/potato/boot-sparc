@@ -23,7 +23,7 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0; 
 fi
 
-echo "-B boot/second.b boot1" > $N.mkisofs_opts
+echo "-B boot1/boot/second.b boot1" > $N.mkisofs_opts
 rm -rf boot1
 
 inst=boot1
