@@ -1,5 +1,7 @@
-debian-cd (2.2.21) UNRELEASED; urgency=low
+debian-cd (2.2.21) unstable; urgency=low
 
+  * Steve McIntyre:
+    - Prepared YA "last before sarge" debian-cd release.
   * Raphael Hertzog
     - One line patch to correct a five year old bug that nobody noticed !
       Closes: #285382
@@ -87,7 +89,7 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Disable CD timeout on powerpc.
     - Add localechooser to exclude-udebs.
 
- -- Bdale Garbee <bdale@gag.com>  Sat, 15 Jan 2005 21:33:48 -0700
+ -- Steve McIntyre <93sam@debian.org>  Sun, 20 Feb 2005 21:35:43 +0000
 
 debian-cd (2.2.20) unstable; urgency=medium
 
