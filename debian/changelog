@@ -1,6 +1,5 @@
 debian-cd (2.2.13) unstable; urgency=low
 
-  * UNRELEASED. 
   * Add jigdo generation support (see README).
   * Automatically add packages listed by local debootstrap. Closes: #131820
   * Adapted to new s390 boot-floppies 3.0.19 directory structure (Stefan
@@ -13,8 +12,9 @@ debian-cd (2.2.13) unstable; urgency=low
   * CDs with .disk/kernel_installable have the disks-<arch> directories
     and those with .disk/base_installable have all the packages required
     by debootstrap.
+  * Updated base-woody with debootstrap 0.1.17. Closes: #138357
 
- -- Raphael Hertzog <hertzog@debian.org>  Sun, 20 Jan 2002 15:42:29 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 16 Mar 2002 19:53:41 +0100
 
 debian-cd (2.2.12) unstable; urgency=low
 

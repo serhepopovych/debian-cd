@@ -16,7 +16,7 @@ do
 done
 
  *
- * Latest update : in sync with debootstrap 0.1.15.8
+ * Latest update : in sync with debootstrap 0.1.17
  *
  * -- Raphael Hertzog
  *
@@ -91,7 +91,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -113,14 +112,17 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 setserial
 aboot
 pciutils
+ipchains
 #endif
 
 #ifdef ARCH_arm
@@ -190,7 +192,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -212,13 +213,17 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 setserial
 libgpmg1
+ipchains
+iptables
 #endif
 
 #ifdef ARCH_i386
@@ -289,7 +294,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -311,17 +315,21 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 lilo
 pciutils
 setserial
 syslinux
 psmisc
 pcmcia-cs
+ipchains
+iptables
 #endif
 
 #ifdef ARCH_ia64
@@ -372,6 +380,7 @@ util-linux
 whiptail
 
 libc6.1
+gcc-2.96-base
 adduser
 apt
 apt-utils
@@ -392,7 +401,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -414,14 +422,19 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 elilo
 efibootmgr
 dosfstools
+libparted1.4
+parted
+iptables
 #endif
 
 #ifdef ARCH_m68k
@@ -491,7 +504,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -513,11 +525,13 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 atari-bootstrap
 atari-fdisk
 amiga-fdisk
@@ -526,6 +540,7 @@ mac-fdisk
 pmac-fdisk-cross
 setserial
 vmelilo
+ipchains
 #endif
 
 #ifdef ARCH_powerpc
@@ -595,7 +610,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -617,11 +631,13 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 quik
 mac-fdisk
 amiga-fdisk
@@ -632,6 +648,8 @@ pciutils
 hfsutils
 yaboot
 pcmcia-cs
+ipchains
+iptables
 #endif
 
 #ifdef ARCH_sparc
@@ -701,7 +719,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -723,15 +740,19 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 silo
 eject
 pciutils
 sparc-utils
+ipchains
+iptables
 #endif
 
 #ifdef ARCH_mips
@@ -801,7 +822,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -823,14 +843,17 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 dvhtool
 pciutils
 setserial
+iptables
 #endif
 
 #ifdef ARCH_mipsel
@@ -900,7 +923,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -922,14 +944,17 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 delo
 pciutils
 setserial
+iptables
 #endif
 
 #ifdef ARCH_hppa
@@ -999,7 +1024,6 @@ gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -1021,14 +1045,17 @@ nvi
 ppp
 pppconfig
 pppoe
+pppoeconf
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 palo
 libstdc++3
 gcc-3.0-base
+iptables
 #endif
 
 #ifdef ARCH_s390
@@ -1078,11 +1105,6 @@ tar
 textutils
 util-linux
 whiptail
-
-
-
-
-
 adduser
 apt
 apt-utils
@@ -1090,20 +1112,16 @@ at
 base-config
 bsdmainutils
 console-common
-console-tools
-console-tools-libs
 console-data
 cpio
 cron
 dhcp-client
 ed
 exim
-fdutils
 gettext-base
 groff-base
 ifupdown
 info
-ipchains
 klogd
 libident
 libldap2
@@ -1122,15 +1140,21 @@ netbase
 netkit-inetd
 netkit-ping
 nvi
-ppp
-pppconfig
-pppoe
 libpcap0
 sysklogd
 tasksel
 tcpd
 telnet
+
 s390-tools
 telnetd
+
+
+
+
+
+
+
+iptables
 #endif
 
