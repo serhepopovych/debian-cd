@@ -8,6 +8,9 @@
 # Released as part of the slink_cd package, not much use standalone
 #
 # Do install stuff for sparc, including making bootable CDs
+# Revisions:
+# 12-MAR-00 changes for new boot-disk orginazation --jwest
+
 
 set -e
 
@@ -28,28 +31,43 @@ echo -n "1/boot" > $N.mkisofs_opts
 mkdir -p $CDDIR/install
 ln -sf install $CDDIR/etc
 ln -sf install $CDDIR/boot
-cp -p $BOOTDIR/cd.b $BOOTDIR/second.b $CDDIR/install
+
+# hurmpf, lets set bootdir to the current bootdisk set! -jwest
+BOOTDIR=1/dists/$CODENAME/main/disks-$ARCH/current/
+
+
+mkdir $CDDIR/install/sun4cdm
+mkdir $CDDIR/install/sun4u
+mkdir $CDDIR/install/sun4c
+
+cp -pr $BOOTDIR/sun4cdm/* $CDDIR/install/sun4cdm
+cp -pr $BOOTDIR/sun4u/* $CDDIR/install/sun4u
+cp -pr $BOOTDIR/sun4c/* $CDDIR/install/sun4c
+
 cat - > $CDDIR/install/silo.conf << __EOF__
 partition=1
 message=/install/debian.txt
 timeout=600
 read-write
 image[sun4c,sun4d,sun4m]=/install/sun4cdm/linux-a.out
-   label=linux
+   label=linux-cdm
    initrd=/install/root.bin
 image[sun4u]=/install/sun4u/linux-a.out
-   label=linux
+   label=linux-4u
+   initrd=/install/root.bin
+image[sun4u]=/install/sun4u/linux-a.out
+   label=linux-4u
    initrd=/install/root.bin
 __EOF__
 
 # linux kernel & co are fetched directly from the install dir
 # ... put the message banner in boot/debian.txt
 
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -pP sun4cdm/linux-a.out sun4u/linux-a.out \
-	$CDDIR/install )
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -p images-1.44/root.bin $CDDIR/install )
+#CHANGE!!! Dont beleive the below is necessary 12-Mar-00 --jwest
+#(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+#	cp -pr sun4cdm/* $CDDIR/install )
+#(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+#	cp -pr images-1.44/* $CDDIR/install )
 
 
 cat - > $CDDIR/install/debian.txt << __EOF__
