@@ -32,6 +32,7 @@ unset FASTSUMS          || true
 unset PUBLISH_URL       || true
 unset PUBLISH_NONUS_URL || true
 unset PUBLISH_PATH      || true
+unset INSTALLER_CD      || true
 
 
 # The debian-cd dir
@@ -42,7 +43,7 @@ export BASEDIR=`pwd`
 export CODENAME=woody
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="3.0 beta"
+export DEBVERSION="3.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
@@ -202,3 +203,9 @@ export PUBLISH_PATH="/home/jigdo-area/"
 
 # File with list of packages to exclude as above.
 #export BASE_EXCLUDE="$BASEDIR"/data/$CODENAME/base_exclude
+
+# Only put the installer onto the cd (set NORECOMMENDS,... as well).
+# INSTALLER_CD=0: nothing special (default)
+# INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer)
+# INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel)
+#export INSTALLER_CD=0

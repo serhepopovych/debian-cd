@@ -215,11 +215,15 @@ src-distclean:
 status: init $(ADIR)/status
 $(ADIR)/status:
 	@echo "Generating a fake status file for apt-get and apt-cache..."
-	$(Q)zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.gz | \
-	perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; \
+	$(Q)if [ "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" ];then \
+		:> $(ADIR)/status ; \
+	else \
+		zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.gz | \
+		perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; \
 	               print if (/^Priority: (required|important|standard)/m or \
 		       /^Section: base/m);' \
-	> $(ADIR)/status
+		> $(ADIR)/status ; \
+	fi
 	# Updating the apt database
 	$(Q)$(apt) update
 	#
@@ -328,7 +332,7 @@ ifdef FORCENONUSONCD1
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us)' - | \
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
-	$(Q)if [ -x "/usr/sbin/debootstrap" ]; then \
+	$(Q)if [ -x "/usr/sbin/debootstrap" -a _$(INSTALLER_CD) != _1 ]; then \
 		/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
 		| tr ' ' '\n' >>$(BDIR)/rawlist; \
 	fi

@@ -20,7 +20,7 @@ fi
 cd $DOCS
 mkdir -p $DIR/install/$DOCDIR
 if cp -a * $DIR/install/$DOCDIR/ ; then
-    ln -f install.en.html $DIR/install/$DOCDIR/index.html
+    ln -f $DIR/install/$DOCDIR/install.en.html $DIR/install/$DOCDIR/index.html
 else
     echo "ERROR: Unable to copy boot-floppies documentation to CD."
 fi

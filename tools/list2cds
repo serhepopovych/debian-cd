@@ -73,6 +73,7 @@ while (defined($_=<AVAIL>)) {
 	$packages{$p}{"Depends"} = [];
 	$packages{$p}{"Suggests"} = [];
 	$packages{$p}{"Recommends"} = [];
+	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
 }
 close AVAIL or die "apt-cache failed : $@ ($!)\n";
 $/ = $oldrs;
@@ -127,30 +128,8 @@ foreach (keys %excluded) {
 close (STATS);
 
 # Browse the list of packages to include
-msg(0, "-- Adding standard, required, important and base packages \n" .
-       "   on the first CD ...\n");
 my ($total_size, $cd_size, $size, $cd) = (0, 0, 0, 1);
 my %cds;
-
-# Automatically include packages listed in the status file
-open(STATUS, "< $adir/status") || die "Can't open status file : $!\n";
-while (defined($_ = <STATUS>)) {
-	next if not m/^Package: (\S+)/;
-	$p = $1;
-	if (not exists $packages{$p}) {
-		msg(1, "WARNING: Package `$p' is listed in the status file "
-		       . "but doesn't exist ! (ignored) \n",
-		       "    TIP: Try to generate the status file with " .
-                       "make (correct)status (after a make distclean)...\n");
-                next;
-	}
-	next if $excluded{$p};
-	msg(2, "+ Trying to add $p...\n");
-	my $size = $packages{$p}{"Size"};
-	add_to_cd (1, $size, [ $p ]);
-}
-close STATUS;
-msg(0, "   Standard system already takes $cd_size bytes on the first CD.\n");
 
 # Generate a dependency tree for each package
 msg(0, "-- Generating dependencies tree with apt-cache depends...\n");
@@ -177,6 +156,26 @@ while (@list) {
 	
 }
 
+msg(0, "-- Adding standard, required, important and base packages \n" .
+       "   on the first CD ...\n");
+# Automatically include packages listed in the status file
+open(STATUS, "< $adir/status") || die "Can't open status file : $!\n";
+while (defined($_ = <STATUS>)) {
+       next if not m/^Package: (\S+)/;
+       $p = $1;
+       if (not exists $packages{$p}) {
+               msg(1, "WARNING: Package `$p' is listed in the status file "
+                      . "but doesn't exist ! (ignored) \n",
+                      "    TIP: Try to generate the status file with " .
+                       "make (correct)status (after a make distclean)...\n");
+                next;
+       }
+       next if $excluded{$p};
+       add_package($p, ! $norecommends, ! $nosuggests);
+}
+close STATUS;
+msg(0, "   Standard system already takes $cd_size bytes on the first CD.\n");
+
 # Now start to look for packages wanted by the user ...
 msg(0, "-- Starting to add packages to the CDs ...\n");
 open (LIST, "< $list") || die "Can't open $list : $!\n";
@@ -193,7 +192,14 @@ while (defined($_=<LIST>)) {
 	    msg(3, "$_ has already been included.\n");
 	    next;
 	}
-	add_package ($_, ! $norecommends, ! $nosuggests);
+	# This is because udebs tend to have bad dependencies but work
+	# nevertheless ... this may be removed once the udebs have a
+	# better depencency system
+	if ($packages{$_}{"IsUdeb"}) {
+	    add_to_cd($cd, $packages{$_}{"Size"}, []);
+	} else {
+	    add_package ($_, ! $norecommends, ! $nosuggests);
+	}
 }
 close LIST;
 

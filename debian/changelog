@@ -10,8 +10,9 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     task mechanism, cf tasks/debian-installer for the current list)
   * Added all files for sarge (in tasks/ data/ and tools/).
   * Updated isolinux.bin from syslinux 1.75-1.
-  * Make it possible to exclude contrib from the CDs.  Useful if you only
-    have a mirror of main.
+  * Tollef Fog Heen:
+    - Make it possible to exclude contrib from the CDs. Useful if you only
+      have a mirror of main.
   * Petter Reinholdtsen:
     - Add CONTRIB flag to debian/CONF.sh.
     - Add support for BASE_INCLUDE and BASE_EXCLUDE, making files
@@ -20,8 +21,14 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     - Document BOOTDISKS.
     - Make disk number available in tools/add-bin-doc.
     - In woody, keep the time stamp of smb.bin when copying it to CD.
+  * Apply patch from Petter Reinholdtsen for inclusion of
+    Recommends/Suggests from the base system. Closes: #106903
+  * Apply nice patch from Santiago Garcia Mantinan for building
+    "netinst CDs" !
+  * Don't check dependencies for udebs, they tend to be broken
+    and we still want them on the CD.
 
- -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 26 Dec 2002 11:08:55 +0100
 
 debian-cd (2.2.15) unstable; urgency=low
 
