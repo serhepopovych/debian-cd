@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# boot-m68k v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>,
+# boot-m68k v 1.14 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>,
 # Chris Lawrence <lawrencc@debian.org>, Christian Steigies <cts@debian.org>, 
-# Michael Schmitz <MSchmitz@lbl.gov>
+# Michael Schmitz <MSchmitz@lbl.gov>, Nick Holgate <holgate@debian.org>
 # Released under GPL 31 Mar 1999
 # See the file COPYING for license details
 # Released as part of the slink_cd package, not much use standalone
@@ -28,9 +28,6 @@
 # * A copy of my m68k-specific README and m68k-tools directories
 # * The m68k kernel sources from sunsite.auc.dk:/projects/680x0
 #   (Sunsite-Denmark is rsync-capable at sunsite.auc.dk::ftp)
-#   I recommend getting the 2.0.36 and 2.2.1-pre2 sources at least.
-#   (Actually 2.0.36 is non-essential since it's on the CDs already;
-#    you probably DO want the 2.2.1-pre2 tree however [under v2.1!]).
 #
 # MVME/BVME users will love you if you also include the "tools" directory
 # from the FTP site, since they may want/need rawwrite for MS-DOS.
@@ -39,146 +36,93 @@
 # with a silly rsync script that will accomplish the last item.
 
 set -e
+#set -x
 
 N=$1
 CDDIR=$2
 
+DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
+
 cd $CDDIR/..
+
+echo -n "--netatalk -J -hfs -probe -map $BASEDIR/data/hfs.map" \
+	> $N.mkisofs_opts
 
 # Only disk 1 bootable
 if [ $N != 1 ]; then
-	echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
-	        > $N.mkisofs_opts
 	exit 0
 fi
 
-echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
-        > $N.mkisofs_opts
-	
-echo -n " -b install/bvme6000/resc1440.bin -c install/bvme6000/boot.catalog" \
-        >> $N.mkisofs_opts
+# Put CD boot image	into place
+mkdir -p boot1/boot
+cp $DISKSROOT/bvme6000/images-2.88/rescue.bin boot1/boot
+
+echo -n " -b boot/rescue.bin -c boot/boot.catalog boot1" \
+	>> $N.mkisofs_opts
 
 
-DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
-INSTALLDIR="$CDDIR/install"
+cd $CDDIR/install
 
-cd $INSTALLDIR
+# Tools
+cp $DISKSROOT/rawrite2.exe $CDDIR/install
+cp $DISKSROOT/rawwrite.ttp $CDDIR/install
 
-#vecho Installing Amiga files
-lha xqf $DISKSROOT/amiga/amigainstall.lha
-mv debian amiga
-mv debian.info amiga.info
-cp $DISKSROOT/amiga/* amiga
-
-# Needs to be executable
-chmod a+x amiga/amiboot-5.6
-
-# Add .info files for amiga
-tar -C .. -xzf $BASEDIR/data/cts_amiga_info.tar.gz
-for file in `tar tzf $BASEDIR/data/cts_amiga_info.tar.gz`
-do
-	chmod a+r ../$file
-done
-# And fix a few things up...
-mkdir common
-mv basecont.txt.info common
-mv ../README.info ../README.m68k.info
-cp ../README.1ST.info ../README.multicd.info
-
-#vecho Installing Atari files
-lha xqf $DISKSROOT/atari/install.lzh
-mv debian atari
-cp $DISKSROOT/atari/* atari
-
-#vecho Installing Mac files
-tar -C .. -zxf $DISKSROOT/source/macinstall.tar.gz
-cp $DISKSROOT/mac/* mac
-
-for TYPE in common bvme6000 mvme162 mvme167 source
+for TYPE in amiga atari bvme6000 mac mvme16x
 do
 	#vecho Installing $TYPE files
-	if [ ! -d $TYPE ] ; then
-	    mkdir $TYPE
+	if [ ! -d $TYPE/images-1.44 ] ; then
+	    mkdir -p $TYPE/images-1.44
 	fi
-	cp $DISKSROOT/$TYPE/* $TYPE
+
+	cp $DISKSROOT/$TYPE/images-1.44/* $TYPE/images-1.44
 done
 
-vecho hexbin Mac files
-cd $INSTALLDIR/mac
-hexbin *.hqx
+# Atari extras
+D=atari
+S=$DISKSROOT/$D
+cp $S/bootargs          $D
+cp $S/bootstra.prg      $D
+cp $S/install.doc       $D
+cp $S/linux             $D
+cp $S/root.bin          $D
 
-vecho Installing m68k FAQ and tools
-mkdir $CDDIR/tmp
-cd $CDDIR/tmp
-tar xzf $BASEDIR/data/m68k-cd-misc.tar.gz
-mv m68k-faq m68k-tools ..
-mv update-kernels ../update-kernels.m68k
-cd ..
-rm -rf tmp
+# Amiga extras
+D=amiga
+S=$DISKSROOT/$D
+cp $S/ReadMe_First      $D
+cp $S/StartInstall      $D
+cp $S/*.txt             $D
+cp $S/*.info            $D
+cp $S/linux             $D
+cp $S/root.bin          $D
+cp $S/amiboot-5.6       $D
+# Needs to be executable
+chmod a+x $D/amiboot-5.6
+cp $S/../amiga.info     $D/..
 
-cd $CDDIR
-# make mountpoint and temp HFS filesystem image
-rm -rf /var/tmp/mnt-macinstall
-mkdir /var/tmp/mnt-macinstall
-dd if=/dev/zero of=/var/tmp/macinstall-temp.img bs=1024 count=1440
-hformat /var/tmp/macinstall-temp.img
-# mount it (':' is top dir) using hfsutils
-hmount /var/tmp/macinstall-temp.img
-# copy booter and preferences files in place (color table missing but 
-# Penguin-17 has colors fixed anyway
-hcopy -b install/mac/Penguin-17.hqx :
-hcopy -b install/mac/Penguin_Prefs.hqx :"Penguin Prefs"
-hcopy -b "install/mac/Penguin_Prefs_(autoboot).hqx" :"Penguin Prefs (autoboot)"
-# unmount HFS image
-humount /var/tmp/macinstall-temp.img
-# mount this HFS floppy image again as netatalk using the loopback mount command
-if [ ! 'mount -t hfs -o loop,fork=netatalk,afpd /var/tmp/macinstall-temp.img /var/tmp/mnt-macinstall' ] ; then
-	# We managed to mount it loop-back
-	# copy over both Penguin-15 and .AppleDouble/Penguin-15
-	# copy over both Penguin Prefs and .AppleDouble/Penguin Prefs
-	# (.AppleDouble files go into .AppleDouble subdir of target dir)
-	cp /var/tmp/mnt-macinstall/Penguin* install/mac/
-	mkdir install/mac/.AppleDouble
-	cp /var/tmp/mnt-macinstall/.AppleDouble/Penguin* install/mac/.AppleDouble/
-	# unmount, cleanup
-	umount /var/tmp/mnt-macinstall
-	rm /var/tmp/macinstall-temp.img
-	rmdir /var/tmp/mnt-macinstall
-else
-	# We failed to mount it. Use the fallback tar.gz that we have
-	echo HFS loopback mount failed on /var/tmp/macinstall-temp.img
-	echo This is not fatal, but check that you have permissions to do this
-        echo and that you have HFS support in your kernel...
-	echo Extracting $BASEDIR/data/macinstall-cd.tar.gz instead.
-	tar xzf $BASEDIR/data/macinstall-cd.tar.gz
-fi
+# BVME6000 extras
+D=bvme6000
+S=$DISKSROOT/$D
+cp $S/linuxbvme6000     $D
+cp $S/rootbvme6000.bin  $D
+cp $S/tftplilo.*        $D
+cp $S/install.txt       $D
+cp $S/bvmbug*           $D
 
-#
-# can remove the .hqx stuff now I guess. 
-#
-# make CD image using the command
-# mkhybrid -map <mapfile> --netatalk -a -j -hfs -r -V <label> -o <image> <source dir>
-#
-# map file contains stuff like
-# # ext. xlate  creator  type    comment
-# .hqx   Ascii  'BnHx'   'TEXT'  "BinHex file"
-# .mov   Raw    'TVOD'   'MooV'  "QuickTime Movie"
-# .deb   Raw    'Debn'   'bina'  "Debian package"
-# .bin   Raw    'Debn'   'bina'  "Floppy or ramdisk image"
-# *      Ascii  'ttxt'   'TEXT'  "Text file"
-#
-# Note that we can't use MacBinary mapping for .bin files due to
-# name clashes with the binary image files, so we have to provide 
-# all encoded Mac files in BinHex format.
-#
-# Kudos Brad Midgley, <brad@pht.com> for the tricks!
-#
-# Possible alternative: convert .hqx in MacBinary files, but we'd need
-# to use a different extension as .bin is taken by the disk images.
-# i.e. hexbin -s Penguin-17.hqx > Penguin-17.mac
-# and use .mac as MacBinary extension. I don't know offhand what the 
-# creator/type for MacBinary is. --netatalk would be replaced by 
-# --macbin, possibly together with --probe.
+# MVME16x extras
+D=mvme16x
+S=$DISKSROOT/$D
+cp $S/linuxmvme16x      $D
+cp $S/rootmvme16x.bin   $D
+cp $S/tftplilo.*        $D
+cp $S/install.txt       $D
 
-
+# Mac extras
+D=mac
+S=$DISKSROOT/$D
+cp $S/linux             $D
+cp $S/root.bin          $D
+cp $S/*.img             $D
+cp $S/install/*         $D
  
+##-----------------------------< end of file >------------------------------##
