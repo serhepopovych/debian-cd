@@ -30,6 +30,8 @@ iso-codes
 console-cyrillic
 console-terminus
 pcmcia-cs
+xfsprogs
+reiserfsprogs
 #ifdef ARCH_i386
 EOF
 
