@@ -486,6 +486,13 @@ $(BDIR)/packages-stamp:
 		dir=$(BDIR)/CD$$dir; \
 		$(scanpackages) install $$dir; \
 	done
+	$(Q)for DISK in $(FIRSTDISKS); do \
+	    DISK=$${DISK##CD}; \
+	    echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
+	    if [ -n "$(LOCAL)" ]; then \
+		echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
+	    fi; \
+	done
 	$(Q)touch $(BDIR)/packages-stamp
 
 sources: src-infos src-list $(SDIR)/sources-stamp
