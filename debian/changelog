@@ -1,10 +1,10 @@
-debian-cd (2.2.11) unstable; urgency=low
+debian-cd (2.2.11) unstable; urgency=medium
 
-  * UNRELEASED.
   * Changed "==" test by "=" test that works with ash also. Closes: #125727
   * Corrected the rules files to remove the .#* files of CVS merges.
     Closes: #125728
   * Corrected the documentation. Closes: #125729
+  * Complains about missing Release files. Closes: #126076
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Dec 2001 04:34:03 +0100
 

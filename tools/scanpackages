@@ -39,8 +39,12 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     if ($f) { 
 	unless (/^ /) { print; $f=0 }
     } else { print }' > dists/$CODENAME/Release
+else
+    echo "ERROR: Release file ($MIRROR/dists/$CODENAME/Release) is missing !"
+    exit 1
 fi
-if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
+if [ -n "$NONUS" ]; then
+if [ -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     # Strip the MD5Sum and SHA1 fields
     # Update some other information as well
     sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
@@ -50,8 +54,12 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     if ($f) { 
 	unless (/^ /) { print; $f=0 }
     } else { print }' > dists/$CODENAME/non-US/Release
+else
+    echo -n "ERROR: Release file ($NONUS/dists/$CODENAME/non-US/Release)"
+    echo " is missing !"
+    exit 1
 fi
-
+fi
 # Copying release files
 for SECT in $SECTIONS; do
 	# Install the release files
