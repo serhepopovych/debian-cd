@@ -22,7 +22,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.
-	- Handle missing m68k/bvme6000 floppy.
+    - Handle missing m68k/bvme6000 floppy.
   * Petter Reinholdtsen
     - New variable SPLASHPNG pointing to replacement splash image on i386.
   * Kenshi Muto
