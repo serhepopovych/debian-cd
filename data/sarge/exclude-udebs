@@ -34,7 +34,6 @@ libdebconfclient0-udeb
 # A reduced version is on the initrd. Nothing currently needs the full
 # version.
 slang1a-utf8-udeb
-
 # These udebs are only useful in building the boot floppy image.
 busybox-cvs-floppy-udeb
 di-utils-bootfloppy
@@ -83,3 +82,5 @@ netcfg-dhcp
 # skolelinux stuff, not for the stock CDs
 debian-edu-install-udeb
 debian-edu-profile-udeb
+# If needed, will be on the initrd already.
+module-init-tools-udeb
