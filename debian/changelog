@@ -1,4 +1,4 @@
-debian-cd (2.2.17) UNRELEASED; urgency=low
+debian-cd (2.2.17) unstable; urgency=low
 
   * Removed debian/conffiles (useless with debhelper 4).
   * Added aptitude on netinst CD (but not on businesscard CD).
