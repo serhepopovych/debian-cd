@@ -10,6 +10,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
       any longer.
     - Updated exclude-udebs to match the current CD initrd package list.
     - Access floppy reorg.
+    - Sparc daily builds moved to joshk's builds.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.
