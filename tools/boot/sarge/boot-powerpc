@@ -14,7 +14,7 @@ N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~luther/debian-installer/daily-powerpc-built/current"
+   DI_WWW_HOME="http://people.debian.org/~luther/d-i/images/daily"
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
