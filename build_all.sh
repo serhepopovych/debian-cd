@@ -4,7 +4,7 @@
 
 . CONF.sh
 
-for ARCH in "i386 m68k alpha sparc powerpc"
+for ARCH in i386 m68k alpha sparc powerpc
 do
 	export ARCH
 	echo "Now we're going to build CD for $ARCH !"
