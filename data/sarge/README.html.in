@@ -168,7 +168,7 @@ CONTENTS:
 #endif
 
 #if TYPEbinary
- <A href="#apt">Using CDs with dselect and apt</A>
+ <A href="#apt">Using CDs with apt</A>
  <P>
 
 #if OUTPUTtext
