@@ -5,7 +5,7 @@
  * This list can be generated with the command:
  * ../tools/generate_di+k_list
  *
- * Last update: Wed Aug  4 15:44:40 MDT 2004
+ * Last update: Mon Sep 13 13:27:20 EDT 2004
  */
 
 #include <debian-installer>
@@ -35,9 +35,9 @@ discover
 discover1
 grub
 lilo
-kernel-image-2.4.26-1-386
-kernel-pcmcia-modules-2.4.26-1-386
-kernel-image-2.6.7-1-386
+kernel-image-2.4.27-1-386
+kernel-pcmcia-modules-2.4.27-1-386
+kernel-image-2.6.8-1-386
 #endif
 #ifdef ARCH_alpha
 aboot
