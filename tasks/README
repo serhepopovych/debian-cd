@@ -13,8 +13,8 @@ not supported.
 
 Popularity contest results:
 
- wget http://people.debian.org/~ballombe/popcon/main/by_inst
- wget http://people.debian.org/~ballombe/popcon/contrib/by_inst
+ wget http://popcon.debian.org/main/by_inst
+ wget http://popcon.debian.org/contrib/by_inst
  grep -h '^[^#]' by_inst* | egrep -v '(Total|-----)' | sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $2}'
 
 -----
