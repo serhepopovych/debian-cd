@@ -9,8 +9,6 @@
 # Do install stuff for alpha, including making bootable CDs
 #
 
-# FIXME: This script ignores jensen, which needs a custom kernel.
-
 . $BASEDIR/tools/boot/$CODENAME/common.sh
 
 set -e
@@ -36,6 +34,7 @@ FLOPPIES=$CDDIR/dists/$CODENAME/main/disks-alpha/current/
 
 # Use the generic linux image
 cp -f $FLOPPIES/linux.bin boot1/boot/linux
+cp -f $FLOPPIES/jensen/linux.bin boot1/boot/jensen
 
 # Copy over the subarch boot-loaders
 mkdir -p boot1/milo
@@ -58,6 +57,9 @@ cat <<EOF > boot1/etc/aboot.conf
 0:boot/linux root=/dev/ram initrd=boot/root.bin
 1:boot/linux root=/dev/ram initrd=boot/root.bin console=ttyS0
 2:boot/linux root=/dev/ram initrd=boot/root.bin console=ttyS1
+3:boot/jensen root=/dev/ram initrd=boot/root.bin
+4:boot/jensen root=/dev/ram initrd=boot/root.bin console=ttyS0
+5:boot/jensen root=/dev/ram initrd=boot/root.bin console=ttyS1
 EOF
 
 cp -f $FLOPPIES/images-1.44/root.bin boot1/boot/root.bin
