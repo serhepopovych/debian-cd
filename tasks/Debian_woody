@@ -11,11 +11,11 @@
 #include "Debian_woody_nonUS"
 #endif
 
-#include <interesting-tasks-potato>
-
 /* Packages that should really be on CD1 */
 #include <base-woody>
 #include <forcd1>
+
+#include <task-woody>
 
 #include <xservers-XFree3>
 
