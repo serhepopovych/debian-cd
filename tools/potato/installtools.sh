@@ -19,6 +19,7 @@ else
 	DOCDIR="documentation"
 fi
 
+
 # Put the install documentation in /install
 cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
 mkdir $BDIR/1/install/$DOCDIR
@@ -32,4 +33,9 @@ for file in ../../install/$DOCDIR/*.{html,txt}
 do
 	ln -s $file
 done
+
+# now make sure that the /doc directory is NOT on cd 2,3,4.etc
+       rm -r $BDIR/2/doc        #remove doc dir on cd 2 
+       rm -r $BDIR/3/doc        #remove doc dir on cd 3 
+       rm -r $BDIR/4/doc        #remove doc dir on cd 4 
 
