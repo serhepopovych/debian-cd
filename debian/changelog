@@ -6,8 +6,9 @@ debian-cd (2.2.15) unstable; urgency=low
   * Updated README.sbm with more info provided by Santiago
     Marcia Mantinan.
   * Reordered some woody task files. Thanks to Philip Charles.
+  * Added cpp in the Depends field. Closes: #145869
 
- -- Raphael Hertzog <hertzog@debian.org>  Sat,  4 May 2002 15:20:57 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
 
 debian-cd (2.2.14) unstable; urgency=high
 
