@@ -126,9 +126,10 @@ while (<F>) {
     
     $tv{'Filename'}= "$pathprefix$fn";
 
-    open(C,"md5sum <$fn |") || die "$fn $!";
+    open(C,"md5sum $fn |") || die "$fn $!";
     chop($_=<C>); close(C); $? and die "\`md5sum < $fn' exited with $?\n";
-    /^[0-9a-f]{32}$/ or die "Strange text from \`md5sum < $fn': \`$_'\n";
+    /^[0-9a-f]{32}/ or die "Strange text from \`md5sum < $fn': \`$_'\n";
+    s/\ .*$//;
     $tv{'MD5sum'}= $_;
 
     @stat= stat($fn) or die "Couldn't stat $fn: $!\n";
