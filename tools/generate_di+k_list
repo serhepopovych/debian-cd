@@ -28,6 +28,7 @@ unifont
 hotplug
 console-cyrillic
 console-terminus
+pcmcia-cs
 #ifdef ARCH_i386
 EOF
 
