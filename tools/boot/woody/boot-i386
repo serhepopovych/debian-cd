@@ -39,9 +39,9 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 KTYPE[1]=""
 KTYPE[2]="compact"
 KTYPE[3]="idepci"
-KTYPE[4]="ide"
-KTYPE[5]="udma100-ext3"
-KTYPE[6]="reiserfs"
+KTYPE[4]="udma100-ext3"
+KTYPE[5]="reiserfs"
+KTYPE[6]=""
 KTYPE[7]=""
 KTYPE[8]=""
 
@@ -69,21 +69,20 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 # The next chunk of code is only used if MULTIBOOT=yes
 # Make disk1 a multi-boot image
 # ElTorito supports multiple boot images
-# Setup all boot-disk images (currently 6 of em)
-# note: this is a copy, but could this be a link  to save space ?
+# Setup all boot-disk images (currently 5)
 
 
 if [ $MULTIBOOT == "yes" ] ; then
         echo "Adding additional boot images to CD1"
 
-    for (( i=2; i != 7; ++i )) ; do
-
+    for i in 2 3 4 5 ; do
+	
         # first copy/link the next boot block to the disk.
-        ln  CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[i]}/rescue.bin boot$N/boot/${KTYPE[i]}.bin
+        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$i]}/rescue.bin boot$N/boot/${KTYPE[$i]}.bin
         # then the eltorito-alt-boot cmd to mkisofs_opts
         echo -n "-eltorito-alt-boot " >> $N.mkisofs_opts
         # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n "-b boot/${KTYPE[i]}.bin "  >> $N.mkisofs_opts
+        echo -n "-b boot/${KTYPE[$i]}.bin "  >> $N.mkisofs_opts
 
     done
 fi
