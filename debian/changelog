@@ -1,7 +1,9 @@
 debian-cd (2.2.7) unstable; urgency=low
 
-  * UNRELEASED 
   * Minor fix in tools/woody/installtools.sh
+  * Disabled the secured stuff by default. Make it configurable
+    with a environment variable.
+  * Various other little changes (in particular wrt LOCAL handling).
 
  -- Raphael Hertzog <hertzog@debian.org>  Tue, 24 Jul 2001 18:56:33 +0200
 

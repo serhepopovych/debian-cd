@@ -223,7 +223,9 @@ $MIRROR/dists/$CODENAME/local/binary-$ARCH/<section>.
 The organization of this sub-tree is the same than what you can find
 in the main, contrib or non-free part. You may use different section
 names if you want. Be sure to create Packages files (and Sources.gz if you
-include sources). 
+include sources). You can also put your local packages under
+$MIRROR/pool/local (just a new facility for people not wanting packages
+under dists).
 
 To include local packages, the LOCAL environment variable must be set
 to "1" while building the CDs.
