@@ -5,6 +5,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
   * Joey Hess
     - Include sarge installation manual on sarge CDs.
     - Remove install/doc, and just use doc/install.
+    - Patch from Thiemo Seufer to add mips and mipsel kernels.
+      Also, remove some packages from arches that do not need them.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
