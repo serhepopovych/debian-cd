@@ -1,8 +1,13 @@
 debian-cd (2.2.15) unstable; urgency=low
 
   * UNRELEASED.
+  * Apply patch for mipsel boot support. Closes: #145318
+    Thanks to Karsten Merker.
+  * Updated README.sbm with more info provided by Santiago
+    Marcia Mantinan.
+  * Reordered some woody task files. Thanks to Philip Charles.
 
- -- Raphael Hertzog <hertzog@debian.org>  Sun, 28 Apr 2002 16:04:24 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Sat,  4 May 2002 15:20:57 +0200
 
 debian-cd (2.2.14) unstable; urgency=high
 

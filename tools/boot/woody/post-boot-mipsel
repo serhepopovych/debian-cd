@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# post-boot-mipsel - (C) 2002 by Karsten Merker <merker@debian.org>
+#
+# Do post-image-building tasks for mipsel, to make CDs bootable.
+#
+# You may copy, modify and distribute this under the terms of the GNU
+# General Public License as published by the Free Software Foundation;
+# either version 2 of the License, or (at your option) any later version.
+#
+# Using this script on any architecture other than mipsel requires
+# having binutils-multiarch installed, as it uses objdump (a part
+# of binutils) which is platform dependent. The binutils-multiarch
+# package contains an objdump which is capable of dealing with other
+# arches' binary formats.
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+# $3 is the image file
+
+set -e
+
+N=$1
+CDROOT=$2
+CDIMAGE=$3
+
+echo "post-boot-mipsel called"
+echo "pwd=${PWD}, N=$N, CDROOT=${CDROOT}, CDIMAGE=${CDIMAGE}"
+
+
+# Strip NONUS part of disk number
+# NN will be 1...N so it can be used as an index
+#
+NN=`echo $N | sed -e 's/_NONUS//'`
+
+cd $CDROOT/..
+
+# Only disks 1 and 2 bootable
+if [ $NN != 1 -a $NN != 2 ]; then
+        exit 0
+fi
+
+KTYPE[1]="r3k-kn02"
+KTYPE[2]="r4k-kn04"
+KTYPE[3]=""
+KTYPE[4]=""
+KTYPE[5]=""
+KTYPE[6]=""
+KTYPE[7]=""
+KTYPE[8]=""
+
+mkdir -p /tmp/debian-cd-loop.$$
+mount -o ro,loop ${CDIMAGE} /tmp/debian-cd-loop.$$
+KERNEL_ENTRY=`objdump -f CD1/dists/$CODENAME/main/disks-$ARCH/current/tftpimage-${KTYPE[$NN]} | grep "start address" | cut -f 3 -d " "`
+echo "kernel_entry=$KERNEL_ENTRY"
+mkdecbootcd /tmp/debian-cd-loop.$$/cdboot/tftpimage-${KTYPE[$NN]}.raw ${CDIMAGE} $KERNEL_ENTRY
+umount /tmp/debian-cd-loop.$$
+rmdir /tmp/debian-cd-loop.$$
+
+exit 0

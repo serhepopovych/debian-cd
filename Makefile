@@ -893,10 +893,11 @@ bin-image: ok bin-md5list $(OUT)
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
 	 $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD); \
-	 if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
-		$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
-		 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
-	 fi
+         if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+                $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $(CD) $(BDIR)/CD$(CD) \
+                 $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
+         fi
+
 src-image: ok src-md5list $(OUT)
 	@echo "Generating the source iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
