@@ -53,6 +53,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         kernel-pcmcia-modules-2.4.22-xfs-686-smp,
         kernel-source-2.2.20, timidity-patches, tcl8.2 and tk8.2.
     - Update list2cds to allow #-comments in the exclude file.
+    - Try to create $(OUT) instead of just bailing out if it is missing.
   * Stephen R. Marenka
     - Update m68k support for sarge.
         - Fix m68k/amiga icons.

@@ -175,7 +175,9 @@ endif
 ## INITIALIZATION ##
 
 # Creation of the directories needed
-init: ok $(TDIR) $(BDIR) $(SDIR) $(ADIR)
+init: ok $(OUT) $(TDIR) $(BDIR) $(SDIR) $(ADIR)
+$(OUT):
+	$(Q)mkdir -p $(OUT)
 $(TDIR):
 	$(Q)mkdir -p $(TDIR)
 $(BDIR):
