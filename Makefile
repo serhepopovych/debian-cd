@@ -316,7 +316,7 @@ $(BDIR)/bootable-stamp:
 		n=$${dir##$(BDIR)/}; \
 		if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) ]; then \
 			cd $(BDIR); \
-			sh -c $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
+			$(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
 		else \
 			echo "No script to make CDs bootable for $(ARCH) ..."; \
 			exit 1; \
