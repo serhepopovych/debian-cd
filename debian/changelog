@@ -5,8 +5,10 @@ debian-cd (2.2.10) unstable; urgency=low
     You must export MULTIBOOT="yes" in CONF.sh  to enable this feature. -jwest
   * Removed "ide" boot floppy's flavor. Closes: #120415
   * Added support for s390 (Jochen Röhrig <jr@debian.org>).
+  * Documentation about the fact the environment variables may
+    pollute your environment after a debian-cd run. Closes: #123289
 
- -- Jochen Röhrig <jr@debian.org>  Mon, 26 Nov 2001 18:21:50 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Mon, 26 Nov 2001 18:21:50 +0100
 
 debian-cd (2.2.9) unstable; urgency=low
 

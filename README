@@ -76,6 +76,12 @@ The process of building a CD is decomposed as follow :
   tree. If you can't do this, you'll have to use the symlink farm.
   The symlink farm is explained at the end of this README.
 
+  Keep in mind that the environment variables will stay in the
+  environment after your debian-cd run, and may interfere with
+  other program using the same variables (kernel-package for
+  example ...). So if you want to be 100% safe, run debian-cd in a
+  separate shell that you exit afterwards.
+  
 - let's clean everything that may still be there from previous runs :
   $ make distclean
 
