@@ -9,22 +9,26 @@
 
 if [ -e "dists/$CODENAME/Release" ]; then 
     find dists/$CODENAME/ -name 'Packages' -o -name 'Packages.gz' \
-    -o -name 'Sources' -o -name 'Sources.gz' | grep -v non-US/ | \
+    -o -name 'Sources' -o -name 'Sources.gz' -o -name 'Release' | \
+    grep -v non-US/ | grep -v dists/$CODENAME/Release | \
     sed -e "s#^dists/$CODENAME/##" | \
     (while read file; do \
-    	c=`wc -c < $file`; \
-	m=`md5sum < $file`; \
+        rfile="dists/$CODENAME/$file"; \
+    	c=`wc -c < $rfile`; \
+	m=`md5sum < $rfile`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/Release
 fi
 
 if [ -n "$NONUS" -a -e "dists/$CODENAME/non-US/Release" ]; then
     find dists/$CODENAME/non-US/ -name 'Packages' -o -name 'Packages.gz' \
-    -o -name 'Sources' -o -name 'Sources.gz' | \
+    -o -name 'Sources' -o -name 'Sources.gz' -o -name 'Release' | \
+    grep -v dists/$CODENAME/non-US/Release | \
     sed -e "s#^dists/$CODENAME/non-US/##" | \
     (while read file; do \
-    	c=`wc -c < $file`; \
-	m=`md5sum < $file`; \
+        rfile="dists/$CODENAME/non-US/$file"; \
+    	c=`wc -c < $rfile`; \
+	m=`md5sum < $rfile`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/non-US/Release
 fi
