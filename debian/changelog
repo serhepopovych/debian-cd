@@ -8,6 +8,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Patch from Thiemo Seufer to add mips and mipsel kernels.
       Also, remove some packages from arches that do not need them.
     - Remove module-init-tools-udeb from the CD.
+  * Petter Reinholdtsen
+    - Regenereated tasks/popularity-contest-sarge based on the current data.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
