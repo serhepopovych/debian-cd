@@ -609,7 +609,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 		$(add_files) \
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
-		touch $(BDIR)/.disk/kernel_installable ; \
+		touch $(BDIR)/$$DISK/.disk/kernel_installable ; \
 		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
 		rm -rf base-images-*; \
 		if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \

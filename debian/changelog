@@ -9,6 +9,10 @@ debian-cd (2.2.13) unstable; urgency=low
   * Don't include the base-images-* directories on the CD. They
     are meant for people wishing to install by floppy (who download the
     floppy images from the net).
+  * Corrected the priority to match the priority given in the override file.
+  * CDs with .disk/kernel_installable have the disks-<arch> directories
+    and those with .disk/base_installable have all the packages required
+    by debootstrap.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 20 Jan 2002 15:42:29 +0100
 
