@@ -14,9 +14,12 @@ DOCDIR=doc
 
 if [ -e $BOOTDISKS/current/$DOCDIR ] ; then
         DOCS=$BOOTDISKS/current/$DOCDIR
-else
+elif [ -e $MIRROR/dists/potato/main/disks-$ARCH/current/$DOCDIR ] ; then
         echo "Using potato bootdisk documentation"
         DOCS=$MIRROR/dists/potato/main/disks-$ARCH/current/$DOCDIR
+else
+	echo "Unable to find any documentation"
+	exit 0
 fi
 
 
