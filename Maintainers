@@ -9,6 +9,7 @@ Arm
     no-one (yet)
 
 i386 (ia32)
+    Steve McIntyre <stevem@chiark.greenend.org.uk>
 
 M68k
     Chris Lawrence <lawrencc@debian.org>
