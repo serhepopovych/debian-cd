@@ -22,8 +22,8 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 fi
 
 palo --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk" \
-     --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/32/linux \
-     --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/64/linux \
+     --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/32/linux.bin \
+     --recoverykernel=CD1/dists/$CODENAME/main/disks-hppa/current/64/linux.bin \
      --bootloader=CD1/install/iplboot \
      --ramdisk=CD1/dists/$CODENAME/main/disks-hppa/current/root.bin \
      --init-cdrom=$CDIMAGE --configfile=/dev/null
