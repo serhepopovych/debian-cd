@@ -22,6 +22,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Add mdadm to the netinst CD, needed for software raid installs.
     - Add lvm2 (and dependencies libdevmapper1.00 and lvm-common)
       for new partman. Left lvm10 on the CD for now, remove later.
+    - Add jfsutils to netinst cds.:
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we

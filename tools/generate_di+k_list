@@ -34,6 +34,7 @@ console-terminus
 pcmcia-cs
 wireless-tools
 xfsprogs
+jfsutils
 reiserfsprogs
 #ifdef ARCH_i386
 discover
