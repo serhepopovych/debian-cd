@@ -1020,6 +1020,24 @@ conf:
 mirrorcheck: ok apt-update
 	$(Q)$(apt) cache dumpavail | $(mirrorcheck)
 
+update-popcon: tasks/popularity-contest-$(CODENAME)
+tasks/popularity-contest-$(CODENAME):
+	rm -f popcon-inst
+	( \
+		echo '/*' ; \
+		echo '   Popularity Contest results' ; \
+		echo '   See the README for details on updating.' ; \
+		echo '' ; \
+		echo '   Last update: $$Date$$' ; \
+		echo '*/' ; \
+		echo '' ; \
+	) > $@
+	wget --output-document popcon-inst \
+		http://popcon.debian.org/main/by_inst \
+		http://popcon.debian.org/contrib/by_inst
+	grep -h '^[^#]' popcon-inst | egrep -v '(Total|-----)' | \
+		sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $$2}' >> $@
+
 # Little trick to simplify things
 official_images: bin-official_images src-official_images
 bin-official_images: ok bootable upgrade bin-images
