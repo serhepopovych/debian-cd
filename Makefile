@@ -467,6 +467,10 @@ bin-images: ok bin-md5list $(OUT)
 		rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
 		$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 		  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts $$n ; \
+		if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+			$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
+			 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+		fi \
 	done
 src-images: ok src-md5list $(OUT)
 	@echo "Generating the source iso images ..."

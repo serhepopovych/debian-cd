@@ -401,6 +401,9 @@ sub add_package {
 		$limit = $ENV{"SIZELIMIT$cd"} || $deflimit;
 		msg(2, "Limit for CD $cd is $limit.\n");
 	}
+
+	msg(2, "  \$cd_size = $cd_size, \$size = $size\n");
+
 	$cd_size += $size;
 	$total_size += $size;
 
