@@ -48,8 +48,8 @@ unset MAXCDS            || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building woody cd set ...
-export CODENAME=woody
+# Building sarge cd set ...
+export CODENAME=sarge
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
@@ -164,9 +164,9 @@ export DEFBINSIZE=630
 export DEFSRCSIZE=635
 
 # We don't want certain packages to take up space on CD1...
-#export EXCLUDE="$BASEDIR"/tasks/exclude-potato
+export EXCLUDE="$BASEDIR"/tasks/exclude-sarge
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)
-#export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-potato
+export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-sarge
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
 

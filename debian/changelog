@@ -53,6 +53,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - NORECOMMENDS should be used for sarge official CD sets (getting full
       tasks is more important), and is on by default.
     - Add libfribidi0 to generate_di+k_list, needed for BIDI.
+    - Switch CONF.sh to sarge.
+    - Uncomment exclude lines.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
