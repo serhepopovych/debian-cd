@@ -680,9 +680,9 @@ if [ $error -eq 0 ] ; then
 		if [ "$ARCH"x = "i386"x ] ; then
 			vecho "Disk 1"
 			vecho "   upgrade-2.0-i386"
-			(cd $TDIR/cd1 && ln -s dists/$CODENAME_STATUS/main/upgrade-2.0-i386)
+			(cd $TDIR/$(CODENAME)1 && ln -s dists/$CODENAME_STATUS/main/upgrade-2.0-i386)
 			vecho "   upgrade-older-i386"
-			(cd $TDIR/cd1 && ln -s dists/$CODENAME_STATUS/main/upgrade-older-i386)
+			(cd $TDIR/$(CODENAME)1 && ln -s dists/$CODENAME_STATUS/main/upgrade-older-i386)
 		fi
     fi
 fi
@@ -690,7 +690,7 @@ fi
 # Fix the crypt++el_2.84-2.deb brokenness in non-US - temporary workaround...
 if [ "$NU"x = "1"x ] ; then
 	vecho "Looking for broken crypt++el_2.84-2.deb link in non-US..."
-    cd $TDIR/cd2/dists/$CODENAME/non-US/binary-$ARCH
+    cd $TDIR/$(CODENAME)2/dists/$CODENAME/non-US/binary-$ARCH
 	if [ -L crypt++el_2.84-2.deb ] ; then
 	    link=`ls -l crypt++el_2.84-2.deb | awk '{print $11}'`
 		if [ "$link"x != "../binary-all/crypt++el_2.84-2.deb"x ] ; then
@@ -1068,11 +1068,11 @@ if [ $error -eq 0 ] ; then
         vecho "Making bootable images for $ARCH..."
         cd $TDIR
 
-        mkdir -m 755 cd1/install
-        (cd cd1/dists/$CODENAME_STATUS/main/disks-$ARCH/current/ ; \
-			cp *.txt *.html $TDIR/cd1/install )
+        mkdir -m 755 $(CODENAME)1/install
+        (cd $(CODENAME)1/dists/$CODENAME_STATUS/main/disks-$ARCH/current/ ; \
+			cp *.txt *.html $TDIR/$(CODENAME)1/install )
 
-		(cd cd1/doc; 
+		(cd $(CODENAME)1/doc; 
 			for file in ../install/*.{html,txt}; do	ln -s $file; done)
 
         # Hack for bootable disks
@@ -1115,10 +1115,10 @@ case "$ARCH"x in
 		if [ -d boot1 ]; then
 			MKISOFS_OPTS_DISC1="boot1"
 			# move install tree to correct location
-			if [ -d $TDIR/cd1/install ] ; then
+			if [ -d $TDIR/$(CODENAME)1/install ] ; then
 				vecho "Moving install to boot1"
 				rm -rf $TDIR/boot1/install || true
-				mv $TDIR/cd1/install $TDIR/boot1
+				mv $TDIR/$(CODENAME)1/install $TDIR/boot1
 			fi
 		fi
 		;;
@@ -1197,9 +1197,9 @@ if [ $error -eq 0 ] ; then
 		VOLID1=`cat $TDIR/cd1.volid`
         vecho "Making image of cd1 to $OUT/$(CODENAME)1-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 cd1 
+			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 $(CODENAME)1 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 cd1
+			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 $(CODENAME)1
     fi
 
     if [ "$IMAGE2"x = "1"x ] ; then
@@ -1207,9 +1207,9 @@ if [ $error -eq 0 ] ; then
 		VOLID2=`cat $TDIR/cd2.volid`
         vecho "Making image of cd2 to $OUT/$(CODENAME)2-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 cd2
+	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 $(CODENAME)2
         $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 cd2
+	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 $(CODENAME)2
     fi
 
     if [ "$IMAGE3"x = "1"x ] ; then
@@ -1217,9 +1217,9 @@ if [ $error -eq 0 ] ; then
 		VOLID3=`cat $TDIR/cd3.volid`
         vecho "Making image of cd3 to $OUT/$(CODENAME)3.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 cd3 
+	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 $(CODENAME)3 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 cd3
+	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 $(CODENAME)3
     fi
 
     if [ "$IMAGE4"x = "1"x ] ; then
@@ -1227,9 +1227,9 @@ if [ $error -eq 0 ] ; then
 		VOLID4=`cat $TDIR/cd4.volid`
         vecho "Making image of cd4 to $OUT/$(CODENAME)4.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 cd4 
+	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 $(CODENAME)4 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 cd4
+	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 $(CODENAME)4
     fi
 
     if [ "$IMAGE5"x = "1"x ] ; then
@@ -1238,9 +1238,9 @@ if [ $error -eq 0 ] ; then
         vecho "Making image of cd5 to $OUT/$(CODENAME)5-$ARCH.raw"
 		if [ "$NF"x = "1"x ] ; then
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 cd5
+	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 $(CODENAME)5
         $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 cd5
+	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 $(CODENAME)5
         fi
     fi
 fi
