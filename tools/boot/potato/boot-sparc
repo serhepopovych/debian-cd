@@ -62,9 +62,6 @@ cp -a $tmp/debian-sparc-root/* $inst/.
 # no longer need this
 rm -rf $tmp
 
-# make this a cdrom root, this gives dbootstrap a heads up
-echo $CODENAME > $inst/cdrom_image
-
 # Get rid of some junk
 rm -f $inst/{boot_message,type.txt}
 
@@ -75,7 +72,6 @@ ln -s ../tmp/run $inst/var/run
 
 # Hack...need a better way
 ln -s ../tmp/resolv.conf $inst/etc/resolv.conf
-ln -s ../target/etc/modules.conf $inst/etc/modules.conf
 ln -s ../../target/usr/bin/whiptail $inst/usr/bin/whiptail
 rmdir $inst/lib/modules
 ln -s ../target/lib/modules $inst/lib/modules
