@@ -11,8 +11,8 @@ DOCDIR=doc
 if [ -n "$BOOTDISKS" -a -e $BOOTDISKS/current/$DOCDIR ] ; then
         DOCS=$BOOTDISKS/current/$DOCDIR
 else
-        echo "WARNING: Using sid bootdisk documentation"
-        DOCS=$MIRROR/dists/sid/main/installer-$ARCH/current/$DOCDIR
+        echo "WARNING: Using $DI_CODENAME bootdisk documentation"
+        DOCS=$MIRROR/dists/$DI_CODENAME/main/installer-$ARCH/current/$DOCDIR
 fi
 
 # Put the install documentation in /doc/install
