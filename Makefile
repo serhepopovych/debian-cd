@@ -42,6 +42,9 @@ endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
+ifndef BOOTDISKS
+BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
+endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
@@ -141,7 +144,7 @@ $(BDIR)/status:
 	# Checking the consistence of the standard system
 	# If this does fail, then launch make correctstatus
 	#
-	@$(apt) check
+	@$(apt) check || $(MAKE) correctstatus
 
 # Only useful if the standard system is broken
 # It tries to build a better status file with apt-get -f install
@@ -359,12 +362,9 @@ $(BDIR)/1/tools:
 	@echo "Adding install tools and documentation ..."
 	@$(addfiles) $(BDIR)/1 $(MIRROR) tools
 	@mkdir $(BDIR)/1/install
-	@cd \
-	 $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH)/current; \
-	 cp *.html *.txt $(BDIR)/1/install/
-	@ln -sf install.html $(BDIR)/1/install/index.html
-	@cd $(BDIR)/1/doc; \
-	 for file in ../install/*.{html,txt}; do ln -s $$file; done
+	@if [ -x "$(BASEDIR)/tools/$(CODENAME)/installtools.sh" ]; then \
+		$(BASEDIR)/tools/$(CODENAME)/installtools.sh; \
+	 fi
 
 # Add the disks-arch directories where needed
 disks: ok bin-infos $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH)
@@ -374,7 +374,7 @@ $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH):
 	    $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH)
 	@$(addfiles) \
 	  $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH) \
-	  $(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH) .
+	  $(BOOTDISKS) .
 	@#Keep only one copy of the disks stuff
 	@cd $(BDIR)/1/dists/$(CODENAME)/main/disks-$(ARCH); \
 	if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \

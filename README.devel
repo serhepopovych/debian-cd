@@ -33,6 +33,9 @@ Log files :
 
 TODO list :
 -----------
++ be able to use an alternate location for the boot disks
+  (in order to use i18ned boot disks and to more easily
+   test debian-cd with CVS version of the boot-floppies)
 + a way to force the inclusion of packages (even broken)
 + possibility to add project/* to the last CD
 + check the source files on the mirror (with Sources.gz)

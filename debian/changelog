@@ -5,6 +5,15 @@ debian-cd (2.1.91) unstable; urgency=low
   * Updated the tasks/Debian_potato to use the new task-* packages.
   * New boot-i386 which does use resc2880.bin (the tecra image has
     been removed since it does no more exist in the latest boot-floppies).
+  * Can now build CD with bootdisks taken from somewhere else than
+    the mirror (allow you to use your own boot floppies, notably those
+    built with translated documentation).
+  * The documentation from the boot-floppies are now installed
+    in /install and /doc by the scripts tools/$CODENAME/installtools.sh
+    It was needed since the documentation of the boot-floppies does
+    differ from one dist to another ...
+  * Removed some cruft which is no more needed (master for potato,
+    status.i386).
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 11 Nov 1999 20:50:26 +0100
 

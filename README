@@ -36,7 +36,7 @@ For people that do not have time, here's the quick explanation :
 Edit the CONF.sh and change the PATHs for the mirror and so on.
 $ vim CONF.sh
 $ . CONF.sh
-$ make potato_status
+$ make status
 $ make list COMPLETE=1 SIZELIMIT1=576716800
 $ make official_images
 [ or if you want only binary images :
@@ -47,7 +47,7 @@ But you really should consider reading further for more information.
 How to build a CD set - step by step
 ====================================
 
-If not yet done, first decompact the archive and cd to the "yacs" directory.
+If not yet done, cd to the /usr/share/debian-cd/ directory.
 
 The process of building a CD is decomposed as follow :
 
@@ -67,15 +67,10 @@ The process of building a CD is decomposed as follow :
 - then you will have to launch this for initializing the
   temporary directory used for the build :
   $ make status
-  If this has failed then you'll have to launch :
+  If this has failed then this will be automatically launched :
   $ make correctstatus
   However note that make status should never fail if it is
   used for building a CD set for the stable release ...
-
-  NOTE: Actually (11/7/99) potato is in a bad state, I advise you
-  to use the potato.status file in the data dir as your status file,
-  to do so you can launch : 
-  $ make potato_status
 
 - now you can decide what you want on your CDs
   $ make list TASK=tasks/debian-2.2 COMPLETE=1
@@ -111,6 +106,13 @@ The process of building a CD is decomposed as follow :
 - it may be time to add the disks-arch stuff and to make the CDs bootable
   $ make bootable
   This does affect only the binary CDs.
+
+  If you want to use boot-floppies built by yourself you can give
+  a parameter BOOTDISKS=<dir> giving the directory where
+  they are (note that $BOOTDISKS/current must be a symlink to the
+  real directory, it must follow the same setup than in the FTP
+  mirror). Your boot-floppies must also be on the same partiton than
+  your mirror & temporary dir (hardlinks are used here too).
 
 - now, we'll add the binary packages to the temporary tree :
   $ make packages
