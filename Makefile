@@ -494,7 +494,7 @@ $(BDIR)/CD1/doc:
 		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \
 		cd $(BDIR)/$$DISK/doc/FAQ/html ; \
 		tar xzvf ../debian-faq.html.tar.gz ; \
-		rm ../debian-faq.html.tar.gz ; \
+		rm -f ../debian-faq.html.tar.gz ; \
 	done
 	$(Q)$(add_bin_doc) # Common stuff for all disks
 
