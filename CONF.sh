@@ -10,7 +10,7 @@ export BASEDIR=`pwd`
 export CODENAME=woody
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="3.0 prerelease"
+export DEBVERSION="3.0 beta"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
