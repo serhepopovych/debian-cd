@@ -1,6 +1,5 @@
 debian-cd (2.2.15) unstable; urgency=low
 
-  * UNRELEASED.
   * Apply patch for mipsel boot support. Closes: #145318
     Thanks to Karsten Merker.
   * Updated README.sbm with more info provided by Santiago
@@ -20,8 +19,8 @@ debian-cd (2.2.15) unstable; urgency=low
     without docs.
   * Make sure discover, read-edid and mdetect are on the first CD if
     possible.
-  
- -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
+
+ -- Raphael Hertzog <hertzog@debian.org>  Tue, 17 Sep 2002 21:18:05 +0200
 
 debian-cd (2.2.14) unstable; urgency=high
 
