@@ -13,6 +13,11 @@ set -e
 N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
+
+# the ! case further down doesn't seem to work.
+if [ ! "$DI_WWW_HOME" ];then
+	DI_WWW_HOME="default" 
+fi
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/images-m68k/daily"
 elif [ "$DI_WWW_HOME" = "test" ];then
@@ -50,12 +55,12 @@ cd $INSTALLDIR
 
 if [ ! "$DI_WWW_HOME" ];then
 	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
-	SUBARCHS=`find "$DI_DIR/*" -type d -print | cut -d'/' -f3`
+	SUBARCHS=`find "$DI_DIR/*" -type d -print | sed -e 's,.*/,,'`
 
 	for subarch in $SUBARCHS; do
 		echo "subarch: $subarch"
 		mkdir $subarch
-		cp "$DI_DIR"/$subarch/* $subarch
+		cp -a "$DI_DIR"/$subarch/* $subarch
 	done
 	cp "$DI_DIR/cdrom-initrd.gz" root.bin
 	if [ -f "$DI_DIR/cdrom22-initrd.gz" ]; then 
