@@ -3,7 +3,7 @@
 #
 
 # Unset all optional variables first to start from a clean state
-unset NONUS
+unset NONUS             || true
 unset FORCENONUSONCD1   || true
 unset NONFREE           || true
 unset EXTRANONFREE      || true
