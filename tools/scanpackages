@@ -125,17 +125,15 @@ if [ "$1" != "scan" ]; then exit 0; fi
 
 for SECT in $SECTIONS; do
 
-	# Look at the ugly hack for the main special case ...
-
 	dpkg-scanpackages -m "`cat .disk/info`" \
 	          dists/$CODENAME/$SECT/binary-$ARCH \
-                  $MIRROR/indices/override.$CODENAME.`t=${SECT}.; echo -n ${t##main.}`gz \
+                  $MIRROR/indices/override.$CODENAME.$SECT.gz \
 		  > $PREFIX.Packages-$SECT
    
 	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
  		 dpkg-scanpackages -m "`cat .disk/info`" \
 		        dists/$CODENAME/non-US/$SECT/binary-$ARCH \
-                  	$NONUS/indices-non-US/override.$CODENAME.`t=${SECT}.; echo -n ${t##main.}`gz \
+                  	$NONUS/indices-non-US/override.$CODENAME.$SECT.gz \
 		  	> $PREFIX.Packages-non-US-$SECT
 	fi
 	
