@@ -26,6 +26,46 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Make i386 cds 8.3 filenaming compatible again.
     - Workaround the two kernels problem on hppa.
     - Fix the kernel-image-2.4.27-amiga thing on generate_di+k_list.
+  * Joey Hess again:
+    - Since amd64 is not on standard debian mirrors, and generate_d-i+k_list
+      must be runnable on them, make it chack for absence of amd64 Packages
+      files and add a dummy kernel for amd64. This will need to be manually
+      kept up-to-date by the amd64 people for now.
+    - Didn't fix generate_di_list the same way, since doing so would be too
+      hard. Next time tasks/debian-installer is updated using this script on
+      a machine w/o the unofficial amd64 archive, the am64 info in the file
+      will be lost.
+    - Add DO NOT EDIT warning messages to generated files in cvs.
+    - Check and revert manual modifications to tasks/base-sarge. This file is
+      automatically generated and those mods would have been lost:
+        - Add fileutils to generate_d-i+k_list, "until kernels get fixed",
+          whatever that means.
+        - arcboot was already in generate_d-i+k_list.
+    - Update tasks/debian-installer+kernel using generate_d-i+k_list.
+    - Sort package lists in tasks/base-sarge to ease comparisons when
+      updating.
+    - Update tasks/base-sarge for debootstrap 0.2.45. This includes the
+      following removals:
+         - aboot: already listed in debian-installer+kernel
+         - gcc-3.2-base, libdb2, libgcrypt1, libgnutls7, libident, 
+           libdb2, libtasn1-0: obsolete
+         - modconf: obsoleted by d-i
+         - setserial: not base anymore
+         - slang1: turned into slang1a-utf8
+         - libident: not needed by base anymore
+         - lilo: in debian-installer+kernel
+         - mbr: not installed anymore
+         - pcmcia-cs: in debian-installer+kernel
+         - syslinux: not installed
+         - "filesutils": typo; fileutils in generate_d-i+k_list for m68k
+         - quik: in debian-installer+kernel
+         - yaboot: in debian-installer+kernel
+         - arcboot: in debian-installer+kernel
+         - delo: in debian-installer+kernel
+      And the following additions:
+         - libdb4.2, libgcrypt11, libgcrypt7, libgnutls10, libgnutls11,
+           libgpg-error0, libtasn1-2: new libraries
+         - console-tools: now installed by debootstrap even on s390
 
  -- Joey Hess <joeyh@debian.org>  Mon, 25 Oct 2004 03:03:36 -0400
 
