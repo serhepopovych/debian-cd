@@ -23,7 +23,7 @@ $/ = ''; # Browse by paragraph
 my ($p, $file, $arch, $d, $realfile, $source, $section, $name);
 while (defined($_ = <LIST>)) {
 	m/^Package: (\S+)/m and $p = $1;
-	m/^Filename: (\S+)/m and $file = $1;
+	m/^Filename: (\S+)/mi and $file = $1;
 	m/^Architecture: (\S+)/m and $arch = $1;
 	m/^Section: (\S+)/m and $section = $1;
 

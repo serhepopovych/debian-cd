@@ -45,7 +45,7 @@ my ($p, $re);
 while (defined($_=<AVAIL>)) {
     next if not m/^Package: (\S+)\s*$/m;
     $p = $1;
-    if( m/^(Section|Filename): \S*non-US\S*\s*$/m )
+    if( m/^(Section|Filename): \S*non-US\S*\s*$/mi )
     {
         $packages{$p}{"nonus"} = 1;
     } else {
