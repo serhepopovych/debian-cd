@@ -41,6 +41,7 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Document vga=771 boot option for laptops with screen problems.
     - Add the debian-edu udebs to the exclude list for netinst CDs, and
       remove the deleted di-utils-devicefiles.
+    - Update boot/sarge/boot-i386 to use the new d-i image names.
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)

@@ -14,7 +14,7 @@ N=$1
 CDDIR=$2
 BOOTDIR=
 if [ ! "$WWW_HOME" ];then
-   WWW_HOME="http://people.debian.org/~sjogren/d-i/images/daily"
+   WWW_HOME="http://people.debian.org/~joeyh/d-i/images/daily"
 fi
 
 cd $CDDIR/..
@@ -31,7 +31,7 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 
 # List of boot image for each CD
 KTYPE[1]="" #isolinux multiboot in fact
-KTYPE[2]="cdrom-image"
+KTYPE[2]="cdrom"
 # XXX add net-image back when it's fixed
 KTYPE[3]=""
 KTYPE[4]=""
@@ -44,11 +44,15 @@ KTYPE[10]=""
 
 THISTYPE=${KTYPE[$NN]}
 
+BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz netboot/initrd.gz"
+DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img floppy/net-drivers.img "
+
 # Download boot images
-# XXX add net-image.img back when it's fixed
-for image in cd_drivers-image.img cdrom-image.img cdrom-initrd.gz floppy-image.img floppy-initrd.gz net_drivers-image.img netboot-initrd.gz vmlinuz ; do
+for image in $BOOT_IMAGES $DISK_IMAGES; do
     if [ ! -e "$image" ]; then
-	wget $WWW_HOME/$image
+	dir=$(dirname $image)
+	mkdir -p $dir
+	wget $WWW_HOME/$image -O $image
     fi
 done
 
@@ -56,16 +60,16 @@ if [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
     cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
-    cp -lf vmlinuz $CDDIR/install/
-    cp -lf cdrom-initrd.gz $CDDIR/install/cdrom.gz
-    cp -lf netboot-initrd.gz $CDDIR/install/net.gz
+    cp -lf cdrom/vmlinuz $CDDIR/install/
+    cp -lf cdrom/initrd.gz $CDDIR/install/cdrom.gz
+    cp -lf netboot/initrd.gz $CDDIR/install/net.gz
     echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 else
     if [ -n "$THISTYPE" ]; then
 	echo "Using $THISTYPE boot-disks image on CD$N"
 	mkdir -p boot$N/boot
-	cp $THISTYPE.img boot$N/boot/
-	echo -n "-cache-inodes -J -l -b boot/$THISTYPE.img "  > $N.mkisofs_opts
+	cp $THISTYPE/boot.img boot$N/boot/
+	echo -n "-cache-inodes -J -l -b boot/boot.img "  > $N.mkisofs_opts
     else
 	mkdir boot$N
 	echo -n "-cache-inodes -J -l " > $N.mkisofs_opts
@@ -80,8 +84,11 @@ if [ "$NN" = "1" ]; then
 
 
 # populate the install directory as well
-cp -lf *.img $CDDIR/install
-cp -lf floppy-initrd.gz $CDDIR/install
+for disk in $DISK_IMAGES; do
+	dir=$(dirname $disk)
+	mkdir -p $CDDIR/install/$dir
+	cp -lf $disk $CDDIR/install/$dir
+done
 
 # ISOLINUX setup
 
