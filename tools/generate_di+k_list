@@ -144,6 +144,7 @@ cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_sparc
 discover1
+initrd-tools
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*-sparc.*\)$/\1/p' \
