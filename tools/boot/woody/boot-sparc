@@ -27,13 +27,13 @@ fi
 
 install_languages $CDDIR
 
-echo "-B boot/second.b boot1" > $N.mkisofs_opts
+echo "-silo-boot boot/second.b -s boot/silo.conf -S boot/cd.b boot1" > $N.mkisofs_opts
 rm -rf boot1
 
 inst=boot1
 
 # Setup directories
-mkdir -p $inst/{boot/sun4{u,cdm},etc}
+mkdir -p $inst/boot
 
 silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 # put the relevant parts of SILO boot loader
@@ -41,24 +41,13 @@ silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 	tar zxf - -C $inst/ ./boot/{cd,second}.b)
 
 # Some custom etc files
-cp -f -p $BASEDIR/data/sparc/etc/{boot-msg.txt,debian.txt,silo.conf} \
-	$inst/etc/
+cp -f -p $BASEDIR/data/sparc/etc/{debian.txt,silo.conf} \
+	$inst/boot/
 
-tmp=$TDIR/sparc-root
-rm -rf $tmp
-mkdir -p $tmp
-
-for suba in sun4cdm sun4u; do
-  ln -s ../../dists/$CODENAME/main/disks-$ARCH/current/$suba/linux-a.out \
-	$inst/boot/$suba/linux
-done
-
-# Unpack the root tree into the directory. we use the tftp root.tar.gz
-tar zxf $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/root.tar.gz -C $tmp/
-cp -f -a $tmp/debian-sparc-root/. $inst/
+cp ../../dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/vmlinuz \
+	$inst/boot/sparc32.gz
+cp ../../dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
+	$inst/boot/sparc64.gz
 
 # no longer need this
 rm -rf $tmp
-
-# Get rid of some junk
-rm -f $inst/{boot_message,type.txt}
