@@ -39,7 +39,7 @@ mkdir -p $inst/{boot/sun4{u,cdm},etc}
 cp -f -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
 	$inst/etc/
 
-tmp=/var/tmp/debian_cd
+tmp=$TDIR/sparc-root
 rm -rf $tmp
 mkdir -p $tmp
 
