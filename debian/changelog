@@ -22,7 +22,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Add mdadm to the netinst CD, needed for software raid installs.
     - Add lvm2 (and dependencies libdevmapper1.00 and lvm-common)
       for new partman. Left lvm10 on the CD for now, remove later.
-    - Add jfsutils to netinst cds.:
+    - Add jfsutils to netinst cds.
+    - Add usbutils to netinst cds, it'll be installed by a future version
+      of hw-detect.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
@@ -56,8 +58,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         - Fix m68k/amiga icons.
         - Add 2.2 kernel-based cdrom initrd.
         - Redo mz68k subarch boot/install for sarge.
-		- Bump all subarchs to 2.4 kernel, except mac.
-		- Add bvme6000 boot code.
+        - Bump all subarchs to 2.4 kernel, except mac.
+        - Add bvme6000 boot code.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.
