@@ -1,0 +1,222 @@
+debian-cd (2.1.90-1) unstable; urgency=low
+
+  * Moved to contrib because of the unzip and lha dependencies.
+  * Corrected the boot-m68k script (bvme600 -> bvme6000).
+  * YACS 0.5 :
+  * ----------
+  * tools/add_dirs: don't create section subdirectories for non-US.
+  * tools/*: full slink compliance. Should build slink disk even with
+    non-US. Thanks to the help of Filip Van Raemdonck <mechanix@dma.be>.
+  * Makefile: added an upgrade target called when building
+    official_images. It will call tools/$CODENAME/upgrade.sh if possible.
+    Created this upgrade.sh file for slink.
+  * YACS can/should generate complete slink images with this release.
+    Please test. In particular for non-i386 CD images. I want to check
+    if the scripts to make CD bootables are (still) working.
+  * tools/apt-selection: removed some bashisms.
+  * Many data has been splitted by codename. This is to allow
+    us to build slink and potato CD without much troubles.
+  * Updated the master file for potato. Added the old one for slink.
+  * Status file is now automatically generated when a provided one
+    is not available (data/$CODENAME/status.$ARCH).
+  * build.sh build_all.sh: convenience scripts to build CD images.
+  * YACS 0.4 :
+  * ----------
+  * New status file for potato i386.
+  * When including packages listed in the status file check that they
+    exist before.
+  * Call dpkg-scansources for generating Sources.gz file on the source 
+    CD. And depends on dpkg-dev (>= 1.4.1.6) to be sure that we have it.
+  * Add dependency to libdigest-md5-perl.
+  * list2cds: try to select all suggested/recommended packages not only from
+    packages explicitely selectionned but also from packages listed
+    in dependencies.
+  * list2cds: many little checks added, now generates a log.list2cds
+    file (in the temp dir).
+  * YACS 0.3 :
+  * ----------
+  * This version has herited nothing from the previous debian-cd 
+    package only the changelog has been added.
+  * It can now build sources CD.
+  * This package does now replace slink_cd and the old debian-cd.
+    I'll close the bugs (after checking that the new debian-cd behaves
+    correctly with the bug report situation) affected to those packages.
+  * The Packages.cd files are generated correctly (the same way than
+    slink_cd did).
+  * Added the good dependencies. Closes: #25710, #36109, #27758
+  * Some bugs are no more applicable. Closes: #24708, #25195, #31044, #24418
+    Closes: #36115, #36228
+  * No source URL in copyright file since this is a Debian native 
+    package. Closes: #36111
+  * Full GPL isn't included. Closes: #36113
+  * Missing newlines added. Closes: #36114
+  * The README is a good documentation for building CD. Closes: #17540
+  * Added the support for hooks. Closes: #36112
+  * Added a link index.html -> install.html. Closes: #38402
+  * Files are better placed. Closes: #36110
+  * Rebuilding the Contents file is of no use. And if you really need
+    it, you can do it yourself with the hook system. Closes: #36116
+  * Internationalization is a boot-floppies problem. Closes: #25210
+  * Tried miniunz but it lacks important feature like -L ... still
+    uses unzip. And recommends it. 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 29 Jul 1999 18:26:09 +0200
+
+debian-cd (2.0.2) unstable; urgency=low
+
+  * get rid of .html from the errata URL
+  * add contents to README.official
+    
+ -- Philip Hands <phil@hands.com>  Fri, 24 Jul 1998 00:09:22 +0100
+
+debian-cd (2.0.1) unstable; urgency=low
+
+  * add the copyright/licence intro from the install docs to the main readme
+  * add a reference to http://www.debian.org/2.0/errata.html to the main README
+  * generally tidy up README's
+
+ -- Philip Hands <phil@hands.com>  Thu, 23 Jul 1998 18:41:23 +0100
+
+debian-cd (2.0.0) unstable; urgency=low
+
+  * Suggest cdrecord (rather than Depend) since it's not needed to create
+    images, only to write them.
+  * get rid of purge_duff_disks hack
+  * fix timestamp to use 24 hour clock and GMT
+  * add README.contrib to all CD images
+
+ -- Philip Hands <phil@hands.com>  Wed, 22 Jul 1998 12:16:16 +0100
+
+debian-cd (1.99.18) unstable; urgency=low
+
+  * add dependencies (closes: #9072, #19116)
+  * add $(init-dists) for contrib (closes: #24465)
+  * make check_mirror.pl able to deal with md5sums.gz (closes: 24418)
+
+ -- Philip Hands <phil@hands.com>  Fri, 17 Jul 1998 22:06:16 +0100
+
+debian-cd (1.99.17) unstable; urgency=low
+
+  * add -p option to tecra boot mkdir
+  * add missing define for ``install-source-x11''
+  * fix making of .mkisofsrc
+
+ -- Philip Hands <phil@hands.com>  Wed, 15 Jul 1998 15:16:48 +0100
+
+debian-cd (1.99.16) unstable; urgency=low
+
+  * add hack to get rid of old 2.0.6 disks
+
+ -- Philip Hands <phil@hands.com>  Wed,  8 Jul 1998 17:46:18 +0100
+
+debian-cd (1.99.15) frozen unstable; urgency=low
+
+  * separate boot/ dir to get boot image near the start of the ISO image
+    resulting in bootable CD's for all (or so I hope)
+  * rework makefiles using defines instead of targets, and generally tidy up
+  * fix image-md5sum and image-date targets
+
+ -- Philip Hands <phil@hands.com>  Wed,  8 Jul 1998 13:29:52 +0100
+
+debian-cd (1.99.14-4) frozen unstable; urgency=low
+
+  * make mkisofs-source use resc1440tecra.bin as boot image (rather than the
+    cdboot.bin hack)
+
+ -- Philip Hands <phil@hands.com>  Tue,  7 Jul 1998 14:13:54 +0100
+
+debian-cd (1.99.14-3) frozen unstable; urgency=low
+
+  * fix typo in mkisofs-source target
+
+ -- Philip Hands <phil@hands.com>  Tue,  7 Jul 1998 14:03:34 +0100
+
+debian-cd (1.99.14-2) frozen unstable; urgency=low
+
+  * use the normal resc1440 images for CD booting, since they are now built
+    with syslinux -s
+  * get rid of binary-all from the source image
+
+ -- Philip Hands <phil@hands.com>  Tue,  7 Jul 1998 13:51:23 +0100
+
+debian-cd (1.99.14-1) frozen unstable; urgency=low
+
+  * This should really go in hamm, so that the scripts to build the CD's
+    end up on the CD's.  Of course this will probably require a few attempts
+    before the scripts here settle down, because other changes are still being
+    made to hamm that affect these.
+  * edit some README's and Configuration defaults.  Done with a -1 version
+    so my diff's come out in the diff file
+  * put the hamm --> ../hamm link back into dists
+
+ -- Philip Hands <phil@hands.com>  Fri,  3 Jul 1998 11:31:26 +0100
+
+debian-cd (1.99.14) stable unstable; urgency=low
+
+  * use Andreas Jellinghaus's makefile system for building CD's (starting with
+  * 0.14)
+
+ -- Philip Hands <phil@hands.com>  Tue, 30 Jun 1998 22:15:59 +0100
+
+debian-cd (1.0.0) stable unstable; urgency=low
+
+  * What was in vars.sh is now individual files per variable in the
+    vars/ directory.
+
+  * Various edits from the experience of making the Official CDs.
+
+ -- Bruce Perens <bruce@debian.org>  Sun, 10 Aug 1997 21:02:17 -0700
+
+debian-cd (0.1.6) frozen unstable; urgency=low
+
+  * Remove quotes from strings in .mkisofsrc, they were being
+    put on the disc. Pad filesystems for Linux read-ahead bug.
+
+ -- Bruce Perens <bruce@debian.org>  Fri, 13 Jun 1997 10:08:42 -0700
+
+debian-cd (0.1.5) frozen unstable; urgency=low
+
+  * Put vars.sh in debian/conffiles, so that a user's altered one 
+    will not be over-written.
+
+  * boot.bat was broken.
+
+ -- Bruce Perens <bruce@debian.org>  Fri, 30 May 1997 10:46:33 -0700
+
+debian-cd (0.1.4) frozen unstable; urgency=low
+
+  * Add COLOPHON.txt, a readme about how the CD was produced.
+    This is my last release before going on vacation, if anything
+    needs to be fixed in this package for 1.3, someone else must
+    fix it.
+
+ -- Bruce Perens <bruce@debian.org>  Wed, 30 Apr 1997 12:35:02 -0700
+
+debian-cd (0.1.3) frozen unstable; urgency=low
+
+  * Add SOURCE.txt, a readme about source-code availability, to the
+    binary CD. Make distribution both frozen and unstable. 
+
+ -- Bruce Perens <bruce@debian.org>  Wed, 23 Apr 1997 23:22:37 -0700
+
+debian-cd (0.1.2) unstable; urgency=low
+
+  * Add El Torito bootable-CD patches from Helmut Geyer. 
+
+ -- Bruce Perens <bruce@debian.org>  Sun, 23 Apr 2000 10:31:08 -0700
+
+debian-cd (0.1.1) unstable; urgency=low
+
+  * Change architecture to "all". 
+
+ -- Bruce Perens <bruce@debian.org>  Fri, 18 Apr 1997 22:51:36 -0700
+
+debian-cd (0.1.0) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Bruce Perens <bruce@debian.org>  Fri, 18 Apr 1997 22:20:51 -0700
+
+Local variables:
+mode: debian-changelog
+End:
