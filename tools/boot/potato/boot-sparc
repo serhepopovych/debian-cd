@@ -19,23 +19,39 @@ CDDIR=$2
 
 cd $CDDIR/..
 
-# Disk 1 only
-if [ $N != 1 ]; then
-	:> $N.mkisofs_opts
-	exit 0;
-fi
 
-echo -n "1/boot" > $N.mkisofs_opts
-
+# move all the bootdisks to /install
 # put the relevant parts of SILO boot loader
 mkdir -p $CDDIR/install
 ln -sf install $CDDIR/etc
-ln -sf install $CDDIR/boot
+#ln -sf install $CDDIR/boot
+mkdir -p boot1/boot
 
-# hurmpf, lets set bootdir to the current bootdisk set! -jwest
 BOOTDIR=1/dists/$CODENAME/main/disks-$ARCH/current/
 
+# make a copy of the boot disks in the /install dir
 cp -pr $BOOTDIR/* $CDDIR/install
+# remove the /install/doc directory as it is reduntant to /doc
+rm -r $CDDIR/install/doc
+
+
+# Disks != 1 and not 2
+if [ $N != 1 ]; then 
+        echo -n "-J" > $N.mkisofs_opts
+        exit 0; 
+fi
+echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
+
+(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+        cp sun4cdm/images-1.44/resc*.bin  $CDDIR/install ; \
+        cp sun4cdm/*  $CDDIR/install ; \
+        cp images-1.44/root.bin $CDDIR/install )
+
+mkdir -p boot1/boot
+
+cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/images-1.44/rescue.bin boot1/boot
+
+
 
 cat - > $CDDIR/install/silo.conf << __EOF__
 partition=1
