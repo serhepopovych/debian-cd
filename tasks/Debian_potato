@@ -4,10 +4,40 @@
  *
  */
 
-/* Be sure to have all packages for the standard tasks & profiles on
- * the first CD */
-#include <potato/@ARCH@/Task_ALL>
-#include <potato/@ARCH@/Profile_ALL>
+/* The potato CD set does now use empty package called task-*
+   to select the packages in the initial installation */
+
+task-dialup
+task-dialup-isdn
+task-newbie-help
+task-gnome-desktop
+task-gnome-games
+task-gnome-net
+task-gnome-apps
+task-sgml
+task-tex
+task-samba
+task-games
+task-laptop
+task-devel-common
+task-c-dev
+task-c++-dev
+task-debug
+task-sgml-dev
+task-tcltk
+task-fortran
+task-objc-dev
+
+/* Well I don't know if task for specific countries should be included
+   on the first CD ... 
+   I'll leave it there for now ..
+*/
+   
+task-german
+task-chinese-s
+task-chinese-t
+task-japanese
+task-polish
 
 /* List of packages that may still fit on the first CD */
 

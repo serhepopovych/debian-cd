@@ -307,9 +307,9 @@ $(BDIR)/bootable-stamp:
 	@for file in $(BDIR)/*.packages; do \
 		dir=$${file%%.packages}; \
 		n=$${dir##$(BDIR)/}; \
-		if [ -x $(BASEDIR)/tools/boot/boot-$(ARCH) ]; then \
+		if [ -x $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) ]; then \
 			cd $(BDIR); \
-			$(BASEDIR)/tools/boot/boot-$(ARCH) $$n $$dir; \
+			$(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
 		else \
 			echo "No script to make CDs bootable for $(ARCH) ..."; \
 			exit 1; \

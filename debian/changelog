@@ -1,3 +1,13 @@
+debian-cd (2.1.91) unstable; urgency=low
+
+  * Splitted the boot scripts for slink & potato. Updated the Makefile
+    to handle this.
+  * Updated the tasks/Debian_potato to use the new task-* packages.
+  * New boot-i386 which does use resc2880.bin (the tecra image has
+    been removed since it does no more exist in the latest boot-floppies).
+
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 11 Nov 1999 20:50:26 +0100
+
 debian-cd (2.1.90-1) unstable; urgency=low
 
   * Moved to contrib because of the unzip and lha dependencies.
