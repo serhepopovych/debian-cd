@@ -79,11 +79,11 @@ if [ $MULTIBOOT == "yes" ] ; then
     for (( i=2; i != 7; ++i )) ; do
 
         # first copy/link the next boot block to the disk.
-        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[i]}/rescue.bin boot$N/boot/${KTYPE[i]}.bin
+        ln  CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[i]}/rescue.bin boot$N/boot/${KTYPE[i]}.bin
         # then the eltorito-alt-boot cmd to mkisofs_opts
-        echo -n " -eltorito-alt-boot " >> $N.mkisofs_opts
+        echo -n "-eltorito-alt-boot " >> $N.mkisofs_opts
         # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n " -b boot/${KTYPE[i]}.bin "  >> $N.mkisofs_opts
+        echo -n "-b boot/${KTYPE[i]}.bin "  >> $N.mkisofs_opts
 
     done
 fi
@@ -156,7 +156,7 @@ fi
 
 
 # write final lines to mkisofs_opts
-echo -n " -c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
 
 
 # th,th, thats all
