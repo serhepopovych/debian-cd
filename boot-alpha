@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# boot-alpha v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# and Loic Prylli <Loic.Prylli@ens-lyon.fr>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Released as part of the slink_cd package, not much use standalone
+#
+# Do install stuff for alpha, including making bootable CDs
+#
+# $1 is Debian-mirror location
+# $2 is start directory location (where the scripts live)
+# $3 is tmpdir location
+# $4 is the binary arch
+# $5 is debug level
+# $6 is $BOOTDIR (not needed for i386, but let's stay consistent)
+
+MIRROR=$1
+BASEDIR=$2
+TDIR=$3
+ARCH=$4
+VERBOSE=$5
+BOOTDIR=$6
+
+. $BASEDIR/vecho # Include local definitions for vecho, vvecho, vvvecho
+
+# Now check the boot-disks; make sure they exist and we
+# have a "current" directory. If not, exit
+if [ ! -e slink1/dists/stable/main/disks-$ARCH ] ; then
+   echo "No boot disks found for arch $ARCH."
+   echo "Exit."
+   exit 1
+fi
+
+cd slink1/dists/stable/main/disks-$ARCH
+if [ ! -e current ] ; then
+   echo "No \"current\" boot disks found for arch $ARCH."
+   echo "Exit."
+   exit 1
+fi                      
+
+# OK, we have what we need. Now check and see what mess
+# things are in. We _don't_ need more than one set of boot
+# disks and it would be useful if the ftp maintainers
+# would remove old versions instead of leaving them
+# around...
+
+if [ -L current ] ; then
+   # Find the link, rename it for safety then put it back
+   CURRENT_LINK=`ls -l current | awk '{print $11}'`
+   mv $CURRENT_LINK .tmp_link
+   rm -rf 2*
+   mv .tmp_link $CURRENT_LINK
+else
+   # We can simply remove all the others if current is a directory
+   rm -rf 2*
+fi
+
+cd $TDIR
+# Hack for bootable disks
+vecho "Copying boot images to <root>/boot for disc 1"
+
+echo "extract aboot(bootlx) from sable set"
+echo dump srmbootcode boot1/boot/bootlx |\
+     debugfs slink1/dists/stable/main/disks-$ARCH/current/sable/resc1440.bin
+for subarch in avanti avanti-s xl xlt cabriolet eb66 eb66p eb64p eb164 pc164 \
+      lx164 sx164 jensen noname takara mikasa mikasa-p noritake noritake-p alcor miata \
+           sable sable-g  book1    ruffian; do      
+ mkdir boot1/boot/$subarch
+ echo "drive m: file=\"$TDIR/slink1/dists/stable/main/disks-$ARCH/current/$subarch/resc1440.bin\"" > mtoolsrc.tmp
+ echo "extracting stuff for $subarch"
+ case $subarch in
+          jensen|noritake*|mikasa-p|sable*|book1|miata-s|avanti-s|generic)
+       echo dump linux boot1/boot/$subarch/linux |\
+          debugfs slink1/dists/stable/main/disks-$ARCH/current/$subarch/resc1440.bin
+       ;;
+       ruffian)
+         MTOOLSRC=$TDIR/mtoolsrc.tmp mcopy m:linux m:milo m:ldmilo.exe boot1/boot/$subarch/.
+   ;;         
+       *)
+         MTOOLSRC=$TDIR/mtoolsrc.tmp mcopy m:linux m:milo m:linload.exe boot1/boot/$subarch/.
+   ;;
+  esac
+done
+
+mkdir slink1/tools/rawrite1
+(cd slink1/tools/rawrite1; \
+   unzip -Lq $MIRROR/tools/rawrite1.zip )
+
+mkdir slink1/tools/rawrite2
+(cd slink1/tools/rawrite2; \
+   unzip -Lq $MIRROR/tools/rawrite2.zip; \
+   rm rawrite2.c )
+
+(echo "Tools for DOS :" ; \
+   echo "rawrite1/       rawrite 1.3 : create disks from disk images (*.bin)"; 
+\
+   echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; 
+\
+   echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
+   ) |todos > slink1/tools/README.tools
+
+cp slink1/tools/rawrite1/rawrite3.com slink1/install/rw1_3.com
+cp slink1/tools/rawrite2/rawrite2.exe slink1/install/rw2_0.exe
+
+exit 0

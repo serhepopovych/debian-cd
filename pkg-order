@@ -1,0 +1,415 @@
+#!/usr/bin/perl -w
+
+eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
+#                              -*- Mode: Perl -*- 
+# Debian-pkg.pm --- 
+# Author           : Manoj Srivastava ( srivasta@tiamat.datasync.com ) 
+# Created On       : Wed Jan 22 09:53:33 1997
+# Created On Node  : tiamat.datasync.com
+# Last Modified By : Manoj Srivastava
+# Last Modified On : Sat Mar 14 13:08:24 1998
+# Last Machine Used: tiamat.datasync.com
+# Update Count     : 346
+# Status           : Unknown, Use with caution!
+# HISTORY          : 
+# Description      : 
+# 
+# 
+
+
+use strict;
+use diagnostics;
+use Carp;
+require 5.001;
+
+use Debian::Package::Dependency_List;
+use Debian::Package::Package;
+use Debian::Package::List;
+use Getopt::Long;
+
+package main;
+
+#Handle The auto generated eval line.
+use vars qw($running_under_some_shell);
+
+=head1 NAME
+
+
+pkg-order - A Package dependency checker and install ordering tool.
+
+=cut
+
+=head1 SYNOPSIS
+
+ usage: pkg-order [options] <Package-file-for-new-packages>
+ where the options are:
+
+=over 2
+
+=item --nocheck-depends
+
+=item --check-depends      Do a dependency check as well as the ordering [ON]
+
+=item --nostrict-depends 
+
+=item --strict-depends     Do not carry on ordering after dependency failure [ON]
+
+=item --nooutput-order 
+
+=item --output-order       Do a package ordering                         [ON]
+
+=item --nocheck-recommends 
+
+=item --check-recommends   Check the Recommends field as well            [OFF]
+
+=item --nocheck-suggests
+
+=item --check-suggests     Check the Suggests field as well              [OFF]
+
+=item --nocheck-consistency 
+
+=item --check-consistency  Make sure that extra warning are issued if the
+                      new packages are not consistent               [ON]
+
+=item --noprint-failures
+
+=item --print-failures     Make a full report of dependency failures     [ON]
+
+=item --noprint-dependencies
+
+=item --print-dependencies Print fulfilled dependencies as well          [OFF]
+
+=item --installed-packages <Package-file-for-installed-packages> 
+
+=back
+
+=cut
+
+=head1 DESCRIPTION
+
+ This utility does dependency checks, if you wish. It knows the
+ difference between installed, new (and available) packages, and the
+ relationship fields (pre-depends, depends, recommends, and
+ suggests). (For example, the current packages list need not be read
+ in unless you want dependency checks; you may already have done that
+ and now merely wish an ordering). It comes with a Test::Harness test
+ suite, to protect the world against my typos. Oh, it knows about
+ epochs as well if your dpkg does. This could be the basis of mass
+ compiling the packages on a new architecture, or to build a release
+ from scratch.
+ 
+ It creates associative arrays of currently installed packages
+ (/var/lib/dpkg/status), and new packages (given a packages file at
+ the command line). Then, in the checking dependency phase, for each
+ package in the new packages list, it looks at the dependencies, and
+ ensure that each dependency is satisfied in either the new list or
+ the installed list If the directive is satisfied from the new list,
+ add a line to an output file with the format required by tsort, which
+ is the entity that gives us the ordered list.
+
+ The default is to assume that the list of installed packages may be
+ derived from the file I</var/lib/dpkg/status>, but the user may
+ override this by providing a I<Packages> file listing all the
+ packages that are assumed to be already installed.
+
+=cut 
+
+sub main {
+  my $installed;
+  my $candidates;
+  my $ret;
+  my $do_depends = 1;
+  my $strict_depends = 1;
+  my $do_conflicts = 1;
+  my $do_order = 1;
+  my $recommends = 0;
+  my $suggests = 0;
+  my $consistent = 1;
+  my $print_failures = 1;
+  my $print_found = 0;
+  my $dohelp = 0;
+  my $filename = '';
+  my $usage = '';
+  my $installed_packages = '';
+  
+  my $MYNAME = '';
+  
+  ($MYNAME     = $0) =~ s|.*/||;
+
+
+  $usage= <<EOUSAGE;
+ usage: $MYNAME [options] <Package-file-for-new-packages>
+ where the options are:
+ --help               This message.
+ --nocheck-depends
+ --check-depends      Do a dependency check as well as the ordering [ON]
+ --nostrict-depends
+ --strict-depends     Die on failing to satisfy dependency.         [ON]
+ --nocheck-conflicts
+ --check-conflicts    Do a conflicts check                          [ON]
+ --nooutput-order
+ --output-order       Do a package ordering                         [ON]
+ --nocheck-recommends
+ --check-recommends   Check the Recommends field as well            [OFF]
+ --nocheck-suggests
+ --check-suggests     Check the Suggests field as well              [OFF]
+ --nocheck-consistency
+ --check-consistency  Make sure that extra warning are issued if the
+                      new packages are not consistent               [ON]
+ --noprint-failures
+ --print-failures     Make a full report of dependency failures     [ON]
+ --noprint-dependencies
+ --print-dependencies Print fulfilled dependencies as well          [OFF]
+ --installed-packages <Package-file-for-installed-packages> 
+EOUSAGE
+  
+  $ret = GetOptions("check-depends!"       => \$do_depends,
+                    "strict-depends!"      => \$strict_depends,
+                    "output-order!"        => \$do_order,
+                    "check-recommends!"    => \$recommends,
+                    "check-suggests!"      => \$suggests,
+		    "check-conflicts!"     => \$do_conflicts,
+                    "check-consistency!"   => \$consistent,
+                    "print-failures!"      => \$print_failures,
+                    "print-dependencies!"  => \$print_found,
+		    "help"                 => \$dohelp,
+		    "installed-packages=s" => \$installed_packages);
+
+  if ($dohelp) {
+    print "$usage";
+    exit (0);
+  }
+  die "$usage" unless $ret;
+  
+  $filename = shift @ARGV;
+  die "Need a New packages file (Packages))" 
+    unless $filename;
+  die "Could not find new Packages file $filename" 
+    unless -f $filename;
+
+  ######################################################################
+  #                     Phase One: Gather data                         #
+  ######################################################################
+
+  # Installed file (default value taken from status file)
+  if ($do_depends) {
+    if (-f $installed_packages) {
+      $installed = Debian::Package::New->new('filename' => $installed_packages);
+    }
+    else {
+      $installed = Debian::Package::Installed->new();
+    }
+  }
+  # The new candidates (taken from the packages file)
+  $candidates = Debian::Package::New->new('filename' => $filename);
+
+  ######################################################################
+  #                 Phase Two: Check dependencies                      #
+  ######################################################################
+
+  # Omit phase Two and Three unless $do_depends is TRUE
+  if ($do_depends) {
+    # This sets Types which will show up as critical errors. Does not
+    # change what errors are recorded. 
+    $candidates->set_fatal_failure_on_types('Type List' =>
+					    "Pre-Depends Depends Conflict");
+    
+    # Check Pre-Dependencies
+    $candidates->check_relations('Consistent' => $consistent,
+				 'Installed' => $installed,
+				 'Field' => 'Pre-Depends');
+    # Check Dependencies
+    $candidates->check_relations('Consistent' => $consistent,
+				 'Installed' => $installed,
+				 'Field' => 'Depends');
+    # Check Conflicts
+    $candidates->check_relations('Consistent' => $consistent,
+				 'Installed' => $installed,
+				 'Field' => 'Conflicts')
+	if $do_conflicts;
+    # Check Recommendations
+    $candidates->check_relations('Consistent' => $consistent,
+				 'Installed' => $installed,
+				 'Warn'       => 'True',
+				 'Field' => 'Recommendations')
+      if $recommends;
+    # Check Suggestions
+    $candidates->check_relations('Consistent' => $consistent,
+				 'Installed'  => $installed,
+				 'Warn'       => 'True',
+				 'Field'      => 'Suggestions')
+      if $suggests;
+    
+  ######################################################################
+  #      	      Phase Three: Print Results                       #
+  ######################################################################
+    if ($print_failures) {
+      my $result_string = 
+	$candidates->result_as_string('Type' => 'All',
+				      'Category' => 'Failed');
+      if ($result_string) {
+	print STDERR "=" x70, "\n";
+	print STDERR "Failed:\n";
+	print "$result_string";
+	print STDERR "=" x70, "\n";
+      }
+
+      my $unknowns = 
+	$candidates->result_as_string('Type' => 'All',
+				      'Category' => 'Unknown');
+      if ($unknowns) {
+	print STDERR "=" x70, "\n";
+	print STDERR "Unknown:\n";
+	print "$unknowns";
+	print STDERR "=" x70, "\n";
+      }
+
+      # Different from above to see an example of print result
+      my $numconflicts = 
+	$candidates->check_result('Type' => 'All',
+				  'Category' => 'Conflict');
+      if ($numconflicts > 0) {
+	print STDERR "=" x70, "\n";
+	print STDERR "Conflicted:\n";
+	$candidates->print_result('Type' => 'All',
+				  'Category' => 'Conflict');;
+	print STDERR "=" x70, "\n";
+      }
+    }
+    
+    if ($print_found) {
+      my $result_string = 
+	$candidates->result_as_string('Type' => 'All',
+				      'Category' => 'Found');
+      if ($result_string) {
+	print STDERR "=" x70, "\n";
+	print STDERR "Found:\n";
+	print "$result_string";
+	print STDERR "=" x70, "\n";
+      }
+    }
+    if ($strict_depends) {
+      my $critical_errors = 
+	$candidates->check_result('Type' => "Critical",
+				  'Category' => 'Failed') 
+	  + $candidates->check_result('Type' => "Critical",
+				      'Category' => 'Conflict') 
+	  + $candidates->check_result('Type' => "Critical",
+				      'Category' => 'Unknown');
+      if ($critical_errors > 0) {
+	print "$critical_errors Critical errors encountered. Exiting.\n";
+	exit ($critical_errors);
+      }
+    }
+  }
+  
+  ######################################################################
+  #                Phase Four: Gather ordering data                    #
+  ######################################################################
+  
+  return 0 unless $do_order;
+
+  # Order Pre-Dependencies
+  $candidates->order('Field' => 'Pre-Depends');
+  # Order Dependencies
+  $candidates->order('Field' => 'Depends');
+  # Order Conflicts
+  $candidates->order('Field' => 'Conflicts', 'Installed' => $installed);
+
+  ######################################################################
+  #                    Phase Five: Do ordering                         #
+  ######################################################################
+  
+  # Get ordering info and do topological sorting
+  my $order_string = $candidates->get_ordering();
+  # This is the raw order string
+  # print $order_string;
+  print "No packages to order. Exiting.\n" unless $order_string;
+  return 2 unless $order_string;
+  
+  # This is the first method used to insert Breaks
+  my $order_one = 
+    $candidates->insert_breaks('Ordered List' => $order_string);
+  print "$order_one\n";
+
+  # This is another way to insert breaks
+  # print "=" x 70;
+  # my $order_two = 
+  #  $candidates->{' _Targets'}->insert_breaks('Ordered List' => $order_string);
+  # print "$order_two\n";
+
+  my %force_options = $candidates->list_marks("Mark" => '\-\-');
+  my $forced_pkg;
+  
+  foreach $forced_pkg (keys %force_options) {
+    my $option;
+    my @options = split ' ', $force_options{$forced_pkg};
+    for $option (@options) {
+      next unless $option =~ /\-\-/o;
+      
+      print "Package $forced_pkg will need $option for installation)\n";
+    }
+  }
+
+  exit 0;
+}
+
+=head2 list_diff
+
+This is an example of how to detect packages and list packages in list
+A that are not in list B. Takes two Package::List objects, and returns
+a list object. This is how one may take an installed list, a final
+list, and figure out the packages to be removed, and the new
+packages, by just taking A - B and B - A set differences. 
+
+=cut
+
+sub list_diff {
+  my %params = @_;
+  my $ListA;
+  my $ListB;
+  my $ListC;
+  
+  
+  croak("Need argument 'List A'") unless defined $params{'List A'};
+  croak("Need argument 'List B'") unless defined $params{'List B'};
+
+  $ListA  = $params{'List A'};
+  $ListB  = $params{'List B'};
+  $ListC  = Debian::Package::New->new();
+  
+  my $name;
+  
+  for $name (sort keys %{$ListA}) {
+    my $pkg;
+    next if $name =~ /^\s+_/o;
+    $pkg = $ListA->{$name};
+    
+    next if $ListB->{$name}->{'Package'};
+    $ListC->add('Package_desc' => $pkg->print());
+  }
+  return $ListC;
+}
+
+=head1 CAVEATS
+
+This is very inchoate, at the moment, and needs testing.
+
+=cut
+
+=head1 BUGS
+
+None Known so far.
+
+=cut
+
+=head1 AUTHOR
+
+Manoj Srivastava <srivasta@debian.org>
+
+=cut
+
+&main::main();
+
+__END__    

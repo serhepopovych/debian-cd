@@ -1,0 +1,3 @@
+# END_OF_PROCESSING must be here to catch the end of this file - the next file
+# is actual package data and we need a separator.
+END_OF_PROCESSING

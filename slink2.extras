@@ -1,0 +1,3 @@
+/debian/local/slink2-ARCH.extras/*
+/debian/local/slink2-all.extras/*
+/debian/local/kernel/

@@ -1,0 +1,929 @@
+--- mkhybrid-1.12a4.7/mkisofs.c	Mon Aug 24 20:12:55 1998
++++ mkhybrid-1.12a4.7.new/mkisofs.c	Thu Jan 14 11:53:57 1999
+@@ -91,6 +91,7 @@
+ int verbose = 1;
+ int all_files  = 0;
+ int follow_links = 0;
++int follow_links_sensible = 0;
+ int rationalize = 0;
+ int generate_tables = 0;
+ int print_size = 0;
+@@ -106,6 +107,7 @@
+ char * system_id = SYSTEM_ID_DEFAULT;
+ char * boot_catalog = BOOT_CATALOG_DEFAULT;
+ char * boot_image = BOOT_IMAGE_DEFAULT;
++char follow_links_base[256];
+ 
+ int omit_period = 0;             /* Violates iso9660, but these are a pain */
+ int transparent_compression = 0; /* So far only works with linux */
+@@ -237,6 +239,8 @@
+       'D', NULL, "Disable deep directory relocation", ONE_DASH },
+   { {"follow-links", no_argument, NULL, 'f'},
+       'f', NULL, "Follow symbolic links", ONE_DASH },
++  { {"follow-outside-links", required_argument, NULL, 'F'},
++	  'F', NULL, "Follow symbolic links which point outside the CD base directory", ONE_DASH },
+ #ifdef APPLE_HYB
+   { {"apple", no_argument, NULL, 'g'},
+       'g', NULL, "Add Apple ISO9660 extensions", ONE_DASH },
+@@ -682,6 +686,8 @@
+   char *log_file = 0;		/* stderr log file re-direct */
+ #endif /* APPLE_HYB */
+ 
++  char old_dir[256];
++
+   if (argc < 2)
+     usage();
+ 
+@@ -773,181 +779,189 @@
+ 	}
+ 	break;
+       case 'A':
+-	appid = optarg;
+-	if(strlen(appid) > 128) {
+-		fprintf(stderr,"Application-id string too long\n");
+-		exit(1);
+-	};
+-	break;
++		  appid = optarg;
++		  if(strlen(appid) > 128) 
++		  {
++			  fprintf(stderr,"Application-id string too long\n");
++			  exit(1);
++		  }
++		  break;
+       case 'd':
+-	omit_period++;
+-	break;
++		  omit_period++;
++		  break;
+       case 'D':
+-	RR_relocation_depth = 32767;
+-	break;
++		  RR_relocation_depth = 32767;
++		  break;
+       case 'f':
+-	follow_links++;
+-	break;
++		  follow_links++;
++		  break;
++      case 'F':
++		  follow_links_sensible++;
++		  getcwd (old_dir, 256);
++		  chdir (optarg);
++		  getcwd (follow_links_base, 256);
++		  chdir (old_dir);
++		  break;
+       case 'l':
+-	full_iso9660_filenames++;
+-	break;
++		  full_iso9660_filenames++;
++		  break;
+       case 'L':
+-        allow_leading_dots++;
+-        break;
++		  allow_leading_dots++;
++		  break;
+       case 'M':
+-	merge_image = optarg;
+-	break;
++		  merge_image = optarg;
++		  break;
+       case 'N':
+-	omit_version_number++;
+-	break;
++		  omit_version_number++;
++		  break;
+       case 'o':
+-	outfile = optarg;
+-	break;
++		  outfile = optarg;
++		  break;
+       case 'p':
+-	preparer = optarg;
+-	if(strlen(preparer) > 128) {
+-		fprintf(stderr,"Preparer string too long\n");
+-		exit(1);
+-	};
+-	break;
++		  preparer = optarg;
++		  if(strlen(preparer) > 128) {
++			  fprintf(stderr,"Preparer string too long\n");
++			  exit(1);
++		  };
++		  break;
+       case OPTION_PRINT_SIZE:
+-	print_size++;
+-	break;
++		  print_size++;
++		  break;
+       case 'P':
+-	publisher = optarg;
+-	if(strlen(publisher) > 128) {
+-		fprintf(stderr,"Publisher string too long\n");
+-		exit(1);
+-	};
+-	break;
++		  publisher = optarg;
++		  if(strlen(publisher) > 128) {
++			  fprintf(stderr,"Publisher string too long\n");
++			  exit(1);
++		  };
++		  break;
+       case OPTION_QUIET:
+-	verbose = 0;
+-	break;
++		  verbose = 0;
++		  break;
+       case 'R':
+-	use_RockRidge++;
+-	break;
++		  use_RockRidge++;
++		  break;
+       case 'r':
+-	rationalize++;
+-	use_RockRidge++;
+-	break;
++		  rationalize++;
++		  use_RockRidge++;
++		  break;
+       case OPTION_SPLIT_OUTPUT:
+-	split_output++;
+-	break;
++		  split_output++;
++		  break;
+ #ifdef APPLE_HYB
+       case OPTION_TRANS_TBL:
+-	trans_tbl = optarg;
+-	/* fall through */
++		  trans_tbl = optarg;
++		  /* fall through */
+ #endif /* APPLE_HYB */
+       case 'T':
+-	generate_tables++;
+-	break;
++		  generate_tables++;
++		  break;
+       case 'V':
+-	volume_id = optarg;
+-	break;
++		  volume_id = optarg;
++		  break;
+       case 'v':
+-	verbose++;
+-	break;
++		  verbose++;
++		  break;
+       case 'z':
+ #ifdef VMS
+-	fprintf(stderr,"Transparent compression not supported with VMS\n");
+-	exit(1);
++		  fprintf(stderr,"Transparent compression not supported with VMS\n");
++		  exit(1);
+ #else
+-	transparent_compression++;
++		  transparent_compression++;
+ #endif
+-	break;
++		  break;
+       case 'x':
+       case 'm':
+-	/*
+-	 * Somehow two options to do basically the same thing got added somewhere along
+-	 * the way.  The 'match' code supports limited globbing, so this is the one
+-	 * that got selected.  Unfortunately the 'x' switch is probably more intuitive.
++		  /*
++		   * Somehow two options to do basically the same thing got added somewhere along
++		   * the way.  The 'match' code supports limited globbing, so this is the one
++		   * that got selected.  Unfortunately the 'x' switch is probably more intuitive.
+ 	 */
+-        add_match(optarg);
+-	break;
++		  add_match(optarg);
++		  break;
+       case OPTION_I_HIDE:
+-	i_add_match(optarg);
+-	break;
++		  i_add_match(optarg);
++		  break;
+       case OPTION_J_HIDE:
+-	j_add_match(optarg);
+-	break;
++		  j_add_match(optarg);
++		  break;
+       case OPTION_HELP:
+-	usage ();
+-	exit (0);
+-	break;
++		  usage ();
++		  exit (0);
++		  break;
+       case OPTION_NOSPLIT_SL_COMPONENT:
+-	split_SL_component = 0;
+-	break;
++		  split_SL_component = 0;
++		  break;
+       case OPTION_NOSPLIT_SL_FIELD:
+-	split_SL_field = 0;
+-	break;
++		  split_SL_field = 0;
++		  break;
+ #ifdef APPLE_HYB
+       case 'H':
+-	afpfile = optarg;
+-	hfs_last = MAP_LAST;
+-	break;
++		  afpfile = optarg;
++		  hfs_last = MAP_LAST;
++		  break;
+       case 'h':
+-	apple_hyb = 1;
+-	break;
++		  apple_hyb = 1;
++		  break;
+       case 'g':
+-	apple_ext = 1;
+-	break;
++		  apple_ext = 1;
++		  break;
+       case OPTION_PROBE:
+-	probe = 1;
+-	break;
++		  probe = 1;
++		  break;
+       case OPTION_MACNAME:
+-	mac_name = 1;
+-	break;
++		  mac_name = 1;
++		  break;
+       case OPTION_NOMACFILES:
+-	nomacfiles = 1;
+-	break;
++		  nomacfiles = 1;
++		  break;
+       case OPTION_BOOT_HFS_FILE:
+-	hfs_boot_file = optarg;
+-	break;
++		  hfs_boot_file = optarg;
++		  break;
+       case OPTION_MAGIC_FILE:
+-	magic_file = optarg;
+-	hfs_last = MAG_LAST;
+-	break;
+-      /* Mac/Unix types to include */
++		  magic_file = optarg;
++		  hfs_last = MAG_LAST;
++		  break;
++		  /* Mac/Unix types to include */
+       case OPTION_CAP:
+-	hfs_select |= DO_CAP;
+-	break;
++		  hfs_select |= DO_CAP;
++		  break;
+       case OPTION_NETA:
+-	hfs_select |= DO_NETA;
+-	break;
++		  hfs_select |= DO_NETA;
++		  break;
+       case OPTION_DBL:
+-	hfs_select |= DO_DBL;
+-	break;
++		  hfs_select |= DO_DBL;
++		  break;
+       case OPTION_ESH:
+       case OPTION_USH:
+-	hfs_select |= DO_ESH;
+-	break;
++		  hfs_select |= DO_ESH;
++		  break;
+       case OPTION_FE:
+-	hfs_select |= DO_FEU;
+-	hfs_select |= DO_FEL;
+-	break;
++		  hfs_select |= DO_FEU;
++		  hfs_select |= DO_FEL;
++		  break;
+       case OPTION_SGI:
+       case OPTION_XIN:
+-	hfs_select |= DO_SGI;
+-	break;
++		  hfs_select |= DO_SGI;
++		  break;
+       case OPTION_MBIN:
+-	hfs_select |= DO_MBIN;
+-	break;
++		  hfs_select |= DO_MBIN;
++		  break;
+       case OPTION_SGL:
+-	hfs_select |= DO_SGL;
+-	break;
++		  hfs_select |= DO_SGL;
++		  break;
+       case OPTION_CREATE_DT:
+-	create_dt = 0;
+-	break;
++		  create_dt = 0;
++		  break;
+       case OPTION_HFS_HIDE:
+-        hfs_add_match(optarg);
+-	break;
++		  hfs_add_match(optarg);
++		  break;
+       case OPTION_LOG_FILE:
+-	log_file = optarg;
+-	break;
++		  log_file = optarg;
++		  break;
+ #endif /* APPLE_HYB */
+       default:
+-	usage();
+-	exit(1);
++		  usage();
++		  exit(1);
+       }
+ 
+ parse_input_files:
+diff -u mkhybrid-1.12a4.7/mkisofs.h mkhybrid-1.12a4.7.new/mkisofs.h
+--- mkhybrid-1.12a4.7/mkisofs.h	Mon Aug 24 19:55:07 1998
++++ mkhybrid-1.12a4.7.new/mkisofs.h	Tue Jan 12 11:27:10 1999
+@@ -280,6 +280,8 @@
+ extern int use_Joliet;
+ extern int rationalize;
+ extern int follow_links;
++extern int follow_links_sensible;
++extern char follow_links_base[];
+ extern int verbose;
+ extern int all_files;
+ extern int generate_tables;
+--- mkhybrid-1.12a4.7/tree.c	Mon Aug 24 20:06:37 1998
++++ mkhybrid-1.12a4.7.new/tree.c	Thu Jan 14 12:03:29 1999
+@@ -827,165 +827,181 @@
+        char *, path, 
+        struct directory_entry *, de)
+ {
+-  DIR				* current_dir;
+-  char				  whole_path[1024];
+-  struct dirent			* d_entry;
+-  struct directory		* parent;
+-  int				  dflag;
+-  char				* old_path;
++	DIR				* current_dir;
++	char				  whole_path[1024];
++	struct dirent			* d_entry;
++	struct directory		* parent;
++	int				  dflag;
++	char				* old_path;
+ 
+-  current_dir = opendir(path);
+-  d_entry = NULL;
++	current_dir = opendir(path);
++	d_entry = NULL;
+ 
+-  /* Apparently NFS sometimes allows you to open the directory, but
+-     then refuses to allow you to read the contents.  Allow for this */
++	/* Apparently NFS sometimes allows you to open the directory, but
++	   then refuses to allow you to read the contents.  Allow for this */
+ 
+-  old_path = path;
++	old_path = path;
+ 
+-  if(current_dir) d_entry = readdir(current_dir);
++	if(current_dir) d_entry = readdir(current_dir);
+ 
+-  if(!current_dir || !d_entry) 
++	if(!current_dir || !d_entry) 
+     {
+-      fprintf(stderr,"Unable to open directory %s\n", path);
+-      de->isorec.flags[0] &= ~2; /* Mark as not a directory */
+-      if(current_dir) closedir(current_dir);
+-      return 0;
++		fprintf(stderr,"Unable to open directory %s\n", path);
++		de->isorec.flags[0] &= ~2; /* Mark as not a directory */
++		if(current_dir) closedir(current_dir);
++		return 0;
+     }
+ 
+-  parent = de->filedir;
+-  /* Set up the struct for the current directory, and insert it into the
+-     tree */
++	parent = de->filedir;
++	/* Set up the struct for the current directory, and insert it into the
++	   tree */
+ 
+ #ifdef VMS
+-  vms_path_fixup(path);
++	vms_path_fixup(path);
+ #endif
+ 
+-  /*
+-   * if entry for this sub-directory is hidden, then hide this directory
+-   */
+-  if (de->de_flags & INHIBIT_ISO9660_ENTRY)
+-    this_dir->dir_flags |= INHIBIT_ISO9660_ENTRY;
++	/*
++	 * if entry for this sub-directory is hidden, then hide this directory
++	 */
++	if (de->de_flags & INHIBIT_ISO9660_ENTRY)
++		this_dir->dir_flags |= INHIBIT_ISO9660_ENTRY;
+  
+-  if (de->de_flags & INHIBIT_JOLIET_ENTRY)
+-    this_dir->dir_flags |= INHIBIT_JOLIET_ENTRY;
++	if (de->de_flags & INHIBIT_JOLIET_ENTRY)
++		this_dir->dir_flags |= INHIBIT_JOLIET_ENTRY;
+   
+-  /* 
+-   * Now we scan the directory itself, and look at what is inside of it. 
+-   */
+-  dflag = 0;
+-  while(1==1){
++	/* 
++	 * Now we scan the directory itself, and look at what is inside of it. 
++	 */
++	dflag = 0;
++	while(1==1)
++	{
+ 
+-    /* The first time through, skip this, since we already asked for
+-       the first entry when we opened the directory. */
+-    if(dflag) d_entry = readdir(current_dir);
+-    dflag++;
+-
+-    if(!d_entry) break;
+-
+-    /* OK, got a valid entry */
+-
+-    /* If we do not want all files, then pitch the backups. */
+-    if(!all_files){
+-	    if(   strchr(d_entry->d_name,'~')
+-	       || strchr(d_entry->d_name,'#'))
+-	      {
+-		if( verbose > 0 )
+-		  {
+-		    fprintf(stderr, "Ignoring file %s\n", d_entry->d_name);
+-		  }
+-		continue;
+-	      }
+-    }
++		/* The first time through, skip this, since we already asked for
++		   the first entry when we opened the directory. */
++		if(dflag) 
++			d_entry = readdir(current_dir);
++		dflag++;
++
++		if(!d_entry) 
++			break;
++
++		/* OK, got a valid entry */
++
++		/* If we do not want all files, then pitch the backups. */
++		if(!all_files)
++		{
++			if(strchr(d_entry->d_name,'~') || strchr(d_entry->d_name,'#'))
++			{
++				if( verbose > 0 )
++					fprintf(stderr, "Ignoring file %s\n", d_entry->d_name);
++				continue;
++			}
++		}
+ 
+ #ifdef APPLE_HYB
+-    if (apple_both) {
+-      /* exclude certain HFS type files/directories for the time being */
+-      if (hfs_exclude(d_entry->d_name))
+-	continue;
+-    }
++		if (apple_both) {
++			/* exclude certain HFS type files/directories for the time being */
++			if (hfs_exclude(d_entry->d_name))
++				continue;
++		}
+ #endif /* APPLE_HYB */
+ 
+-    if(strlen(path)+strlen(d_entry->d_name) + 2 > sizeof(whole_path)){
+-      fprintf(stderr, "Overflow of stat buffer\n");
+-      exit(1);
+-    };
++		if(strlen(path)+strlen(d_entry->d_name) + 2 > sizeof(whole_path))
++		{
++			fprintf(stderr, "Overflow of stat buffer\n");
++			exit(1);
++		};
+ 
+-    /* Generate the complete ASCII path for this file */
+-    strcpy(whole_path, path);
++		/* Generate the complete ASCII path for this file */
++		strcpy(whole_path, path);
+ #ifndef VMS
+-    if(whole_path[strlen(whole_path)-1] != '/')
+-      strcat(whole_path, "/");
++		if(whole_path[strlen(whole_path)-1] != '/')
++			strcat(whole_path, "/");
+ #endif
+-    strcat(whole_path, d_entry->d_name);
++		strcat(whole_path, d_entry->d_name);
+ 
+-    /** Should we exclude this file ? */
+-    if (matches(d_entry->d_name) || matches(whole_path)) {
+-      if (verbose > 1) {
+-	fprintf(stderr, "Excluded by match: %s\n", whole_path);
+-      }
+-      continue;
+-    }
++		/** Should we exclude this file ? */
++		if (matches(d_entry->d_name) || matches(whole_path)) 
++		{
++			if (verbose > 1) 
++				fprintf(stderr, "Excluded by match: %s\n", whole_path);
++			continue;
++		}
+ 
+-    if(    generate_tables 
+ #ifdef APPLE_HYB
+-	&& strcmp(d_entry->d_name, trans_tbl) == 0 )
++		if(generate_tables && strcmp(d_entry->d_name, trans_tbl) == 0 )
+ #else
+-	&& strcmp(d_entry->d_name, "TRANS.TBL") == 0 )
++			if(generate_tables && strcmp(d_entry->d_name, "TRANS.TBL") == 0 )
+ #endif /* APPLE_HYB */
+-      {
+-	/*
+-	 * Ignore this entry.  We are going to be generating new
+-	 * versions of these files, and we need to ignore any
+-	 * originals that we might have found.
+-	 */
+-	if (verbose > 1) 
+-	  {
+-	    fprintf(stderr, "Excluded: %s\n",whole_path);
+-	  }
+-	continue;
+-      }
+-
+-    /*
+-     * If we already have a '.' or a '..' entry, then don't
+-     * insert new ones.
+-     */
+-    if( strcmp(d_entry->d_name, ".") == 0 
+-	&& this_dir->dir_flags & DIR_HAS_DOT )
+-      {
+-	continue;
+-      }
+-
+-    if( strcmp(d_entry->d_name, "..") == 0 
+-	&& this_dir->dir_flags & DIR_HAS_DOTDOT )
+-      {
+-	continue;
+-      }
++			{
++				/*
++				 * Ignore this entry.  We are going to be generating new
++				 * versions of these files, and we need to ignore any
++				 * originals that we might have found.
++			 */
++				if (verbose > 1) 
++					fprintf(stderr, "Excluded: %s\n",whole_path);
++				continue;
++			}
++
++		/*
++		 * If we already have a '.' or a '..' entry, then don't
++	     * insert new ones.
++		 */
++		if(strcmp(d_entry->d_name,".") == 0 && this_dir->dir_flags & DIR_HAS_DOT)
++			continue;
++
++		if(strcmp(d_entry->d_name,"..") == 0 && this_dir->dir_flags&DIR_HAS_DOTDOT)
++			continue;
+ 
+ #if 0
+-    if (verbose > 1)  fprintf(stderr, "%s\n",whole_path);
++		if (verbose > 1)  fprintf(stderr, "%s\n",whole_path);
+ #endif
+-    /*
++		/*
+      * This actually adds the entry to the directory in question.
+      */
+ #ifdef APPLE_HYB
+-    insert_file_entry(this_dir, whole_path, d_entry->d_name, 0);
++		insert_file_entry(this_dir, whole_path, d_entry->d_name, 0);
+ #else
+-    insert_file_entry(this_dir, whole_path, d_entry->d_name);
++		insert_file_entry(this_dir, whole_path, d_entry->d_name);
+ #endif /* APPLE_HYB */
+-  }
+-  closedir(current_dir);
++	}
++
++	closedir(current_dir);
+ 
+ #ifdef APPLE_HYB
+-  /* if we cached the HFS info stuff for this directory, then delete it */
+-  if (this_dir->hfs_info) {
+-    del_hfs_info(this_dir->hfs_info);
+-    this_dir->hfs_info = 0;
+-  }
++/* if we cached the HFS info stuff for this directory, then delete it */
++	if (this_dir->hfs_info) {
++		del_hfs_info(this_dir->hfs_info);
++		this_dir->hfs_info = 0;
++	}
+ #endif /* APPLE_HYB */
+-  
+-  return 1;
++	return 1;
+ }
+ 
++/* check_dirlevel: returns 1 if
++ * name is below the tree of follow_links_base */
++int check_dirlevel (char *name)
++{
++	char old[256] = {0,}, buf[256] = {0,}, b2[256], *c;
++   
++	strcpy (b2, name);
++	c = strrchr (b2, '/');
++	if (c)
++	{
++		*c = '\0';
++		getcwd (old, 256);
++		chdir (b2);
++		getcwd (buf, 256);
++		chdir (old);
++       
++		if (!strncmp (buf, follow_links_base, strlen (follow_links_base)))
++			return 1;
++		return 0;
++	}
++	else
++		return 1;
++}
+ 
+ /* 
+  * Function:		insert_file_entry
+@@ -1008,132 +1024,170 @@
+        char *, short_name,
+        int, have_rsrc)
+ #else
+-int
++	int
+ FDECL3(insert_file_entry,struct directory *, this_dir,
+        char *, whole_path,
+        char *, short_name)
+ #endif /* APPLE_HYB */
+ {
+-  struct stat			  statbuf, lstatbuf;
+-  struct directory_entry	* s_entry, *s_entry1;
+-  int				  lstatus;
+-  int				  status;
+-  int				  deep_flag;
++	struct stat			  statbuf, lstatbuf;
++	struct directory_entry	* s_entry, *s_entry1;
++	int				  lstatus;
++	int				  status;
++	int				  deep_flag;
+ #ifdef APPLE_HYB
+-  int				  x_hfs = 0;
+-  int				  htype;
++	int				  x_hfs = 0;
++	int				  htype;
+ #endif /* APPLE_HYB */
++	char               link_buf[256];
++	int                do_follow_links = 0;
+ 
+-  status = stat_filter(whole_path, &statbuf);
++	status = stat_filter(whole_path, &statbuf);
+ 
+-  lstatus = lstat_filter(whole_path, &lstatbuf);
++	lstatus = lstat_filter(whole_path, &lstatbuf);
+ 
+-  if( (status == -1) && (lstatus == -1) )
++	if( (status == -1) && (lstatus == -1) )
+     {
+-      /*
+-       * This means that the file doesn't exist, or isn't accessible.
+-       * Sometimes this is because of NFS permissions problems.
+-       */
+-      fprintf(stderr, "Non-existant or inaccessible: %s\n",whole_path);
+-      return 0;
++		/*
++		 * This means that the file doesn't exist, or isn't accessible.
++		 * Sometimes this is because of NFS permissions problems.
++		 */
++		fprintf(stderr, "Non-existant or inaccessible: %s\n",whole_path);
++		return 0;
+     }
+   
+-  if(this_dir == root && strcmp(short_name, ".") == 0)
+-    root_statbuf = statbuf;  /* Save this for later on */
++	if(this_dir == root && strcmp(short_name, ".") == 0)
++		root_statbuf = statbuf;  /* Save this for later on */
+   
+   /* We do this to make sure that the root entries are consistent */
+-  if(this_dir == root && strcmp(short_name, "..") == 0) 
++	if(this_dir == root && strcmp(short_name, "..") == 0) 
+     {
+-      statbuf = root_statbuf;
+-      lstatbuf = root_statbuf;
++		statbuf = root_statbuf;
++		lstatbuf = root_statbuf;
+     }
+ 
+-  if(S_ISLNK(lstatbuf.st_mode))
+-    {
++	if(S_ISLNK(lstatbuf.st_mode))
++	{
+       
+-      /* Here we decide how to handle the symbolic links.  Here
+-	 we handle the general case - if we are not following
+-	 links or there is an error, then we must change
+-	 something.  If RR is in use, it is easy, we let RR
+-	 describe the file.  If not, then we punt the file. */
++		/* Here we decide how to handle the symbolic links.  Here
++		   we handle the general case - if we are not following
++		   links or there is an error, then we must change
++		   something.  If RR is in use, it is easy, we let RR
++		   describe the file.  If not, then we punt the file. */
+       
+-      if((status || !follow_links))
+-	{
+-	  if(use_RockRidge)
+-	    {
+-	      status = 0;
+-	      statbuf.st_size = 0;
+-	      STAT_INODE(statbuf) = UNCACHED_INODE;
+-	      statbuf.st_dev = (dev_t) UNCACHED_DEVICE;
+-	      statbuf.st_mode = (statbuf.st_mode & ~S_IFMT) | S_IFREG;
+-	    } else {
+-	      if(follow_links) 
++		/* First check for the sensible follow_links option */
++		if (follow_links_sensible)
+ 		{
+-		  fprintf(stderr,
+-			  "Unable to stat file %s - ignoring and continuing.\n",
+-			  whole_path);
++			/* Where does the link point to? */
++			memset (link_buf, 0, 256);
++			readlink (whole_path, link_buf, 255);
++			if (check_dirlevel (link_buf))
++			{
++				/* Treat it as a symlink */
++				if (!use_RockRidge)
++				{
++					fprintf (stderr, "Ignoring symlink %s (which wouldn't be followed)\n",
++							 whole_path);
++				}
++				else
++				{
++					do_follow_links = 0;
++					if (status)
++					{
++						status = 0;
++						statbuf.st_size = 0;
++						STAT_INODE(statbuf) = UNCACHED_INODE;
++						statbuf.st_dev = (dev_t) UNCACHED_DEVICE;
++						statbuf.st_mode = (statbuf.st_mode & ~S_IFMT) | S_IFREG;
++					}
++				}
++			}
++			else
++			{
++				/* Follow the link */
++				do_follow_links = 1;
++			}
+ 		}
+-	      else
++		else if (!follow_links_sensible)
++			do_follow_links = follow_links;
++      
++		if((status || !do_follow_links))
+ 		{
+-		  fprintf(stderr,
+-			  "Symlink %s ignored - continuing.\n",
+-			  whole_path);
+-		  return 0;  /* Non Rock Ridge discs - ignore all symlinks */
++			if(use_RockRidge)
++			{
++				status = 0;
++				statbuf.st_size = 0;
++				STAT_INODE(statbuf) = UNCACHED_INODE;
++				statbuf.st_dev = (dev_t) UNCACHED_DEVICE;
++				statbuf.st_mode = (statbuf.st_mode & ~S_IFMT) | S_IFREG;
++			} else {
++				if(do_follow_links) 
++				{
++					fprintf(stderr,
++							"Unable to stat file %s - ignoring and continuing.\n",
++							whole_path);
++				}
++				else
++				{
++					fprintf(stderr,
++							"Symlink %s ignored - continuing.\n",
++							whole_path);
++					return 0;  /* Non Rock Ridge discs - ignore all symlinks */
++				}
++			}
+ 		}
+-	    }
+-	}
+       
+-      /* Here we handle a different kind of case.  Here we have
+-	 a symlink, but we want to follow symlinks.  If we run
+-	 across a directory loop, then we need to pretend that
+-	 we are not following symlinks for this file.  If this
+-	 is the first time we have seen this, then make this
+-	 seem as if there was no symlink there in the first
+-	 place */
++		/* Here we handle a different kind of case.  Here we have
++		   a symlink, but we want to follow symlinks.  If we run
++		   across a directory loop, then we need to pretend that
++		   we are not following symlinks for this file.  If this
++		   is the first time we have seen this, then make this
++		   seem as if there was no symlink there in the first
++		   place */
+       
+-      if( follow_links
+-	  && S_ISDIR(statbuf.st_mode) ) 
+-	{
+-	  if(   strcmp(short_name, ".")
+-		&& strcmp(short_name, "..") )
+-	    {
+-	      if(find_directory_hash(statbuf.st_dev, STAT_INODE(statbuf)))
++		if( do_follow_links
++			&& S_ISDIR(statbuf.st_mode) ) 
+ 		{
+-		  if(!use_RockRidge) 
+-		    {
+-		      fprintf(stderr, "Already cached directory seen (%s)\n", 
+-			      whole_path);
+-		      return 0;
+-		    }
+-		  statbuf.st_size = 0;
+-		  STAT_INODE(statbuf) = UNCACHED_INODE;
+-		  statbuf.st_dev = (dev_t) UNCACHED_DEVICE;
+-		  statbuf.st_mode = (statbuf.st_mode & ~S_IFMT) | S_IFREG;
++			if(   strcmp(short_name, ".")
++				  && strcmp(short_name, "..") )
++			{
++				if(find_directory_hash(statbuf.st_dev, STAT_INODE(statbuf)))
++				{
++					if(!use_RockRidge) 
++					{
++						fprintf(stderr, "Already cached directory seen (%s)\n", 
++								whole_path);
++						return 0;
++					}
++					statbuf.st_size = 0;
++					STAT_INODE(statbuf) = UNCACHED_INODE;
++					statbuf.st_dev = (dev_t) UNCACHED_DEVICE;
++					statbuf.st_mode = (statbuf.st_mode & ~S_IFMT) | S_IFREG;
++				}
++				else 
++				{
++					lstatbuf = statbuf;
++					add_directory_hash(statbuf.st_dev, STAT_INODE(statbuf));
++				}
++			}
+ 		}
+-	      else 
++      
++		/*
++		 * For non-directories, we just copy the stat information over
++		 * so we correctly include this file.
++		 */
++		if( do_follow_links
++			&& !S_ISDIR(statbuf.st_mode) ) 
+ 		{
+-		  lstatbuf = statbuf;
+-		  add_directory_hash(statbuf.st_dev, STAT_INODE(statbuf));
++			lstatbuf = statbuf;
+ 		}
+-	    }
+-	}
+-      
+-      /*
+-       * For non-directories, we just copy the stat information over
+-       * so we correctly include this file.
+-       */
+-      if( follow_links
+-	  && !S_ISDIR(statbuf.st_mode) ) 
+-	{
+-	  lstatbuf = statbuf;
+-	}
+     }
+   
+   /*
+    * Add directories to the cache so that we don't waste space even
+    * if we are supposed to be following symlinks.
+    */
+-  if( follow_links
++  if( do_follow_links
+       && strcmp(short_name, ".")
+       && strcmp(short_name, "..")
+       && S_ISDIR(statbuf.st_mode) ) 
+@@ -1158,7 +1212,7 @@
+   
+   /* Add this so that we can detect directory loops with hard links.
+      If we are set up to follow symlinks, then we skip this checking. */
+-  if(   !follow_links 
++  if(   !do_follow_links 
+ 	&& S_ISDIR(lstatbuf.st_mode) 
+ 	&& strcmp(short_name, ".") 
+ 	&& strcmp(short_name, "..") ) 

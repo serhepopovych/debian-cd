@@ -1,0 +1,5 @@
+doc
+README.*
+dists/slink/non-free/binary-ARCH
+dists/slink/non-free/binary-all
+dists/slink/non-free/source

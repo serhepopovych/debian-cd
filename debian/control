@@ -1,0 +1,15 @@
+Source: slink-cd
+Section: contrib/utils
+Priority: extra
+Maintainer: Steve McIntyre <stevem@chiark.greenend.org.uk>
+Standards-Version: 2.4.1.1
+
+Package: slink-cd
+Architecture: all
+Depends: unzip, lha, dpkg-multicd, slice, pkg-order, python-base, macutils
+Recommends: cdwrite|cdrecord, mkhybrid
+Description: Build Debian slink CD images
+ slink_cd is the set of scripts used to generate Debian CDs from the archive. 
+ Likely to be useful for vendors and any Debian users wanting to make their 
+ own CDs.
+

@@ -1,0 +1,22 @@
+# Local definitions for vecho and friends, source when necessary.
+
+function vecho ()
+{
+	if [ $VERBOSE -gt 0 ] ; then
+		echo "$@"
+	fi
+}
+
+function vvecho ()
+{
+	if [ $VERBOSE -gt 1 ] ; then
+		echo "$@"
+	fi
+}
+
+function vvvecho ()
+{
+	if [ $VERBOSE -gt 2 ] ; then
+		echo "$@"
+	fi
+}

@@ -1,0 +1,21 @@
+Multicd installation instructions
+=================================
+
+Once you have installed the base system and rebooted your machine, you
+will need to go through and configure parts of the system (root
+password etc.). After this you will be presented with dselect, the
+standard package installation program on a Debian system.
+
+If you wish to use the multicd installation method, as is the default
+for CD-based installs, you should be careful to insert the LAST BINARY
+CD of your set when you start, e.g.:
+
+	if you have a single CD, insert that single CD
+	if you have a 2-CD binary set, insert CD#2
+	if you have an official 4-CD set, insert CD#2 
+			(#3 and #4 should contain source only)
+	etc.
+
+README.multicd 
+23 Feb 1999 
+Steve McIntyre <stevem@chiark.greenend.org.uk>

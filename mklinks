@@ -1,0 +1,69 @@
+#!/usr/bin/perl -w 
+# mklinks v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Released as part of the slink_cd package, not much use standalone
+#
+# Given a list of *files* on stdin, will work through them replacing
+# links into binary-all as appropriate, and will also fix the
+# boot-disks current/ symlink as necessary. Designed to work with the
+# "genlinks" option in slink_cd.
+#
+# Takes no parameters. Inspired by the "flatten" script by Jens Ritter
+
+# $1 is the debug level
+# We extensively work on $_!
+while (<STDIN>)
+{
+	chop;
+	if ( -l )
+	{
+		# Check if we have a file that we can link to binary-all
+		if ( /binary-(i386|alpha|sparc|powerpc|arm|hurd-i386|m68k)\/.*/ )
+		{
+			$allfile = $_;
+			$allfile =~ s/binary-\w*/binary-all/;
+			$allfile =~ s/\.\///;
+			if ( -e $allfile)
+			{
+				# We have a winner!
+				unlink;
+				if ( /non-US/ ) 
+				{
+					# broken layout...
+					symlink( "../../$allfile", $_);
+				}
+				else
+				{
+					symlink( "../../../$allfile", $_);
+				}
+			}
+		}
+
+	    # And also check for the "current" boot-disks sym-link - this
+	    # will break the sym-links farm when we try to link to it later...
+		if ( /disks-(i386|alpha|sparc|powerpc|arm|hurd-i386|m68k)\/current$/ )
+		{
+			if($1)
+			{
+				print "Fixing the disks-ARCH/current sym-link for our purposes\n";
+			}
+			$currentdir = $_;
+			$diskdir = readlink $currentdir;
+			unlink $currentdir;
+			mkdir $currentdir,0755;
+			opendir(DIR, "$diskdir/" ) || die "can't opendir $diskdir: $!";
+			while ($file = readdir(DIR))
+			{
+				if( ! -d "$diskdir/$file" )
+				{
+					symlink( "$diskdir/$file","$currentdir/$file" );
+				}
+			}
+			closedir DIR;
+		}
+	}
+}
+
+
+

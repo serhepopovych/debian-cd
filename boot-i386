@@ -1,0 +1,110 @@
+#!/bin/bash
+#
+# boot-i386 v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Released as part of the slink_cd package, not much use standalone
+#
+# Do install stuff for i386, including making bootable CDs
+#
+# $1 is Debian-mirror location
+# $2 is start directory location (where the scripts live)
+# $3 is tmpdir location
+# $4 is the binary arch
+# $5 is debug level
+# $6 is $BOOTDIR (not needed for i386, but let's stay consistent)
+
+MIRROR=$1
+BASEDIR=$2
+TDIR=$3
+ARCH=$4
+VERBOSE=$5
+BOOTDIR=$6
+
+. $BASEDIR/vecho # Include local definitions for vecho, vvecho, vvvecho
+
+# Now check the boot-disks; make sure they exist and we
+# have a "current" directory. If not, exit
+if [ ! -e slink1/dists/stable/main/disks-$ARCH ] ; then
+	echo "No boot disks found for arch $ARCH."
+	echo "Exit."
+	exit 1
+fi
+
+(cd slink1/dists/stable/main/disks-$ARCH/current/ ; \
+	cp resc*.bin linux root.bin $TDIR/slink1/install )
+
+cd slink1/dists/stable/main/disks-$ARCH
+if [ ! -e current ] ; then
+	echo "No \"current\" boot disks found for arch $ARCH."
+	echo "Exit."
+	exit 1
+fi                      
+
+# OK, we have what we need. Now check and see what mess
+# things are in. We _don't_ need more than one set of boot
+# disks and it would be useful if the ftp maintainers
+# would remove old versions instead of leaving them
+# around...
+
+if [ -L current ] ; then
+	# Find the link, rename it for safety then put it back
+	CURRENT_LINK=`ls -l current | awk '{print $11}'`
+	mv $CURRENT_LINK .tmp_link
+	rm -rf 2*
+	mv .tmp_link $CURRENT_LINK
+else
+	# We can simply remove all the others if current is a directory
+	rm -rf 2*
+fi
+
+cd $TDIR
+# Hack for bootable disks
+vecho "Copying boot image to <root>/boot for disc 1"
+cp slink1/dists/stable/main/disks-$ARCH/current/resc1440.bin \
+	boot1/boot
+if [ -e slink1/dists/stable/main/disks-$ARCH/current/resc1440tecra.bin ] ; then
+	mkdir -p boot2/boot
+	vecho "Copying tecra boot image to <root>/boot for disc 2"
+	cp slink1/dists/stable/main/disks-$ARCH/current/resc1440tecra.bin \
+		boot2/boot
+fi
+
+vecho "Extracting tools for disc 1"
+mkdir -p slink1/tools/fips20
+(cd slink1/tools/fips20; \
+	unzip -Lq $MIRROR/tools/fips20.zip; \
+	rm restorrb source -rf)
+
+(cd slink1/tools; \
+	unzip -Lq $MIRROR/tools/lodlin16.zip; \
+	rm lodlin16/src lodlin16/initrd loadlin16/debian -rf )
+
+mkdir slink1/tools/rawrite1
+(cd slink1/tools/rawrite1; \
+	unzip -Lq $MIRROR/tools/rawrite1.zip )
+
+mkdir slink1/tools/rawrite2
+(cd slink1/tools/rawrite2; \
+	unzip -Lq $MIRROR/tools/rawrite2.zip; \
+	rm rawrite2.c )
+
+(echo "Tools for DOS :" ; \
+	echo "fips20/         non-destructively shorten a FAT partition" ; \
+	echo "lodlin16/       load Linux kernel from DOS" ;\
+	echo "rawrite1/       rawrite 1.3 : create disks from disk images (*.bin)"; \
+	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
+	echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
+	) |todos > slink1/tools/README.tools
+
+cp slink1/tools/lodlin16/*.exe slink1/install
+cp slink1/tools/rawrite1/rawrite3.com slink1/install/rw1_3.com
+cp slink1/tools/rawrite2/rawrite2.exe slink1/install/rw2_0.exe
+cp slink1/tools/fips*/*.exe slink1/install
+
+(echo "@ echo off" ; \
+	echo "rem Flush any write-cached disk blocks before we leave DOS. " ; \
+	echo "smartdrv /c" ; \
+	echo "loadlin.exe linux root=/dev/ram ro initrd=root.bin" ; \
+	) |todos > slink1/install/boot.bat
+

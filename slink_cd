@@ -1,0 +1,1280 @@
+#!/bin/bash
+# slink_cd v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Greatly influenced by the older Makefile system in the Hamm debian-cd package
+#
+##############################################################################
+#
+#  Read the README! IMPORTANT STUFF HERE!
+#
+##############################################################################
+
+# Version number, to be used later
+SLINKCD_VERSION=1.13
+SLINKCD_SITE="http://www.chiark.greenend.org.uk/~stevem/DebianCD/"
+
+###########################################################################
+# Default options - we check for these in the environment first, so it
+# is possible to drive this script entirely without changing these if
+# you so desire. Where this really comes into its own is in automating
+# the process for multiple architectures - try a script that sets the
+# environment appropriately, then calls this for each architecture,
+# something like:
+# 
+# ARCH=i386 TDIR=~/i386-tmp OUT=~/i386-out ./slink_cd <options>
+# ARCH=m68k TDIR=~/m68k-tmp OUT=~/m68k-out ./slink_cd <options>
+# ARCH=alpha TDIR=~/alpha-tmp OUT=~/alpha-out ./slink_cd <options>
+# ARCH=sparc TDIR=~/sparc-tmp OUT=~/sparc-out ./slink_cd <options>
+#
+# It's not pretty but it should work... (TM) :-) - look at the included 
+# "arch" script for an example.
+###########################################################################
+
+# Grab current directory for later use. Can be over-ridden by $BASEDIR
+# in the environment
+BASEDIR=${BASEDIR:-$PWD}
+
+# Architecture to build images for (i386, alpha, m68k, sparc, powerpc so far).
+# Default, will be overridden by other options - use m68k, alpha or i386 on 
+# commandline to change
+ARCH=${ARCH:-i386}
+
+# Top level location of Debian mirror
+MIRROR=${MIRROR:-/home/ftp/debian}
+
+# Location of non-US mirror
+NONUS=${NONUS:-$MIRROR/non-US}
+
+# Path to use with mkisofs/mkhybrid
+MKISOFS=${MKISOFS:-"mkhybrid"}
+
+# Options to use with mkisofs/mkhybrid - one of these should do you
+# If you're using i386 then -J will be added later to add Joliet stuff
+# * Why can't Windows read RockRidge like any sensible OS? *
+#MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -T"} # For normal users
+
+MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -F -T"} # For sym-link farmers. 
+# Also make sure you have a patched mkhybrid - read the README
+
+# TDIR must be on the same partition as the mirror for hard links trick 
+# to work
+TDIR=${TDIR:-~stevem/slinkcd}
+
+# Target directory for output ISO images
+OUT=${OUT:-$MIRROR/local/images}
+
+# Sparc (maybe other?) boot directory from where to grab the SILO boot loader
+BOOTDIR=${BOOTDIR:-/boot}
+
+. $BASEDIR/vecho # Local definitions for vecho, vvecho, vvvecho
+
+# Default debug level
+VERBOSE=0
+DATE=`date +%Y%m%d`
+
+# Parse options
+
+if [ $# -gt 0 ] ; then
+    while [ $# -gt 0 ] 
+    do
+        case "$1"x in 
+	  "-v"x)
+	      VERBOSE=$[ $VERBOSE + 1 ]
+	      shift 1
+	  ;;
+	  "clean"x)
+	      CLEAN=1
+	      shift 1
+	  ;;
+	  "genlist"x)
+	      GENLIST=1
+	      shift 1
+	  ;;
+	  "tree"x)
+	      TREE=1
+	      shift 1
+	  ;;
+	  "genlinks"x)
+	      GENLINKS=1
+	      shift 1
+	  ;;
+	  "flatten"x)
+	      FLATTEN=1
+	      shift 1
+	  ;;
+	  "md5check"x)
+	      MD5CHECK=1
+	      shift 1
+	  ;;
+	  "packages"x)
+	      PACKAGES=1
+	      shift 1
+	  ;;
+	  "boot"x)
+	      BOOT=1
+	      shift 1
+	  ;;
+	  "extras"x)
+	      EXTRAS=1
+	      shift 1
+	  ;;
+	  "md5list"x)
+	      MD5LIST=1
+	      shift 1
+	  ;;
+	  "images"x)
+	      IMAGES=1
+	      IMAGE1=1
+	      IMAGE2=1
+	      IMAGE3=1
+	      IMAGE4=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "image1"x)
+	      IMAGE1=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "image2"x)
+	      IMAGE2=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "image3"x)
+	      IMAGE3=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "image4"x)
+	      IMAGE4=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "image5"x)
+	      IMAGE5=1
+	      IMAGESMADE=1
+	      shift 1
+	  ;;
+	  "imagesums"x)
+	      IMAGESUMS=1
+	      shift 1
+	  ;;
+	  "alpha"x)
+	      ARCH=alpha
+	      shift 1
+	  ;;
+	  "sparc"x)
+	      ARCH=sparc
+	      shift 1
+	  ;;
+	  "powerpc"x)
+	      ARCH=powerpc
+	      shift 1
+	  ;;
+	  "m68k"x)
+	      ARCH=m68k
+	      shift 1
+	  ;;
+	  "i386"x)
+	      ARCH=i386
+	      shift 1
+	  ;;
+	  "single_disk"x)
+	      SINGLE_DISK=1
+	      shift 1
+	  ;;
+	  "force_deps"x)
+	      FORCE_DEPENDS=1
+	      shift 1
+	  ;;
+	  "non-US"x|"non-us"x)
+	      # Only set this if we have a location for it...
+	      if [ "$NONUS"x != ""x ] ; then
+		NU=1
+	      fi
+	      shift 1
+	  ;;
+	  "non-free"x)
+	      NF=1
+	      shift 1
+	  ;;
+	  *)
+	      echo \"$1\": invalid option.
+	      exit 1
+	  ;;	
+        esac
+    done			
+else
+    CLEAN=1
+    GENLIST=1
+    TREE=1
+    GENLINKS=0
+    FLATTEN=1
+    MD5CHECK=1
+    PACKAGES=1
+    BOOT=1
+    EXTRAS=1
+    MD5LIST=1
+    IMAGE1=0
+    IMAGE2=0
+    IMAGE3=0
+    IMAGE4=0
+    IMAGE5=0
+	IMAGESUMS=0
+    NU=0
+    NF=0
+	SINGLE_DISK=0
+fi
+
+if [ "$IMAGES"x = "1"x -a "$NF"x = "1"x ] ; then
+	IMAGE5=1
+fi
+
+error=0
+vecho VERBOSE=$VERBOSE
+vecho CLEAN=$CLEAN
+vecho GENLIST=$GENLIST
+vecho TREE=$TREE
+vecho GENLINKS=$GENLINKS
+vecho FLATTEN=$FLATTEN
+vecho MD5CHECK=$MD5CHECK
+vecho PACKAGES=$PACKAGES
+vecho BOOT=$BOOT
+vecho EXTRAS=$EXTRAS
+vecho MD5LIST=$MD5LIST
+vecho IMAGES=$IMAGES
+vecho IMAGE1=$IMAGE1 
+vecho IMAGE2=$IMAGE2
+vecho IMAGE3=$IMAGE3 
+vecho IMAGE4=$IMAGE4 
+vecho IMAGE5=$IMAGE5 
+vecho IMAGESUMS=$IMAGESUMS
+vecho ARCH=$ARCH
+vecho MIRROR=$MIRROR
+vecho NONUS=$NONUS
+vecho MKISOFS=$MKISOFS
+vecho TDIR=$TDIR
+vecho OUT=$OUT
+vecho BASEDIR=$BASEDIR
+vecho NU=$NU
+vecho NF=$NF
+vecho SINGLE_DISK=$SINGLE_DISK
+
+# Sort out non-US link - this should be done better...
+if [ "$NU"x = "1"x ] ; then
+	vecho Checking for non-US link in $MIRROR/dists/slink
+    if [ ! -L $MIRROR/dists/slink/non-US -a ! -d $MIRROR/dists/slink/non-US ] ; then
+		vecho "Does not exist; trying to make one"
+        (cd $MIRROR/dists/slink && ln -s $NONUS/dists/slink/non-US >/dev/null 2>&1 ) # Redirect errors - people may have a read-only mirror...
+    fi
+fi
+
+# Cope with relative paths; some people insist on using them.
+vecho Checking TDIR is set OK
+# Does it exist?
+if [ ! -e $TDIR ] ; then
+	vecho "$TDIR does not exist - making it"
+	mkdir $TDIR
+	if [ $? -gt 0 ] ; then
+		echo "Temporary directory $TDIR does not exist and we cannot create it."
+		echo "Exit."
+		exit 1
+	fi
+fi
+pushd $TDIR >/dev/null
+if [ $? -gt 0 ] ; then
+	echo "Error in directory $TDIR"
+	echo "Exit."
+	exit 1
+fi
+TDIR=$PWD
+popd >/dev/null
+vecho TDIR is now $TDIR
+
+vecho Checking MIRROR is set OK
+# Does it exist?
+if [ ! -e $MIRROR ] ; then
+	echo "Mirror directory $MIRROR does not exist"
+	echo "Exit."
+	exit 1
+fi
+
+if [ "$NU"x = "1"x ] ; then
+	vecho Checking NONUS is set OK
+	# Does it exist?
+	if [ ! -e $NONUS ] ; then
+		echo "non-US Mirror directory $NONUS does not exist"
+		echo "Exit."
+		exit 1
+	fi
+fi
+
+vecho Checking OUT is set OK
+# Does it exist?
+if [ ! -e $OUT ] ; then
+	vecho "$OUT does not exist - making it"
+	mkdir $OUT
+	if [ $? -gt 0 ] ; then
+		echo "Image directory $OUT does not exist and we cannot create it."
+		echo "Exit."
+		exit 1
+	fi
+fi
+pushd $OUT >/dev/null
+if [ $? -gt 0 ] ; then
+	echo "Error in directory $OUT"
+	echo "Exit."
+	exit 1
+fi
+OUT=$PWD
+popd >/dev/null
+vecho OUT is now $OUT
+
+# Check the user has done as told - make sure we're on the same
+# partition as the mirror unless we have been told to "genlinks"
+
+if [ "$GENLINKS"x != "1"x -a "$TREE"x = "1"x ] ; then
+	vecho Checking that TDIR is on the same partition as the mirror.
+	MIRRORPART=`df $MIRROR | grep -v ilesystem | awk '{print $1}'`
+		vvecho MIRROR is on $MIRRORPART
+	TMPPART=`df $TDIR | grep -v ilesystem | awk '{print $1}'`
+		vvecho TDIR is on $TMPPART
+	if [ "$MIRRORPART"x = "$TMPPART"x ] ; then
+		vecho "Good - they match."
+	else
+		echo "Read the instructions, the temporary dir specified must be on the" 
+		echo "same partition as the mirror unless you specify \"genlinks\" to make a sym-link"
+		echo "farm"
+		echo "$TMPPART != $MIRRORPART"
+		exit 1
+	fi
+fi
+
+# Check to see if we're being asked to create md5sums for non-existent images
+if [ "$IMAGESMADE"x != "1"x -a "$IMAGESUMS"x = "1"x ] ; then
+	echo "To create md5sums of CD images you first need to create the images!"
+	echo "Try again, either adding an image creation option (image[12345x])"
+	echo "or removing the \"imagesums\" option"
+	echo "Exit."
+	exit 1
+fi
+
+# If we're doing genlinks then check we have the required -F option
+# for mkhybrid
+if [ "$GENLINKS"x = "1"x ] ; then
+	if ! (echo "$MKISOFS_OPTS" | grep -q \\-F ) ; then
+		echo "If you are using the \"genlinks\" option then you also need to use a patched"
+		echo "mkhybrid/mkisofs and add the \"-F\" flag to the command line for it. See the"
+		echo "README file for more details."
+		echo "Exit."
+		exit 1
+	fi
+fi
+
+# Set up for later; non-free and non-US will be added as necessary
+SECTLIST="main"       # List of sections
+DISKLIST="1 2 3 4"    # List of all disks
+BINLIST="1 2"         # List of disks containing binaries
+
+if [ "$SINGLE_DISK"x = "1"x ] ; then
+	# Sanity check...
+	if [ "$NU"x = "1"x -o "$NF"x = "1"x ] ; then
+		echo 'single_disk option is not compatible with either non-free or non-US.' 
+		echo Exit.
+		exit 1
+	fi
+	if [ "$IMAGE2"x = "1"x -o "$IMAGE3"x = "1"x -o "$IMAGE3" = "1"x -o "$IMAGE4"x = "1"x ] ; then
+		echo 'single_disk option is not compatible with creation of CD images other than #1.' 
+		echo Exit.
+		exit 1
+	fi
+	DISKLIST="1"
+	BINLIST="1"
+else
+	SECTLIST="$SECTLIST contrib"
+fi
+
+if [ "$NU"x = "1"x ] ; then
+    SECTLIST="$SECTLIST non-US"
+fi
+
+if [ "$NF"x = "1"x ] ; then
+    SECTLIST="$SECTLIST non-free"
+    DISKLIST="$DISKLIST 5"
+	BINLIST="$BINLIST 5"
+fi
+
+vecho "About to run to create disk(s) $DISKLIST and section(s) $SECTLIST"
+
+# Sanity check for combinations of options - creating sym-links then
+# flattening them isn't just silly, it's stupid...
+
+if [ "$GENLINKS"x = "1"x -a "$FLATTEN"x = "1"x ] ; then
+	echo "The \"genlinks\" and \"flatten\" options are incompatible."
+	echo "Exit."
+	exit 1
+fi
+
+if [ $error -eq 0 ] ; then
+    if [ "$CLEAN"x = "1"x ] ; then
+		echo CLEAN:
+		vecho Removing old directories
+		if [ "$VERBOSE" -gt 1 ] ; then
+			rm -rvf $TDIR
+		else
+			rm -rf $TDIR
+		fi
+		mkdir $TDIR
+	fi
+fi	
+
+vecho "Making working copies of config files, converting ARCH to $ARCH"
+if [ -e $TDIR/slink1.list ] ; then
+    vecho "You already appear to have them. I therefore assume the ones in"
+    vecho "$TDIR are correct and I will leave them alone. If you"
+    vecho "want to generate new ones, delete the file \"slink1.list\" in"
+    vecho "$TDIR and try again."
+else
+    for i in $DISKLIST
+    do
+        for TYPE in list info volid extras optional
+        do
+			if [ -e slink$i.$TYPE ] ; then
+				vecho "    slink$i.$TYPE"
+				cat slink$i.$TYPE | sed "s/ARCH/$ARCH/g" >$TDIR/slink$i.$TYPE
+			fi
+        done
+    done
+	vecho "    mkisofsrc"
+	cat mkisofsrc | sed "s/ARCH/$ARCH/g" >$TDIR/.mkisofs
+	ln -s .mkisofs $TDIR/.mkisofsrc
+	vecho "    slink1.needed" 
+	slice master
+	if [ $? -gt 0 ] ; then
+		echo "\"slice master\" failed - do you have the slice package installed?"
+		echo Exit.
+		exit 1
+	fi
+	echo "# Do not edit this file - it is automatically generated." >$TDIR/slink1.needed
+	echo "# Edit \"master\" instead." >>$TDIR/slink1.needed
+	cat master.$ARCH | awk -F':' '
+	/Packages:/ {packages++; next} 
+	/.+.+/      {if(packages) {print $1}}
+	' |sort |uniq >>$TDIR/slink1.needed
+	rm master.*
+
+	vecho "    slink1.useful" 
+	slice useful
+	if [ $? -gt 0 ] ; then
+		echo "\"slice useful\" failed - do you have the slice package installed?"
+		echo Exit.
+		exit 1
+	fi
+	echo "# Do not edit this file - it is automatically generated." >$TDIR/slink1.useful
+	echo "# Edit \"useful\" instead." >>$TDIR/slink1.useful
+	cat useful.$ARCH | awk -F':' '
+	/.+.+/      {print $1}
+	' |sort |uniq >>$TDIR/slink1.useful
+	rm useful.*
+
+	# Check for non-US entries in these files - if we mention it then fix it...
+	if [ "$NU"x != "1"x ] ; then
+		vecho "non-US option not given, so removing non-US references from file lists"
+		for file in $TDIR/slink*.list
+		do
+			mv $file $file.1
+			vecho "    $file"
+			grep -v non-US $file.1 >$file
+		done
+	fi
+fi
+
+if [ $error -eq 0 ] ; then
+    if [ "$GENLIST"x = "1"x ] ; then
+		echo GENLIST:
+        $BASEDIR/mklist "$MIRROR" "$BASEDIR" "$TDIR" "$ARCH" "$VERBOSE"
+        
+        cd $TDIR
+
+        # Now combine the lists
+		if [ ! -e slink1.list ] ; then
+			echo mklist step failed - $TDIR/slink1.list not found
+			echo Exit.
+			exit 1
+		fi
+		if [ ! -e list/OUT1 ] ; then
+			echo mklist step failed - $TDIR/list/OUT1 not found
+			echo Exit.
+			exit 1
+		fi
+        mv slink1.list slink1.list.orig
+        cat slink1.list.orig | grep -v main/binary- >slink1.list
+        cat list/OUT1 | sed 's/dists\/frozen/dists\/slink/g;s/dists\/stable/dists\/slink/g' >>slink1.list
+        rm slink1.list.orig
+
+		if [ "$SINGLE_DISK"x != "1"x ] ; then
+			# Now combine the lists
+			if [ ! -e slink2.list ] ; then
+				echo mklist step failed - $TDIR/slink2.list not found
+				echo Exit.
+				exit 1
+			fi
+			if [ ! -e list/OUT2 ] ; then
+				echo mklist step failed - $TDIR/list/OUT2 not found
+				echo Exit.
+				exit 1
+			fi
+			mv slink2.list slink2.list.orig
+			cat slink2.list.orig | grep -v main/binary- >slink2.list
+			cat list/OUT2 | sed 's/dists\/frozen/dists\/slink/g;s/dists\/stable/dists\/slink/g' >>slink2.list
+			rm slink2.list.orig
+	    fi
+    fi
+fi	
+
+# Make sym-link farm for those people that need it...
+if [ $error -eq 0 ] ; then
+    if [ "$GENLINKS"x = "1"x ] ; then
+		echo GENLINKS:
+		vecho Making sym-link farm of parts of $MIRROR under $TDIR/tmp-mirror
+        cd $TDIR
+		mkdir tmp-mirror
+		cd tmp-mirror
+		cp -pRs $MIRROR/dists $MIRROR/doc $MIRROR/README* $MIRROR/hamm $MIRROR/indices $MIRROR/ls* $MIRROR/project $MIRROR/tools .
+
+		# Copy non-US separately if necessary...
+		if [ -L $MIRROR/dists/slink/non-US ] ; then
+			vecho Adding non-US
+			rm dists/slink/non-US
+			mkdir dists/slink/non-US
+			cp -dpRs $NONUS/slink/* dists/slink/non-US
+		fi
+
+		cd dists/slink
+		vecho Putting binary-all links in
+		find . | $BASEDIR/mklinks $VERBOSE
+		MIRROR=$TDIR/tmp-mirror
+	fi
+fi
+
+# Make initial tree(s)
+if [ $error -eq 0 ] ; then
+    if [ "$TREE"x = "1"x ] ; then
+		echo TREE:
+        cd $TDIR
+
+		# First of all the general stuff to go on all disks.
+        for i in $DISKLIST
+        do
+			vecho Disk $i
+			vecho "   Make directories"
+			mkdir -p $TDIR/slink$i/dists/slink
+			mkdir -p $TDIR/slink$i/.disk
+
+			# Oops. We're copying the dists stuff into the root
+			# directory, the boot-floppies install stuff wants it in
+			# /debian. Simple fix...
+			cd $TDIR/slink$i
+			ln -s . debian 
+
+			# Set up symlinks so things may work.
+			cd dists 
+			ln -s slink stable 
+#           Frozen no longer needed
+#			ln -s slink frozen
+
+			cd stable 
+
+			cd $TDIR			
+			vecho "   Copy info file"
+			(cat slink$i.info | awk '{printf("%s",$0)}'; echo $DATE) \
+					>slink$i/.disk/info
+			vecho "   Copy release notes"
+			cp $MIRROR/dists/slink/main/Release-Notes slink$i
+			vecho "   Copy README.1ST"
+			echo "This Debian CD was created by slink_cd version $SLINKCD_VERSION on $DATE" >slink$i/README.1ST
+			echo "slink_cd is available from $SLINKCD_SITE">>slink$i/README.1ST
+			echo "This disc is labelled" >>slink$i/README.1ST
+			echo "" >>slink$i/README.1ST
+			cat slink$i/.disk/info >>slink$i/README.1ST
+			if [ -e $BASEDIR/README.multicd ] ; then
+				vecho "   Copy README.multicd"
+				cat $BASEDIR/README.multicd >>slink$i/README.multicd
+			fi
+			todos slink$i/README.1ST
+			cd $MIRROR
+			vecho "   Create tree"
+			for file in `cat $TDIR/slink$i.list`
+			do 
+				cp -dpRPl $file $TDIR/slink$i
+			done
+        done
+
+		cd $TDIR			
+
+		# And now the arch-specific stuff, NOT to go on the source disks.
+        for i in $BINLIST
+        do
+			vecho Disk $i
+			vecho "   Make binary directories"
+			for SECT in $SECTLIST
+			do
+				mkdir -p slink$i/dists/slink/$SECT/binary-$ARCH
+				mkdir -p slink$i/dists/slink/$SECT/binary-all
+			done
+			vecho "   Finish README.1ST"
+			echo "" >>slink$i/README.1ST
+			if [ -e $BASEDIR/README.1ST.$ARCH ] ; then
+				cat $BASEDIR/README.1ST.$ARCH >>slink$i/README.1ST
+			fi
+			if [ -e $BASEDIR/README.$ARCH ] ; then
+				vecho "   Copy README.$ARCH"
+				cat $BASEDIR/README.$ARCH >>slink$i/README.$ARCH
+			fi
+        done
+
+		# Add the Release files, munging if necessary
+        for i in $BINLIST
+        do
+			vecho Disk $i
+			vecho "   add Release files"
+			for SECT in $SECTLIST
+			do
+				if [ -e slink$i/dists/slink/$SECT/binary-$ARCH/Release ] ; then
+					rm -f slink$i/dists/slink/$SECT/binary-$ARCH/Release
+				fi
+				
+				if [ -d slink$i/dists/slink/$SECT/binary-$ARCH ] ; then
+					if [ -e slink$i/dists/slink/$SECT/binary-$ARCH/Release ] ; then
+						cat $MIRROR/dists/slink/$SECT/binary-$ARCH/Release \
+							| sed 's/frozen/stable/g' \
+							> slink$i/dists/slink/$SECT/binary-$ARCH/Release
+					fi
+				fi
+			done
+        done		
+		
+		# Add sym-links for the upgrade stuff if we have it.
+		if [ "$ARCH"x = "i386"x ] ; then
+			vecho "Disk 1"
+			vecho "   upgrade-2.0-i386"
+			(cd $TDIR/slink1 && ln -s dists/stable/main/upgrade-2.0-i386)
+			vecho "   upgrade-older-i386"
+			(cd $TDIR/slink1 && ln -s dists/stable/main/upgrade-older-i386)
+		fi
+    fi
+fi
+
+# Fix the crypt++el_2.84-2.deb brokenness in non-US - temporary workaround...
+if [ "$NU"x = "1"x ] ; then
+	vecho "Looking for broken crypt++el_2.84-2.deb link in non-US..."
+    cd $TDIR/slink2/dists/slink/non-US/binary-$ARCH
+	if [ -L crypt++el_2.84-2.deb ] ; then
+	    link=`ls -l crypt++el_2.84-2.deb | awk '{print $11}'`
+		if [ "$link"x != "../binary-all/crypt++el_2.84-2.deb"x ] ; then
+			vecho "Fixing it"
+			vecho rm crypt++el_2.84-2.deb
+			rm crypt++el_2.84-2.deb
+			vecho ln -s ../binary-all/crypt++el_2.84-2.deb
+			ln -s ../binary-all/crypt++el_2.84-2.deb
+			vecho cd ../binary-all
+			cd ../binary-all
+			vecho ln -s $NONUS/hamm/binary-all/crypt++el_2.84-2.deb
+			ln -s $NONUS/hamm/binary-all/crypt++el_2.84-2.deb
+		else
+			vecho "You do not have it - good"
+		fi
+    fi
+fi
+
+# Generate the list of files we have
+cd $TDIR
+rm -f binary targz diffgz dsc
+
+vecho Generating file list:
+
+vecho '   *.deb'
+for i in $BINLIST
+do
+	vecho "      slink$i"
+	find slink$i -name *.deb >>binary
+done
+
+vecho '   *.tar.gz'
+for i in $DISKLIST
+do
+	vecho "      slink$i"
+	find slink$i -name *.tar.gz >>targz
+done
+
+vecho '   *.diff.gz'
+for i in $DISKLIST
+do
+	vecho "      slink$i"
+	find slink$i -name *.diff.gz >>diffgz
+done
+
+vecho '   *.dsc'
+for i in $DISKLIST
+do
+	vecho "      slink$i"
+	find slink$i -name *.dsc >>dsc
+done
+
+# Now we need to flatten out links pointing outside the tree
+if [ $error -eq 0 ] ; then
+    if [ "$FLATTEN"x = "1"x ] ; then
+		echo FLATTEN:
+		vecho Flattening external symlinks
+        # This is done in perl.
+        cat binary targz diffgz dsc | $BASEDIR/flatten "$MIRROR" "$NONUS" "$VERBOSE"
+    fi
+fi
+
+# Now do a check for the MD5 sums of all the packages before creating
+# the CD images. To avoid the pain of coping with different paths,
+# cheat and make sym-links to the real files and compare against
+# munged pathnames from the Packages files
+
+if [ $error -eq 0 ] ; then
+    if [ "$MD5CHECK"x = "1"x ] ; then
+		echo MD5CHECK:
+        # First grab all the details from the appropriate Packages files
+		vecho Creating MD5 list of packages for comparison
+        cd $MIRROR/dists/slink
+
+		# build the list of packages files to read (either compressed or not)
+		for SECT in $SECTLIST
+		do
+			dir=$SECT/binary-$ARCH
+			if [ -e $dir/Packages ] ; then
+				PFILES="$PFILES $dir/Packages"
+			elif [ -e $dir/Packages.gz ]; then
+				PFILES="$PFILES $dir/Packages.gz"
+			else
+				echo "WARNING: no Packages file(s) found for $dir."
+			fi
+		done
+
+		# -f on zcat allows uncompressed files to be processed as well
+		# We find the local list of packages as otherwise the
+		# single_disk hack will fail, because of missing files that
+		# would have gone on other discs. Unfortunately this means we
+		# won't be able to detect missing files... Suggestions?
+
+		echo "   binary"
+		(cat $TDIR/binary | sed 's/.*\///g;s/_.*//g' ; cat $BASEDIR/EOP; zcat -f $PFILES) \
+			| grep -v '^#' |awk '
+			/END_OF_PROCESSING/		{ yes_done++ ; next }
+			/.*/	{ if(!yes_done) { yes[$1]=1 ; next } }
+			/^Package:/	{package=$2}
+			/^Filename:/	{filename[package]=$2}
+			/^MD5sum:/	{md5sum[package]=$2;
+				gsub(".*/","",filename[package]);
+				if(yes[package])
+				{
+					printf("%32.32s  %s\n",md5sum[package],filename[package])
+				}
+			}
+			' >$TDIR/debcheck_disks.1
+
+		cd $TDIR
+
+        # Now the sym-links
+		vecho Creating package sym-links
+        rm -rf md5
+        mkdir md5
+        # Use the list we already generated earlier...
+        for file in `cat binary`
+        do
+			ln -sf ../$file md5
+        done
+
+        # Compare
+        vecho Comparing sums
+        cd md5
+        md5sum -c ../debcheck_disks.1
+		vecho Checking file sizes
+		find . -follow -size 0 >../sizecheck_disks.1
+		if [ -s ../sizecheck_disks.1 ] ; then
+			echo "   Awooga!"
+			echo "   Awooga!"
+			echo "   Awooga!"
+			echo "   The following files are of zero size:"
+			cat ../sizecheck_disks.1
+			echo "This is fatal. Exit."
+			exit 1
+		fi
+        cd ..
+        rm -rf md5
+
+		echo "   source"
+        # Now check source - use the .dsc files
+        vecho Creating MD5 list of source files for comparison
+        cat `cat dsc` | awk '
+			/^-----BEGIN PGP SIGNATURE/ {in_list=0}
+			{
+			if(in_list) {printf("%32.32s  %s\n",$1,$3)}
+			}
+			/^Files:/	{in_list=1}
+			' >$TDIR/debcheck_disks.2
+
+        # Now the sym-links
+        vecho Creating source file sym-links
+        if [ -d md5 ] ; then 
+			rm -rf md5
+        fi
+        mkdir md5
+        # Use the list we already generated earlier...
+        for file in `cat targz diffgz`
+        do
+			ln -sf ../$file md5
+        done
+
+        # Compare
+        vecho Comparing sums
+        cd md5
+        md5sum -c ../debcheck_disks.2
+		vecho Checking file sizes
+		find . -follow -size 0 >../sizecheck_disks.2
+		if [ -s ../sizecheck_disks.2 ] ; then
+			echo "   Awooga!"
+			echo "   Awooga!"
+			echo "   Awooga!"
+			echo "   The following files are of zero size:"
+			cat ../sizecheck_disks.2
+			echo "This is fatal. Exit."
+			exit 1
+		fi
+        cd ..
+        rm -rf md5
+
+        # Next we need to look at the boot-disks
+
+        vecho Checking boot disks areas:
+        for dir in `find $TDIR | grep disks-$ARCH$`
+        do
+			cd $dir
+			vecho $dir...
+			for dir1 in *
+			do
+				cd $dir1
+				vecho $dir/$dir1...
+				if [ -e md5sum.txt ] ; then
+					md5sum -c md5sum.txt 
+				else
+					echo WARNING: no md5sum.txt file found in $dir/$dir1
+				fi
+				cd ..
+			done
+        done
+    fi
+fi
+
+if [ $error -eq 0 ] ; then
+    if [ "$PACKAGES"x = "1"x ] ; then
+		echo PACKAGES:
+        cd $TDIR
+        rm -vf Packages-{main,contrib,non-US,non-free}.[12345]
+
+        # Create Packages and Packages.cd files	to go on the CDs
+        # First lists by section and CD
+        for i in $BINLIST
+        do
+			echo Creating Packages-main for disc $i
+			if [ ! -e $MIRROR/indices/override.slink.gz ] ; then
+				echo "Override file $MIRROR/indices/override.slink.gz not found. We cannot" 
+				echo "generate our Packages file(s) without this file. Check you are mirroring the"
+				echo "indices/ directory"
+				echo "Exit."
+				exit 1
+			fi
+			(cd $TDIR/slink$i/dists/stable/main && \
+				dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
+				binary-$ARCH $MIRROR/indices/override.slink.gz \
+				dists/stable/main/ > $TDIR/Packages-main.$i)
+
+			if [ "$SINGLE_DISK"x != "1"x ] ; then
+				echo Creating Packages-contrib for disc $i
+				if [ ! -e $MIRROR/indices/override.slink.contrib.gz ] ; then
+					echo "Override file $MIRROR/indices/override.slink.contrib.gz not found. We cannot" 
+					echo "generate our Packages file(s) without this file. Check you are mirroring the"
+					echo "indices/ directory"
+					echo "Exit."
+					exit 1
+				fi
+				(cd $TDIR/slink$i/dists/stable/contrib && \
+					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
+					binary-$ARCH $MIRROR/indices/override.slink.contrib.gz \
+					dists/stable/contrib/ > $TDIR/Packages-contrib.$i)
+			fi
+
+			if [ "$NU"x = "1"x ] ; then
+				echo Creating Packages-non-US for disc $i
+				# Hmmm, we have a problem here. My non-US mirror has the
+				# override file in $NONUS/indices but open has it in
+				# $MIRROR/indices (and with a different filename!!!)
+				# Check for both in turn...
+				OVER_NU=/foo # default catch-all
+				if [ -e $NONUS/indices/override.slink.nonus ] ; then
+					OVER_NU=$NONUS/indices/override.slink.nonus
+				elif [ -e $NONUS/indices/override.slink.nonus.gz ] ; then
+					OVER_NU=$NONUS/indices/override.slink.nonus.gz
+				elif [ -e $MIRROR/indices/override.non-us.slink ] ; then
+					OVER_NU=$MIRROR/indices/override.non-us.slink
+				elif [ -e $MIRROR/indices/override.non-us.slink.gz ] ; then
+					OVER_NU=$MIRROR/indices/override.non-us.slink.gz
+				fi
+				if [ ! -e "$OVER_NU" ] ; then
+					echo "Override file "$OVER_NU" not found. We cannot" 
+					echo "generate our Packages file(s) without this file. Check you are mirroring the"
+					echo "indices/ directory"
+					echo "Exit."
+					exit 1
+				fi
+				(cd $TDIR/slink$i/dists/stable/non-US && \
+					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
+					binary-$ARCH $OVER_NU \
+					dists/stable/non-US/ > $TDIR/Packages-non-US.$i)
+			fi
+
+			if [ "$NF"x = "1"x ] ; then
+				echo Creating Packages-non-free for disc $i
+				if [ ! -e $MIRROR/indices/override.slink.non-free.gz ] ; then
+					echo "Override file $MIRROR/indices/override.slink.non-free.gz not found. We cannot" 
+					echo "generate our Packages file(s) without this file. Check you are mirroring the"
+					echo "indices/ directory"
+					echo "Exit."
+					exit 1
+				fi
+				(cd $TDIR/slink$i/dists/stable/non-free && \
+					dpkg-scanpackages -m "`cat $TDIR/slink$i/.disk/info`" \
+					binary-$ARCH $MIRROR/indices/override.slink.non-free.gz \
+					dists/stable/non-free/ > $TDIR/Packages-non-free.$i)
+			fi
+        done
+
+		echo "Checking dependencies"
+		echo "   CD #1"
+		>/tmp/foo
+		$BASEDIR/pkg-order --nocheck-conflicts --nooutput-order --installed-packages /tmp/foo $TDIR/Packages-main.1 >$TDIR/pkg-order.1 2>&1 
+		if [ $? -gt 0 ] ; then
+			echo "Dependencies of CD #1 cannot be met:"
+		    cat $TDIR/pkg-order.1
+			if [ "$FORCE_DEPENDS"x != "1"x ] ; then
+				echo Exit.
+				exit 1
+			fi
+		else
+			echo "      seems OK"
+		fi
+
+		if [ "$SINGLE_DISK"x != "1"x ] ; then
+			echo "   All CDs"
+			# Use sed here to fix broken package Depends: line
+			cat $TDIR/Packages* | sed 's/^Suggests:\ metro-motif-devel\ (2/Suggests:\ metro-motif-devel\ (=\ 2/g' >$TDIR/Packages-all
+			$BASEDIR/pkg-order --nocheck-conflicts --nooutput-order --check-recommends --installed-packages /tmp/foo $TDIR/Packages-all >$TDIR/pkg-order.2 2>&1 
+			if [ $? -gt 0 ] ; then
+				echo Dependencies of the CD set cannot be met:
+				if [ "$NF"x = 1 -a "$NU"x = 1 ] ; then
+					echo "As all sections have been covered, this is fatal..."
+					if [ "$FORCE_DEPENDS"x != "1"x ] ; then
+						echo Exit.
+						exit 1
+					fi
+				else
+					echo "Not all sections have been included on the CD, so this is not fatal."
+					echo "However, some packages (especially in the contrib section) will not install"
+					echo "correctly."
+				fi
+			fi
+		fi
+
+        # Copy the generated Packages files into place on the
+        # appropriate disks, then the Contents files
+        for i in $BINLIST
+        do
+
+			# First of all, create normal-type Packages files
+			for SECT in $SECTLIST
+			do
+				rm -f slink$i/dists/stable/$SECT/binary-$ARCH/Packages*
+				cat Packages-$SECT.$i | \
+					grep -v ^X-Medium \
+					>slink$i/dists/stable/$SECT/binary-$ARCH/Packages
+				cat Packages-$SECT.$i | grep -v ^X-Medium | \
+					gzip -9 >slink$i/dists/stable/$SECT/binary-$ARCH/Packages.gz
+			done
+			
+			# Now the Packages.cd files
+			vecho slink$i
+			
+			# Be slightly clever here - only copy Packages data for
+			# disc nos. less than or equal to the one we're on - disc
+			# 1 will not know about discs 2,5 but 5 will know about
+			# both the others. The user should insert the last binary
+			# disc they have for initial installation.
+
+			for j in $BINLIST
+			do
+
+				if [ $j -le $i ] ; then
+					for SECT in $SECTLIST
+					do
+						if [ -e Packages-$SECT.$j ] ; then
+							vecho "   Packages-$SECT.$j"
+							cat Packages-$SECT.$j >> \
+								slink$i/dists/stable/$SECT/binary-$ARCH/Packages.cd
+							cat Packages-$SECT.$j | gzip -9 >> \
+								slink$i/dists/stable/$SECT/binary-$ARCH/Packages.cd.gz
+						fi
+					done
+				fi
+			done
+
+			vecho "   Contents-$ARCH.gz"
+			cp -pl $MIRROR/dists/slink/Contents-$ARCH.gz slink$i/dists/stable
+        done
+    fi
+fi
+
+# Now fix the missing bits
+
+if [ $error -eq 0 ] ; then
+    if [ "$BOOT"x = "1"x ] ; then
+		echo BOOT:		
+        vecho "Making bootable images for $ARCH..."
+        cd $TDIR
+
+        mkdir -m 755 slink1/install
+        (cd slink1/dists/stable/main/disks-$ARCH/current/ ; \
+			cp *.txt *.html $TDIR/slink1/install )
+
+		(cd slink1/doc; 
+			for file in ../install/*.{html,txt}; do	ln -s $file; done)
+
+        # Hack for bootable disks
+        rm -rf boot1 boot2
+        mkdir -p boot1/boot
+
+		case "$ARCH"x in
+		"i386"x|"sparc"x|"m68k"x|"alpha"x)
+			vecho "ARCH is $ARCH, we know what to do. Continuing..."
+
+			$BASEDIR/boot-$ARCH $MIRROR $BASEDIR $TDIR $ARCH $VERBOSE $BOOTDIR
+			if [ $? -gt 0 ] ; then
+				echo "boot-$ARCH failed. Exit."
+				exit 1
+			fi
+			;;
+		*)
+			echo "Oops! We don't know what to do with $ARCH disks yet"
+			echo "Leaving bootable CDs alone, you'll need to make boot"
+			echo "floppies by hand to install."
+			;;
+		esac
+    fi
+fi
+
+# define extra mkisofs flags for CD image creation
+# (this part cannot fit in the above section because it is not required to run
+# slink_cd with *both* BOOT & IMAGEx options enabled at one time)
+cd $TDIR
+case "$ARCH"x in
+	"i386"x)
+		if [ -d boot1 ]; then
+			MKISOFS_OPTS_DISC1="-J -b boot/resc1440.bin -c boot/boot.catalog boot1"
+		fi
+		if [ -d boot2 ]; then
+			MKISOFS_OPTS_DISC2="-J -b boot/resc1440tecra.bin -c boot/boot.catalog boot2"
+		fi
+		;;
+	"sparc"x)
+		if [ -d boot1 ]; then
+			MKISOFS_OPTS_DISC1="boot1"
+			# move install tree to correct location
+			if [ -d $TDIR/slink1/install ] ; then
+				vecho "Moving install to boot1"
+				rm -rf $TDIR/boot1/install || true
+				mv $TDIR/slink1/install $TDIR/boot1
+			fi
+		fi
+		;;
+	"m68k"x)
+		if [ -d boot1 ]; then
+			MKISOFS_OPTS_DISC1="-b install/bvme6000/resc1440.bin -c install/bvme6000/boot.catalog"
+		fi		
+		;;
+	"alpha"x)
+		if [ -d boot1 ]; then
+			MKISOFS_OPTS_DISC1="-J boot1"
+		fi
+		;;
+	esac
+
+if [ $error -eq 0 ] ; then
+    if [ "$EXTRAS"x = "1"x ] ; then
+		echo EXTRAS:
+        # Copy some extras onto disks to fill them, e.g. newest 2.1 and 
+        # 2.2 kernels and netscape
+        vecho Copying extras onto disks:
+        cd $TDIR
+        for i in $DISKLIST
+        do
+			if [ -f $TDIR/slink$i.extras ] ; then
+				vecho "   slink$i extras:"
+				mkdir slink$i/extras
+				cp -R `cat $TDIR/slink$i.extras` slink$i/extras
+			else
+				vecho "   slink$i has no extras"
+			fi
+        done
+    fi
+fi
+
+if [ $error -eq 0 ] ; then
+    if [ "$MD5LIST"x = "1"x ] ; then
+		echo MD5LIST:
+        vecho "Generating md5sums for contents of each disk:"
+        for i in $DISKLIST
+        do
+			cd $TDIR/slink$i
+			vecho "   Disk $i"
+			find . -follow -type f | grep -v "\./md5sum" | grep -v "/dists/stable" | xargs md5sum > md5sum.txt
+		done
+		# Generate some sizes here. Unfortunately no use at all if we're
+		# using a sym-link farm...
+		if [ "$GENLINKS" != "1"x ] ; then
+			vecho "Generating sizes of the trees"
+			cd $TDIR
+			du -l >du
+		fi
+    fi
+fi
+
+if [ $error -eq 0 ] ; then
+
+	# Add HFS flags for m68k/powerpc for macs
+	if [ "$ARCH"x = "powerpc"x -o "$ARCH"x = "m68k"x ] ; then
+		MKISOFS_OPTS="--netatalk -j -hfs -probe -map $BASEDIR/hfs.map $MKISOFS_OPTS"
+	fi
+
+    cd $TDIR
+
+	if [ ! -d $OUT ] ; then
+		mkdir -p $OUT
+	fi
+
+    if [ "$IMAGE1"x = "1"x ] ; then
+		echo IMAGE1:
+		VOLID1=`cat $TDIR/slink1.volid`
+        vecho "Making image of slink1 to $OUT/slink1-$ARCH.raw"
+        vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
+			-o $OUT/slink1-$ARCH.raw $MKISOFS_OPTS_DISC1 slink1 
+        $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
+			-o $OUT/slink1-$ARCH.raw $MKISOFS_OPTS_DISC1 slink1
+    fi
+
+    if [ "$IMAGE2"x = "1"x ] ; then
+		echo IMAGE2:
+		VOLID2=`cat $TDIR/slink2.volid`
+        vecho "Making image of slink2 to $OUT/slink2-$ARCH.raw"
+        vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
+	  -o $OUT/slink2-$ARCH.raw $MKISOFS_OPTS_DISC2 slink2
+        $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
+	  -o $OUT/slink2-$ARCH.raw $MKISOFS_OPTS_DISC2 slink2
+    fi
+
+    if [ "$IMAGE3"x = "1"x ] ; then
+		echo IMAGE3:
+		VOLID3=`cat $TDIR/slink3.volid`
+        vecho "Making image of slink3 to $OUT/slink3.raw"
+        vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
+	  -o $OUT/slink3.raw $MKISOFS_OPTS_DISC3 slink3 
+        $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
+	  -o $OUT/slink3.raw $MKISOFS_OPTS_DISC3 slink3
+    fi
+
+    if [ "$IMAGE4"x = "1"x ] ; then
+		echo IMAGE4:
+		VOLID4=`cat $TDIR/slink4.volid`
+        vecho "Making image of slink4 to $OUT/slink4.raw"
+        vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
+	  -o $OUT/slink4.raw $MKISOFS_OPTS_DISC4 slink4 
+        $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
+	  -o $OUT/slink4.raw $MKISOFS_OPTS_DISC4 slink4
+    fi
+
+    if [ "$IMAGE5"x = "1"x ] ; then
+		echo IMAGE5:
+		VOLID5=`cat $TDIR/slink5.volid`
+        vecho "Making image of slink5 to $OUT/slink5-$ARCH.raw"
+		if [ "$NF"x = "1"x ] ; then
+        vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
+	  -o $OUT/slink5-$ARCH.raw $MKISOFS_OPTS_DISC5 slink5 
+        $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
+	  -o $OUT/slink5-$ARCH.raw $MKISOFS_OPTS_DISC5 slink5
+        fi
+    fi
+fi
+
+# post-process of generated images (eg. to make the CD image bootable on sparc)
+if [ $error -eq 0 ] ; then
+	if [ "$IMAGE1"x = "1"x ] ; then
+		if [ "$ARCH"x = "alpha"x ] ; then
+			vecho "Making slink1 image bootable"
+			isomarkboot $OUT/slink1-$ARCH.raw /boot/bootlx /dists/slink/main/disks-al/1999-03-/root1440.bin
+        fi
+		if [ "$ARCH"x = "sparc"x ] ; then
+			# temporary mount point (eg. for silo to create the
+			# bootable CD image) only needed for Sparc so far...
+			vecho Checking for temporary mount point for SILO
+			mountpoint=/var/tmp/slink_cd.mnt
+			if [ -d $mountpoint ]; then
+					umount $mountpoint || true
+			else
+					mkdir -p $mountpoint
+			fi
+
+			vecho "Making slink1 image bootable"
+			EXECARCH=`dpkg --print-installation-architecture`
+			if [ "$EXECARCH"x = "sparc"x ]; then
+				siloprog=silo
+			elif [ "$EXECARCH"x = "i386"x ]; then
+				siloprog=intelsilo
+			fi
+			if [ -n "$siloprog" ]; then
+				cd1=/boot/debian.txt
+				cd2=/install/linux-a.out
+				cd3=/install/linux-2.2.1-a.out
+				cd4=/install/linux-2.2.1-sun4u-a.out
+				cd5=/install/root.bin
+				echo "mount -o loop $OUT/slink1-$ARCH.raw $mountpoint"
+				mount -o loop $OUT/slink1-$ARCH.raw $mountpoint
+				vecho $siloprog -r $mountpoint -c $OUT/slink1-$ARCH.raw \
+					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
+				$siloprog -r $mountpoint -c $OUT/slink1-$ARCH.raw \
+					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
+				umount $mountpoint
+			else
+				echo "Don't know how to make the sparc bootable image on $EXECARCH system!"
+			fi
+		fi
+    fi
+fi
+
+if [ "$IMAGESUMS"x = "1"x ] ; then
+	echo IMAGESUMS:
+    # Let's make md5sums of the images for people who may be
+    # downloading them
+    cd $OUT
+	>MD5SUMS
+	vecho Generating md5sums for the CD images:
+	for file in *.raw
+	do
+		vecho "   $file"
+		md5sum $file >>MD5SUMS
+	done
+fi

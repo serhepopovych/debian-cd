@@ -1,0 +1,317 @@
+README for slink_cd v 1.13, released Mar 31 1999
+(c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+
+What this program does
+======================
+It will create CDs of Debian from a local set of files. You will
+probably need to mirror most of the Debian site; check out the Debian
+mirror package for an example of how to this. A full mirror will take
+about 7GB at the time of writing.
+
+What this program doesn't do
+============================
+It does not fix world hunger or bring peace on earth. And it's not
+guaranteed to work at all, in fact. But if you have any problems,
+please contact me and tell me about them. I'll be glad to help and to
+fix any bugs that you might find.
+
+What it needs
+=============
+You will almost definitely need a Linux box to run the scripts here,
+preferably a Debian one. I haven't had the chance to test on other
+machines, but I'm fairly certain there are bits that won't run.
+
+To make the full set of images you will need a lot of disk space -
+each CD image will take up ~600MB. And of course you'll need the
+mirror itself for the files. But this no longer has to be local - see
+"Making a symlink-farm" below.
+
+In terms of other software, you'll need 
+
+	perl
+	bash
+	sed
+	awk (any awk should do)
+	
+These _should_ be standard on any Linux system. You'll also need:
+
+	mkisofs/mkhybrid (a recent version - the standard one in Debian slink 
+                      should do)
+
+	a PATCHED mkhybrid (if you want to use the symlink-farm method - see below)
+
+	slice (to create the slink1.needed file from master)
+
+	dpkg-multicd (VERY Debian-specific. Maybe it will work on other systems, 
+                  but I don't know and you'll probably have to play with it)
+
+	cdwrite/cdrecord (to write the images once you've created them. They will 
+                      be standard ISO images, so even most *spit* Windoze CD 
+                      creation programs should be able to write them at a 
+                      push.)
+	sysutils
+	pkg-order
+	dpkg-perl
+	unzip (for i386 bootable CDs)
+	lha (for m68k CDs)
+	silo (if you want to create sparc disks - this may be problematic
+		  on non-sparc machines)
+	isomarkboot (for alpha CDs - source is in the aboot package, binaries
+		         for i386 and alpha are contained in this tar file)
+	m68k-cd-misc.tar.gz (from the same place you got this package, 
+						 for m68k CDs. Copy it to $BASEDIR before you start.)
+	hfsutils (for Mac stuff on m68k CDs)
+
+There may be other things too, but for now these are all I can think of.
+
+How do I use it?
+================
+To be reading this, you must have extracted the tar file. Good
+start. Next what you need to do is:
+
+	customise the file lists (slink<n>.{needed,useful,list}) if necessary
+	edit slink<n>.info (dselect multicd disk info)
+	list any extras in slink<n>.extras
+	edit slink<n>.volid (ISO VOLID)
+	edit mkisofsrc (other ISO headers)
+	list any packages to be excluded in exclude-$ARCH if necessary
+	set up parameters in slink_cd or in the environment
+	run slink_cd with appropriate parameters
+
+Huh?
+====
+Customise the file lists if you want to. The lists distributed with
+this program should work for most people, and will be the basis of the
+official Debian slink CD images when they are made. 
+
+The (Debian) contents of discs 1 and 2 are calculated at run-time to
+match as closely as possible the list of files needed by the Debian
+install programs, and then the rest of the packages are split
+(hopefully) sensibly. If you wish to produce a single standalone disc
+of the key parts of Debian, this is easy - see "Single Debian discs"
+below. If you want to create more complete sets, this is also easy.
+
+The file "master" lists the packages that are REQUIRED for all the
+standard suggested systems to work at first install. These packages
+come to about 300MB in total. The file "slink1.useful" contains a list
+of further packages that I and others thought should also go on the
+first disc and these take about 220MB more. This second list can
+easily be modified if you so desire, but if you do please be careful
+that the dependencies are met, as I did. The package "pkg-order" is
+very useful here. When the lists for disc 1 is created, these packages
+plus any others of "important", "standard" or "required" priority will
+be marked to go on disc 1. The rest of the binary packages from the
+main section will go onto disc 2, taking about 325 MB.
+
+And, finally, list the packages you want to _completely_ exclude from
+the CDs in exclude-$ARCH. Reasons for doing this may include unmet
+dependencies, broken packages, broken Packages files etc.
+
+Beyond this list of packages, the rest of the specification is quite
+easy. For each disc, a file slink<n>.list should contain a list of
+files to go onto that disc. These can list directories or files,
+either will work. The standard layout will look something like:
+
+	1: main binary-ARCH section 1
+	   docs
+       install stuff
+       boot disks
+	2: main binary-ARCH section 2
+       contrib (binary-ARCH and source)
+       (OPTIONAL) non-US (binary-ARCH and source)
+       project
+	3: main source section 1
+    4: main source section 2
+    5: (OPTIONAL) non-free (binary-ARCH and source)
+
+* ARCH is a special keyword - see below for more info.
+
+=============================================================================
+NOTE: The non-free section is not part of Debian and the programs contained
+      within are not endorsed by Debian, but they have been packaged as a
+      service to our users who may still need them until free alternatives
+      have been made available.
+=============================================================================
+
+The non-US section is slightly complicated by the fact that in most
+cases it will have to be mirrored separately, as the main Debian
+servers in the USA cannot legally export this software. <sigh> More on
+the non-US configuration later.
+
+To generate the 5th (non-free) CD you will need to specify "non-free"
+as a command-line option when running slink_cd. To add the non-US
+section on disk 2 you will need to specify "non-US" as an option.
+
+Other things to be configured:
+
+The dselect (installation) multi-cd install method uses the contents
+of a file .disk/info on each CD when determining the contents of a
+disc and in deciding which discs are needed. The .info file for each
+disc will be created using slink<n>.info. Edit these accordingly, and
+the date will automatically be added by the script when used.
+
+Extra files may be added to each disc if you desire. Many OEM
+producers of Debian CDs may want to use this - it allows you to
+customise the contents of your CDs, for example if you wish to add
+extra software of your own or other local content. Simply list them in
+slink<n>.extras.
+
+The CD Volume ID for each disk will be created from the contents of
+slink<n>.volid.
+
+If you wish to configure other options in the CD ISO headers, edit
+mkisofsrc. See the mkhybrid/mkisofs documentation for more details.
+
+=============================================================================
+          Working examples for all of these files are given. 
+=============================================================================
+
+* In ALL of these files, the keyword "ARCH" is magic and will be
+  replaced by the appropriate architecture (i386,m68k,powerpc,sparc,alpha) 
+  when you run the scripts here. This makes it easier to produce images for 
+  several platforms in one run.
+
+e.g. in slink1.list:
+
+       dists/slink/main/binary-ARCH/Release
+
+             will become
+
+       dists/slink/main/binary-i386/Release
+
+when run to produce i386 disks.
+
+The other things to configure are found in the main slink_cd script itself:
+
+ARCH         - the target architecture
+MIRROR       - the location of your Debian mirror
+NONUS        - the location of the non-US part of your Debian mirror, 
+			   if applicable
+MKISOFS      - the location of your mkisofs/mkhybrid program
+MKISOFS_OPTS - the options to use with your mkisofs/mkhybrid program
+TDIR         - the location of the temporary directory to use. This must be 
+               on the same partition as your mirror, unless you use the 
+               "genlinks" option to create a sym-link farm (below)
+OUT          - the directory in which we should write the completed images
+BOOTDIR      - (sparc specific) - where do we find silo?
+
+All of these can be changed by using environment variables, which is
+especially useful when making CDs for multiple architecture in one
+run. See the "arch" script for an example of this. 
+
+Making a sym-link farm
+======================
+When slink_cd is run, temporary trees/files will be made under
+$TDIR. This no longer MUST be on the same partition as the mirror,
+for the hard-links hack to work. There is now a new option,
+"genlinks", which will create a tree of sym-links for you from a
+mirror elsewhere, be it scattered across several mount points (small
+disks) or mounted readonly via NFS from another machine. The CD images
+can then be created from the sym-link farm. There are a couple of
+limitations to this method, so the original hard-links method will
+still be preferred and is the default. These limitations are:
+
+speed: 			the sym-links method is much slower, for a variety of reasons
+reliability:	the final "du" output of the script is no use with sym-links, 
+				so you will probably have to create the CD images to make sure
+				all is well in testing.
+compatibility:  the hard-links method will work with any recent version of 
+				mkhybrid/mkisofs, but to use the sym-links method you need a 
+				specially patched version of mkhybrid. 
+
+There is a patch for mkhybrid 1.12a4.7 included with this
+program. Grab the original source from
+http://www.ps.ucl.ac.uk/~jcpearso/mkhybrid.html or
+http://www.chiark.greenend.org.uk/~stevem/DebianCD/ . There is also a
+statically-linked i386 binary at the latter site. You will also need
+to add the "-F" option to the mkhybrid command line for this sym-links
+hack to work.
+
+Non-US
+======
+To make Debian CDs with the non-US section you will need to specify
+the location of your non-US mirror, and also add "non-US" to the
+slink_cd command line. The default place for the non-US stuff is on
+disc 2, but this can be changed.
+
+Non-free
+========
+To make a set of Debian CDs with the non-free section you will need to
+add "non-free" to the slink_cd command line. This will create a tree
+etc. for the fifth disc, containing non-free. Attempting to create the
+fifth disc without specifying "non-free" will fail. See the earlier
+disclaimer about the non-free section. CD producers should definitely
+read the copyrights of non-free packages to check they can sell them on
+CD before doing so. Debian packages contain copyright information in
+/usr/doc/<package-name>/copyright.
+
+Single Debian discs
+===================
+Some producers may want to make single Debian CDs that will work on
+their own without mentioning packages that would be on the other
+CDs. The "single_disk" option should work for these people. And check
+the extras lists above if you want to add more of your own
+software/data to this single disc - the layout has been specifically
+optimised so you have ~100MB of space there for you. Of course, this
+layout will mean that many of the Debian binary packages will not be
+packaged up and also there will be no source. Check the GPL and other
+licenses to see what this means to you...
+
+Complete options list
+=====================
+You can specify any combination of steps to do on the command-line:
+
+   clean       removes old link trees
+   genlist     creates a list of files optimised to make disc#1 as standalone 
+               as possible, with ~100MB spare for local customisations 
+	           (see "extras"). Check the contents of "slink1.useful" - 
+               this lists the Priority: optional main binary-$ARCH packages 
+               that will be moved to CD#1. Also checks that the Packages file
+               is up-to-date (maybe not on a borken mirror) and creates a new 
+               one if not.
+   genlinks    creates a sym-link farm in $TDIR/tmp-mirror to work from
+   tree        creates new link trees
+   single_disk makes a single disc (#1) which will stand alone (SEE BELOW)
+   flatten     goes through the trees removing sym-links outside of the 
+               selected dist
+   md5check    checks the md5sums of all the packages and boot disks 
+               in the trees
+   packages    creates Packages.cd files to go on each CD, and then checks them
+               for consistency of dependencies
+   boot        adds the bootable CD and install tools as appropriate
+   extras      adds specified extras to the CDs (see below)
+   md5list     creates a complete md5sum of each CD tree to go on the disk
+   images      actually create all the ISO images. Make sure all the necessary 
+               steps above have been run first, or these images may be 
+               complete garbage
+   image<x>    Create image number x, where x is 1-4 or can also be 5 if 
+               non-free is built.
+   imagesums   Once the images are made, make md5sums of them into "MD5SUMS"
+   i386        targets binary-i386
+   m68k        targets binary-m68k
+   alpha       targets binary-alpha
+   sparc       targets binary-sparc
+   powerpc     targets binary-powerpc
+   non-free    adds the stuff for CD #5 (non-free)
+   non-US      adds the non-US stuff for CD #2. 
+   -v          increments the debug level. Default level is 0, maximum is 3
+   force_deps  continue on even if the pkg-order check fails in "packages" 
+			   above. Use with care!
+
+N.B. "single_disk" should now be obsoleted due to changes in the
+layouts, but should still work.
+
+If you specify no command-line options then the standard set of
+commands (see below) will be done in order. THIS WILL NOT MAKE ANY
+IMAGES.
+
+Some options will not work together. Some options depend on others
+Some of these combinations are obvious, but in particular:
+
+	"tree" needs "genlist"
+	"flatten" will not work with "genlinks"
+	"image5" needs "non-free"
+	"single_disk" will not work with "non-free" or "non-US"
+	"imagesums" needs at least one "image[12345x]"
+
+END.

@@ -1,0 +1,12 @@
+project
+doc
+README.*
+dists/slink/main/source/admin
+dists/slink/main/source/base
+dists/slink/main/source/comm
+dists/slink/main/source/devel
+dists/slink/main/source/doc
+dists/slink/main/source/editors
+dists/slink/main/source/electronics
+dists/slink/main/source/games
+dists/slink/main/source/graphics
