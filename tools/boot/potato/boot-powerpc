@@ -37,6 +37,7 @@ INSTALLDIR="$CDROOT/install"
 # Apus, MBX and BBox will hopefully follow
 #
 # -- We need a generic boot-loader --
+# -- (We wish) --
 #
 cd $INSTALLDIR
 # ---- auto-booting section -----
@@ -132,6 +133,7 @@ cp $DISKSROOT/powermac/images-1.44/rescue.bin powermac
 echo Installing PReP files
 mkdir prep
 cp $DISKSROOT/prep/linux prep
+cp $DISKSROOT/prep/images-1.44/boot.bin prep
 cp $DISKSROOT/prep/images-1.44/root.bin prep
 cp $DISKSROOT/prep/images-1.44/rescue.bin prep
 

@@ -10,7 +10,7 @@ BDIR=$TDIR/$CODENAME-$ARCH
 
 # boot-disk location for documentation is inconsistant --jwest
 if [ "$ARCH" = "powerpc" ]; then
-	DOCDIR="docs"
+	DOCDIR="doc"
  elif [ "$ARCH" = "i386" ]; then 
          DOCDIR="doc"
  elif [ "$ARCH" = "sparc" ]; then
