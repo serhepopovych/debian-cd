@@ -18,6 +18,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Add 2.6 kernels to ia64 netinst CDs (and incidentially, update to
       2.4.27).
     - Drop i386 floppies that have gone away in d-i.
+    - Put 2.4, not 2.6 kernels on hppa cd.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.

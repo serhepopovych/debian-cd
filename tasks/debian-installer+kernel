@@ -57,10 +57,10 @@ kernel-image-netbootable
 #endif
 #ifdef ARCH_hppa
 discover1
-kernel-image-2.6.8-1-32-smp
-kernel-image-2.6.8-1-64
-kernel-image-2.6.8-1-64-smp
-kernel-image-netbootable
+kernel-image-2.4.27-32
+kernel-image-2.4.27-32-smp
+kernel-image-2.4.27-64
+kernel-image-2.4.27-64-smp
 #endif
 #ifdef ARCH_ia64
 discover1

@@ -73,7 +73,7 @@ cat >> debian-installer+kernel << EOF
 discover1
 EOF
 
-/bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
+/bin/sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-hppa/Packages|tail -n4 \
   >> debian-installer+kernel
 
