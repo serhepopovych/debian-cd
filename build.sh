@@ -34,14 +34,22 @@ if [ -f $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc ]; then
     . $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc
 fi
 SIZE_ARGS=''
-for CD in 1 2 3 4 5 6 7 8; do
+for CD in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
 	size=`eval echo '$'"BOOT_SIZE_${CD}"`
 	[ "$size" = "" ] && size=0
 	[ $CD = "1" ] && size=$(($size + $disks))
+	mult=`eval echo '$'"SIZE_MULT_${CD}"`
+	[ "$mult" = "" ] && mult=100
     FULL_SIZE=`echo "($DEFBINSIZE - $size) * 1024 * 1024" | bc`
-	echo "INFO: Reserving $size MB on the $CD cd.  SIZELIMIT=$FULL_SIZE."
+	echo "INFO: Reserving $size MB on CD $CD for boot files.  SIZELIMIT=$FULL_SIZE."
+    if [ $mult != 100 ]; then
+        echo "  INFO: Reserving "$((100-$mult))"% of the CD for extra metadata"
+        FULL_SIZE=`echo "$FULL_SIZE * $mult" / 100 | bc`
+        echo "  INFO: SIZELIMIT now $FULL_SIZE."
+    fi
 	SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$FULL_SIZE"
 done
+
 FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`
 make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 echo " ... building the images"
