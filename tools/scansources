@@ -37,24 +37,32 @@ done
 for SECT in $SECTIONS; do
 
 	if [ -d "pool/$SECT" ]; then
-	    dpkg-scansources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
+		dpkg-scansources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
 	fi
 	for DIST in $DISTS; do
-	    dpkg-scansources dists/$DIST/$SECT/source \
-		>> dists/$CODENAME/$SECT/source/Sources
-	done
-        gzip --best dists/$CODENAME/$SECT/source/Sources
-   
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
-	    if [ -d "pool/non-US/$SECT" ]; then
-		dpkg-scansources pool/non-US/$SECT \
-			> dists/$CODENAME/$SECT/source/Sources
-	    fi
-	    for DIST in $DISTSNONUS; do
-		dpkg-scansources dists/$DIST/non-US/$SECT/source \
+		if [ -d "dists/$DIST/$SECT/source" ] ; then
+			dpkg-scansources dists/$DIST/$SECT/source \
 			>> dists/$CODENAME/$SECT/source/Sources
-	    done
-	    gzip --best dists/$CODENAME/non-US/$SECT/source/Sources
+		fi
+	done
+	if [ -f dists/$CODENAME/$SECT/source/Sources ] ; then
+		gzip --best dists/$CODENAME/$SECT/source/Sources
+	fi
+
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+		if [ -d "pool/non-US/$SECT" ]; then
+			dpkg-scansources pool/non-US/$SECT \
+			> dists/$CODENAME/non-US/$SECT/source/Sources
+		fi
+		for DIST in $DISTSNONUS; do
+			if [ -d "dists/$DIST/non-US/$SECT/source" ] ; then
+				dpkg-scansources dists/$DIST/non-US/$SECT/source \
+					>> dists/$CODENAME/non-US/$SECT/source/Sources		
+			fi
+		done
+		if [ -f dists/$CODENAME/non-US/$SECT/source/Sources ] ; then
+			gzip --best dists/$CODENAME/non-US/$SECT/source/Sources
+		fi
 	fi
 	
 done
