@@ -9,6 +9,8 @@ console-keymaps-at
 console-keymaps-usb
 discover-data-udeb
 discover-udeb
+discover1-data-udeb
+discover1-udeb
 floppy-modules-*
 fat-modules-*
 cdrom-core-modules-*
@@ -30,7 +32,8 @@ userdevfs
 # These packages are for the old partitioning system, and should not be
 # included as they confuse users.
 # Note that partconf-find-partitions is used by lvmcfg-utils, so is not
-# excluded.
+# excluded likewise, partconf-mkfstab is used by autopartkit.
 partconf
-partconf-mkfstab
 partitioner
+# This is obsolete.
+discover2-data-udeb
