@@ -71,7 +71,7 @@ JIGDOSCRIPT=$(BASEDIR)/tools/jigdo_header
 endif
 
 ifndef UDEB_INCLUDE
-# Netinst/businesscard CD should have udeb_include file by default
+# Netinst/businesscard CD have different udeb_include files
 ifeq ($(INSTALLER_CD),1)
 UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_businesscard_udeb_include
 endif
@@ -79,6 +79,11 @@ ifeq ($(INSTALLER_CD),2)
 UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_netinst_udeb_include
 endif
 endif
+# Default udeb_include files.
+ifndef UDEB_INCLUDE
+UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_udeb_include
+endif
+
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
