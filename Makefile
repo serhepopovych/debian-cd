@@ -449,9 +449,9 @@ $(BDIR)/packages-stamp:
 	    if [ "$$ok" = "yes" ]; then \
 		echo "CD$$DISK contains all packages needed by debootstrap"; \
 		touch $(BDIR)/CD$$DISK/.disk/base_installable; \
-	    else \
-		echo "Unable to find debootstrap program"; \
 	    fi; \
+	else \
+	    echo "Unable to find debootstrap program"; \
 	fi; \
 	done
 	$(Q)set -e; \
