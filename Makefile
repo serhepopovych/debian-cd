@@ -331,6 +331,11 @@ $(BDIR)/list: $(BDIR)/rawlist
 
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
+# Dirty workaround for saving space on netinst images, we add some hints.
+# This is just a temporal solution, list2cds should be a little bit less
+# silly so that this is not needed. For more info have a look at
+# http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
+	/bin/echo -e "mawk\nexim4-daemon-light\nunifont" >>$(BDIR)/rawlist
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us)' - | \
