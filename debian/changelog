@@ -49,6 +49,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       translatons and all the scsi drivers.
     - Drop lowmemcheck from the CD; it is in the initrd.
     - Add wireless-tools to generate_d-i+k_list
+    - Remove the old partitioner from the CD for i386. (This should also be
+      done for other arches for which it is not default)
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)

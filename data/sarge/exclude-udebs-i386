@@ -27,3 +27,10 @@ userdevfs
 # The speakup kernel modules are not useful unless the access images are
 # provided.
 *-speakup-di
+# These packages are for the old partitioning system, and should not be
+# included as they confuse users.
+# Note that partconf-find-partitions is used by lvmcfg-utils, so is not
+# excluded.
+partconf
+partconf-mkfstab
+partitioner
