@@ -47,13 +47,13 @@ ifndef SRCVOLID
 SRCVOLID="Debian $(DEBVERSION) Src-$$num"
 endif
 ifndef MKISOFS
-MKISOFS=/usr/bin/mkhybrid
+MKISOFS=/usr/bin/mkisofs
 endif
 ifndef MKISOFS_OPTS
 #For normal users
-MKISOFS_OPTS=-a -r -T      
+MKISOFS_OPTS=-r -T
 #For symlink farmers
-#MKISOFS_OPTS=-a -r -F . -T  
+#MKISOFS_OPTS=-r -F . -T
 endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook

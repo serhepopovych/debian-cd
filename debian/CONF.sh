@@ -72,9 +72,9 @@ export APTTMP=/home/ftp/tmp/apt
 # export COPYLINK=1
 
 # Options
-# export MKISOFS=/usr/bin/mkhybrid
-# export MKISOFS_OPTS="-a -r -T"	#For normal users
-# export MKISOFS_OPTS="-a -r -F . -T"	#For symlink farmers
+# export MKISOFS=/usr/bin/mkisofs
+# export MKISOFS_OPTS="-r -T"		#For normal users
+# export MKISOFS_OPTS="-r -F . -T"	#For symlink farmers
 
 # uncomment this to if you want to see more of what the Makefile is doing
 #export VERBOSE_MAKE=1
