@@ -13,6 +13,8 @@ debian-cd (2.2.21) unstable; urgency=low
       inclusion of local udebs. Closes: #258029
     - Apply another patch from horsm@debian.org to try to look for d-i images
       in "local" dirs first. Closes: #258026
+    - Use LC_ALL=C when calling apt-cache since the output is now translated.
+      Closes: #290959
   * Steve McIntyre
     - Substantially updated update-cd:
        - Cope with Woody r3 updates taking more than 1 CD per
