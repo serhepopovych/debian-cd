@@ -61,6 +61,7 @@ kernel-image-2.6.5-1-686
 kernel-image-2.6.5-1-686-smp
 kernel-image-2.6.5-1-k7
 kernel-image-2.6.5-1-k7-smp
+kernel-image-2.6.6-1-386
 kernel-image-2.6.6-1-686
 kernel-image-2.6.6-1-686-smp
 kernel-image-2.6.6-1-k7
@@ -69,6 +70,10 @@ kernel-image-2.6.7-1-686
 kernel-image-2.6.7-1-686-smp
 kernel-image-2.6.7-1-k7
 kernel-image-2.6.7-1-k7-smp
+kernel-image-2.6.8-1-686
+kernel-image-2.6.8-1-686-smp
+kernel-image-2.6.8-1-k7
+kernel-image-2.6.8-1-k7-smp
 kernel-pcmcia-modules-2.4-386
 kernel-pcmcia-modules-2.4-586tsc
 kernel-pcmcia-modules-2.4-686
