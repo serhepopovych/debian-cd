@@ -9,6 +9,7 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
       partitioner, and discover2-data-udeb, which are not in unstable for i386
       any longer.
     - Updated exclude-udebs to match the current CD initrd package list.
+    - Access floppy reorg.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.

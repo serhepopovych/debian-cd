@@ -46,9 +46,12 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
-DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img floppy/net-drivers.img floppy/asian-root.img floppy/access/boot.img floppy/access/root.img floppy/access/drivers.img "
+DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
+# Note that floppy/access/drivers.img was renamed to cd-drivers, both
+# present for the transition.
+EXTRA_DISK_IMAGES="floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img"
 
-# Download boot images
+# Download boot images and floppies.
 for image in $BOOT_IMAGES $DISK_IMAGES; do
     if [ ! -e "$image" ]; then
 	dir=$(dirname $image)
@@ -57,6 +60,19 @@ for image in $BOOT_IMAGES $DISK_IMAGES; do
 		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
 	else
 		wget "$DI_WWW_HOME/$image" -O "$image"
+	fi
+    fi
+done
+
+# Floppies that are not really required or may be unavailable.
+for image in $EXTRA_DISK_IMAGES; do
+    if [ ! -e "$image" ]; then
+	dir=$(dirname $image)
+	mkdir -p $dir
+	if [ ! "$DI_WWW_HOME" ];then
+		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image""$image" || true
+	else
+		wget "$DI_WWW_HOME/$image" -O "$image" || rm -f "$image"
 	fi
     fi
 done
