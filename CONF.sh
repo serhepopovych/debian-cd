@@ -42,7 +42,7 @@ unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
 unset DI_CODENAME       || true
 unset MAXCDS            || true
-
+unset SPLASHPNG         || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -275,6 +275,9 @@ export PUBLISH_PATH="/home/jigdo-area/"
 
 # If set, limits the number of binary CDs to produce.
 #export MAXCDS=1
+
+# If set, overrides the boot picture used.
+#export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
 
 # Used by build.sh to determine what to build, this is the name of a target
 # in the Makefile. Use bin-official_images to build only binary CDs. The
