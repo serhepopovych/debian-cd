@@ -25,6 +25,8 @@ if [ -n "$LOCAL" ]; then
   SECTIONS="$SECTIONS local"
 fi
 
+
+
 cd "$2"
 
 if [ "$1" = "install" ]; then
@@ -62,22 +64,27 @@ fi
 fi
 # Copying release files
 for SECT in $SECTIONS; do
-	# Install the release files
-	if [ -e "$MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release" ]; then
-	    cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
-   		dists/$CODENAME/$SECT/binary-$ARCH/
-	fi
-	if [ -n "$NONUS" ]; then
-		cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
-		   dists/$CODENAME/non-US/$SECT/binary-$ARCH/
-	fi
+    # Install the release files
+    if [ -e "$MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release" ]; then
+	cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
+	   dists/$CODENAME/$SECT/binary-$ARCH/
+    fi
+    if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release" ]; then
+	cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
+	   dists/$CODENAME/non-US/$SECT/binary-$ARCH/
+    fi
 done
 
 if [ -n "$LOCALDEBS" -a -n "$LOCAL" ]; then
-	if [ -e $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release ]; then
-	   cp $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release \
-   		dists/$CODENAME/local/binary-$ARCH/
-	fi
+    if [ -e $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release ]; then
+       cp $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release \
+	    dists/$CODENAME/local/binary-$ARCH/
+    fi
+fi
+
+if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer/binary-$ARCH/Release" ]; then
+    cp $MIRROR/dists/$CODENAME/main/debian-installer/binary-$ARCH/Release \
+       dists/$CODENAME/main/debian-installer/binary-$ARCH/
 fi
 
 # Generating Packages files
@@ -85,9 +92,11 @@ apt-ftparchive generate $PREFIX.generate-binary
 if [ -n "$NONUS" ]; then
     apt-ftparchive generate $PREFIX.generate-binary-non-US
 fi
-
-
+if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+    apt-ftparchive generate $PREFIX.generate-binary-debian-installer
 fi
+
+fi ## END "$1" = "install"
 
 # Prepare the files needed to generate the Packages files
 if [ "$1" != "scan" ]; then exit 0; fi
@@ -178,6 +187,40 @@ Tree "dists/$CODENAME/non-US" {
     SrcOverride "override.$CODENAME.\$(SECTION).src";
 }
 EOF
+cat >$PREFIX.generate-binary-debian-installer <<EOF
+Dir::ArchiveDir "$2";
+Dir::OverrideDir "$BDIR/indices";
+Dir::CacheDir "$APTTMP/$CODENAME-$ARCH/apt-ftparchive-db";
+
+TreeDefault::Contents " ";
+
+Tree "dists/$CODENAME/main" {
+    FileList "$PREFIX.filelist_main";
+    Sections "debian-installer";
+    Architectures "$ARCH";
+    
+    BinOverride "override.$CODENAME.main.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.main";
+    SrcOverride "override.$CODENAME.main.src";
+    Packages::Extensions ".udeb";
+}
+EOF
+if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
+cat >>$PREFIX.generate-binary-debian-installer <<EOF
+
+Tree "dists/$CODENAME/local" {
+    Sections "debian-installer";
+    Architectures "$ARCH";
+    
+    BinOverride "override.$CODENAME.local.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.local";
+    SrcOverride "override.$CODENAME.local.src";
+    Packages::Extensions ".udeb";
+}
+EOF
+fi
+
+
 # Creating the indices directory
 if [ ! -d "$BDIR/indices" ]; then
     mkdir $BDIR/indices
@@ -191,6 +234,14 @@ if [ ! -d "$BDIR/indices" ]; then
 	touch $BDIR/indices/override.$CODENAME.extra.$SECT
 	touch $BDIR/indices/override.$CODENAME.$SECT.src
     done
+    if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+	touch $BDIR/indices/override.$CODENAME.main.debian-installer
+    fi
+    if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
+	touch $BDIR/indices/override.$CODENAME.local.debian-installer
+	touch $BDIR/indices/override.$CODENAME.extra.local
+	touch $BDIR/indices/override.$CODENAME.local.src
+    fi
 fi
 if [ -n "$NONUS" -a ! -d "$BDIR/indices-non-US" ]; then
     mkdir $BDIR/indices-non-US

@@ -62,6 +62,15 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	  echo "deb file:${SECURITY:-$MIRROR} $CODENAME/updates $sections" \
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
         fi
+	# Debian-installer
+	if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+	  echo "deb file:$MIRROR $CODENAME main/debian-installer" \
+	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+	fi
+	if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/debian-installer" ]; then
+	  echo "deb file:${LOCALDEBS:-$MIRROR} $CODENAME local/debian-installer" \
+	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+	fi
 fi
 
 temp=$APTTMP/$CODENAME-$ARCH/temp.apt-selection

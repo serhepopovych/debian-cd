@@ -435,9 +435,12 @@ $(SDIR)/CD1/.disk/info:
 # Adding the deb files to the images
 packages: bin-infos bin-list $(BDIR)/packages-stamp
 $(BDIR)/packages-stamp:
+	@echo "Current disk usage on the binary CDs (before the debs are added) :"
+	@cd $(BDIR) && du -sm CD[0123456789]*
 	@echo "Adding the selected packages to each CD :"
 	@# Check that all packages required by debootstrap are included
 	@# and create .disk/base_installable if yes
+	@# Also create .disk/base_components
 	$(Q)for DISK in $(FIRSTDISKS); do \
 	if [ -x "/usr/sbin/debootstrap" ]; then \
 	    ok=yes; \
@@ -456,6 +459,10 @@ $(BDIR)/packages-stamp:
 	    fi; \
 	else \
 	    echo "Unable to find debootstrap program"; \
+	fi; \
+	echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
+	if [ -n "$(LOCAL)" ]; then \
+	    echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
 	fi; \
 	done
 	$(Q)set -e; \

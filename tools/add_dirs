@@ -2,32 +2,28 @@
 
 # Create the needed directories before putting packages into them
 
-SECTIONS="admin base comm devel doc editors electronics games graphics \
-          hamradio interpreters libs mail math misc net news oldlibs \
-	  otherosfs science shells sound tex text utils web x11"
-
 set -e
 
 # There's no difference between NONFREE and EXTRANONFREE for this script
 if [ "${EXTRANONFREE:-0}" != "0" ]
 then
-	NONFREE=1
+    NONFREE=1
 fi
 
 cd $1
 
 if [ ! -e debian ] ; then
-	ln -sf . debian
+    ln -sf . debian
 fi
 
 if [ ! -d dists/$CODENAME ] ; then
-	mkdir -p dists/$CODENAME
-	ln -sf $CODENAME dists/stable
-	ln -sf $CODENAME dists/unstable
-	ln -sf $CODENAME dists/frozen
+    mkdir -p dists/$CODENAME
+    for name in stable unstable frozen testing; do
+	ln -sf $CODENAME dists/$name
+    done
 fi
 
-# Commidity link for tools which want local in dists/local/local ...
+# Commodity link for tools which want local in dists/local/local ...
 if [ -n "$LOCAL" ]
 then
     ln -sf $CODENAME dists/local
@@ -35,54 +31,40 @@ fi
 
 
 if [ ! -d .disk ] ; then
-	mkdir .disk
+    mkdir .disk
 fi
 
-for i in $SECTIONS
-do
-        mkdir -p dists/$CODENAME/main/binary-$ARCH/$i
-        mkdir -p dists/$CODENAME/main/binary-all/$i
-        mkdir -p dists/$CODENAME/main/source/$i
-        mkdir -p dists/$CODENAME/contrib/binary-$ARCH/$i
-        mkdir -p dists/$CODENAME/contrib/binary-all/$i
-        mkdir -p dists/$CODENAME/contrib/source/$i
-        if [ "${NONFREE:-0}" != "0" ]; then
-                mkdir -p dists/$CODENAME/non-free/binary-$ARCH/$i
-                mkdir -p dists/$CODENAME/non-free/binary-all/$i
-                mkdir -p dists/$CODENAME/non-free/source/$i
-        fi
-        if [ -n "$LOCAL" ]; then
-                mkdir -p dists/$CODENAME/local/binary-$ARCH/$i
-                mkdir -p dists/$CODENAME/local/binary-all/$i
-                mkdir -p dists/$CODENAME/local/source/$i
-        fi
-done
-
+mkdir -p dists/$CODENAME/main/binary-$ARCH
+mkdir -p dists/$CODENAME/main/source
+mkdir -p dists/$CODENAME/contrib/binary-$ARCH
+mkdir -p dists/$CODENAME/contrib/source
+if [ "${NONFREE:-0}" != "0" ]; then
+    mkdir -p dists/$CODENAME/non-free/binary-$ARCH
+    mkdir -p dists/$CODENAME/non-free/source
+fi
+if [ -e "$MIRROR/dists/$CODENAME/main/debian-installer" ]; then
+    mkdir -p dists/$CODENAME/main/debian-installer/binary-$ARCH
+fi
+    
 if [ -n "$SECURITY" ]; then
     mkdir -p dists/$CODENAME/updates/main/binary-$ARCH
-    mkdir -p dists/$CODENAME/updates/main/binary-all
     mkdir -p dists/$CODENAME/updates/main/source
     mkdir -p dists/$CODENAME/updates/contrib/binary-$ARCH
-    mkdir -p dists/$CODENAME/updates/contrib/binary-all
     mkdir -p dists/$CODENAME/updates/contrib/source
     if [ "${NONFREE:-0}" != "0" ]; then
         mkdir -p dists/$CODENAME/updates/non-free/binary-$ARCH
-        mkdir -p dists/$CODENAME/updates/non-free/binary-all
         mkdir -p dists/$CODENAME/updates/non-free/source
     fi
 fi
 
 if [ -n "$NONUS" ]; then
-        mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
-        mkdir -p dists/$CODENAME/non-US/main/binary-all
-        mkdir -p dists/$CODENAME/non-US/main/source
-        mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
-        mkdir -p dists/$CODENAME/non-US/contrib/binary-all
-        mkdir -p dists/$CODENAME/non-US/contrib/source
-        if [ "${NONFREE:-0}" != "0" ]; then
-                mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
-                mkdir -p dists/$CODENAME/non-US/non-free/binary-all
-                mkdir -p dists/$CODENAME/non-US/non-free/source
-        fi
+    mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
+    mkdir -p dists/$CODENAME/non-US/main/source
+    mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
+    mkdir -p dists/$CODENAME/non-US/contrib/source
+    if [ "${NONFREE:-0}" != "0" ]; then
+	    mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
+	    mkdir -p dists/$CODENAME/non-US/non-free/source
+    fi
 fi
 

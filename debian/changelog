@@ -3,8 +3,16 @@ debian-cd (2.2.16) unstable; urgency=low
   * UNRELEASED
   * Updated standards-version to 3.5.7.
   * Use debhelper 4 (build-depends on it, updated DH_COMPAT).
+  * WARNING: potato is now mostly unsupported, some cruft has been
+    removed that may have been useful for generating potato CDs.
+  * Added debian-installer support. debian-installer is automatically
+    used if $MIRROR/dists/$CODENAME/main/debian-installer exists.
+    (however you have to require the inclusion of the udeb via the
+    task mechanism, cf tasks/debian-installer for the current list)
+  * Added all files for sarge (in tasks/ data/ and tools/).
+  * Updated isolinux.bin from syslinux 1.75-1.
 
- -- Raphael Hertzog <hertzog@debian.org>  Tue, 17 Sep 2002 21:29:30 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Thu, 10 Oct 2002 14:52:15 +0200
 
 debian-cd (2.2.15) unstable; urgency=low
 
