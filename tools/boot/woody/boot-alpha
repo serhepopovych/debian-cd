@@ -51,22 +51,4 @@ for subarch in avanti avanti-s xl xlt cabriolet eb66 eb66p eb64p eb164 pc164 \
   esac
 done
 
-mkdir $CDDIR/tools/rawrite1
-(cd $CDDIR/tools/rawrite1; \
-   unzip -Lq $MIRROR/tools/rawrite1.zip )
-
-mkdir $CDDIR/tools/rawrite2
-(cd $CDDIR/tools/rawrite2; \
-   unzip -Lq $MIRROR/tools/rawrite2.zip; \
-   rm rawrite2.c )
-
-(echo "Tools for DOS :" ; \
-   echo "rawrite1/       rawrite 1.3 : create disks from disk images (*.bin)"; \
-   echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
-   echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
-   ) |todos > $CDDIR/tools/README.tools
-
-cp $CDDIR/tools/rawrite1/rawrite3.com $CDDIR/install/rw1_3.com
-cp $CDDIR/tools/rawrite2/rawrite2.exe $CDDIR/install/rw2_0.exe
-
 exit 0

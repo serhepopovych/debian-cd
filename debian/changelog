@@ -6,6 +6,8 @@ debian-cd (2.2.8) unstable; urgency=low
   * Update the "Components" field of the Release files. Was
     causing a bug in debootstrap.
   * Add support for hppa (Richard Hirst).
+  * Removed the last reference to unzip. No more references to lha
+    either. So debian-cd can go in main.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 19 Aug 2001 13:42:27 +0200
 
