@@ -1,7 +1,5 @@
-debian-cd (2.2.4) unstable; urgency=low
+debian-cd (2.2.4) unstable; urgency=medium
 
-  * UNRELEASED
-    ----------
   * All (i386) CD's now have a different kernel from boot-disks.
   * Updated pi-makelist, now excludes all of the sparc live filesystem.
   * Added Recommends: debianutils because pi-makelist uses tempfile(1)
@@ -23,7 +21,7 @@ debian-cd (2.2.4) unstable; urgency=low
   * Updated and reorganized package/popularity lists, as produced by the
     "Useful CD 1 Project". More info in tasks/README.
 
- -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 28 Apr 2001 23:56:14 +0200
  
 debian-cd (2.2.3) unstable; urgency=low
 
