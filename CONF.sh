@@ -175,7 +175,7 @@ export DEFSRCSIZE=635
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
-#export NORECOMMENDS=1
+export NORECOMMENDS=1
 
 # Set this if the suggested packages should be skipped when adding 
 # package on the CD.  The default is 'true'.
