@@ -14,6 +14,9 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
          architecture.
        - (Optionally) use JTE mkisofs extensions to create jigdo
          files directly.
+    - Added amd64 support in several places, looking (oddly) very similar
+      to i386 for now. The help texts displayed by isolinux at boot still
+      need updating - HELP!
   * Stephen R. Marenka
     - m68k: add kernel-image-2.4.27-amiga to debian-installer+kernel.
   * Santiago Garcia
