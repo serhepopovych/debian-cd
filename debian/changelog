@@ -17,6 +17,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       uses dhcp-client-udeb.
     - Remove console-keymaps from all udeb_includes; they are included
       on the cdrom initrds.
+    - Add appropriate kernel-pcmcia-modules package to
+      debian-installer+kernel task for i386.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
