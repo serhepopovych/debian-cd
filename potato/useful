@@ -14,6 +14,10 @@
 # documentation, "man slice" or http://www.engelschall.com/sw/slice/.
 :DONOTKEEP]
 
+# these additions are a hack to be able to generate a
+# useful CD1 for potato.  They ARE only useful for i386
+# as of 7-1-99 there are NO boot-disks for potato!
+# start potato hack...
 alsalib0.3.0
 alsalib0.3.2
 gnome-bin
@@ -74,6 +78,7 @@ libjpeg62
 libmpeg1
 zlib1g
 
+# end potato hack
 
 # The packages here are taken to fill space, trying to find useful ones
 adjtimex
