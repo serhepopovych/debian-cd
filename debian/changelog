@@ -7,6 +7,8 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
       put myself into Uploaders (as well as Santiago Garcia Mantinan & Steve
       McIntyre). That's because I'm not keeping up well enough with debian-cd
       and I need more people involved in managing bugs.
+    - Apply patch from Horms <horms@debian.org> to fix some problems with
+      inclusion of local udebs. Closes: #258029
   * Joey Hess
     - Exclude all the new amd64 kernel images from cd #1, no space.
     - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
@@ -54,7 +56,7 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Update tasks/base-sarge for debootstrap 0.2.45. This includes the
       following removals:
          - aboot: already listed in debian-installer+kernel
-         - gcc-3.2-base, libdb2, libgcrypt1, libgnutls7, libident, 
+         - gcc-3.2-base, libdb2, libgcrypt1, libgnutls7, libident,
            libdb2, libtasn1-0: obsolete
          - modconf: obsoleted by d-i
          - setserial: not base anymore
@@ -74,7 +76,7 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
            libgpg-error0, libtasn1-2: new libraries
          - console-tools: now installed by debootstrap even on s390
 
- -- Joey Hess <joeyh@debian.org>  Mon, 25 Oct 2004 03:03:36 -0400
+ -- Raphael Hertzog <hertzog@debian.org>  Wed, 12 Jan 2005 17:07:56 +0100
 
 debian-cd (2.2.20) unstable; urgency=medium
 

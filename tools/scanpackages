@@ -221,6 +221,7 @@ if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-in
 cat >>$PREFIX.generate-binary-debian-installer <<EOF
 
 Tree "dists/$CODENAME/local" {
+    FileList "$PREFIX.filelist_local";
     Sections "debian-installer";
     Architectures "$ARCH";
     

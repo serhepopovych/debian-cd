@@ -44,6 +44,10 @@ if [ "${NONFREE:-0}" != "0" ]; then
     mkdir -p dists/$CODENAME/non-free/binary-$ARCH
     mkdir -p dists/$CODENAME/non-free/source
 fi
+
+if [ -n "$LOCAL"  -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
+    mkdir -p dists/$CODENAME/local/debian-installer/binary-$ARCH
+fi
 if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
     mkdir -p dists/$CODENAME/main/debian-installer/binary-$ARCH
 fi
@@ -74,3 +78,7 @@ if [ -n "$NONUS" ]; then
     fi
 fi
 
+if [ -n "$LOCAL" ]; then
+    mkdir -p dists/$CODENAME/local/binary-$ARCH
+    mkdir -p dists/$CODENAME/local/source
+fi
