@@ -8,6 +8,8 @@
 # Do install stuff for m68k, including making bootable CDs or BVME4000/6000
 #
 
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
 set -e
 #set -x
 
@@ -23,6 +25,8 @@ echo -n "--netatalk -J -hfs -probe -map $BASEDIR/data/hfs.map" \
 if [ $N != 1 ]; then
 	exit 0
 fi
+
+install_languages $CDDIR
 
 # Get real name of current disks directory
 DISKSDIR=$CDDIR/dists/$CODENAME/main/disks-$ARCH

@@ -2,8 +2,18 @@ debian-cd (2.2.14) unstable; urgency=low
 
   * UNRELEASED.
   * Updated the script to update tasks/base-woody. Closes: #138651
+  * Anne commited stuff for inclusion of a local security.debian.org.
+  * Added NOSUGGESTS in a similar way than NORECOMMENDS. Thanks
+    to Petter Reinholdtsen <pere@hungry.com>.
+  * Added "decompacted language packs" to the bootable CDs.
+    Closes: #139179
+  * Corrected name of kernel s/linux/linux.bin/ (why the hell
+    do they need to change that name now ...). Closes: #139503
+    Change has been made for arches where the latest bf are
+    available. More may need to come for arches like sparc
+    which are catching up with bf.
 
- -- Raphael Hertzog <hertzog@debian.org>  Sun, 17 Mar 2002 00:05:11 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Mon, 25 Mar 2002 10:53:01 +0100
 
 debian-cd (2.2.13) unstable; urgency=low
 

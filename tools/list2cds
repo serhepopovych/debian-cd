@@ -22,6 +22,7 @@ my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $exclude = $ENV{'EXCLUDE'} || "$list.exclude";
 my $norecommends = $ENV{'NORECOMMENDS'} || 0;
+my $nosuggests = $ENV{'NOSUGGESTS'} || 1;
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
 my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
@@ -192,7 +193,7 @@ while (defined($_=<LIST>)) {
 	    msg(3, "$_ has already been included.\n");
 	    next;
 	}
-	add_package ($_, ! $norecommends);
+	add_package ($_, ! $norecommends, ! $nosuggests);
 }
 close LIST;
 
@@ -207,7 +208,7 @@ if ($complete) {
     foreach $p (sort { ($packages{$a}{"Section"} cmp $packages{$b}{"Section"})
                     || ($a cmp $b) }
              grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
-	add_package ($p, 0);
+	add_package ($p, 0, 0);
     }
 }
 msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
@@ -233,7 +234,7 @@ if ($extranonfree and (! $nonfree))
 	# Include non-free packages
 	foreach $p (@toinclude)
 	{
-		add_package($p, 1);
+		add_package($p, 1, 1);
 	}
 
 	# If a contrib package was listed in the list of packages to
@@ -251,7 +252,7 @@ if ($extranonfree and (! $nonfree))
 	          	 "(ignored)\n");
 		  next;
 		}
-		add_package ($_, 1);
+		add_package ($_, 1, 1);
 	}
 	close LIST;
 
@@ -264,7 +265,7 @@ if ($extranonfree and (! $nonfree))
 			grep { not ($included{$_} or $excluded{$_}) } 
 			keys %packages) 
 	    {
-		add_package ($p, 0);
+		add_package ($p, 0, 0);
 	    }
 	}
 
@@ -409,7 +410,8 @@ sub read_virtualdepends {
 
 sub add_package {
 	my $p = shift;
-	my $add_rec = shift; # Do we look for recommends/suggests
+	my $add_rec = shift; # Do we look for recommends
+	my $add_sug = shift; # Do we look for suggests
 	
 	msg(2, "+ Trying to add $p...\n");
 	if ($included{$p}) {
@@ -438,8 +440,8 @@ sub add_package {
 	msg(3, "  \@dep after checklist = @dep\n");
 	
 	if ($add_rec) {
-	    #TODO: Look for recommends & suggests (not yet included !!)
-		add_suggests (\@dep);
+	    #TODO: Look for recommends (not yet included !!)
+		add_recommends (\@dep);
 	    	# Check again but doesn't fail if one of the package cannot be
 	    	# installed, just ignore it (it will be removed from @dep)
 	    	if (not check_list (\@dep, 0)) {
@@ -447,6 +449,18 @@ sub add_package {
 	    		return;
 	    	}
 		msg(3, "  \@dep after checklist2 = @dep\n");
+	}
+	
+	if ($add_sug) {
+	    #TODO: Look for suggests (not yet included !!)
+		add_suggests (\@dep);
+	    	# Check again but doesn't fail if one of the package cannot be
+	    	# installed, just ignore it (it will be removed from @dep)
+	    	if (not check_list (\@dep, 0)) {
+	    		msg(0, "UNEXPECTED: It shouldn't fail here !\n");
+	    		return;
+	    	}
+		msg(3, "  \@dep after checklist3 = @dep\n");
 	}
 	
 	# All packages are ok, now check for the size issue
@@ -483,8 +497,18 @@ sub add_suggests {
 	my @copy = @{$list}; # A copy is needed since I'll modify the array
 	
 	foreach $p (@copy) {
-		add_missing($list, $packages{$p}{"Recommends"});
 		add_missing($list, $packages{$p}{"Suggests"});
+	}
+		
+}
+
+sub add_recommends {
+	my $list = shift;
+	my $p; # = shift;
+	my @copy = @{$list}; # A copy is needed since I'll modify the array
+	
+	foreach $p (@copy) {
+		add_missing($list, $packages{$p}{"Recommends"});
 	}
 		
 }

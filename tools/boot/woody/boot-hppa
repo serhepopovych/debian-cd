@@ -7,6 +7,8 @@
 
 # palo is used to make ISOs bootable on HPPA.
 
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
 N=$1
 CDROOT=$2
 
@@ -23,6 +25,8 @@ fi
 # matter).
 
 cp -f /usr/share/palo/iplboot $CDROOT/install
+
+install_languages $CDROOT
 
 exit 0
 

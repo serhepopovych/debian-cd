@@ -14,6 +14,8 @@
 # $1 is the CD number
 # $2 is the temporary CD build dir
 
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
 set -e
 
 N=$1
@@ -57,7 +59,7 @@ cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$NN]}/res
 
 echo -n "-J -b boot/rescue.bin "  > $N.mkisofs_opts
 
-
+install_languages $CDDIR
 
 # Only disk one gets the extra files installed
 #
@@ -93,10 +95,10 @@ fi
 # populate the install directory as well
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
 	cp -f images-1.44/resc*.bin $CDDIR/install ; \
-	cp -f linux $CDDIR/install/linux ; \
-	cp -f compact/linux $CDDIR/install/lincompt ; \
-	cp -f idepci/linux $CDDIR/install/linpci ; \
-	cp -f bf2.4/linux $CDDIR/install/lin24 ; \
+	cp -f linux.bin $CDDIR/install/linux ; \
+	cp -f compact/linux.bin $CDDIR/install/lincompt ; \
+	cp -f idepci/linux.bin $CDDIR/install/linpci ; \
+	cp -f bf2.4/linux.bin $CDDIR/install/lin24 ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
 

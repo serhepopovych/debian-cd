@@ -14,6 +14,7 @@ unset MKISOFS_OPTS
 unset EXCLUDE
 unset SRCEXCLUDE
 unset NORECOMMENDS
+unset NOSUGGESTS
 unset DOJIGDO
 unset JIGDOCMD
 unset JIGDOTEMPLATEURL
@@ -119,9 +120,13 @@ export APTTMP=/home/ftp/tmp/apt
 # We also exclude some source packages
 #export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-potato
 
-# Set this if only the required (and NOT the recommended/suggested) packages
-# should be added on CDs when a package is added on the CD.
+# Set this if the recommended packages should be skipped when adding 
+# package on the CD.  The default is 'false'.
 #export NORECOMMENDS=1
+
+# Set this if the suggested packages should be skipped when adding 
+# package on the CD.  The default is 'true'.
+#export NOSUGGESTS=1
 
 # Produce jigdo files:
 # 0/unset = Don't do jigdo at all, produce only the full iso image.
