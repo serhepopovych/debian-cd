@@ -12,6 +12,9 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Access floppy reorg.
     - Sparc daily builds moved to joshk's builds.
     - Update tasks for 2.4.27 and 2.6.8 kernels.
+    - Remove access floppies to save space on netinsts. Also remove
+      net-drivers floppy and some other things not really needed for install
+      from CD.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.
