@@ -47,6 +47,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       kernels on the CD.
     - Update task-essential-sarge to tasksel 2.05. Fix the generator to work
       with post-2002 tasksels.
+    - Update task-full-sarge and task.list to tasksel 2.05. The task.list was
+      manually ordered to give desktop task priority, followed by servers,
+      followed by languages.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
