@@ -15,6 +15,7 @@ di-utils-reboot
 busybox-cvs-udeb
 rootskel-locale
 languagechooser
+countrychooser
 hw-detect
 cdrom-detect
 cdrom-retriever
