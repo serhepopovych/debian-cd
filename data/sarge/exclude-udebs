@@ -12,23 +12,27 @@ anna
 di-utils-shell
 di-utils-reboot
 lowmemcheck
-# build/pkg-lists/cdrom/common, in d-i cvs
+# build/pkg-lists/cdrom/common, in d-i cvs (also included in the
+# root+cd-drivers floppies)
 busybox-cvs-udeb
 rootskel-locale
 languagechooser
 countrychooser
+iso-3166-udeb
 hw-detect
 cdrom-detect
 cdrom-retriever
-load-installer
+load-cdrom
 cdrom-checker
 bogl-bterm-udeb
 di-utils-terminfo
 cdebconf-priority
 cdebconf-newt-udeb
 usb-discover
+file-preseed
 nano-udeb
 floppy-retriever
+libfribidi0-udeb
 # Already on the initrd, thanks to library reduction.
 libdebconfclient0-udeb
 # A reduced version is on the initrd. Nothing currently needs the full
@@ -61,10 +65,9 @@ dhcp3-client-udeb
 pump-udeb
 # This package is only useful in the d-i-demo.
 di-utils-exit-installer
-# These loader udebs are not currently used on this CDs. That may change,
-# but for now load-installer is used.
+# No need for these loaders.
+load-installer
 download-installer
-load-cdrom
 load-floppy
 # Only useful in the hd-media initrd.
 iso-scan
