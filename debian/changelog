@@ -4,6 +4,7 @@ debian-cd (2.2.0) frozen unstable; urgency=low
   * Changes to tools/potato/boot-sparc for new bootdisk
     organization. --jwest
   * Changes to /tools/boot/potato/boot-i386 for new bootdisks --jwest
+    Closes: #59250
   * Added missing semi-colon in the target pi-makelist.
   * /install/boot.bat not working because of missing loadlin.exe fixed
   * Updates to sparc bootable
