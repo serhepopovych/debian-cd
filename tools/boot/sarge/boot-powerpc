@@ -72,8 +72,20 @@ do
   else
 	DI_DIR="di_stuff"
 	wget -r -nd --no-parent --level=1 -P "$DI_DIR" "$DI_WWW_HOME/$subarch/cdrom/"
+	# One of these two wgets will fail; the price of maintaining
+	# compatibility. The 2.4/2.6 duplication can go away once the new
+	# debian-installer image layout reaches sarge.
+	wget -r -nd --no-parent --level=1 -P "$DI_DIR/2.4" "$DI_WWW_HOME/$subarch/cdrom/2.4/"
 	wget -r -nd --no-parent --level=1 -P "$DI_DIR/2.6" "$DI_WWW_HOME/$subarch/cdrom/2.6/"
-	rm -f "$DI_DIR"/index* "$DI_DIR/2.6"/index*
+	rm -f "$DI_DIR"/index* "$DI_DIR/2.4"/index* "$DI_DIR/2.6"/index*
+	if [ -d "$DI_DIR/2.6" ]; then
+	    # Cope with old debian-installer image layout from before 2.6
+	    # became the default.
+	    mkdir -p "$DI_DIR/2.4"
+	    find "$DI_DIR" -type f -maxdepth 1 | xargs -r mv --target-directory="$DI_DIR/2.4"
+	    find "$DI_DIR/2.6" -type f -maxdepth 1 | xargs -r mv --target-directory="$DI_DIR"
+	    rm -rf "$DI_DIR/2.6"
+	fi
   fi
   cp -a "$DI_DIR" "$subarch"
   rm -rf di_stuff
