@@ -124,6 +124,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
   * Sven Luther
     - fixed powerpc list so it includes the 2.6 kernels too as well as the
       power3 and power4 2.4 kernels.
+  * Steve Langasek
+    - Add alpha and mipsel bootloaders to debian-installer+kernel,
+      so debootstrap doesn't have to install them
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
