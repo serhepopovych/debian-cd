@@ -1,0 +1,12 @@
+About the Smart Boot Manager image
+----------------------------------
+
+The file `sbm.bin' that is available in this directory may be useful
+to you if you are not able to directly boot the first CD because your
+BIOS may be too old and may not support ISOLINUX.
+
+Then, instead of booting on the CD directly, you create a Smart Boot
+Manager floppy image by using the sbm.bin disk image. You can create this
+floppy with rawrite (under DOS) or with dd (under Linux). Now you can
+boot on this floppy disk and it will detect your CDROM and let you boot
+on it bypassing any BIOS limitation.

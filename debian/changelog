@@ -1,6 +1,5 @@
-debian-cd (2.2.14) unstable; urgency=low
+debian-cd (2.2.14) unstable; urgency=high
 
-  * UNRELEASED.
   * Updated the script to update tasks/base-woody. Closes: #138651
   * Anne commited stuff for inclusion of a local security.debian.org.
   * Added NOSUGGESTS in a similar way than NORECOMMENDS. Thanks
@@ -46,8 +45,10 @@ debian-cd (2.2.14) unstable; urgency=low
   * Reworked boot-ia64 to use hardlinks and so 1_NONUS.raw is built properly.
   * Reworked post-boot-hppa to hardcode path to palo, and to ensure
     1_NONUS.raw is built properly.
+  * Added Smart Boot Manager image for people who want to boot ISOLINUX
+    image on machine with BIOS which don't support them.
 
- -- Raphael Hertzog <hertzog@debian.org>  Mon, 15 Apr 2002 13:16:25 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 28 Apr 2002 15:52:32 +0200
 
 debian-cd (2.2.13) unstable; urgency=low
 

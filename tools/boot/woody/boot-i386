@@ -95,7 +95,12 @@ if [ "$N" = "1" ] || [ "$N" = "1_NONUS" ] ; then
 # and include the legacy DOS stuff 
 
 if [ "${ISOLINUX:-0}" != "0" ]; then
-    cp -f $BASEDIR/data/woody/isolinux.txt $BASEDIR/data/woody/f*.txt boot$N/isolinux/
+    # Include Smart Boot Manager image for people where isolinux doesn't
+    # work
+    gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
+    cp $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
+    # Isolinux config files
+    cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
     cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/linpci
 APPEND root=/dev/ram ro initrd=idepci.bin ramdisk_size=16384 disksize=1.44 flavor=idepci
