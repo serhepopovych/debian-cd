@@ -80,6 +80,8 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
     - add ramdisk_size=16384 to palo call in post-boot-hppa 
+  * Colin Watson
+    - Disable CD timeout on powerpc.
 
  -- Bdale Garbee <bdale@gag.com>  Sat, 15 Jan 2005 21:33:48 -0700
 
