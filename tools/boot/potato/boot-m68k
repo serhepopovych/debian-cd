@@ -89,16 +89,18 @@ cp $S/root.bin          $D
 # Amiga extras
 D=amiga
 S=$DISKSROOT/$D
-cp $S/ReadMe_First      $D
-cp $S/StartInstall      $D
+cp $S/ReadMe_First*     $D
+cp $S/StartInstall*     $D
 cp $S/*.txt             $D
-cp $S/*.info            $D
+cp $S/*.txt.info        $D
+cp $S/install.*         $D
 cp $S/linux             $D
 cp $S/root.bin          $D
 cp $S/amiboot-5.6       $D
 # Needs to be executable
 chmod a+x $D/amiboot-5.6
-cp $S/../amiga.info     $D/..
+cp $DISKSROOT/amiga.info     $CDDIR/install
+cp $DISKSROOT/amiga.info     $CDDIR/install.info
 
 # BVME6000 extras
 D=bvme6000
