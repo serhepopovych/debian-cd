@@ -126,14 +126,19 @@ cd $INSTALLDIR
 
 # bvme6000 specific stuff
 if [ "" != "`echo $SUBARCHS | grep bvme6000`" ]; then
-	mkdir -p $CDDIR/boot1/boot
 	if [ -f bvme6000/cdrom-boot.img.gz ]; then
+		mkdir -p $CDDIR/boot1/boot
 		cp bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
-	else
+		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+    		>> $N.mkisofs_opts
+	elif [ -f cdrom/bvme6000-boot.img.gz ]; then
+		mkdir -p $CDDIR/boot1/boot
 		cp cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
+		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+    		>> $N.mkisofs_opts
+	else
+		echo "bvme6000 not bootable"
 	fi
-	echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
-    	>> $N.mkisofs_opts
 fi
 
 ##-----------------------------< end of file >------------------------------##
