@@ -9,8 +9,11 @@ for arch in i386 alpha sparc m68k
 do
   if [ "$ARCH" = "$arch" -a -d "$MIRROR/dists/$CODENAME/main/upgrade-$ARCH" ];
   then
-    cp -a $MIRROR/dists/$CODENAME/main/upgrade-$ARCH $TDIR/$CODENAME-$ARCH/1/
-    mv $TDIR/$CODENAME-$ARCH/1/upgrade-$ARCH $TDIR/$CODENAME-$ARCH/1/upgrade
+    for dir in $TDIR/$CODENAME-$ARCH/CD1*
+    do
+      cp -a $MIRROR/dists/$CODENAME/main/upgrade-$ARCH $dir/
+      mv $dir/upgrade-$ARCH $dir/upgrade
+    done
   fi
 done
 

@@ -42,6 +42,7 @@ For people that do not have time, here's the quick explanation :
 Edit the CONF.sh and change the PATHs for the mirror and so on.
 $ vim CONF.sh
 $ . CONF.sh
+$ make distclean
 $ make status
 $ make list COMPLETE=1 SIZELIMIT1=555000000 SRCSIZELIMIT=665000000
 $ make official_images
@@ -72,6 +73,9 @@ The process of building a CD is decomposed as follow :
   mirror because debian-cd uses hardlinks for generating an image 
   tree. If you can't do this, you'll have to use the symlink farm.
   The symlink farm is explained at the end of this README.
+
+- let's clean everything that may still be there from previous runs :
+  $ make distclean
 
 - now we'll check if your mirror is ok (with good Packages files) :
   $ make mirrorcheck
