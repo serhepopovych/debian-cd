@@ -102,14 +102,14 @@ mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
 # Isolinux config file.
 cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
 LABEL expert
   kernel /install/vmlinuz
-  append DEBCONF_PRIORITY=low vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/cdrom.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
