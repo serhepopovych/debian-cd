@@ -59,7 +59,7 @@ ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
 ifndef BOOTDISKS
-BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
+export BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
 endif
 
 ## Internal variables  
@@ -486,7 +486,7 @@ need-complete-mirror:
 	    echo "indices directories ! "; \
 	    exit 1; \
 	fi
-    
+
 # Add everything that is needed to make the CDs bootable
 bootable: ok disks installtools $(BDIR)/bootable-stamp
 $(BDIR)/bootable-stamp:
@@ -672,7 +672,7 @@ $(BDIR)/CD1/dists/$(CODENAME)-secured:
 		cd $$dir; \
 		$(add_secured); \
 	done
-	
+
 src-secured: $(SDIR)/CD1/dists/$(CODENAME)-secured
 $(SDIR)/CD1/dists/$(CODENAME)-secured:
 	@echo "Generating $(CODENAME)-secured on all the source CDs ..."
