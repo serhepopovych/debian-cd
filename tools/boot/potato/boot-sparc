@@ -22,56 +22,61 @@ if [ $N != 1 ]; then
 	exit 0;
 fi
 
-echo -n "boot1" > $N.mkisofs_opts
-
-rm -fr boot1
-
-# temporary mount point (eg. for silo to create the bootable CD image)
-# only needed for Sparc so far...
-#vecho Checking for temporary mount point for SILO
-mountpoint=/var/tmp/debian_cd.mnt
-if [ -d $mountpoint ]; then
-	umount $mountpoint || true
-else
-	mkdir -p $mountpoint
-fi
+echo -n "1/boot" > $N.mkisofs_opts
 
 # put the relevant parts of SILO boot loader
-mkdir -p boot1/boot
-cp -p $BOOTDIR/cd.b $BOOTDIR/second.b boot1/boot
-cat - > boot1/boot/silo.conf << __EOF__
-message=!cd1
-timeout=300
-root=/dev/ram
-image[sun4c,sun4d,sun4m]=!cd2
+mkdir -p $CDDIR/install
+ln -sf install $CDDIR/etc
+ln -sf install $CDDIR/boot
+cp -p $BOOTDIR/cd.b $BOOTDIR/second.b $CDDIR/install
+cat - > $CDDIR/install/silo.conf << __EOF__
+partition=1
+message=/install/debian.txt
+timeout=600
+read-write
+image[sun4c,sun4d,sun4m]=/install/sun4cdm/linux-a.out
    label=linux
-   initrd=!cd5
-image[sun4u]=!cd4
+   initrd=/install/root.bin
+image[sun4u]=/install/sun4u/linux-a.out
    label=linux
-   initrd=!cd5
-image[sun4c,sun4d,sun4m]=!cd3
-   label=linux-2.2
-   initrd=!cd5
-image[sun4u]=!cd4
-   label=linux-2.2
-   initrd=!cd5
+   initrd=/install/root.bin
 __EOF__
 
 # linux kernel & co are fetched directly from the install dir
 # ... put the message banner in boot/debian.txt
 
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -p linux-a.out linux-2.2.1-sun4u-a.out \
-	linux-2.2.1-a.out root.bin sparc_release_note.txt \
+	cp -pP sun4cdm/linux-a.out sun4u/linux-a.out \
 	$CDDIR/install )
-
-#echo mount -r -o loop \
-#	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/resc1440.bin \
-#	$mountpoint
-mount -r -o loop \
-	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/resc1440.bin \
-	$mountpoint
-cp -p $mountpoint/debian.txt boot1/boot/debian.txt
-umount $mountpoint
+(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+	cp -p images-1.44/root.bin $CDDIR/install )
 
 
+cat - > $CDDIR/install/debian.txt << __EOF__
+
+
+                  Welcome to Debian GNU/Linux 2.2!
+
+This is the Debian Rescue CD. Keep it once you have installed
+your system, as you can boot from it to repair the system on your
+hard disk if that ever becomes necessary.
+
+On most systems, you can go ahead and press <ENTER> to begin
+installation.  You will probably want to try doing that before you try
+anything else.  If you run into trouble, or if you already have
+questions, press the <TAB> key to list alternative boot options or
+enter the "help" keyword to show a message about SILO boot commands.
+
+WARNING: You should completely back up all of your hard disks before
+  proceeding. The installation procedure can completely and
+  irreversibly erase them! If you haven't made backups yet, remove
+  the rescue CD from the drive and enter the "halt" keyword
+  to get back to the monitor.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+
+This CD uses Linux 2.2.14
+
+Press <ENTER> to boot!
+__EOF__

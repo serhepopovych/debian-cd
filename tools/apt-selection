@@ -27,6 +27,12 @@ options=" -o Dir::State::status=$TDIR/$CODENAME-$ARCH/status \
 	  -o Dir::Etc=$TDIR/$CODENAME-$ARCH/apt/ \
 	  -o APT::Architecture=$ARCH "
 
+if [ -n "$NONFREE" ]; then
+	sections="main contrib non-free"
+else
+	sections="main contrib"
+fi
+
 # Check for the necessary dirs and files ...
 if [ ! -d "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial" ]; then
 	mkdir -p "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial"
@@ -39,7 +45,7 @@ if [ ! -d "$TDIR/$CODENAME-$ARCH/apt" ]; then
 fi
 if [ ! -e "$TDIR/$CODENAME-$ARCH/apt/sources.list" ]; then
 	# Generating a correct sources.list file
-	echo "deb file:$MIRROR $CODENAME main contrib non-free" \
+	echo "deb file:$MIRROR $CODENAME $sections" \
 	> $TDIR/$CODENAME-$ARCH/apt/sources.list
 	if [ -n "$NONUS" ]; then
 	  # Slink used the old paths
@@ -47,7 +53,7 @@ if [ ! -e "$TDIR/$CODENAME-$ARCH/apt/sources.list" ]; then
 	     echo "deb file:$NONUS $CODENAME non-US" \
 	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
 	  else
-	     echo "deb file:$NONUS $CODENAME/non-US main contrib non-free" \
+	     echo "deb file:$NONUS $CODENAME/non-US $sections" \
 	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
 	  fi
 	fi
