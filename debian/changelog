@@ -22,8 +22,13 @@ debian-cd (2.2.14) unstable; urgency=low
     disk sizes in build.sh and build_all.sh, and use the textutils
     version of md5sum to avoid missing large file support in dpkg
     version. Specify the output image sizes in CONF.sh
+  * Added ISOLINUX code (export ISOLINUX=yes in CONF.sh); this provides a
+    "rescue floppy like" boot screen that allows choosing between kernel
+    images, rather than loading the rescue disks directly from the boot
+    sector.
+  * Removed obsolete local-variables section from changelog.
 
- -- Raphael Hertzog <hertzog@debian.org>  Sat,  6 Apr 2002 10:26:42 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Mon,  8 Apr 2002 20:37:41 -0500
 
 debian-cd (2.2.13) unstable; urgency=low
 
@@ -520,7 +525,3 @@ debian-cd (0.1.0) unstable; urgency=low
   * Initial Release.
 
  -- Bruce Perens <bruce@debian.org>  Fri, 18 Apr 1997 22:20:51 -0700
-
-Local variables:
-mode: debian-changelog
-End:
