@@ -22,6 +22,9 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Update the yaboot boot.msg to match the one in d-i cvs, including
       details about setting debconf priority.
     - Link the d-i INSTALLATION-HOWTO into doc/, if it exists.
+    - Add my exclude_udebs lists, for general and i386, and modify
+      generate_di_list to not include udebs from those lists onto the
+      cdrom, to save space on the netinst cds.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 

@@ -1,0 +1,29 @@
+# These udebs build the d-i cdrom initrd. As such, there is no reason
+# to keep another copy of them on the CD in udeb form.
+#
+# This duplicates data found in the file build/pkg-lists/cdrom/i386,
+# in d-i cvs.
+isa-pnp-modules-*
+socket-modules-*
+console-keymaps-at
+console-keymaps-usb
+discover-data-udeb
+discover-udeb
+floppy-modules-*
+fat-modules-*
+cdrom-core-modules-*
+cdrom-modules-*
+ide-modules-*
+ide-core-modules-*
+input-modules-*
+fb-modules-*
+kbd-chooser
+usb-modules-*
+firewire-core-modules-*
+usb-storage-modules-*
+scsi-core-modules-*
+# Not needed with the 2.4 kernel on i386.
+userdevfs
+# The speakup kernel modules are not useful unless the access images are
+# provided.
+*-speakup-di
