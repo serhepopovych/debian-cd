@@ -52,12 +52,16 @@ cat $BASEDIR/data/sarge/sparc/debian.txt \
 # uncompress it before hand.
 
 if [ ! "$DI_WWW_HOME" ];then
-	cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom/initrd.gz" "$inst/boot/initrd.gz"
-	cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom/vmlinuz-2.4.24-sparc32" "$inst/boot/sparc32"
-	zcat "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom/vmlinuz-2.4.24-sparc64" > "$inst/boot/sparc64"
+	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom"
 else
-	wget "$DI_WWW_HOME/initrd.gz" -O "$inst/boot/initrd.gz"
-	wget "$DI_WWW_HOME/vmlinuz-2.4.24-sparc32" -O "$inst/boot/sparc32"
-	wget "$DI_WWW_HOME/vmlinuz-2.4.24-sparc64"
-	zcat vmlinuz-2.4.24-sparc64 > "$inst/boot/sparc64"
+	DI_DIR="."
+	wget "$DI_WWW_HOME" -O di.dir
+	sparc32=$(sed -n 's/.*a href="\(vmlinuz-.*-sparc32\)".*/\1/p' di.dir)
+	sparc64=$(sed -n 's/.*a href="\(vmlinuz-.*-sparc64\)".*/\1/p' di.dir)
+	wget "$DI_WWW_HOME/$sparc32" -O vmlinuz-x-sparc32
+	wget "$DI_WWW_HOME/$sparc64" -O vmlinuz-x-sparc64
+	wget "$DI_WWW_HOME/initrd.gz"
 fi
+cp "$DI_DIR"/initrd.gz "$inst/boot/initrd.gz"
+cp "$DI_DIR"/vmlinuz-*-sparc32 "$inst/boot/sparc32"
+zcat "$DI_DIR"/vmlinuz-*-sparc64 > "$inst/boot/sparc64"

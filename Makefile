@@ -345,7 +345,9 @@ $(BDIR)/rawlist:
 # This is just a temporal solution, list2cds should be a little bit less
 # silly so that this is not needed. For more info have a look at
 # http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
+ifneq ($(INSTALLER_CD),1)
 	/bin/echo -e "mawk\nexim4-daemon-light\nunifont" >>$(BDIR)/rawlist
+endif
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us)' - | \

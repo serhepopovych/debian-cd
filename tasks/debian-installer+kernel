@@ -5,13 +5,17 @@
  * This list can be generated with the command:
  * ../tools/generate_di+k_list
  *
- * Last update: Tue Apr 13 14:22:10 MDT 2004
+ * Last update: Sun Jun  6 23:08:15 MDT 2004
  */
 
 #include <debian-installer>
 eject
 locales
 lvm10
+libdevmapper1.00
+lvm-common
+lvm2
+mdadm
 aptitude
 jfbterm
 unifont
@@ -22,14 +26,16 @@ console-terminus
 pcmcia-cs
 wireless-tools
 xfsprogs
+jfsutils
 reiserfsprogs
 #ifdef ARCH_i386
 discover
 discover1
 grub
 lilo
-kernel-image-2.4.25-1-386
-kernel-pcmcia-modules-2.4.25-1-386
+kernel-image-2.4.26-1-386
+kernel-pcmcia-modules-2.4.26-1-386
+kernel-image-2.6.6-1-386
 #endif
 #ifdef ARCH_alpha
 discover1
@@ -37,37 +43,43 @@ kernel-image-2.4-generic
 kernel-image-2.4-smp
 kernel-image-2.4.25-1-generic
 kernel-image-2.4.25-1-smp
+kernel-image-2.4.26-1-generic
+kernel-image-2.4.26-1-smp
 kernel-image-2.6-generic
 kernel-image-2.6-smp
-kernel-image-2.6.3-1-generic
-kernel-image-2.6.3-1-smp
+kernel-image-2.6.5-1-generic
+kernel-image-2.6.5-1-smp
+kernel-image-2.6.6-1-generic
+kernel-image-2.6.6-1-smp
+kernel-image-netbootable
 #endif
 #ifdef ARCH_hppa
 discover1
-kernel-image-2.4.25-32
-kernel-image-2.4.25-32-smp
-kernel-image-2.4.25-64
-kernel-image-2.4.25-64-smp
+kernel-image-2.4.26-32-smp
+kernel-image-2.4.26-64
+kernel-image-2.4.26-64-smp
+kernel-image-netbootable
 #endif
 #ifdef ARCH_ia64
 discover1
 initrd-tools
-kernel-image-2.6.3-itanium
-kernel-image-2.6.3-itanium-smp
-kernel-image-2.6.3-mckinley
-kernel-image-2.6.3-mckinley-smp
+kernel-image-2.4.25-itanium
+kernel-image-2.4.25-itanium-smp
+kernel-image-2.4.25-mckinley
+kernel-image-2.4.25-mckinley-smp
 #endif
 #ifdef ARCH_mips
 arcboot
-kernel-image-2.4.22-r4k-ip22
-kernel-image-2.4.22-r5k-ip22
+kernel-image-2.4.26-r4k-ip22
+kernel-image-2.4.26-r5k-ip22
 #endif
 #ifdef ARCH_mipsel
-kernel-image-2.4.19-r3k-kn02
-kernel-image-2.4.19-r4k-kn04
+kernel-image-2.4.26-r3k-kn02
+kernel-image-2.4.26-r4k-kn04
 #endif
 #ifdef ARCH_powerpc
 discover1
+yaboot
 kernel-image-2.4.25-powerpc-pmac
 kernel-image-2.4.25-powerpc-small-pmac
 kernel-image-2.4.25-powerpc-prep
@@ -77,17 +89,17 @@ kernel-image-2.4.25-apus
 #endif
 #ifdef ARCH_sparc
 discover1
-kernel-image-2.4.24-sparc32
-kernel-image-2.4.24-sparc32-smp
-kernel-image-2.4.24-sparc64
-kernel-image-2.4.24-sparc64-smp
+initrd-tools
+kernel-image-2.4.26-sparc32
+kernel-image-2.4.26-sparc32-smp
+kernel-image-2.4.26-sparc64
+kernel-image-2.4.26-sparc64-smp
 #endif
 #ifdef ARCH_m68k
-kernel-image-2.2.25-amiga
-kernel-image-2.2.25-atari
-kernel-image-2.2.25-bvme6000
 kernel-image-2.2.25-mac
-kernel-image-2.2.25-mvme147
-kernel-image-2.2.25-mvme16x
-kernel-image-2.4.25-amiga
+kernel-image-2.4.26-amiga
+kernel-image-2.4.26-atari
+kernel-image-2.4.26-bvme6000
+kernel-image-2.4.26-mvme147
+kernel-image-2.4.26-mvme16x
 #endif

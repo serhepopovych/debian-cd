@@ -115,6 +115,7 @@ cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_powerpc
 discover1
+yaboot
 EOF
 
 # Only include powerpc kernels that d-i base-installer installs.
