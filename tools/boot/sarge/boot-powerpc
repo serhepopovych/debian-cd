@@ -59,7 +59,7 @@ cd $INSTALLDIR/powermac
 BUILD_DATE=$(date +%Y%m%d)
 cat $BASEDIR/data/sarge/yaboot/boot.msg \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
- | sed "s/\$(DEBIAN_VERSION)/${CODENAME}/g" \
+ | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
  > boot.msg
 cat $BASEDIR/data/sarge/yaboot/yaboot.conf \
