@@ -77,8 +77,11 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
          - libdb4.2, libgcrypt11, libgcrypt7, libgnutls10, libgnutls11,
            libgpg-error0, libtasn1-2: new libraries
          - console-tools: now installed by debootstrap even on s390
+  * Bdale Garbee
+    - update tasks and tools to make 2.6.8 kernels primary on hppa
+    - add ramdisk_size=16384 to palo call in post-boot-hppa 
 
- -- Raphael Hertzog <hertzog@debian.org>  Wed, 12 Jan 2005 17:35:52 +0100
+ -- Bdale Garbee <bdale@gag.com>  Sat, 15 Jan 2005 21:33:48 -0700
 
 debian-cd (2.2.20) unstable; urgency=medium
 

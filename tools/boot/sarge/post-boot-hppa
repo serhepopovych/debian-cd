@@ -24,7 +24,7 @@ fi
 K32=$(ls $CDROOT/install/vmlinux-*-32|head -1)
 K64=$(ls $CDROOT/install/vmlinux-*-64|head -1)
 /sbin/palo \
-     --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk init=/linuxrc" \
+     --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk ramdisk_size=16384 init=/linuxrc" \
      --recoverykernel="$K32" \
      --recoverykernel="$K64" \
      --bootloader="$CDROOT/install/iplboot" \
