@@ -310,23 +310,23 @@ $(SDIR)/1/.disk/info:
 		num=$${i%%.sources}; num=$${num##$(SDIR)/}; \
 		echo -n $(SRCDISKINFO) > $(SDIR)/$$num/.disk/info; \
 		echo '#define DISKNAME ' $(SRCDISKINFOND) \
-					> $(BDIR)/$$num/README.diskdefines; \
+					> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define TYPE  source' \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define TYPEsource  1' \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define ARCH ' $(ARCH) \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define ARCH'$(ARCH) ' 1' \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define DISKNUM ' $$num \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define DISKNUM'$$num ' 1' \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define TOTALNUM ' $$nb \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo '#define TOTALNUM'$$nb ' 1' \
-					>> $(BDIR)/$$num/README.diskdefines; \
+					>> $(SDIR)/$$num/README.diskdefines; \
 		echo -n $(SRCVOLID) > $(SDIR)/$${num}.volid; \
 		$(set_mkisofs_opts) src $$num > $(SDIR)/$${num}.mkisofs_opts; \
 	done
