@@ -31,6 +31,7 @@ iso-codes
 console-cyrillic
 console-terminus
 pcmcia-cs
+wireless-tools
 xfsprogs
 reiserfsprogs
 #ifdef ARCH_i386
