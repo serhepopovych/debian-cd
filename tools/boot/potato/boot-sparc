@@ -23,12 +23,11 @@ cd $CDDIR/..
 # Disk 1 only
 [ "$N" = 1 ] || exit 0
 
-echo "-B boot/cd.b boot1" > $N.mkisofs_opts
+echo "-B boot/second.b boot1" > $N.mkisofs_opts
 rm -rf boot1
 
 inst=boot1
 
-<<<<<<< boot-sparc
 # Setup directories
 mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
