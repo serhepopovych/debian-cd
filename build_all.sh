@@ -18,7 +18,10 @@ do
 		exit 1
 	fi
 	echo " ... selecting packages to include"
-	make list COMPLETE=1 SIZELIMIT1=$((529 * 1024 *1024)) SRCSIZELIMIT=$((635 * 1024 * 1024))
+	disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
+	        awk '{print $1}'`
+	make list COMPLETE=1 SIZELIMIT1=$(((630 - ${disks}) * 1024 *1024)) \
+		SRCSIZELIMIT=$((635 * 1024 * 1024))
 	echo " ... building the images"
 	if [ "$ARCH" = "i386" ]; then
 		make official_images
