@@ -22,14 +22,12 @@ fi
 
 cd $CDDIR/..
 
-#
 # This script is called with $1 (now $N) as the CD to 
 # make bootable.  N may be in the form "n" or "n_NONUS"
 # There may be more than 4 disks...support extras.
 
 # Strip NONUS part of disk number
 # NN will be 1...N so it can be used as an index
-#
 NN=`echo $N | sed -e 's/_NONUS//'`
 
 # List of boot image for each CD
@@ -82,46 +80,35 @@ else
     fi
 fi
 
-#install_languages $CDDIR
+write_isolinix_config () {
+	cat > boot$N/isolinux/isolinux.cfg <<EOF
+DEFAULT /install/vmlinuz
+APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+LABEL linux
+  kernel /install/vmlinuz
+LABEL cdrom
+  kernel /install/vmlinuz
+LABEL expert
+  kernel /install/vmlinuz
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+DISPLAY isolinux.txt
+TIMEOUT 0
+PROMPT 1
+F1 f1.txt
+F2 f2.txt
+F3 f3.txt
+F4 f4.txt
+F5 f5.txt
+F6 f6.txt
+F7 f7.txt
+F8 f8.txt
+F9 f9.txt
+F0 f10.txt
+EOF
+}
 
-# Only disk one gets the extra files installed
-#
-if [ "$NN" = "1" ]; then
-
-
-# populate the install directory as well
-for disk in $DISK_IMAGES; do
-	dir=$(dirname $disk)
-	mkdir -p $CDDIR/install/$dir
-	cp -lf $disk $CDDIR/install/$dir
-done
-
-# ISOLINUX setup
-
-# Include Smart Boot Manager image for people where isolinux fails
-gzip -dc $BASEDIR/data/$DI_CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
-# Keep the original file timestamp
-touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
-cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
-# Isolinux help files come from d-i.
-cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
-mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
-if [ -e boot$N/isolinux/f3.txt.with26 ];then
-  mv boot$N/isolinux/f3.txt.with26 boot$N/isolinux/f3.txt
-  for image in cdrom/2.6/initrd.gz cdrom/2.6/vmlinuz; do
-    if [ ! -e "$image" ]; then
-	dir=$(dirname $image)
-	mkdir -p $dir
-	if [ ! "$DI_WWW_HOME" ];then
-		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
-	else
-		wget "$DI_WWW_HOME/$image" -O "$image"
-	fi
-    fi
-  done
-  cp -a cdrom/2.6 $CDDIR/install/2.6
-# Isolinux config file.
-cat > boot$N/isolinux/isolinux.cfg <<EOF
+write_isolinux_config_26 () {
+	cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
 APPEND $KERNEL_PARAMS vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL linux
@@ -151,33 +138,52 @@ F8 f8.txt
 F9 f9.txt
 F0 f10.txt
 EOF
+}
 
-else
+# Only disk one gets the extra files installed
+if [ "$NN" = "1" ]; then
+	# populate the install directory as well
+	for disk in $DISK_IMAGES; do
+		dir=$(dirname $disk)
+		mkdir -p $CDDIR/install/$dir
+		cp -lf $disk $CDDIR/install/$dir
+	done
 
-# Isolinux config file.
-cat > boot$N/isolinux/isolinux.cfg <<EOF
-DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-LABEL linux
-  kernel /install/vmlinuz
-LABEL cdrom
-  kernel /install/vmlinuz
-LABEL expert
-  kernel /install/vmlinuz
-  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-DISPLAY isolinux.txt
-TIMEOUT 0
-PROMPT 1
-F1 f1.txt
-F2 f2.txt
-F3 f3.txt
-F4 f4.txt
-F5 f5.txt
-F6 f6.txt
-F7 f7.txt
-F8 f8.txt
-F9 f9.txt
-F0 f10.txt
-EOF
-
+	# Include Smart Boot Manager image for people where isolinux fails
+	gzip -dc $BASEDIR/data/$DI_CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
+	# Keep the original file timestamp
+	touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
+	cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
+	# Isolinux help files come from d-i.
+	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
+	mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
+	if [ -e boot$N/isolinux/f3.txt.with26 ];then
+		mv boot$N/isolinux/f3.txt.with26 boot$N/isolinux/f3.txt
+		for image in cdrom/2.6/initrd.gz cdrom/2.6/vmlinuz; do
+			if [ ! -e "$image" ]; then
+				dir=$(dirname $image)
+				mkdir -p $dir
+				if [ ! "$DI_WWW_HOME" ];then
+					cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
+				else
+					wget "$DI_WWW_HOME/$image" -O "$image"
+				fi
+			fi
+		done
+		cp -a cdrom/2.6 $CDDIR/install/2.6
+		write_isolinux_config_26
+	else 
+		write_isolinux_config
+	fi
 fi
+
+# write final lines to mkisofs_opts
+if [ "$NN" = "1" ]; then
+	echo -n "boot$N " >> $N.mkisofs_opts
+else
+	if [ -n "$THISTYPE" ]; then
+		echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+	fi
+fi
+
+# th,th, thats all
