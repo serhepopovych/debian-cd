@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Raphael Hertzog <hertzog@debian.org>
 Uploaders: Steve McIntyre <93sam@debian.org>
 Build-Depends-Indep: debhelper (>= 4), sysutils, mkisofs
-Standards-Version: 3.6.2.0
+Standards-Version: 3.6.1.0
 
 Package: debian-cd
 Architecture: all
