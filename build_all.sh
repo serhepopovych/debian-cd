@@ -6,7 +6,7 @@
 
 TMP_OUT=$OUT
 
-for ARCH in i386 alpha arm hppa ia64 m68k mips mipsel powerpc s390 sparc
+for ARCH in i386 alpha arm hppa ia64 m68k mips mipsel powerpc s390 sparc #amd64
 do
 	export ARCH
 	echo "Now we're going to build CD for $ARCH !"
