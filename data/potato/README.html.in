@@ -130,11 +130,13 @@ CONTENTS:
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A href="#lastmin">Last-Minute Notes</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
+#endif
 #endif
 
 #if TYPEbinary
@@ -146,18 +148,22 @@ CONTENTS:
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A href="#nonfree">Non-free/Non-US</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
 #endif
+#endif
 
+#ifndef UNOFFEXTRAS
 <A href="#cdmanuf">CD Manufacturers</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
+#endif
 #endif
 
 <A href="#other">More Information</A>
@@ -265,6 +271,7 @@ This CD-ROM is labeled
   DISKNAME
 </tt>
 <P>
+#ifndef UNOFFEXTRAS
 which means that this CD is number DISKNUM of totally TOTALNUM CDs containing
 #if TYPEbinary
 programs ("binaries") for `ARCH' computers.
@@ -281,6 +288,9 @@ The source packages on the Source CDs are ordered by popularity, like
 the programs on the Binary CDs. This means that the source code of the
 programs on the Binary-DISKNUM CD can most likely be found on this CD
 (though there may be some variation due to size issues).
+#endif
+#else
+#include <unoffextrascd.html.in>
 #endif
 
 <A name="install">
@@ -396,6 +406,7 @@ Installing
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A name="lastmin">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -437,7 +448,7 @@ Last-minutes notes for this CD may be available on
 </LI>
 
 </UL>
-
+#endif
 
 #if TYPEbinary
  <A name="apt">
@@ -492,6 +503,7 @@ Last-minutes notes for this CD may be available on
 #endif
 
 
+#ifndef UNOFFEXTRAS
 <A name="nonfree">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -524,7 +536,9 @@ packages. You can get them from our FTP/HTTP mirror sites.
 
 <P>
 Note that you <i>are</i> allowed to <i>import</i> non-US packages into the US.
+#endif
 
+#ifndef UNOFFEXTRAS
 <A name="cdmanuf">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -551,7 +565,7 @@ For all needed information, and contact addresses, please refer to
 <tt>&nbsp;
   <a href="http://cdimage.debian.org/">http://cdimage.debian.org</a>
 </tt>
-
+#endif
 
 <A name="other">
 #if OUTPUTtext
