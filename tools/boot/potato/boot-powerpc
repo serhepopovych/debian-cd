@@ -113,7 +113,7 @@ cp -f $DISKSROOT/powermac/bootvars* powermac/
 
 # New-world bootability
 # This works in a subdirectory via an ugly hack; fix yaboot.
-cat $BASEDIR/data/yaboot/yaboot.conf \
+cat $BASEDIR/data/yaboot/potato-yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > powermac/yaboot.conf
 cp -f $BASEDIR/data/yaboot/ofboot.b powermac/
 

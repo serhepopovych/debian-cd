@@ -11,6 +11,7 @@ debian-cd (2.2.9) unstable; urgency=low
   * If using BOOTDISK= pick up docs from there also (Richard Hirst).
   * Synced tasks/base-woody with debootstrap 0.1.15.8.
     Closes: #119099
+  * Add kludgy yaboot.conf for potato's broken yaboot.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Sep 2001 14:57:22 +0200
 
