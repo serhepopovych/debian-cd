@@ -31,32 +31,24 @@ mkdir -p $inst/{boot/sun4{u,cdm},etc}
 
 # put the relevant parts of SILO boot loader
 (ar p $MIRROR/dists/$CODENAME/main/binary-sparc/base/silo_* data.tar.gz | \
-	tar zxf - -C $inst/ boot/{cd,second}.b)
+	tar zxf - -C $inst/ ./boot/{cd,second}.b)
 
 # Some custom etc files
 cp -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
 	$inst/etc/
 
-# linux kernel & co are fetched directly from the rescue disks
 tmp=/var/tmp/debian_cd
-mnt=$tmp/mnt
-if [ -d $mnt/ ]; then
-    umount $mnt >/dev/null 2>&1 || true
-else
-    mkdir -p $mnt
+if [ ! -d $tmp ]; then
+    mkdir -p $tmp
 fi
 for suba in sun4cdm sun4u; do
-  cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/$suba/images-1.44/rescue.bin \
-	$tmp/rescue.bin
-  mount -o loop,ro $tmp/rescue.bin $mnt
-  cp $mnt/linux $inst/boot/$suba/linux
-  umount $mnt
-  rm -f $tmp/rescue.bin
+  ln -s ../../dists/$CODENAME/main/disks-$ARCH/current/$suba/linux-a.out \
+	$inst/boot/$suba/linux
 done
 
 # Unpack the root tree into the directory. we use the tftp root.tar.gz
 tar zxf $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/root.tar.gz -C $tmp/
-cp -a $tmp/debian-sparc-root/* $inst/.
+cp -a $tmp/debian-sparc-root/. $inst/
 
 # no longer need this
 rm -rf $tmp
