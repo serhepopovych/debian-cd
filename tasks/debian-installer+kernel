@@ -5,7 +5,7 @@
  * This list can be generated with the command:
  * ../tools/generate_di+k_list
  *
- * Last update: Wed Oct  6 05:36:00 MDT 2004
+ * Last update: Sun Nov 21 16:22:02 MST 2004
  */
 
 #include <debian-installer>
@@ -109,7 +109,7 @@ kernel-image-2.4.27-powerpc-pmac
 kernel-image-2.4.27-powerpc-prep
 kernel-image-2.4.27-powerpc-chrp
 kernel-image-2.4.27-powerpc-chrp-rs6k
-kernel-image-2.4.25-apus
+kernel-image-2.4.27-apus
 #endif
 #ifdef ARCH_sparc
 discover1
@@ -131,7 +131,6 @@ kernel-image-2.6.8-1-sparc64-smp
 #endif
 #ifdef ARCH_m68k
 kernel-image-2.2.25-mac
-kernel-image-2.4.27-amiga
 kernel-image-2.4.27-atari
 kernel-image-2.4.27-bvme6000
 kernel-image-2.4.27-mvme147

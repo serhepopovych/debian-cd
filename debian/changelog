@@ -16,6 +16,11 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
          files directly.
   * Stephen R. Marenka
     - m68k: add kernel-image-2.4.27-amiga to debian-installer+kernel.
+  * Santiago Garcia
+    - Update debian-installer's tasks.
+    - Update calc script and calc files.
+    - Make i386 cds 8.3 filenaming compatible again.
+    - Workaround the two kernels problem on hppa.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 25 Oct 2004 03:03:36 -0400
 

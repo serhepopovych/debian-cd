@@ -36,6 +36,17 @@ then
     esac
   done
 fi
-case "$ARCH" in
-  powerpc)     echo SIZE_MULT_1=93 >> "boot/$CODENAME/boot-$ARCH.calc";;
-esac
+
+#Use different corrections depending on the size of the ISO
+if [ -n "$SIZELIMIT1" ] && [ "$SIZELIMIT1" -gt 1000000000 ] || 
+   [ -n "$SIZELIMIT" ] && [ "$SIZELIMIT" -gt 1000000000 ] ||
+   [ -n "$DEFBINSIZE" ] && [ "$DEFBINSIZE" -gt 1000 ]
+then
+  case "$ARCH" in
+    powerpc)     echo SIZE_MULT_1=92 >> "boot/$CODENAME/boot-$ARCH.calc";;
+  esac
+else
+  case "$ARCH" in
+    powerpc)     echo SIZE_MULT_1=96 >> "boot/$CODENAME/boot-$ARCH.calc";;
+  esac
+fi

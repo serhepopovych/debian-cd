@@ -86,16 +86,16 @@ if [ "$NN" = "1" ]; then
     cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
     cp -lf cdrom/vmlinuz $CDDIR/install/
     cp -lf cdrom/initrd.gz $CDDIR/install/
-    echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
+    echo -n "-cache-inodes -J -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 else
     if [ -n "$THISTYPE" ]; then
 	echo "Using $THISTYPE boot-disks image on CD$N"
 	mkdir -p boot$N/boot
 	cp $THISTYPE/boot.img boot$N/boot/
-	echo -n "-cache-inodes -J -l -b boot/boot.img "  > $N.mkisofs_opts
+	echo -n "-cache-inodes -J -b boot/boot.img "  > $N.mkisofs_opts
     else
 	mkdir boot$N
-	echo -n "-cache-inodes -J -l " > $N.mkisofs_opts
+	echo -n "-cache-inodes -J " > $N.mkisofs_opts
     fi
 fi
 
