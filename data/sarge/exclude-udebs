@@ -85,3 +85,5 @@ debian-edu-install-udeb
 debian-edu-profile-udeb
 # If needed, will be on the initrd already.
 module-init-tools-udeb
+# Not used yet. When it is, it will go in the initrd.
+localechooser
