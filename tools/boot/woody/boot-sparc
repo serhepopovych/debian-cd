@@ -27,7 +27,7 @@ fi
 
 install_languages $CDDIR
 
-echo "-silo-boot boot/second.b -s boot/silo.conf -S boot/cd.b boot1" > $N.mkisofs_opts
+echo "-silo-boot boot/second.b -s /boot/silo.conf -S boot/cd.b boot1" > $N.mkisofs_opts
 rm -rf boot1
 
 inst=boot1
@@ -44,12 +44,9 @@ silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 cp -f -p $BASEDIR/data/sparc/etc/{debian.txt,silo.conf} \
 	$inst/boot/
 
-cp ../../dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/vmlinuz \
+cp CD1/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/vmlinuz \
 	$inst/boot/sparc32.gz
 # Sparc64 kernel is so big, that uncompressing it corrupts SILO memory, so
 # uncompress it before hand.
-zcat ../../dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
-	$inst/boot/sparc64
-
-# no longer need this
-rm -rf $tmp
+zcat CD1/dists/$CODENAME/main/disks-$ARCH/current/sun4u/vmlinuz \
+	>$inst/boot/sparc64
