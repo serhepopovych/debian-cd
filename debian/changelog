@@ -53,8 +53,10 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Add arcboot to the mips tasks/base-sarge list, like it is done for
       other bootloaders.
     - Add a default bootfile named sashARCS for mips, aliased to r4k-ip22.
+  * Joshua Kwan
+    - Add ramdisk_size=16384 to silo.conf. closes: #274958
 
- -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue,  5 Oct 2004 13:22:45 -0700
 
 debian-cd (2.2.19) unstable; urgency=medium
 
