@@ -77,9 +77,14 @@ cat >> debian-installer+kernel << EOF
 #ifdef ARCH_powerpc
 EOF
 
-/bin/sed -n 's/Package: \(kernel-image-.*-powerpc.*\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages \
-  >> debian-installer+kernel
+# Only include powerpc kernels that d-i base-installer installs.
+for subarch in powerpc-pmac powerpc-small-pmac powerpc-prep powerpc-chrp \
+               powerpc-chrp-rs6k apus; do
+	sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' \
+		$MIRROR/dists/$CODENAME/main/binary-powerpc/Packages \
+		| grep -- "-$subarch$" | sort -n | tail -n 1 \
+                >> debian-installer+kernel
+done
 
 cat >> debian-installer+kernel << EOF
 #endif

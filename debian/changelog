@@ -51,8 +51,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Add wireless-tools to generate_d-i+k_list
     - Remove the old partitioner from the CD for i386. (This should also be
       done for other arches for which it is not default)
-    - Include every available powerpc kernel on the CD, which is perhaps
-      better than a random selection of two obscure subarches..
+    - Include all the powerpc kernels that d-i's base-installer currently
+      could try to install on the CD.
     - Try to include some sparc kernels on the CD; it's probably better than
       including none..
   * Steve Langasek
