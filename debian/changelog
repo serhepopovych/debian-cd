@@ -9,6 +9,7 @@ debian-cd (2.2.0) frozen unstable; urgency=low
   * /install/boot.bat not working because of missing loadlin.exe fixed
   * Updates to sparc bootable
   * Updates to woody/boot-i386 --jwest
+  * Add powerpc support for potato (dan).
 
  -- Raphael Hertzog <hertzog@debian.org>  Mon, 13 Mar 2000 13:15:11 +0100
 
