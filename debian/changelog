@@ -65,6 +65,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       handle a command line longer than 127 chars right now
   * Otavio Salvador
     - Preprocess exclude files much like tasks files are. Closes: #247379
+    - Check if the missing debootstrap-required is not included on
+      base_exclude.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 

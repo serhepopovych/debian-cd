@@ -480,6 +480,10 @@ $(BDIR)/packages-stamp:
 	        ok=yes; \
 	        for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
 		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
+			if [ -n "$(BASE_EXCLUDE)" ] && grep -q ^$$p$$ $(BASE_EXCLUDE); then \
+				echo "Missing debootstrap-required $$p but included in $(BASE_EXCLUDE)"; \
+				continue; \
+			fi; \
 		        ok=no; \
 		        echo "Missing debootstrap-required $$p"; \
 		    fi; \
