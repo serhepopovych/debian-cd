@@ -115,6 +115,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       installs it.
     - Bump initrd-size to 10MB for powerpc 2.4. Current d-i initrds exceed
       that.
+    - Remove -safe options from powerpc yaboot menu, as they caused
+      combinatorial explosion. Instead, document video=ofonly in boot.msg.
   * Sven Luther
     - fixed powerpc list so it includes the 2.6 kernels too as well as the
       power3 and power4 2.4 kernels.
