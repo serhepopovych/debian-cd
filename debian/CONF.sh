@@ -19,6 +19,8 @@ unset NOSUGGESTS
 unset DOJIGDO
 unset JIGDOCMD
 unset JIGDOTEMPLATEURL
+unset DEFBINSIZE
+unset DEFSRCSIZE
 unset FASTSUMS
 unset PUBLISH_URL
 unset PUBLISH_PATH
@@ -116,6 +118,14 @@ export ISOLINUX=1
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work
 #ATTEMPT_FALLBACK=yes
+
+# Set the default sizes of the images we want to create, in MB
+# Use these for CD
+export DEFSRCSIZE=640
+export DEFBINSIZE=630
+# Use these for DVD
+#export DEFSRCSIZE=4600
+#export DEFBINSIZE=4600
 
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE="$BASEDIR"/tasks/exclude-potato
