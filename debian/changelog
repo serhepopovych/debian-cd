@@ -1,3 +1,9 @@
+debian-cd (2.2.6) unstable; urgency=low
+
+  * UNRELEASED 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Tue, 19 Jun 2001 00:43:04 +0200
+
 debian-cd (2.2.5) unstable; urgency=low
 
   * Remove (obsolete) -a from mkhybrid call. Changed mkhybrid to mkisofs
