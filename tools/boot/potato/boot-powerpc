@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# boot-powerpc version 0.5 (c)  Hartmut Koptein <koptein@debian.org>,
+# boot-powerpc version 0.6 (c)  Hartmut Koptein <koptein@debian.org>,
+# PReP support (C)  Matt Porter <porter@debian.org>
 #
 # Released under GPL 1 Mar 1999
 # See the file COPYING for license details
@@ -25,8 +26,7 @@ fi
 
 echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
         > $N.mkisofs_opts
-echo -n " -b install/prep/resc1440.bin -c install/prep/boot.catalog" \
-        >> $N.mkisofs_opts
+echo -n " -prep-boot install/prep/boot.bin" >> $N.mkisofs_opts
 
 DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
 INSTALLDIR="$CDROOT/install"
@@ -40,7 +40,7 @@ cd $INSTALLDIR
 #
 # -- We need a generic boot-loader --
 #
-echo "Copying boot images to $CDROOT/boot for disc 1"
+echo "Copying boot images to $CDROOT/install/boot for disc 1"
 rm -fr boot
 mkdir -p boot
 for subarch in chrp powermac prep ; do
@@ -63,7 +63,11 @@ for subarch in chrp powermac prep ; do
                 echo "need work for PowerMac"
         ;;
         prep)
-                echo "need work for PReP"
+		# PReP doesn't need an extra copy of the boot image
+		# The -B parameter to mkhybrid points directly to our
+		# PReP bootable image in /install/prep/boot.bin
+		# We put a symlink here for now for uniformity.
+                ln -s ../../prep/boot.bin boot/prep/
         ;;
     esac
 done
