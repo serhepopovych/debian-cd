@@ -67,7 +67,6 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Preprocess exclude files much like tasks files are. Closes: #247379
     - Check if the missing debootstrap-required is not included on
       base_exclude.
-    - Use DI_CODENAME variable to build debian-installer+kernel task.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
