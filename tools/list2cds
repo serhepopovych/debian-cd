@@ -85,6 +85,8 @@ if (-e $exclude) {
 	open (EXCL, "< $exclude") || die "Can't open $exclude : $!\n";
 	while (defined($_=<EXCL>)) {
 		chomp;
+		s/\#.*$//;
+		next if m/^\s*$/;
 		if (not exists $packages{$_}) {
 			msg(1, "INIT: Package '$_' is in excluded but " .
 			       "doesn't exist. Ignored.\n");
