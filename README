@@ -160,12 +160,12 @@ The process of building a CD is composed of the following steps:
 
   This affects only the binary CDs.
 
-  If you want to use boot-floppies built by yourself you can give
-  a parameter BOOTDISKS=<dir> giving the directory where
-  they are (note that $BOOTDISKS/current must be a symlink to the
-  real directory, it must follow the same setup than in the FTP
-  mirror). Your boot-floppies must also be on the same partiton than
-  your mirror & temporary dir (hardlinks are used here too).
+  If you want to use boot-floppies built by yourself you can add
+  a parameter BOOTDISKS=<dir> which specifies the directory where
+  they are. Note that $BOOTDISKS/current must be a symlink to the
+  real directory and it must follow the same setup as the FTP
+  mirror. Your boot-floppies must also be on the same partition as
+  your mirror and temporary dir (hardlinks are used here too).
 
   Size calculation is imprecise for bootable CDs (usually the first CDs
   in the set), so you may need to manually adjust SIZELIMIT* variables
