@@ -47,7 +47,7 @@ ifndef SRCVOLID
 SRCVOLID="Debian $(DEBVERSION) Src-$$num"
 endif
 ifndef MKISOFS
-MKISOFS=/usr/bin/mkisofs
+export MKISOFS=/usr/bin/mkisofs
 endif
 ifndef MKISOFS_OPTS
 #For normal users
@@ -476,6 +476,14 @@ $(SDIR)/sources-stamp:
 
 ## BOOT & DOC & INSTALL ##
 
+# Basic checks
+$(MIRROR)/doc: need-complete-mirror
+$(MIRROR)/tools: need-complete-mirror
+need-complete-mirror:
+	@echo "You need a Debian mirror with the doc, tools and"
+	@echo "indices directories ! "
+	exit 1
+    
 # Add everything that is needed to make the CDs bootable
 bootable: ok disks installtools $(BDIR)/bootable-stamp
 $(BDIR)/bootable-stamp:
@@ -498,7 +506,7 @@ $(BDIR)/bootable-stamp:
 
 # Add the doc files to the CDs and the Release-Notes and the
 # Contents-$(ARCH).gz files
-bin-doc: ok bin-infos $(BDIR)/CD1/doc
+bin-doc: ok bin-infos $(MIRROR)/doc $(BDIR)/CD1/doc
 $(BDIR)/CD1/doc:
 	@echo "Adding the documentation (bin) ..."
 	$(Q)set -e; \
@@ -539,7 +547,7 @@ $(SDIR)/CD1/README.html:
 	done
 
 # Add the install stuff on the first CD
-installtools: ok bin-doc disks $(BDIR)/CD1/tools
+installtools: ok bin-doc disks $(MIRROR)/tools $(BDIR)/CD1/tools
 $(BDIR)/CD1/tools:
 	@echo "Adding install tools and documentation ..."
 	$(Q)set -e; \
