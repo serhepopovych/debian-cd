@@ -1,10 +1,3 @@
-
-  * Added FORCENONUSONCD1 support - move all non-US packages/sources to
-    CD#1 of the set. We then make 2 copies of this, one with non-US and
-    one without. Useful for people wanting to create non-US and US-safe
-    CDs without having to spend so much disk space.
-  
-  
 debian-cd (2.2.1) frozen unstable; urgency=low
 
   * Should go to frozen as well...
@@ -21,6 +14,10 @@ debian-cd (2.2.1) frozen unstable; urgency=low
     README.txt in boot-floppies
   * Modified build_all.sh so that it puts each arch under a subdir and
     modified imagesums/pi-makelist to support the subdirs
+  * Added FORCENONUSONCD1 support - move all non-US packages/sources to
+    CD#1 of the set. We then make 2 copies of this, one with non-US and
+    one without. Useful for people wanting to create non-US and US-safe
+    CDs without having to spend so much disk space.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 
