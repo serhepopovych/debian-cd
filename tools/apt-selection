@@ -1,0 +1,84 @@
+#!/bin/sh
+
+# This is a little shell script that will launch apt-get in dry-run mode
+# to find all the dependencies of a specific package
+
+# Get the configuration information if necessary
+if [ -z "$TDIR" -o -z "$CODENAME" -o -z "$ARCH" ]; then
+	if [ -e CONF.sh ]; then
+		source CONF.sh
+	else
+		echo "Please set the good environment variables before "
+		echo "launching this program ..."
+		echo "Current values are :"
+		echo "TDIR=$TDIR"
+		echo "CODENAME=$CODENAME"
+		echo "ARCH=$ARCH"
+	fi
+fi
+
+options=" -o Dir::State::status=$TDIR/$CODENAME-$ARCH/status \
+          -o Dir::State=$TDIR/$CODENAME-$ARCH/apt-state/ \
+	  -o Dir::Cache=$TDIR/$CODENAME-$ARCH/apt-cache/ \
+	  -o Dir::Etc=$TDIR/$CODENAME-$ARCH/apt/ \
+	  -o APT::Architecture=$ARCH "
+
+# Check for the necessary dirs and files ...
+if [ ! -d "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial" ]; then
+	mkdir -p "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial"
+fi
+if [ ! -d "$TDIR/$CODENAME-$ARCH/apt-cache/archives/partial" ]; then
+	mkdir -p "$TDIR/$CODENAME-$ARCH/apt-cache/archives/partial"
+fi
+if [ ! -d "$TDIR/$CODENAME-$ARCH/apt" ]; then
+	mkdir -p "$TDIR/$CODENAME-$ARCH/apt"
+fi
+if [ ! -e "$TDIR/$CODENAME-$ARCH/apt/sources.list" ]; then
+	# Generating a correct sources.list file
+	echo "deb file:$MIRROR $CODENAME main contrib non-free" \
+	> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	if [ -n "$NONUS" ]; then
+	  # Slink used the old paths
+	  if [ "$CODENAME" = "slink" ]; then
+	     echo "deb file:$NONUS $CODENAME non-US" \
+	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	  else
+	     echo "deb file:$NONUS $CODENAME/non-US main contrib non-free" \
+	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	  fi
+	fi
+fi
+
+temp=$TDIR/$CODENAME-$ARCH/temp.apt-selection
+
+# Launch the command
+if [ "$1" = "update" -o "$1" = "check" ]; then
+	apt-get $options $@
+	exit $?
+elif [ "$1" = "cache" ]; then
+	shift
+	apt-cache $options $@
+	exit $?
+elif [ "$1" = "deselected" ]; then
+	shift
+	apt-get $options -s $@ > $temp
+	num=$?
+	#if [ $num -ne 0 ]; then 
+	    #echo ": Param: apt-selection deselected $@" >&2; 
+	    #exit $num;  
+	#fi
+	perl -ne 'print "$1\n" if /^Remv (\S+)\s*(?:\[|$)/' $temp | sort
+elif [ "$1" = "selected" ]; then
+	shift
+	apt-get $options -s $@ > $temp 
+	num=$?
+	#if [ $num -ne 0 ]; then 
+	#    echo "ERROR: Param: apt-selection selected $@" >&2; 
+	#    exit $num;  
+	#fi
+	perl -ne 'print "$1\n" if /^Inst (\S+)\s*(?:\[|$)/' $temp | sort
+else
+	apt-get $options -s $@
+	exit $?
+fi
+

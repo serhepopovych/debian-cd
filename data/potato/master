@@ -1,0 +1,1127 @@
+%!slice -o (I386uUNDEFuNOT_*)\NOT_I386:master.i386 -o (SPARCuUNDEFuNOT_*)\NOT_SPARC:master.sparc -o (ALPHAuUNDEFuNOT_*)\NOT_ALPHA:master.alpha -o (M68KuUNDEFuNOT_*)\NOT_M68K:master.m68k -o (ARMuUNDEFuNOT_*)\NOT_ARM:master.arm -o (POWERPCuUNDEFuNOT_*)\NOT_POWERPC:master.powerpc
+
+[DONOTKEEP:
+# Do not touch the above line, except to add a new architecture.
+:DONOTKEEP]
+
+# "master" file. See README for explanations.
+# More or less maintained by Stephane Bortzmeyer <bortzmeyer@debian.org>
+# $Id$
+
+[DONOTKEEP:
+# You can have system-dependent parts with the slices of slice(1) (Debian
+# package "slice". See examples hereunder, starting with [. Or see slice
+# documentation, "man slice" or http://www.engelschall.com/sw/slice/.
+:DONOTKEEP]
+
+--- Tasks:
+Admin: Administration tools (incl. Basic) 
+Backup: Floppy tape backup tools (incl. Basic) 
+Basic: Basic tools 
+C: C/C++/ObjC development (incl. Basic, Standard, Devel) 
+Chinese: Chinese-speaking environment (incl. Basic)
+Database: PostgreSQL database (incl. Basic) 
+Debian: Debian development (incl. Basic) 
+Devel: Development environment  (incl. Basic) 
+Dialup: Dialup utilities (incl. Basic) 
+Dns: DNS server (incl. Basic) 
+Doc: General documentation (incl. Basic) 
+Fortran: Fortran development (incl. Basic, Devel) 
+Ftp: FTP server (incl. Basic) 
+Games: Games (incl. Basic, X_sel) 
+Graphics: Graphics tools (incl. Basic, X_sel) 
+Gui_devel: GUI development (incl. Basic, Standard, Devel, C) 
+High_rel: Reliability/security monitoring tools 
+Lisp: Lisp development (incl. Basic, Devel) 
+Mail: Mailing list server (incl. Basic) 
+Net_comp: Internet Tools (incl. Basic) 
+Net_sel: Selected Internet tools (incl. Basic) 
+Netadm: Network administration (incl. Basic) 
+Netbckup: Network backup server (incl. Basic) 
+Newbie: New user documentation (Linux Gazette; incl. Basic) 
+News: News server (incl. Basic) 
+Nis: NIS server (incl. Basic) 
+Perl_devel: Perl development (incl. Basic, Devel) 
+Plot: Plotutils for data (incl. Basic) 
+Pop: POP mail server (incl. Basic) 
+Prod: Personal productivity (incl. Basic) 
+Python: Python environment (incl. Basic, Devel) 
+Samba: Samba SMB server (incl. Basic) 
+Scheme: Scheme development (incl. Basic, Devel) 
+Science: Science, mostly math (incl. Basic) 
+Sgml: SGML Text processing (incl. Basic) 
+Sound: Sound tools (incl. Basic) 
+Standard: Standard installation (incl. Basic) 
+Tcl_devel: Tcl development tools (incl. Basic, Devel) 
+Tex: TeX/LaTeX environment (incl. Basic) 
+Web: Web server (incl. Basic) 
+Webcache: Web proxy caching server (incl. Basic) 
+Workst: Workstation add-ons (incl. Basic) 
+X_comp: X window system (incl. Basic) 
+X_sel: Small X window environment (incl. Basic) 
+
+
+--- Profiles:
+Admin: Administrator box (network tools, Perl, ...) 
+Basic: Stand-alone system without development tools 
+Devel_comp: Huge development environment (Perl, Python, C, ...) 
+Devel_std: Standard C development environment 
+Dialup: Home machine (graphics, sound, X, ...) 
+Server_comp: Server (add. Mailinglist, Backup, News, Samba, Squid) 
+Server_std: Std. Server (Ftp, Web, DNS, NIS, POP) 
+Standard: Compiler, printing, emacs and networking 
+Work_sci: Scientific Workstation (Tex, math, plot, X, ...) 
+Work_std: Standard Workstation (TeX, graphics, Internet, X, ...) 
+
+
+--- Packages:
+3dchess: Tasks: Games,  Profiles: Dialup, 
+a2ps: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+aalib-bin: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+aalib1: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+aalib1-dev: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+abc2ps: Tasks: Sound,  Profiles: Dialup, 
+abcmidi: Tasks: Sound,  Profiles: Dialup, 
+[ALPHA:
+aboot: Tasks: Basic, Profiles: Basic,
+:ALPHA]
+[NOT_ALPHA:
+[NOT_SPARC:
+abuse: Tasks: Games,  Profiles: Dialup, 
+abuse-lib: Tasks: Games,  Profiles: Dialup,
+:NOT_SPARC] 
+:NOT_ALPHA]
+acct: Tasks: Admin,  Profiles: Admin, 
+[I386:
+[ALPHA:
+acidwarp: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+:ALPHA]
+:I386]
+acm: Tasks: Games,  Profiles: Dialup, 
+addressbook: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+af: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+afbackup: Tasks: Netbckup,  Profiles: Server_comp, 
+afbackup-client: Tasks: Netbckup,  Profiles: Server_comp, 
+afio: Tasks: Backup,  Profiles: Dialup, 
+afterstep: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+alias: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+alien: Tasks: Admin,  Profiles: Admin, 
+amanda-client: Tasks: Netbckup,  Profiles: Server_comp, 
+amanda-common: Tasks: Netbckup,  Profiles: Server_comp, 
+amanda-server: Tasks: Netbckup,  Profiles: Server_comp, 
+[NOT_SPARC: 
+amaya: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+:NOT_SPARC]
+an: Tasks: Games,  Profiles: Dialup, 
+anacron: Tasks: Dialup, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+analog: Tasks: Web,  Profiles: Server_comp, Server_std, 
+apache: Tasks: Web,  Profiles: Server_comp, Server_std, 
+apache-common: Tasks: Web,  Profiles: Server_comp, Server_std, 
+apache-dev: Tasks: Web,  Profiles: Server_comp, Server_std, 
+apache-doc: Tasks: Web,  Profiles: Server_comp, Server_std, 
+apcalc: Tasks: Science,  Profiles: Work_sci, 
+apcalc-dev: Tasks: Science,  Profiles: Work_sci, 
+apt: Tasks: Basic, Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std
+arena: Tasks: Net_comp, Newbie,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+ascd: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+asmail: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+asmixer: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+asmodem: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+at: Tasks: Admin, Backup, Basic, C, Database, Debian, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+auctex: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+aumix: Tasks: Sound,  Profiles: Dialup, 
+autoconf: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+automake: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+bbdb: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+bc: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+bibindex: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+bibtool: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+biff: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+[I386:
+bin86: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+:I386]
+[POWERPC: 
+bincompat: Tasks: Admin, Standard,  Profiles: Standard, 
+:POWERPC]
+bind: Tasks: Dns,  Profiles: Server_comp, Server_std, 
+bind-doc: Tasks: Dns,  Profiles: Server_comp, Server_std, 
+bing: Tasks: Netadm,  Profiles: Admin, 
+binstats: Tasks: Admin,  Profiles: Admin, 
+binutils: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, High_rel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+bison: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+bitchx: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+blast: Tasks: Games,  Profiles: Dialup, 
+bonnie: Tasks: Admin,  Profiles: Admin, 
+bplay: Tasks: Sound,  Profiles: Dialup, 
+bsdgames: Tasks: Games,  Profiles: Dialup, 
+bsdmainutils: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+buffer: Tasks: Backup,  Profiles: Dialup, 
+bug: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+bzip2: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+c2man: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+calc: Tasks: Science,  Profiles: Work_sci, 
+cam: Tasks: Sound,  Profiles: Dialup, 
+catdoc: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+cbb: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+cdda2wav: Tasks: Admin,  Profiles: Admin, 
+[NOT_POWERPC:
+cdparanoia: Tasks: Admin,  Profiles: Admin, 
+:NOT_POWERPC]
+cddb: Tasks: Sound,  Profiles: Dialup, 
+[NOT_POWERPC:
+cdrdao:  Tasks: Admin,  Profiles: Admin, 
+:NOT_POWERPC]
+cdrecord: Tasks: Admin,  Profiles: Admin, 
+cdtool: Tasks: Sound,  Profiles: Dialup, 
+[NOT_ALPHA: 
+cdwrite: Tasks: Admin,  Profiles: Admin, 
+:NOT_ALPHA]
+cfengine: Tasks: Netadm,  Profiles: Admin, 
+cfingerd: Tasks: Netadm,  Profiles: Admin, 
+cflow: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+cftp: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+cgi-scripts: Tasks: Web,  Profiles: Server_comp, Server_std, 
+cgilib: Tasks: Web,  Profiles: Server_comp, Server_std, 
+cgoban: Tasks: Games,  Profiles: Dialup, 
+[I386: 
+checker: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+:I386]
+chimera2: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[NOT_M68K:
+[NOT_SPARC:
+clisp: Tasks: Lisp,  Profiles: Devel_comp, 
+:NOT_SPARC]
+:NOT_M68K]
+compface: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+cpio: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+cpp: Tasks: Admin, C, Debian, Fortran, Games, Graphics, Gui_devel, Science, Standard, Tcl_devel, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+cracklib2: Tasks: Dialup, Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+cracklib-runtime: Tasks: Dialup,  Profiles: Dialup, 
+cron: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+cti-ifhp: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+ctwm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+cutils: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+cvs: Tasks: C, Debian, Devel, Fortran, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+cvs-buildpackage: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+cvs-pcl: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+cweb: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+cweb-latex: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+cwnn: Tasks: Chinese, Profiles: 
+cxhextris: Tasks: Games,  Profiles: Dialup, 
+cxref: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+data-dumper: Tasks: Admin, Net_comp, Netadm, Newbie, Perl_devel,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+dc: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+ddd: Tasks: C, Fortran, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+debhelper: Tasks: Admin, Debian,  Profiles: Admin, Devel_comp, 
+debian-policy: Tasks: C, Debian, Devel, Doc, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+debiandoc-sgml: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+debmake: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+debsums: Tasks: Debian, High_rel,  Profiles: Admin, Devel_comp, 
+dejagnu: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+developers-reference: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+devscripts: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+dftp: Tasks: Admin,  Profiles: Admin, 
+dhelp: Tasks: Doc,  Profiles: Dialup, Work_sci, Work_std, 
+[NOT_SPARC:
+diald: Tasks: Dialup,  Profiles: Dialup, 
+dialdcost: Tasks: Dialup,  Profiles: Dialup, 
+:NOT_SPARC]
+dialog: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+diffstat: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+dist: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+djtools: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+dnsutils: Tasks: C, Dns, Gui_devel, Net_comp, Net_sel, Netadm, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+doc-debian: Tasks: Doc,  Profiles: Dialup, Work_sci, Work_std, 
+doc-linux-html: Tasks: Doc,  Profiles: Dialup, Work_sci, Work_std, 
+doc-linux-text: Tasks: Doc,  Profiles: Dialup, Work_sci, Work_std, 
+doc-linux-zh: Tasks: Chinese, Profiles: 
+docbook: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+docbook-doc: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+docbook-stylesheets: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+dome: Tasks: Science,  Profiles: Work_sci, 
+dotfile: Tasks: C, Devel, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-bash: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-elm: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-emacs: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-fvwm1: Tasks: Games, Graphics, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-fvwm2: Tasks: Games, Graphics, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-ipfwadm: Tasks: Netadm,  Profiles: Admin, 
+dotfile-procmail: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-rtin: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dotfile-tcsh: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dpkg-dev: Tasks: Admin, C, Debian, Gui_devel, High_rel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+# The following installation methods are regarded as obsolete.
+dpkg-ftp: Tasks: Admin,  Profiles: Admin, 
+#dpkg-http: Tasks: Admin,  Profiles: Admin, 
+#dpkg-mountable: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+dpkg-perl: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+dpkg-repack: Tasks: Admin,  Profiles: Admin, Devel_comp, Server_comp, Work_sci, 
+dump: Tasks: Backup, Netbckup,  Profiles: Dialup, Server_comp, 
+dupload: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+dvidvi: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+dxpc: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+e2fsprogs: Tasks:  Profiles: Admin, Devel_comp, Devel_std, Dialup, Dialup, Server_comp, Work_sci, Work_std, 
+echoping: Tasks:  Profiles: Admin, Server_std, 
+ed: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+ee: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[NOT_ALPHA:
+[NOT_POWERPC:
+egcc: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, 
+:NOT_POWERPC]
+:NOT_ALPHA]
+electric-fence: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+elib: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+elk: Tasks: Graphics, Scheme,  Profiles: Devel_comp, Dialup, Work_sci, Work_std, 
+elkdoc: Tasks: Scheme,  Profiles: Devel_comp, 
+elm-me+: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+[NOT_POWERPC:
+emacs19: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+emacs19-el: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+:NOT_POWERPC]
+emacs20: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+emacs20-el: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+emacsen-common: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+[NOT_SPARC:
+eperl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+:NOT_SPARC]
+epic: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+et: Tasks: Tcl_devel,  Profiles: Admin, Devel_comp, 
+eterm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+eterm-backgrounds: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+exim: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+exim-doc: Tasks: Admin, Dialup, Dns, Doc, Fortran, Ftp, Mail, Net_comp, Net_sel, Netadm, Newbie, Profiles: Admin, Dialup, Server_comp, Server_std,  
+exmh: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+expect5.24: Tasks: Admin, C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+expect5.24-dev: Tasks: Admin,  Profiles: Admin, 
+exuberant-ctags: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+f2c: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
+fakeroot: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+[I386:
+[ALPHA:
+fdflush: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+:ALPHA]
+:I386]
+fbset: Tasks: Admin, Basic  Profiles: Admin,
+fdutils: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+[NOT_SPARC:
+felt: Tasks: Science,  Profiles: Work_sci, 
+felt-doc: Tasks: Science,  Profiles: Work_sci, 
+:NOT_SPARC]
+fetchmail: Tasks: Dialup,  Profiles: Dialup, 
+figlet: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+file: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+filerunner: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+flex: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+floatbg: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+flying: Tasks: Games,  Profiles: Dialup, 
+fmirror: Tasks: Netadm,  Profiles: Admin, 
+fort77: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
+fortune-mod: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+fortunes: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+fortunes-min: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+freeciv: Tasks: Games,  Profiles: Dialup, 
+freetype1: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+freetype2: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+[I386:
+ftape-module-2.0.34: Tasks: Backup,  Profiles: Dialup, 
+ftape-util: Tasks: Backup,  Profiles: Dialup, 
+:I386]
+fte: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+ftnchek: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
+fvwm: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+fvwm-common: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+fvwm2: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+fvwm95: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+fvwmconf: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+fweb: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
+g++: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, 
+g77: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
+gawk: Tasks: Sgml,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+gcal: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+gcc: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+[NOT_M68K:
+[NOT_SPARC:
+[NOT_ALPHA:
+gcl: Tasks: Lisp,  Profiles: Devel_comp, 
+:NOT_ALPHA]
+:NOT_SPARC]
+:NOT_M68K]
+gclinfo: Tasks: Lisp,  Profiles: Devel_comp, 
+gdb: Tasks: C, Fortran, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+gedit: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+genpower: Tasks: High_rel, Profiles: 
+ghostview: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+gimp: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+gimp-data-extras: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+gimp-manual: Tasks: Graphics,  Profiles: 
+gltt2: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+glut-data: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+glut-doc: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+glutg3: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+glutg3-dev: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+gmemusage: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+gmp2: Tasks: Python,  Profiles: Admin, Devel_comp, 
+gnuchess: Tasks: Games,  Profiles: Dialup, 
+gnuchess-book: Tasks: Games,  Profiles: Dialup, 
+gnugo: Tasks: Games,  Profiles: Dialup, 
+gnuplot: Tasks: Plot, Science,  Profiles: Dialup, Work_sci, Work_std, 
+gnushogi: Tasks: Games,  Profiles: Dialup, 
+gobjc: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+gom: Tasks: Sound,  Profiles: Dialup, 
+gom-x: Tasks: Sound,  Profiles: Dialup, 
+gpm: Tasks: Admin, C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Sound, Standard, Tcl_devel, Tex, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+groff: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+gs: Tasks: C, Graphics, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+gsfonts: Tasks: C, Graphics, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+gtimer: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[NOT_M68K:
+guile1.3: Tasks: Scheme, Workst, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_M68K]
+gv: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+gzilla: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+htdig: Tasks: Web,  Profiles: Server_comp, Server_std, 
+hyperlatex: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+hypermail: Tasks: Mail,  Profiles: Server_comp, 
+hyphen-show: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+iamerican: Tasks: C, Gui_devel, Net_comp, Net_sel, Sgml, Standard, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+ibritish: Tasks: C, Gui_devel, Net_comp, Net_sel, Sgml, Standard, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+ical: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+icewm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+imagemagick: Tasks: Graphics, X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+imlib-base: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+imlib1: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+indent: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+inewsinn: Tasks: Net_comp, Net_sel, News,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Work_sci, Work_std, 
+info: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+inn: Tasks: News,  Profiles: Server_comp, 
+innfeed: Tasks: News,  Profiles: Server_comp, 
+int-fiction: Tasks: Games,  Profiles: Dialup, 
+intlfonts-chinese: Tasks: Chinese,  Profiles: 
+iplogger: Tasks: Netadm,  Profiles: Admin, 
+ipmasq: Tasks: High_rel, Profiles: 
+iptraf: Tasks: Netadm,  Profiles: Admin, 
+ircii: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[I386:
+[ALPHA:
+isapnptools: Tasks: Admin, Profiles: Admin, Dialup,
+:ALPHA]
+:I386]
+[NOT_M68K:
+[NOT_SPARC:
+isdnutils: Tasks: Dialup, Net_comp, Net_sel, Netadm, Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std
+:NOT_SPARC]
+:NOT_M68K]
+ispell: Tasks: C, Gui_devel, Net_comp, Net_sel, Sgml, Standard, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+ivtools: Tasks: Gui_devel, Sound,  Profiles: Devel_comp, Devel_std, Dialup, 
+ivtools-bin: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+ivtools-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+ivtools-doc: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+jade: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+jadetex: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+jargon: Tasks: Debian, Doc,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+jed: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+jed-common: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+jered: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+jgraph: Tasks: Plot,  Profiles: Dialup, Work_sci, Work_std, 
+joe: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+jpeginfo: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+junkbuster: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+kernel-package: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+kernel-source-2.0.36: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+kernel-headers-2.0.36: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+kernel-source-2.2.10: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+kernel-headers-2.2.10: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+knews: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+koules: Tasks: Games,  Profiles: Dialup, 
+lacheck: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+lapack: Tasks: Science,  Profiles: Work_sci, 
+lapack-dev: Tasks: Science,  Profiles: Work_sci, 
+lapack-doc: Tasks: Science,  Profiles: Work_sci, 
+leave: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+less: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+lesstifg: Tasks: Admin, C, Doc, Fortran, Games, Graphics, Gui_devel, Newbie, Net_comp, Net_sel, Plot, Prod, Sound, Sgml, Standard, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Standard, Work_sci, Work_std, 
+lftp: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+lg-base: Tasks: Newbie,  Profiles: 
+lg-issue01to08: Tasks: Newbie,  Profiles: 
+lg-issue09: Tasks: Newbie,  Profiles: 
+lg-issue10: Tasks: Newbie,  Profiles: 
+lg-issue11: Tasks: Newbie,  Profiles: 
+lg-issue12: Tasks: Newbie,  Profiles: 
+lg-issue13: Tasks: Newbie,  Profiles: 
+lg-issue14: Tasks: Newbie,  Profiles: 
+lg-issue15: Tasks: Newbie,  Profiles: 
+lg-issue16: Tasks: Newbie,  Profiles: 
+lg-issue17: Tasks: Newbie,  Profiles: 
+lg-issue18: Tasks: Newbie,  Profiles: 
+lg-issue19: Tasks: Newbie,  Profiles: 
+lg-issue20: Tasks: Newbie,  Profiles: 
+lg-issue21: Tasks: Newbie,  Profiles: 
+lg-issue22: Tasks: Newbie,  Profiles: 
+lg-issue23: Tasks: Newbie,  Profiles: 
+lg-issue24: Tasks: Newbie,  Profiles: 
+lg-issue25: Tasks: Newbie,  Profiles: 
+lg-issue26: Tasks: Newbie,  Profiles: 
+lg-issue27: Tasks: Newbie,  Profiles: 
+lg-issue28: Tasks: Newbie,  Profiles: 
+[I386:
+[M68K:
+libc5: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+:M68K]
+:I386]
+libc6-dev: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+glibc-doc: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+libcgi-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libcompfaceg1: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libcompress-zlib-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libcurses-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libdb2: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libdelimmatch-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libdnd1: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libelfg0: Tasks: Admin, Graphics, Net_comp, Scheme, Mail, C, Samba,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+[ALPHA:
+libffm1: Tasks: Science, Profiles: Work_sci,
+:ALPHA]
+[NOT_POWERPC:
+libg++2.8.2: Tasks: Sound, Science,  Profiles: Dialup, Work_sci,
+libg++272: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+:NOT_POWERPC]
+[NOT_ALPHA:
+[NOT_POWERPC:
+libgdbm1: Tasks:  Profiles: Admin, 
+:NOT_POWERPC]
+:NOT_ALPHA]
+libgdbmg1: Tasks: Admin, C, Database, Devel, Dialup, Fortran, Gui_devel, Lisp, Netadm, Net_comp, Net_sel, Nis, Perl_devel, Pop, Python, Scheme, Sgml, Standard, Tcl_devel, Tex, Web,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libgdbmg1-dev: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+libgimp1: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+libglib1.1: Tasks: Graphics, Gui_devel, Perl_devel,  Profiles: Admin, Dialup, Devel_comp, Work_sci, Work_std
+libglib1.2: Tasks: Graphics, Gui_devel, Perl_devel, C,  Profiles: Admin, Dialup, Devel_comp, Work_sci, Work_std
+libgpmg1: Tasks: Admin, C, Devel, Fortran, Games, Graphics, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Sound, Tcl_devel, Tex, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libgtk-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+libgtk-doc: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+[NOT_SPARC:
+libgtk-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+:NOT_SPARC]
+libgtk1: Tasks: Games, Graphics, Gui_devel, Net_comp, Netadm, Perl_devel, Prod, Workst, X_comp , X_sel Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libgtk1.1: Tasks: Graphics, Gui_devel, Perl_devel,  Profiles: Admin, Devel_comp, Dialup, Work_std, Work_sci
+libgtk1.2: Tasks: Graphics, Gui_devel, Perl_devel, C,  Profiles: Admin, Devel_comp, Dialup, Work_std, Work_sci
+libgtkmm: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+libgtkmm-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+[NOT_M68K:
+libguile4: Tasks: Scheme, Workst, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libguile4-dev: Tasks: Scheme,  Profiles: Devel_comp, 
+:NOT_M68K]
+libhdf4g: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libhtml-parser-perl: Tasks: Newbie,  Profiles: 
+libident: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, High_rel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libio-stringy-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libjpeg62: Tasks: C, Database, Devel, Fortran, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Newbie, Perl_devel, Prod, Python, Scheme, Sgml, Sound, Standard, Tcl_devel, Tex, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+liblockdev0-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+liblockfile0: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Net_sel, Perl_devel, Pop, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libmagick4g: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libmime-base64-perl: Tasks: Admin, Net_comp, Netadm, Newbie, Perl_devel,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libmime-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libmpeg1: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libncurses4-dev: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+libnet-perl: Tasks: Admin, Net_comp, Netadm, Newbie, Perl_devel,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libnspr3: Tasks: C, Devel, Standard,  Profiles: Devel_std, Dialup, Server_std, Standard, Work_sci, Work_std,
+liborbit0: Tasks: Dialup, Games, Graphics, X_comp, X_sel, C,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std,
+libpam0g: Tasks: Admin, Dialup, Games, Graphics, X_comp, X_sel, High_rel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std
+libpam0g-util: Tasks: Dialup, Games, Graphics, X_comp, X_sel, High_rel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libpam-runtime: Tasks: Admin, Dialup, Games, Graphics, X_comp, X_sel, High_rel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std
+libpam-modules: Tasks: Admin, Dialup, Games, Graphics, X_comp, X_sel, High_rel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std
+libpaperg: Tasks: C, Graphics, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+libpcap0: Tasks: High_rel, Netadm,  Profiles: Admin, 
+libpcre1: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libpcre2: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+libpgperl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libpgsql: Tasks: Database, Perl_devel, Tcl_devel,  Profiles: Admin, Devel_comp, 
+libpgtcl: Tasks: Tcl_devel,  Profiles: Admin, Devel_comp, 
+libpng0g: Tasks: Graphics, Net_comp, Net_sel, Newbie, Perl_devel, Plot, Science, Sgml, Tex, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libpng2: Tasks: C, Devel, Net_sel, Fortran, Graphics, Gui_devel, Lisp, Net_comp, Newbie, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+libpopt0: Tasks: Admin,  Profiles: Admin, Devel_comp, Devel_std,
+libproplist0: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+libpwdb0g: Tasks: Dialup, Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libreadlineg2-dev: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+librecode0: Tasks: Admin,  Profiles: Admin,
+librpm1: Tasks: Admin,  Profiles: Admin, 
+librx1g: Tasks: Web, X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, Server_comp, Server_std, 
+libsocks4: Tasks: High_rel, Profiles: 
+libsp1: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+[NOT_POWERPC:
+libstdc++2.8: Tasks: C, Fortran, Gui_devel, Graphics, Sgml, Sound, Standard, Tex, Web, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Server_comp, Server_std, Work_sci, Work_std, 
+:NOT_POWERPC]
+libstdc++2.9-dev: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, 
+libterm-readkey-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libtiff3g: Tasks: Database, Graphics, Gui_devel, Perl_devel, Sound, Tcl_devel, Tex, X_comp, C,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+libtime-hires-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libtime-period-perl: Tasks: High_rel, Netadm, Perl_devel,  Profiles: Admin, Devel_comp, 
+libtimedate-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+libtool: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+libungif3g: Tasks:  X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+libwraster1: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+libwww-perl: Tasks: Admin, Net_comp, Netadm, Newbie, Perl_devel,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+libxbase-perl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+[I386: 
+lilo: Tasks:  Profiles: Admin, 
+:I386]
+lincity: Tasks: Games,  Profiles: Dialup, 
+[I386:
+[ALPHA:
+lincity-svga: Tasks: Games,  Profiles: Dialup, 
+:ALPHA]
+:I386]
+lincity-x: Tasks: Games,  Profiles: Dialup, 
+liwc: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+loadmeter: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+locales: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+lockvc: Tasks: High_rel, Profiles: 
+lprng: Tasks: C, Gui_devel, Net_comp, Sgml, Standard, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+lprng-doc: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+lrzsz: Tasks: Dialup,  Profiles: Dialup, 
+lsof-2.2: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+[NOT_SPARC:
+[NOT_ALPHA:
+[NOT_POWERPC:
+ltrace: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+:NOT_POWERPC]
+:NOT_ALPHA]
+:NOT_SPARC]
+lurkftp: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+[I386:
+[ALPHA:
+luxman: Tasks: Games,  Profiles: Dialup, 
+:ALPHA]
+:I386]
+lynx: Tasks: C, Doc, Gui_devel, Net_comp, Net_sel, Newbie, Sgml, Standard, Tex, Web,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+m4: Tasks: C, Games, Graphics, Gui_devel, Standard, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+magicfilter: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+mailtools: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+mailx: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+make: Tasks: Admin, C, Debian, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+make-doc: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+makepasswd: Tasks: High_rel, Profiles: 
+makepatch: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+man-db: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+manpages: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+manpages-dev: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+maplay: Tasks: Sound,  Profiles: Dialup, 
+mc: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+mctools-lite: Tasks: Sound,  Profiles: Dialup, 
+megahal: Tasks: Games,  Profiles: Dialup, 
+menu: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+mesa-doc: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+mesag-dev: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+mesag3: Tasks: Graphics, X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+metamail: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+mgt: Tasks: Games,  Profiles: Dialup, 
+mh: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+mime-support: Tasks: C, Database, Doc, Gui_devel, Net_comp, Net_sel, Newbie, Sgml, Standard, Tex, Web,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+mirrordir: Tasks: Netadm,  Profiles: Admin, 
+[NOT_SPARC:
+mixviews: Tasks: Sound,  Profiles: Dialup, 
+:NOT_SPARC]
+mkhybrid: Tasks: Admin,  Profiles: Admin, 
+mkisofs: Tasks: Admin,  Profiles: Admin, 
+mmv: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+mon: Tasks: Admin, High_rel,  Profiles: 
+[NOT_M68K:
+moonlight: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+:NOT_M68K]
+most: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+motifnls: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[NOT_M68K:
+mozilla: Tasks: Doc, Gui_devel, Net_comp, Net_sel, Newbie, Sgml, Standard, Tex, Web,  Profiles: Admin, Dialup, Server_comp, Standard, Work_sci, Work_std, 
+:NOT_M68K]
+mpack: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+mpage: Tasks: C, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+mtools: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+mtr: Tasks: Netadm,  Profiles: Admin, 
+mtx: Tasks: Netbckup,  Profiles: Server_comp, 
+multitee: Tasks: Admin,  Profiles: Admin, 
+mutt: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+nas-lib: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Sound, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+ncftp: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+ncurses-bin: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+ncurses-term: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+ncurses3.4: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, High_rel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+netbase: Tasks: C, Debian, Devel, Dialup, Dns, Fortran, Ftp, Gui_devel, High_rel, Lisp, Net_comp, Net_sel, Netadm, Netadm, Netbckup, Nis, Perl_devel, Python, Samba, Scheme, Tcl_devel, Webcache,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+netcat: Tasks: Netadm,  Profiles: Admin, 
+netcdfg3: Tasks: Plot, Science,  Profiles: Dialup, Work_sci, Work_std, 
+[NOT_M68K:
+netdiag: Tasks: Netadm,  Profiles: Admin, 
+:NOT_M68K]
+nethack: Tasks: Games,  Profiles: Dialup, 
+netmaze: Tasks: Games,  Profiles: Dialup, 
+netpbm: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+netpbm1: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+netris: Tasks: Games,  Profiles: Dialup, 
+netstd: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+nfs-server: Tasks: Net_comp, Net_sel, Netadm,  Profiles: Admin, Server_comp, Server_std, 
+nighthawk: Tasks: Games,  Profiles: Dialup, 
+nis: Tasks: Nis,  Profiles: Server_comp, Server_std, 
+nmap: Tasks: High_rel, Profiles: 
+nn: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+nosql: Tasks: Database,  Profiles: Admin, 
+nvi: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+octave: Tasks: Science,  Profiles: Work_sci, 
+octave-ci: Tasks: Science,  Profiles: Work_sci, 
+octave-doc: Tasks: Science,  Profiles: Work_sci, 
+oleo: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+olvwm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+olwm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+oneko: Tasks: Games,  Profiles: Dialup, 
+orbit: Tasks: C,  Profiles: Devel_comp,
+packaging-manual: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+pacman: Tasks: Games,  Profiles: Dialup, 
+patch: Tasks: Admin, C, Debian, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+pdksh: Tasks: C, Gui_devel, Standard,  Profiles: Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+pdl: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+pdmenu: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+pente: Tasks: Games,  Profiles: Dialup, 
+perl-5.004: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, High_rel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+perl-5.005: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, High_rel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+perl-5.004-suid: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+perl-5.005-suid: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+perl-tk: Tasks: Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Dialup, Work_sci, Work_std, 
+perlmagick: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+perlmenu: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+perlsgml: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+pftp: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+pgapack: Tasks: Science,  Profiles: Work_sci, 
+phalanx: Tasks: Games,  Profiles: Dialup, 
+php3: Tasks: Web,  Profiles: Server_comp, Server_std, 
+php3-dev: Tasks: Web,  Profiles: Server_comp, Server_std, 
+php3-doc: Tasks: Web,  Profiles: Server_comp, Server_std, 
+pixmap: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+pkg-order: Tasks: Admin,  Profiles: Admin, 
+plan: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+playmidi: Tasks: Sound,  Profiles: Dialup, 
+plotutils: Tasks: Plot,  Profiles: Dialup, Work_sci, Work_std, 
+postgresql: Tasks: Database,  Profiles: Admin, 
+postgresql-dev: Tasks: Database,  Profiles: Admin, 
+postgresql-doc: Tasks: Database,  Profiles: Admin, 
+[POWERPC:
+powerpc-utils: Tasks: Basic,  Profiles: Basic,
+:POWERPC]
+ppp: Tasks: Dialup,  Profiles: Dialup, 
+ppp-pam: Tasks: Dialup,  Profiles: Dialup, 
+printop: Tasks: Admin,  Profiles: Admin, 
+procmail: Tasks: C, Gui_devel, Mail, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Standard, Work_sci, Work_std, 
+procmail-lib: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+procmeter: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+proftpd: Tasks: Ftp,  Profiles: Server_comp, Server_std, 
+psgml: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+psmisc: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+pstoedit: Tasks: Graphics, Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+pstotext: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+psutils: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+publib-dev: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+purity: Tasks: Games,  Profiles: Dialup, 
+pwgen: Tasks: Admin,  Profiles: Admin, 
+python-base: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-bsddb: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-curses: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-dev: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-doc: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-elisp: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-examples: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-misc: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-mpz: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-net: Tasks: Python,  Profiles: Admin, Devel_comp, 
+[NOT_SPARC:
+python-numeric: Tasks: Python,  Profiles: Admin, Devel_comp, 
+:NOT_SPARC]
+python-pmw: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-tk: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-wpy: Tasks: Python,  Profiles: Admin, Devel_comp, 
+python-zlib: Tasks: Python,  Profiles: Admin, Devel_comp, 
+qpopper: Tasks: Pop,  Profiles: Server_comp, Server_std, 
+queso: Tasks:  Profiles: Admin, Server_std, 
+[POWERPC:
+quik: Tasks: Basic,  Profiles: Basic,
+:POWERPC]
+quota: Tasks: Admin,  Profiles: Admin, 
+r-base: Tasks: Science,  Profiles: Work_sci, 
+r-cran: Tasks: Science,  Profiles: Work_sci, 
+raidtools: Tasks: Admin, High_rel,  Profiles: 
+[NOT_M68K:
+[NOT_SPARC:
+razzle: Tasks: Games,  Profiles: Dialup, 
+:NOT_SPARC]
+:NOT_M68K]
+rcs: Tasks: C, Database, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+recode: Tasks: Admin, Sgml, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+redir: Tasks: High_rel, Profiles: 
+regina0: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+rgrep: Tasks: Admin,  Profiles: Admin, 
+rinetd: Tasks: High_rel, Profiles: 
+rpm: Tasks: Admin,  Profiles: Admin, 
+rpncalc: Tasks: Science,  Profiles: Work_sci, 
+[NOT_ALPHA:
+rscheme: Tasks: Scheme,  Profiles: Devel_comp, 
+:NOT_ALPHA]
+rstart: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+rstartd: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+rsync: Tasks: Netadm,  Profiles: Admin, 
+ruari-diff: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+rxvt: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+rxvt-ml: Tasks: Chinese, Profiles: ,
+s3mod: Tasks: Sound,  Profiles: Dialup, 
+sac: Tasks: Admin,  Profiles: Admin, 
+samba: Tasks: Samba,  Profiles: Server_comp, 
+samba-common: Tasks: Samba,  Profiles: Server_comp,
+sane: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+sash: Tasks: Admin,  Profiles: Admin, 
+sc: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+sced: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+[NOT_ALPHA: 
+scm: Tasks: Scheme,  Profiles: Devel_comp, 
+:NOT_ALPHA]
+scotty: Tasks: Netadm,  Profiles: Admin, 
+scwm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+secure-su: Tasks: High_rel, Profiles: 
+seesat5: Tasks: Science,  Profiles: Work_sci, 
+sendfile: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+sgb: Tasks: Science,  Profiles: Work_sci, 
+sgml-base: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+sgml-data: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+sgml-tools: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+sgmlspm: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+sharutils: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+shhmsg: Tasks: Games,  Profiles: Dialup, 
+shhopt: Tasks: Games,  Profiles: Dialup, 
+signify: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+sigrot: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+[SPARC: 
+silo: Tasks:  Profiles: Admin, 
+:SPARC]
+sirc: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+slang1-dev: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
+slay: Tasks: Admin,  Profiles: Admin, 
+slib: Tasks: Scheme, Workst, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+slrn: Tasks: Dialup, Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+slsc: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+smartlist: Tasks: Mail,  Profiles: Server_comp, 
+snake4: Tasks: Games,  Profiles: Dialup, 
+socks4-clients: Tasks: High_rel, Profiles: 
+socks4-server: Tasks: High_rel, Profiles: 
+sortmail: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+sox: Tasks: Admin, Dialup, Netadm, Net_comp, Net_sel, Sound,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std,
+sp: Tasks: Sgml,  Profiles: Devel_comp, Devel_std, 
+spider: Tasks: Games,  Profiles: Dialup, 
+spline: Tasks: Science,  Profiles: Work_sci, 
+squid: Tasks: Webcache,  Profiles: Server_comp, 
+squidclient: Tasks: Webcache,  Profiles: Server_comp, 
+stat: Tasks: Admin,  Profiles: Admin, 
+stow: Tasks: Admin,  Profiles: Admin, 
+strace: Tasks: Admin, C, Gui_devel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Standard, Work_sci, Work_std, 
+sudo: Tasks: Admin, High_rel, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+suidmanager: Tasks: Admin, Dialup, High_rel, Net_comp, Net_sel, Netadm, Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std,
+super: Tasks: Admin,  Profiles: Admin, 
+[I386:
+[ALPHA:
+svgalibg1: Tasks: C, Games, Graphics, Gui_devel, High_rel, Plot, Science, Sgml, Sound, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+:ALPHA]
+:I386]
+[NOT_I386:
+[NOT_ALPHA:
+svgalib-dummyg1: Tasks: C, Games, Graphics, Gui_devel, High_rel, Plot, Science, Sgml, Sound, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+:NOT_ALPHA]
+:NOT_I386]
+swish++: Tasks: Web,  Profiles: Server_comp, Server_std, 
+swisswatch: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+symlinks: Tasks: Admin,  Profiles: Admin, 
+synaesthesia: Tasks: Sound,  Profiles: Dialup, 
+sysnews: Tasks: Admin,  Profiles: Admin, 
+sysutils: Tasks: Admin,  Profiles: Admin, 
+talk: Tasks: Net_sel, Netadm,  Profiles: Admin, Server_comp, 
+talkd: Tasks: Net_comp, Net_sel, Netadm, Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Work_sci, Work_std, 
+tama: Tasks: Games,  Profiles: Dialup, 
+taper: Tasks: Backup,  Profiles: Dialup, 
+tcl7.6: Tasks: Games, Graphics, Net_comp, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tcl8.0: Tasks: Admin, C, Database, Debian, Devel, Dialup, Fortran, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Perl_devel, Prod, Python, Scheme, Sgml, Sound, Tcl_devel, Tex, Workst, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+tcl8.0-dev: Tasks: Admin, Gui_devel, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, 
+tcpdump: Tasks: High_rel, Netadm,  Profiles: Admin, 
+tcsh: Tasks: C, Graphics, Gui_devel, Netbckup, Standard, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Standard, Work_sci, Work_std, 
+tcsh-i18n: Tasks: C, Gui_devel, Standard, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+telnet: Tasks: Net_comp, Net_sel, Netadm,  Profiles: Admin, Server_comp, Server_std, 
+telnetd: Tasks: Net_comp, Net_sel, Netadm,  Profiles: Admin, Server_comp, Server_std, 
+tetex-base: Tasks: Sgml, Tex, C,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tetex-bin: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tetex-doc: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+tetex-extra: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tf: Tasks: Games,  Profiles: Dialup, 
+the: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+the-doc: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+thrust: Tasks: Games,  Profiles: Dialup, 
+time: Tasks: C, Gui_devel, News, Standard,  Profiles: Devel_comp, Devel_std, Server_comp, Standard, Work_sci, Work_std, 
+timidity: Tasks: Sound,  Profiles: Dialup, 
+timidity-patches: Tasks: Sound,  Profiles: Dialup, 
+tinyirc: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tix41: Tasks: Admin,  Profiles: Admin, 
+tk4.2: Tasks: Games, Graphics, Net_comp, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tk8.0: Tasks: Admin, C, Database, Debian, Devel, Fortran, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Perl_devel, Prod, Python, Scheme, Sgml, Sound, Tcl_devel, Tex, Workst, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tk8.0-dev: Tasks: Admin, Gui_devel, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, 
+tkcvs: Tasks: C, Debian, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+[NOT_ALPHA:
+[NOT_SPARC:
+tkdesk: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_SPARC]
+:NOT_ALPHA]
+tkdiff: Tasks: C, Debian, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+tkfont: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tkinfo: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tkirc: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tkmail: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tkmixer: Tasks: Sound,  Profiles: Dialup, 
+tkps: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+tkrat: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tkstep8.0: Tasks: Database, Tcl_devel,  Profiles: Admin, Devel_comp, 
+tm: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+tmpreaper: Tasks: Admin,  Profiles: Admin, 
+tob: Tasks: Backup,  Profiles: Dialup, 
+transfig: Tasks: Graphics, Tex,  Profiles: Dialup, Work_sci, Work_std, 
+tree: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+trn: Tasks: Net_comp, Net_sel, News,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Work_sci, Work_std, 
+twm: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+ttysnoop: Tasks: Netadm,  Profiles: Admin, 
+typist: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+untex: Tasks: Tex,  Profiles: Dialup, Work_sci, Work_std, 
+urlview: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+uudeview: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+v-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+v1g: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+[I386:
+[ALPHA:
+vgacardgames: Tasks: Games,  Profiles: Dialup, 
+vgagamespack: Tasks: Games,  Profiles: Dialup, 
+:ALPHA]
+:I386]
+vim: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+vim-rt: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+visual-tcl: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+vm-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+vm1: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+[NOT_ALPHA:
+[NOT_SPARC:
+vrweb: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+:NOT_SPARC]
+:NOT_ALPHA]
+vtwm: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+w3-el-e20: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+w3mir: Tasks: Net_comp, Netadm,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wdiff: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+wenglish: Tasks: C, Games, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+wget: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+wm2: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wmaker: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wmaker-data: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wmload: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wmmail: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+wnn-common: Tasks: Chinese, Profiles: 
+word2x: Tasks: Sgml, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+wordplay: Tasks: Games,  Profiles: Dialup, 
+workbone: Tasks: Sound,  Profiles: Dialup, 
+worklog: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+workman: Tasks: Sound,  Profiles: Dialup, 
+wvdial: Tasks: Dialup,  Profiles: Dialup, 
+www-pgsql: Tasks: Database,  Profiles: Admin, 
+www-search: Tasks: Perl_devel,  Profiles: Admin, Devel_comp, 
+wxhelp: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+wxxt1: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+wzip: Tasks: Science,  Profiles: Work_sci, 
+xabacus: Tasks: Games,  Profiles: Dialup, 
+xacc: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xarclock: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xasteroids: Tasks: Games,  Profiles: Dialup, 
+xaw-wrappers: Tasks: Games,  Profiles: Dialup, 
+xaw3dg: Tasks: C, Games, Gui_devel, Sgml, Standard, Tex,  Profiles: Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+xbanner: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xbase-clients: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+xbattle: Tasks: Games,  Profiles: Dialup, 
+xbill: Tasks: Games,  Profiles: Dialup, 
+xbl: Tasks: Games,  Profiles: Dialup, 
+xblast: Tasks: Games,  Profiles: Dialup, 
+xblast-sound: Tasks: Games,  Profiles: Dialup, 
+xbmbrowser: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+xboard: Tasks: Games,  Profiles: Dialup, 
+xboing: Tasks: Games,  Profiles: Dialup, 
+xbuffy: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xcal: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xcin: Tasks: Chinese, Profiles: ,
+xcdroast: Tasks: Admin,  Profiles: Admin, 
+xcolors: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xcolorsel: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xconq: Tasks: Games,  Profiles: Dialup, 
+xconq-doc: Tasks: Games,  Profiles: Dialup, 
+xcontrib: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xcoral: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xdaliclock: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xdemineur: Tasks: Games,  Profiles: Dialup, 
+xdigger: Tasks: Games,  Profiles: Dialup, 
+xdm: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+[NOT_POWERPC:
+xemacs20-bin: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs20-nomule: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs20-mule: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs20-support: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_POWERPC]
+[POWERPC:
+xemacs21-bin: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs21-nomule: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs21-mule: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xemacs21-support: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Sgml, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:POWERPC]
+xemeraldia: Tasks: Games,  Profiles: Dialup, 
+xevil: Tasks: Games,  Profiles: Dialup, 
+[NOT_M68K:
+[NOT_SPARC:
+[NOT_POWERPC:
+xf86setup: Tasks: X_comp, X_sel, Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_POWERPC]
+:NOT_SPARC]
+:NOT_M68K]
+xfig: Tasks: Graphics, Tex,  Profiles: Dialup, Work_sci, Work_std, 
+xfig-doc: Tasks: Graphics, Tex,  Profiles: Dialup, Work_sci, Work_std, 
+xfishtank: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xflip: Tasks: Games,  Profiles: Dialup, 
+xfntbig5p-cmex24m: Tasks: Chinese,  Profiles: 
+xfree86-common: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+xfs: Tasks: Admin, C, Chinese, Database, Debian, Devel, Dialup, Doc, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+xfonts-100dpi: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+xfonts-75dpi: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xfonts-base: Tasks: Games, Graphics, X_comp, X_sel, Chinese, Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xfonts-cjk: Tasks: Chinese,  Profiles: 
+xfonts-pex: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xfonts-scalable: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xftp: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xgammon: Tasks: Games,  Profiles: Dialup, 
+xjewel: Tasks: Games,  Profiles: Dialup, 
+xjig: Tasks: Games,  Profiles: Dialup, 
+xkobo: Tasks: Games,  Profiles: Dialup, 
+xlaby: Tasks: Games,  Profiles: Dialup, 
+xlbiff: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xless: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xlib6g: Tasks: Admin, C, Chinese, Database, Debian, Devel, Doc, Dialup, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Netadm, Newbie, News, Perl_devel, Plot, Prod, Python, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+xlib6g-dev: Tasks: Admin, Gui_devel, Science, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, 
+xlife: Tasks: Games,  Profiles: Dialup, 
+[NOT_SPARC: 
+xlispstat: Tasks: Science,  Profiles: Work_sci, 
+:NOT_SPARC]
+xloadimage: Tasks: Graphics, Tex,  Profiles: Dialup, Work_sci, Work_std, 
+xlockmore: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xmaddressbook: Tasks: Prod,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xmailbox: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xmailtool: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xmanpages: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+xmcd: Tasks: Sound,  Profiles: Dialup, 
+[NOT_ALPHA: 
+xmcpustate: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_ALPHA]
+xmgr: Tasks: Plot,  Profiles: Dialup, Work_sci, Work_std, 
+xmille: Tasks: Games,  Profiles: Dialup, 
+xmix: Tasks: Sound,  Profiles: Dialup, 
+xmorph: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+xmotd: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xmountains: Tasks: Games,  Profiles: Dialup, 
+xnetload: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xntp3: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xntp3-doc: Tasks: Net_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xodo: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xoids: Tasks: Games,  Profiles: Dialup, 
+xoj: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xonix: Tasks: Games,  Profiles: Dialup, 
+xonix-jahu: Tasks: Games,  Profiles: Dialup, 
+[NOT_POWERPC:
+xosview: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_POWERPC]
+xpaint: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std, 
+xpat2: Tasks: Games,  Profiles: Dialup, 
+xphoon: Tasks: Games,  Profiles: Dialup, 
+xpilot: Tasks: Games,  Profiles: Dialup, 
+xpm4g: Tasks: Admin, C, Chinese, Database, Devel, Fortran, Games, Graphics, Gui_devel, Lisp, Net_comp, Newbie, Perl_devel, Plot, Prod, Python, Scheme, Sgml, Sound, Tcl_devel, Tex, Workst, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xpm4g-dev: Tasks: Gui_devel,  Profiles: Devel_comp, Devel_std, 
+[NOT_POWERPC:
+xproc: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_POWERPC]
+xpuzzles: Tasks: Games,  Profiles: Dialup, 
+xroach: Tasks: Games,  Profiles: Dialup, 
+xscavenger: Tasks: Games,  Profiles: Dialup, 
+xscreensaver: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xscreensaver-gl: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xserver-common: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[I386:
+[ALPHA:
+xserver-mach64: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xserver-s3: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xserver-svga: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:ALPHA]
+:I386]
+[I386:
+xserver-vga16: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:I386]
+[SPARC:
+xserver-xsun-mono: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std,
+xserver-xsun: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std,
+xserver-xsun24: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std,
+:SPARC]
+xserver-fbdev: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xshogi: Tasks: Games,  Profiles: Dialup, 
+xskat: Tasks: Games,  Profiles: Dialup, 
+xsok: Tasks: Games,  Profiles: Dialup, 
+xsoldier: Tasks: Games,  Profiles: Dialup, 
+[NOT_SPARC: 
+xspread: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:NOT_SPARC]
+xsysinfo: Tasks: Admin, Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xterm: Tasks: X_comp, X_sel, Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+xtoolwait: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xtris: Tasks: Games,  Profiles: Dialup, 
+xtrlock: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xtron: Tasks: Games,  Profiles: Dialup, 
+xtv: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xvier: Tasks: Games,  Profiles: Dialup, 
+xview-clients: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xviewg: Tasks: Sound, X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xvt: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+xwave: Tasks: Sound,  Profiles: Dialup, 
+xzip: Tasks: Games,  Profiles: Dialup, 
+xzoom: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+yorick: Tasks: Science,  Profiles: Work_sci, 
+ytalk: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+zed: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+[I386:
+[ALPHA:
+zgv: Tasks: Graphics,  Profiles: Dialup, Work_sci, Work_std,
+:ALPHA] 
+:I386] 
+zile: Tasks: Workst,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+zircon: Tasks: Net_comp, Net_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+zlib1g: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Netadm, Netbckup, Net_comp, Net_sel, Newbie, News, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+
+[DONOTKEEP:
+# Empty slices to keep slice happy
+:DONOTKEEP]
+[SPARC:
+:SPARC]
+[ALPHA:
+:ALPHA]
+[M68K:
+:M68K]
+[ARM:
+:ARM]
+[POWERPC:
+:POWERPC]
+[NOT_SPARC:
+:NOT_SPARC]
+[NOT_ALPHA:
+:NOT_ALPHA]
+[NOT_M68K:
+:NOT_M68K]
+[NOT_I386:
+:NOT_I386]
+[NOT_ARM:
+:NOT_ARM]
+[NOT_POWERPC:
+:NOT_POWERPC]
+

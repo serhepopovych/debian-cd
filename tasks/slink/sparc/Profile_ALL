@@ -1,0 +1,10 @@
+#include <slink/sparc/Profile_Work_sci>
+#include <slink/sparc/Profile_Standard>
+#include <slink/sparc/Profile_Server_std>
+#include <slink/sparc/Profile_Admin>
+#include <slink/sparc/Profile_Devel_std>
+#include <slink/sparc/Profile_Basic>
+#include <slink/sparc/Profile_Work_std>
+#include <slink/sparc/Profile_Server_comp>
+#include <slink/sparc/Profile_Devel_comp>
+#include <slink/sparc/Profile_Dialup>

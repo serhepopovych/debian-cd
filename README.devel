@@ -1,0 +1,46 @@
+README for those who want to hack on yacs
+-----------------------------------------
+
+The Makefile which is the main directory will be used to launch
+each step of the install process. Try to comment each target of
+the makefile so that other can know why it's here. If you need
+specific programs (perl or shell scripts), please put them
+in the tools directory.
+
+The tasks directory will contain files listing packages (the
+order in which package are listed is important, each package
+added will be added to the current CD until it's full).
+
+The data dir will contains useful data (not directly task 
+related) like the master file from boot-floppies and so on.
+
+Each tool is self-documented, if you want to know what it
+does read the sources (they are scripts).
+
+Debugging YACS :
+----------------
+
+If you want to read more about what YACS is doing you can set
+the VERBOSE environment variable to 1, 2 or 3 depending on the
+level of noise that you want.
+
+Some scripts generates their own log files in the temp dir. You 
+can take a look at them if you want to check for warnings 
+and so on.
+Log files :
+- $TDIR/$CODENAME-$ARCH/log.list2cds
+- $TDIR/$CODENAME-SRC/log.cds2src
+
+TODO list :
+-----------
++ a way to force the inclusion of packages (even broken)
++ possibility to add project/* to the last CD
++ check the source files on the mirror (with Sources.gz)
+  when doing make mirrorcheck
+
+Bugs / Problems :
+-----------------
+* make list will not add contrib packages if you do not
+  select NONFREE too. That's because contrib is broken
+  without non-free. And the building process only allow
+  functionnal packages to be added.

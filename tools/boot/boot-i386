@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# boot-i386 v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Released as part of the debian_cd package, not much use standalone
+#
+# 06-10-99 jjw Added $CODENAME and $CODENAME_STATUS support 
+#
+# Do install stuff for i386, including making bootable CDs
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+N=$1
+CDDIR=$2
+BOOTDIR=
+
+cd $CDDIR/..
+
+# Tecra image for disk 2
+
+if [ $N == 2 ]; then
+	:> 2.mkisofs_opts
+	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/resc1440tecra.bin ] 
+	then
+		mkdir -p boot2/boot
+		cp 1/dists/$CODENAME/main/disks-$ARCH/current/resc1440tecra.bin \
+			boot2/boot
+		echo -n "-J -b boot/resc1440tecra.bin -c boot/boot.catalog boot2" \
+		        > 2.mkisofs_opts
+	fi
+	exit 0;
+fi
+
+# Disks != 1 and not 2
+if [ $N != 1 ]; then 
+	echo -n "-J" > $N.mkisofs_opts
+	exit 0; 
+fi
+
+# Now we do disk 1 ...
+
+echo -n "-J -b boot/resc1440.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
+
+(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+	cp resc*.bin linux root.bin $CDDIR/install )
+
+mkdir -p boot1/boot
+
+cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/resc1440.bin	boot1/boot
+
+#Extracting tools for disc 1
+
+mkdir -p $CDDIR/tools/fips20
+(cd $CDDIR/tools/fips20; \
+	unzip -Lq $MIRROR/tools/fips20.zip >/dev/null; \
+	rm restorrb source -rf)
+
+(cd $CDDIR/tools; \
+	unzip -Lq $MIRROR/tools/lodlin16.zip >/dev/null; \
+	rm lodlin16/src lodlin16/initrd loadlin16/debian -rf )
+
+mkdir $CDDIR/tools/rawrite1
+(cd $CDDIR/tools/rawrite1; \
+	unzip -Lq $MIRROR/tools/rawrite1.zip >/dev/null)
+
+mkdir $CDDIR/tools/rawrite2
+(cd $CDDIR/tools/rawrite2; \
+	unzip -Lq $MIRROR/tools/rawrite2.zip >/dev/null; \
+	rm rawrite2.c )
+
+(echo "Tools for DOS :" ; \
+	echo "fips20/         non-destructively shorten a FAT partition" ; \
+	echo "lodlin16/       load Linux kernel from DOS" ;\
+	echo "rawrite1/       rawrite 1.3 : create disks from disk images (*.bin)"; \
+	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
+	echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
+	) |todos > $CDDIR/tools/README.tools
+
+cp $CDDIR/tools/lodlin16/*.exe $CDDIR/install
+cp $CDDIR/tools/rawrite1/rawrite3.com $CDDIR/install/rw1_3.com
+cp $CDDIR/tools/rawrite2/rawrite2.exe $CDDIR/install/rw2_0.exe
+cp $CDDIR/tools/fips*/*.exe $CDDIR/install
+
+(echo "@ echo off" ; \
+	echo "rem Flush any write-cached disk blocks before we leave DOS. " ; \
+	echo "smartdrv /c" ; \
+	echo "loadlin.exe linux root=/dev/ram ro initrd=root.bin" ; \
+	) |todos > $CDDIR/install/boot.bat
+

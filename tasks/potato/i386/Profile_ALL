@@ -1,0 +1,10 @@
+#include <potato/i386/Profile_Work_sci>
+#include <potato/i386/Profile_Standard>
+#include <potato/i386/Profile_Server_std>
+#include <potato/i386/Profile_Admin>
+#include <potato/i386/Profile_Devel_std>
+#include <potato/i386/Profile_Basic>
+#include <potato/i386/Profile_Work_std>
+#include <potato/i386/Profile_Server_comp>
+#include <potato/i386/Profile_Devel_comp>
+#include <potato/i386/Profile_Dialup>

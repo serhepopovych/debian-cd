@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# boot-alpha v 1.13 (c) Steve McIntyre <stevem@chiark.greenend.org.uk>
+# and Loic Prylli <Loic.Prylli@ens-lyon.fr>
+# Released under GPL 31 Mar 1999
+# See the file COPYING for license details
+# Released as part of the slink_cd package, not much use standalone
+#
+# Do install stuff for alpha, including making bootable CDs
+#
+
+N=$1
+CDDIR=$2
+
+cd $CDDIR/..
+
+# Only disc 1 bootable
+
+if [ $N != 1 ]; then 
+	echo "-J" > $N.mkisofs_opts
+	exit 0; 
+fi
+
+# Hack for bootable disks
+mkdir -p boot1/boot
+
+echo -n "-J boot1" > 1.mkisofs_opts
+
+echo "extract aboot(bootlx) from sable set"
+echo dump srmbootcode boot1/boot/bootlx |\
+     debugfs $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/sable/resc1440.bin
+for subarch in avanti avanti-s xl xlt cabriolet eb66 eb66p eb64p eb164 pc164 \
+      lx164 sx164 jensen noname takara mikasa mikasa-p noritake noritake-p alcor miata \
+           sable sable-g  book1    ruffian; do      
+ mkdir boot1/boot/$subarch
+ echo "drive m: file=\"$CDDIR/dists/stable/main/disks-$ARCH/current/$subarch/resc1440.bin\"" > mtoolsrc.tmp
+ echo "extracting stuff for $subarch"
+ case $subarch in
+          jensen|noritake*|mikasa-p|sable*|book1|miata-s|avanti-s|generic)
+       echo dump linux boot1/boot/$subarch/linux |\
+          debugfs $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/$subarch/resc1440.bin
+       ;;
+       ruffian)
+         MTOOLSRC=$CDDIR/../mtoolsrc.tmp mcopy m:linux m:milo m:ldmilo.exe boot1/boot/$subarch/.
+   ;;         
+       *)
+         MTOOLSRC=$CDDIR/../mtoolsrc.tmp mcopy m:linux m:milo m:linload.exe boot1/boot/$subarch/.
+   ;;
+  esac
+done
+
+mkdir $CDDIR/tools/rawrite1
+(cd $CDDIR/tools/rawrite1; \
+   unzip -Lq $MIRROR/tools/rawrite1.zip )
+
+mkdir $CDDIR/tools/rawrite2
+(cd $CDDIR/tools/rawrite2; \
+   unzip -Lq $MIRROR/tools/rawrite2.zip; \
+   rm rawrite2.c )
+
+(echo "Tools for DOS :" ; \
+   echo "rawrite1/       rawrite 1.3 : create disks from disk images (*.bin)"; \
+   echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
+   echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
+   ) |todos > $CDDIR/tools/README.tools
+
+cp $CDDIR/tools/rawrite1/rawrite3.com $CDDIR/install/rw1_3.com
+cp $CDDIR/tools/rawrite2/rawrite2.exe $CDDIR/install/rw2_0.exe
+
+exit 0

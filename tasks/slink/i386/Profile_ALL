@@ -1,0 +1,10 @@
+#include <slink/i386/Profile_Work_sci>
+#include <slink/i386/Profile_Standard>
+#include <slink/i386/Profile_Server_std>
+#include <slink/i386/Profile_Admin>
+#include <slink/i386/Profile_Devel_std>
+#include <slink/i386/Profile_Basic>
+#include <slink/i386/Profile_Work_std>
+#include <slink/i386/Profile_Server_comp>
+#include <slink/i386/Profile_Devel_comp>
+#include <slink/i386/Profile_Dialup>

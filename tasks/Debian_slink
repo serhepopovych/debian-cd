@@ -1,0 +1,15 @@
+/* Comment 
+ *
+ * This file is used to build complete set of slink CD
+ *
+ */
+
+/* Be sure to have all packages for the standard tasks & profiles on
+ * the first CD */
+#include <slink/@ARCH@/Task_ALL>
+#include <slink/@ARCH@/Profile_ALL>
+
+/* List of packages that may still fit on the first CD */
+
+/* Other packages to put on the others CDs */
+

@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
+# See the README file for the license
+
+# This script will create the Packages.gz and the Packages.cd files
+# First arg = "scan" or "install"
+# Second arg = directory of the CD
+
+#set -e
+
+PREFIX=$2
+NUM=${PREFIX##$TDIR/$CODENAME-$ARCH/}
+if [ -n "$NONFREE" ]; then
+  SECTIONS="main contrib non-free"
+else
+  SECTIONS="main contrib"
+fi
+
+cd "$2"
+
+if [ "$1" = "install" ]; then
+
+for SECT in $SECTIONS; do
+	# Install the release files
+	cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
+   		dists/$CODENAME/$SECT/binary-$ARCH/
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+		cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
+		   dists/$CODENAME/non-US/$SECT/binary-$ARCH/
+	fi
+	# Install the Packages and Packages.gz files
+	grep -v ^X-Medium $PREFIX.Packages-$SECT \
+	     >dists/$CODENAME/$SECT/binary-$ARCH/Packages
+	grep -v ^X-Medium $PREFIX.Packages-$SECT | gzip --best \
+	     >dists/$CODENAME/$SECT/binary-$ARCH/Packages.gz
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+		grep -v ^X-Medium $PREFIX.Packages-non-US-$SECT \
+		     >dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages
+		grep -v ^X-Medium $PREFIX.Packages-non-US-$SECT | gzip --best \
+		     >dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.gz
+	fi
+	# Install the Packages.cd and Packages.cd.gz files
+	# Each CD know about all prior CDs
+	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+		dir=${i%%.packages}
+		n=${dir##$TDIR/$CODENAME-$ARCH/}
+		if [ $n -le $NUM ]; then
+		   cat $dir.Packages-$SECT \
+			  >>dists/$CODENAME/$SECT/binary-$ARCH/Packages.cd
+		   cat $dir.Packages-$SECT | gzip --best \
+			  >>dists/$CODENAME/$SECT/binary-$ARCH/Packages.cd.gz
+		   if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+		      cat $dir.Packages-non-US-$SECT \
+		      >>dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.cd
+		      cat $dir.Packages-non-US-$SECT | gzip --best \
+		      >>dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.cd.gz
+		   fi
+		fi
+	done
+done
+
+if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
+	cp $NONUS/dists/$CODENAME/non-US/binary-$ARCH/Release \
+	   dists/$CODENAME/non-US/binary-$ARCH/
+	grep -v ^X-Medium $PREFIX.Packages-non-US \
+	     >dists/$CODENAME/non-US/binary-$ARCH/Packages
+	grep -v ^X-Medium $PREFIX.Packages-non-US | gzip --best \
+	     >dists/$CODENAME/non-US/binary-$ARCH/Packages.gz
+	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+		dir=${i%%.packages}
+		n=${dir##$TDIR/$CODENAME-$ARCH/}
+		if [ $n -le $NUM ]; then
+		      cat $dir.Packages-non-US \
+		          >>dists/$CODENAME/non-US/binary-$ARCH/Packages.cd
+		      cat $dir.Packages-non-US | gzip --best \
+		          >>dists/$CODENAME/non-US/binary-$ARCH/Packages.cd.gz
+		fi
+	done
+fi
+
+fi
+
+# Creates the temp Packages-$SECT files
+if [ "$1" != "scan" ]; then exit 0; fi
+
+for SECT in $SECTIONS; do
+
+	# Look at the ugly hack for the main special case ...
+
+	dpkg-scanpackages -m "`cat .disk/info`" \
+	          dists/$CODENAME/$SECT/binary-$ARCH \
+                  $MIRROR/indices/override.$CODENAME.`t=${SECT}.; echo -n ${t##main.}`gz \
+		  > $PREFIX.Packages-$SECT
+   
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+ 		 dpkg-scanpackages -m "`cat .disk/info`" \
+		        dists/$CODENAME/non-US/$SECT/binary-$ARCH \
+                  	$NONUS/indices-non-US/override.$CODENAME.`t=${SECT}.; echo -n ${t##main.}`gz \
+		  	> $PREFIX.Packages-non-US-$SECT
+	fi
+	
+done
+
+# Slink special case
+if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
+	dpkg-scanpackages -m "`cat .disk/info`" \
+	     dists/$CODENAME/non-US/binary-$ARCH \
+	     $NONUS/indices-non-US/override.$CODENAME.gz \
+		  	> $PREFIX.Packages-non-US
+fi
+
+exit 0

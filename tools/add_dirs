@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# Create the needed directories before putting packages into them
+
+SECTIONS="admin base comm devel doc editors electronics games graphics \
+          hamradio interpreters libs mail math misc net news oldlibs \
+	  otherosfs shells sound tex text utils web x11"
+
+set -e
+
+cd $1
+
+ln -sf . debian
+mkdir -p dists/$CODENAME
+ln -sf $CODENAME dists/stable
+ln -sf $CODENAME dists/unstable
+ln -sf $CODENAME dists/frozen
+
+for i in $SECTIONS
+do
+	mkdir -p dists/$CODENAME/main/binary-$ARCH/$i
+	mkdir -p dists/$CODENAME/main/binary-all/$i
+	mkdir -p dists/$CODENAME/main/source/$i
+	mkdir -p dists/$CODENAME/contrib/binary-$ARCH/$i
+	mkdir -p dists/$CODENAME/contrib/binary-all/$i
+	mkdir -p dists/$CODENAME/contrib/source/$i
+	if [ -n "$NONFREE" ]; then
+		mkdir -p dists/$CODENAME/non-free/binary-$ARCH/$i
+		mkdir -p dists/$CODENAME/non-free/binary-all/$i
+		mkdir -p dists/$CODENAME/non-free/source/$i
+	fi
+done
+
+if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
+	mkdir -p dists/$CODENAME/non-US/main/binary-all
+	mkdir -p dists/$CODENAME/non-US/main/source
+	mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
+	mkdir -p dists/$CODENAME/non-US/contrib/binary-all
+	mkdir -p dists/$CODENAME/non-US/contrib/source
+	if [ -n "$NONFREE" ]; then
+		mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
+		mkdir -p dists/$CODENAME/non-US/non-free/binary-all
+		mkdir -p dists/$CODENAME/non-US/non-free/source
+	fi
+# Special case for old slink layout
+elif [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
+	mkdir -p dists/$CODENAME/non-US/binary-$ARCH
+	mkdir -p dists/$CODENAME/non-US/binary-all
+	mkdir -p dists/$CODENAME/non-US/source
+fi
+
+mkdir .disk
+
+

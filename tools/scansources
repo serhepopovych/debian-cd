@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
+# See the README file for the license
+
+# This script will create the Sources.gz files
+# First arg = directory of the CD
+
+#set -e
+
+PREFIX=$1
+if [ -n "$NONFREE" ]; then
+  SECTIONS="main contrib non-free"
+else
+  SECTIONS="main contrib"
+fi
+
+cd $PREFIX
+
+for SECT in $SECTIONS; do
+
+	dpkg-scansources dists/$CODENAME/$SECT/source \
+        | gzip --best > dists/$CODENAME/$SECT/source/Sources.gz 
+   
+	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+ 		 dpkg-scansources dists/$CODENAME/non-US/$SECT/source \
+                 | gzip --best > dists/$CODENAME/non-US/$SECT/source/Sources.gz
+	fi
+	
+done
+
+# Slink special case
+if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
+	dpkg-scansources dists/$CODENAME/non-US/source \
+	| gzip --best > dists/$CODENAME/non-US/source/Sources.gz
+fi
+
+exit 0

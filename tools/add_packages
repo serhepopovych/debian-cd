@@ -1,0 +1,50 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+my $dir = shift;
+
+if (! -d $dir) { 
+	die "$dir is not a directory ..."; 
+}
+
+my $mirror  = $ENV{'MIRROR'}  || die "Set the MIRROR var ...\n";
+my $nonus   = $ENV{'NONUS'}   || '';
+my $basedir = $ENV{'BASEDIR'} || die "Set the BASEDIR var ...\n";
+
+require "$basedir/tools/link.pl";
+
+open (LIST, "$basedir/tools/apt-selection cache show @ARGV |") 
+					|| die "Can't fork : $!\n";
+
+$/ = ''; # Browse by paragraph
+
+my ($p, $file, $arch, $d, $realfile, $source, $section, $name);
+while (defined($_ = <LIST>)) {
+	m/^Package: (\S+)/m and $p = $1;
+	m/^Filename: (\S+)/m and $file = $1;
+	m/^Architecture: (\S+)/m and $arch = $1;
+	m/^Section: (\S+)/m and $section = $1;
+
+	$source = ($section =~ /non-US/) ? $nonus : $mirror;
+
+	if ($arch eq "all") {
+		if ($section =~ /non-US/) {
+			$file =~ m#/([^/]+)$# and $name = $1;
+			symlink ("../binary-all/$name", "$dir/$file");
+		} else {
+			$file =~ m#/([^/]+/[^/]+)$# and $name = $1;
+			symlink ("../../binary-all/$name", "$dir/$file");
+		}
+		$file =~ s#/binary-$ENV{'ARCH'}/#/binary-all/#g;
+		$realfile = real_file ("$source/$file");
+		good_link ($realfile, "$dir/$file");
+	} else {
+		$realfile = real_file ("$source/$file");
+		good_link ($realfile, "$dir/$file");
+	}
+}
+
+close LIST or die "Something went wrong with apt-cache : $@ ($!)\n";
+
+

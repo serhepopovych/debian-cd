@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# boot-powerpc version 0.5 (c)  Hartmut Koptein <koptein@debian.org>,
+#
+# Released under GPL 1 Mar 1999
+# See the file COPYING for license details
+# Released as part of the debian_cd package, not much use standalone
+#
+# Do install stuff for powerpc, including making bootable CDs
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+N=$1
+CDROOT=$2
+
+cd $CDROOT/..
+
+# Only disk 1 bootable
+if [ $N != 1 ]; then
+	echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
+	        > $N.mkisofs_opts
+	exit 0
+fi
+
+echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
+        > $N.mkisofs_opts
+echo -n " -b install/prep/resc1440.bin -c install/prep/boot.catalog" \
+        >> $N.mkisofs_opts
+
+DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
+INSTALLDIR="$CDROOT/install"
+
+cd $INSTALLDIR
+
+# Debian/PowerPC consits currently for three parts: CHRP, PMac and PReP
+# Apus, MBX and BBox will hopefully follow
+#
+
+#
+# -- We need a generic boot-loader --
+#
+echo "Copying boot images to $CDROOT/boot for disc 1"
+rm -fr boot
+mkdir -p boot
+for subarch in chrp powermac prep ; do
+    mkdir boot/$subarch
+    echo "extracting stuff for $subarch"
+    case $subarch in
+        chrp)
+                echo "need work for CHRP"
+        ;;
+        powermac)
+                #cp -p $BOOTDIR/cd.b $BOOTDIR/second.b boot/powermac
+                #cp -p $BOOTDIR/second.b boot/powermac
+                #cat - > boot/powermac/quik.conf << __EOF__
+                #timeout=300
+                #root=/dev/ram
+                #image=!cd1
+                #label=Linux
+                #initrd=!cd5
+                #__EOF__
+                echo "need work for PowerMac"
+        ;;
+        prep)
+                echo "need work for PReP"
+        ;;
+    esac
+done
+
+cd $INSTALLDIR
+
+#-------------- CHRP - Stuff -------------------------------
+echo Installing CHRP files
+mkdir chrp
+cp $DISKSROOT/chrp/* chrp
+
+#-------------- PMac - Stuff -------------------------------
+echo Installing Power-Macintosh files
+mkdir powermac
+cp $DISKSROOT/powermac/* powermac
+
+#-------------- PReP - Stuff -------------------------------
+echo Installing PReP files
+mkdir prep
+cp $DISKSROOT/prep/* prep
+
+#============== fix a few things up... =====================
+echo Installing PowerPC FAQ and tools
+mkdir common
+#mv basecont.txt.info common
+#mv ../README.info ../README.powerpc.info
+#cp ../README.1ST.info ../README.multicd.info
+
