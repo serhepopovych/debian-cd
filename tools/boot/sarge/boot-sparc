@@ -11,7 +11,7 @@ set -e
 N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~joshk/d-i/images/daily/cdrom"
+   DI_WWW_HOME="http://people.debian.org/~stappers/d-i/images/daily/cdrom"
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"

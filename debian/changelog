@@ -96,6 +96,7 @@ debian-cd (2.2.21) unstable; urgency=low
     - More README updates from patch by Frans Pop. Closes: #300301
     - libdevmapper1.00 renamed to libdevmapper1.01, update debian-installer
       task. Closes: #298724
+    - Sparc daily builds moved.
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
     - add ramdisk_size=16384 to palo call in post-boot-hppa 
