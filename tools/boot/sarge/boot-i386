@@ -88,17 +88,17 @@ cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
 cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
 cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
 LABEL cdrom144
   kernel /install/vmlinuz
-  append vga=normal initrd=cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append vga=normal initrd=/install/cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL net
   kernel /install/vmlinuz
-  append vga=normal initrd=net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append vga=normal initrd=/install/net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
