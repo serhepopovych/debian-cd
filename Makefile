@@ -164,6 +164,7 @@ $(SDIR):
 	$(Q)mkdir -p $(SDIR)
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
+	$(Q)mkdir -p $(ADIR)/apt-ftparchive-db
 
 ## CLEANINGS ##
 
@@ -172,6 +173,7 @@ clean: ok bin-clean src-clean
 bin-clean:
 	$(Q)-rm -rf $(BDIR)/CD[1234567890]
 	$(Q)-rm -rf $(BDIR)/*_NONUS
+	$(Q)-rm -f $(BDIR)/*.filelist*
 	$(Q)-rm -f  $(BDIR)/packages-stamp $(BDIR)/bootable-stamp \
 	         $(BDIR)/upgrade-stamp
 src-clean:

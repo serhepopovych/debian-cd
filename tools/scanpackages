@@ -13,14 +13,16 @@ BDIR=$TDIR/$CODENAME-$ARCH
 
 PREFIX=`echo $2 | sed "s?$BDIR/CD?$BDIR/?"`
 
-NUM=${PREFIX##$BDIR/}
-NUM=`echo $NUM | sed 's/_NONUS//g'`
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
   SECTIONSNONUS="non-US/main non-US/contrib non-US/non-free"
 else
   SECTIONS="main contrib"
   SECTIONSNONUS="non-US/main non-US/contrib"
+fi
+
+if [ -n "$LOCAL" ]; then
+  SECTIONS="$SECTIONS local"
 fi
 
 cd "$2"
@@ -50,76 +52,42 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     } else { print }' > dists/$CODENAME/non-US/Release
 fi
 
+# Copying release files
 for SECT in $SECTIONS; do
 	# Install the release files
-	cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
+	if [ -e "$MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release" ]; then
+	    cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
    		dists/$CODENAME/$SECT/binary-$ARCH/
+	fi
 	if [ -n "$NONUS" ]; then
 		cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
 		   dists/$CODENAME/non-US/$SECT/binary-$ARCH/
 	fi
-	# Install the Packages and Packages.gz files
-	cp $PREFIX.Packages-$SECT dists/$CODENAME/$SECT/binary-$ARCH/Packages
-	cat $PREFIX.Packages-$SECT | gzip --best \
-	     >dists/$CODENAME/$SECT/binary-$ARCH/Packages.gz
-	if [ -n "$NONUS" ]; then
-		cp $PREFIX.Packages-non-US-$SECT \
-		     dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages
-		cat $PREFIX.Packages-non-US-$SECT | gzip --best \
-		     >dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.gz
-	fi
 done
 
-if [ -n "$LOCAL" ]; then
-	if [ -e ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release ]; then
-	   cp ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release \
+if [ -n "$LOCALDEBS" -a -n "$LOCAL" ]; then
+	if [ -e $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release ]; then
+	   cp $LOCALDEBS/dists/$CODENAME/local/binary-$ARCH/Release \
    		dists/$CODENAME/local/binary-$ARCH/
 	fi
-	cp $PREFIX.Packages-local dists/$CODENAME/local/binary-$ARCH/Packages
-	cat $PREFIX.Packages-local | gzip --best \
-	     >dists/$CODENAME/local/binary-$ARCH/Packages.gz
+fi
+
+# Generating Packages files
+apt-ftparchive generate $PREFIX.generate-binary
+if [ -n "$NONUS" ]; then
+    apt-ftparchive generate $PREFIX.generate-binary-non-US
 fi
 
 
 fi
 
-# Creates the temp Packages-$SECT files
+# Prepare the files needed to generate the Packages files
 if [ "$1" != "scan" ]; then exit 0; fi
 
-
-if [ ! -e "../overrides" ]; then
-    # Create an override file with all sections
-    for SECT in $SECTIONS; do
-	zcat $MIRROR/indices/override.$CODENAME.$SECT.gz >> ../overrides
-	if [ -n "$NONUS" ]; then
-	    zcat $NONUS/indices-non-US/override.$CODENAME.$SECT.gz \
-	    	 >> ../overrides
-	fi
-    done
-fi
-if [ ! -e "../overrides.extra" ]; then
-    # Create an extra override file with all sections
-    for SECT in $SECTIONS; do
-	if [ -e $MIRROR/indices/override.$CODENAME.extra.$SECT.gz ]; then
-	    zcat $MIRROR/indices/override.$CODENAME.extra.$SECT.gz \
-		>> ../overrides.extra
-	fi
-	if [ -n "$NONUS" ]; then
-	    if [ -e $NONUS/indices-non-US/override.$CODENAME.extra.gz ]; then
-	       zcat $NONUS/indices-non-US/override.$CODENAME.extra.$SECT.gz \
-	    	 >> ../overrides.extra
-	    fi
-	fi
-    done
-fi
-
 #
-# Create a Packages file for all packages on the CD
+# Create the file lists and the config files for apt-ftparchive generate
 #
-if [ -d pool ]; then
-    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
-	packages pool ../overrides > $PREFIX.Packages-BOTH
-fi
+
 # We have to scan all possible dists where packages can be
 DISTS=""
 DISTSNONUS=""
@@ -137,47 +105,88 @@ for i in `cd dists; echo *; cd ..`; do
 	fi
     fi
 done
+# Creating the file lists
 for SECT in $SECTIONS; do
+    touch $PREFIX.filelist_$SECT
+    if [ -d "pool/$SECT" ]; then
+	find pool/$SECT >>$PREFIX.filelist_$SECT
+    fi
     for DIST in $DISTS; do
-	apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
-	    packages dists/$DIST/$SECT/binary-$ARCH ../overrides \
-	    >> $PREFIX.Packages-BOTH
-    done
-    for DIST in $DISTSNONUS; do
-	if [ -n "$NONUS" ]; then
-	    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
-		    packages dists/$DIST/non-US/$SECT/binary-$ARCH \
-		    ../overrides >> $PREFIX.Packages-BOTH
+	if [ -d "dists/$DIST/$SECT/binary-$ARCH" ]; then
+	    find dists/$DIST/$SECT/binary-$ARCH >>$PREFIX.filelist_$SECT
 	fi
     done
-done
-# Separate non-US from the rest
-grep-dctrl -FFilename -e '/non-[Uu][Ss]/' $PREFIX.Packages-BOTH \
-	> $PREFIX.Packages-ALLNONUS
-grep-dctrl -v -FFilename -e '/non-[Uu][Ss]/' $PREFIX.Packages-BOTH \
-	> $PREFIX.Packages-ALL
-
-# Split the Packages file by section
-for SECT in $SECTIONS; do
-    grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALL \
-    	> $PREFIX.Packages-$SECT
-    
     if [ -n "$NONUS" ]; then
-	grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALLNONUS \
-		> $PREFIX.Packages-non-US-$SECT
+	touch $PREFIX.filelist_non-US_$SECT
+	if [ -d "pool/non-US/$SECT" ]; then
+	    find pool/non-US/$SECT >>$PREFIX.filelist_non-US_$SECT
+	fi
+	for DIST in $DISTSNONUS; do
+	    if [ -d "dists/$DIST/non-US/$SECT/binary-$ARCH" ]; then
+		find dists/$DIST/non-US/$SECT/binary-$ARCH \
+		    >>$PREFIX.filelist_non-US_$SECT
+	    fi
+	done
     fi
 done
+# Creating the config files
+cat >$PREFIX.generate-binary <<EOF
+Dir::ArchiveDir "$2";
+Dir::OverrideDir "$BDIR/indices";
+Dir::CacheDir "$APTTMP/$CODENAME-$ARCH/apt-ftparchive-db";
 
-if [ -n "$LOCAL" ]; then
-	apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
-	     packages dists/$CODENAME/local/binary-$ARCH \
-	     > $PREFIX.Packages-local
+TreeDefault::Contents " ";
 
-	if [ -d pool/local ]
-	then
-	    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
-		 packages pool/local >> $PREFIX.Packages-local
-	fi
+Tree "dists/$CODENAME" {
+    FileList "$PREFIX.filelist_\$(SECTION)";
+    Sections "$SECTIONS";
+    Architectures "$ARCH";
+    
+    BinOverride "override.$CODENAME.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    SrcOverride "override.$CODENAME.\$(SECTION).src";
+}
+EOF
+cat >$PREFIX.generate-binary-non-US <<EOF
+Dir::ArchiveDir "$2";
+Dir::OverrideDir "$BDIR/indices-non-US";
+Dir::CacheDir "$APTTMP/$CODENAME-$ARCH/apt-ftparchive-db";
+
+TreeDefault::Contents " ";
+
+Tree "dists/$CODENAME/non-US" {
+    FileList "$PREFIX.filelist_non-US_\$(SECTION)";
+    Sections "`echo $SECTIONSNONUS | sed -e 's#non-US/##g'`";
+    Architectures "$ARCH";
+    
+    BinOverride "override.$CODENAME.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    SrcOverride "override.$CODENAME.\$(SECTION).src";
+}
+EOF
+# Creating the indices directory
+if [ ! -d "$BDIR/indices" ]; then
+    mkdir $BDIR/indices
+    cp $MIRROR/indices/* $BDIR/indices/
+    if [ -n "$LOCALDEBS" -a -d $LOCALDEBS/indices ]; then
+         cp $LOCALDEBS/indices/* $BDIR/indices/
+    fi
+    gunzip -f $BDIR/indices/*.gz
+    for SECT in $SECTIONS; do
+	touch $BDIR/indices/override.$CODENAME.$SECT
+	touch $BDIR/indices/override.$CODENAME.extra.$SECT
+	touch $BDIR/indices/override.$CODENAME.$SECT.src
+    done
+fi
+if [ -n "$NONUS" -a ! -d "$BDIR/indices-non-US" ]; then
+    mkdir $BDIR/indices-non-US
+    cp $NONUS/indices-non-US/* $BDIR/indices-non-US/
+    gunzip -f $BDIR/indices-non-US/*.gz
+    for SECT in `echo $SECTIONSNONUS | sed -e 's#non-US/##g'`; do
+	touch $BDIR/indices-non-US/override.$CODENAME.$SECT
+	touch $BDIR/indices-non-US/override.$CODENAME.extra.$SECT
+	touch $BDIR/indices-non-US/override.$CODENAME.$SECT.src
+    done
 fi
 
 exit 0

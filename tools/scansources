@@ -8,14 +8,16 @@
 
 set -e
 
-PREFIX=$1
+SDIR=$TDIR/$CODENAME-src
+PREFIX=`echo $1 | sed "s?$SDIR/CD?$SDIR/?"`
+
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
 else
   SECTIONS="main contrib"
 fi
 
-cd $PREFIX
+cd $1
 
 # We have to scan all possible dists where sources can be
 DISTS=""
@@ -53,42 +55,97 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     > dists/$CODENAME/non-US/Release
 fi
 
+
+# Creating the file lists
 for SECT in $SECTIONS; do
-
-	if [ -d "pool/$SECT" ]; then
-	    apt-ftparchive sources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
-	fi
-	for DIST in $DISTS; do
-		if [ -d "dists/$DIST/$SECT/source" ] ; then
-			apt-ftparchive sources dists/$DIST/$SECT/source \
-			>> dists/$CODENAME/$SECT/source/Sources
-		fi
-	done
-	if [ -f dists/$CODENAME/$SECT/source/Sources ] ; then
-		gzip --best dists/$CODENAME/$SECT/source/Sources
-	fi
-
-	if [ -n "$NONUS" ]; then
-		if [ -d "pool/non-US/$SECT" ]; then
-			apt-ftparchive sources pool/non-US/$SECT \
-			> dists/$CODENAME/non-US/$SECT/source/Sources
-		fi
-		for DIST in $DISTSNONUS; do
-		    if [ -d "dists/$DIST/non-US/$SECT/source" ] ; then
-			apt-ftparchive sources dists/$DIST/non-US/$SECT/source \
-			    >> dists/$CODENAME/non-US/$SECT/source/Sources		
-		    fi
-		done
-		if [ -f dists/$CODENAME/non-US/$SECT/source/Sources ] ; then
-			gzip --best dists/$CODENAME/non-US/$SECT/source/Sources
-		fi
-	fi
-	
+    touch $PREFIX.sourcefilelist_$SECT
+    if [ -d "pool/$SECT" ]; then
+        find pool/$SECT >>$PREFIX.sourcefilelist_$SECT
+    fi
+    for DIST in $DISTS; do
+        if [ -d "dists/$DIST/$SECT/binary-$ARCH" ]; then
+            find dists/$DIST/$SECT/binary-$ARCH >>$PREFIX.sourcefilelist_$SECT
+        fi
+    done
+    if [ -n "$NONUS" ]; then
+        touch $PREFIX.sourcefilelist_non-US_$SECT
+        if [ -d "pool/non-US/$SECT" ]; then
+            find pool/non-US/$SECT >>$PREFIX.sourcefilelist_non-US_$SECT
+        fi
+        for DIST in $DISTSNONUS; do
+            if [ -d "dists/$DIST/non-US/$SECT/binary-$ARCH" ]; then
+                find dists/$DIST/non-US/$SECT/binary-$ARCH \
+                    >>$PREFIX.sourcefilelist_non-US_$SECT
+            fi
+        done 
+    fi
 done
 
-if [ -n "$LOCAL" ]; then
-	apt-ftparchive sources dists/$CODENAME/local/source \
-	| gzip --best > dists/$CODENAME/local/source/Sources.gz
+# Creating the config files
+cat >$PREFIX.generate-source <<EOF
+Dir::ArchiveDir "$1";
+Dir::OverrideDir "$SDIR/indices";
+Dir::CacheDir "$APTTMP/$CODENAME-$ARCH/apt-ftparchive-db";
+
+TreeDefault::Contents " ";
+
+Tree "dists/$CODENAME" {
+    SourceFileList "$PREFIX.sourcefilelist_\$(SECTION)";
+    Sections "$SECTIONS";
+    Architectures "source";
+    
+    BinOverride "override.$CODENAME.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    SrcOverride "override.$CODENAME.\$(SECTION).src";
+}
+EOF
+cat >$PREFIX.generate-source-non-US <<EOF
+Dir::ArchiveDir "$1";
+Dir::OverrideDir "$SDIR/indices-non-US";
+Dir::CacheDir "$APTTMP/$CODENAME-$ARCH/apt-ftparchive-db";
+
+TreeDefault::Contents " ";
+
+Tree "dists/$CODENAME/non-US" {
+    SourceFileList "$PREFIX.sourcefilelist_non-US_\$(SECTION)";
+    Sections "`echo $SECTIONS | sed -e 's# local##'`";
+    Architectures "source";
+    
+    BinOverride "override.$CODENAME.\$(SECTION)";
+    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    SrcOverride "override.$CODENAME.\$(SECTION).src";
+}
+EOF
+
+# Creating the indices directory
+if [ ! -d "$SDIR/indices" ]; then
+    mkdir $SDIR/indices
+    cp $MIRROR/indices/* $SDIR/indices/
+    if [ -n "$LOCALDEBS" -a -d $LOCALDEBS/indices ]; then
+         cp $LOCALDEBS/indices/* $SDIR/indices/
+    fi
+    gunzip -f $SDIR/indices/*.gz
+    for SECT in $SECTIONS; do
+        touch $SDIR/indices/override.$CODENAME.$SECT
+        touch $SDIR/indices/override.$CODENAME.extra.$SECT
+        touch $SDIR/indices/override.$CODENAME.$SECT.src
+    done
 fi
+if [ -n "$NONUS" -a ! -d "$SDIR/indices-non-US" ]; then
+    mkdir $SDIR/indices-non-US
+    cp $NONUS/indices-non-US/* $SDIR/indices-non-US/
+    gunzip -f $SDIR/indices-non-US/*.gz
+    for SECT in `echo $SECTIONSNONUS | sed -e 's#non-US/##g'`; do
+        touch $SDIR/indices-non-US/override.$CODENAME.$SECT
+        touch $SDIR/indices-non-US/override.$CODENAME.extra.$SECT
+        touch $SDIR/indices-non-US/override.$CODENAME.$SECT.src
+    done
+fi
+
+apt-ftparchive generate $PREFIX.generate-source
+if [ -n "$NONUS" ]; then
+    apt-ftparchive generate $PREFIX.generate-source-non-US
+fi
+
 
 exit 0
