@@ -19,6 +19,9 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       on the cdrom initrds.
     - Add appropriate kernel-pcmcia-modules package to
       debian-installer+kernel task for i386.
+    - Update the yaboot boot.msg to match the one in d-i cvs, including
+      details about setting debconf priority.
+    - Link the d-i INSTALLATION-HOWTO into doc/, if it exists.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
