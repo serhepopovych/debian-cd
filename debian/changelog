@@ -1,6 +1,6 @@
-debian-cd (2.2.16) UNRELEASED; urgency=low
+debian-cd (2.2.16) unstable; urgency=low
 
-  * Updated standards-version to 3.5.9.
+  * Updated standards-version to 3.6.0.
   * Use debhelper 4 (build-depends on it, updated DH_COMPAT).
   * WARNING: potato is now mostly unsupported, some cruft has been
     removed that may have been useful for generating potato CDs.
@@ -34,9 +34,12 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
   * Don't check dependencies for udebs, they tend to be broken
     and we still want them on the CD.
   * Put good default values for UDEB_INCLUDE based on the value of
-    INSTALLER_CD. 
+    INSTALLER_CD.
+  * Many updates on the tasks files by Josip Rodin. Removed useless packages
+    from sarge CD1... and so on.
+  * Updated hfs.map with .sit info (for powerpc arch). Closes: #186837
 
- -- Raphael Hertzog <hertzog@debian.org>  Wed,  7 May 2003 20:02:18 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 19:59:54 +0200
 
 debian-cd (2.2.15) unstable; urgency=low
 
