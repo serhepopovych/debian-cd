@@ -33,9 +33,9 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 
 # List of boot image for each CD
 KTYPE[1]="" #isolinux multiboot in fact
-KTYPE[2]="cdrom-2880"
-KTYPE[3]="net-1440"
-KTYPE[4]="cdrom144-1440"
+KTYPE[2]="cdrom"
+KTYPE[3]="net"
+KTYPE[4]="cdrom144"
 KTYPE[5]=""
 KTYPE[6]=""
 KTYPE[7]=""
@@ -46,7 +46,7 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 # Download boot images
-for image in cdrom-2880.img cdrom-initrd.gz cdrom144-1440.img cdrom144-initrd.gz net-1440.img net-initrd.gz vmlinuz ; do
+for image in cdrom.img cdrom-initrd.gz cdrom144.img cdrom144-initrd.gz net.img net-initrd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
             wget -q $BOOTIMAGEDIR/$image
     fi

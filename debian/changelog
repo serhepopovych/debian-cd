@@ -13,6 +13,9 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
   * Tollef Fog Heen:
     - Make it possible to exclude contrib from the CDs. Useful if you only
       have a mirror of main.
+    - The names of the bootable images have changed on
+      people.d.o/~tfheen/d-i/images/daily, update download scripts to reflect
+      that.
   * Petter Reinholdtsen:
     - Add CONTRIB flag to debian/CONF.sh.
     - Add support for BASE_INCLUDE and BASE_EXCLUDE, making files
