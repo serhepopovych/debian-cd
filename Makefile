@@ -325,9 +325,9 @@ ifdef FORCENONUSONCD1
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us/main)' - | \
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
-	if [ -x "`which debootstrap`" ]; then \
+	$(Q)if [ -x "`which debootstrap`" ]; then \
 		debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
-		| tr ' ' '\n' >>$(BDIR)/rawlist \
+		| tr ' ' '\n' >>$(BDIR)/rawlist; \
 	fi
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
 	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \

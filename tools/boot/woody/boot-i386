@@ -38,9 +38,9 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 #
 KTYPE[1]=""
 KTYPE[2]="compact"
-KTYPE[3]="idepci"
-KTYPE[4]="udma100-ext3"
-KTYPE[5]="reiserfs"
+KTYPE[3]="bf2.4"
+KTYPE[4]="idepci"
+KTYPE[5]=""
 KTYPE[6]=""
 KTYPE[7]=""
 KTYPE[8]=""
@@ -75,7 +75,7 @@ if [ "$N" = "1" ] || [ "$N" = "1_NONUS" ] ; then
 if [ "$MULTIBOOT" = "yes" ] ; then
         echo "Adding additional boot images to CD1"
 
-    for i in 2 3 4 5 ; do
+    for i in 2 3 4 ; do
 	
         # first copy/link the next boot block to the disk.
         ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$i]}/rescue.bin boot$N/boot/${KTYPE[$i]}.bin
@@ -96,8 +96,7 @@ fi
 	cp -f linux $CDDIR/install/linux ; \
 	cp -f compact/linux $CDDIR/install/lincompt ; \
 	cp -f idepci/linux $CDDIR/install/linpci ; \
-	cp -f udma100-ext3/linux $CDDIR/install/linext3 ; \
-	cp -f reiserfs/linux $CDDIR/install/linreis ; \
+	cp -f bf2.4/linux $CDDIR/install/lin24 ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
 
@@ -121,12 +120,10 @@ smartdrv /c
 echo Please choose a linux kernel now
 echo 1= standard kernel     (2.2)
 echo 2= compact kernel      (2.2)
-echo 3= IDEPCI kernel       (2.2)
-echo 4= UDMA100-ext3 kernel (2.2)
-echo 5= reiserfs kernel     (2.2)
+echo 3= 2.4.x kernel        (2.4)
+echo 4= IDEPCI kernel       (2.2)
 
 choice /c:1234
-if errorlevel 5 goto FIVE
 if errorlevel 4 goto FOUR
 if errorlevel 3 goto THREE
 if errorlevel 2 goto TWO
@@ -144,16 +141,13 @@ echo using compact kernel
 loadlin.exe lincompt root=/dev/ram ro initrd=root.bin cdrom
 
 :THREE
+echo using 2.4.x kernel
+loadlin.exe lin24 root=/dev/ram ro initrd=root.bin cdrom
+
+:FOUR
 echo using IDEPCI kernel
 loadlin.exe linpci root=/dev/ram ro initrd=root.bin cdrom
 
-:FOUR
-echo using UDMA100-ext3 kernel
-loadlin.exe linext3 root=/dev/ram ro initrd=root.bin cdrom
-
-:FIVE
-echo using reiserfs kernel
-loadlin.exe linreis root=/dev/ram ro initrd=root.bin cdrom
 EOF
 ) |todos > $CDDIR/install/boot.bat
 
