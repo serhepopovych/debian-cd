@@ -14,7 +14,12 @@ do
 	make distclean
 	make ${CODENAME}_status
 	echo " ... checking your mirror"
-	make mirrorcheck
+	if [ "$SKIPMIRRORCHECK" != "yes" ] ; then 
+		make mirrorcheck
+	else
+		echo "WARNING: skipping mirrorcheck"
+	fi
+
 	if [ $? -gt 0 ]; then
 		echo "ERROR: Your mirror has a problem, please correct it." >&2
 		exit 1
