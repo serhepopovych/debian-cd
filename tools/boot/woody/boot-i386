@@ -96,7 +96,8 @@ fi
 	cp -f linux $CDDIR/install/linux ; \
 	cp -f compact/linux $CDDIR/install/lincompt ; \
 	cp -f idepci/linux $CDDIR/install/linpci ; \
-	cp -f ide/linux $CDDIR/install/linide ; \
+	cp -f udma100-ext3/linux $CDDIR/install/linext3 ; \
+	cp -f reiserfs/linux $CDDIR/install/linreis ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
 
@@ -118,12 +119,14 @@ you can safely ignore that.
 smartdrv /c
 
 echo Please choose a linux kernel now
-echo 1= standard kernel (2.2)
-echo 2= compact kernel  (2.2)
-echo 3= IDEPCI kernel   (2.2)
-echo 4= IDE kernel      (2.2)
+echo 1= standard kernel     (2.2)
+echo 2= compact kernel      (2.2)
+echo 3= IDEPCI kernel       (2.2)
+echo 4= UDMA100-ext3 kernel (2.2)
+echo 5= reiserfs kernel     (2.2)
 
 choice /c:1234
+if errorlevel 5 goto FIVE
 if errorlevel 4 goto FOUR
 if errorlevel 3 goto THREE
 if errorlevel 2 goto TWO
@@ -145,8 +148,12 @@ echo using IDEPCI kernel
 loadlin.exe linpci root=/dev/ram ro initrd=root.bin
 
 :FOUR
-echo using IDE kernel
-loadlin.exe linide root=/dev/ram ro initrd=root.bin
+echo using UDMA100-ext3 kernel
+loadlin.exe linext3 root=/dev/ram ro initrd=root.bin
+
+:FIVE
+echo using reiserfs kernel
+loadlin.exe linreis root=/dev/ram ro initrd=root.bin
 EOF
 ) |todos > $CDDIR/install/boot.bat
 
