@@ -58,8 +58,10 @@ endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
+ifneq "$(wildcard $(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH))" ""
 ifndef BOOTDISKS
 export BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
+endif
 endif
 ifndef DOJIGDO
 export DOJIGDO=0
@@ -666,19 +668,17 @@ $(BDIR)/CD1/tools:
 		fi ; \
 	done
 
-# Add the disks-arch directories where needed
+# Add the disks-arch directories if/where needed
 disks: ok bin-infos $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH)
 $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
+ifdef BOOTDISKS
 	@echo "Adding disks-$(ARCH) stuff ..."
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
 		mkdir -p $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) ; \
-		if [ ! -e "$(BOOTDISKS)" ]; then \
-		    break; \
-		fi; \
 		$(add_files) \
-	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
-	  	$(BOOTDISKS) . ; \
+		  $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
+		  $(BOOTDISKS) . ; \
 		touch $(BDIR)/$$DISK/.disk/kernel_installable ; \
 		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
 		rm -rf base-images-*; \
@@ -692,6 +692,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 			rm -rf [0123456789]*; \
 		fi; \
 	done
+endif
 
 upgrade: ok bin-infos $(BDIR)/upgrade-stamp
 $(BDIR)/upgrade-stamp:

@@ -8,7 +8,7 @@ DIR=$1
 
 DOCDIR=doc
 
-if [ -e $BOOTDISKS/current/$DOCDIR ] ; then
+if [ -n "$BOOTDISKS" -a -e $BOOTDISKS/current/$DOCDIR ] ; then
         DOCS=$BOOTDISKS/current/$DOCDIR
 else
         echo "WARNING: Using woody bootdisk documentation"
