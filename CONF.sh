@@ -173,7 +173,7 @@ export DEFSRCSIZE=635
 # them locally
 #export FASTSUMS=1
 
-# a couple of things used by publish_cds, so it can twaek the jigdo files,
+# a couple of things used by publish_cds, so it can tweak the jigdo files,
 # and knows where to put the results
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
