@@ -82,7 +82,7 @@ export ARCH=`dpkg --print-installation-architecture`
 #	      images, however. Also, if you are using an NFS partition for
 #	      some part of this, you must use this option.
 # Paths to the mirrors
-export MIRROR=/home/debian
+export MIRROR=/ftp/debian
 
 # Comment the following line if you don't have/want non-US
 #export NONUS=/ftp/debian-non-US
@@ -93,14 +93,14 @@ export MIRROR=/home/debian
 #export FORCENONUSONCD1=1
 
 # Path of the temporary directory
-export TDIR=/home/joey//tmp
+export TDIR=/ftp/tmp
 
 # Path where the images will be written
-export OUT=/home/joey/tmp/debian-cd
+export OUT=/rack/debian-cd
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.
-export APTTMP=/home/joey/tmp/apt
+export APTTMP=/ftp/tmp/apt
 
 # Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
