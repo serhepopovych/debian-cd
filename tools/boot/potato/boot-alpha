@@ -29,7 +29,7 @@ echo -n "-J boot1" > $N.mkisofs_opts
 
 # Use the generic linux image
 cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/linux \
-	boot1/boot/linux
+	boot1/$kernel
 
 # Copy over the subarch boot-loaders
 mkdir boot1/milo
@@ -40,6 +40,18 @@ cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/MILO/* \
 mkdir boot1/apb
 cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/APB/* \
 	boot1/apb/
+
+# And aboot
+cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/bootlx \
+	boot1/boot/bootlx
+cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/images-1.44/root.bin \
+	boot1/boot/root.bin
+mkdir -p boot1/etc
+cat <<EOF > boot1/etc/aboot.conf
+0:boot/linux root=/dev/ram initrd=boot/root.bin
+1:boot/linux root=/dev/ram initrd=boot/root.bin console=ttyS0
+2:boot/linux root=/dev/ram initrd=boot/root.bin console=ttyS1
+EOF
 
 mkdir $CDDIR/tools/rawrite1
 (cd $CDDIR/tools/rawrite1; \
