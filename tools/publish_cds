@@ -79,10 +79,12 @@ my $mirror_dir = $conf{'MIRROR'} ;
 my $nonus_dir = $conf{'NONUS'} ;
 my $tdir = $conf{'TDIR'} ;
 my $publish_url = $conf{'PUBLISH_URL'} ;
+my $publish_nonus_url = $conf{'PUBLISH_NONUS_URL'} ;
 my $publish_path = $conf{'PUBLISH_PATH'} ;
 
 my $to_dir = $publish_path . "/" . $cd_version . "/" ;
 my $fallback_url = $publish_url . "/$cd_version/snapshot/" ; 
+my $fallback_nonus_url = $publish_nonus_url . "/$cd_version/snapshot/" ; 
 
 my @archs ;
 if ($#ARGV >= 0) {
@@ -190,7 +192,7 @@ for my $arch (@archs) {
       $jigdo_gz->gzwrite($_ . "\n") ;
     }
     $jigdo_gz->gzwrite(sprintf "\n[Servers]\nDebian=%s\nNon-US=%s\n",
-      			       $fallback_url, $fallback_url); 
+      			       $fallback_url, $fallback_nonus_url); 
 
     $jigdo_gz->gzclose() ;
     close(JIGDO);

@@ -27,6 +27,7 @@ unset DEFBINSIZE
 unset DEFSRCSIZE
 unset FASTSUMS
 unset PUBLISH_URL
+unset PUBLISH_NONUS_URL
 unset PUBLISH_PATH
 
 
@@ -176,5 +177,6 @@ export DEFSRCSIZE=635
 # a couple of things used by publish_cds, so it can tweak the jigdo files,
 # and knows where to put the results
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
+export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
 
