@@ -3,6 +3,7 @@ debian-cd (2.2.0) frozen unstable; urgency=low
   * The final debian-cd for potato ! Must go to frozen ...
   * Changes to tools/potato/boot-sparc for new bootdisk
     organization. --jwest 
+  * Changes to /tools/boot/potato/boot-i386 for new bootdisks --jwest
 
  -- Raphael Hertzog <hertzog@debian.org>  Tue,  7 Mar 2000 20:31:18 +0100
 
