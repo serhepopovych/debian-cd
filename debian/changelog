@@ -93,6 +93,7 @@ debian-cd (2.2.21) unstable; urgency=low
     - Also make the README link to the manual on the Debian web site if
       OMIT_MANUAL=1.
     - Update the README to mention manual translations are available.
+    - More README updates from patch by Frans Pop. Closes: #300301
     - libdevmapper1.00 renamed to libdevmapper1.01, update debian-installer
       task. Closes: #298724
   * Bdale Garbee

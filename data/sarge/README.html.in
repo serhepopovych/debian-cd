@@ -337,21 +337,24 @@ Installing
 
  Because Debian is a complete Operating System, the installation procedure
  may seem a bit unusual. You can install Debian GNU/Linux either
- <i>next to</i> your current OS, or as <i>only</i> OS on your computer.
+ <i>alongside</i> your current OS, or as the <i>only</i> OS on your computer.
 #if OMIT_MANUAL
  <P>
- Read the <i>Installation Manual</i>
- <A href="http://www.nl.debian.org/releases/sarge/installmanual">on the Debian web site</a>.
+ An <b>Installation Guide</b> for this CD is available from
+ <A href="http://www.debian.org/releases/sarge/installmanual">the Debian web site</a>.
 #else
  <P>
- Read the <i>Installation Manual</i>, on this CD at
+ An <b>Installation Guide</b> is included on this CD at
  <P>
  <tt>&nbsp;
  <A href="doc/install/manual/en/index.html">doc/install/manual/en/index.html</a> &nbsp;&nbsp;&nbsp; (English version)</tt>
  <P>
- Translations of the Installation Manual are also available in the
- <tt><A href="doc/install">doc/install/</a></tt>
- directory, along with various other documents.
+ Several translations of the Installation Guide are included on this CD in
+ the <tt><A href="doc">doc/</a></tt> directory, along with various other documents.
+ <br>
+ Note: additional translations, other formats (like PDF and TXT) and updated 
+ versions for the Installation Guide are available from
+ <A href="http://www.debian.org/releases/sarge/installmanual">the Debian web site</a>.
 #endif
  <P>
  Programs and other files that are needed for the installation can be found on
