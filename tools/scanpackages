@@ -24,8 +24,10 @@ NUM=${PREFIX##$BDIR/}
 NUM=`echo $NUM | sed 's/_NONUS//g'`
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
+  SECTIONSNONUS="non-US/main non-US/contrib non-US/non-free"
 else
   SECTIONS="main contrib"
+  SECTIONSNONUS="non-US/main non-US/contrib"
 fi
 
 cd "$2"
@@ -34,8 +36,10 @@ if [ "$1" = "install" ]; then
 
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     # Strip the MD5Sum and SHA1 fields
+    # Update some other information as well
     sed -e "s/^Architectures: .*$/Architectures: $ARCH/" \
     $MIRROR/dists/$CODENAME/Release | \
+    sed -e "s/^Components: .*$/Components: $SECTIONS/" | \
     perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
     if ($f) { 
 	unless (/^ /) { print; $f=0 }
@@ -43,8 +47,10 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
 fi
 if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     # Strip the MD5Sum and SHA1 fields
+    # Update some other information as well
     sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
     $NONUS/dists/$CODENAME/non-US/Release | \
+    sed -e "s/^Components: .*$/Components: $SECTIONSNONUS/" | \
     perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
     if ($f) { 
 	unless (/^ /) { print; $f=0 }

@@ -83,6 +83,7 @@ python-bobo
 python-bobopos
 python-dev
 python-doc
+pythondoc
 python-examples
 python-extclass
 python-gdbm
@@ -108,7 +109,6 @@ python-pam
 python-pmw
 python-tk
 python-xml
-pythondoc
 qpopper
 rxvt-ml
 samba
