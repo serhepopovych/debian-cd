@@ -158,15 +158,6 @@ CONTENTS:
 </LI><LI>
 #endif
 
-#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
- <A href="#upgrade">Upgrading</A>
- <P>
-
-#if OUTPUTtext
-  </LI><LI>
-#endif
-#endif
-
 #ifndef UNOFFEXTRAS
 <A href="#lastmin">Last-Minute Notes</A>
 <P>
@@ -397,33 +388,6 @@ Installing
  See the README on that CD for more info.
 #endif
 
-#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
-#if OUTPUTtext
-  <P>&nbsp;<P><H2><A name="upgrade">
-#endif
-#if OUTPUThtml
-  <P><HR><P><H2><A name="upgrade">
-#endif
- Upgrading
-#if OUTPUTtext
-  <br>
-  =========
-#endif
- </H2>
- </a>
- <p>
-#if DISKNUM1 && TYPEbinary
-
-  If you are already running an older version of the Debian GNU/Linux
-  Operating System, you may want to upgrade to version 3.0 first.
-
-#else
-  Procedures describing the upgrade from an older version of the Debian
-  Operating System are also located on the Binary-1 CD.
-  See the README on that CD for more info.
-#endif
-#endif
-
 #ifndef UNOFFEXTRAS
 #if OUTPUTtext
 <P>&nbsp;<P><H2><A name="lastmin">
@@ -467,7 +431,7 @@ Last-minutes notes for this CD may be available on
 #if OUTPUThtml
   <P><HR><P><H2><A name="apt">
 #endif
- Using CDs Apt
+ Using Apt
 #if OUTPUTtext
   <br>
   =============
