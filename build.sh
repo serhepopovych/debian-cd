@@ -45,6 +45,9 @@ done
 FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`
 make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 echo " ... building the images"
-make official_images
+if [ -z "$IMAGETARGET" ] ; then
+    IMAGETARGET="official_images"
+fi
+make "$IMAGETARGET"
 
 make imagesums
