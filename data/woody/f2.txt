@@ -9,9 +9,9 @@ You'll need more disk space to install additional packages, depending
 on what you wish to do with your new Debian system.
 
 See the Installation Manual or the FAQ for more information; both
-of these are also available at the Debian web site,
-http://www.debian.org/ .
+documents are located in the /doc directory on this CD-ROM.
 
+They are also available at the Debian web site, http://www.debian.org/
 
 
 
