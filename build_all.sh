@@ -46,6 +46,8 @@ do
 		make src-official_images
 		echo Generating MD5Sums of the images
 		make imagesums
+		echo Generating list files for images
+		make pi-makelist
 	else
 		export OUT=$TMP_OUT/$ARCH; mkdir -p $OUT
 		make bin-official_images
