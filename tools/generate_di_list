@@ -23,16 +23,16 @@ die "Missing \$MIRROR variable" unless $ENV{MIRROR};
 die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
 
 foreach my $arch (@ARCHES) {
-	(my $cpparch = $arch) =~ s/-/_/g;
-	print OUT "#ifdef ARCH_$cpparch\n";
-	my @exclude = @common_excludes;
-	push @exclude, read_exclude("exclude-udebs-$arch")
-		if -e exclude_path("exclude-udebs-$arch");
 	my $packagefile="$ENV{MIRROR}/dists/$ENV{DI_CODENAME}/main/debian-installer/binary-$arch/Packages";
 	unless (-f $packagefile) {
 		print "Missing package file for arch $arch.\n";
 		next;
 	}
+	(my $cpparch = $arch) =~ s/-/_/g;
+	print OUT "#ifdef ARCH_$cpparch\n";
+	my @exclude = @common_excludes;
+	push @exclude, read_exclude("exclude-udebs-$arch")
+		if -e exclude_path("exclude-udebs-$arch");
 UDEB:	foreach my $udeb (map { chomp; $_ } `grep-dctrl -n -s Package '' $packagefile`) {
 		foreach my $pattern (@exclude) {
 			if ($udeb =~ /^$pattern$/) {
