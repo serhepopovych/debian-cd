@@ -1,4 +1,4 @@
-%!slice -o (I386uUNDEFuNOT_*)\NOT_I386:master.i386 -o (SPARCuUNDEFuNOT_*)\NOT_SPARC:master.sparc -o (ALPHAuUNDEFuNOT_*)\NOT_ALPHA:master.alpha -o (M68KuUNDEFuNOT_*)\NOT_M68K:master.m68k -o (ARMuUNDEFuNOT_*)\NOT_ARM:master.arm 
+%!slice -o (I386uUNDEFuNOT_*)\NOT_I386:master.i386 -o (SPARCuUNDEFuNOT_*)\NOT_SPARC:master.sparc -o (ALPHAuUNDEFuNOT_*)\NOT_ALPHA:master.alpha -o (M68KuUNDEFuNOT_*)\NOT_M68K:master.m68k -o (ARMuUNDEFuNOT_*)\NOT_ARM:master.arm -o (POWERPCuUNDEFuNOT_*)\NOT_POWERPC:master.powerpc
 
 [DONOTKEEP:
 # Do not touch the above line, except to add a new architecture.
@@ -272,8 +272,10 @@ elib: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl
 elk: Tasks: Graphics, Scheme,  Profiles: Devel_comp, Dialup, Work_sci, Work_std, 
 elkdoc: Tasks: Scheme,  Profiles: Devel_comp, 
 elm-me+: Tasks: C, Gui_devel, Net_comp, Net_sel, Standard,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+[NOT_POWERPC:
 emacs19: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
 emacs19-el: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
+:NOT_POWERPC]
 emacs20: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
 emacs20-el: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Perl_devel, Python, Scheme, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Work_sci, Work_std, 
 emacsen-common: Tasks: C, Devel, Fortran, Gui_devel, Lisp, Net_comp, Perl_devel, Prod, Python, Scheme, Science, Sgml, Standard, Tcl_devel, Tex,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
@@ -292,6 +294,11 @@ expect5.24-dev: Tasks: Admin,  Profiles: Admin,
 exuberant-ctags: Tasks: C, Gui_devel,  Profiles: Devel_comp, Devel_std, Work_sci, 
 f2c: Tasks: Fortran,  Profiles: Devel_comp, Work_sci, 
 fakeroot: Tasks: Debian,  Profiles: Admin, Devel_comp, 
+[POWERPC:
+[M68K:
+fbset: Tasks:  Profiles: Admin,
+:M68K]
+:POWERPC]
 [I386:
 [ALPHA:
 fdflush: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
@@ -320,8 +327,10 @@ freetype2: Tasks: Graphics, Perl_devel, X_comp,  Profiles: Admin, Devel_comp, Di
 [NOT_M68K:
 [NOT_SPARC:
 [NOT_ALPHA:
+[NOT_POWERPC:
 ftape-module-2.0.34: Tasks: Backup,  Profiles: Dialup, 
 ftape-util: Tasks: Backup,  Profiles: Dialup, 
+:NOT_POWERPC]
 :NOT_ALPHA]
 :NOT_SPARC]
 :NOT_M68K]
@@ -477,7 +486,9 @@ lg-issue26: Tasks: Newbie,  Profiles:
 lg-issue27: Tasks: Newbie,  Profiles: 
 lg-issue28: Tasks: Newbie,  Profiles: 
 [NOT_ALPHA:
+[NOT_POWERPC:
 libc5: Tasks: X_comp,  Profiles: Admin, Dialup, Work_sci, Work_std, 
+:NOT_POWERPC]
 libc6-dev: Tasks: Admin, C, Debian, Fortran, Graphics, Gui_devel, Science, Standard, Tcl_devel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
 :NOT_ALPHA]
 [ALPHA:
@@ -504,8 +515,10 @@ libelfg0: Tasks: Graphics, Net_comp, Scheme,  Profiles: Admin, Devel_comp, Dialu
 [ALPHA:
 libffm1: Tasks: Science, Profiles: Work_sci,
 :ALPHA]
+[NOT_POWERPC:
 libg++2.8.2: Tasks: Sound, Science,  Profiles: Dialup, Work_sci,
 libg++272: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Net_comp, Net_sel, Netadm, Netbckup, Newbie, News, Nis, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+:NOT_POWERPC]
 [NOT_ALPHA:
 libgdbm1: Tasks:  Profiles: Admin, 
 :NOT_ALPHA]
@@ -548,7 +561,9 @@ libjpeg62: Tasks: C, Database, Devel, Fortran, Graphics, Gui_devel, Lisp, Net_co
 [M68K:
 [SPARC:
 [ALPHA:
+[POWERPC:
 libjpeg62: Tasks: C, Database, Devel, Fortran, Graphics, Gui_devel, Lisp, Net_comp, Net_sel, Newbie, Perl_devel, Prod, Python, Scheme, Sgml, Sound, Standard, Tcl_devel, Tex, X_comp,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Standard, Work_sci, Work_std, 
+:POWERPC]
 :ALPHA]
 :SPARC]
 :M68K]
@@ -828,6 +843,9 @@ python-wpy: Tasks: Python,  Profiles: Admin, Devel_comp,
 python-zlib: Tasks: Python,  Profiles: Admin, Devel_comp, 
 qpopper: Tasks: Pop,  Profiles: Server_comp, Server_std, 
 queso: Tasks:  Profiles: Admin, Server_std, 
+[POWERPC:
+quik: Tasks:  Profiles: Admin,
+:POWERPC]
 quota: Tasks: Admin,  Profiles: Admin, 
 r-base: Tasks: Science,  Profiles: Work_sci, 
 r-cran: Tasks: Science,  Profiles: Work_sci, 
@@ -1165,7 +1183,9 @@ xserver-xsun: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_com
 xserver-xsun24: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std,
 :SPARC]
 [M68K:
+[POWERPC:
 xserver-fbdev: Tasks: Games, Graphics, X_comp, X_sel,  Profiles: Admin, Devel_comp, Devel_std, Dialup, Work_sci, Work_std, 
+:POWERPC]
 :M68K]
 xshogi: Tasks: Games,  Profiles: Dialup, 
 xskat: Tasks: Games,  Profiles: Dialup, 
@@ -1204,7 +1224,9 @@ zlib1g: Tasks: Admin, C, Chinese, Database, Debian, Devel, Doc, Fortran, Games, 
 [M68K:
 [SPARC:
 [ALPHA:
+[POWERPC:
  zlib1g: Tasks: Admin, Backup, Basic, C, Database, Debian, Devel, Dialup, Dns, Doc, Fortran, Ftp, Games, Graphics, Gui_devel, Lisp, Mail, Netadm, Netbckup, Net_comp, Net_sel, Newbie, News, Perl_devel, Plot, Pop, Prod, Python, Samba, Scheme, Science, Sgml, Sound, Standard, Tcl_devel, Tex, Web, Webcache, Workst, X_comp, X_sel,  Profiles: Admin, Basic, Devel_comp, Devel_std, Dialup, Server_comp, Server_std, Standard, Work_sci, Work_std, 
+:POWERPC] 
 :ALPHA]
 :SPARC]
 :M68K]
@@ -1220,6 +1242,8 @@ zlib1g: Tasks: Admin, C, Chinese, Database, Debian, Devel, Doc, Fortran, Games, 
 :M68K]
 [ARM:
 :ARM]
+[POWERPC:
+:POWERPC]
 [NOT_SPARC:
 :NOT_SPARC]
 [NOT_ALPHA:
@@ -1230,4 +1254,6 @@ zlib1g: Tasks: Admin, C, Chinese, Database, Debian, Devel, Doc, Fortran, Games, 
 :NOT_I386]
 [NOT_ARM:
 :NOT_ARM]
+[NOT_POWERPC:
+:NOT_POWERPC]
 
