@@ -60,9 +60,9 @@ if [ $NN = 1 ]; then
 
     mkdir -p boot$N/etc
     cat <<EOF > boot$N/etc/aboot.conf
-0:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall
-1:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall console=ttyS0
-2:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall console=ttyS1
+0:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall
+1:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
+2:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
 EOF
 
     echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
