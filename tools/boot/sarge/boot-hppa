@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# boot-hppa
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+# palo is used to make ISOs bootable on HPPA.
+
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
+set -e
+
+N=$1
+CDROOT=$2
+if [ "$DI_WWW_HOME" = "default" ];then
+   DI_WWW_HOME="http://people.debian.org/~tsauter/d-i/images-hppa/daily"
+fi
+
+:> $1.mkisofs_opts
+
+# Only disk 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then
+	exit 0
+fi
+
+if [ ! "$DI_WWW_HOME" ];then
+	cp $MIRROR/dists/sid/main/installer-$ARCH/current/images/cdrom/iplboot $CDROOT/install/iplboot
+	cp $MIRROR/dists/sid/main/installer-$ARCH/current/images/cdrom/vmlinux-2.4.20-32-udeb $CDROOT/install/vmlinux-32
+	cp $MIRROR/dists/sid/main/installer-$ARCH/current/images/cdrom/vmlinux-2.4.20-64-udeb $CDROOT/install/vmlinux-64
+	cp $MIRROR/dists/sid/main/installer-$ARCH/current/images/cdrom/cdrom-initrd.gz $CDROOT/install/root.bin
+else
+	wget "$DI_WWW_HOME/iplboot" -O $CDROOT/install/iplboot
+	wget "$DI_WWW_HOME/vmlinux-2.4.20-32-udeb" -O $CDROOT/install/vmlinux-32
+	wget "$DI_WWW_HOME/vmlinux-2.4.20-64-udeb" -O $CDROOT/install/vmlinux-64
+	wget "$DI_WWW_HOME/cdrom-initrd.gz" -O $CDROOT/install/root.bin
+fi
+install_languages $CDROOT
+
+exit 0
