@@ -103,6 +103,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
   * Colin Watson
     - Add exclude-udebs-powerpc list with packages already in the initrd,
       along the same lines as exclude-udebs-i386. Saves about 11 megabytes.
+    - Add bootable CD support for arm, following Vince Sanders' advice.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
