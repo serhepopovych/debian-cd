@@ -113,6 +113,9 @@ for my $arch (@archs) {
     my ($archname) = $2 ;
     my ($diskname) = $3 ;
 
+    my ($archdesc) = $archname ;
+    $archdesc =~ s/src/source/ ;
+
     # find out the image name
     open (JIGDO, $jigdo) || die;
     printf "Opening %s\n", $jigdo ;
@@ -135,7 +138,7 @@ for my $arch (@archs) {
       if ($section eq "Image") {
 	if (/^Filename=(.*)$/) { $filename = $1 ; }
 	if (/^Template=(.*)$/) {
-	  $_ = "Template=$publish_url/$cd_version/jigdo/$archname/$distname-$archname-$diskname.template" ;
+	  $_ = "Template=$publish_url/$cd_version/jigdo/$archdesc/$distname-$archname-$diskname.template" ;
 	}
       }
       elsif ($section eq "Parts") {
@@ -157,11 +160,12 @@ for my $arch (@archs) {
 	  $frompath =~ s|^Non-US:|$tdir/$tsubdir/| ;
 
 	  if (!-f $frompath) {
-	    print STDERR "WARNING: $frompath is not a file\n" ;
+	    #print STDERR "WARNING: $frompath is not a file," ;
 	    # if it's missing, let's grab it from the mirror
 	    $frompath = $file ;
 	    $frompath =~ s|^Debian:|$mirror_dir/| ;
 	    $frompath =~ s|^Non-US:|$nonus_dir/| ;
+	    #print STDERR "lets try $frompath\n" ;
           }
 
 	  my $topath = $file ;
@@ -214,8 +218,10 @@ for my $arch (@archs) {
     }
     print STDERR "WARNING: image too small ($size in $template)\n"
       if ($size < 10000000) ;
-    print STDERR "WARNING: image too big ($size in $template)\n"
-      if ($size > 681574400) ;
+    if ($size >= 680000000) {
+      print STDERR "ERROR: image too big ($size in $template)\n" ;
+      #exit 1 ;
+    }
     printf MD5OUT "%032s  %s\n", $md5, $filename;
     close(TPL) ;
 
