@@ -29,6 +29,7 @@ unset PUBLISH_URL       || true
 unset PUBLISH_NONUS_URL || true
 unset PUBLISH_PATH      || true
 unset INSTALLER_CD      || true
+unset DI_CODENAME       || true
 
 
 # The debian-cd dir
