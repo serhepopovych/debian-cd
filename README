@@ -102,6 +102,10 @@ The process of building a CD is decomposed as follow :
     if you have one)
   - if NONFREE is set, then packages from non-free will be allowed
     (NONFREE must be exported to all sub-shells)
+  - if EXTRANONFREE is set, then non-free packages will be included
+    on an extra CD (the last CD in fact). Don't use NONFREE and
+    EXTRANONFREE at the same time !
+    (EXTRANONFREE must be exported to all sub-shells)
   - if COMPLETE is set, all packages that are not listed in the
     selected task file will be included at the end
   - if SIZELIMIT is set, it will be used as the maximum size that

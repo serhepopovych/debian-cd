@@ -11,7 +11,7 @@
 
 PREFIX=$2
 NUM=${PREFIX##$TDIR/$CODENAME-$ARCH/}
-if [ -n "$NONFREE" ]; then
+if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
 else
   SECTIONS="main contrib"

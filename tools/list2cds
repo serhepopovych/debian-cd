@@ -15,6 +15,7 @@ my $deflimit = $ENV{'SIZELIMIT'} || shift || 639631360;
 my $limit = $ENV{'SIZELIMIT1'} || $deflimit;
 
 my $nonfree = $ENV{'NONFREE'} || 0;
+my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $nonus = $ENV{'NONUS'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
@@ -209,6 +210,65 @@ if ($complete) {
     }
 }
 msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
+
+# Now select the non-free packages for an extra CD
+if ($extranonfree and (! $nonfree))
+{
+	my ($p, @toinclude);
+	
+	# Finally accept non-free packages ...
+	foreach $p (grep { $excluded{$_} eq "nonfree" } (keys %excluded))
+	{
+		$excluded{$p} = 0;
+		push @toinclude, $p;
+	}
+	
+	# Start a new CD
+	$cd++;
+	$cd_size = 0;
+	$limit = $ENV{"SIZELIMIT$cd"} || $deflimit;
+	msg(0, "Limit for non-free CD $cd is $limit.\n");
+	
+	# Include non-free packages
+	foreach $p (@toinclude)
+	{
+		add_package($p, 1);
+	}
+
+	# If a contrib package was listed in the list of packages to
+	# include and if COMPLETE=0 there's a chance that the package
+	# will not get included in any CD ... so I'm checking the complete
+	# list again
+	open (LIST, "< $list") || die "Can't open $list : $!\n";
+	while (defined($_=<LIST>)) {
+		chomp;
+		next if m/^\s*$/;
+		next if $included{$_};
+		next if $excluded{$_};
+		if (not exists $packages{$_}) { 
+		  msg(1, "WARNING: '$_' does not appear to be available ... " . 
+	          	 "(ignored)\n");
+		  next;
+		}
+		add_package ($_, 1);
+	}
+	close LIST;
+
+	# Try to include other packages that could not be included
+	# before (because they depends on excluded non-free packages)
+	if ($complete)
+	{
+	    foreach $p (sort { ($packages{$a}{"Section"} 
+				cmp $packages{$b}{"Section"}) || ($a cmp $b) }
+			grep { not ($included{$_} or $excluded{$_}) } 
+			keys %packages) 
+	    {
+		add_package ($p, 0);
+	    }
+	}
+
+	msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
+}
 
 # Remove old files
 foreach (glob("$dir/*.packages")) {

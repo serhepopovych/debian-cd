@@ -8,6 +8,12 @@ SECTIONS="admin base comm devel doc editors electronics games graphics \
 
 set -e
 
+# There's no difference between NONFREE and EXTRANONFREE for this script
+if [ -n "$EXTRANONFREE" ]
+then
+	NONFREE=1
+fi
+
 cd $1
 
 ln -sf . debian

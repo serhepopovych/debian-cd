@@ -6,6 +6,9 @@ debian-cd (2.2.1) frozen unstable; urgency=low
   * Update for m68k, they should at least build now.
   * Include upgrade-{i386,sparc,alpha,m68k} dir when available.
   * Updated README.html.in (new version provided by Anne Bezemer).
+  * Added EXTRANONFREE support. It allows to generate an extra non-free CD.
+    The first CDs are totally free and the last(s) CD(s) contains 
+    only non-free and possibly some files from contrib.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 

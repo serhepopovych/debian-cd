@@ -113,6 +113,12 @@ endif
 ifndef OUT
 ok=false
 endif
+# Never use NONFREE and EXTRANONFREE at the same time
+ifdef NONFREE
+ifdef EXTRANONFREE
+ok=false
+endif
+endif
 
 default:
 	@echo "Please refer to the README file for more information"

@@ -43,8 +43,12 @@ export OUT=/rack/debian-cd
 # This cannot reside on an NFS mount.
 export APTTMP=/ftp/tmp/apt
 
-# Do I want to have NONFREE
+# Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
+
+# Do I want to have NONFREE on a separate CD (the last CD of the CD set)
+# WARNING: Don't use NONFREE and EXTRANONFREE at the same time !
+# export EXTRANONFREE=1
 
 # If you have a $MIRROR/dists/$CODENAME/local/binary-$ARCH dir with 
 # local packages that you want to put on the CD set then

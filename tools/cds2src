@@ -14,7 +14,8 @@ use strict;
 my $deflimit = $ENV{'SRCSIZELIMIT'} || $ENV{'SIZELIMIT'} || shift || 629145600;
 my $limit = $ENV{'SRCSIZELIMIT1'} || $deflimit;
 
-my $nonfree = $ENV{'NONFREE'};
+my $nonfree = $ENV{'NONFREE'} || 0;
+my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $nonus = $ENV{'NONUS'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
@@ -42,6 +43,7 @@ sub msg {
 my %bin2src;
 my %sources;
 my %included;
+my %excluded;
 
 # Get the information from the good Sources.gz files
 my @SOURCES = ("$mirror/dists/$codename/main/source/Sources.gz",
@@ -52,7 +54,7 @@ if ($nonus and ($codename ne "slink")) {
              "$nonus/dists/$codename/non-US/main/source/Sources.gz",
              "$nonus/dists/$codename/non-US/contrib/source/Sources.gz";
 } 
-if ($nonfree) {
+if ($nonfree or $extranonfree) {
 	push @SOURCES, "$mirror/dists/$codename/non-free/source/Sources.gz";
 	if ($nonus and ($codename ne "slink")) {
 	  push @SOURCES,
@@ -88,6 +90,19 @@ while (defined($_ = <SOURCES>)) {
 		(m/^$re: (.*?)\s*$/m and $sources{$p}{$re} = $1)
 		|| msg(1, "Header field '$re' missing for source '$p'\n");
 	}
+	# Avoid a perl warning for sources packages without section header
+	if (! exists $sources{$p}{"Section"})
+	{
+		$sources{$p}{"Section"} = "No section";
+	}
+	# Generate the list of non-free source packages to exclude
+	if ((! $nonfree) and ($sources{$p}{"Section"} =~ /non-free/))
+	{
+		$excluded{$p} = "nonfree";
+	} else {
+		$excluded{$p} = 0;
+	}
+	# Match between source & binary packages
 	foreach $bin (split (/,\s+/, $sources{$p}{"Binary"})) {
 		$bin2src{$bin} = $p;
 	}
@@ -135,6 +150,7 @@ foreach $p (@list) {
 		msg(0, "ERROR: Source `$src' does not exist ... (ignored)\n");
 		next;
 	}
+	next if $excluded{$src};
 	next if $included{$src};
 	add_src ($src);
 }
@@ -143,11 +159,38 @@ if ($complete) {
     msg(0, "Now we'll add the sources not yet included ...\n");
     foreach $p (sort { ($sources{$a}{"Section"} cmp $sources{$b}{"Section"})
                        || ($a cmp $b) }
-                grep { not $included{$_} } keys %sources) 
+                grep { not ($included{$_} or $excluded{$_}) } keys %sources) 
     {
 	add_src ($p);
     }
+}
+msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
 
+# Now generate the extra non-free CD
+if ($extranonfree and (! $nonfree))
+{
+	my ($p, @toinclude);
+	
+	# Finally accept non-free packages
+	foreach $p (grep { $excluded{$p} eq "nonfree" } (keys %sources))
+	{
+		$excluded{$p} = 0;
+		push @toinclude, $p;
+	}
+
+	# Start a new CD
+	$cd++;
+	$cd_size = 0;
+	$limit = $ENV{"SRCSIZELIMIT$cd"} || $deflimit;
+	msg(0, "Limit for non-free source CD $cd is $limit.\n");
+
+	# Include non-free source packages
+	foreach $p (@toinclude)
+	{
+		add_src ($p);
+	}
+
+	msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
 }
 
 # Now write the lists down

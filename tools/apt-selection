@@ -27,7 +27,7 @@ options=" -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
 	  -o Dir::Etc=$APTTMP/$CODENAME-$ARCH/apt/ \
 	  -o APT::Architecture=$ARCH "
 
-if [ -n "$NONFREE" ]; then
+if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
 	sections="main contrib non-free"
 else
 	sections="main contrib"
