@@ -46,6 +46,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       images from the chosen dist using the mirror or from the web.
     - Add support for sarge bootable mips cds.
     - Add support for sarge bootable sparc cds.
+    - Add kernel 2.6 on i386 cds, remove it from the exclusion list.
+    - Add support for booting 2.6 as well as 2.4 i386 isolinux cd.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 

@@ -43,6 +43,9 @@ EOF
 /bin/sed -n 's/Package: \(kernel-pcmcia-modules-2.4.*-386\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-i386/Packages|/usr/bin/tail -n 1 \
   >> debian-installer+kernel
+/bin/sed -n 's/Package: \(kernel-image-2.6.*-386\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-i386/Packages|/usr/bin/tail -n 1 \
+  >> debian-installer+kernel
 
 cat >> debian-installer+kernel << EOF
 #endif

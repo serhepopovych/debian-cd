@@ -68,7 +68,7 @@ if [ "$NN" = "1" ]; then
     mkdir -p boot$N/isolinux
     cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
     cp -lf cdrom/vmlinuz $CDDIR/install/
-    cp -lf cdrom/initrd.gz $CDDIR/install/cdrom.gz
+    cp -lf cdrom/initrd.gz $CDDIR/install/
     echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 else
     if [ -n "$THISTYPE" ]; then
@@ -106,17 +106,37 @@ cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
 # Isolinux help files come from d-i.
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
+if [ -e boot$N/isolinux/f3.txt.with26 ];then
+  mv boot$N/isolinux/f3.txt.with26 boot$N/isolinux/f3.txt
+  for image in cdrom/2.6/initrd.gz cdrom/2.6/vmlinuz; do
+    if [ ! -e "$image" ]; then
+	dir=$(dirname $image)
+	mkdir -p $dir
+	if [ ! "$DI_WWW_HOME" ];then
+		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
+	else
+		wget "$DI_WWW_HOME/$image" -O "$image"
+	fi
+    fi
+  done
+  cp -a cdrom/2.6 $CDDIR/install/2.6
 # Isolinux config file.
 cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
+LABEL linux26
+  kernel /install/2.6/vmlinuz
+APPEND vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL expert
   kernel /install/vmlinuz
-  append DEBCONF_PRIORITY=low vga=normal initrd=/install/cdrom.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+LABEL expert26
+  kernel /install/2.6/vmlinuz
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
@@ -132,6 +152,36 @@ F9 f9.txt
 F0 f10.txt
 EOF
 
+else
+
+# Isolinux config file.
+cat > boot$N/isolinux/isolinux.cfg <<EOF
+DEFAULT /install/vmlinuz
+APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+LABEL linux
+  kernel /install/vmlinuz
+LABEL cdrom
+  kernel /install/vmlinuz
+LABEL expert
+  kernel /install/vmlinuz
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+DISPLAY isolinux.txt
+TIMEOUT 0
+PROMPT 1
+F1 f1.txt
+F2 f2.txt
+F3 f3.txt
+F4 f4.txt
+F5 f5.txt
+F6 f6.txt
+F7 f7.txt
+F8 f8.txt
+F9 f9.txt
+F0 f10.txt
+EOF
+
+fi
+
 (echo "Tools for DOS :" ; \
 	echo "lodlin/         load Linux kernel from DOS" ;\
 	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
@@ -146,7 +196,7 @@ you can safely ignore that.
 smartdrv /c
 
 echo using CDROM install
-loadlin.exe vmlinuz vga=normal initrd=cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+loadlin.exe vmlinuz vga=normal initrd=initrd.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 
 EOF
 ) |todos > $CDDIR/install/boot.bat
