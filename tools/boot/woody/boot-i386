@@ -137,23 +137,23 @@ goto ONE
 
 :ONE
 echo using standard kernel
-loadlin.exe linux root=/dev/ram ro initrd=root.bin
+loadlin.exe linux root=/dev/ram ro initrd=root.bin cdrom
 
 :TWO
 echo using compact kernel
-loadlin.exe lincompt root=/dev/ram ro initrd=root.bin
+loadlin.exe lincompt root=/dev/ram ro initrd=root.bin cdrom
 
 :THREE
 echo using IDEPCI kernel
-loadlin.exe linpci root=/dev/ram ro initrd=root.bin
+loadlin.exe linpci root=/dev/ram ro initrd=root.bin cdrom
 
 :FOUR
 echo using UDMA100-ext3 kernel
-loadlin.exe linext3 root=/dev/ram ro initrd=root.bin
+loadlin.exe linext3 root=/dev/ram ro initrd=root.bin cdrom
 
 :FIVE
 echo using reiserfs kernel
-loadlin.exe linreis root=/dev/ram ro initrd=root.bin
+loadlin.exe linreis root=/dev/ram ro initrd=root.bin cdrom
 EOF
 ) |todos > $CDDIR/install/boot.bat
 

@@ -1,6 +1,5 @@
 debian-cd (2.2.10) unstable; urgency=low
 
-  * UNRELEASED
   * first test of multi-boot cdimage for i386 disk #1
     You must export MULTIBOOT="yes" in CONF.sh  to enable this feature. -jwest
   * Removed "ide" boot floppy's flavor. Closes: #120415
