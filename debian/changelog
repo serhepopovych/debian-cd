@@ -1,6 +1,5 @@
 debian-cd (2.2.12) unstable; urgency=low
 
-  * UNRELEASED. 
   * Get it right this time with the MULTIBOOT test ... Closes: #127234
   * Correct spelling mistake in README.devel. Closes: #127726
   * Make the log output more consistent and offer the possibility
@@ -10,6 +9,7 @@ debian-cd (2.2.12) unstable; urgency=low
   * Undef some automatic variable substitution (like i386)
     of cpp causing problems while generating tasks files. Closes: #129044
     Thanks again to Petter Reinholdsten.
+  * Don't fail if Contents-$ARCH files are missing. Closes: #129166
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 29 Dec 2001 19:57:23 +0100
 
