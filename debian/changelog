@@ -19,6 +19,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       are not a good choice ATM according to bdale.
     - silo.conf fixes.
     - Fix mirror_check to look under LOCALDEBS for files if it is set.
+    - Add mdadm to the netinst CD, needed for software raid installs.
+    - Add lvm2 (and dependencies libdevmapper1.00 and lvm-common)
+      for new partman. Left lvm10 on the CD for now, remove later.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we

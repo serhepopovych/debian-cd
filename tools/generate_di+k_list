@@ -20,6 +20,10 @@ cat > debian-installer+kernel << EOF
 eject
 locales
 lvm10
+libdevmapper1.00
+lvm-common
+lvm2
+mdadm
 aptitude
 jfbterm
 unifont
