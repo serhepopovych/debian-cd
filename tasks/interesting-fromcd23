@@ -4,7 +4,6 @@
 
 hwtools
 bzip2
-elinks
 libghttp1
 bplay
 word2x
@@ -20,7 +19,6 @@ nano
 xkeycaps
 xcolorsel
 csh
-zsh
 bible-kjv
 bible-kjv-text
 verse
@@ -55,3 +53,6 @@ libltdl3-dev
 stl-manual
 pcmcia-source
 kernel-source-2.4.21
+elinks
+zsh
+joe
