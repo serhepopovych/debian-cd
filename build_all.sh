@@ -37,9 +37,15 @@ do
 	if [ "$ARCH" = "i386" ]; then
 		export OUT="$TMP_OUT/$ARCH"; mkdir -p $OUT
 		make bin-official_images
+		echo Generating MD5Sums of the images
+		make imagesums
+		echo Generating list files for images
+		make pi-makelist
 
 		export OUT="$TMP_OUT/src"; mkdir -p $OUT
 		make src-official_images
+		echo Generating MD5Sums of the images
+		make imagesums
 	else
 		export OUT=$TMP_OUT/$ARCH; mkdir -p $OUT
 		make bin-official_images
@@ -50,9 +56,10 @@ do
 			make installtools
 			make bin-images
 		fi
+		echo Generating MD5Sums of the images
+		make imagesums
+		echo Generating list files for images
+		make pi-makelist
 	fi
 	echo "--------------- `date` ---------------"
 done
-
-make imagesums
-make pi-makelist

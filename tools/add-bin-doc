@@ -7,13 +7,16 @@ BDIR=$TDIR/$CODENAME-$ARCH
 ADIR=$APTTMP/$CODENAME-$ARCH
 SDIR=$TDIR/$CODENAME-src
 
-$BASEDIR/tools/add_files $BDIR/$DISK $MIRROR doc
-
 for i in $BDIR/*.packages; do 
 	dir=${i%%.packages}
 	dir=${dir##$BDIR/}
 	dir=$BDIR/CD$dir
 	cp -df $MIRROR/README* $dir/ 
+
+	if [ -f $dir/doc/dedication-$DEBVERSION.txt ]; then
+		mv $dir/doc/dedication-$DEBVERSION.txt $dir/dedication.txt
+		ln -s ../dedication.txt $dir/doc/dedication-$DEBVERSION.txt
+	fi
 
 	rm -f $dir/README $dir/README.1ST \
 		$dir/README.CD-manufacture $dir/README.multicd \
