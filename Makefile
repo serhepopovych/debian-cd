@@ -326,8 +326,8 @@ ifdef FORCENONUSONCD1
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us/main)' - | \
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
-	$(Q)if [ -x "`which debootstrap`" ]; then \
-		debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
+	$(Q)if [ -x "/usr/sbin/debootstrap" ]; then \
+		/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
 		| tr ' ' '\n' >>$(BDIR)/rawlist; \
 	fi
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
@@ -437,16 +437,20 @@ $(BDIR)/packages-stamp:
 	@# Check that all packages required by debootstrap are included
 	@# and create .disk/base_installable if yes
 	$(Q)for DISK in $(FIRSTDISKS); do \
-	if [ -x "`which debootstrap`" ]; then \
+	if [ -x "/usr/sbin/debootstrap" ]; then \
 	    ok=yes; \
 	    DISK=$${DISK##CD}; \
-	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
+	    for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
 		if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
 		    ok=no; \
+		    echo "Missing debootstrap-required $p"; \
 		fi; \
 	    done; \
 	    if [ "$$ok" = "yes" ]; then \
+		echo "CD$$DISK contains all packages needed by debootstrap"; \
 		touch $(BDIR)/CD$$DISK/.disk/base_installable; \
+	    else \
+		echo "Unable to find debootstrap program"; \
 	    fi; \
 	fi; \
 	done
