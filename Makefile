@@ -594,7 +594,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
 		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
-		rm -f base-images-*; \
+		rm -rf base-images-*; \
 		if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \
 		if [ -L current ]; then \
 			CURRENT_LINK=`ls -l current | awk '{print $$11}'`; \
