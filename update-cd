@@ -19,7 +19,7 @@ NONUS=${NONUS:-$MIRROR/non-US}
 NONFREE=1
 
 # What release version is this?
-VER=2.2r3
+VER=2.2r4
 
 # Path to use with mkisofs/mkhybrid
 MKISOFS=${MKISOFS:-"mkhybrid"}
@@ -36,7 +36,7 @@ OUT=/mirror/debian-cd
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/mirror/lists/r0-r3.diff #~/r2.diff
+DIFF=/mirror/lists/r0-r4.diff #~/r2.diff
 
 REL=Debian"$VER"
 CLOG=dists/potato/ChangeLog
@@ -52,8 +52,8 @@ ARCH2="m68k powerpc sparc"
 
 export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
 
-scanpackages=$BASEDIR/tools/scanpackages
-scansources=$BASEDIR/tools/scansources
+scanpackages=$BASEDIR/tools/scanpackages.old
+scansources=$BASEDIR/tools/scansources.old
 set_mkisofs_opts=$BASEDIR/tools/set_mkisofs_opts
 adddirs=$BASEDIR/tools/add_dirs
 addfiles=$BASEDIR/tools/add_files
@@ -137,21 +137,22 @@ fi
 cd $UPD
 
 echo Splitting binary dirs between trees
+
 for ARCH in $ARCH2
 do
 	find CD1 -type d | egrep -e binary-$ARCH$ | xargs rm -r
 done
-find CD1 -type d | egrep -e source | xargs rm -r
+find CD1 -type d | grep source$ | xargs rm -r
 
 for ARCH in $ARCH1
 do
 	find CD2 -type d | egrep -e binary-$ARCH$ | xargs rm -r
 done
-find CD2 -type d | egrep -e source | xargs rm -r
+find CD2 -type d | grep source$ | xargs rm -r
 
-for ARCH in sparc all
+for ARCH in $ARCH1 $ARCH2 all
 do
-	find CD3 -type d | egrep -e binary-$ARCH$ | xargs rm -r
+	find CD3 -type d | grep -e binary-$ARCH$ | xargs rm -r >/dev/null 2>&1
 done
 
 # Now create the binary-all symlinks
