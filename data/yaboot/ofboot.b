@@ -3,7 +3,7 @@
 MacRISC
 </COMPATIBLE>
 <DESCRIPTION>
-Debian GNU/Linux 2.2 (potato) PowerPC bootloader
+Debian GNU/Linux PowerPC first stage CDROM bootloader
 </DESCRIPTION>
 <BOOT-SCRIPT>
 " screen" output
