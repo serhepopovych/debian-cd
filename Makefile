@@ -433,6 +433,22 @@ $(SDIR)/CD1/.disk/info:
 packages: bin-infos bin-list $(BDIR)/packages-stamp
 $(BDIR)/packages-stamp:
 	@echo "Adding the selected packages to each CD :"
+	@# Check that all packages required by debootstrap are included
+	@# and create .disk/base_installable if yes
+	$(Q)for DISK in $(FIRSTDISKS); do \
+	if [ -x "`which debootstrap`" ]; then \
+	    ok=yes; \
+	    DISK=$${DISK##CD}; \
+	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
+		if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
+		    ok=no; \
+		fi; \
+	    done; \
+	    if [ "$$ok" = "yes" ]; then \
+		touch $(BDIR)/CD$$DISK/.disk/base_installable; \
+	    fi; \
+	fi; \
+	done
 	$(Q)set -e; \
 	 for i in $(BDIR)/*.packages; do \
 		dir=$${i%%.packages}; \
@@ -593,6 +609,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 		$(add_files) \
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
+		touch $(BDIR)/.disk/kernel_installable ; \
 		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
 		rm -rf base-images-*; \
 		if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \

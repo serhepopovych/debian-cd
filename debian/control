@@ -1,13 +1,13 @@
 Source: debian-cd
 Section: admin
-Priority: optional
+Priority: extra
 Maintainer: Raphael Hertzog <hertzog@debian.org>
 Build-Depends-Indep: debhelper (>= 3)
 Standards-Version: 3.5.2
 
 Package: debian-cd
 Architecture: all
-Depends: perl5 | perl, libdigest-md5-perl, sysutils, apt (>= 0.3.11.1), make, mkisofs | mkhybrid, lynx, grep-dctrl, apt-utils (>= 0.5.4)
+Depends: perl, libdigest-md5-perl, sysutils, apt (>= 0.3.11.1), make, mkisofs | mkhybrid, lynx, grep-dctrl, apt-utils (>= 0.5.4), debootstrap
 Recommends: hfsutils, debianutils (>= 1.6)
 Suggests: palo (>= 0.94)
 Description: Tools for building (Official) Debian CD set
