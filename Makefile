@@ -306,7 +306,7 @@ $(BDIR)/list: $(BDIR)/rawlist
 $(BDIR)/rawlist:
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
-		grep-dctrl -FSection -n -sPackage -e '^non-US' - | \
+		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us/main)' - | \
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
