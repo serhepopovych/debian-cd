@@ -49,13 +49,14 @@ KTYPE[8]=""
 
 # Show user what is going on.
 #
-echo "Using ${${KTYPE[$NN]}:-vanilla} boot-disks image on CD$N"
+THISTYPE=${KTYPE[$NN]}
+echo "Using ${THISTYPE:-vanilla} boot-disks image on CD$N"
 
 # Put boot images on CD1...CD(N)
 #
 :> $N.mkisofs_opts
 mkdir -p boot$N/boot
-cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$NN]}/rescue.bin boot$N/boot/
+cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${THISTYPE}/rescue.bin boot$N/boot/
 
 echo -n "-J -b boot/rescue.bin "  > $N.mkisofs_opts
 
@@ -78,13 +79,13 @@ if [ "$MULTIBOOT" = "yes" ] ; then
         echo "Adding additional boot images to CD1"
 
     for i in 2 3 4 ; do
-	
+	THISTYPE=${KTYPE[$i]}
         # first copy/link the next boot block to the disk.
-        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$i]}/rescue.bin boot$N/boot/${${KTYPE[$i]}:-vanilla}.bin
+        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/$THISTYPE/rescue.bin boot$N/boot/${THISTYPE:-vanilla}.bin
         # then the eltorito-alt-boot cmd to mkisofs_opts
         echo -n "-eltorito-alt-boot " >> $N.mkisofs_opts
         # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n "-b boot/${${KTYPE[$i]}:-vanilla}.bin "  >> $N.mkisofs_opts
+        echo -n "-b boot/${THISTYPE:-vanilla}.bin "  >> $N.mkisofs_opts
 
     done
 fi
