@@ -21,6 +21,7 @@ my $complete = $ENV{'COMPLETE'} || 0;
 my $exclude = $ENV{'EXCLUDE'} || "$list.exclude";
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
+my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $verbose = $ENV{'VERBOSE'} || 0;
 
@@ -128,7 +129,7 @@ my ($total_size, $cd_size, $size, $cd) = (0, 0, 0, 1);
 my %cds;
 
 # Automatically include packages listed in the status file
-open(STATUS, "< $dir/status") || die "Can't open status file : $!\n";
+open(STATUS, "< $adir/status") || die "Can't open status file : $!\n";
 while (defined($_ = <STATUS>)) {
 	next if not m/^Package: (\S+)/;
 	$p = $1;

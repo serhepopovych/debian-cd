@@ -20,6 +20,7 @@ my $complete = $ENV{'COMPLETE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 
 my $bdir = "$ENV{'TDIR'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
+my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $sdir = "$ENV{'TDIR'}/$ENV{'CODENAME'}-src";
 my $verbose = $ENV{'VERBOSE'} || 0;
 

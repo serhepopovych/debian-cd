@@ -8,23 +8,23 @@
 # set -e
 
 # Get the configuration information if necessary
-if [ -z "$TDIR" -o -z "$CODENAME" -o -z "$ARCH" ]; then
+if [ -z "$CODENAME" -o -z "$ARCH" -o -z "$APTTMP" ]; then
 	if [ -e CONF.sh ]; then
 		source CONF.sh
 	else
 		echo "Please set the good environment variables before "
 		echo "launching this program ..."
 		echo "Current values are :"
-		echo "TDIR=$TDIR"
 		echo "CODENAME=$CODENAME"
 		echo "ARCH=$ARCH"
+		echo "APTTMP=$APTTMP"
 	fi
 fi
 
-options=" -o Dir::State::status=$TDIR/$CODENAME-$ARCH/status \
-          -o Dir::State=$TDIR/$CODENAME-$ARCH/apt-state/ \
-	  -o Dir::Cache=$TDIR/$CODENAME-$ARCH/apt-cache/ \
-	  -o Dir::Etc=$TDIR/$CODENAME-$ARCH/apt/ \
+options=" -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
+          -o Dir::State=$APTTMP/$CODENAME-$ARCH/apt-state/ \
+	  -o Dir::Cache=$APTTMP/$CODENAME-$ARCH/apt-cache/ \
+	  -o Dir::Etc=$APTTMP/$CODENAME-$ARCH/apt/ \
 	  -o APT::Architecture=$ARCH "
 
 if [ -n "$NONFREE" ]; then
@@ -34,37 +34,37 @@ else
 fi
 
 # Check for the necessary dirs and files ...
-if [ ! -d "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial" ]; then
-	mkdir -p "$TDIR/$CODENAME-$ARCH/apt-state/lists/partial"
+if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt-state/lists/partial" ]; then
+	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt-state/lists/partial"
 fi
-if [ ! -d "$TDIR/$CODENAME-$ARCH/apt-cache/archives/partial" ]; then
-	mkdir -p "$TDIR/$CODENAME-$ARCH/apt-cache/archives/partial"
+if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt-cache/archives/partial" ]; then
+	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt-cache/archives/partial"
 fi
-if [ ! -d "$TDIR/$CODENAME-$ARCH/apt" ]; then
-	mkdir -p "$TDIR/$CODENAME-$ARCH/apt"
+if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt" ]; then
+	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt"
 fi
-if [ ! -e "$TDIR/$CODENAME-$ARCH/apt/sources.list" ]; then
+if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	# Generating a correct sources.list file
 	echo "deb file:$MIRROR $CODENAME $sections" \
-	> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	if [ -n "$NONUS" ]; then
 	  # Slink used the old paths
 	  if [ "$CODENAME" = "slink" ]; then
 	     echo "deb file:$NONUS $CODENAME non-US" \
-	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	     >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	  else
 	     echo "deb file:$NONUS $CODENAME/non-US $sections" \
-	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	     >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	  fi
 	fi
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then
 	  echo "deb file:$MIRROR $CODENAME local" \
-	  >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	fi
 fi
 
-temp=$TDIR/$CODENAME-$ARCH/temp.apt-selection
+temp=$APTTMP/$CODENAME-$ARCH/temp.apt-selection
 
 # Launch the command
 if [ "$1" = "update" -o "$1" = "check" ]; then

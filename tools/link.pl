@@ -4,6 +4,7 @@ use strict;
 
 my $symlink_farm = $ENV{'SYMLINK'} || 0;
 my $link_verbose = $ENV{'VERBOSE'} || 0;
+my $link_copy = $ENV{'COPYLINK'} || 0;
 
 sub good_link ($$) {
 	my ($src, $dest) = @_;
@@ -25,8 +26,15 @@ sub good_link ($$) {
 		if (not symlink ($src, $dest)) {
 			print STDERR "Symlink from $src to $dest failed: $!\n";
 		}
+	} elsif ($link_copy) {
+		print "Copy: $dest => $src\n" if ($link_verbose >= 3);
+		if (system("cp -ap $src $dest")) {
+			my $err_num = $? >> 8;
+			my $sig_num = $? & 127;
+			print STDERR "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
+		}
 	} else {
-		print "Harlink: $dest => $src\n" if ($link_verbose >= 3);
+		print "Hardlink: $dest => $src\n" if ($link_verbose >= 3);
 		if (not link ($src, $dest)) {
 			print STDERR "Link from $src to $dest failed: $!\n";
 		}

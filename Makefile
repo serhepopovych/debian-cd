@@ -60,6 +60,7 @@ addfiles=$(BASEDIR)/tools/add_files
 set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
+ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
 SDIR=$(TDIR)/$(CODENAME)-src
 
 ## CHECKS ##
@@ -97,13 +98,15 @@ ok:
 ## INITIALIZATION ##
 
 # Creation of the directories needed
-init: ok $(TDIR) $(BDIR) $(SDIR)
+init: ok $(TDIR) $(BDIR) $(SDIR) $(ADIR)
 $(TDIR):
 	@mkdir -p $(TDIR)
 $(BDIR):
 	@mkdir -p $(BDIR)
 $(SDIR):
 	@mkdir -p $(SDIR)
+$(ADIR):
+	@mkdir -p $(ADIR)
 
 ## CLEANINGS ##
 
@@ -130,14 +133,14 @@ src-distclean:
 
 # Regenerate the status file with only packages that
 # are of priority standard or higher
-status: init $(BDIR)/status
-$(BDIR)/status:
+status: init $(ADIR)/status
+$(ADIR)/status:
 	@echo "Generating a fake status file for apt-get and apt-cache..."
 	@zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.gz | \
 	perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; \
 	               print if (/^Priority: (required|important|standard)/m or \
 		       /^Section: base/m);' \
-	> $(BDIR)/status
+	> $(ADIR)/status
 	# Updating the apt database
 	@$(apt) update
 	#
@@ -156,7 +159,7 @@ correctstatus: status apt-update
 	@for i in `$(apt) deselected -f install`; do \
 		echo $$i; \
 		perl -i -000 -ne "print unless /^Package: \Q$$i\E/m" \
-		$(BDIR)/status; \
+		$(ADIR)/status; \
 	done
 	#
 	# Adding packages to the system :
@@ -165,7 +168,7 @@ correctstatus: status apt-update
 	  $(apt) cache dumpavail | perl -000 -ne \
 	      "s/^(Package: .*)\$$/\$$1\nStatus: install ok installed/m; \
 	       print if /^Package: \Q$$i\E\s*\$$/m;" \
-	       >> $(BDIR)/status; \
+	       >> $(ADIR)/status; \
 	done
 	#
 	# Showing the output of apt-get check :
@@ -531,5 +534,5 @@ src-official_images: ok src-images
 
 $(CODENAME)_status: ok init
 	@echo "Using the provided status file for $(CODENAME)-$(ARCH) ..."
-	@cp $(BASEDIR)/data/$(CODENAME)/status.$(ARCH) $(BDIR)/status \
+	@cp $(BASEDIR)/data/$(CODENAME)/status.$(ARCH) $(ADIR)/status \
 	 2>/dev/null || $(MAKE) status || $(MAKE) correctstatus
