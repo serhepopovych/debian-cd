@@ -23,7 +23,8 @@ Software:
 - mkisofs/mkhybrid (mkisofs also provides the isoinfo binary used by the
   Pseudo Image Kit)
 - the perl Digest::MD5 module
-- lynx (for text version of README.html)
+- lynx (for text version of README.html) and todos from sysutils
+  to convert docs to DOS format (although you can rip that out, too)
 - if you want to generate .list files: tempfile, as included in debianutils
   >= 1.6 (not absolutely necessary, workaround described in tools/pi-makelist)
 - if you want to generate jigdo files: jigdo-file (see below)
