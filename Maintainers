@@ -11,6 +11,7 @@ Arm
 i386 (ia32)
 
 M68k
+    Chris Lawrence <lawrencc@debian.org>
 
 Mips
     no-one (yet)
