@@ -97,6 +97,8 @@ if [ "${ISOLINUX:-0}" != "0" ]; then
     # Include Smart Boot Manager image for people where isolinux doesn't
     # work
     gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
+    # Keep the original file timestamp
+    touch -r $BASEDIR/data/$CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
     cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
     # Isolinux config files
     cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/

@@ -19,6 +19,7 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
       debian-installer.
     - Document BOOTDISKS.
     - Make disk number available in tools/add-bin-doc.
+    - In woody, keep the time stamp of smb.bin when copying it to CD.
 
  -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
 
