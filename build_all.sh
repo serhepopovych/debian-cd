@@ -20,8 +20,12 @@ do
 		exit 1
 	fi
 	echo " ... selecting packages to include"
-	disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
-	        awk '{print $1}'`
+    if [ -e ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. ] ; then
+            disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
+				awk '{print $1}'`
+    else
+            disks=0
+    fi
 	if [ -f $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc ]; then
 	    . $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc
 	fi
