@@ -18,6 +18,7 @@ my $nonfree = $ENV{'NONFREE'} || 0;
 my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $nonus = $ENV{'NONUS'} || 0;
 my $forcenonusoncd1 = $ENV{'FORCENONUSONCD1'} || 0;
+my $contrib = $ENV{'CONTRIB'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 
@@ -50,13 +51,18 @@ my @nonuslist=();
 my %includesrc;
 
 # Get the information from the good Sources.gz files
-my @SOURCES = ("$mirror/dists/$codename/main/source/Sources.gz",
-               "$mirror/dists/$codename/contrib/source/Sources.gz");
+my @SOURCES = ("$mirror/dists/$codename/main/source/Sources.gz");
+
+if ($contrib) {
+     push @SOURCES, "$mirror/dists/$codename/contrib/source/Sources.gz";
+}
 
 if ($nonus) {
-	push @SOURCES, 
-             "$nonus/dists/$codename/non-US/main/source/Sources.gz",
-             "$nonus/dists/$codename/non-US/contrib/source/Sources.gz";
+	push @SOURCES, "$nonus/dists/$codename/non-US/main/source/Sources.gz";
+        if ($contrib) {
+             push @SOURCES, 
+                 "$nonus/dists/$codename/non-US/contrib/source/Sources.gz";
+        }
 } 
 if ($nonfree or $extranonfree) {
 	push @SOURCES, "$mirror/dists/$codename/non-free/source/Sources.gz";

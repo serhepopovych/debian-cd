@@ -36,8 +36,10 @@ fi
 
 mkdir -p dists/$CODENAME/main/binary-$ARCH
 mkdir -p dists/$CODENAME/main/source
-mkdir -p dists/$CODENAME/contrib/binary-$ARCH
-mkdir -p dists/$CODENAME/contrib/source
+if [ "${CONTRIB:-0}" != 0 ]; then
+    mkdir -p dists/$CODENAME/contrib/binary-$ARCH
+    mkdir -p dists/$CODENAME/contrib/source
+fi
 if [ "${NONFREE:-0}" != "0" ]; then
     mkdir -p dists/$CODENAME/non-free/binary-$ARCH
     mkdir -p dists/$CODENAME/non-free/source
@@ -49,8 +51,10 @@ fi
 if [ -n "$SECURITY" ]; then
     mkdir -p dists/$CODENAME/updates/main/binary-$ARCH
     mkdir -p dists/$CODENAME/updates/main/source
-    mkdir -p dists/$CODENAME/updates/contrib/binary-$ARCH
-    mkdir -p dists/$CODENAME/updates/contrib/source
+    if [ "${CONTRIB:-0}" != "0" ]; then
+        mkdir -p dists/$CODENAME/updates/contrib/binary-$ARCH
+        mkdir -p dists/$CODENAME/updates/contrib/source
+    fi
     if [ "${NONFREE:-0}" != "0" ]; then
         mkdir -p dists/$CODENAME/updates/non-free/binary-$ARCH
         mkdir -p dists/$CODENAME/updates/non-free/source
@@ -60,8 +64,10 @@ fi
 if [ -n "$NONUS" ]; then
     mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
     mkdir -p dists/$CODENAME/non-US/main/source
-    mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
-    mkdir -p dists/$CODENAME/non-US/contrib/source
+    if [ "${CONTRIB:-0}" != "0" ]; then
+        mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
+        mkdir -p dists/$CODENAME/non-US/contrib/source
+    fi
     if [ "${NONFREE:-0}" != "0" ]; then
 	    mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
 	    mkdir -p dists/$CODENAME/non-US/non-free/source

@@ -11,10 +11,12 @@ set -e
 SDIR=$TDIR/$CODENAME-src
 PREFIX=`echo $1 | sed "s?$SDIR/CD?$SDIR/?"`
 
+SECTIONS="main"
 if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ]; then
-  SECTIONS="main contrib non-free"
-else
-  SECTIONS="main contrib"
+  SECTIONS="${SECTIONS} non-free"
+fi
+fi [ "${CONTRIB:-0}" != "0" ]; then
+  SECTIONS="${SECTIONS} contrib"
 fi
 
 cd $1
