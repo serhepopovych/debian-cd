@@ -550,12 +550,14 @@ $(BDIR)/bootable-stamp:
 		n=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$n; \
 		if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) ]; then \
-			cd $(BDIR); \
-			echo "Running tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir" ; \
-			$(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
+		    cd $(BDIR); \
+		    echo "Running tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir" ; \
+		    $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
 		else \
+		    if [ "$${IGNORE_MISSING_BOOT_SCRIPT:-0}" = "0" ]; then \
 			echo "No script to make CDs bootable for $(ARCH) ..."; \
 			exit 1; \
+		    fi; \
 		fi; \
 	done
 	$(Q)touch $(BDIR)/bootable-stamp
