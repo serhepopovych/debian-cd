@@ -125,8 +125,8 @@ export CONTRIB=1
 
 # Options
 # export MKISOFS=/usr/bin/mkisofs
-# export MKISOFS_OPTS="-r -T"		#For normal users
-# export MKISOFS_OPTS="-r -F . -T"	#For symlink farmers
+# export MKISOFS_OPTS="-r"		#For normal users
+# export MKISOFS_OPTS="-r -F ."	#For symlink farmers
 
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1

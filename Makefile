@@ -51,9 +51,9 @@ export MKISOFS=/usr/bin/mkisofs
 endif
 ifndef MKISOFS_OPTS
 #For normal users
-MKISOFS_OPTS=-r -T
+MKISOFS_OPTS=-r
 #For symlink farmers
-#MKISOFS_OPTS=-r -F . -T
+#MKISOFS_OPTS=-r -F .
 endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
