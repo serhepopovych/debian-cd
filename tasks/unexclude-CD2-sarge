@@ -38,3 +38,8 @@ timidity-patches
 xserver-xfree86-dbg
 kernel-source-2.2.20
 syslinux
+gcc272
+tk8.0
+tk8.2
+tcl8.0
+tcl8.2
