@@ -79,6 +79,29 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 	done
 fi
 
+if [ -n "$LOCAL" ]; then
+	if [ -e $MIRROR/dists/$CODNAME/local/binary-$ARCH/Release ]; then
+	   cp $MIRROR/dists/$CODENAME/local/binary-$ARCH/Release \
+   		dists/$CODENAME/local/binary-$ARCH/
+	fi
+	grep -v ^X-Medium $PREFIX.Packages-local \
+	     >dists/$CODENAME/local/binary-$ARCH/Packages
+	grep -v ^X-Medium $PREFIX.Packages-local | gzip --best \
+	     >dists/$CODENAME/local/binary-$ARCH/Packages.gz
+
+	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+		dir=${i%%.packages}
+		n=${dir##$TDIR/$CODENAME-$ARCH/}
+		if [ $n -le $NUM ]; then
+			cat $dir.Packages-local \
+			    >>dists/$CODENAME/local/binary-$ARCH/Packages.cd
+			cat $dir.Packages-local | gzip --best \
+			    >>dists/$CODENAME/local/binary-$ARCH/Packages.cd.gz
+		fi
+	done
+fi
+
+
 fi
 
 # Creates the temp Packages-$SECT files
@@ -108,6 +131,12 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 	     dists/$CODENAME/non-US/binary-$ARCH \
 	     $NONUS/indices-non-US/override.$CODENAME.gz \
 		  	> $PREFIX.Packages-non-US
+fi
+
+if [ -n "$LOCAL" ]; then
+	dpkg-scanpackages -m "`cat .disk/info`" \
+	     dists/$CODENAME/local/binary-$ARCH \
+	     /dev/null > $PREFIX.Packages-local
 fi
 
 exit 0

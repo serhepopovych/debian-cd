@@ -2,17 +2,17 @@ Source: debian-cd
 Section: contrib/admin
 Priority: extra
 Maintainer: Raphael Hertzog <hertzog@debian.org>
-Standards-Version: 3.0.1
+Standards-Version: 3.1.1
 
 Package: debian-cd
 Architecture: all
-Depends: perl5 | perl, libdigest-md5-perl | libmd5-perl, sysutils, apt (>= 0.3.11.1), dpkg-dev (>= 1.4.1.6), dpkg-multicd, make
+Depends: perl5 | perl, libdigest-md5-perl | libmd5-perl, sysutils, apt (>= 0.3.11.1), dpkg-dev (>= 1.4.1.6), dpkg-multicd, make, mkhybrid | mkisofs
 Recommends: lha, unzip
 Description: Tools for building (Official) Debian CD set
  This package was formerly called YACS (for Yet Another CD
  Script).
  .
- It's the official way of building CD for the potato release.
+ It's the official way of building CD since the potato release.
  .
  Its goal is to facilitate the creation of customized Debian
  CD set.

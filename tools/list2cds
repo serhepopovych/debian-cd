@@ -16,6 +16,7 @@ my $limit = $ENV{'SIZELIMIT1'} || $deflimit;
 
 my $nonfree = $ENV{'NONFREE'} || 0;
 my $nonus = $ENV{'NONUS'} || 0;
+my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $exclude = $ENV{'EXCLUDE'} || "$list.exclude";
 

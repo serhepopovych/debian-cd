@@ -4,7 +4,7 @@
 
 SECTIONS="admin base comm devel doc editors electronics games graphics \
           hamradio interpreters libs mail math misc net news oldlibs \
-	  otherosfs shells sound tex text utils web x11"
+	  otherosfs science shells sound tex text utils web x11"
 
 set -e
 
@@ -29,6 +29,11 @@ do
 		mkdir -p dists/$CODENAME/non-free/binary-all/$i
 		mkdir -p dists/$CODENAME/non-free/source/$i
 	fi
+	if [ -n "$LOCAL" ]; then
+		mkdir -p dists/$CODENAME/local/binary-$ARCH/$i
+		mkdir -p dists/$CODENAME/local/binary-all/$i
+		mkdir -p dists/$CODENAME/local/source/$i
+	fi
 done
 
 if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
@@ -51,5 +56,4 @@ elif [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 fi
 
 mkdir .disk
-
 

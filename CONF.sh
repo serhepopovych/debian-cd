@@ -12,11 +12,14 @@ export CODENAME=potato
 # ... for arch  
 export ARCH=i386
 
+# IMPORTANT : The 3 following paths must be on the same partition/device
+#             or you won't be able to use debian-cd in the standard way.
+#             If really you can't then, you can try with the symlink farm,
+#             read the README for more information about this.
 # Paths to the mirrors
 export MIRROR=/ftp/debian
 # Comment the following line if you don't have/want non-US
 export NONUS=/ftp/debian-non-US
-
 # Path of the temporary directory
 export TDIR=/ftp/tmp
 
@@ -25,6 +28,11 @@ export OUT=/rack/debian-cd
 
 # Do I want to have NONFREE
 # export NONFREE=1
+
+# If you have a $MIRROR/dists/$CODENAME/local/binary-$ARCH dir with 
+# local packages that you want to put on the CD set then
+# uncomment the following line 
+#export LOCAL=1
 
 # Sparc only : bootdir (location of cd.b and second.b)
 #export BOOTDIR=

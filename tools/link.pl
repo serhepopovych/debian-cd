@@ -7,6 +7,19 @@ my $link_verbose = $ENV{'VERBOSE'} || 0;
 
 sub good_link ($$) {
 	my ($src, $dest) = @_;
+
+	# Check if the destination directory does exist
+	my $ddir = $dest;
+	$ddir =~ s#/?[^/]+$##g;
+	if ($ddir eq "") 
+	{
+		$ddir = ".";
+	}
+	if (! -d $ddir) # Create it if not
+	{
+		system("mkdir -p $ddir");
+	}
+	# Link the files
 	if ($symlink_farm) {
 		print "Symlink: $dest => $src\n" if ($link_verbose >= 3);
 		if (not symlink ($src, $dest)) {

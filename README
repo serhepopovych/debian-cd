@@ -67,6 +67,11 @@ The process of building a CD is decomposed as follow :
   have to build them one after the other (you may use a shell
   script for this).
 
+  Note that the temporary dir must be on the same device than the
+  mirror because debian-cd uses hardlinks for generating an image 
+  tree. If you can't do this, you'll have to use the symlink farm.
+  The symlink farm is explained at the end of this README.
+
 - now we'll check if your mirror is ok (with good Packages files) :
   $ make mirrorcheck
 
@@ -158,6 +163,21 @@ The process of building a CD is decomposed as follow :
 - if you want to generate a MD5SUMS file with the md5sums of the
   images you can do it with :
   $ make imagesums
+
+
+Local packages
+==============
+
+If you provide some custom made packages and you want to put them on
+Debian CD set you can do it. Simply put your packages in
+$MIRROR/dists/$CODENAME/local/binary-$ARCH/<section>.
+The organization of this sub-tree is the same than what you can find
+in the main, contrib or non-free part. You may use different section
+names if you want. Be sure to create Packages files (and Sources.gz if you
+include sources). 
+
+To include local packages, the LOCAL environment variable must be set
+to "1" while building the CDs.
 
 
 Additionnal targets

@@ -35,4 +35,9 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 	| gzip --best > dists/$CODENAME/non-US/source/Sources.gz
 fi
 
+if [ -n "$LOCAL" ]; then
+	dpkg-scansources dists/$CODENAME/local/source \
+	| gzip --best > dists/$CODENAME/local/source/Sources.gz
+fi
+
 exit 0

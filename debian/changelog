@@ -7,7 +7,7 @@ debian-cd (2.1.92) frozen unstable; urgency=low
     -> This change will have to be removed when all arch will have synced
     boot floppies.
   * Changes to tools/potato/boot-i386 for support of the 2.2.3 bootdisks.
-    Closes: #53529
+    Closes: #53529 #58304
   * In Makefile, if there are multiple versions of the
     bootdisks in the source tree, the section "boot:" seems to get
     confused. Not fixed. Temporary solution, move old i386 boot
@@ -22,8 +22,12 @@ debian-cd (2.1.92) frozen unstable; urgency=low
   * Updated README and README.devel. Explained that the main source
     is on CVS and that patch should apply on the CVS tree not on the
     source package available on the Debian FTP.
+  * Added possibility to include local packages on the CD set. Documented
+    it. Closes: #50640
+  * Documented the fact that TMP path must be on the same partition than
+    the mirror. Closes: #59524
 
- -- Raphael Hertzog <hertzog@debian.org>  Sat, 19 Feb 2000 18:32:22 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Tue,  7 Mar 2000 19:03:44 +0100
 
 debian-cd (2.1.91) unstable; urgency=low
 

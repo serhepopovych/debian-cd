@@ -51,6 +51,11 @@ if [ ! -e "$TDIR/$CODENAME-$ARCH/apt/sources.list" ]; then
 	     >> $TDIR/$CODENAME-$ARCH/apt/sources.list
 	  fi
 	fi
+	# Local packages ...
+	if [ -n "$LOCAL" ]; then
+	  echo "deb file:$MIRROR $CODENAME local" \
+	  >> $TDIR/$CODENAME-$ARCH/apt/sources.list
+	fi
 fi
 
 temp=$TDIR/$CODENAME-$ARCH/temp.apt-selection
