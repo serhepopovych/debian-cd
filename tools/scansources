@@ -36,11 +36,20 @@ for i in `cd dists; echo *; cd ..`; do
 done
 
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
-    sed -e "/^ /d" $MIRROR/dists/$CODENAME/Release \
-    > dists/$CODENAME/Release
+    # Strip the MD5Sum and SHA1 field
+    perl -ne 'if (/^(MD5Sum|SHA1):/) { $f=1; next; }
+    if ($f) { 
+	unless (/^ /) { print; $f=0 } 
+    } else { print }' \
+    $MIRROR/dists/$CODENAME/Release > dists/$CODENAME/Release
 fi
 if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
-    sed -e "/^ /d" $NONUS/dists/$CODENAME/non-US/Release \
+    # Strip the MD5Sum and SHA1 field
+    perl -ne 'if (/^(MD5Sum|SHA1):/) { $f=1; next; }
+    if ($f) { 
+	unless (/^ /) { print; $f=0 } 
+    } else { print }' \
+    $NONUS/dists/$CODENAME/non-US/Release \
     > dists/$CODENAME/non-US/Release
 fi
 

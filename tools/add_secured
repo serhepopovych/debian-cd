@@ -8,6 +8,8 @@
 # Complete the "Release" file if it exists
 
 if [ -e "dists/$CODENAME/Release" ]; then 
+    # Add the MD5Sum field again
+    echo "MD5Sum:" >> dists/$CODENAME/Release
     find dists/$CODENAME/ -name 'Packages' -o -name 'Packages.gz' \
     -o -name 'Sources' -o -name 'Sources.gz' -o -name 'Release' | \
     grep -v non-US/ | grep -v dists/$CODENAME/Release | \
@@ -18,9 +20,13 @@ if [ -e "dists/$CODENAME/Release" ]; then
 	m=`md5sum < $rfile`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/Release
+    # TODO: Should add SHA1 field here
+    # Check with libdigest-sha1-perl
 fi
 
 if [ -n "$NONUS" -a -e "dists/$CODENAME/non-US/Release" ]; then
+    # Add the MD5Sum field again
+    echo "MD5Sum:" >> dists/$CODENAME/non-US/Release
     find dists/$CODENAME/non-US/ -name 'Packages' -o -name 'Packages.gz' \
     -o -name 'Sources' -o -name 'Sources.gz' -o -name 'Release' | \
     grep -v dists/$CODENAME/non-US/Release | \
@@ -31,6 +37,8 @@ if [ -n "$NONUS" -a -e "dists/$CODENAME/non-US/Release" ]; then
 	m=`md5sum < $rfile`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/non-US/Release
+    # TODO: Should add SHA1 field here
+    # Check with libdigest-sha1-perl
 fi
 
 # Create the $CODENAME-secured tree by copying files from the mirror

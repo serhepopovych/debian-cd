@@ -33,14 +33,22 @@ cd "$2"
 if [ "$1" = "install" ]; then
 
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
-    sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
-    $MIRROR/dists/$CODENAME/Release \
-    > dists/$CODENAME/Release
+    # Strip the MD5Sum and SHA1 fields
+    sed -e "s/^Architectures: .*$/Architectures: $ARCH/" \
+    $MIRROR/dists/$CODENAME/Release | \
+    perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
+    if ($f) { 
+	unless (/^ /) { print; $f=0 }
+    } else { print }' > dists/$CODENAME/Release
 fi
 if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
+    # Strip the MD5Sum and SHA1 fields
     sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
-    $NONUS/dists/$CODENAME/non-US/Release \
-    > dists/$CODENAME/non-US/Release
+    $NONUS/dists/$CODENAME/non-US/Release | \
+    perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
+    if ($f) { 
+	unless (/^ /) { print; $f=0 }
+    } else { print }' > dists/$CODENAME/non-US/Release
 fi
 
 for SECT in $SECTIONS; do
