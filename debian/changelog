@@ -13,6 +13,10 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       Only f3.txt varies (due to net boot type).
       Closes: #220612, #221186
     - Add "expert" mode to isolinux.cfg for sarge.
+    - Remove pump-udeb from all udeb_includes; netcfg depends on and
+      uses dhcp-client-udeb.
+    - Remove console-keymaps from all udeb_includes; they are included
+      on the cdrom initrds.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
