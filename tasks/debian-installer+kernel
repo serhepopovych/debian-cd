@@ -5,7 +5,7 @@
  * This list can be generated with the command:
  * ../tools/generate_di+k_list
  *
- * Last update: Mon Sep 27 15:44:57 MDT 2004
+ * Last update: Wed Oct  6 05:36:00 MDT 2004
  */
 
 #include <debian-installer>
@@ -46,8 +46,6 @@ aboot-base
 discover1
 kernel-image-2.4-generic
 kernel-image-2.4-smp
-kernel-image-2.4.26-1-generic
-kernel-image-2.4.26-1-smp
 kernel-image-2.4.27-1-generic
 kernel-image-2.4.27-1-smp
 kernel-image-2.6-generic
@@ -120,10 +118,6 @@ kernel-image-2.4-sparc32
 kernel-image-2.4-sparc32-smp
 kernel-image-2.4-sparc64
 kernel-image-2.4-sparc64-smp
-kernel-image-2.4.26-sparc32
-kernel-image-2.4.26-sparc32-smp
-kernel-image-2.4.26-sparc64
-kernel-image-2.4.26-sparc64-smp
 kernel-image-2.4.27-1-sparc32
 kernel-image-2.4.27-1-sparc32-smp
 kernel-image-2.4.27-1-sparc64

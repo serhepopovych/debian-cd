@@ -49,6 +49,8 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Try to fix powerpc DVD builds via -hfs-parms MAX_XTCSIZE.
     - Add prep powerpc support.
     - Update debian-installer tasks.
+    - Add tools/calc script to update .calc files with up to date
+      estimations on the iso size parameters.
   * Thiemo Seufer
     - Add arcboot to the mips tasks/base-sarge list, like it is done for
       other bootloaders.

@@ -60,6 +60,6 @@ echo " ... building the images"
 if [ -z "$IMAGETARGET" ] ; then
     IMAGETARGET="official_images"
 fi
-make "$IMAGETARGET"
+make $IMAGETARGET
 
 make imagesums
