@@ -18,6 +18,8 @@ debian-cd (2.2.15) unstable; urgency=low
     build.sh being able to run with -e set, report reserved space and
     the space debootstrap needs.  Also, handle boot-floppy directories
     without docs.
+  * Make sure discover, read-edid and mdetect are on the first CD if
+    possible.
   
  -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
 
