@@ -1,5 +1,16 @@
+debian-cd (2.2.0) frozen unstable; urgency=low
+
+  * The final debian-cd for potato ! Must go to frozen ...
+
+ -- Raphael Hertzog <hertzog@debian.org>  Tue,  7 Mar 2000 20:31:18 +0100
+
 debian-cd (2.1.92) frozen unstable; urgency=low
 
+  * This version goes to frozen since it's used for building potato CD.
+    Another one will follow once we have the final boot-floppies.
+    But I already upload this one because I'm getting complaints since
+    the old package doesn't work with the actual boot-floppies available
+    on the mirror...
   * Added files for woody (yes, people already burn woody CD images)
   * Make the second CD bootable on i386 with the "compact" image.
   * Changes to installtools.sh, change to check for documentation
