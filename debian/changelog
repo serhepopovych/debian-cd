@@ -13,6 +13,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - discover has been renamed to discover1
     - On i386, include discover on the CD as well, this is discover verson
       2, and is used with the 2.6 kernel.
+    - Based on user reports, remove the read-only, and pass "rw" to the kernel
+      in silo.conf.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
