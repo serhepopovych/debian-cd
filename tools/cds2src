@@ -268,7 +268,7 @@ if ($extranonfree and (! $nonfree))
 }
 
 # Now write the lists down
-foreach (keys %cds) {
+foreach (sort {$a <=> $b} keys %cds) {
         my $count = 0;
         open(CDLIST, "> $sdir/$_.sources") 
                         || die "Can't write in $sdir/$_.sources: $!\n";

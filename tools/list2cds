@@ -282,7 +282,7 @@ foreach (glob("$dir/*.packages")) {
 }
 
 # Now write the lists down
-foreach (keys %cds) {
+foreach (sort { $a <=> $b } keys %cds) {
 	my $count = 0;
 	open(CDLIST, "> $dir/$_.packages") 
 			|| die "Can't write in $dir/$_.packages: $!\n";
