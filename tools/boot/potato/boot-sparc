@@ -8,9 +8,28 @@
 # Released as part of the slink_cd package, not much use standalone
 #
 # Do install stuff for sparc, including making bootable CDs
-# Revisions:
-# 12-MAR-00 changes for new boot-disk orginazation --jwest
 
+# -----------------------------------------------------------------
+#
+# 13MAR00	jwest@d.o	Hummph, I do not beleive this 
+# is currently working as I do NOT see a call to slilo or 
+# intelslilo anwhere.
+#
+# I have cleaned it up a bit, and changed the paths to match the
+# sparc boot-disks 2.2.8 file structure, but me thinks that one
+# still has to make a call (baised on the hardware it is on) to
+# intelslilo or slilo to create the cd.b and second.b ????????
+#
+# I will do a bit more investigation, and begging for help.
+#
+# Note that intelslilo is not currently a debian package,
+# and you can get it from http://www.cse.msu.edu/~dunham/debian/silo/ 
+# and was made by Steve    dunham@cse.msu.edu   
+#
+# I have found another writeup about making bootable sparc cd's at:
+# http://ultra.penguin.cz/ultrapenguin-1.1/ultrapenguin-7.html
+#
+# -------------------------------------------------------------------
 
 set -e
 
@@ -19,94 +38,71 @@ CDDIR=$2
 
 cd $CDDIR/..
 
-
-# move all the bootdisks to /install
-# put the relevant parts of SILO boot loader
-mkdir -p $CDDIR/install
-ln -sf install $CDDIR/etc
-#ln -sf install $CDDIR/boot
-mkdir -p boot1/boot
-
-BOOTDIR=1/dists/$CODENAME/main/disks-$ARCH/current/
-
-
-# Disks != 1 and not 2
-if [ $N != 1 ]; then 
-        echo -n "-J" > $N.mkisofs_opts
-	rm -r $CDDIR/doc	#remove doc dir on #2,#3,#4
-        exit 0; 
+# Disk 1 only
+if [ $N != 1 ]; then
+	:> $N.mkisofs_opts
+	exit 0;
 fi
 
-# make a copy of the boot disks in the /install dir
-####jim is this necessary???
-#cp -pr $BOOTDIR/* $CDDIR/install
-# remove the /install/doc directory as it is reduntant to /doc
-#rm -r $CDDIR/install/doc
+echo -n "boot1" > $N.mkisofs_opts
 
-echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
+rm -fr boot1
 
-(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-        cp sun4cdm/images-1.44/resc*.bin  $CDDIR/install ; \
-        cp -ar sun4cdm/*  $CDDIR/install ; \
-        cp images-1.44/root.bin $CDDIR/install )
+# temporary mount point (eg. for silo to create the bootable CD image)
+# only needed for Sparc so far...
+#vecho Checking for temporary mount point for SILO
+mountpoint=/var/tmp/debian_cd.mnt
+if [ -d $mountpoint ]; then
+	umount $mountpoint || true
+else
+	mkdir -p $mountpoint
+fi
 
+# put the relevant parts of SILO boot loader
 mkdir -p boot1/boot
+#the below moved to after the mount
+#cp -p $BOOTDIR/cd.b $BOOTDIR/second.b boot1/boot
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/images-1.44/rescue.bin boot1/boot
-
-
-
-cat - > $CDDIR/install/silo.conf << __EOF__
-partition=1
-message=/install/debian.txt
-timeout=600
-read-write
-image[sun4c,sun4d,sun4m]=/install/sun4cdm/linux-a.out
-   label=linux-cdm
-   initrd=/install/root.bin
-image[sun4u]=/install/sun4u/linux-a.out
-   label=linux-4u
-   initrd=/install/root.bin
-image[sun4u]=/install/sun4u/linux-a.out
-   label=linux-4u
-   initrd=/install/root.bin
+cat - > boot1/boot/silo.conf << __EOF__
+message=!cd1
+timeout=300
+root=/dev/ram
+image[sun4c,sun4d,sun4m]=!cd2
+   label=linux
+   initrd=!cd5
+image[sun4u]=!cd4
+   label=linux
+   initrd=!cd5
+image[sun4c,sun4d,sun4m]=!cd3
+   label=linux-2.2
+   initrd=!cd5
+image[sun4u]=!cd4
+   label=linux-2.2
+   initrd=!cd5
 __EOF__
 
 # linux kernel & co are fetched directly from the install dir
 # ... put the message banner in boot/debian.txt
 
-#CHANGE!!! Dont beleive the below is necessary 12-Mar-00 --jwest
-#(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-#	cp -pr sun4cdm/* $CDDIR/install )
-#(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-#	cp -pr images-1.44/* $CDDIR/install )
+
+(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+	cp -p sun4cdm/linux-a.out $CDDIR/install ; \
+	cp -p sun4u/linux-a.out $CDDIR/install/linux-4u-a.out ; \
+	cp -p sun4c/linux-a.out $CDDIR/install/linux-4c-a.out ; \
+	cp -p images-1.44/root.bin $CDDIR/install ; \
+	cp -p doc/sparc_release_note.txt $CDDIR/install )
 
 
-cat - > $CDDIR/install/debian.txt << __EOF__
+#echo mount -r -o loop \
+#	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/resc1440.bin \
+#	$mountpoint
+
+mount -r -o loop \
+	$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/sun4cdm/images-1.44/rescue.bin \
+	$mountpoint
+cp -p $mountpoint/debian.txt boot1/boot/debian.txt
+cp -p $mountpoint/boot/cd.b boot1/boot
+cp -p $mountpoint/boot/second.b boot1/boot
+umount $mountpoint
 
 
-                  Welcome to Debian GNU/Linux 2.2!
-
-This is the Debian Rescue CD. Keep it once you have installed
-your system, as you can boot from it to repair the system on your
-hard disk if that ever becomes necessary.
-
-On most systems, you can go ahead and press <ENTER> to begin
-installation.  You will probably want to try doing that before you try
-anything else.  If you run into trouble, or if you already have
-questions, press the <TAB> key to list alternative boot options or
-enter the "help" keyword to show a message about SILO boot commands.
-
-WARNING: You should completely back up all of your hard disks before
-  proceeding. The installation procedure can completely and
-  irreversibly erase them! If you haven't made backups yet, remove
-  the rescue CD from the drive and enter the "halt" keyword
-  to get back to the monitor.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-
-This CD uses Linux 2.2.14
-
-Press <ENTER> to boot!
-__EOF__
