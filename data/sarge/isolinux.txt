@@ -4,8 +4,7 @@ This is a Debian CD-ROM.  Keep it available once you have installed
 your system, as you can boot from it to repair the system on your hard
 disk if that ever becomes necessary (press <09F307> for details).
 
-For a "safe" installation with kernel 2.2.20, you can press <09ENTER07> to begin.
-If you want additional features like modern hardware support, specify a
+If you want additional features, specify a
 different boot flavor at the boot prompt (press <09F307> to get an overview). 
 If you run into trouble or if you already have questions, press <09F107>
 for quick installation help.
