@@ -81,6 +81,7 @@ set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 strip_nonus_bin=$(BASEDIR)/tools/strip-nonUS-bin
 add_secured=$(BASEDIR)/tools/add_secured
 md5sum=/usr/bin/md5sum.textutils
+fastsums=$(BASEDIR)/tools/fast_sums
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
 ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
@@ -677,6 +678,7 @@ bin-md5list: ok packages bin-secured $(BDIR)/CD1/md5sum.txt
 $(BDIR)/CD1/md5sum.txt:
 	@echo "Generating md5sum of files from all the binary CDs ..."
 	$(Q)set -e; \
+	if [ "$$FASTSUMS" != "1" ] ; then \
 	 for file in $(BDIR)/*.packages; do \
 		dir=$${file%%.packages}; \
 		n=$${dir##$(BDIR)/}; \
@@ -686,11 +688,15 @@ $(BDIR)/CD1/md5sum.txt:
 		find . -follow -type f | grep -v "\./md5sum" | grep -v \
 		"dists/stable" | grep -v "dists/frozen" | \
 		grep -v "dists/unstable" | xargs $(md5sum) > md5sum.txt ; \
-	done
+	 done \
+	else \
+	 $(fastsums) $(BDIR); \
+	fi
 src-md5list: ok sources src-secured $(SDIR)/CD1/md5sum.txt
 $(SDIR)/CD1/md5sum.txt:
 	@echo "Generating md5sum of files from all the source CDs ..."
 	$(Q)set -e; \
+	if [ "$$FASTSUMS" != "1" ] ; then \
 	 for file in $(SDIR)/*.sources; do \
 		dir=$${file%%.sources}; \
 		dir=$${dir##$(SDIR)/}; \
@@ -699,7 +705,11 @@ $(SDIR)/CD1/md5sum.txt:
 		find . -follow -type f | grep -v "\./md5sum" | grep -v \
 		"dists/stable" | grep -v "dists/frozen" | \
 		grep -v "dists/unstable" | xargs $(md5sum) > md5sum.txt ; \
-	done
+	 done \
+	else \
+	 $(fastsums) $(SDIR); \
+	fi
+
 
 # Generate $CODENAME-secured tree with Packages and Release(.gpg) files
 # from the official tree

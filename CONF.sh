@@ -25,6 +25,7 @@ unset JIGDOCMD
 unset JIGDOTEMPLATEURL
 unset DEFBINSIZE
 unset DEFSRCSIZE
+unset FASTSUMS
 
 
 # The debian-cd dir
@@ -165,3 +166,8 @@ export DEFSRCSIZE=635
 # in the .jigdo files, which you can edit easily if you want.
 # No trailing slash.
 #export JIGDOTEMPLATEURL="http://this-guy-didnt-configure-debiancd-correctly.com/debian-cd/templates/3.0BETA/%ARCH%"
+
+# If set, use the md5sums from the main archive, rather than calculating
+# them locally
+#export FASTSUMS=1
+
