@@ -23,6 +23,8 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Add floppy/asian-root.img, floppy/mideast-root.img and
       floppy/cyrillic-root.img to EXTRA_DISK_IMAGES (but may it be treated
       as DISK_IMAGES?)
+  * Colin Watson
+    - Add "--" end of installer kernel params markers to yaboot.conf.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
