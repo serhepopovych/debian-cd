@@ -80,7 +80,7 @@ else
     fi
 fi
 
-write_isolinix_config () {
+write_isolinux_config () {
 	cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
 APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
