@@ -33,7 +33,7 @@ UDEB:	foreach my $udeb (map { chomp; $_ } `grep-dctrl -n -s Package '' $packagef
 		}
 		print OUT "$udeb\n";
 	}
-	print OUT "#endif\n";
+	print OUT "#endif /* ARCH_$arch */\n";
 }
 
 sub read_exclude {
