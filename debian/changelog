@@ -5,6 +5,7 @@ debian-cd (2.2.8) unstable; urgency=low
   * Add support for ia64 (Richard Hirst).  Closes #110553.
   * Update the "Components" field of the Release files. Was
     causing a bug in debootstrap.
+  * Add support for hppa (Richard Hirst).
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 19 Aug 2001 13:42:27 +0200
 
