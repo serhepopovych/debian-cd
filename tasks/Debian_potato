@@ -20,14 +20,10 @@
 
 #include <kernel-related-potato>
 
-#include <interesting-redhat>
-
+/* Packages that may still fit on the first CD */
 #include <interesting-fromcd23>
 
-/* List of packages that may still fit on the first CD */
 #include <linuxtag2000>
 
+/* All the remaining packages, sorted per popcon results */
 #include <popularity-contest-potato>
-
-/* Other packages to put on the others CDs */
-

@@ -1,11 +1,11 @@
-/* Comment 
- *
- * This file will be used to build official complete set of Woody CD
- *
+/*
+ * This file is used to build the official set of Debian 3.0 (woody) CDs
  */
 
-/* The CD set does use empty package called task-*
-   to select the packages in the initial installation */
+/*
+ * The CD set uses empty package called task-*
+ * to select the packages in the initial installation
+ */
 
 #if (FORCENONUSONCD1 == 1)
 #include "Debian_woody_nonUS"
@@ -19,14 +19,9 @@
 
 #include <xservers-XFree3>
 
-#include <interesting-redhat>
-
+/* Packages that may still fit on the first CD */
 #include <interesting-fromcd23>
-
-/* List of packages that may still fit on the first CD */
 #include <linuxtag2000>
 
+/* All the remaining packages, sorted per popcon results */
 #include <popularity-contest-woody>
-
-/* Other packages to put on the others CDs */
-

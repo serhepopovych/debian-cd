@@ -2,6 +2,10 @@ ssh
 gnupg
 base-config
 build-essential
+deborphan
+debfoster
+debsums
+localepurge
 chdrvfont
 fbset
 fdutils
@@ -19,6 +23,7 @@ wmakerconf
 libterm-readline-gnu-perl
 whiptail
 dialog
+doc-base
 grub
 libsasl-modules-plain
 libsasl-digestmd5-plain
@@ -37,3 +42,5 @@ sndconfig
 aptitude
 brltty
 popularity-contest
+ntpdate
+hdparm

@@ -16,7 +16,6 @@
 
 /* Other interesting packages */
 #include <interesting-fromcd23>
-#include <interesting-redhat>
 #include <task-full-sarge>
 
 /* The rest ordered by popularity */

@@ -1,7 +1,5 @@
-/* Comment 
- *
- * This file will be used to build complete set of Sid CD (unstable)
- *
+/*
+ * This file is used to build complete set of unstable (sid) CDs
  */
 
 /* The CD set does use empty package called task-*
@@ -11,22 +9,12 @@
 #include "Debian_sid_nonUS"
 #endif
 
-#include <interesting-tasks-potato>
-
 /* Packages that should really be on CD1 */
 #include <base-woody>
 #include <forcd1>
 
-#include <xservers-XFree3>
-
-#include <interesting-redhat>
-
+/* Packages that may still fit on the first CD */
 #include <interesting-fromcd23>
 
-/* List of packages that may still fit on the first CD */
-#include <linuxtag2000>
-
-#include <popularity-contest-woody>
-
-/* Other packages to put on the others CDs */
-
+/* All the remaining packages, sorted per popcon results */
+#include <popularity-contest-sarge>
