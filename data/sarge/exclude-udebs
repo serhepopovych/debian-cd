@@ -11,6 +11,7 @@ udpkg
 anna
 di-utils-shell
 di-utils-reboot
+lowmemcheck
 # build/pkg-lists/cdrom/common, in d-i cvs
 busybox-cvs-udeb
 rootskel-locale
