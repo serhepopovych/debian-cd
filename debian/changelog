@@ -1,4 +1,4 @@
-debian-cd (2.2.20) UNRELEASED; urgency=low
+debian-cd (2.2.20) unstable; urgency=medium
 
   * Joey Hess
     - Remove bogus init=/linuxrc, we have not had a linuxrc in d-i for a long
@@ -58,8 +58,10 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Add a default bootfile named sashARCS for mips, aliased to r4k-ip22.
   * Joshua Kwan
     - Add ramdisk_size=16384 to silo.conf. closes: #274958
-
- -- Joshua Kwan <joshk@triplehelix.org>  Tue,  5 Oct 2004 13:22:45 -0700
+  * Steve McIntyre
+    - Another upload before sarge.
+	
+ -- Steve McIntyre <93sam@debian.org>  Fri,  22 Oct 2004 21:12:15 +0100
 
 debian-cd (2.2.19) unstable; urgency=medium
 
