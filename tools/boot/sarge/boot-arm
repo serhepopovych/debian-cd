@@ -19,7 +19,7 @@ N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~vince/d-i/images/daily"
+   DI_WWW_HOME="http://people.debian.org/~kmuto/d-i/images/daily"
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
