@@ -11,10 +11,11 @@ not supported.
 
 -----
 
-Popularity contest results: http://people.debian.org/~apenwarr/popcon/,
-"Get all the raw results in one compressed file", then
+Popularity contest results:
 
-  sort -n -r -k2,2 -k3,3 -k4,4 -k5,5 all-popcon-results.txt | cut -d ' ' -f 1
+ wget http://people.debian.org/~ballombe/popcon/main/by_vote
+ wget http://people.debian.org/~ballombe/popcon/contrib/by_vote
+ awk '/^[0-9]+ +[0-9a-z]/ {print $2}' by_vote by_vote.1
 
 -----
 
