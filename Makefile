@@ -749,13 +749,15 @@ $(TDIR)/jigdofilelist: $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.
 	$(Q)set -e; \
 	if [ "$(DOJIGDO)" != 0 ]; then \
 		mkdir -p $(TDIR); \
-		find $(MIRROR)//dists $(MIRROR)//doc $(MIRROR)//indices \
+		find $(MIRROR)//dists/$(CODENAME)/main/disks-i386 \
+		     $(MIRROR)//dists/$(CODENAME) \
+		     $(MIRROR)//doc $(MIRROR)//indices \
 		     $(MIRROR)//pool $(MIRROR)//project $(MIRROR)//tools \
 		     -type f \
 		| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
 		> $(TDIR)/jigdofilelist; \
 		if [ -n "$(NONUS)" ]; then \
-			find $(NONUS)// -type f \
+			find $(NONUS)//dists/$(CODENAME) $(NONUS)// -type f \
 			| egrep -v '/README|INDEX$$|/Maintainers|/Release$$|/debian-keyring\.tar\.gz$$|/ls-lR|//doc/[^/]+/?[^/]*\.(txt|html)$$' \
 			>> $(TDIR)/jigdofilelist; \
 		fi; \
