@@ -21,6 +21,9 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     - Document BOOTDISKS.
     - Make disk number available in tools/add-bin-doc.
     - In woody, keep the time stamp of smb.bin when copying it to CD.
+    - Add support for UDEB_INCLUDE and UDEB_EXCLUDE, making files
+      cdrom/.disk/udeb_include and .../udeb_exclude used by
+      debian-installer.
   * Apply patch from Petter Reinholdtsen for inclusion of
     Recommends/Suggests from the base system. Closes: #106903
   * Apply nice patch from Santiago Garcia Mantinan for building
