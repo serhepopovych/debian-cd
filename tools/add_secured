@@ -17,7 +17,7 @@ if [ -e "dists/$CODENAME/Release" ]; then
     (while read file; do \
         rfile="dists/$CODENAME/$file"; \
     	c=`wc -c < $rfile`; \
-	m=`md5sum < $rfile`; \
+	m=`md5sum < $rfile | cut -d" " -f1`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/Release
     # TODO: Should add SHA1 field here
@@ -34,7 +34,7 @@ if [ -n "$NONUS" -a -e "dists/$CODENAME/non-US/Release" ]; then
     (while read file; do \
         rfile="dists/$CODENAME/non-US/$file"; \
     	c=`wc -c < $rfile`; \
-	m=`md5sum < $rfile`; \
+	m=`md5sum < $rfile | cut -d" " -f1`; \
 	printf " %s %8d %s\n" $m $c $file; \
     done) >> dists/$CODENAME/non-US/Release
     # TODO: Should add SHA1 field here

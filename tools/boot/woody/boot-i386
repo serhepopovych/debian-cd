@@ -57,7 +57,7 @@ THISTYPE=${KTYPE[$NN]}
 if [ "${ISOLINUX:-0}" != "0" ] && [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
-    cp -f /usr/share/debian-cd/data/woody/isolinux.bin boot$N/isolinux/
+    cp -f $BASEDIR/data/woody/isolinux.bin boot$N/isolinux/
     cp -lf CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/root.bin boot$N/isolinux/
     cp -lf CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/bf2.4/root.bin boot$N/isolinux/bf24.bin
     cp -lf CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/compact/root.bin boot$N/isolinux/compact.bin

@@ -7,6 +7,12 @@ debian-cd (2.2.15) unstable; urgency=low
     Marcia Mantinan.
   * Reordered some woody task files. Thanks to Philip Charles.
   * Added cpp in the Depends field. Closes: #145869
+  * Fixed error message in Makefile. Closes: #146184
+  * Updated tools/add_secured to work with all versions of md5sum
+    (including the one that comes with dpkg >= 1.10).
+  * Protect the call to add_secured by a stamp file. Closes: #147105
+  * Provide a customised isolinux image. We don't need to
+    recommend syslinux now.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
 

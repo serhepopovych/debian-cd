@@ -191,11 +191,11 @@ bin-clean:
 	$(Q)-rm -rf $(BDIR)/*_NONUS
 	$(Q)-rm -f $(BDIR)/*.filelist*
 	$(Q)-rm -f  $(BDIR)/packages-stamp $(BDIR)/bootable-stamp \
-	         $(BDIR)/upgrade-stamp
+	         $(BDIR)/upgrade-stamp $(BDIR)/secured-stamp
 src-clean:
 	$(Q)-rm -rf $(SDIR)/CD[1234567890]
 	$(Q)-rm -rf $(SDIR)/*_NONUS
-	$(Q)-rm -rf $(SDIR)/sources-stamp
+	$(Q)-rm -rf $(SDIR)/sources-stamp $(SDIR)/secured-stamp
 
 # Completely cleans the current arch tree
 realclean: distclean
@@ -444,7 +444,7 @@ $(BDIR)/packages-stamp:
 	    for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
 		if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
 		    ok=no; \
-		    echo "Missing debootstrap-required $p"; \
+		    echo "Missing debootstrap-required $$p"; \
 		fi; \
 	    done; \
 	    if [ "$$ok" = "yes" ]; then \
@@ -715,8 +715,8 @@ $(SDIR)/CD1/md5sum.txt:
 # from the official tree
 # Complete the Release file from the normal tree
 secured: bin-secured src-secured
-bin-secured: $(BDIR)/CD1/dists/$(CODENAME)-secured
-$(BDIR)/CD1/dists/$(CODENAME)-secured:
+bin-secured: $(BDIR)/secured-stamp
+$(BDIR)/secured-stamp:
 	@echo "Generating $(CODENAME)-secured on all the binary CDs ..."
 	$(Q)set -e; \
 	 for file in $(BDIR)/*.packages; do \
@@ -726,9 +726,10 @@ $(BDIR)/CD1/dists/$(CODENAME)-secured:
 		cd $$dir; \
 		$(add_secured); \
 	done
+	$(Q)touch $(BDIR)/secured-stamp
 
-src-secured: $(SDIR)/CD1/dists/$(CODENAME)-secured
-$(SDIR)/CD1/dists/$(CODENAME)-secured:
+src-secured: $(SDIR)/secured-stamp
+$(SDIR)/secured-stamp:
 	@echo "Generating $(CODENAME)-secured on all the source CDs ..."
 	$(Q)set -e; \
 	 for file in $(SDIR)/*.sources; do \
@@ -738,6 +739,7 @@ $(SDIR)/CD1/dists/$(CODENAME)-secured:
 		cd $$dir; \
 		$(add_secured); \
 	done
+	$(Q)touch $(SDIR)/secured-stamp
 
 # Make file list for jigdo (if DOJIGDO>0)
 # "Fake" depend on the unstable Packages.gz to make sure we only regenerate
