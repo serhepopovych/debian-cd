@@ -38,7 +38,7 @@ case "$MKISOFS" in
 	    >> $N.mkisofs_opts
     ;;
     *mkisofs)
-    echo -n " -part -no-desktop -hfs-bless \$n/install/powermac -hfs-volid Debian/PowerPC_${CODENAME}" \
+    echo -n " -part -no-desktop -hfs-bless CD$N/install/powermac -hfs-volid Debian/PowerPC_${CODENAME}" \
 	    >> $N.mkisofs_opts
     ;;
     *)
