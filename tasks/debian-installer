@@ -3,7 +3,7 @@
  * This list can be generated with the command:
  * ../tools/generate_di_list
  *
- * Last update: Thu Jul 24 10:39:28 CEST 2003
+ * Last update: Thu Aug 14 20:05:23 CEST 2003
  */
 
 #ifdef ARCH_alpha
@@ -26,12 +26,11 @@ cdrom-modules-2.4.20-generic-udeb
 cdrom-modules-2.4.21-1-generic-udeb
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -83,6 +82,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -156,12 +156,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -201,6 +200,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -254,12 +254,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -336,19 +335,17 @@ zlib1g-udeb
 
 #ifdef ARCH_hurd-i386
 anna
-base-installer
 baseconfig-udeb
 bterm-unifont
 cdebconf-udeb
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 di-utils-fake-mkfs
@@ -404,7 +401,9 @@ busybox-cvs-udeb
 busybox-udeb
 cdebconf-gtk-udeb
 cdebconf-newt-udeb
+cdebconf-priority
 cdebconf-slang-udeb
+cdebconf-text-udeb
 cdebconf-udeb
 cdrom-checker
 cdrom-detect
@@ -412,12 +411,11 @@ cdrom-modules-2.4.20-1-386-udeb
 cdrom-modules-2.4.21-1-386-udeb
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -478,6 +476,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-0-udeb
@@ -562,12 +561,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -611,6 +609,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -667,12 +666,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -714,6 +712,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -772,12 +771,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -818,6 +816,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -872,12 +871,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -919,6 +917,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -974,12 +973,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -1025,6 +1023,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -1103,12 +1102,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -1151,6 +1149,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -1208,12 +1207,11 @@ cdrom-checker
 cdrom-detect
 cdrom-retriever
 choose-mirror
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 dash-udeb
@@ -1256,6 +1254,7 @@ libc-udeb
 libdebconfclient0-udeb
 libdirectfb-0.9-17-udeb
 libdirectfb-0.9-18-udeb
+libdirectfb-0.9-19-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libgtk+2.0-directfb0-udeb
@@ -1295,17 +1294,15 @@ zlib1g-udeb
 #endif
 
 #ifdef ARCH_sh
-base-installer
 baseconfig-udeb
 bterm-unifont
 cdrom-detect
 cdrom-retriever
-console-fonts
 console-keymaps-acorn
 console-keymaps-amiga
+console-keymaps-at
 console-keymaps-atari
 console-keymaps-mac
-console-keymaps-ps2
 console-keymaps-sun
 console-keymaps-usb
 di-utils-fake-mkfs
