@@ -1,3 +1,9 @@
+debian-cd (2.2.13) unstable; urgency=low
+
+  * UNRELEASED. 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 20 Jan 2002 15:42:29 +0100
+
 debian-cd (2.2.12) unstable; urgency=low
 
   * Get it right this time with the MULTIBOOT test ... Closes: #127234
