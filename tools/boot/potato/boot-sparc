@@ -63,14 +63,3 @@ rm -rf $tmp
 
 # Get rid of some junk
 rm -f $inst/{boot_message,type.txt}
-
-# Make writable areas point to /tmp
-rm -rf $inst/var
-ln -s ../tmp/var $inst/var
-
-# Hack...need a better way
-ln -s ../tmp/resolv.conf $inst/etc/resolv.conf
-ln -s ../../target/usr/bin/whiptail $inst/usr/bin/whiptail
-rmdir $inst/lib/modules
-ln -s ../target/lib/modules $inst/lib/modules
-ln -s ../tmp/log $inst/dev/log
