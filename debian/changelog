@@ -4,6 +4,11 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Remove bogus init=/linuxrc, we have not had a linuxrc in d-i for a long
       time and I don't know how that managed to work.
     - Update path to ia64 cdrom/boot.img.
+    - Tweaked exclude-udebs-i386, removing fat-modules as it's not available
+      otherwise if booting from floppy, and removing excludes of partconf,
+      partitioner, and discover2-data-udeb, which are not in unstable for i386
+      any longer.
+    - Updated exclude-udebs to match the current CD initrd package list.
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.
