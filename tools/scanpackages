@@ -9,13 +9,6 @@
 
 #set -e
 
-CDPACKAGES=1
-
-if [ "$1"x = "-noPackages.cd"x ] ; then
-	shift 1
-	CDPACKAGES=0
-fi	
-
 BDIR=$TDIR/$CODENAME-$ARCH
 
 PREFIX=`echo $2 | sed "s?$BDIR/CD?$BDIR/?"`
@@ -61,85 +54,30 @@ for SECT in $SECTIONS; do
 	# Install the release files
 	cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
    		dists/$CODENAME/$SECT/binary-$ARCH/
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	if [ -n "$NONUS" ]; then
 		cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
 		   dists/$CODENAME/non-US/$SECT/binary-$ARCH/
 	fi
 	# Install the Packages and Packages.gz files
-	grep -v ^X-Medium $PREFIX.Packages-$SECT \
-	     >dists/$CODENAME/$SECT/binary-$ARCH/Packages
-	grep -v ^X-Medium $PREFIX.Packages-$SECT | gzip --best \
+	cp $PREFIX.Packages-$SECT dists/$CODENAME/$SECT/binary-$ARCH/Packages
+	cat $PREFIX.Packages-$SECT | gzip --best \
 	     >dists/$CODENAME/$SECT/binary-$ARCH/Packages.gz
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
-		grep -v ^X-Medium $PREFIX.Packages-non-US-$SECT \
-		     >dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages
-		grep -v ^X-Medium $PREFIX.Packages-non-US-$SECT | gzip --best \
+	if [ -n "$NONUS" ]; then
+		cp $PREFIX.Packages-non-US-$SECT \
+		     dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages
+		cat $PREFIX.Packages-non-US-$SECT | gzip --best \
 		     >dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.gz
 	fi
-	# Install the Packages.cd and Packages.cd.gz files
-	# Each CD know about all prior CDs
-	# We use "?.packages" here so that we always use US-safe
-	# packages files only - we don't want later (supposedly
-	# common) CDs having dependencies on a non-US CD#1...
-	if [ $CDPACKAGES -eq 1 ] ; then
-		for i in $TDIR/$CODENAME-$ARCH/?.packages; do
-			dir=${i%%.packages}
-			n=${dir##$TDIR/$CODENAME-$ARCH/}
-			if [ $n -le $NUM ]; then
-			   cat $dir.Packages-$SECT \
-				  >>dists/$CODENAME/$SECT/binary-$ARCH/Packages.cd
-			   cat $dir.Packages-$SECT | gzip --best \
-				  >>dists/$CODENAME/$SECT/binary-$ARCH/Packages.cd.gz
-			   if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
-				  cat $dir.Packages-non-US-$SECT \
-				  >>dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.cd
-				  cat $dir.Packages-non-US-$SECT | gzip --best \
-				  >>dists/$CODENAME/non-US/$SECT/binary-$ARCH/Packages.cd.gz
-			   fi
-			fi
-		done
-	fi
 done
-
-if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
-	cp $NONUS/dists/$CODENAME/non-US/binary-$ARCH/Release \
-	   dists/$CODENAME/non-US/binary-$ARCH/
-	grep -v ^X-Medium $PREFIX.Packages-non-US \
-	     >dists/$CODENAME/non-US/binary-$ARCH/Packages
-	grep -v ^X-Medium $PREFIX.Packages-non-US | gzip --best \
-	     >dists/$CODENAME/non-US/binary-$ARCH/Packages.gz
-	for i in $TDIR/$CODENAME-$ARCH/?.packages; do
-		dir=${i%%.packages}
-		n=${dir##$TDIR/$CODENAME-$ARCH/}
-		if [ $n -le $NUM ]; then
-		      cat $dir.Packages-non-US \
-		          >>dists/$CODENAME/non-US/binary-$ARCH/Packages.cd
-		      cat $dir.Packages-non-US | gzip --best \
-		          >>dists/$CODENAME/non-US/binary-$ARCH/Packages.cd.gz
-		fi
-	done
-fi
 
 if [ -n "$LOCAL" ]; then
 	if [ -e ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release ]; then
 	   cp ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release \
    		dists/$CODENAME/local/binary-$ARCH/
 	fi
-	grep -v ^X-Medium $PREFIX.Packages-local \
-	     >dists/$CODENAME/local/binary-$ARCH/Packages
-	grep -v ^X-Medium $PREFIX.Packages-local | gzip --best \
+	cp $PREFIX.Packages-local dists/$CODENAME/local/binary-$ARCH/Packages
+	cat $PREFIX.Packages-local | gzip --best \
 	     >dists/$CODENAME/local/binary-$ARCH/Packages.gz
-
-	for i in $TDIR/$CODENAME-$ARCH/?.packages; do
-		dir=${i%%.packages}
-		n=${dir##$TDIR/$CODENAME-$ARCH/}
-		if [ $n -le $NUM ]; then
-			cat $dir.Packages-local \
-			    >>dists/$CODENAME/local/binary-$ARCH/Packages.cd
-			cat $dir.Packages-local | gzip --best \
-			    >>dists/$CODENAME/local/binary-$ARCH/Packages.cd.gz
-		fi
-	done
 fi
 
 
@@ -153,9 +91,24 @@ if [ ! -e "../overrides" ]; then
     # Create an override file with all sections
     for SECT in $SECTIONS; do
 	zcat $MIRROR/indices/override.$CODENAME.$SECT.gz >> ../overrides
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	if [ -n "$NONUS" ]; then
 	    zcat $NONUS/indices-non-US/override.$CODENAME.$SECT.gz \
 	    	 >> ../overrides
+	fi
+    done
+fi
+if [ ! -e "../overrides.extra" ]; then
+    # Create an extra override file with all sections
+    for SECT in $SECTIONS; do
+	if [ -e $MIRROR/indices/override.$CODENAME.extra.$SECT.gz ]; then
+	    zcat $MIRROR/indices/override.$CODENAME.extra.$SECT.gz \
+		>> ../overrides.extra
+	fi
+	if [ -n "$NONUS" ]; then
+	    if [ -e $NONUS/indices-non-US/override.$CODENAME.extra.gz ]; then
+	       zcat $NONUS/indices-non-US/override.$CODENAME.extra.$SECT.gz \
+	    	 >> ../overrides.extra
+	    fi
 	fi
     done
 fi
@@ -164,8 +117,8 @@ fi
 # Create a Packages file for all packages on the CD
 #
 if [ -d pool ]; then
-    dpkg-scanpackages -m "`cat .disk/info`" pool ../overrides \
-	    > $PREFIX.Packages-BOTH
+    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
+	packages pool ../overrides > $PREFIX.Packages-BOTH
 fi
 # We have to scan all possible dists where packages can be
 DISTS=""
@@ -186,13 +139,14 @@ for i in `cd dists; echo *; cd ..`; do
 done
 for SECT in $SECTIONS; do
     for DIST in $DISTS; do
-	dpkg-scanpackages -m "`cat .disk/info`" dists/$DIST/$SECT/binary-$ARCH \
-		../overrides >> $PREFIX.Packages-BOTH
+	apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
+	    packages dists/$DIST/$SECT/binary-$ARCH ../overrides \
+	    >> $PREFIX.Packages-BOTH
     done
     for DIST in $DISTSNONUS; do
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
-	    dpkg-scanpackages -m "`cat .disk/info`" \
-		    dists/$DIST/non-US/$SECT/binary-$ARCH \
+	if [ -n "$NONUS" ]; then
+	    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
+		    packages dists/$DIST/non-US/$SECT/binary-$ARCH \
 		    ../overrides >> $PREFIX.Packages-BOTH
 	fi
     done
@@ -208,29 +162,21 @@ for SECT in $SECTIONS; do
     grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALL \
     	> $PREFIX.Packages-$SECT
     
-    if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+    if [ -n "$NONUS" ]; then
 	grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages-ALLNONUS \
 		> $PREFIX.Packages-non-US-$SECT
     fi
 done
 
-# Slink special case
-if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
-	dpkg-scanpackages -m "`cat .disk/info`" \
-	     dists/$CODENAME/non-US/binary-$ARCH \
-	     $NONUS/indices-non-US/override.$CODENAME.gz \
-		  	> $PREFIX.Packages-non-US
-fi
-
 if [ -n "$LOCAL" ]; then
-	dpkg-scanpackages -m "`cat .disk/info`" \
-	     dists/$CODENAME/local/binary-$ARCH \
-	     /dev/null > $PREFIX.Packages-local
+	apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
+	     packages dists/$CODENAME/local/binary-$ARCH \
+	     > $PREFIX.Packages-local
 
 	if [ -d pool/local ]
 	then
-	    dpkg-scanpackages -m "`cat .disk/info`" \
-		 pool/local /dev/null >> $PREFIX.Packages-local
+	    apt-ftparchive -o Tree::ExtraOverride=../overrides.extra \
+		 packages pool/local >> $PREFIX.Packages-local
 	fi
 fi
 

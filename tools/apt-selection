@@ -21,7 +21,7 @@ if [ -z "$CODENAME" -o -z "$ARCH" -o -z "$APTTMP" ]; then
 	fi
 fi
 
-options=" -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
+options=" -q -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
           -o Dir::State=$APTTMP/$CODENAME-$ARCH/apt-state/ \
 	  -o Dir::Cache=$APTTMP/$CODENAME-$ARCH/apt-cache/ \
 	  -o Dir::Etc=$APTTMP/$CODENAME-$ARCH/apt/ \
@@ -49,14 +49,8 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	echo "deb file:$MIRROR $CODENAME $sections" \
 	> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	if [ -n "$NONUS" ]; then
-	  # Slink used the old paths
-	  if [ "$CODENAME" = "slink" ]; then
-	     echo "deb file:$NONUS $CODENAME non-US" \
-	     >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
-	  else
 	     echo "deb file:$NONUS $CODENAME/non-US $sections" \
 	     >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
-	  fi
 	fi
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then

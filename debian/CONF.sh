@@ -1,3 +1,19 @@
+# Unset all optional variables first to start from a clean state
+unset NONUS
+unset FORCENONUSONCD1
+unset NONFREE
+unset EXTRANONFREE
+unset LOCAL
+unset LOCALDEBS
+unset SECURED
+unset BOOTDIR
+unset SYMLINK
+unset COPYLINK
+unset MKISOFS
+unset MKISOFS_OPTS
+unset EXCLUDE
+unset SRCEXCLUDE
+
 # The debian-cd dir
 export BASEDIR=/usr/share/debian-cd
 
@@ -5,7 +21,7 @@ export BASEDIR=/usr/share/debian-cd
 export CODENAME=woody
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="3.0 prerelease"
+export DEBVERSION="3.0 beta"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE

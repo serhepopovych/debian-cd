@@ -2,19 +2,16 @@ Source: debian-cd
 Section: admin
 Priority: optional
 Maintainer: Raphael Hertzog <hertzog@debian.org>
-Build-Depends: debhelper
+Build-Depends: debhelper (>= 3)
 Standards-Version: 3.5.2
 
 Package: debian-cd
 Architecture: all
-Depends: perl5 | perl, libdigest-md5-perl, sysutils, apt (>= 0.3.11.1), dpkg-dev (>= 1.4.1.6), dpkg-multicd, make, mkhybrid | mkisofs, lynx, grep-dctrl
+Depends: perl5 | perl, libdigest-md5-perl, sysutils, apt (>= 0.3.11.1), make, mkhybrid | mkisofs, lynx, grep-dctrl, apt-utils
 Recommends: hfsutils, debianutils (>= 1.6)
 Suggests: palo (>= 0.94)
 Description: Tools for building (Official) Debian CD set
- This package was formerly called YACS (for Yet Another CD
- Script).
+ Debian-cd is the official tool for building Debian CD set since the potato
+ release. It was formerly called YACS (for Yet Another CD Script).
  .
- It's the official way of building CD since the potato release.
- .
- Its goal is to facilitate the creation of customized Debian
- CD set.
+ Its goal is to facilitate the creation of customized Debian CD set.

@@ -56,11 +56,11 @@ fi
 for SECT in $SECTIONS; do
 
 	if [ -d "pool/$SECT" ]; then
-		dpkg-scansources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
+	    apt-ftparchive sources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
 	fi
 	for DIST in $DISTS; do
 		if [ -d "dists/$DIST/$SECT/source" ] ; then
-			dpkg-scansources dists/$DIST/$SECT/source \
+			apt-ftparchive sources dists/$DIST/$SECT/source \
 			>> dists/$CODENAME/$SECT/source/Sources
 		fi
 	done
@@ -68,16 +68,16 @@ for SECT in $SECTIONS; do
 		gzip --best dists/$CODENAME/$SECT/source/Sources
 	fi
 
-	if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+	if [ -n "$NONUS" ]; then
 		if [ -d "pool/non-US/$SECT" ]; then
-			dpkg-scansources pool/non-US/$SECT \
+			apt-ftparchive sources pool/non-US/$SECT \
 			> dists/$CODENAME/non-US/$SECT/source/Sources
 		fi
 		for DIST in $DISTSNONUS; do
-			if [ -d "dists/$DIST/non-US/$SECT/source" ] ; then
-				dpkg-scansources dists/$DIST/non-US/$SECT/source \
-					>> dists/$CODENAME/non-US/$SECT/source/Sources		
-			fi
+		    if [ -d "dists/$DIST/non-US/$SECT/source" ] ; then
+			apt-ftparchive sources dists/$DIST/non-US/$SECT/source \
+			    >> dists/$CODENAME/non-US/$SECT/source/Sources		
+		    fi
 		done
 		if [ -f dists/$CODENAME/non-US/$SECT/source/Sources ] ; then
 			gzip --best dists/$CODENAME/non-US/$SECT/source/Sources
@@ -86,14 +86,8 @@ for SECT in $SECTIONS; do
 	
 done
 
-# Slink special case
-if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
-	dpkg-scansources dists/$CODENAME/non-US/source \
-	| gzip --best > dists/$CODENAME/non-US/source/Sources.gz
-fi
-
 if [ -n "$LOCAL" ]; then
-	dpkg-scansources dists/$CODENAME/local/source \
+	apt-ftparchive sources dists/$CODENAME/local/source \
 	| gzip --best > dists/$CODENAME/local/source/Sources.gz
 fi
 

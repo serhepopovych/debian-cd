@@ -2,6 +2,23 @@
 # This file will have to be sourced where needed
 #
 
+# Unset all optional variables first to start from a clean state
+unset NONUS
+unset FORCENONUSONCD1
+unset NONFREE
+unset EXTRANONFREE
+unset LOCAL
+unset LOCALDEBS
+unset SECURED
+unset BOOTDIR
+unset SYMLINK
+unset COPYLINK
+unset MKISOFS
+unset MKISOFS_OPTS
+unset EXCLUDE
+unset SRCEXCLUDE
+
+
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`

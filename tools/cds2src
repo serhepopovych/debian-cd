@@ -53,22 +53,17 @@ my %includesrc;
 my @SOURCES = ("$mirror/dists/$codename/main/source/Sources.gz",
                "$mirror/dists/$codename/contrib/source/Sources.gz");
 
-if ($nonus and ($codename ne "slink")) {
+if ($nonus) {
 	push @SOURCES, 
              "$nonus/dists/$codename/non-US/main/source/Sources.gz",
              "$nonus/dists/$codename/non-US/contrib/source/Sources.gz";
 } 
 if ($nonfree or $extranonfree) {
 	push @SOURCES, "$mirror/dists/$codename/non-free/source/Sources.gz";
-	if ($nonus and ($codename ne "slink")) {
+	if ($nonus) {
 	  push @SOURCES,
                "$nonus/dists/$codename/non-US/non-free/source/Sources.gz";
 	}
-}
-
-# Slink special case
-if ($nonus and ($codename eq "slink")) {
-	push @SOURCES, "$nonus/dists/$codename/non-US/source/Sources.gz";
 }
 
 if ($local and -e "$localdebs/dists/$codename/local/source/Sources.gz")

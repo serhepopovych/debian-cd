@@ -53,7 +53,7 @@ do
 	fi
 done
 
-if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
+if [ -n "$NONUS" ]; then
 	mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
 	mkdir -p dists/$CODENAME/non-US/main/binary-all
 	mkdir -p dists/$CODENAME/non-US/main/source
@@ -65,11 +65,6 @@ if [ -n "$NONUS" -a "$CODENAME" != "slink" ]; then
 		mkdir -p dists/$CODENAME/non-US/non-free/binary-all
 		mkdir -p dists/$CODENAME/non-US/non-free/source
 	fi
-# Special case for old slink layout
-elif [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
-	mkdir -p dists/$CODENAME/non-US/binary-$ARCH
-	mkdir -p dists/$CODENAME/non-US/binary-all
-	mkdir -p dists/$CODENAME/non-US/source
 fi
 
 if [ ! -d .disk ] ; then
