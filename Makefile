@@ -441,28 +441,28 @@ $(SDIR)/sources-stamp:
 		dir=$(SDIR)/CD$$n; \
 		echo -n "$$n ... "; \
 		echo -n "main ... "; \
-		grep -vE "(non-US/|/local/)" $$i > $(SDIR)/$$.main || true ; \
-		if [ -s $(SDIR)/$$.main ] ; then \
-			cat $(SDIR)/$$.main | xargs $(addfiles) $$dir $(MIRROR); \
+		grep -vE "(non-US/|/local/)" $$i > $$i.main || true ; \
+		if [ -s $$i.main ] ; then \
+			cat $$i.main | xargs $(addfiles) $$dir $(MIRROR); \
 		fi ; \
 		if [ -n "$(LOCAL)" ]; then \
 			echo -n "local ... "; \
-			grep "/local/" $$i > $(SDIR)/$$.local || true ; \
-			if [ -s $(SDIR)/$$.local ] ; then \
+			grep "/local/" $$i > $$i.local || true ; \
+			if [ -s $$i.local ] ; then \
 				if [ -n "$(LOCALDEBS)" ] ; then \
-					cat $(SDIR)/$$.local | xargs $(addfiles) \
+					cat $$i.local | xargs $(addfiles) \
 						$$dir $(LOCALDEBS); \
 			    else \
-					cat $(SDIR)/$$.local | xargs $(addfiles) \
+					cat $$i.local | xargs $(addfiles) \
 						$$dir $(MIRROR); \
 				fi; \
 		    fi; \
 		fi; \
 		if [ -n "$(NONUS)" ]; then \
 			echo -n "non-US ... "; \
-			grep "non-US/" $$i > $(SDIR)/$$.nonus || true ; \
-			if [ -s $(SDIR)/$$.nonus ] ; then \
-				cat $(SDIR)/$$.nonus | xargs $(addfiles) $$dir $(NONUS); \
+			grep "non-US/" $$i > $$i.nonus || true ; \
+			if [ -s $$i.nonus ] ; then \
+				cat $$i.nonus | xargs $(addfiles) $$dir $(NONUS); \
 			fi; \
 		fi; \
 		$(scansources) $$dir; \
