@@ -203,8 +203,10 @@ distclean: ok bin-distclean src-distclean
 bin-distclean:
 	$(Q)-rm -rf $(BDIR)
 	$(Q)-rm -rf $(ADIR)
+	$(Q)-rm -rf $(TDIR)/jigdofilelist
 src-distclean:
 	$(Q)-rm -rf $(SDIR)
+	$(Q)-rm -rf $(TDIR)/jigdofilelist
 
 ## STATUS and APT ##
 
