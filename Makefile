@@ -610,6 +610,8 @@ $(BDIR)/CD1/doc:
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
 		$(add_files) $(BDIR)/$$DISK $(MIRROR) doc; \
+		find $(BDIR)/$$DISK/doc -name "dedication-*" | \
+		grep -v $DEBVERSION | xargs rm -f; \
 	done
 	@for DISK in $(FIRSTDISKS) ; do \
 		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \

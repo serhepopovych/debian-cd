@@ -55,6 +55,15 @@ EOF
 
 cat >> debian-installer+kernel << EOF
 #endif
+#ifdef ARCH_hppa
+EOF
+
+/bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-hppa/Packages|tail -n4 \
+  >> debian-installer+kernel
+
+cat >> debian-installer+kernel << EOF
+#endif
 #ifdef ARCH_ia64
 initrd-tools
 EOF
