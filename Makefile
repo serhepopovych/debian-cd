@@ -483,7 +483,7 @@ src-images: ok src-md5list $(OUT)
 pi-makelist:
 	@for file in $(OUT)/$(CODENAME)-*.raw; do \
 		$(BASEDIR)/tools/pi-makelist \
-			$$file > $${file%%.raw}.list \
+			$$file > $${file%%.raw}.list; \
 	done
 
 # Generate only one image number $(CD)
