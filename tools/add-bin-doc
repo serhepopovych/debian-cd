@@ -46,10 +46,17 @@ for i in $BDIR/*.packages; do
 	cp -f $MIRROR/dists/$CODENAME/Contents-$ARCH.gz \
 	   $dir/dists/$CODENAME/; \
 
-	if [ -n "$NONUS" ]; then
-	   cp -f $NONUS/dists/$CODENAME/non-US/Contents-$ARCH.gz \
-	      $dir/dists/$CODENAME/non-US/
+
+        # 08-oct-00 if != woody copy Contents-$ARCH
+        # Contents-$ARCH missing on non-US woody  -- jwest
+        if [ $CODENAME != "woody" ]; then
+	  if [ -n "$NONUS" ]; then
+	     cp -f $NONUS/dists/$CODENAME/non-US/Contents-$ARCH.gz \
+	        $dir/dists/$CODENAME/non-US/
+	  fi
 	fi
+
+
 
 	if [ -e $BASEDIR/data/$CODENAME/README.$ARCH ]; then 
 	  cp -f $BASEDIR/data/$CODENAME/README.$ARCH $dir/
