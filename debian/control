@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Raphael Hertzog <hertzog@debian.org>
 Build-Depends-Indep: debhelper (>= 4)
-Standards-Version: 3.5.7
+Standards-Version: 3.5.9
 
 Package: debian-cd
 Architecture: all

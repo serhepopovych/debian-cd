@@ -65,6 +65,16 @@ ifndef DOJIGDO
 export DOJIGDO=0
 endif
 
+ifndef UDEB_INCLUDE
+# Netinst/businesscard CD should have udeb_include file by default
+ifeq ($(INSTALLER_CD),1)
+UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/netinst_udeb_include
+endif
+ifeq ($(INSTALLER_CD),2)
+UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/netinst_udeb_include
+endif
+endif
+
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
 list2cds=$(BASEDIR)/tools/list2cds

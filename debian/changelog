@@ -1,6 +1,6 @@
 debian-cd (2.2.16) UNRELEASED; urgency=low
 
-  * Updated standards-version to 3.5.7.
+  * Updated standards-version to 3.5.9.
   * Use debhelper 4 (build-depends on it, updated DH_COMPAT).
   * WARNING: potato is now mostly unsupported, some cruft has been
     removed that may have been useful for generating potato CDs.
@@ -30,8 +30,10 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     "netinst CDs" !
   * Don't check dependencies for udebs, they tend to be broken
     and we still want them on the CD.
+  * Put good default values for UDEB_INCLUDE based on the value of
+    INSTALLER_CD. 
 
- -- Raphael Hertzog <hertzog@debian.org>  Thu, 26 Dec 2002 11:08:55 +0100
+ -- Raphael Hertzog <hertzog@debian.org>  Wed,  7 May 2003 20:02:18 +0200
 
 debian-cd (2.2.15) unstable; urgency=low
 
