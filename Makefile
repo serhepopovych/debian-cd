@@ -313,6 +313,7 @@ ifdef FORCENONUSONCD1
 endif
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
 	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
+	     -U $(ARCH) -U i386 -U linux -U unix \
 	     -DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist
 

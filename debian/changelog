@@ -7,6 +7,9 @@ debian-cd (2.2.12) unstable; urgency=low
     to not force the inclusion of recommended/suggested packages.
     Thanks to Petter Reinholdtsen for the patches.
     Closes: #127964, #127968
+  * Undef some automatic variable substitution (like i386)
+    of cpp causing problems while generating tasks files. Closes: #129044
+    Thanks again to Petter Reinholdsten.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 29 Dec 2001 19:57:23 +0100
 
