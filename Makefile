@@ -1037,6 +1037,7 @@ tasks/popularity-contest-$(CODENAME):
 		http://popcon.debian.org/contrib/by_inst
 	grep -h '^[^#]' popcon-inst | egrep -v '(Total|-----)' | \
 		sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $$2}' >> $@
+	rm -f popcon-inst
 
 # Little trick to simplify things
 official_images: bin-official_images src-official_images
