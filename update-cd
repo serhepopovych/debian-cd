@@ -1,0 +1,181 @@
+#!/bin/sh
+#
+# update-cd v 0.1
+# 
+# (c) Steve McIntyre <stevem@chiark.greenend.org.uk> Released under
+# GNU GPL v2 5th December 2000
+#
+# Quick and dirty script to create update CDs for people to upgrade
+# from potato (2.2r0) to the latest release level
+
+# Configuration goes here.
+# Where is your mirror?
+MIRROR=${MIRROR:-/debian}
+
+# If you have a non-US mirror, where is it? Leave blank if you don't have one.
+NONUS=${NONUS:-$MIRROR/non-US}
+
+# Do you want non-free? 1 for yes, 0 for no
+NONFREE=1
+
+# What release version is this?
+VER=2.2r2
+
+# Path to use with mkisofs/mkhybrid
+MKISOFS=${MKISOFS:-"mkhybrid"}
+
+# The working directory to use. MUST be on the same partition as the mirror.
+TDIR=/scratch/debian-cd
+
+# Building potato cd set ...
+CODENAME=potato
+
+# Path where the images will be written
+OUT=/scratch/debian-cd
+
+REL=Debian"$VER"
+CLOG=dists/$REL/ChangeLog
+NUCLOG=dists/$REL/non-US/ChangeLog
+UPD=$TDIR/potato-update
+DATE=`date +%Y%m%d`
+BASEDIR=`pwd`
+INFO1="Debian GNU/Linux $VER Update CD $DATE for Alpha, Arm and i386"
+INFO2="Debian GNU/Linux $VER Update CD $DATE for M68k, PowerPC and Sparc"
+ARCH1="alpha arm i386"
+ARCH2="m68k powerpc sparc"
+
+export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
+
+scanpackages=$BASEDIR/tools/scanpackages
+scansources=$BASEDIR/tools/scansources
+set_mkisofs_opts=$BASEDIR/tools/set_mkisofs_opts
+adddirs=$BASEDIR/tools/add_dirs
+
+echo Cleaning up
+rm -rf $UPD
+mkdir $UPD $UPD/CD1 $UPD/CD2
+
+echo Creating directory trees
+for ARCH in $ARCH1
+do
+	export ARCH
+	$adddirs $UPD/CD1
+done
+
+for ARCH in $ARCH2
+do
+	export ARCH
+	$adddirs $UPD/CD2
+done
+
+cd $MIRROR
+
+echo Creating main-section list
+
+egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/list
+if [ "$NONFREE"x != "1"x ] ; then
+	echo Removing non-free
+	grep -v non-free $UPD/list > $UPD/list1
+	mv -f $UPD/list1 $UPD/list
+fi
+
+echo Creating trees
+for FILE in `cat $UPD/list`
+do
+	cp --parents -dpRl $FILE $UPD/CD1 2>/dev/null
+	cp --parents -dpRl $FILE $UPD/CD2 2>/dev/null
+done
+
+if [ "$NONUS"x != ""x ] ; then
+	echo Creating non-US list
+	cd $NONUS
+	egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/nu-list
+
+	if [ "$NONFREE"x != "1"x ] ; then
+		echo Removing non-free
+		grep -v non-free $UPD/nu-list > $UPD/nu-list1
+		mv -f $UPD/nu-list1 $UPD/nu-list
+	fi
+
+	echo Creating non-US trees
+	for FILE in `cat $UPD/nu-list`
+	do
+		cp --parents -dpRl $FILE $UPD/CD1 2>/dev/null
+		cp --parents -dpRl $FILE $UPD/CD2 2>/dev/null
+	done
+fi
+
+# The full update will not fit on a single CD, so split it by architecture, arbitrarily
+# CD 1 gets alpha/arm/i386
+# CD 2 gets m68k/sparc/powerpc
+# binary-all goes on both, as does source
+
+cd $UPD
+
+echo Splitting binary dirs between trees
+for ARCH in $ARCH2
+do
+	find CD1 -type d | egrep -e binary-$ARCH$ | xargs rm -r
+done
+for ARCH in $ARCH1
+do
+	find CD2 -type d | egrep -e binary-$ARCH$ | xargs rm -r
+done
+
+# Now create the binary-all symlinks
+
+echo Creating binary-all symlinks
+for DIR in `find . -name binary-all`
+do
+	cd $DIR
+	for CAT in *
+	do
+		if [ $CAT != '*' ] ; then
+			cd $CAT
+			for FILE in *.deb
+			do
+				if [ $FILE != '*.deb' ] ; then
+					for ARCH in alpha arm i386 m68k powerpc sparc
+					do
+						if [ -d ../../binary-$ARCH ] ; then
+							if [ ! -d ../../binary-$ARCH/$CAT ] ; then
+								mkdir ../../binary-$ARCH/$CAT
+							fi
+						ln -s ../../binary-all/$CAT/$FILE ../../binary-$ARCH/$CAT
+						fi
+					done
+				fi
+			done
+			cd ..
+		fi
+	done
+	cd $UPD
+done
+
+echo Creating .disk/info files
+echo $INFO1 >CD1/.disk/info
+echo $INFO2 >CD2/.disk/info
+
+echo Creating Packages files
+for ARCH in $ARCH1
+do
+	echo $ARCH
+	ARCH=$ARCH $scanpackages scan CD1
+	ARCH=$ARCH $scanpackages -noPackages.cd install CD1
+done
+
+for ARCH in $ARCH2
+do
+	echo $ARCH
+	ARCH=$ARCH $scanpackages scan CD2
+	ARCH=$ARCH $scanpackages -noPackages.cd install CD2
+done
+
+echo Creating Sources files
+$scansources CD1
+$scansources CD2
+
+rm CD?/CD?.*
+
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-1.raw CD1
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-2.raw CD2

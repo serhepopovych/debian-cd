@@ -16,11 +16,16 @@ fi
 
 cd $1
 
-ln -sf . debian
-mkdir -p dists/$CODENAME
-ln -sf $CODENAME dists/stable
-ln -sf $CODENAME dists/unstable
-ln -sf $CODENAME dists/frozen
+if [ ! -e debian ] ; then
+	ln -sf . debian
+fi
+
+if [ ! -d dists/$CODENAME ] ; then
+	mkdir -p dists/$CODENAME
+	ln -sf $CODENAME dists/stable
+	ln -sf $CODENAME dists/unstable
+	ln -sf $CODENAME dists/frozen
+fi
 
 # Commidity link for tools which want local in dists/local/local ...
 if [ -n "$LOCAL" ]
@@ -67,5 +72,7 @@ elif [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 	mkdir -p dists/$CODENAME/non-US/source
 fi
 
-mkdir .disk
+if [ ! -d .disk ] ; then
+	mkdir .disk
+fi
 
