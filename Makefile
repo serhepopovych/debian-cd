@@ -404,14 +404,14 @@ bin-extras: ok
 	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
 	  false; \
 	fi
-	@echo "Adding dirs `$(DIR)' from `$(ROOTSRC)' to `$(BDIR)/$(CD)'" ...
+	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/$(CD)'" ...
 	@$(addfiles) $(BDIR)/$(CD) $(ROOTSRC) $(DIR)
 src-extras:
 	@if [ -z "$(DIR)" -o -z "$(CD)" -o -z "$(ROOTSRC)" ]; then \
 	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
 	  false; \
 	fi
-	@echo "Adding dirs `$(DIR)' from `$(ROOTSRC)' to `$(SDIR)/$(CD)'" ...
+	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(SDIR)/$(CD)'" ...
 	@$(addfiles) $(SDIR)/$(CD) $(ROOTSRC) $(DIR)
 
 ## IMAGE BUILDING ##

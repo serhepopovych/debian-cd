@@ -78,8 +78,9 @@ The process of building a CD is decomposed as follow :
   $ make list TASK=tasks/gnome COMPLETE=0 SIZELIMIT=576716800
   or
   $ export NONFREE=1; make list TASK=tasks/kde COMPLETE=1
-  or for something like an official image for the USA :
-  $ make COMPLETE=1 NONUS=0 NONFREE=0 SIZELIMIT1=576716800
+  or for something like an official image for the USA (without non-US &
+  non-free) :
+  $ make COMPLETE=1 SIZELIMIT1=576716800
   .... take a look at the file tasks/* to see the options you can have :)
   
   You can change the behaviour of this command with the following
