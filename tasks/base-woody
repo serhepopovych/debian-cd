@@ -10,7 +10,7 @@
 for arch in alpha arm i386 ia64 m68k powerpc sparc mips mipsel hppa s390
 do
     echo "#ifdef ARCH_$arch"
-    debootstrap --arch $arch --print-debs $CODENAME | tr ' ' '\n'
+    debootstrap --arch $arch --print-debs $CODENAME | tr ' ' '\n' | grep -v "^$"
     echo "#endif"
     echo ""
 done
