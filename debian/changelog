@@ -8,6 +8,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Patch from Thiemo Seufer to add mips and mipsel kernels.
       Also, remove some packages from arches that do not need them.
     - Remove module-init-tools-udeb from the CD.
+    - Remove raidtools2-udeb from the exclude list, while nothing depends on
+      it, it can be handy for manually setting up raid.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we

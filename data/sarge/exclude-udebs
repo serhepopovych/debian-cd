@@ -74,7 +74,6 @@ load-iso
 modutils-basic
 modutils-full
 # Nothing currently depends on this, and it seems not useful on its own.
-raidtools2
 reiserfsprogs-udeb
 # These are not really needed, the regular netcfg subsumes them.
 netcfg-static
