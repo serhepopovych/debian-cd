@@ -15,6 +15,8 @@
 #include <base-woody>
 #include <forcd1>
 
+#include <pine>
+
 #include <task-woody>
 
 #include <xservers-XFree3>
@@ -23,10 +25,13 @@
 
 #include <interesting-fromcd23>
 
+/* To ensure that the kernel images are on CD2 */
+#include <unexclude-CD2-woody>
+
 /* List of packages that may still fit on the first CD */
 #include <linuxtag2000>
 
-#include <popularity-contest-woody>
+/*#include <popularity-contest-woody>*/
 
 /* Other packages to put on the others CDs */
 
