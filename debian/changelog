@@ -2,6 +2,7 @@ debian-cd (2.2.13) unstable; urgency=low
 
   * UNRELEASED. 
   * Add jigdo generation support (see README).
+  * Automatically add packages listed by local debootstrap. Closes: #131820
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 20 Jan 2002 15:42:29 +0100
 
