@@ -12,8 +12,7 @@ DIR=$1
 
 DOCDIR=doc
 
-if [ -f $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/res
-cue.bin ]; then
+if [ -f $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] ; then
         CODENAME1=$CODENAME
 else
         echo "Using potato bootdisk documentation"
@@ -22,7 +21,7 @@ fi
 
 
 # Put the install documentation in /install
-cd $DIR/dists/$CODENAME1/main/disks-$ARCH/current/$DOCDIR
+cd $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/$DOCDIR
 mkdir $DIR/install/$DOCDIR
 cp -a * $DIR/install/$DOCDIR/
 ln -sf install.en.html $DIR/install/$DOCDIR/index.html
