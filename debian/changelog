@@ -1,6 +1,8 @@
 debian-cd (2.2.9) unstable; urgency=low
 
   * UNRELEASED 
+  * Added i386 boot blocks for udam100-ext3 to disk 5 -jwest
+  * Added i386 boot blocks for reiserfs to disk 6 - jwest
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Sep 2001 14:57:22 +0200
 
