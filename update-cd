@@ -10,7 +10,7 @@
 #
 # Configuration goes here.
 # Where is your mirror?
-MIRROR=${MIRROR:-/debian}
+MIRROR=${MIRROR:-/scratch/debian}
 
 # If you have a non-US mirror, where is it? Leave blank if you don't have one.
 NONUS=${NONUS:-$MIRROR/non-US}
@@ -19,7 +19,7 @@ NONUS=${NONUS:-$MIRROR/non-US}
 NONFREE=1
 
 # What release version is this?
-VER=2.2r2
+VER=2.2r3
 
 # Path to use with mkisofs/mkhybrid
 MKISOFS=${MKISOFS:-"mkhybrid"}
@@ -36,11 +36,11 @@ OUT=/scratch/debian-cd
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=~/r2.diff
+DIFF=/wibble #~/r2.diff
 
 REL=Debian"$VER"
-CLOG=dists/$REL/ChangeLog
-NUCLOG=dists/$REL/non-US/ChangeLog
+CLOG=dists/potato/ChangeLog
+NUCLOG=dists/potato/non-US/ChangeLog
 UPD=$TDIR/potato-update
 DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
@@ -79,7 +79,7 @@ cd $MIRROR
 echo Creating main-section list
 
 if [ -e $DIFF ] ; then
-	grep -v non-US ~/r2.diff >$UPD/list
+	grep -v non-US $DIFF >$UPD/list
 else
 	egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/list
 fi
@@ -97,7 +97,7 @@ if [ "$NONUS"x != ""x ] ; then
 	echo Creating non-US list
 	cd $NONUS
 	if [ -e $DIFF ] ; then
-		grep non-US ~/r2.diff >$UPD/nu-list
+		grep non-US $DIFF >$UPD/nu-list
 	else
 		egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/nu-list
 	fi
@@ -174,6 +174,7 @@ do
 	echo $ARCH
 	ARCH=$ARCH $scanpackages scan CD1
 	ARCH=$ARCH $scanpackages -noPackages.cd install CD1
+	rm -f CD1/*.Packages*
 done
 
 for ARCH in $ARCH2
@@ -181,6 +182,7 @@ do
 	echo $ARCH
 	ARCH=$ARCH $scanpackages scan CD2
 	ARCH=$ARCH $scanpackages -noPackages.cd install CD2
+	rm -f CD2/*.Packages*
 done
 
 echo Creating Sources files
