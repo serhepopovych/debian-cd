@@ -45,18 +45,18 @@ my %included;
 my %excluded;
 my %packages;
 
-msg(0, "
-======================================================================
-Here are the information you've choosen for making the list :
-List of prefered packages : $list
-All packages : $complete
-Non-free : $nonfree
-Non-US : $nonus
-Exclude file : $exclude
-======================================================================
+msg(0, "======================================================================
+Here are the settings you've chosen for making the list:
+List of prefered packages: $list
+Exclude file: $exclude
+");
+msg(0, "Complete selected packages with all the rest: "); msg(0, yesno($complete)."\n");
+msg(0, "Include non-free packages: "); msg(0, yesno($nonfree)."\n");
+msg(0, "Include non-US packages: "); msg(0, yesno($nonus)."\n");
+msg(0, "======================================================================
 ");
 
-# Get the informations on all packages
+# Get the information on all packages
 my $oldrs = $/;
 $/ = '';
 open(AVAIL, "$apt cache dumpavail |") || die "Can't fork : $!\n";
@@ -112,10 +112,9 @@ if (not $nonus) {
 	}
 }
 
-msg(0, "
-Statistics :
-Number of packages : @{ [scalar(keys %packages)] }
-Number of excluded : $count_excl of @{ [scalar(keys %excluded)] }
+msg(0, "Statistics:
+Number of packages: @{ [scalar(keys %packages)] }
+Number of excluded: $count_excl of @{ [scalar(keys %excluded)] }
 ======================================================================
 
 ");
@@ -685,4 +684,9 @@ sub unexclude {
 	}
 	close UNEXCL;
     }
+}
+
+sub yesno {
+  my $in = shift;
+  return $in ? "yes" : "no";
 }
