@@ -6,7 +6,7 @@
 
 TMP_OUT=$OUT
 
-for ARCH in i386 m68k alpha sparc powerpc arm
+for ARCH in i386 alpha arm hppa ia64 m68k mips mipsel powerpc s390 sparc
 do
 	export ARCH
 	echo "Now we're going to build CD for $ARCH !"
@@ -35,7 +35,7 @@ do
 	    . $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc
 	fi
 	SIZE_ARGS=''
-	for CD in 1 2 3 4; do
+	for CD in 1 2 3 4 5 6 7 8; do
 		size=`eval echo '$'"BOOT_SIZE_${CD}"`
 		[ "$size" = "" ] && size=0
 		[ $CD = "1" ] && size=$(($size + $disks))
