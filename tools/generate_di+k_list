@@ -177,7 +177,7 @@ EOF
   >> debian-installer+kernel
 # Get the latest 2.4 kernels, except mac
 /bin/sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-m68k/Packages | tail -n 6 | \
+  $MIRROR/dists/$CODENAME/main/binary-m68k/Packages | tail -n 7 | \
   grep -v mac >> debian-installer+kernel
 
 cat >> debian-installer+kernel << EOF
