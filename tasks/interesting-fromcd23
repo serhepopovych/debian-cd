@@ -1,6 +1,6 @@
 /* Generally useful/interesting (and mostly small) packages that
-   many people expect on one of the first CDs even if they don't 
-   show up near the top of popcon. */
+   many people expect on one of the first CDs even if there's no room for
+   everything from popcon. */
 
 dpkg-repack
 grep-dctrl
