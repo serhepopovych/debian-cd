@@ -38,7 +38,14 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         kernel-pcmcia-modules-2.4.22-xfs-686-smp,
         kernel-source-2.2.20, timidity-patches, tcl8.2 and tk8.2.
   * Stephen R. Marenka
-  	- m68k support.
+    - m68k support.
+  * Santiago Garcia
+    - Update isolinux.bin to the version we are shipping with Sarge.
+    - Update debian-installer tasks.
+    - Update boot scripts for sarge to be able to build cds using d-i
+      images from the chosen dist using the mirror or from the web.
+    - Add support for sarge bootable mips cds.
+    - Add support for sarge bootable sparc cds.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 

@@ -13,8 +13,11 @@ set -x
 N=$1
 CDDIR=$2
 BOOTDIR=
-if [ ! "$WWW_HOME" ];then
-   WWW_HOME="http://people.debian.org/~jbailey/ia64"
+if [ "$DI_WWW_HOME" = "default" ];then
+   DI_WWW_HOME="http://people.debian.org/~jbailey/d-i/ia64/daily"
+fi
+if [ ! "$DI_DIST" ]; then
+   DI_DIST="$DI_CODENAME"
 fi
 
 cd $CDDIR/..
@@ -26,17 +29,21 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 fi
 
 # Download boot images
-for image in cdrom-image.img; do
+for image in boot.img; do
     if [ ! -e "$image" ]; then
-	wget $WWW_HOME/$image
+	if [ ! "$DI_WWW_HOME" ];then
+		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" .
+	else
+		wget "$DI_WWW_HOME/$image"
+	fi
     fi
 done
 
-#install_languages $CDDIR
+install_languages $CDDIR
 
 mkdir -p boot$N/boot
-cp -f cdrom-image.img boot$N/boot/
-echo -n "-no-emul-boot -J -b boot/cdrom-image.img -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
+cp -f boot.img boot$N/boot/
+echo -n "-no-emul-boot -J -b boot/boot.img -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
 
 # done
 
