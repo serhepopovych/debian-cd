@@ -120,6 +120,7 @@ cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_powerpc
 discover1
+quik
 yaboot
 mkvmlinuz
 module-init-tools

@@ -136,6 +136,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Add bootable CD support for arm, following Vince Sanders' advice.
     - Include kernel-image-2.4-* metapackages for ia64.
     - Unexclude zlib1g-udeb, needed for ssh support in d-i.
+    - Make sure quik is on the powerpc netinst CD; debootstrap no longer
+      installs it.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
