@@ -338,7 +338,7 @@ $(BDIR)/CD1/.disk/info:
 		num=$${i%%.packages}; num=$${num##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$num; \
 		echo -n $(BINDISKINFO) | sed 's/_NONUS//g' > $$dir/.disk/info; \
-		echo '#define DISKNAME ' $(BINDISKINFOND) \
+		echo '#define DISKNAME ' $(BINDISKINFOND) | sed 's/_NONUS//g' \
 					> $$dir/README.diskdefines; \
 		echo '#define TYPE  binary' \
 					>> $$dir/README.diskdefines; \
@@ -348,9 +348,9 @@ $(BDIR)/CD1/.disk/info:
 					>> $$dir/README.diskdefines; \
 		echo '#define ARCH'$(ARCH) ' 1' \
 					>> $$dir/README.diskdefines; \
-		echo '#define DISKNUM ' $$num \
+		echo '#define DISKNUM ' $$num | sed 's/_NONUS//g' \
 					>> $$dir/README.diskdefines; \
-		echo '#define DISKNUM'$$num ' 1' \
+		echo '#define DISKNUM'$$num ' 1' | sed 's/_NONUS//g' \
 					>> $$dir/README.diskdefines; \
 		echo '#define TOTALNUM ' $$nb \
 					>> $$dir/README.diskdefines; \
@@ -368,7 +368,7 @@ $(SDIR)/CD1/.disk/info:
 		num=$${i%%.sources}; num=$${num##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$num; \
 		echo -n $(SRCDISKINFO) | sed 's/_NONUS//g' > $$dir/.disk/info; \
-		echo '#define DISKNAME ' $(SRCDISKINFOND) \
+		echo '#define DISKNAME ' $(SRCDISKINFOND) | sed 's/_NONUS//g' \
 					> $$dir/README.diskdefines; \
 		echo '#define TYPE  source' \
 					>> $$dir/README.diskdefines; \
@@ -378,9 +378,9 @@ $(SDIR)/CD1/.disk/info:
 					>> $$dir/README.diskdefines; \
 		echo '#define ARCH'$(ARCH) ' 1' \
 					>> $$dir/README.diskdefines; \
-		echo '#define DISKNUM ' $$num \
+		echo '#define DISKNUM ' $$num | sed 's/_NONUS//g' \
 					>> $$dir/README.diskdefines; \
-		echo '#define DISKNUM'$$num ' 1' \
+		echo '#define DISKNUM'$$num ' 1' | sed 's/_NONUS//g' \
 					>> $$dir/README.diskdefines; \
 		echo '#define TOTALNUM ' $$nb \
 					>> $$dir/README.diskdefines; \
