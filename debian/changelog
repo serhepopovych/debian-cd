@@ -15,6 +15,8 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Remove access floppies to save space on netinsts. Also remove
       net-drivers floppy and some other things not really needed for install
       from CD.
+    - Add 2.6 kernels to ia64 netinst CDs (and incidentially, update to
+      2.4.27).
   * Stephen R. Marenka
     - Add support for m68k reorganization.
     - Bump m68k 2.4 kernels to 2.4.27.
