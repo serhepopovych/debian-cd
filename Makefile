@@ -572,8 +572,11 @@ $(BDIR)/CD1/doc:
 	@for DISK in $(FIRSTDISKS) ; do \
 		mkdir $(BDIR)/$$DISK/doc/FAQ/html ; \
 		cd $(BDIR)/$$DISK/doc/FAQ/html ; \
-		tar xzvf ../debian-faq.html.tar.gz ; \
-		rm -f ../debian-faq.html.tar.gz ; \
+		if [ -e "../debian-faq.en.html.tar.gz" ]; then \
+		    tar xzvf ../debian-faq.en.html.tar.gz ; \
+		else \
+		    tar xzvf ../debian-faq.html.tar.gz ; \
+		fi; \
 	done
 	$(Q)$(add_bin_doc) # Common stuff for all disks
 
@@ -622,6 +625,9 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
 		mkdir -p $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) ; \
+		if [ ! -e "$(BOOTDISKS)" ]; then \
+		    break; \
+		done; \
 		$(add_files) \
 	  	$(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
 	  	$(BOOTDISKS) . ; \
