@@ -27,7 +27,7 @@ cd $CDDIR/..
 NN=`echo $N | sed -e 's/_NONUS//'`
 
 # List of boot image for each CD
-KTYPE[1]="" #multiboot in fact
+KTYPE[1]="" #isolinux multiboot in fact
 KTYPE[2]="cdrom-2880"
 KTYPE[3]="net-1440"
 KTYPE[4]="cdrom144-1440"
@@ -41,7 +41,7 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 # Download boot images
-for image in cdrom-2880.img cdrom144-1440.img net-1440.img; do
+for image in cdrom-2880.img cdrom-initrd.gz cdrom144-1440.img cdrom144-initrd.gz net-1440.img net-inirtd.gz vmlinuz ; do
     if [ ! -e "$image" ]; then
 	wget http://people.debian.org/~joeyh/debian-installer/daily/images/$image
     fi
@@ -51,11 +51,14 @@ if [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
     cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
-    cp -lf cdrom-2880.img cdrom144-1440.img net-1440.img boot$N/isolinux/
+    cp -lf vmlinuz $CDDIR/install/
+    cp -lf cdrom-initrd.gz $CDDIR/install/cdrom.gz
+    cp -lf cdrom144-initrd.gz $CDDIR/install/cdrom144.gz
+    cp -lf net-initrd.gz $CDDIR/install/net.gz
     echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 else
     if [ -n "$THISTYPE" ]; then
-	echo "Using ${THISTYPE:-vanilla} boot-disks image on CD$N"
+	echo "Using $THISTYPE boot-disks image on CD$N"
 	mkdir -p boot$N/boot
 	cp $THISTYPE.img boot$N/boot/
 	echo -n "-cache-inodes -J -l -b boot/$THISTYPE.img "  > $N.mkisofs_opts
@@ -75,28 +78,27 @@ if [ "$NN" = "1" ]; then
 # populate the install directory as well
 cp -lf *.img $CDDIR/install
 
-# Tools for disc 1
-# and include the legacy DOS stuff 
+# ISOLINUX setup
 
-if [ "${ISOLINUX:-0}" != "0" ]; then
-    # Include Smart Boot Manager image for people where isolinux doesn't
-    # work
-    gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
-    touch -r $BASEDIR/data/$CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
-    cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
-    # Isolinux config files
-    cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
-    cat > boot$N/isolinux/isolinux.cfg <<EOF
-DEFAULT /install/linpci
-APPEND root=/dev/ram ro initrd=idepci.bin ramdisk_size=16384 disksize=1.44 flavor=idepci
+# Include Smart Boot Manager image for people where isolinux fails
+gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
+touch -r $BASEDIR/data/$CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
+cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
+# Isolinux config files
+cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
+cat > boot$N/isolinux/isolinux.cfg <<EOF
+DEFAULT /install/vmlinuz
+APPEND vga=normal initrd=cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL linux
-  kernel /isolinux/cdrom-2880.img
+  kernel /install/vmlinuz
 LABEL cdrom
-  kernel /isolinux/cdrom-2880.img
+  kernel /install/vmlinuz
 LABEL cdrom144
-  kernel /isolinux/cdrom144-1440.img
+  kernel /install/vmlinuz
+  append vga=normal initrd=cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 LABEL net
-  kernel /isolinux/net-1440.img
+  kernel /install/vmlinuz
+  append vga=normal initrd=net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
@@ -111,14 +113,13 @@ F8 f8.txt
 F9 f9.txt
 F0 f10.txt
 EOF
-fi
 
 (echo "Tools for DOS :" ; \
 	echo "lodlin/         load Linux kernel from DOS" ;\
 	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
 	) |todos > $CDDIR/tools/README.tools
 
-if [ "disabled" = "" ]; then
+# Loadlin script for starting install via dos/windows
 (cat <<EOF;
 @ echo off
 rem Flush any write-cached disk blocks before we leave DOS. 
@@ -126,14 +127,12 @@ If your system does not use smartdrv an error message will appear,
 you can safely ignore that.
 smartdrv /c
 
-echo Please choose a linux kernel now
-echo 1= IDEPCI kernel                 (2.2)
-echo 2= compact (SCSI) kernel         (2.2)
-echo 3= 2.4.x kernel                  (2.4)
-echo 4= vanilla (standard) kernel     (2.2)
+echo Please choose an install method now
+echo 1= CDROM install
+echo 2= CDROM install (1.44Mb image)
+echo 3= NET install
 
-choice /c:1234
-if errorlevel 4 goto FOUR
+choice /c:123
 if errorlevel 3 goto THREE
 if errorlevel 2 goto TWO
 if errorlevel 1 goto ONE
@@ -142,24 +141,19 @@ echo doing default somehow and going to ONE
 goto ONE
 
 :ONE
-echo using IDEPCI kernel
-loadlin.exe linpci root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44 flavor=idepci
+echo using CDROM install
+loadlin.exe vmlinuz vga=normal initrd=cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 
 :TWO
-echo using compact (SCSI) kernel
-loadlin.exe lincompt root=/dev/ram ro initrd=compact.bin ramdisk_size=16384 disksize=1.44 flavor=compact
+echo using CDROM (1.44Mb) install
+loadlin.exe vmlinuz vga=normal initrd=cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 
 :THREE
-echo using 2.4.x kernel
-loadlin.exe lin24 root=/dev/ram ro initrd=bf24.bin ramdisk_size=16384 disksize=1.44 flavor=bf2.4
-
-:FOUR
-echo using standard (vanilla) kernel
-loadlin.exe linux root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44 TERM=vt102
+echo using NET install
+loadlin.exe vmlinuz vga=normal initrd=net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 
 EOF
 ) |todos > $CDDIR/install/boot.bat
-fi
 
 fi
 
@@ -167,7 +161,9 @@ fi
 if [ "$NN" = "1" ]; then
     echo -n "boot$N " >> $N.mkisofs_opts
 else
-    echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+    if [ -n "$THISTYPE" ]; then
+	echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+    fi
 fi
 
 # th,th, thats all
