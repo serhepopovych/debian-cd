@@ -35,14 +35,7 @@ ln -sf install $CDDIR/boot
 # hurmpf, lets set bootdir to the current bootdisk set! -jwest
 BOOTDIR=1/dists/$CODENAME/main/disks-$ARCH/current/
 
-
-mkdir $CDDIR/install/sun4cdm
-mkdir $CDDIR/install/sun4u
-mkdir $CDDIR/install/sun4c
-
-cp -pr $BOOTDIR/sun4cdm/* $CDDIR/install/sun4cdm
-cp -pr $BOOTDIR/sun4u/* $CDDIR/install/sun4u
-cp -pr $BOOTDIR/sun4c/* $CDDIR/install/sun4c
+cp -pr $BOOTDIR/* $CDDIR/install
 
 cat - > $CDDIR/install/silo.conf << __EOF__
 partition=1
