@@ -1,6 +1,7 @@
 debian-cd (2.2.6) unstable; urgency=low
 
-  * UNRELEASED 
+  * UNRELEASED
+  * Updated tasks/base-woody to be in sync with debootstrap 0.1.15.
 
  -- Raphael Hertzog <hertzog@debian.org>  Tue, 19 Jun 2001 00:43:04 +0200
 
