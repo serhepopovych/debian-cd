@@ -24,7 +24,7 @@ fi
 cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
 mkdir $BDIR/1/install/$DOCDIR
 cp *.{html,txt} $BDIR/1/install/$DOCDIR/
-#ln -sf install*.html $BDIR/1/install/$DOCDIR/index.html
+ln -sf install*.html $BDIR/1/install/$DOCDIR/index.html
 
 # Put the boot-disk documentation in /doc too
 mkdir $BDIR/1/doc/install
