@@ -20,7 +20,7 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
     - Link the d-i INSTALLATION-HOWTO into doc/, if it exists.
     - Add my exclude_udebs lists, for general and i386, and modify
       generate_di_list to not include udebs from those lists onto the
-      cdrom, to save space on the netinst cds.
+      cdrom, to save space on the netinst cds. Closes: #215469
     - Use the d-i docs in sid instead of the woody boot floppies docs.
     - Add pcmcia-cs-udeb to sarge's i386_netinst_udeb_include, to support
       pcmcia installs.
@@ -55,6 +55,13 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       could try to install on the CD.
     - Try to include some sparc kernels on the CD; it's probably better than
       including none..
+    - Revamped the README.html, removing the old manual apt setup
+      instructions, various references to woody, fixing the link to the LDP
+      home page, dropping reference to the basically dead non-us section,
+      removing confusing references to non-free being on the CD, dropping
+      references to dselect, etc.
+    - Fix layout of README.txt, adding missing <p>'s after headings.
+    - Drop README.mirrors and README.non-US from the CDs.
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)

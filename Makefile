@@ -635,7 +635,8 @@ $(SDIR)/CD1/README.html:
 		cp -d $(MIRROR)/README* $$dir/; \
 		rm -f $$dir/README $$dir/README.html \
 			$$dir/README.CD-manufacture \
-			$$dir/README.pgp ; \
+			$$dir/README.pgp $$dir/README.mirrors.txt \
+			$$dir/README.mirrors.html $$dir/README.non-US; \
 		cpp -traditional -undef -P -C -Wall -nostdinc -I $$dir/ \
 		    -D OUTPUTtext $(BASEDIR)/data/$(CODENAME)/README.html.in \
 			| sed -e 's/%%.//g' > $$dir/README.html ; \

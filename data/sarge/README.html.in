@@ -186,15 +186,6 @@ CONTENTS:
 #endif
 
 #ifndef UNOFFEXTRAS
-<A href="#nonfree">Non-Free/Non-US</A>
-<P>
-
-#if OUTPUTtext
-</LI><LI>
-#endif
-#endif
-
-#ifndef UNOFFEXTRAS
 <A href="#cdmanuf">CD Manufacturers</A>
 <P>
 
@@ -248,7 +239,7 @@ Intro
 #endif
 </H2>
 </a>
-
+<p>
 This is one of the CD-ROMs of the
 <a href="http://www.debian.org/">Debian GNU/Linux</a>
 distribution. Debian is a
@@ -306,7 +297,7 @@ About This CD
 #endif
 </H2>
 </a>
-
+<p>
 This CD-ROM is labeled
 <P>
 <tt>&nbsp;
@@ -314,7 +305,7 @@ This CD-ROM is labeled
 </tt>
 <P>
 #ifndef UNOFFEXTRAS
-which means that this CD is number DISKNUM of totally TOTALNUM CDs containing
+which means that this CD is number DISKNUM of TOTALNUM CDs containing
 #if TYPEbinary
 programs ("binaries") for `ARCH' computers.
 <P>
@@ -349,8 +340,8 @@ Installing
 #endif
 </H2>
 </a>
-
-#if DISKNUM1 && TYPEbinary
+<p>
+#if TYPEbinary
 
  Because Debian is a complete Operating System, the installation procedure
  may seem a bit unusual. You can install Debian GNU/Linux either
@@ -360,22 +351,17 @@ Installing
  Read the <i>Installation Manual</i>, on this CD at
  <P>
  <tt>&nbsp;
- <A href="install/doc/install.en.html">/install/doc/install.en.html</a> &nbsp;&nbsp;&nbsp; </tt>
-					(English version).
- <P>
- Translations of the <i>Installation Manual</i>, and plain-text and PDF
- versions, are also available in the 
- <P>
- <tt>&nbsp;
- <A href="install/doc/">/install/doc</a></tt>
- <P>
- directory, along with various other documents.
+ <A href="install/doc/index.en.html">/install/doc/index.en.html</a> &nbsp;&nbsp;&nbsp; </tt>
  <P>
  Programs and other files that are needed for the installation can be found on
  this CD under
  <P>
  <tt>&nbsp;
- <A href=%%""dists/sarge/main/disks-ARCH/%%"">/dists/sarge/main/disks-ARCH</a>
+ <A href=%%""tools/%%"">/tools/</a>
+ </tt>
+ and
+ <tt>&nbsp;
+ <A href=%%""install/floppy/%%"">/install/floppy/</a>
  </tt>
 
 #if ARCHi386 || ARCHalpha || ARCHpowerpc || ARCHsparc
@@ -425,7 +411,7 @@ Installing
 #endif
  </H2>
  </a>
-
+ <p>
 #if DISKNUM1 && TYPEbinary
 
   If you are already running an older version of the Debian GNU/Linux
@@ -452,7 +438,7 @@ Last-Minute Notes
 #endif
 </H2>
 </a>
-
+<p>
 <UL>
 
 <LI>
@@ -481,27 +467,22 @@ Last-minutes notes for this CD may be available on
 #if OUTPUThtml
   <P><HR><P><H2><A name="apt">
 #endif
- Using CDs with Dselect and Apt
+ Using CDs Apt
 #if OUTPUTtext
   <br>
-  ==============================
+  =============
 #endif
  </H2>
  </a>
-
+ <p>
  After installing or upgrading, Debian's packaging system can use CD-ROMs,
  local collections, or networked servers (FTP, HTTP) to automatically
  install software from (<tt>.deb</tt> <i>packages</i>). This is done
- preferably with the `apt' and `dselect' programs. If you do not already
- know how to setup these, here is a brief explanation.
- <P>
-
-#define CDROMreadme	1
-#include "apt-setup.html.in"
+ preferably with the `apt' and `aptitude' programs. 
 
  <P>
 
- Once this is done, you can install packages from the commandline using
+ You can install packages from the commandline using
  <tt>apt-get</tt>. For example, if you want to install the packages
  `commprog' and `maxgame', you can give the command
  <P>
@@ -511,54 +492,12 @@ Last-minutes notes for this CD may be available on
  <P>
  Note that you don't have to enter the complete path, or the
  `<tt>.deb</tt>' extension. `Apt' will figure this out itself. 
-
  <P>
-
- `<tt>Dselect</tt>' is also able to use `apt' to fetch the packages. To set
- up `<tt>dselect</tt>', choose [A]ccess in the main menu, and then select
- `apt'. The <tt>sources.list</tt> file should be okay already, so don't let
- the program make a new one. Then, after an [U]pdate, the configuration is
- ready. You can just keep using [S]elect and [I]nstall to install packages. 
- <P>
- See <tt>dselect</tt>'s online help screens for more information (use the
- `<tt>?</tt>' key).
-
+ Or use aptitude for a full screen interactive selection of available
+ Debian packages.
+ 
 #endif
 
-
-#ifndef UNOFFEXTRAS
-#if OUTPUTtext
-<P>&nbsp;<P><H2><A name="nonfree">
-#endif
-#if OUTPUThtml
-<P><HR><P><H2><A name="nonfree">
-#endif
-Non-free and Non-US
-#if OUTPUTtext
-<br>
-===================
-#endif
-</H2>
-</a>
-
-The package sections `non-free' and `non-US' contain packages that either
-have a restrictive license, or can't be exported from the US (like `pgp'
-or `ssh'). It may well be that this CD does not contain (all of) these
-packages. You can get them from our FTP/HTTP mirror sites.
-
-<P>
-`Non-free' packages are on our "regular" mirrors, listed in
-<a href="README.mirrors.html">README.mirrors.html</a> on this CD, or on
-<a href="http://www.debian.org/distrib/ftplist">http://www.debian.org/distrib/ftplist</a> ("Full list of mirrors").
-
-<P>
-`Non-US' packages are on special mirrors outside the US, listed in
-<a href="README.non-US">README.non-US</a> on this CD, or on
-<a href="http://www.debian.org/misc/README.non-US">http://www.debian.org/misc/README.non-US</a>.
-
-<P>
-Note that you <i>are</i> allowed to <i>import</i> non-US packages into the US.
-#endif
 
 #ifndef UNOFFEXTRAS
 #if OUTPUTtext
@@ -574,8 +513,8 @@ CD Manufacturers
 #endif
 </H2>
 </a>
-
-You are completely free to manufacture and (re-)distribute CD-ROMs of the
+<p>
+You are completely free to manufacture and re-distribute CD-ROMs of the
 Debian GNU/Linux Operating System, like this one. There is no charge from
 us (but of course donations are always welcome). 
 
@@ -601,7 +540,7 @@ More Information
 #endif
 </H2>
 </a>
-
+<p>
 #if DISKNUM1 && TYPEbinary
 
 There is much more information present on this CD. Besides the already
@@ -699,10 +638,10 @@ http://www.debian.org/support
 <LI>
 
 #if OUTPUTtext
-http://www.linuxdoc.org
+http://www.tldp.org
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 #endif
-<A href="http://www.linuxdoc.org/">The Linux Documentation Project</a>
+<A href="http://www.tldp.org/">The Linux Documentation Project</a>
 
 </LI>
 <LI>
@@ -739,7 +678,7 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Wed Apr 18 19:09:34 CEST 2001
+Last Modified:  Sat Mar 20 12:30:45 EST 2004
 
 <br></SMALL>
 </DIV>
