@@ -119,10 +119,12 @@ cp -f $BASEDIR/data/yaboot/ofboot.b powermac/
 
 # Extract yaboot from the archive
 if [ -z "$YABOOT_DEBUG" ]; then
- (ar p $MIRROR/dists/$CODENAME/main/binary-powerpc/base/yaboot_* data.tar.gz | \
+    YADEB="$($BASEDIR/tools/apt-selection cache show yaboot | \
+	   grep ^Filename | awk '{print $2}')"
+    (ar p "${MIRROR}/${YADEB}" data.tar.gz | \
 	tar zxf - -C powermac ./usr/lib/yaboot/yaboot)
- mv powermac/usr/lib/yaboot/yaboot powermac/yaboot
- rm -rf powermac/usr
+    mv powermac/usr/lib/yaboot/yaboot powermac/yaboot
+    rm -rf powermac/usr
 else
  cp -f $YABOOT_DEBUG powermac/yaboot
 fi
