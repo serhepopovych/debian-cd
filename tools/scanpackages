@@ -34,6 +34,12 @@ cd "$2"
 
 if [ "$1" = "install" ]; then
 
+# these two lines can be inserted below the "Architectures" line below,
+# to sort out broken Release files just after the testing --> stable
+# transition
+#     sed -e "s/^Suite: .*$/Suite: stable/" | \
+#     sed -e "s/^Description: .*$/Description: Debian $DEBVERSION/" | \
+
 if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     # Strip the MD5Sum and SHA1 fields
     # Update some other information as well
