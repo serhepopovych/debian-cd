@@ -1,4 +1,4 @@
-%!slice -o (I386uUNDEFuNOT_*)\NOT_I386:useful.i386 -o (SPARCuUNDEFuNOT_*)\NOT_SPARC:useful.sparc -o (ALPHAuUNDEFuNOT_*)\NOT_ALPHA:useful.alpha -o (M68KuUNDEFuNOT_*)\NOT_M68K:useful.m68k -o (ARMuUNDEFuNOT_*)\NOT_ARM:useful.arm 
+%!slice -o (I386uUNDEFuNOT_*)\NOT_I386:useful.i386 -o (SPARCuUNDEFuNOT_*)\NOT_SPARC:useful.sparc -o (ALPHAuUNDEFuNOT_*)\NOT_ALPHA:useful.alpha -o (M68KuUNDEFuNOT_*)\NOT_M68K:useful.m68k -o (ARMuUNDEFuNOT_*)\NOT_ARM:useful.arm -o (POWERPCuUNDEFuNOT_*)\NOT_POWERPC:useful.powerpc
 
 [DONOTKEEP:
 # Do not touch the above line, except to add a new architecture.
@@ -383,6 +383,8 @@ zsh
 :M68K]
 [ARM:
 :ARM]
+[POWERPC:
+:POWERPC]
 [NOT_SPARC:
 :NOT_SPARC]
 [NOT_ALPHA:
@@ -393,4 +395,6 @@ zsh
 :NOT_I386]
 [NOT_ARM:
 :NOT_ARM]
+[NOT_POWERPC:
+:NOT_POWERPC]
 

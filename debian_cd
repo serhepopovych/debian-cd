@@ -36,6 +36,7 @@ CODENAME_STATUS=${CODENAME_STATUS:-unstable}
 # ARCH=m68k TDIR=~/m68k-tmp OUT=~/m68k-out ./debian_cd <options>
 # ARCH=alpha TDIR=~/alpha-tmp OUT=~/alpha-out ./debian_cd <options>
 # ARCH=sparc TDIR=~/sparc-tmp OUT=~/sparc-out ./debian_cd <options>
+# ARCH=powerpc TDIR=~/powerpc-tmp OUT=~/powerpc-out ./debian_cd <options>
 #
 # It's not pretty but it should work... (TM) :-) - look at the included 
 # "arch" script for an example.
@@ -1079,7 +1080,7 @@ if [ $error -eq 0 ] ; then
         mkdir -p boot1/boot
 
 		case "$ARCH"x in
-		"i386"x|"sparc"x|"m68k"x|"alpha"x)
+		"i386"x|"sparc"x|"m68k"x|"alpha"x|"powerpc"x)
 			vecho "ARCH is $ARCH, we know what to do. Continuing..."
 
 			$BASEDIR/boot-$ARCH $MIRROR $BASEDIR $TDIR $ARCH $VERBOSE $BOOTDIR
@@ -1120,6 +1121,11 @@ case "$ARCH"x in
 				mv $TDIR/cd1/install $TDIR/boot1
 			fi
 		fi
+		;;
+	"powerpc"x)
+		if [ -d boot1 ]; then
+			MKISOFS_OPTS_DISC1="-b install/prep/resc1440.bin -c install/prep/boot.catalog"
+		fi		
 		;;
 	"m68k"x)
 		if [ -d boot1 ]; then
