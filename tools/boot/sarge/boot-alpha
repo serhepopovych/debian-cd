@@ -3,22 +3,29 @@
 # Do install stuff for alpha, including making bootable CDs
 # Works with debian-installer
 #
-# Currently untested.
-
+#Vorlon:
+#
+#The following pieces are still missing:
+#
+#- MILO bootloader & images.  I have no way to test this directly, and
+#  haven't used MILO for years, so I'm giving this a pass on the first
+#  run.
+#- Floppy images.  Currently, debian-installer claims not to support
+#  the floppy target on alpha, which is arbitrary, but there may just not
+#  be any reason to continue supporting this install method.  Another
+#  decision that can be made later.
+#
 # $1 is the CD number
 # $2 is the temporary CD build dir
+
+. $BASEDIR/tools/boot/$CODENAME/common.sh
 
 set -e
 
 N=$1
 CDDIR=$2
+BOOTDIR=
 
-# FIXME
-# Change this to $ARCHIVE/dists/$CODENAME/main/disks-alpha/current/
-# when the images are known to work
-BOOTIMAGEDIR=http://people.debian.org/~mckinstry/d-i/images/alpha
-
-# 
 cd $CDDIR/..
 
 #
@@ -31,96 +38,47 @@ cd $CDDIR/..
 #
 NN=`echo $N | sed -e 's/_NONUS//'`
 
-# List of boot image for each CD
-KTYPE[1]="" #isolinux multiboot in fact
-KTYPE[2]="cdrom"
-KTYPE[3]="net"
-KTYPE[4]="cdrom144"
-KTYPE[5]=""
-KTYPE[6]=""
-KTYPE[7]=""
-KTYPE[8]=""
-KTYPE[9]=""
-KTYPE[10]=""
-
-THISTYPE=${KTYPE[$NN]}
-
 # Download boot images
-for image in cdrom.img cdrom-initrd.gz cdrom144.img cdrom144-initrd.gz net.img net-initrd.gz vmlinuz ; do
+# XXX: Driver floppies?  Any alpha that /has/ a CDROM should be able to
+# boot from it, so this would be pure convenience of distribution.
+#for image in cd_drivers-image.img cdrom-image.img cdrom-initrd.gz floppy-image.img floppy-initrd.gz net_drivers-image.img netboot-initrd.gz vmlinuz ; do
+
+for image in bootlx cdrom-initrd.gz cdrom-linux; do
     if [ ! -e "$image" ]; then
-            wget -q $BOOTIMAGEDIR/$image
+	# XXX: not really 'daily'...
+	wget -q http://people.debian.org/~vorlon/d-i/images/daily/$image
     fi
 done
 
-if [ "$NN" = "1" ]; then
-    echo "Using ISOLINUX boot-disks image on CD$N"
-    mkdir -p boot$N/isolinux
-    cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
-    cp -lf vmlinuz $CDDIR/install/
-    cp -lf cdrom-initrd.gz $CDDIR/install/cdrom.gz
-    cp -lf cdrom144-initrd.gz $CDDIR/install/cdrom144.gz
-    cp -lf net-initrd.gz $CDDIR/install/net.gz
-    echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
-else
-   if [ -n "$THISTYPE" ]; then
-     echo "Using $THISTYPE boot-disks image on CD$N"
-     mkdir -p boot$N/boot
-     cp $THISTYPE.img boot$N/boot/
-     echo -n "-cache-inodes -J -l -b boot/$THISTYPE.img "  > $N.mkisofs_opts
-  else
-     mkdir boot$N
-     echo -n "-cache-inodes -J -l " > $N.mkisofs_opts
-  fi
-fi
+if [ $NN = 1 ]; then
+    echo "Using $THISTYPE boot-disks image on CD$N"
+    mkdir -p boot$N/boot
+    cp bootlx cdrom-initrd.gz cdrom-linux boot$N/boot/
 
-
-
-# Only disk one gets the extra files installed
-#
-if [ "$NN" = "1" ]; then
-
-
-# populate the install directory as well
-cp -lf *.img $CDDIR/install
-
-
-# Taken from boot-i386
-cat > boot$N/isolinux/isolinux.cfg <<EOF
-DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=/install/cdrom.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-LABEL linux
-  kernel /install/vmlinuz
-LABEL cdrom
-  kernel /install/vmlinuz
-LABEL cdrom144
-  kernel /install/vmlinuz
-  append vga=normal initrd=/install/cdrom144.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-LABEL net
-  kernel /install/vmlinuz
-append vga=normal initrd=/install/net.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-DISPLAY isolinux.txt
-TIMEOUT 0
-PROMPT 1
-F1 f1.txt
-F2 f2.txt
-F3 f3.txt
-F4 f4.txt
-F5 f5.txt
-F6 f6.txt
-F7 f7.txt
-F8 f8.txt
-F9 f9.txt
-F0 f10.txt
+    mkdir -p boot$N/etc
+    cat <<EOF > boot$N/etc/aboot.conf
+0:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall
+1:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall console=ttyS0
+2:boot/cdrom-linux ramdisk_size=16384 initrd=/boot/cdrom-initrd.gz root=/dev/rd/0 devfs=mount,dall console=ttyS1
 EOF
 
-fi
+    echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
+    mkdir -p boot$N/milo
+    # XXX: we need to build milo first.
+    #cp linload.exe ldmilo.exe boot$N/milo
+    #cp -f $(ls MILO/milo_*.bin | sed 's,\(.*\)milo_\(.*\).bin,\1\2,') \
+    #     boot$N/milo/
 
-# write final lines to mkisofs_opts
-if [ "$NN" = "1" ]; then
+    # XXX: populate the install directory as well, if we want floppies.
+    #cp -lf *.img $CDDIR/install
+    #cp -lf floppy-initrd.gz $CDDIR/install
+
+    # write final lines to mkisofs_opts
     echo -n "boot$N " >> $N.mkisofs_opts
+
 else
-    if [ -n "$THISTYPE" ]; then
-       echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
-    fi
+    mkdir boot$N
+    echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
 fi
 
+#install_languages $CDDIR
