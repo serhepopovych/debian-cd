@@ -18,16 +18,15 @@ cat > debian-installer << EOF
 EOF
 
 for arch in $ARCHS ; do
-cat >> debian-installer << EOF
+  cat >> debian-installer << EOF
 #ifdef ARCH_$arch
 EOF
 
-
-grep-dctrl -s Package -n -e '.*' \
+  grep-dctrl -n -s Package '' \
   $MIRROR/dists/$CODENAME/main/debian-installer/binary-$arch/Packages \
   >> debian-installer
 
-cat >> debian-installer << EOF 
+  cat >> debian-installer << EOF
 #endif
 
 EOF
