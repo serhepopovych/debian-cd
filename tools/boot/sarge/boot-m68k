@@ -50,6 +50,7 @@ if [ ! "$DI_WWW_HOME" ];then
 	cp "$DI_DIR"/amiga/nativehd-vmlinuz* amiga/vmlinuz
 	cp "$DI_DIR"/mac/nativehd-vmlinuz* mac/vmlinuz
 	cp "$DI_DIR/cdrom-initrd.gz" root.bin
+	cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
 else
 	kernel_amiga=$(wget "$DI_WWW_HOME/amiga/" -O - | \
 	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-amiga\)".*/\1/p')
@@ -58,6 +59,7 @@ else
 	wget -O amiga/vmlinuz "$DI_WWW_HOME/amiga/$kernel_amiga"
 	wget -O mac/vmlinuz "$DI_WWW_HOME/mac/$kernel_mac"
 	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
+	wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"
 fi
 
 # Amiboot and dmesg need to be executable

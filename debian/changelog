@@ -49,6 +49,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
   * Stephen R. Marenka
     - Update m68k support for sarge.
 	- Fix m68k/amiga icons.
+	- Add 2.2 kernel-based cdrom initrd.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.
