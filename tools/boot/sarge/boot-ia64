@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# boot-ia64
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+. $BASEDIR/tools/boot/$CODENAME/common.sh
+
+set -e
+set -x
+
+N=$1
+CDDIR=$2
+BOOTDIR=
+
+cd $CDDIR/..
+
+# Only disc 1 bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then 
+	echo "-J" > $N.mkisofs_opts
+	exit 0; 
+fi
+
+# Download boot images
+for image in cdrom-image.img; do
+    if [ ! -e "$image" ]; then
+	wget -q http://people.debian.org/~jbailey/ia64/$image
+    fi
+done
+
+#install_languages $CDDIR
+
+mkdir -p boot$N/boot
+cp -f cdrom-image.img boot$N/boot/
+echo -n "-no-emul-boot -J -b boot/cdrom-image.img -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
+
+# done
+
