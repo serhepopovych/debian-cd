@@ -1,3 +1,9 @@
+debian-cd (2.2.17) UNRELEASED; urgency=low
+
+  * Removed debian/conffiles (useless with debhelper 4).
+
+ -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
+
 debian-cd (2.2.16) unstable; urgency=low
 
   * Updated standards-version to 3.6.0.
