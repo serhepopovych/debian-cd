@@ -28,28 +28,19 @@ mkdir -p boot1/boot
 
 echo -n "-J boot1" > 1.mkisofs_opts
 
-echo "extract aboot(bootlx) from sable set"
-echo dump srmbootcode boot1/boot/bootlx |\
-     debugfs $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/sable/resc1440.bin
-for subarch in avanti avanti-s xl xlt cabriolet eb66 eb66p eb64p eb164 pc164 \
-      lx164 sx164 jensen noname takara mikasa mikasa-p noritake noritake-p alcor miata \
-           sable sable-g  book1    ruffian; do      
- mkdir boot1/boot/$subarch
- echo "drive m: file=\"$CDDIR/dists/stable/main/disks-$ARCH/current/$subarch/resc1440.bin\"" > mtoolsrc.tmp
- echo "extracting stuff for $subarch"
- case $subarch in
-          jensen|noritake*|mikasa-p|sable*|book1|miata-s|avanti-s|generic)
-       echo dump linux boot1/boot/$subarch/linux |\
-          debugfs $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/$subarch/resc1440.bin
-       ;;
-       ruffian)
-         MTOOLSRC=$CDDIR/../mtoolsrc.tmp mcopy m:linux m:milo m:ldmilo.exe boot1/boot/$subarch/.
-   ;;         
-       *)
-         MTOOLSRC=$CDDIR/../mtoolsrc.tmp mcopy m:linux m:milo m:linload.exe boot1/boot/$subarch/.
-   ;;
-  esac
-done
+# Use the generic linux image
+cp $CDDIR/dists/stable/main/disks-$ARCH/current/linux \
+	boot1/boot/linux
+
+# Copy over the subarch boot-loaders
+mkdir boot1/milo
+cp $CDDIR/dists/stable/main/disks-$ARCH/current/MILO/* \
+	boot1/milo/
+
+# Now the APB stuff
+mkdir boot1/apb
+cp $CDDIR/dists/stable/main/disks-$ARCH/current/APB/* \
+	boot1/apb/
 
 mkdir $CDDIR/tools/rawrite1
 (cd $CDDIR/tools/rawrite1; \

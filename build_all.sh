@@ -20,8 +20,17 @@ do
 	echo " ... selecting packages to include"
 	disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
 	        awk '{print $1}'`
-	make list COMPLETE=1 SIZELIMIT1=$(((630 - ${disks}) * 1024 *1024)) \
-		SRCSIZELIMIT=$((635 * 1024 * 1024))
+	if [ -f $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc ]; then
+	    . $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc
+	fi
+	SIZE_ARGS=''
+	for CD in 1 2 3 4; do
+		size=`eval echo '$'"BOOT_SIZE_${CD}"`
+		[ "$size" = "" ] && size=0
+		[ $CD = "1" ] && size=$(($size + $disks))
+		SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$(((630 - $size) * 1024 *1024))"
+	done
+	make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$((635 * 1024 * 1024))
 	echo " ... building the images"
 	if [ "$ARCH" = "i386" ]; then
 		make official_images

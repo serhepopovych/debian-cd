@@ -9,6 +9,9 @@ debian-cd (2.2.1) frozen unstable; urgency=low
   * Added EXTRANONFREE support. It allows to generate an extra non-free CD.
     The first CDs are totally free and the last(s) CD(s) contains 
     only non-free and possibly some files from contrib.
+  * Added extra file to help fine tune the CD sizes per archs
+  * Edited boot-alpha to work (I hope) based on what was available in the
+    README.txt in boot-floppies
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 
