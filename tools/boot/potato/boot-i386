@@ -43,7 +43,7 @@ if [ $N == "6_NONUS" ] || [ $N == "6" ] ; then NN=6 ; fi
 KTYPE[1]=""
 KTYPE[2]=compact
 KTYPE[3]=idepci
-KTYPE[4]=""
+KTYPE[4]="udma66"
 KTYPE[5]=""
 KTYPE[6]=""
 
