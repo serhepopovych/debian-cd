@@ -1,6 +1,0 @@
-# ext. xlate  creator  type    comment
-.hqx   Ascii  'BnHx'   'TEXT'  "BinHex file"
-.mov   Raw    'TVOD'   'MooV'  "QuickTime Movie"
-.deb   Raw    'Debn'   'bina'  "Debian package"
-.bin   Raw    'Debn'   'bina'  "Floppy or ramdisk image"
-*      Ascii  'ttxt'   'TEXT'  "Text file"
