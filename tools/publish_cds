@@ -7,7 +7,16 @@
 
 # This script creates the md5sums files, using the precalculated md5sums
 # from the main archive
-# First arg = the place that gets published as http://.../debian-cd/
+#
+# First arg = the version directory name to target
+#
+# subsequent optional arguments are the architectures to publish
+# If omited, the script will use all the directories in the $OUT
+# directory as the architectures to publish.
+#
+# For example:
+#     ./tools/publish_cds 3.0-pre2 i386 src m68k
+#
 
 use strict;
 use MIME::Base64;

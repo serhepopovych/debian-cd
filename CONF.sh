@@ -26,6 +26,8 @@ unset JIGDOTEMPLATEURL
 unset DEFBINSIZE
 unset DEFSRCSIZE
 unset FASTSUMS
+unset PUBLISH_URL
+unset PUBLISH_PATH
 
 
 # The debian-cd dir
@@ -170,4 +172,9 @@ export DEFSRCSIZE=635
 # If set, use the md5sums from the main archive, rather than calculating
 # them locally
 #export FASTSUMS=1
+
+# a couple of things used by publish_cds, so it can twaek the jigdo files,
+# and knows where to put the results
+export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
+export PUBLISH_PATH="/home/jigdo-area/"
 
