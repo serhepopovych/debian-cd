@@ -1,3 +1,9 @@
+debian-cd (2.2.15) unstable; urgency=low
+
+  * UNRELEASED.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 28 Apr 2002 16:04:24 +0200
+
 debian-cd (2.2.14) unstable; urgency=high
 
   * Updated the script to update tasks/base-woody. Closes: #138651
