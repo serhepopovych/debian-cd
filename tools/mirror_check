@@ -22,6 +22,7 @@ while (defined($_ = <>)) {
 	next if not $p;
 	
 	$file = ( ( -e "$mirror/$filename" ) ? "$mirror/$filename" :
+		  ( exists $ENV{LOCALDEBS} && -e "$ENV{LOCALDEBS}/$filename" ) ? "$ENV{LOCALDEBS}/$filename" :
 		  ( -e "$nonus/$filename" ) ? "$nonus/$filename" :
 		  "$security/$filename" );
 	

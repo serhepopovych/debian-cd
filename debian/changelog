@@ -18,6 +18,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Include only 2.4 ia64 kernels on the d-i CD for now, the 2.6 ones
       are not a good choice ATM according to bdale.
     - silo.conf fixes.
+    - Fix mirror_check to look under LOCALDEBS for files if it is set.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
@@ -48,9 +49,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Update list2cds to allow #-comments in the exclude file.
   * Stephen R. Marenka
     - Update m68k support for sarge.
-	- Fix m68k/amiga icons.
-	- Add 2.2 kernel-based cdrom initrd.
-	- Redo m68k subarch boot/install for sarge.
+        - Fix m68k/amiga icons.
+        - Add 2.2 kernel-based cdrom initrd.
+        - Redo m68k subarch boot/install for sarge.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.
