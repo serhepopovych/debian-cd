@@ -18,8 +18,10 @@ cd $CDDIR/..
 
 :> $N.mkisofs_opts
 
-# Disk 1 only
-[ "$N" = 1 ] || exit 0
+# Only disc 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then 
+	exit 0; 
+fi
 
 echo "-B boot/second.b boot1" > $N.mkisofs_opts
 rm -rf boot1
@@ -34,7 +36,7 @@ mkdir -p $inst/{boot/sun4{u,cdm},etc}
 	tar zxf - -C $inst/ ./boot/{cd,second}.b)
 
 # Some custom etc files
-cp -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
+cp -f -p $BASEDIR/tools/boot/potato/sparc-etc/{boot-msg.txt,debian.txt,silo.conf} \
 	$inst/etc/
 
 tmp=/var/tmp/debian_cd
@@ -48,7 +50,7 @@ done
 
 # Unpack the root tree into the directory. we use the tftp root.tar.gz
 tar zxf $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/root.tar.gz -C $tmp/
-cp -a $tmp/debian-sparc-root/. $inst/
+cp -f -a $tmp/debian-sparc-root/. $inst/
 
 # no longer need this
 rm -rf $tmp

@@ -6,19 +6,20 @@
 
 set -e
 
-BDIR=$TDIR/$CODENAME-$ARCH
+# The location of the tree for CD#1, passed in
+DIR=$1
 
 DOCDIR=doc
 
 # Put the install documentation in /install
-cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
-mkdir $BDIR/1/install/$DOCDIR
-cp -a * $BDIR/1/install/$DOCDIR/
-ln -sf install.en.html $BDIR/1/install/$DOCDIR/index.html
+cd $DIR/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
+mkdir $DIR/install/$DOCDIR
+cp -a * $DIR/install/$DOCDIR/
+ln -sf install.en.html $DIR/install/$DOCDIR/index.html
 
 # Put the boot-disk documentation in /doc too
-mkdir $BDIR/1/doc/install
-cd $BDIR/1/doc/install
+mkdir $DIR/doc/install
+cd $DIR/doc/install
 for file in ../../install/$DOCDIR/*.{html,txt}
 do
 	ln -s $file

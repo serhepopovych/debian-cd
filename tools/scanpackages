@@ -9,8 +9,12 @@
 
 #set -e
 
-PREFIX=$2
+BDIR=$TDIR/$CODENAME-$ARCH
+
+PREFIX=`echo $2 | sed "s?$BDIR/CD?$BDIR/?"`
+
 NUM=${PREFIX##$TDIR/$CODENAME-$ARCH/}
+NUM=`echo $NUM | sed 's/_NONUS//g'`
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
   SECTIONS="main contrib non-free"
 else
@@ -42,7 +46,10 @@ for SECT in $SECTIONS; do
 	fi
 	# Install the Packages.cd and Packages.cd.gz files
 	# Each CD know about all prior CDs
-	for i in $TDIR/$CODENAME-$ARCH/*.packages; do
+	# We use "?.packages" here so that we always use US-safe
+	# packages files only - we don't want later (supposedly
+	# common) CDs having dependencies on a non-US CD#1...
+	for i in $TDIR/$CODENAME-$ARCH/?.packages; do
 		dir=${i%%.packages}
 		n=${dir##$TDIR/$CODENAME-$ARCH/}
 		if [ $n -le $NUM ]; then

@@ -7,6 +7,10 @@
 /* The potato CD set does now use empty package called task-*
    to select the packages in the initial installation */
 
+#if (FORCENONUSONCD1 == 1)
+#include "Debian_potato_nonUS"
+#endif
+
 task-dialup
 task-dialup-isdn
 task-newbie-help

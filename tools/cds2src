@@ -17,6 +17,7 @@ my $limit = $ENV{'SRCSIZELIMIT1'} || $deflimit;
 my $nonfree = $ENV{'NONFREE'} || 0;
 my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $nonus = $ENV{'NONUS'} || 0;
+my $forcenonusoncd1 = $ENV{'FORCENONUSONCD1'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 
@@ -44,6 +45,8 @@ my %bin2src;
 my %sources;
 my %included;
 my %excluded;
+my @nonuslist=();
+my %includesrc;
 
 # Get the information from the good Sources.gz files
 my @SOURCES = ("$mirror/dists/$codename/main/source/Sources.gz",
@@ -85,7 +88,7 @@ while (defined($_ = <SOURCES>)) {
 	next if not m/^Package: (\S+)\s*$/m;
 	$p = $1;
 	$included{$p} = 0;
-	 $sources{$p}{"Package"} = $p;
+	$sources{$p}{"Package"} = $p;
 	foreach $re (qw/Binary Version Section Directory/) {
 		(m/^$re: (.*?)\s*$/m and $sources{$p}{$re} = $1)
 		|| msg(1, "Header field '$re' missing for source '$p'\n");
@@ -101,6 +104,11 @@ while (defined($_ = <SOURCES>)) {
 		$excluded{$p} = "nonfree";
 	} else {
 		$excluded{$p} = 0;
+	}
+	# Generate the list of non-US source packages
+	if (($sources{$p}{"Directory"} =~ /non-US/)) 
+	{
+	    push @nonuslist, $p;
 	}
 	# Match between source & binary packages
 	foreach $bin (split (/,\s+/, $sources{$p}{"Binary"})) {
@@ -126,20 +134,65 @@ $/ = $oldrs;
 # Get the list of included packages
 my @list = ();
 my $i = 1;
+my $infile;
 while (-e "$bdir/$i.packages") {
-	open (LIST, "< $bdir/$i.packages") || die "Can't open $file ...\n";
-	while (defined($_ = <LIST>)) {
-		chomp;
-		push @list, $_;
-	}
-	close LIST;
-	$i++;
+    my $nonusfile = sprintf("%s/%d_NONUS.packages", $bdir, $i);
+    if(-e "$nonusfile") {
+        $infile = $nonusfile;
+    } else {
+        $infile = "$bdir/$i.packages";
+    }
+
+    print "Using package file $infile\n";
+    open (LIST, "< $infile") || die "Can't open $infile ...\n";
+
+    while (defined($_ = <LIST>)) {
+        chomp;
+        push @list, $_;
+    }
+    close LIST;
+    $i++;
 }
 msg(0, "ERROR: No source packages for the CD !\n") if not @list;
 
 # Calculate what files go on which CD
 my (%cds);
 my ($cd, $cd_size, $total_size, $src) = (1, 0, 0);
+
+# Add non-US stuff to CD#1 first if we have been asked to...
+# "complete" means also add non-US sources that don't have binary packages...
+if($forcenonusoncd1) {
+    if(!$complete) {
+        foreach (@list) {
+	  if(not exists $bin2src{$_}) {
+	      next;
+	  }
+	  $includesrc{$bin2src{$_}} = 1;
+        }
+    }
+
+    foreach $src (@nonuslist) 
+    {
+        if (! ($complete or $includesrc{$src}))
+        {
+	  msg(1, "Non-US source package $src doesn't need to be included !\n");
+	  next;
+        }
+        msg(1, "Asked to add non-US source $src to source CD#1\n");
+        if (not exists $included{$src}) {
+	  msg(0, "ERROR: Non-US source `$src' does not exist ... (ignored)\n");
+	  next;
+        }
+        if ($excluded{$src}) {
+	  msg(1, "...but not doing so - $excluded{$src}\n");
+	  next;
+        }
+        next if $included{$src};
+        add_src ($src);
+    }
+}
+
+# And then the rest
 foreach $p (@list) {
 	if (not exists $bin2src{$p}) {
 		msg(1, "WARNING: Package `$p' has no sources ... (ignored)\n");
@@ -155,6 +208,7 @@ foreach $p (@list) {
 	add_src ($src);
 }
 
+# And now any remaining sources that don't have binary packages
 if ($complete) {
     msg(0, "Now we'll add the sources not yet included ...\n");
     foreach $p (sort { ($sources{$a}{"Section"} cmp $sources{$b}{"Section"})

@@ -100,6 +100,12 @@ The process of building a CD is decomposed as follow :
   - if NONUS is set, then packages from non-US will be allowed (remember
     that the value of NONUS must be the path to the non-US mirror
     if you have one)
+  - if FORCENONUSONCD1 is set also, then packages will be
+    rearranged so that non-US packages are all on CD#1. This
+    includes the non-free ones if you specify NONFREE. Then 2 separate
+    copies of CD#1 will be produced, identical in every respect except
+    for the inclusion/lack of non-US packages. The same happens for
+    the source CDs when they are built.
   - if NONFREE is set, then packages from non-free will be allowed
     (NONFREE must be exported to all sub-shells)
   - if EXTRANONFREE is set, then non-free packages will be included

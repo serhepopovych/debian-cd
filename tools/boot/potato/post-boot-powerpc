@@ -19,8 +19,8 @@ CDIMAGE=$3
 
 cd $CDROOT/..
 
-# Only disk 1 bootable
-if [ $N != 1 ]; then
+# Only disk 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0
 fi
 

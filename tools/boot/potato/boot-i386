@@ -24,18 +24,18 @@ cd $CDDIR/..
 # Compact image for disk 2
 if [ $N == 2 ]; then
 	:> 2.mkisofs_opts
-	if [ -e 1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] 
+	if [ -e CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] 
 	then
 	  mkdir -p boot2/boot
-	  cp 1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin boot2/boot/
+	  cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin boot2/boot/
 	  echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot2" \
 		        > 2.mkisofs_opts
 	fi
 	exit 0;
 fi
 
-# Disks != 1 and not 2
-if [ $N != 1 ]; then 
+# Disks != 1* and not 2
+if [ $N != 1 -a $N != 1_NONUS ]; then 
 	echo -n "-J" > $N.mkisofs_opts
 	exit 0; 
 fi
@@ -43,12 +43,12 @@ fi
 # Now we do disk 1 ...
 # couple of changes for 2.2.x bootdisks 27-dec-99 -- jwest
 
-echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
+echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > $N.mkisofs_opts
 
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp images-1.44/resc*.bin  $CDDIR/install ; \
-	cp linux  $CDDIR/install ; \
-	cp images-1.44/root.bin $CDDIR/install )
+	cp -f images-1.44/resc*.bin  $CDDIR/install ; \
+	cp -f linux  $CDDIR/install ; \
+	cp -f images-1.44/root.bin $CDDIR/install )
 
 mkdir -p boot1/boot
 
@@ -64,12 +64,12 @@ mkdir -p boot1/boot
 #	rm /tmp/root.bin.uncompressed  )
 ## end notes
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/boot
+cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/boot
 
 
 #Extracting tools for disc 1
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
+cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
 
 (echo "Tools for DOS :" ; \
 	echo "lodlin/         load Linux kernel from DOS" ;\

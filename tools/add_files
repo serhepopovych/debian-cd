@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 # First arg, the root of the destination
-# Second arg, the roof of the source
+# Second arg, the root of the source
 # Other args, the directories/files to copy (relative to the root source)
 
 use strict;

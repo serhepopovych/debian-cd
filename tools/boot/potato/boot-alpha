@@ -17,8 +17,7 @@ CDDIR=$2
 cd $CDDIR/..
 
 # Only disc 1 bootable
-
-if [ $N != 1 ]; then 
+if [ $N != 1 -a $N != 1_NONUS ]; then 
 	echo "-J" > $N.mkisofs_opts
 	exit 0; 
 fi
@@ -26,20 +25,20 @@ fi
 # Hack for bootable disks
 mkdir -p boot1/boot
 
-echo -n "-J boot1" > 1.mkisofs_opts
+echo -n "-J boot1" > $N.mkisofs_opts
 
 # Use the generic linux image
-cp $CDDIR/dists/stable/main/disks-$ARCH/current/linux \
+cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/linux \
 	boot1/boot/linux
 
 # Copy over the subarch boot-loaders
 mkdir boot1/milo
-cp $CDDIR/dists/stable/main/disks-$ARCH/current/MILO/* \
+cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/MILO/* \
 	boot1/milo/
 
 # Now the APB stuff
 mkdir boot1/apb
-cp $CDDIR/dists/stable/main/disks-$ARCH/current/APB/* \
+cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/APB/* \
 	boot1/apb/
 
 mkdir $CDDIR/tools/rawrite1
@@ -57,7 +56,7 @@ mkdir $CDDIR/tools/rawrite2
    echo "         rawrite 2.0 is much faster, but it locks up on some machines";\
    ) |todos > $CDDIR/tools/README.tools
 
-cp $CDDIR/tools/rawrite1/rawrite3.com $CDDIR/install/rw1_3.com
-cp $CDDIR/tools/rawrite2/rawrite2.exe $CDDIR/install/rw2_0.exe
+cp -f $CDDIR/tools/rawrite1/rawrite3.com $CDDIR/install/rw1_3.com
+cp -f $CDDIR/tools/rawrite2/rawrite2.exe $CDDIR/install/rw2_0.exe
 
 exit 0

@@ -19,8 +19,8 @@ CDROOT=$2
 
 cd $CDROOT/..
 
-# Only disk 1 bootable
-if [ $N != 1 ]; then
+# Only disk 1* bootable
+if [ $N != 1 -a $N != 1_NONUS ]; then
 	echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
 	        > $N.mkisofs_opts
 	exit 0
@@ -59,49 +59,49 @@ cd $INSTALLDIR
 #--------------- APUS - Stuff -------------------------------
 #echo Installing APUS files
 mkdir apus
-cp $DISKSROOT/apus/linux apus
-cp $DISKSROOT/apus/images-1.44/root.bin apus
-cp $DISKSROOT/apus/images-1.44/rescue.bin apus
+cp -f $DISKSROOT/apus/linux apus
+cp -f $DISKSROOT/apus/images-1.44/root.bin apus
+cp -f $DISKSROOT/apus/images-1.44/rescue.bin apus
 
 #--------------- CHRP - Stuff -------------------------------
 echo Installing CHRP files
 mkdir chrp
-cp $DISKSROOT/chrp/linux chrp
-cp $DISKSROOT/chrp/images-1.44/root.bin chrp
-cp $DISKSROOT/chrp/images-1.44/rescue.bin chrp
+cp -f $DISKSROOT/chrp/linux chrp
+cp -f $DISKSROOT/chrp/images-1.44/root.bin chrp
+cp -f $DISKSROOT/chrp/images-1.44/rescue.bin chrp
 
 #-------------- Common - Stuff ------------------------------
 #echo Installing Common files
 #mkdir common
-#cp $DISKSROOT/common/linux common
-#cp $DISKSROOT/common/images-1.44/root.bin common
-#cp $DISKSROOT/common/images-1.44/rescue.bin common
+#cp -f $DISKSROOT/common/linux common
+#cp -f $DISKSROOT/common/images-1.44/root.bin common
+#cp -f $DISKSROOT/common/images-1.44/rescue.bin common
 
 #---------------- MBX - Stuff -------------------------------
 #echo Installing MBX files
 #mkdir mbx
-#cp $DISKSROOT/mbx/linux mbx
-#cp $DISKSROOT/mbx/images-1.44/root.bin mbx
-#cp $DISKSROOT/mbx/images-1.44/rescue.bin mbx
+#cp -f $DISKSROOT/mbx/linux mbx
+#cp -f $DISKSROOT/mbx/images-1.44/root.bin mbx
+#cp -f $DISKSROOT/mbx/images-1.44/rescue.bin mbx
 
 #--------------- PMac - Stuff -------------------------------
 echo Installing Power-Macintosh files
 mkdir powermac
-cp $DISKSROOT/powermac/linux powermac/vmlinux
-cp $DISKSROOT/powermac/images-1.44/root.bin powermac/
-cp $DISKSROOT/powermac/images-1.44/boot-floppy-hfs.img powermac/
+cp -f $DISKSROOT/powermac/linux powermac/vmlinux
+cp -f $DISKSROOT/powermac/images-1.44/root.bin powermac/
+cp -f $DISKSROOT/powermac/images-1.44/boot-floppy-hfs.img powermac/
 
-cp $DISKSROOT/powermac/BootX* powermac/
-cp $DISKSROOT/powermac/bootvars* powermac/
+cp -f $DISKSROOT/powermac/BootX* powermac/
+cp -f $DISKSROOT/powermac/bootvars* powermac/
 
 # Completely useless!  It's an ext2 floppy... how is that supposed to boot?
-# cp $DISKSROOT/powermac/images-1.44/rescue.bin powermac/
+# cp -f $DISKSROOT/powermac/images-1.44/rescue.bin powermac/
 
 # New-world bootability
 # This works in a subdirectory via an ugly hack; fix yaboot.
 cat $BASEDIR/data/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > powermac/yaboot.conf
-cp $BASEDIR/data/yaboot/ofboot.b powermac/
+cp -f $BASEDIR/data/yaboot/ofboot.b powermac/
 
 # Extract yaboot from the archive
 if [ -z "$YABOOT_DEBUG" ]; then
@@ -110,21 +110,21 @@ if [ -z "$YABOOT_DEBUG" ]; then
  mv powermac/boot/yaboot powermac/yaboot
  rmdir powermac/boot
 else
- cp $YABOOT_DEBUG powermac/yaboot
+ cp -f $YABOOT_DEBUG powermac/yaboot
 fi
 
 #--------------- PReP - Stuff -------------------------------
 echo Installing PReP files
 mkdir prep
-cp $DISKSROOT/prep/linux prep
-cp $DISKSROOT/prep/images-1.44/boot.bin prep
-cp $DISKSROOT/prep/images-1.44/root.bin prep
-cp $DISKSROOT/prep/images-1.44/rescue.bin prep
+cp -f $DISKSROOT/prep/linux prep
+cp -f $DISKSROOT/prep/images-1.44/boot.bin prep
+cp -f $DISKSROOT/prep/images-1.44/root.bin prep
+cp -f $DISKSROOT/prep/images-1.44/rescue.bin prep
 
 #=============== fix a few things up... =====================
 echo Installing PowerPC FAQ and tools
 #mkdir common
 #mv basecont.txt.info common
 #mv ../README.info ../README.powerpc.info
-#cp ../README.1ST.info ../README.multicd.info
+#cp -f ../README.1ST.info ../README.multicd.info
 
