@@ -46,3 +46,6 @@ ntpdate
 hdparm
 jfbterm
 unifont
+hotplug
+console-cyrillic
+console-terminus

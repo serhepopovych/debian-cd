@@ -7,6 +7,7 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
   * Kenshi Muto
     - Add jfbterm, unifont into forcd1, d-i+kernel (second stage of debian-installer needs
       them).
+    - Add console-cyrillic, console-terminus, hotplug into forcd1, d-i+kernel.
   * Joey Hess
     - Merge in d-i iso/syslinux help files from d-i CVS to data/sarge.
       Expand ${DEBIAN_VERSION}, ${MEDIA_TYPE}, and ${BUILD_DATE}

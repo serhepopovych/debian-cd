@@ -25,6 +25,9 @@ lvm10
 aptitude
 jfbterm
 unifont
+hotplug
+console-cyrillic
+console-terminus
 #ifdef ARCH_i386
 EOF
 
