@@ -20,12 +20,12 @@ do
 		exit 1
 	fi
 	echo " ... selecting packages to include"
-    if [ -e ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. ] ; then
-            disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
+	if [ -e ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. ] ; then
+		disks=`du -sm ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. | \
 				awk '{print $1}'`
-    else
-            disks=0
-    fi
+	else
+		disks=0
+	fi
 	if [ -f $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc ]; then
 	    . $BASEDIR/tools/boot/$CODENAME/boot-$ARCH.calc
 	fi
@@ -34,9 +34,11 @@ do
 		size=`eval echo '$'"BOOT_SIZE_${CD}"`
 		[ "$size" = "" ] && size=0
 		[ $CD = "1" ] && size=$(($size + $disks))
-		SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$(((630 - $size) * 1024 *1024))"
+        FULL_SIZE=`echo "($DEFBINSIZE - $size) * 1024 * 1024" | bc`
+        SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$FULL_SIZE"
 	done
-	make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$((635 * 1024 * 1024))
+    FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`
+    make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 	echo " ... building the images"
 	if [ "$ARCH" = "i386" ]; then
 		export OUT="$TMP_OUT/$ARCH"; mkdir -p $OUT

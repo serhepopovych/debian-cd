@@ -80,6 +80,7 @@ add_files=$(BASEDIR)/tools/add_files
 set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 strip_nonus_bin=$(BASEDIR)/tools/strip-nonUS-bin
 add_secured=$(BASEDIR)/tools/add_secured
+md5sum=/usr/bin/md5sum.textutils
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
 ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
@@ -680,7 +681,7 @@ $(BDIR)/CD1/md5sum.txt:
 		cd $$dir; \
 		find . -follow -type f | grep -v "\./md5sum" | grep -v \
 		"dists/stable" | grep -v "dists/frozen" | \
-		grep -v "dists/unstable" | xargs md5sum > md5sum.txt ; \
+		grep -v "dists/unstable" | xargs $(md5sum) > md5sum.txt ; \
 	done
 src-md5list: ok sources src-secured $(SDIR)/CD1/md5sum.txt
 $(SDIR)/CD1/md5sum.txt:
@@ -693,7 +694,7 @@ $(SDIR)/CD1/md5sum.txt:
 		cd $$dir; \
 		find . -follow -type f | grep -v "\./md5sum" | grep -v \
 		"dists/stable" | grep -v "dists/frozen" | \
-		grep -v "dists/unstable" | xargs md5sum > md5sum.txt ; \
+		grep -v "dists/unstable" | xargs $(md5sum) > md5sum.txt ; \
 	done
 
 # Generate $CODENAME-secured tree with Packages and Release(.gpg) files
@@ -904,7 +905,7 @@ src-image: ok src-md5list $(OUT)
 #Calculate the md5sums for the images (if available), or get from templates
 imagesums:
 	$(Q)cd $(OUT); :> MD5SUMS; for file in `find * -name \*.raw`; do \
-		md5sum $$file >>MD5SUMS; \
+		$(md5sum) $$file >>MD5SUMS; \
 	done; \
 	for file in `find * -name \*.template`; do \
 		if [ "`tail --bytes=29 "$$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 01 ]; then \

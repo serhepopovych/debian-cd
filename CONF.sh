@@ -22,6 +22,8 @@ unset NOSUGGESTS
 unset DOJIGDO
 unset JIGDOCMD
 unset JIGDOTEMPLATEURL
+unset DEFBINSIZE
+unset DEFSRCSIZE
 
 
 # The debian-cd dir
@@ -114,6 +116,12 @@ export APTTMP=/ftp/tmp/apt
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work
 #ATTEMPT_FALLBACK=yes
+
+# Set your disk size here in MB. Used in calculating package and
+# source file layouts in build.sh and build_all.sh. Defaults are for
+# CD-R, try ~4600 for DVD-R.
+export DEFBINSIZE=630
+export DEFSRCSIZE=635
 
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE="$BASEDIR"/tasks/exclude-potato

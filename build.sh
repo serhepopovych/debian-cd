@@ -29,9 +29,11 @@ for CD in 1 2 3 4 5 6 7 8; do
 	size=`eval echo '$'"BOOT_SIZE_${CD}"`
 	[ "$size" = "" ] && size=0
 	[ $CD = "1" ] && size=$(($size + $disks))
-	SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$(((630 - $size) * 1024 *1024))"
+    FULL_SIZE=`echo "($DEFBINSIZE - $size) * 1024 * 1024" | bc`
+	SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$FULL_SIZE"
 done
-make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$((635 * 1024 * 1024))
+FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`
+make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 echo " ... building the images"
 make official_images
 

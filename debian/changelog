@@ -18,6 +18,10 @@ debian-cd (2.2.14) unstable; urgency=low
     second "compact", third "bf2.4" and fourth the old default one. At
     least we have the language chooser on the first CD but it's still
     2.2 based. Reworked the MULTIBOOT code to take this into account.
+  * Added capability to generate DVD-sized images. Use bc to calculate
+    disk sizes in build.sh and build_all.sh, and use the textutils
+    version of md5sum to avoid missing large file support in dpkg
+    version. Specify the output image sizes in CONF.sh
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat,  6 Apr 2002 10:26:42 +0200
 
