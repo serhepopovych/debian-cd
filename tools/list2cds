@@ -23,6 +23,7 @@ my $complete = $ENV{'COMPLETE'} || 0;
 my $exclude = "$list.exclude";
 my $norecommends = $ENV{'NORECOMMENDS'} || 0;
 my $nosuggests = $ENV{'NOSUGGESTS'} || 1;
+my $maxcds = $ENV{'MAXCDS'} || 0;
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
 my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
@@ -284,7 +285,14 @@ foreach (glob("$dir/*.packages")) {
 }
 
 # Now write the lists down
+my $numcds=0;
 foreach (sort { $a <=> $b } keys %cds) {
+	if ($maxcds && $numcds+1 > $maxcds) {
+		msg(0, "Stopping at CD $numcds\n");
+		last;
+	}
+	$numcds++;
+	
 	my $count = 0;
 	open(CDLIST, "> $dir/$_.packages") 
 			|| die "Can't write in $dir/$_.packages: $!\n";

@@ -27,6 +27,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       of hw-detect.
     - Add tools/get_diskusage.pl (originally by Petter).
     - Add update-popcon Makefile target (taken from Skolelinux).
+    - Add MAXCDS config variable, which forces debian-cd to stop after a given
+      number of binary CDs.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we

@@ -41,6 +41,7 @@ unset BASE_INCLUDE      || true
 unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
 unset DI_CODENAME       || true
+unset MAXCDS		|| true
 
 
 # The debian-cd dir
@@ -261,3 +262,6 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer)
 # INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel)
 #export INSTALLER_CD=0
+
+# If set, limits the number of binary CDs to produce.
+#MAXCDS=1
