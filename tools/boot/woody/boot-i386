@@ -27,15 +27,11 @@ cd $CDDIR/..
 # make bootable.  N may be in the form "n" or "n_NONUS"
 # There may be more than 4 disks...support extras.
 
-# Strip stupid NONUS sutff
+# Strip NONUS part of disk number
+# NN will be 1...N so it can be used as an index
 #
-if [ $N == "1_NONUS" ] || [ $N == "1" ] ; then NN=1 ; fi
-if [ $N == "2_NONUS" ] || [ $N == "2" ] ; then NN=2 ; fi
-if [ $N == "3_NONUS" ] || [ $N == "3" ] ; then NN=3 ; fi
-if [ $N == "4_NONUS" ] || [ $N == "4" ] ; then NN=4 ; fi
-if [ $N == "5_NONUS" ] || [ $N == "5" ] ; then NN=5 ; fi
-if [ $N == "6_NONUS" ] || [ $N == "6" ] ; then NN=6 ; fi
-# NN is now 1...N so it can be used as an index
+NN=`echo $N | sed 's/_NONUS//'`
+
 
 # what kernel-type to put on what disk?
 # a null "" value will use the default boot-disk kernel
@@ -46,6 +42,8 @@ KTYPE[3]="idepci"
 KTYPE[4]="ide"
 KTYPE[5]="udma100-ext3"
 KTYPE[6]="reiserfs"
+KTYPE[6]=""
+KTYPE[6]=""
 
 # Show user what is going on.
 #
@@ -72,18 +70,6 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 	cp -f ide/linux $CDDIR/install/linide ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
-
-##	24-Mar-2000 notes from Ben Collins on using cd as live file-system
-##	for 2.2.9 bootdisks	
-# (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/ ; \
-#	gzip -dc root.bin > /tmp/root.bin.uncompressed ; \
-#	mount -o loop /tmp/root.bin.uncompressed /mnt ; \
-#	touch /mnt/cdrom_image ; \
-#	umount /mnt ; \
-#	sync ; \
-#	gzip -c9 /tmp/root.bin.uncompressed > $CDDIR/install/root.bin ; \
-#	rm /tmp/root.bin.uncompressed  )
-## end notes
 
 
 # Tools for disc 1
