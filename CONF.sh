@@ -10,7 +10,7 @@ export BASEDIR=`pwd`
 export CODENAME=potato
 
 # ... for arch  
-export ARCH=powerpc
+export ARCH=`dpkg --print-installation-architecture`
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
 #	      If they aren't then you must set COPYLINK below to 1. This
@@ -18,20 +18,20 @@ export ARCH=powerpc
 #	      images, however. Also, if you are using an NFS partition for
 #	      some part of this, you must use this option.
 # Paths to the mirrors
-export MIRROR=/org/ftp.debian.org/ftp
+export MIRROR=/ftp/debian
 
 # Comment the following line if you don't have/want non-US
 #export NONUS=/ftp/debian-non-US
 
 # Path of the temporary directory
-export TDIR=/scratch/dan/tmp
+export TDIR=/ftp/tmp
 
 # Path where the images will be written
-export OUT=/scratch/dan/images
+export OUT=/rack/debian-cd
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.
-export APTTMP=/scratch/dan/apt-tmp
+export APTTMP=/ftp/tmp/apt
 
 # Do I want to have NONFREE
 # export NONFREE=1

@@ -18,7 +18,7 @@ do
 		exit 1
 	fi
 	echo " ... selecting packages to include"
-	make list COMPLETE=1 SIZELIMIT1=576716800
+	make list COMPLETE=1 SIZELIMIT1=$((529 * 1024 *1024)) SRCSIZELIMIT=$((635 * 1024 * 1024))
 	echo " ... building the images"
 	if [ "$ARCH" = "i386" ]; then
 		make official_images

@@ -6,5 +6,5 @@ set -e
 make distclean
 make ${CODENAME}_status
 make mirrorcheck
-make list COMPLETE=1 SIZELIMIT1=$((525 * 1024 * 1024)) SRCSIZELIMIT=$((630 * 1024 * 1024))
-make bin-official_images
+make list COMPLETE=1 SIZELIMIT1=$((529 * 1024 * 1024)) SRCSIZELIMIT=$((635 * 1024 * 1024))
+make official_images
