@@ -59,8 +59,7 @@ cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/
 
 mkdir -p $CDDIR/install/dosutils
 
-(cd $CDDIR/dosutils; \
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/dosutils)
+cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/dosutils/
 
 
 (echo "Tools for DOS :" ; \
