@@ -275,3 +275,8 @@ export PUBLISH_PATH="/home/jigdo-area/"
 
 # If set, limits the number of binary CDs to produce.
 #export MAXCDS=1
+
+# Used by build.sh to determine what to build, this is the name of a target
+# in the Makefile. Use bin-official_images to build only binary CDs. The
+# default, official_images, builds everything.
+#IMAGETARGET=official_images
