@@ -12,6 +12,7 @@
 
 
         <!-- The HTML and TEXT file are NOT the actual source code... -->
+        <!-- For that, see http://cdimage.debian.org/ch32.html -->
 #if 0
         If you read THIS, you're viewing the actual source file ;-)
 #endif
@@ -279,7 +280,7 @@ the source code of programs in the Debian OS.
 The source packages on the Source CDs are ordered by popularity, like
 the programs on the Binary CDs. This means that the source code of the
 programs on the Binary-DISKNUM CD can most likely be found on this CD
-(there may be some variation due to size issues).
+(though there may be some variation due to size issues).
 #endif
 
 <A name="install">
@@ -324,7 +325,7 @@ Installing
 #endif
 
 #if ARCHi386 || ARCHalpha || ARCHsparc
-  You can start the installation program easily by booting off this CD-ROM.
+  you can start the installation program easily by booting off this CD-ROM.
   Note that not all (esp. older) systems support this. 
   <P>
 #endif
@@ -405,6 +406,7 @@ Last-Minute Notes
 
 <UL>
 
+#if 0
 <LI>
 The version of the X Window System on these CDs has a slight problem
 with reading the X resource files. A simple fix is described at
@@ -420,10 +422,11 @@ to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
 
 <BR>&nbsp;
 </LI>
+#endif
 
 <LI>
-Last-minutes notes for these testing images may be available on
-<a href="http://cdimage.debian.org/potato_pre.html">http://cdimage.debian.org/potato_pre.html</a>
+Last-minutes notes for this CD may be available on
+<a href="http://cdimage.debian.org/lastmin.html">http://cdimage.debian.org/lastmin.html</a>
 </LI>
 
 </UL>
@@ -695,7 +698,7 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Sat Jun  3 20:14:42 CEST 2000
+Last Modified: Fri Jun 30 11:06:02 CEST 2000
 
 <BR></SMALL>
 </DIV>
