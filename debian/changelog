@@ -43,6 +43,7 @@ debian-cd (2.2.14) unstable; urgency=low
   * added ramdisk_size=8192 to palo commandline for hppa
   * Added empty boot-mips & boot mipsel.
   * Updated boot-alpha to conditionalize the inclusion of APB.
+  * Reworked boot-ia64 to use hardlinks and so 1_NONUS.raw is built properly.
 
  -- Raphael Hertzog <hertzog@debian.org>  Mon, 15 Apr 2002 13:16:25 +0200
 

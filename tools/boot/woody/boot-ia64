@@ -24,14 +24,14 @@ fi
 install_languages $CDDIR
 
 mkdir -p boot$N/boot
-cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin boot$N/boot/
+cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin boot$N/boot/
 echo -n "-no-emul-boot -J -b boot/rescue.bin -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
 
-# populate the install directory as well, with symlinks to save space
+# populate the install directory as well, with links to save space
 # rescue.bin is 10MB on ia64
-(cd CD1/install; \
-	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin . ; \
-	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/linux.bin . ; \
-	ln -s ../dists/$CODENAME/main/disks-$ARCH/current/root.bin . )
+(cd $CDDIR/install; \
+	cp -lf ../dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin . ; \
+	cp -lf ../dists/$CODENAME/main/disks-$ARCH/current/linux.bin . ; \
+	cp -lf ../dists/$CODENAME/main/disks-$ARCH/current/root.bin . )
 
 # th,th, thats all
