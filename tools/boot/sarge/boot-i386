@@ -48,7 +48,7 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
-DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img floppy/net-drivers.img "
+DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img floppy/net-drivers.img floppy/asian-root.img floppy/access/boot.img floppy/access/root.img floppy/access/drivers.img "
 
 # Download boot images
 for image in $BOOT_IMAGES $DISK_IMAGES; do
