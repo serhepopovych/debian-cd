@@ -15,12 +15,14 @@ CDDIR=$2
 INSTALLDIR=$CDDIR/install
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/images-m68k/daily"
+elif [ "$DI_WWW_HOME" = "test" ];then
+   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/test/cd"
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-DI_BOOTLOADER="http://people.debian.org/~smarenka/d-i/images-m68k/daily"
+DI_BOOTLOADER="http://people.debian.org/~smarenka/d-i"
 
 cd $CDDIR/..
 
@@ -32,42 +34,95 @@ if [ $N != 1 ]; then
 	exit 0
 fi
 
+echo "DI_WWW_HOME: $DI_WWW_HOME"
+echo "DI_BOOTLOADER: $DI_BOOTLOADER"
+
 install_languages $CDDIR
 
 # remove i386 stuff
 rm -rf $CDDIR/tools
 
 cd $INSTALLDIR
-# create directories for different sub-archs
-mkdir {amiga,atari,bvme6000,mac,mvme147,mvme16x}
 
-wget -O bootloaders.tar.bz2 "$DI_BOOTLOADER"/../../bootloaders.tar.bz2
-tar -xvjf bootloaders.tar.bz2
-rm bootloaders.tar.bz2
+# This setup is designed to automatically use whatever subarchs are 
+# available to build the cd.
 
 if [ ! "$DI_WWW_HOME" ];then
 	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
-	cp "$DI_DIR"/amiga/nativehd-vmlinuz* amiga/vmlinuz
-	cp "$DI_DIR"/mac/nativehd-vmlinuz* mac/vmlinuz
+	SUBARCHS=`find "$DI_DIR/*" -type d -print | cut -d'/' -f3`
+
+	for subarch in $SUBARCHS; do
+		echo "subarch: $subarch"
+		mkdir $subarch
+		cp "$DI_DIR"/$subarch/* $subarch
+	done
 	cp "$DI_DIR/cdrom-initrd.gz" root.bin
-	cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
+	if [ -f "$DI_DIR/cdrom22-initrd.gz" ]; then 
+		cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
+	fi
+	cp "$DI_DIR/MANIFEST" .
 else
-	kernel_amiga=$(wget "$DI_WWW_HOME/amiga/" -O - | \
-	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-amiga\)".*/\1/p')
-	kernel_mac=$(wget "$DI_WWW_HOME/mac/" -O - | \
-	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-mac\)".*/\1/p')
-	wget -O amiga/vmlinuz "$DI_WWW_HOME/amiga/$kernel_amiga"
-	wget -O mac/vmlinuz "$DI_WWW_HOME/mac/$kernel_mac"
+	SUBARCHS=$(wget -q "$DI_WWW_HOME/" -O - | \
+		sed -n -e 's/.*>\(.*\)\/<.*/\1/p')
+
+	for subarch in $SUBARCHS; do
+		echo "subarch: $subarch"
+		mkdir $subarch
+		cd $subarch
+		wget -q -np -nd -r -l 1 -R '.gif' "$DI_WWW_HOME/$subarch"
+		rm index*
+		cd ..
+	done
 	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
-	wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"
+	if ! `wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"` ; then
+		rm root22.bin
+	fi
+	wget -O MANIFEST "$DI_WWW_HOME/MANIFEST"
 fi
 
-# Amiboot and dmesg need to be executable
-chmod a+x amiga/amiboot-5.6
-chmod a+x amiga/dmesg
+# grab unpackged stuff
+for subarch in $SUBARCHS; do
+	TARF="bootloaders-$subarch.tar.bz2"
+	if `wget -O $TARF "$DI_BOOTLOADER/$TARF"` ; then
+		tar -xvjf $TARF
+	fi
+	rm -f $TARF
+done
 
-# Setup amiga icons
-cp amiga/amiga.info  $CDDIR/install.info
-mv amiga/amiga.info  .
+# old way, get rid of it once the above is validated.
+# create directories for different sub-archs
+#mkdir {amiga,atari,bvme6000,mac,mvme147,mvme16x}
+
+#wget -O bootloaders.tar.bz2 "$DI_BOOTLOADER"/../../bootloaders.tar.bz2
+#tar -xvjf bootloaders.tar.bz2
+#rm bootloaders.tar.bz2
+
+#if [ ! "$DI_WWW_HOME" ];then
+#	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+#	cp "$DI_DIR"/amiga/nativehd-vmlinuz* amiga/vmlinuz
+#	cp "$DI_DIR"/mac/nativehd-vmlinuz* mac/vmlinuz
+#	cp "$DI_DIR/cdrom-initrd.gz" root.bin
+#	cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
+#else
+#	kernel_amiga=$(wget "$DI_WWW_HOME/amiga/" -O - | \
+#	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-amiga\)".*/\1/p')
+#	kernel_mac=$(wget "$DI_WWW_HOME/mac/" -O - | \
+#	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-mac\)".*/\1/p')
+#	wget -O amiga/vmlinuz "$DI_WWW_HOME/amiga/$kernel_amiga"
+#	wget -O mac/vmlinuz "$DI_WWW_HOME/mac/$kernel_mac"
+#	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
+#	wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"
+#fi
+
+# amiga specific stuff
+if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
+	# Amiboot and dmesg need to be executable
+	chmod a+x amiga/amiboot-5.6
+	chmod a+x amiga/dmesg
+
+	# Setup amiga icons
+	cp amiga/amiga.info  $CDDIR/install.info
+	mv amiga/amiga.info  .
+fi
 
 ##-----------------------------< end of file >------------------------------##
