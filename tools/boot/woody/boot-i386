@@ -96,6 +96,8 @@ cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
 
 (echo "@ echo off" ; \
 	echo "rem Flush any write-cached disk blocks before we leave DOS. " ; \
+        echo "If your system does not use smartdrv an error message will appear, " ; \
+        echo "you can safely ignore that." ; \
 	echo "smartdrv /c" ; \
 	echo "loadlin.exe linux root=/dev/ram ro initrd=root.bin" ; \
 	) |todos > $CDDIR/install/boot.bat
