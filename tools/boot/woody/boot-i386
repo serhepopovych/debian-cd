@@ -53,7 +53,6 @@ THISTYPE=${KTYPE[$NN]}
 
 # Put boot images on CD1...CD(N)
 #
-:> $N.mkisofs_opts
 
 if [ "${ISOLINUX:-0}" != "0" ] && [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
