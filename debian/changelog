@@ -1,3 +1,11 @@
+debian-cd (2.2.20) UNRELEASED; urgency=low
+
+  * Joey Hess
+    - Remove bogus init=/linuxrc, we have not had a linuxrc in d-i for a long
+      time and I don't know how that managed to work.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
+
 debian-cd (2.2.19) unstable; urgency=medium
 
   * Steve McIntyre
