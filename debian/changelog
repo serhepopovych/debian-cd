@@ -27,8 +27,19 @@ debian-cd (2.2.14) unstable; urgency=low
     images, rather than loading the rescue disks directly from the boot
     sector.
   * Removed obsolete local-variables section from changelog.
+  * Added default values into CONF.sh for isolinux support.
+  * Change again the order of the boot images for i386.
+    1: multiboot (isolinux) 2: vanilla 3: compact 4: idepci 5: bf2.4
+  * Put TERM=vt102 for vanilla flavor as it seems to fix the borders
+    of the boxes in a few cases.
+  * Improved the test to see if we want non-free. Instead of -n "$NONFREE"
+    it's now "${NONFREE:-0}" != "0" (same for EXTRANONFREE). Maybe
+    should we do the same for the other boolean environment variables like
+    LOCAL, SECURITY, SECURED ...
+  * Changed the test for ISOLINUX and MULTIBOOT to be coherent with the other
+    boolean variables.
 
- -- Raphael Hertzog <hertzog@debian.org>  Mon,  8 Apr 2002 20:37:41 -0500
+ -- Raphael Hertzog <hertzog@debian.org>  Fri, 12 Apr 2002 17:34:31 +0200
 
 debian-cd (2.2.13) unstable; urgency=low
 

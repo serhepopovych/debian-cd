@@ -11,6 +11,7 @@ unset SYMLINK
 unset COPYLINK
 unset MKISOFS
 unset MKISOFS_OPTS
+unset ISOLINUX
 unset EXCLUDE
 unset SRCEXCLUDE
 unset NORECOMMENDS
@@ -102,6 +103,9 @@ export APTTMP=/home/ftp/tmp/apt
 # export MKISOFS=/usr/bin/mkisofs
 # export MKISOFS_OPTS="-r -T"		#For normal users
 # export MKISOFS_OPTS="-r -F . -T"	#For symlink farmers
+
+# ISOLinux support for multiboot on CD1 for i386
+export ISOLINUX=1
 
 # uncomment this to if you want to see more of what the Makefile is doing
 #export VERBOSE_MAKE=1

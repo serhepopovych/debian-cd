@@ -38,11 +38,11 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 # what kernel-type to put on what disk?
 # a null "" value will use the default boot-disk kernel
 #
-KTYPE[1]="idepci"
-KTYPE[2]="compact"
-KTYPE[3]="bf2.4"
-KTYPE[4]=""
-KTYPE[5]=""
+KTYPE[1]="bf2.4" #multiboot in fact
+KTYPE[2]="" #vanilla
+KTYPE[3]="compact"
+KTYPE[4]="idepci"
+KTYPE[5]="bf2.4"
 KTYPE[6]=""
 KTYPE[7]=""
 KTYPE[8]=""
@@ -55,7 +55,7 @@ THISTYPE=${KTYPE[$NN]}
 #
 :> $N.mkisofs_opts
 
-if [ "$ISOLINUX" = "yes" ] && [ "$NN" = "1" ]; then
+if [ "${ISOLINUX:-0}" != "0" ] && [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
     cp -f /usr/lib/syslinux/isolinux.bin boot$N/isolinux/
@@ -80,13 +80,13 @@ if [ "$N" = "1" ] || [ "$N" = "1_NONUS" ] ; then
 
 
 # # new new new # #
-# The next chunk of code is only used if MULTIBOOT=yes
+# The next chunk of code is only used if MULTIBOOT=1
 # Make disk1 a multi-boot image
 # ElTorito supports multiple boot images
 # Setup all boot-disk images (currently 4)
 
 
-if [ "$MULTIBOOT" = "yes" ] && [ ! "$ISOLINUX" = "yes" ]; then
+if [ "${MULTIBOOT:-0}" != "0" ] && [ "${ISOLINUX:-0}" = "0" ]; then
         echo "Adding additional boot images to CD1"
 
     for i in 2 3 4 ; do
@@ -120,7 +120,7 @@ fi
 # Tools for disc 1
 # and include the legacy DOS stuff 
 
-if [ "$ISOLINUX" = "yes" ]; then
+if [ "${ISOLINUX:-0}" != "0" ]; then
     cp -f $BASEDIR/data/woody/isolinux.txt $BASEDIR/data/woody/f*.txt boot$N/isolinux/
     cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/linpci
@@ -134,7 +134,7 @@ LABEL compact
   append root=/dev/ram ro initrd=compact.bin ramdisk_size=16384 disksize=1.44 flavor=compact
 LABEL vanilla
   kernel /install/linux
-  append root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44
+  append root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44 TERM=vt102
 LABEL bf24
   kernel /install/lin24
   append root=/dev/ram ro initrd=bf24.bin ramdisk_size=16384 disksize=1.44 flavor=bf2.4
@@ -209,7 +209,7 @@ loadlin.exe lin24 root=/dev/ram ro initrd=bf24.bin ramdisk_size=16384 disksize=1
 
 :FOUR
 echo using standard (vanilla) kernel
-loadlin.exe linux root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44
+loadlin.exe linux root=/dev/ram ro initrd=root.bin ramdisk_size=16384 disksize=1.44 TERM=vt102
 
 EOF
 ) |todos > $CDDIR/install/boot.bat
@@ -219,7 +219,7 @@ fi
 
 
 # write final lines to mkisofs_opts
-if [ "$ISOLINUX" = "yes" ] && [ "$NN" = "1" ]; then
+if [ "${ISOLINUX:-0}" != "0" ] && [ "$NN" = "1" ]; then
     echo -n "boot$N " >> $N.mkisofs_opts
 else
     echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts

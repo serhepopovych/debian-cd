@@ -9,7 +9,7 @@ SECTIONS="admin base comm devel doc editors electronics games graphics \
 set -e
 
 # There's no difference between NONFREE and EXTRANONFREE for this script
-if [ -n "$EXTRANONFREE" ]
+if [ "${EXTRANONFREE:-0}" != "0" ]
 then
 	NONFREE=1
 fi
@@ -46,7 +46,7 @@ do
         mkdir -p dists/$CODENAME/contrib/binary-$ARCH/$i
         mkdir -p dists/$CODENAME/contrib/binary-all/$i
         mkdir -p dists/$CODENAME/contrib/source/$i
-        if [ -n "$NONFREE" ]; then
+        if [ "${NONFREE:-0}" != "0" ]; then
                 mkdir -p dists/$CODENAME/non-free/binary-$ARCH/$i
                 mkdir -p dists/$CODENAME/non-free/binary-all/$i
                 mkdir -p dists/$CODENAME/non-free/source/$i
@@ -65,7 +65,7 @@ if [ -n "$SECURITY" ]; then
     mkdir -p dists/$CODENAME/updates/contrib/binary-$ARCH
     mkdir -p dists/$CODENAME/updates/contrib/binary-all
     mkdir -p dists/$CODENAME/updates/contrib/source
-    if [ -n "$NONFREE" ]; then
+    if [ "${NONFREE:-0}" != "0" ]; then
         mkdir -p dists/$CODENAME/updates/non-free/binary-$ARCH
         mkdir -p dists/$CODENAME/updates/non-free/binary-all
         mkdir -p dists/$CODENAME/updates/non-free/source
@@ -79,7 +79,7 @@ if [ -n "$NONUS" ]; then
         mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
         mkdir -p dists/$CODENAME/non-US/contrib/binary-all
         mkdir -p dists/$CODENAME/non-US/contrib/source
-        if [ -n "$NONFREE" ]; then
+        if [ "${NONFREE:-0}" != "0" ]; then
                 mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
                 mkdir -p dists/$CODENAME/non-US/non-free/binary-all
                 mkdir -p dists/$CODENAME/non-US/non-free/source
