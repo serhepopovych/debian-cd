@@ -45,8 +45,10 @@ cp -f $(ls $FLOPPIES/MILO/milo_*.bin | sed 's,\(.*\)milo_\(.*\).bin,\1\2,') \
 	 boot1/milo/
 
 # Now the APB stuff
-mkdir -p boot1/apb
-cp -f $FLOPPIES/APB/* boot1/apb/
+if [ -d "$FLOPPIES/APB" ]; then
+    mkdir -p boot1/apb
+    cp -f $FLOPPIES/APB/* boot1/apb/
+fi
 
 # Prepare aboot stuff.  The bootloader itself will be installed in
 # boot-alpha-post via isomarkboot.
