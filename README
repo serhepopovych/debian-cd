@@ -317,6 +317,33 @@ no full iso image is available, the MD5sum will be extracted from the
 .template file. A note in the Makefile shows how the original file size
 can be extracted from the .template in a similar way.
 
+About jigdo "fallback servers":
+
+jigdo works by downloading individual packages and other files from a
+normal Debian mirror, and using them to regenerate a CD/DVD image. 
+However, the content of Debian mirrors changes over time, files are
+added and removed. But jigdo must have access to all files needed for
+the image it has to regenerate, even those that have been removed from
+the normal Debian mirrors.
+
+A fallback server contains a backup of the Debian FTP space for the
+moment the .jigdo files were generated. This backup is made available
+under a certain URL which is written to the .jigdo files. jigdo will
+*only* revert to the fallback server after an unsuccessful attempt to
+retrieve a file from the normal user-selected Debian mirror, so the
+bandwidth requirements are modest.
+
+A fallback is even necessary for .jigdo files of the stable release,
+because some files (typically documentation or boot floppies) can
+change at any time.
+
+debian-cd allows you to automatically create a directory on disc which
+is suitable for use as a fallback mirror. It is populated with hard
+links to the archive contents. In CONF.sh, simply supply as
+JIGDOFALLBACKPATH the name of the directory, and as JIGDOFALLBACKURLS
+the URLs under which it will be made available (two separate URLs are
+necessary, one for "Debian" and one for "Non-US").
+
 
 About the hook system
 =====================

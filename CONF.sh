@@ -26,6 +26,9 @@ unset NOSUGGESTS        || true
 unset DOJIGDO           || true
 unset JIGDOCMD          || true
 unset JIGDOTEMPLATEURL  || true
+unset JIGDOFALLBACKURLS || true
+unset JIGDOINCLUDEURLS  || true
+unset JIGDOSCRIPT       || true
 unset DEFBINSIZE        || true
 unset DEFSRCSIZE        || true
 unset FASTSUMS          || true
@@ -179,18 +182,47 @@ export DEFSRCSIZE=635
 # Note: building the cache takes hours, so keep it around for the next run
 #export JIGDOCMD="/usr/local/bin/jigdo-file --cache=$HOME/jigdo-cache.db"
 #
-# HTTP/FTP URL for directory where you intend to make the templates available.
-# %ARCH%, if present, will be replaced by $ARCH (or "source"). This only goes
-# in the .jigdo files, which you can edit easily if you want.
-# No trailing slash.
-#export JIGDOTEMPLATEURL="http://this-guy-didnt-configure-debiancd-correctly.com/debian-cd/templates/3.0BETA/%ARCH%"
+# HTTP/FTP URL for directory where you intend to make the templates
+# available. You should not need to change this; the default value ""
+# means "template in same dir as the .jigdo file", which is usually
+# correct. If it is non-empty, it needs a trailing slash. "%ARCH%"
+# will be substituted by the current architecture.
+#export JIGDOTEMPLATEURL=""
+#
+# Name of a directory on disc to create data for a fallback server in. 
+# Should later be made available by you at the URL given in
+# JIGDOFALLBACKURLS. In the directory, two subdirs named "Debian" and
+# "Non-US" will be created, and filled with hard links to the actual
+# files in your FTP archive. Because of the hard links, the dir must
+# be on the same partition as the FTP archive! If unset, no fallback
+# data is created, which may cause problems - see README.
+#export JIGDOFALLBACKPATH="$(OUT)/snapshot/"
+#
+# Space-separated list of label->URL mappings for "jigdo fallback
+# server(s)" to add to .jigdo file. If unset, no fallback URL is
+# added, which may cause problems - see README.
+#export JIGDOFALLBACKURLS="Debian=http://myserver/snapshot/Debian/ Non-US=http://myserver/snapshot/Non-US/"
+#
+# Space-separated list of "include URLs" to add to the .jigdo file. 
+# The included files are used to provide an up-to-date list of Debian
+# mirrors to the jigdo _GUI_application_ (_jigdo-lite_ doesn't support
+# "[Include ...]").
+export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigdo"
+#
+# $JIGDOTEMPLATEURL and $JIGDOINCLUDEURLS are passed to
+# "tools/jigdo_header", which is used by default to generate the
+# [Image] and [Servers] sections of the .jigdo file. You can provide
+# your own script if you need the .jigdo file to contain different
+# data.
+#export JIGDOSCRIPT="myscript"
 
 # If set, use the md5sums from the main archive, rather than calculating
 # them locally
 #export FASTSUMS=1
 
-# a couple of things used by publish_cds, so it can tweak the jigdo files,
-# and knows where to put the results
+# A couple of things used only by publish_cds, so it can tweak the
+# jigdo files, and knows where to put the results.
+# You need to run publish_cds manually, it is not run by the Makefile.
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"

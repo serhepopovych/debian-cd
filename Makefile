@@ -24,17 +24,17 @@ ifndef CAPCODENAME
 CAPCODENAME:=$(shell perl -e "print ucfirst("$(CODENAME)")")
 endif
 ifndef BINDISKINFO
-BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num ($$DATE)"
+export BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num ($$DATE)"
 endif
 ifndef SRCDISKINFO
-SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num ($$DATE)"
+export SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num ($$DATE)"
 endif
 # ND=No-Date versions for README
 ifndef BINDISKINFOND
-BINDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num"
+export BINDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num"
 endif
 ifndef SRCDISKINFOND
-SRCDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num"
+export SRCDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num"
 endif
 ifndef BINVOLID
 ifeq ($(ARCH),powerpc)
@@ -65,6 +65,9 @@ endif
 endif
 ifndef DOJIGDO
 export DOJIGDO=0
+endif
+ifndef JIGDOSCRIPT
+JIGDOSCRIPT=$(BASEDIR)/tools/jigdo_header
 endif
 
 ifndef UDEB_INCLUDE
@@ -164,9 +167,6 @@ endif
 ifneq "$(DOJIGDO)" "0"
 ifndef JIGDOCMD
 	@echo JIGDOCMD undefined -- set up CONF.sh; false
-endif
-ifndef JIGDOTEMPLATEURL
-	@echo JIGDOTEMPLATEURL undefined -- set up CONF.sh; false
 endif
 else
 export JIGDOCMD=false
@@ -846,18 +846,11 @@ bin-images: ok bin-md5list $(OUT) $(TDIR)/jigdofilelist
 		volid=`cat $(BDIR)/$$n.volid`; \
 		rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
 		if [ "$(DOJIGDO)" != "0" ]; then \
-			echo "[Image]" \
+			$(JIGDOSCRIPT) \
+				"debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-$(ARCH)-binary-$$n.iso" \
+				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`$(CODENAME)-$(ARCH)-$$n.template" \
+				$(BINDISKINFOND) \
 				> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
-			echo "Filename=debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-$(ARCH)-binary-$$n.iso" \
-				>> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
-			echo "Template=`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`/$(CODENAME)-$(ARCH)-$$n.template" \
-				>> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
-			echo "Template-MD5Sum=" \
-				>> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
-			echo "ShortInfo='"$(BINDISKINFOND)" CD'" \
-				>> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
-			echo "Info='Generated on `date -R`'" \
-				>> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
 		fi; \
 		if [ "$(DOJIGDO)" != "2" -o -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
@@ -867,30 +860,18 @@ bin-images: ok bin-md5list $(OUT) $(TDIR)/jigdofilelist
 				 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
 			fi; \
 			if [ "$(DOJIGDO)" != "0" ]; then \
-				$(JIGDOCMD) make-template --force \
-				  --files-from=$(TDIR)/jigdofilelist \
-				  --image=$(OUT)/$(CODENAME)-$(ARCH)-$$n.raw \
-				  --jigdo=$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo \
-				  --template=$(OUT)/$(CODENAME)-$(ARCH)-$$n.template \
-				  --label Non-US="$(NONUS)" \
-				  --label Debian="$(MIRROR)" \
-				  --merge="$(TDIR)/$(CODENAME)-$(ARCH).jigdo" \
-				  --no-servers-section \
-				  --report=noprogress; \
+				$(BASEDIR)/tools/jigdo_create "$(OUT)/$(CODENAME)-$(ARCH)-$$n.raw" \
+				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo" \
+				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.template" \
+				  "$(TDIR)/$(CODENAME)-$(ARCH).jigdo"; \
 			fi; \
 		else \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  $$opts CD$$n \
-			| $(JIGDOCMD) make-template --force \
-				  --files-from=$(TDIR)/jigdofilelist \
-				  --image=- \
-				  --jigdo=$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo \
-				  --template=$(OUT)/$(CODENAME)-$(ARCH)-$$n.template \
-				  --label Non-US="$(NONUS)" \
-				  --label Debian="$(MIRROR)" \
-				  --merge="$(TDIR)/$(CODENAME)-$(ARCH).jigdo" \
-				  --no-servers-section \
-				  --report=noprogress; \
+			| $(BASEDIR)/tools/jigdo_create "-" \
+				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo" \
+				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.template" \
+				  "$(TDIR)/$(CODENAME)-$(ARCH).jigdo"; \
 		fi; \
 		if [ "$(DOJIGDO)" = "2" ]; then \
 			rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
@@ -910,47 +891,28 @@ src-images: ok src-md5list $(OUT) $(TDIR)/jigdofilelist
 		volid=`cat $(SDIR)/$$n.volid`; \
 		rm -f $(OUT)/$(CODENAME)-src-$$n.raw; \
 		if [ "$(DOJIGDO)" != "0" ]; then \
-			echo "[Image]" \
+			$(JIGDOSCRIPT) \
+				"debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-source-$$n.iso" \
+				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`$(CODENAME)-src-$$n.template" \
+				$(SRCDISKINFOND) \
 				> $(TDIR)/$(CODENAME)-src.jigdo; \
-			echo "Filename=debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-source-$$n.iso" \
-				>> $(TDIR)/$(CODENAME)-src.jigdo; \
-			echo "Template=`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|source|g'`/$(CODENAME)-src-$$n.template" \
-				>> $(TDIR)/$(CODENAME)-src.jigdo; \
-			echo "Template-MD5Sum=" \
-				>> $(TDIR)/$(CODENAME)-src.jigdo; \
-			echo "ShortInfo='"$(SRCDISKINFOND)" CD'" \
-				>> $(TDIR)/$(CODENAME)-src.jigdo; \
-			echo "Info='Generated on `date -R`'" \
-				>> $(TDIR)/$(CODENAME)-src.jigdo; \
 		fi; \
 		if [ "$(DOJIGDO)" != "2" ]; then \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  -o $(OUT)/$(CODENAME)-src-$$n.raw $$opts CD$$n ; \
 			if [ "$(DOJIGDO)" != "0" ]; then \
-				$(JIGDOCMD) make-template --force \
-				  --files-from=$(TDIR)/jigdofilelist \
-				  --image=$(OUT)/$(CODENAME)-src-$$n.raw \
-				  --jigdo=$(OUT)/$(CODENAME)-src-$$n.jigdo \
-				  --template=$(OUT)/$(CODENAME)-src-$$n.template \
-				  --label Non-US="$(NONUS)" \
-				  --label Debian="$(MIRROR)" \
-				  --merge="$(TDIR)/$(CODENAME)-src.jigdo" \
-				  --no-servers-section \
-				  --report=noprogress; \
+				$(BASEDIR)/tools/jigdo_create "$(OUT)/$(CODENAME)-src-$$n.raw" \
+				  "$(OUT)/$(CODENAME)-src-$$n.jigdo" \
+				  "$(OUT)/$(CODENAME)-src-$$n.template" \
+				  "$(TDIR)/$(CODENAME)-src.jigdo"; \
 			fi; \
 		else \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  $$opts CD$$n \
-			| $(JIGDOCMD) make-template --force \
-				  --files-from=$(TDIR)/jigdofilelist \
-				  --image=- \
-				  --jigdo=$(OUT)/$(CODENAME)-src-$$n.jigdo \
-				  --template=$(OUT)/$(CODENAME)-src-$$n.template \
-				  --label Non-US="$(NONUS)" \
-				  --label Debian="$(MIRROR)" \
-				  --merge="$(TDIR)/$(CODENAME)-src.jigdo" \
-				  --no-servers-section \
-				  --report=noprogress; \
+			| $(BASEDIR)/tools/jigdo_create "-" \
+				  "$(OUT)/$(CODENAME)-src-$$n.jigdo" \
+				  "$(OUT)/$(CODENAME)-src-$$n.template" \
+				  "$(TDIR)/$(CODENAME)-src.jigdo"; \
 		fi; \
 	done
 	rm -f "$(TDIR)/$(CODENAME)-src.jigdo"
