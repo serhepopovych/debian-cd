@@ -91,6 +91,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Fix preprocess of exclude files when EXCLUDE is not set.
   * Kenshi Muto
     - Add floppy/asian-root.img and floppy/access/* as i386 disk image.
+  * Colin Watson
+    - Add exclude-udebs-powerpc list with packages already in the initrd,
+      along the same lines as exclude-udebs-i386. Saves about 11 megabytes.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
