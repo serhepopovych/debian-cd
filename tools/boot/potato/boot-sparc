@@ -29,17 +29,19 @@ mkdir -p boot1/boot
 
 BOOTDIR=1/dists/$CODENAME/main/disks-$ARCH/current/
 
+
+# Disks != 1 and not 2
+if [ $N != 1 ]; then 
+        echo -n "-J" > $N.mkisofs_opts
+	rm -r $CDDIR/doc	#remove doc dir on #2,#3,#4
+        exit 0; 
+fi
+
 # make a copy of the boot disks in the /install dir
 cp -pr $BOOTDIR/* $CDDIR/install
 # remove the /install/doc directory as it is reduntant to /doc
 rm -r $CDDIR/install/doc
 
-
-# Disks != 1 and not 2
-if [ $N != 1 ]; then 
-        echo -n "-J" > $N.mkisofs_opts
-        exit 0; 
-fi
 echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
 
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
