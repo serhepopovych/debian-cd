@@ -61,12 +61,18 @@ isoinfo -i "$1" -R -l -f			\
 	    -e '^/dedication\.txt$'		\
 	    -e '^/README\.html$'		\
 	    -e '^/README\.txt$'			\
-	    -e '^/etc/'				\
 	    -e '^/pics/'			\
 	    -e '^/doc/package-developer/hello'	\
 	    -e '^/milo/'			\
 	    -e '^/apb/'				\
 	    -e '^/linux$'			\
+	    -e '^/bin/'				\
+	    -e '^/etc/'				\
+	    -e '^/lib/'				\
+	    -e '^/release_notes$'		\
+	    -e '^/sbin/'			\
+	    -e '^/tmp/'				\
+	    -e '^/usr/'				\
   > "$TEMPF"
 
 # Temporarily block the pipe, since we need to inspect it's contents

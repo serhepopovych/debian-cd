@@ -25,6 +25,8 @@ Software :
 - the perl MD5 module
 - dpkg-dev (>= 1.4.1.6) (for dpkg-scansources)
 - lynx (for text version of README.html)
+- if you want to generate .list files: tempfile, as included in debianutils
+  >= 1.6 (not absolutely necessary, workaround described in tools/pi-makelist)
 Other :
 - lots of free space on your disks
 - a Debian mirror (on a partition where you can write, if you can't write

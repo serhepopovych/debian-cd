@@ -1,3 +1,13 @@
+debian-cd (2.2.4) unstable; urgency=low
+
+  * UNRELEASED
+    ----------
+  * Updated pi-makelist, now excludes all of the sparc live filesystem.
+  * Added Recommends: debianutils because pi-makelist uses tempfile(1)
+    since 2.2.3; also mentioned this in the debian-cd/YACS README.
+  * Some minor updates/rewordings in CD's top-level README.
+
+
 debian-cd (2.2.3) unstable; urgency=low
 
   * Fixes several bug caused by changes in the way binary-all packages
