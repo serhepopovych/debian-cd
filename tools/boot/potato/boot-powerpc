@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# boot-powerpc version 0.6 (c)  Hartmut Koptein <koptein@debian.org>,
+# boot-powerpc version 0.7 (C)  Hartmut Koptein <koptein@debian.org>,
 # PReP support (C)  Matt Porter <porter@debian.org>
 #
 # Released under GPL 1 Mar 1999
@@ -33,24 +33,31 @@ echo -n " -prep-boot install/prep/boot.bin" >> $N.mkisofs_opts
 DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
 INSTALLDIR="$CDROOT/install"
 
-cd $INSTALLDIR
-
 # Debian/PowerPC consits currently for three parts: CHRP, PMac and PReP
 # Apus, MBX and BBox will hopefully follow
 #
-
-#
 # -- We need a generic boot-loader --
 #
+cd $INSTALLDIR
+# ---- auto-booting section -----
 echo "Copying boot images to $CDROOT/install/boot for disc 1"
 rm -fr boot
 mkdir -p boot
-for subarch in chrp powermac prep ; do
+for subarch in apus chrp common mbx powermac prep ; do
     mkdir boot/$subarch
     echo "extracting stuff for $subarch"
     case $subarch in
+        apus)
+                echo "need work for Apus"
+        ;;
         chrp)
                 echo "need work for CHRP"
+        ;;
+        common)
+                echo "need work for common"
+        ;;
+        mbx)
+                echo "need work for mbx"
         ;;
         powermac)
                 #cp -p $BOOTDIR/cd.b $BOOTDIR/second.b boot/powermac
@@ -74,26 +81,63 @@ for subarch in chrp powermac prep ; do
     esac
 done
 
+#-------------- Install paths -------------------------------
+# $DISKSROOT  == dists/potato/main/disks-powerpc/current/
+# $INSTALLDIR == install/
+#
+# The layout has changed. Images are now in $SUBARCH/images-1.44
+#
+
 cd $INSTALLDIR
 
-#-------------- CHRP - Stuff -------------------------------
+# Section for the base, rescue and drivers into the /install/
+# area on the cd.
+
+#--------------- APUS - Stuff -------------------------------
+#echo Installing APUS files
+mkdir apus
+cp $DISKSROOT/apus/linux apus
+cp $DISKSROOT/apus/images-1.44/root.bin apus
+cp $DISKSROOT/apus/images-1.44/rescue.bin apus
+
+#--------------- CHRP - Stuff -------------------------------
 echo Installing CHRP files
 mkdir chrp
-cp $DISKSROOT/chrp/* chrp
+cp $DISKSROOT/chrp/linux chrp
+cp $DISKSROOT/chrp/images-1.44/root.bin chrp
+cp $DISKSROOT/chrp/images-1.44/rescue.bin chrp
 
-#-------------- PMac - Stuff -------------------------------
+#-------------- Common - Stuff ------------------------------
+#echo Installing Common files
+#mkdir common
+#cp $DISKSROOT/common/linux common
+#cp $DISKSROOT/common/images-1.44/root.bin common
+#cp $DISKSROOT/common/images-1.44/rescue.bin common
+
+#---------------- MBX - Stuff -------------------------------
+#echo Installing MBX files
+#mkdir mbx
+#cp $DISKSROOT/mbx/linux mbx
+#cp $DISKSROOT/mbx/images-1.44/root.bin mbx
+#cp $DISKSROOT/mbx/images-1.44/rescue.bin mbx
+
+#--------------- PMac - Stuff -------------------------------
 echo Installing Power-Macintosh files
 mkdir powermac
-cp $DISKSROOT/powermac/* powermac
+cp $DISKSROOT/powermac/linux powermac
+cp $DISKSROOT/powermac/images-1.44/root.bin powermac
+cp $DISKSROOT/powermac/images-1.44/rescue.bin powermac
 
-#-------------- PReP - Stuff -------------------------------
+#--------------- PReP - Stuff -------------------------------
 echo Installing PReP files
 mkdir prep
-cp $DISKSROOT/prep/* prep
+cp $DISKSROOT/prep/linux prep
+cp $DISKSROOT/prep/images-1.44/root.bin prep
+cp $DISKSROOT/prep/images-1.44/rescue.bin prep
 
-#============== fix a few things up... =====================
+#=============== fix a few things up... =====================
 echo Installing PowerPC FAQ and tools
-mkdir common
+#mkdir common
 #mv basecont.txt.info common
 #mv ../README.info ../README.powerpc.info
 #cp ../README.1ST.info ../README.multicd.info
