@@ -17,6 +17,7 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     - Add support for BASE_INCLUDE and BASE_EXCLUDE, making files
       cdrom/.disk/base_include and .../base_exclude used by
       debian-installer.
+    - Document BOOTDISKS.
 
  -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
 

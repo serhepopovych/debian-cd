@@ -13,6 +13,7 @@ unset LOCALDEBS         || true
 unset SECURED           || true
 unset SECURITY          || true
 unset BOOTDIR           || true
+unset BOOTDISKS         || true
 unset SYMLINK           || true
 unset COPYLINK          || true
 unset MKISOFS           || true
@@ -188,6 +189,9 @@ export DEFSRCSIZE=635
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
+
+# Where to find the boot disks
+#export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies
 
 # File with list of packages to include when running debootstrap from
 # the first stage installer (currently only supported in
