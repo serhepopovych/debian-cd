@@ -131,6 +131,7 @@ kernel-image-2.6.8-1-sparc64-smp
 #endif
 #ifdef ARCH_m68k
 kernel-image-2.2.25-mac
+kernel-image-2.4.27-amiga
 kernel-image-2.4.27-atari
 kernel-image-2.4.27-bvme6000
 kernel-image-2.4.27-mvme147
