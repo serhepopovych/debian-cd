@@ -21,17 +21,31 @@ cd $CDROOT/..
 
 # Only disk 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then
-	echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
-	        > $N.mkisofs_opts
+    # we don't need HFS cruft on anything but CD 1
+	#echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
+	#        > $N.mkisofs_opts
+	:> $N.mkisofs_opts
 	exit 0
 fi
 
-echo -n "--netatalk -j -hfs -probe -map $BASEDIR/data/hfs.map" \
+echo -n "--netatalk -hfs -probe -map $BASEDIR/data/hfs.map" \
         > $N.mkisofs_opts
 echo -n " -prep-boot install/prep/boot.bin" >> $N.mkisofs_opts
 # For newworld Mac booting  - Note, no spaces in volid!
-echo -n " -part -no-desktop -hfs-volid Debian/PowerPC_${CODENAME}" \
-	>> $N.mkisofs_opts
+case "$MKISOFS" in
+    *mkhybrid)
+    echo -n " -part -no-desktop -hfs-volid Debian/PowerPC_${CODENAME}" \
+	    >> $N.mkisofs_opts
+    ;;
+    *mkisofs)
+    echo -n " -part -no-desktop -hfs-bless \$n/install/powermac -hfs-volid Debian/PowerPC_${CODENAME}" \
+	    >> $N.mkisofs_opts
+    ;;
+    *)
+    echo 1>&2 "Only mkhybrid or mkisofs can be used"
+    exit 1
+    ;;
+esac
 
 DISKSROOT="$MIRROR/dists/$CODENAME/main/disks-$ARCH/current"
 INSTALLDIR="$CDROOT/install"

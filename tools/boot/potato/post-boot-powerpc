@@ -24,6 +24,13 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0
 fi
 
-hmount $3
-hattrib -b ":install:powermac"
-humount $3
+case "$MKISOFS" in
+    *mkhybrid)
+	hmount $3
+	hattrib -b ":install:powermac"
+	humount $3
+    ;;
+    *mkisofs)
+	exit 0
+    ;;
+esac
