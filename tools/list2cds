@@ -11,7 +11,7 @@
 use strict;
 
 my $list = shift;
-my $deflimit = shift || $ENV{'SIZELIMIT'} || 639631360;
+my $deflimit = $ENV{'SIZELIMIT'} || shift || 639631360;
 my $limit = $ENV{'SIZELIMIT1'} || $deflimit;
 
 my $nonfree = $ENV{'NONFREE'} || 0;

@@ -11,7 +11,7 @@
 
 use strict;
 
-my $deflimit = shift || $ENV{'SRCSIZELIMIT'} || $ENV{'SIZELIMIT'} || 629145600;
+my $deflimit = $ENV{'SRCSIZELIMIT'} || $ENV{'SIZELIMIT'} || shift || 629145600;
 my $limit = $ENV{'SRCSIZELIMIT1'} || $deflimit;
 
 my $nonfree = $ENV{'NONFREE'};

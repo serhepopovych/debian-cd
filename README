@@ -42,7 +42,7 @@ Edit the CONF.sh and change the PATHs for the mirror and so on.
 $ vim CONF.sh
 $ . CONF.sh
 $ make status
-$ make list COMPLETE=1 SIZELIMIT1=576716800
+$ make list COMPLETE=1 SIZELIMIT1=555000000 SRCSIZELIMIT=665000000
 $ make official_images
 [ or if you want only binary images :
   $ make bin-official_images ]

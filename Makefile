@@ -329,9 +329,9 @@ $(BDIR)/bootable-stamp:
 doc: ok bin-infos $(BDIR)/1/doc
 $(BDIR)/1/doc:
 	@echo "Adding the documentation ..."
+	@$(addfiles) $(BDIR)/1 $(MIRROR) doc; 
 	@for i in $(BDIR)/*.packages; do \
 		dir=$${i%%.packages}; \
-		$(addfiles) $$dir $(MIRROR) doc; \
 		cp -d $(MIRROR)/README* $$dir/; \
 		if [ -e $(MIRROR)/dists/$(CODENAME)/main/Release-Notes ]; then \
 		   cp $(MIRROR)/dists/$(CODENAME)/main/Release-Notes $$dir/; \
@@ -357,8 +357,6 @@ $(BDIR)/1/doc:
 		   cp $(BASEDIR)/data/$(CODENAME)/README.multicd $$dir/; \
 		fi; \
 	done
-	
-	
 
 # Add the install stuff on the first CD
 installtools: ok doc disks $(BDIR)/1/tools
