@@ -20,6 +20,7 @@ cat > debian-installer+kernel << EOF
 discover
 eject
 grub
+lilo
 locales
 lvm10
 aptitude

@@ -12,6 +12,7 @@
 discover
 eject
 grub
+lilo
 locales
 lvm10
 aptitude

@@ -43,6 +43,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       with this initrd on it, and since the d-i help screen does not mention
       the net type.
     - Add xfsprogs and reiserfsprogs to generate_di+k_list.
+    - Add lilo as well; it's not autoinstalled by debootstrap, but
+      lilo-installer still uses it.
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)
