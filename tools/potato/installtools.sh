@@ -8,17 +8,7 @@ set -e
 
 BDIR=$TDIR/$CODENAME-$ARCH
 
-# boot-disk location for documentation is inconsistant --jwest
-if [ "$ARCH" = "powerpc" ]; then
-	DOCDIR="doc"
- elif [ "$ARCH" = "i386" ]; then 
-         DOCDIR="doc"
- elif [ "$ARCH" = "sparc" ]; then
-         DOCDIR="doc"
-else
-	DOCDIR="documentation"
-fi
-
+DOCDIR=doc
 
 # Put the install documentation in /install
 cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR
