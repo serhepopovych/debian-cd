@@ -3,7 +3,7 @@
 # This script makes use of the following variables that need to be preset:
 # MIRROR, DI_CODENAME, BASEDIR
 my @ARCHES=qw{alpha arm hppa hurd-i386 i386 ia64 m68k mips mipsel
-              powerpc s390 sparc sh};
+              powerpc s390 sparc sh amd64};
 my $DATE=`date`;
 chomp $DATE;
 open(OUT, ">debian-installer") || die "write: $!";
