@@ -47,7 +47,7 @@ ifndef MKISOFS_OPTS
 #For normal users
 MKISOFS_OPTS=-a -r -T      
 #For symlink farmers
-#MKISOFS_OPTS=-a -r -F -T  
+#MKISOFS_OPTS=-a -r -F . -T  
 endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook

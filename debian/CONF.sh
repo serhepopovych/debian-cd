@@ -69,4 +69,4 @@ export APTTMP=/home/ftp/tmp/apt
 # Options
 # export MKISOFS=/usr/bin/mkhybrid
 # export MKISOFS_OPTS="-a -r -T"	#For normal users
-# export MKISOFS_OPTS="-a -r -F -T"	#For symlink farmers
+# export MKISOFS_OPTS="-a -r -F . -T"	#For symlink farmers

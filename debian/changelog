@@ -3,6 +3,7 @@ debian-cd (2.2.2) frozen unstable; urgency=low
   * Still targeted to frozen. Documentations (README.html on the CD) updates
     & other little changes. 
   * Fixed targets bin-image and src-image to use CD$(CD) instead of $(CD).
+  * Added "." after -F argument for symlink farm user. Closes: #66599
 
  -- Raphael Hertzog <hertzog@debian.org>  Fri, 30 Jun 2000 17:50:16 +0200
 
