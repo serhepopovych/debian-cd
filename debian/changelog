@@ -8,7 +8,12 @@ debian-cd (2.2.4) unstable; urgency=low
     since 2.2.3; also mentioned this in the debian-cd/YACS README.
   * Some minor updates/rewordings in CD's top-level README.
   * Typo. tools/add_dirs line #26 changed to if [ -n     --jwest
+    Closes: #79902
+  * Include a new interactive boot.bat. Closes: #83471
+  * Corrected tools/apt-selection. Closes: #79903
 
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 27 Jan 2001 18:19:21 +0100
+ 
 debian-cd (2.2.3) unstable; urgency=low
 
   * Fixes several bug caused by changes in the way binary-all packages

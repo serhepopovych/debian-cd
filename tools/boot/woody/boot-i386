@@ -65,8 +65,11 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 
 # populate the install directory as well
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp -f images-1.44/resc*.bin  $CDDIR/install ; \
-	cp -f linux  $CDDIR/install ; \
+	cp -f images-1.44/resc*.bin $CDDIR/install ; \
+	cp -f linux $CDDIR/install/linux ; \
+	cp -f compact/linux $CDDIR/install/lincompt ; \
+	cp -f idepci/linux $CDDIR/install/linide ; \
+	cp -f udma66/linux $CDDIR/install/linudma ; \
 	cp -f images-1.44/root.bin $CDDIR/install )
 
 
@@ -83,7 +86,6 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 ## end notes
 
 
-
 # Tools for disc 1
 # and include the legacy DOS stuff 
 
@@ -94,12 +96,45 @@ cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
 	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
 	) |todos > $CDDIR/tools/README.tools
 
-(echo "@ echo off" ; \
-	echo "rem Flush any write-cached disk blocks before we leave DOS. " ; \
-        echo "If your system does not use smartdrv an error message will appear, " ; \
-        echo "you can safely ignore that." ; \
-	echo "smartdrv /c" ; \
-	echo "loadlin.exe linux root=/dev/ram ro initrd=root.bin" ; \
-	) |todos > $CDDIR/install/boot.bat
+(cat <<EOF;
+@ echo off
+rem Flush any write-cached disk blocks before we leave DOS. 
+If your system does not use smartdrv an error message will appear, 
+you can safely ignore that.
+smartdrv /c
+
+echo Please choose a linux kernel now
+echo 1= standard kernel (2.2)
+echo 2= compact kernel  (2.2)
+echo 3= IDEPCI kernel   (2.2)
+echo 4= UDMA66 kernel   (2.2)
+
+choice /c:1234
+if errorlevel 4 goto FOUR
+if errorlevel 3 goto THREE
+if errorlevel 2 goto TWO
+if errorlevel 1 goto ONE
+
+echo doing default somehow and going to ONE
+goto ONE
+
+:ONE
+echo using standard kernel
+loadlin.exe linux root=/dev/ram ro initrd=root.bin
+
+:TWO
+echo using compact kernel
+loadlin.exe lincompt root=/dev/ram ro initrd=root.bin
+
+:THREE
+echo using IDEPCI kernel
+loadlin.exe linide root=/dev/ram ro initrd=root.bin
+
+:FOUR
+echo using UDMA66 kernel
+loadlin.exe linudma root=/dev/ram ro initrd=root.bin
+EOF
+) |todos > $CDDIR/install/boot.bat
+
 fi
 # th,th, thats all

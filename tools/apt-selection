@@ -82,7 +82,7 @@ elif [ "$1" = "deselected" ]; then
 	    #echo ": Param: apt-selection deselected $@" >&2; 
 	    #exit $num;  
 	#fi
-	perl -ne 'print "$1\n" if /^Remv (\S+)\s*(?:\[|$)/' $temp | sort
+	perl -ne 'print "$1\n" if /^Remv (\S+).*/' $temp | sort
 elif [ "$1" = "selected" ]; then
 	shift
 	apt-get $options -s $@ > $temp 
@@ -91,7 +91,7 @@ elif [ "$1" = "selected" ]; then
 	#    echo "ERROR: Param: apt-selection selected $@" >&2; 
 	#    exit $num;  
 	#fi
-	perl -ne 'print "$1\n" if /^Inst (\S+)\s*(?:\[|$)/' $temp | sort
+	perl -ne 'print "$1\n" if /^Inst (\S+).*/' $temp | sort
 else
 	apt-get $options -s $@
 	exit $?
