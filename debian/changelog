@@ -26,6 +26,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       generate_di_list to not include udebs from those lists onto the
       cdrom, to save space on the netinst cds.
     - Use the d-i docs in sid instead of the woody boot floppies docs.
+    - Add pcmcia-cs-udeb to sarge's i386_netinst_udeb_include, to support
+      pcmcia installs.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
