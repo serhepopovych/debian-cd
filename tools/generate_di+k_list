@@ -47,6 +47,7 @@ EOF
 cat >> debian-installer+kernel << EOF
 #endif
 #ifdef ARCH_ia64
+initrd-tools
 EOF
 
 /bin/sed -n 's/Package: \(kernel-image-.*\)$/\1/p' \
