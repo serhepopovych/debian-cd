@@ -14,6 +14,10 @@ debian-cd (2.2.15) unstable; urgency=low
   * Provide a customised isolinux image. We don't need to
     recommend syslinux now.
   * Apply patch from Petter Reinholdtsen to put security updates on the cd.
+  * Apply patch from Petter Reinholdtsen to preserve timestamps, making
+    build.sh being able to run with -e set, report reserved space and
+    the space debootstrap needs.  Also, handle boot-floppy directories
+    without docs.
   
  -- Raphael Hertzog <hertzog@debian.org>  Sun,  5 May 2002 12:12:36 +0200
 

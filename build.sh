@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/sh -e
 
 # Script to build one arch
 
 . CONF.sh
 
-[ -n "$1" ] && export ARCH=$1
+if [ -n "$1" ] ; then
+    export ARCH=$1
+fi
 
 make distclean
 make ${CODENAME}_status
@@ -30,6 +32,7 @@ for CD in 1 2 3 4 5 6 7 8; do
 	[ "$size" = "" ] && size=0
 	[ $CD = "1" ] && size=$(($size + $disks))
     FULL_SIZE=`echo "($DEFBINSIZE - $size) * 1024 * 1024" | bc`
+	echo "INFO: Reserving $size MB on the $CD cd.  SIZELIMIT=$FULL_SIZE."
 	SIZE_ARGS="$SIZE_ARGS SIZELIMIT${CD}=$FULL_SIZE"
 done
 FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`

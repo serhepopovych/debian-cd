@@ -97,7 +97,7 @@ if [ "${ISOLINUX:-0}" != "0" ]; then
     # Include Smart Boot Manager image for people where isolinux doesn't
     # work
     gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
-    cp $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
+    cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
     # Isolinux config files
     cp -f $BASEDIR/data/$CODENAME/isolinux.txt $BASEDIR/data/$CODENAME/f*.txt boot$N/isolinux/
     cat > boot$N/isolinux/isolinux.cfg <<EOF
@@ -144,7 +144,7 @@ F0 f10.txt
 EOF
 fi
 
-cp -f $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
+cp -pf $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
 
 (echo "Tools for DOS :" ; \
 	echo "lodlin/         load Linux kernel from DOS" ;\

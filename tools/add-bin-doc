@@ -13,7 +13,7 @@ for i in $BDIR/*.packages; do
 	dir=${i%%.packages}
 	dir=${dir##$BDIR/}
 	dir=$BDIR/CD$dir
-	cp -df $MIRROR/README* $dir/ 
+	cp -pdf $MIRROR/README* $dir/ 
 
 	if [ -f $dir/doc/dedication-$DEBMAINVER.txt ]; then
 		mv $dir/doc/dedication-$DEBMAINVER.txt $dir/dedication.txt
@@ -37,14 +37,14 @@ for i in $BDIR/*.packages; do
 
 	rm -f $dir/README.diskdefines
 	mkdir -p $dir/pics 
-	cp $BASEDIR/data/pics/*.* $dir/pics/ 
+	cp -p $BASEDIR/data/pics/*.* $dir/pics/ 
 
 	if [ -e $MIRROR/dists/$CODENAME/main/Release-Notes ]; then 
-	   cp -f $MIRROR/dists/$CODENAME/main/Release-Notes $dir/
+	   cp -pf $MIRROR/dists/$CODENAME/main/Release-Notes $dir/
 	fi
 
 	if [ -e $MIRROR/dists/$CODENAME/Contents-$ARCH.gz ]; then
-	   cp -f $MIRROR/dists/$CODENAME/Contents-$ARCH.gz $dir/dists/$CODENAME/
+	   cp -pf $MIRROR/dists/$CODENAME/Contents-$ARCH.gz $dir/dists/$CODENAME/
 	else
 	   echo "WARNING: there's no Contents-$ARCH.gz file for $CODENAME !"
 	fi
@@ -52,7 +52,7 @@ for i in $BDIR/*.packages; do
         if [ -n "$NONUS" ]
 	then
 	    if [ -e $NONUS/dists/$CODENAME/non-US/Contents-$ARCH.gz ]; then
-		 cp -f $NONUS/dists/$CODENAME/non-US/Contents-$ARCH.gz \
+		 cp -pf $NONUS/dists/$CODENAME/non-US/Contents-$ARCH.gz \
 		    $dir/dists/$CODENAME/non-US/
 	    else
 		echo "WARNING: there's no Content-$ARCH.gz file for $CODENAME/non-US !"
@@ -60,7 +60,7 @@ for i in $BDIR/*.packages; do
 	fi
 
 	if [ -e $BASEDIR/data/$CODENAME/README.$ARCH ]; then 
-	  cp -f $BASEDIR/data/$CODENAME/README.$ARCH $dir/
+	  cp -pf $BASEDIR/data/$CODENAME/README.$ARCH $dir/
 	fi
 
 	if [ -e $BASEDIR/data/$CODENAME/README.1ST.$ARCH ]; then 
@@ -73,7 +73,7 @@ for i in $BDIR/*.packages; do
 	fi
 
 	if [ -e $BASEDIR/data/$CODENAME/README.multicd ]; then 
-	    cp -f $BASEDIR/data/$CODENAME/README.multicd $dir/
+	    cp -pf $BASEDIR/data/$CODENAME/README.multicd $dir/
 	fi
 
 done

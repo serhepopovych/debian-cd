@@ -4,32 +4,32 @@
 
 # Unset all optional variables first to start from a clean state
 unset NONUS
-unset FORCENONUSONCD1
-unset NONFREE
-unset EXTRANONFREE
-unset LOCAL
-unset LOCALDEBS
-unset SECURED
-unset SECURITY
-unset BOOTDIR
-unset SYMLINK
-unset COPYLINK
-unset MKISOFS
-unset MKISOFS_OPTS
-unset ISOLINUX
-unset EXCLUDE
-unset SRCEXCLUDE
-unset NORECOMMENDS
-unset NOSUGGESTS
-unset DOJIGDO
-unset JIGDOCMD
-unset JIGDOTEMPLATEURL
-unset DEFBINSIZE
-unset DEFSRCSIZE
-unset FASTSUMS
-unset PUBLISH_URL
-unset PUBLISH_NONUS_URL
-unset PUBLISH_PATH
+unset FORCENONUSONCD1   || true
+unset NONFREE           || true
+unset EXTRANONFREE      || true
+unset LOCAL             || true
+unset LOCALDEBS         || true
+unset SECURED           || true
+unset SECURITY          || true
+unset BOOTDIR           || true
+unset SYMLINK           || true
+unset COPYLINK          || true
+unset MKISOFS           || true
+unset MKISOFS_OPTS      || true
+unset ISOLINUX          || true
+unset EXCLUDE           || true
+unset SRCEXCLUDE        || true
+unset NORECOMMENDS      || true
+unset NOSUGGESTS        || true
+unset DOJIGDO           || true
+unset JIGDOCMD          || true
+unset JIGDOTEMPLATEURL  || true
+unset DEFBINSIZE        || true
+unset DEFSRCSIZE        || true
+unset FASTSUMS          || true
+unset PUBLISH_URL       || true
+unset PUBLISH_NONUS_URL || true
+unset PUBLISH_PATH      || true
 
 
 # The debian-cd dir

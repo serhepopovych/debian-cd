@@ -23,8 +23,11 @@ fi
 # Put the install documentation in /install
 cd $DOCS
 mkdir -p $DIR/install/$DOCDIR
-cp -a * $DIR/install/$DOCDIR/
-ln -sf install.en.html $DIR/install/$DOCDIR/index.html
+if cp -a * $DIR/install/$DOCDIR/ ; then
+    ln -sf install.en.html $DIR/install/$DOCDIR/index.html
+else
+    echo "ERROR: Unable to copy boot-floppies documentation to CD."
+fi
 
 # Put the boot-disk documentation in /doc too
 mkdir -p $DIR/doc/install
