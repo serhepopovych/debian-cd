@@ -658,7 +658,7 @@ $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
 		rm -rf base-images-*; \
 		if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \
 		if [ -L current ]; then \
-			CURRENT_LINK=`ls -l current | awk '{print $$11}'`; \
+			CURRENT_LINK=`readlink current`; \
 			mv $$CURRENT_LINK .tmp_link; \
 			rm -rf [0123456789]*; \
 			mv .tmp_link $$CURRENT_LINK; \
