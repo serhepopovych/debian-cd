@@ -32,6 +32,10 @@ unset FASTSUMS          || true
 unset PUBLISH_URL       || true
 unset PUBLISH_NONUS_URL || true
 unset PUBLISH_PATH      || true
+unset UDEB_INCLUDE      || true
+unset UDEB_EXCLUDE      || true
+unset BASE_INCLUDE      || true
+unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
 
 
@@ -194,11 +198,20 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # Where to find the boot disks
 #export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies
 
+# File with list of packages to include when fetching modules for the
+# first stage installer (debian-installer). One package per line.
+# Lines starting with '#' are comments.  The package order is
+# important, as the packages will be installed in the given order.
+#export UDEB_INCLUDE="$BASEDIR"/data/$CODENAME/udeb_include
+
+# File with list of packages to exclude as above.
+#export UDEB_EXCLUDE="$BASEDIR"/data/$CODENAME/udeb_exclude
+
 # File with list of packages to include when running debootstrap from
 # the first stage installer (currently only supported in
 # debian-installer). One package per line.  Lines starting with '#'
-# are comments.  The package order is important, when will be
-# installed in the given order.
+# are comments.  The package order is important, as the packages will
+# be installed in the given order.
 #export BASE_INCLUDE="$BASEDIR"/data/$CODENAME/base_include
 
 # File with list of packages to exclude as above.

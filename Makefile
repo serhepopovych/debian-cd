@@ -468,6 +468,22 @@ $(BDIR)/packages-stamp:
 	    if [ -n "$(LOCAL)" ]; then \
 	        echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
 	    fi; \
+	    if [ -n "$(UDEB_INCLUDE)" ] ; then \
+		if [ -r "$(UDEB_INCLUDE)" ] ; then \
+		    cp -af "$(UDEB_INCLUDE)" \
+		        "$(BDIR)/CD$$DISK/.disk/udeb_include"; \
+		else \
+		    echo "ERROR: Unable to read UDEB_INCLUDE file $(UDEB_INCLUDE)"; \
+		fi; \
+	    fi; \
+	    if [ -n "$(UDEB_EXCLUDE)" ] ; then \
+		if [ -r "$(UDEB_EXCLUDE)" ] ; then \
+		    cp -af "$(UDEB_EXCLUDE)" \
+		        "$(BDIR)/CD$$DISK/.disk/udeb_exclude"; \
+		else \
+		    echo "ERROR: Unable to read UDEB_EXCLUDE file $(UDEB_EXCLUDE)"; \
+		fi; \
+	    fi; \
 	    if [ -n "$(BASE_INCLUDE)" ] ; then \
 		if [ -r "$(BASE_INCLUDE)" ] ; then \
 		    cp -af "$(BASE_INCLUDE)" \
