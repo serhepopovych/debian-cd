@@ -17,36 +17,36 @@ then CD-ROMs, and finally FTP/HTTP mirrors.)
 <P>
 <UL>
 <LI>
-For a local archive (or a single mounted CD-ROM), that for example has
-  these directories,
+For an archive on a local harddisk, that for example has these directories,
 
 #if OUTPUTtext
 <PRE>
 
-         /var/ftp/debian/dists/potato/main/binary-ARCH/...
-         /var/ftp/debian/dists/potato/contrib/binary-ARCH/...
-         ---------------       ------     |\ 
-               \________          \_      | \___
-       add:             \           \     |     \ 
-                  --------------- ------  |      \ 
-         deb file:/var/ftp/debian potato main contrib
+         /var/ftp/debian/dists/woody/main/binary-ARCH/...
+         /var/ftp/debian/dists/woody/contrib/binary-ARCH/...
+         ---------------       -----     |\ 
+               \________          \_     | \___
+       add:             \           \    |     \ 
+                  --------------- -----  |      \ 
+         deb file:/var/ftp/debian woody main contrib
 
 </PRE>
 #endif
 #if OUTPUThtml
 <PRE>
-  /var/ftp/debian/dists/potato/main/binary-ARCH/...
-  /var/ftp/debian/dists/potato/contrib/binary-ARCH/...
-  ---------------       ------     |\ 
-        \________          \_      | \___
-add:             \           \     |     \ 
-           --------------- ------  |      \ 
-  deb file:/var/ftp/debian potato main contrib
+  /var/ftp/debian/dists/woody/main/binary-ARCH/...
+  /var/ftp/debian/dists/woody/contrib/binary-ARCH/...
+  ---------------       -----     |\ 
+        \________          \_     | \___
+add:             \           \    |     \ 
+           --------------- -----  |      \ 
+  deb file:/var/ftp/debian woody main contrib
 </PRE>
 #endif
 
-  As shown, the `<tt>dists</tt>' is added implicitly, and the 3rd,...
-  arguments are used to expand the path into multiple directories.
+  As shown, the `<tt>dists</tt>' is added implicitly, and the 3rd
+  and following arguments are used to expand the path into multiple
+  directories.
 
 <BR>&nbsp;<BR>
 
@@ -56,9 +56,9 @@ add:             \           \     |     \
 <BR>&nbsp;<BR>
 
 <tt>&nbsp;
-    deb file:/var/ftp/debian potato main contrib non-free <BR>
+    deb file:/var/ftp/debian woody main contrib non-free <BR>
 &nbsp;
-    deb file:/var/ftp/debian-non-US potato/non-US main contrib non-free
+    deb file:/var/ftp/debian-non-US woody/non-US main contrib non-free
 </tt>
 
 <BR>&nbsp;<BR>
@@ -75,7 +75,7 @@ add:             \           \     |     \
 <BR>&nbsp;<BR>
 <LI>
 
-FTP or HTTP packages mirror addresses can be found on
+FTP and HTTP packages mirror addresses can be found on
 
 #if CDROMreadme
 #if OUTPUTtext
@@ -101,30 +101,31 @@ this CD in <a href="README.mirrors.html">README.mirrors.html</a>, or on
 #if OUTPUTtext
 <PRE>
 
-         ftp://some-server/debian/dists/potato/main/binary-ARCH/...
-         ftp://some-server/debian/dists/potato/contrib/binary-ARCH/...
-         ------------------------       ------ |   |
-                     \___                 /    |   |
-       add:              \               /     |   |
-             ------------------------ ------   |   |
-         deb ftp://some-server/debian potato main contrib
+         ftp://some-server/debian/dists/woody/main/binary-ARCH/...
+         ftp://some-server/debian/dists/woody/contrib/binary-ARCH/...
+         ------------------------       ----- |   |
+                     \___                 /   |   |
+       add:              \               /    |   |
+             ------------------------ -----   |   |
+         deb ftp://some-server/debian woody main contrib
 
 </PRE>
 #endif
 #if OUTPUThtml
 <PRE>
-  ftp://some-server/debian/dists/potato/main/binary-ARCH/...
-  ftp://some-server/debian/dists/potato/contrib/binary-ARCH/...
-  ------------------------       ------ |   |
-              \___                 /    |   |
-add:              \               /     |   |
-      ------------------------ ------   |   |
-  deb ftp://some-server/debian potato main contrib
+  ftp://some-server/debian/dists/woody/main/binary-ARCH/...
+  ftp://some-server/debian/dists/woody/contrib/binary-ARCH/...
+  ------------------------       ----- |   |
+              \___                 /   |   |
+add:              \               /    |   |
+      ------------------------ -----   |   |
+  deb ftp://some-server/debian woody main contrib
 </PRE>
 #endif
 
-  As shown, the `<tt>dists</tt>' is added implicitly, and the 3rd,...
-  arguments are used to expand the path into multiple directories.
+  As shown, the `<tt>dists</tt>' is added implicitly, and the 3rd
+  and following arguments are used to expand the path into multiple
+  directories.
 
 <BR>&nbsp;<BR>
 
@@ -134,9 +135,9 @@ add:              \               /     |   |
 <BR>&nbsp;<BR>
 
 <tt>&nbsp;
-    deb ftp://some-server/debian potato main contrib non-free <BR>
+    deb ftp://some-server/debian woody main contrib non-free <BR>
 &nbsp;
-    deb ftp://some-server/debian-non-US potato/non-US main contrib non-free
+    deb ftp://some-server/debian-non-US woody/non-US main contrib non-free
 </tt>
 
 <BR>&nbsp;<BR>
@@ -162,8 +163,8 @@ add:              \               /     |   |
 <BR>&nbsp;<BR>
 <LI>
 
-In case of upgrading from a set of CD-ROMs (also possible for a single,
-  unmounted CD-ROM), do _not_ add any lines to sources.list manually.
+If you use (one or more) CD-ROMs, do _not_ add any lines to sources.list
+  manually.
 
 <BR>&nbsp;<BR>
 
@@ -213,7 +214,7 @@ In case of upgrading from a set of CD-ROMs (also possible for a single,
 
     <tt>&nbsp; mount /cdrom</tt><BR>
     <tt>&nbsp; ls -alF /cdrom &nbsp;&nbsp;&nbsp;</tt>
-                            (this should show the CD-ROM's root directory)<BR>
+                            (should show the CD-ROM's root directory)<BR>
     <tt>&nbsp; umount /cdrom</tt>
 
 <BR>&nbsp;<BR>
@@ -228,9 +229,9 @@ In case of upgrading from a set of CD-ROMs (also possible for a single,
 
 <BR>&nbsp;<BR>
 
-  to add the data of each individual CD-ROM to apt's internal database.
+  to add the data of each CD-ROM to apt's internal database.
   This command will ask for one CD-ROM per run, and mount/unmount the
-  CD-ROM automatically. You should repeat this command for all 2.2 `Binary'
+  CD-ROM automatically. You should repeat this command for all 3.0 `Binary'
   CD-ROMs you have.
 
 #if UPGRADING
@@ -243,7 +244,8 @@ In case of upgrading from a set of CD-ROMs (also possible for a single,
 </UL>
 <P>
 
-The final step of the preparation is to update apt's internal database
+When the <tt>sources.list</tt> is correct,
+the final step of the preparation is to update apt's internal database
 with the command
 
 <P>
