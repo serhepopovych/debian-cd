@@ -4,8 +4,8 @@ export BASEDIR=/usr/share/debian-cd
 # Building potato cd set ...
 export CODENAME=potato
 
-# Version number, 2.2 or 2.2_r3 etc.
-export DEBVERSION="2.2"
+# Version number, "2.2 r0", "2.2 r1" etc.
+export DEBVERSION="2.2 r0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
@@ -27,6 +27,11 @@ export MIRROR=/home/ftp/debian
 
 # Comment the following line if you don't have/want non-US
 #export NONUS=/ftp/debian-non-US
+
+# And this option will make you 2 copies of CD1 - one with all the
+# non-US packages on it, one with none. Useful if you're likely to
+# need both.
+#export FORCENONUSONCD1=1
 
 # Path of the temporary directory
 export TDIR=/home/ftp/tmp

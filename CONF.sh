@@ -9,8 +9,8 @@ export BASEDIR=`pwd`
 # Building potato cd set ...
 export CODENAME=potato
 
-# Version number
-export DEBVERSION="2.2"
+# Version number, "2.2 r0", "2.2 r1" etc.
+export DEBVERSION="2.2 r0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
