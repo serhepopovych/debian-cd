@@ -9,7 +9,7 @@ BDIR=$TDIR/$CODENAME-$ARCH
 # Put the install documentation in /install
 cd $BDIR/1/dists/$CODENAME/main/disks-$ARCH/current
 cp *.{html,txt} $BDIR/1/install/
-ln -sf install.html $BDIR/1/install/index.html
+ln -sf install.en.html $BDIR/1/install/index.html
 
 # Put the boot-disk documentation in /doc too
 cd $BDIR/1/doc
