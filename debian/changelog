@@ -71,6 +71,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       This should be fixed in a proper way when time permits.
     - Make fast_sums ignore md5sums of files not in the pool directory.
       Closes: #247889
+    - Add support for sarge bootable mipsel cds (delo based), needs work.
   * Bdale Garbee
     - shorten the command line in post-boot-hppa for sarge, as palo can't
       handle a command line longer than 127 chars right now
