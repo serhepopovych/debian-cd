@@ -2,6 +2,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
 
   * Remove debian-keyring.tar.gz from the doc dir.
   * Don't include Contents-$ARCH.gz on netinst/businesscard CD.
+  * Joey Hess
+    - Include sarge installation manual on sarge CDs.
+    - Remove install/doc, and just use doc/install.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
