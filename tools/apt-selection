@@ -57,6 +57,11 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	  echo "deb file:${LOCALDEBS:-$MIRROR} $CODENAME local" \
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	fi
+        # Security mirror ...
+        if [ -n "$SECURITY" ]; then
+	  echo "deb file:${SECURITY:-$MIRROR} $CODENAME/updates $sections" \
+	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+        fi
 fi
 
 temp=$APTTMP/$CODENAME-$ARCH/temp.apt-selection

@@ -33,41 +33,56 @@ then
     ln -sf $CODENAME dists/local
 fi
 
-for i in $SECTIONS
-do
-	mkdir -p dists/$CODENAME/main/binary-$ARCH/$i
-	mkdir -p dists/$CODENAME/main/binary-all/$i
-	mkdir -p dists/$CODENAME/main/source/$i
-	mkdir -p dists/$CODENAME/contrib/binary-$ARCH/$i
-	mkdir -p dists/$CODENAME/contrib/binary-all/$i
-	mkdir -p dists/$CODENAME/contrib/source/$i
-	if [ -n "$NONFREE" ]; then
-		mkdir -p dists/$CODENAME/non-free/binary-$ARCH/$i
-		mkdir -p dists/$CODENAME/non-free/binary-all/$i
-		mkdir -p dists/$CODENAME/non-free/source/$i
-	fi
-	if [ -n "$LOCAL" ]; then
-		mkdir -p dists/$CODENAME/local/binary-$ARCH/$i
-		mkdir -p dists/$CODENAME/local/binary-all/$i
-		mkdir -p dists/$CODENAME/local/source/$i
-	fi
-done
-
-if [ -n "$NONUS" ]; then
-	mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
-	mkdir -p dists/$CODENAME/non-US/main/binary-all
-	mkdir -p dists/$CODENAME/non-US/main/source
-	mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
-	mkdir -p dists/$CODENAME/non-US/contrib/binary-all
-	mkdir -p dists/$CODENAME/non-US/contrib/source
-	if [ -n "$NONFREE" ]; then
-		mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
-		mkdir -p dists/$CODENAME/non-US/non-free/binary-all
-		mkdir -p dists/$CODENAME/non-US/non-free/source
-	fi
-fi
 
 if [ ! -d .disk ] ; then
 	mkdir .disk
+fi
+
+for i in $SECTIONS
+do
+        mkdir -p dists/$CODENAME/main/binary-$ARCH/$i
+        mkdir -p dists/$CODENAME/main/binary-all/$i
+        mkdir -p dists/$CODENAME/main/source/$i
+        mkdir -p dists/$CODENAME/contrib/binary-$ARCH/$i
+        mkdir -p dists/$CODENAME/contrib/binary-all/$i
+        mkdir -p dists/$CODENAME/contrib/source/$i
+        if [ -n "$NONFREE" ]; then
+                mkdir -p dists/$CODENAME/non-free/binary-$ARCH/$i
+                mkdir -p dists/$CODENAME/non-free/binary-all/$i
+                mkdir -p dists/$CODENAME/non-free/source/$i
+        fi
+        if [ -n "$LOCAL" ]; then
+                mkdir -p dists/$CODENAME/local/binary-$ARCH/$i
+                mkdir -p dists/$CODENAME/local/binary-all/$i
+                mkdir -p dists/$CODENAME/local/source/$i
+        fi
+done
+
+if [ -n "$SECURITY" ]; then
+    mkdir -p dists/$CODENAME/updates/main/binary-$ARCH
+    mkdir -p dists/$CODENAME/updates/main/binary-all
+    mkdir -p dists/$CODENAME/updates/main/source
+    mkdir -p dists/$CODENAME/updates/contrib/binary-$ARCH
+    mkdir -p dists/$CODENAME/updates/contrib/binary-all
+    mkdir -p dists/$CODENAME/updates/contrib/source
+    if [ -n "$NONFREE" ]; then
+        mkdir -p dists/$CODENAME/updates/non-free/binary-$ARCH
+        mkdir -p dists/$CODENAME/updates/non-free/binary-all
+        mkdir -p dists/$CODENAME/updates/non-free/source
+    fi
+fi
+
+if [ -n "$NONUS" ]; then
+        mkdir -p dists/$CODENAME/non-US/main/binary-$ARCH
+        mkdir -p dists/$CODENAME/non-US/main/binary-all
+        mkdir -p dists/$CODENAME/non-US/main/source
+        mkdir -p dists/$CODENAME/non-US/contrib/binary-$ARCH
+        mkdir -p dists/$CODENAME/non-US/contrib/binary-all
+        mkdir -p dists/$CODENAME/non-US/contrib/source
+        if [ -n "$NONFREE" ]; then
+                mkdir -p dists/$CODENAME/non-US/non-free/binary-$ARCH
+                mkdir -p dists/$CODENAME/non-US/non-free/binary-all
+                mkdir -p dists/$CODENAME/non-US/non-free/source
+        fi
 fi
 

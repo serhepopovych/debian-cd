@@ -106,6 +106,9 @@ for i in `cd dists; echo *; cd ..`; do
 	     -d "dists/$i/contrib/binary-$ARCH" ]; then
 	    DISTS="$DISTS $i"
 	fi
+        if [ -n "$SECURITY" ]; then
+            DISTS="$DISTS $i/updates"
+        fi
 	if [ -d "dists/$i/non-US/main/binary-$ARCH" -o \
 	     -d "dists/$i/non-US/non-free/binary-$ARCH" -o \
 	     -d "dists/$i/non-US/contrib/binary-$ARCH" ]; then
