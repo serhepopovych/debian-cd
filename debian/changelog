@@ -32,6 +32,10 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Add "--" end of installer kernel params markers to yaboot.conf.
     - Drop compatibility with old powerpc 2.4/2.6 d-i image layout, since
       the changed image layout reached sarge a while ago.
+    - Remove 2.4 images from power3 and power4; those few who want them can
+      netboot.
+    - Remove 2.6 PReP images from power3 and power4, as no such machines
+      exist.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
