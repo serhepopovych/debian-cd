@@ -39,7 +39,7 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     # Update some other information as well
     sed -e "s/^Architectures: .*$/Architectures: $ARCH/" \
     $MIRROR/dists/$CODENAME/Release | \
-    sed -e "s/^Components: .*$/Components: $SECTIONS/" | \
+    sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
     perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
     if ($f) { 
 	unless (/^ /) { print; $f=0 }
@@ -50,7 +50,7 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
     # Update some other information as well
     sed -e "/^ /d" -e "s/^Architectures: .*$/Architectures: $ARCH/" \
     $NONUS/dists/$CODENAME/non-US/Release | \
-    sed -e "s/^Components: .*$/Components: $SECTIONSNONUS/" | \
+    sed -e "s|^Components: .*$|Components: $SECTIONSNONUS|" | \
     perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
     if ($f) { 
 	unless (/^ /) { print; $f=0 }
