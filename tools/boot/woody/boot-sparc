@@ -35,10 +35,20 @@ inst=boot1
 # Setup directories
 mkdir -p $inst/boot
 
-silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
+silo_deb=`ls -t $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 # put the relevant parts of SILO boot loader
 (ar p $silo_deb data.tar.gz | \
 	tar zxf - -C $inst/ ./boot/{cd,second}.b)
+
+if [ ! -e $inst/boot/cd.b ] ; then
+    echo "no cd.b found! exiting"
+    exit 1
+fi
+
+if [ ! -e $inst/boot/second.b ] ; then
+    echo "no second.b found! exiting"
+    exit 1
+fi
 
 # Some custom etc files
 cp -f -p $BASEDIR/data/sparc/etc/{debian.txt,silo.conf} \
