@@ -53,6 +53,8 @@ debian-cd (2.2.17) UNRELEASED; urgency=low
       done for other arches for which it is not default)
     - Include every available powerpc kernel on the CD, which is perhaps
       better than a random selection of two obscure subarches..
+    - Try to include some sparc kernels on the CD; it's probably better than
+      including none..
   * Steve Langasek
     - Add fdisk-udeb to the list of needed debs for alpha
     - Use /dev/ram as the root device for aboot (alpha)

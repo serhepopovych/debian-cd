@@ -74,5 +74,13 @@ EOF
 
 cat >> debian-installer+kernel << EOF
 #endif
+#ifdef ARCH_sparc
+EOF
 
+/bin/sed -n 's/Package: \(kernel-image-.*-sparc.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-sparc/Packages \
+  >> debian-installer+kernel
+
+cat >> debian-installer+kernel << EOF
+#endif
 EOF
