@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# boot-ia64
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+set -e
+
+N=$1
+CDDIR=$2
+BOOTDIR=
+
+cd $CDDIR/..
+
+#
+# This script is called with $1 (now $N) as the CD to 
+# make bootable.  N may be in the form "n" or "n_NONUS"
+# There may be more than 4 disks...support extras.
+
+# Put boot images on CD1...CD(N)
+#
+:> $N.mkisofs_opts
+mkdir -p boot$N/boot
+cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/rescue.bin boot$N/boot/
+echo -n "-no-emul-boot -J -b boot/rescue.bin -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
+
+# Only disk one gets the extra files installed
+#
+if [ $N == "1" ] ; then
+
+# populate the install directory as well
+(cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
+	cp -f images-1.44/resc*.bin $CDDIR/install ; \
+	cp -f linux $CDDIR/install/linux ; \
+	cp -f root.bin $CDDIR/install )
+
+fi
+
+# th,th, thats all

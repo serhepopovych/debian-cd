@@ -2,6 +2,7 @@ debian-cd (2.2.8) unstable; urgency=low
 
   * UNRELEASED. 
   * Be less restrictive on non-US section name (ie accepts non-us too).
+  * Add support for ia64 (Richard Hirst).  Closes #110553.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 19 Aug 2001 13:42:27 +0200
 

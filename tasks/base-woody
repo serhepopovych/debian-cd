@@ -83,6 +83,12 @@ setserial
 syslinux
 #endif
 
+#ifdef ARCH_ia64
+elilo
+efibootmgr
+dosfstools
+#endif
+
 #ifdef ARCH_m68k
 atari-bootstrap
 atari-fdisk
