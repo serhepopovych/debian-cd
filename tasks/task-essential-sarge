@@ -2,7 +2,7 @@
  *
  * Generated with: 
  
-grep-dctrl -s Essential -n -e '.*' /usr/share/tasksel/debian-tasks.desc | sed -e 's/ *//' | grep -v ^$ | sort | uniq
+grep-dctrl -s Essential -n -e '.*' /usr/share/tasksel/debian-tasks.desc | sed -e 's? *??' | grep -v ^$ | sort | uniq
 
  * If the list is too big for the first CD, then we'll have to sort it
  * better, but hopefully this will never be needed since the goal of that

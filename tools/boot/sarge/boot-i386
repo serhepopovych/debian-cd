@@ -47,7 +47,7 @@ for image in cdrom-2880.img cdrom144-1440.img net-1440.img; do
     fi
 done
 
-if [ "$NN" = "1" ]; the
+if [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
     cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
