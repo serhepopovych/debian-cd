@@ -311,12 +311,19 @@ Installing
  <A href="install/doc/install.en.html">/install/doc/install.en.html</a> &nbsp;&nbsp;&nbsp; </tt>
 					(English version).
  <P>
- Translations of the <i>Installation Manual</i>, various other documents, 
- and just everything else needed for the installation can be found on
+ Translations of the <i>Installation Manual</i>, and plain-text and PDF
+ versions, are also available in the 
+ <P>
+ <tt>&nbsp;
+ <A href="install/doc/">/install/doc</a></tt>
+ <P>
+ directory, along with various other documents.
+ <P>
+ Programs and other files that are needed for the installation can be found on
  this CD under
  <P>
  <tt>&nbsp;
- <A href=%%""dists/potato/main/disks-ARCH/%%"">/dists/potato/main/disks-ARCH</a>
+ <A href=%%""dists/woody/main/disks-ARCH/%%"">/dists/woody/main/disks-ARCH</a>
  </tt>
 
 #if ARCHi386 || ARCHalpha || ARCHpowerpc || ARCHsparc
@@ -563,7 +570,7 @@ For all needed information, and contact addresses, please refer to
 More Information
 #if OUTPUTtext
 <BR>
-=================
+================
 #endif
 </H2>
 </a>
@@ -705,7 +712,7 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Fri Jun 30 11:17:16 CEST 2000
+Last Modified: Sat Aug 12 11:09:43 CEST 2000
 
 <BR></SMALL>
 </DIV>
