@@ -183,3 +183,13 @@ export DEFSRCSIZE=635
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
+
+# File with list of packages to include when running debootstrap from
+# the first stage installer (currently only supported in
+# debian-installer). One package per line.  Lines starting with '#'
+# are comments.  The package order is important, when will be
+# installed in the given order.
+#export BASE_INCLUDE="$BASEDIR"/data/$CODENAME/base_include
+
+# File with list of packages to exclude as above.
+#export BASE_EXCLUDE="$BASEDIR"/data/$CODENAME/base_exclude

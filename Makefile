@@ -442,28 +442,44 @@ $(BDIR)/packages-stamp:
 	@# and create .disk/base_installable if yes
 	@# Also create .disk/base_components
 	$(Q)for DISK in $(FIRSTDISKS); do \
-	if [ -x "/usr/sbin/debootstrap" ]; then \
-	    ok=yes; \
-	    DISK=$${DISK##CD}; \
-	    for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
-		if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
-		    ok=no; \
-		    echo "Missing debootstrap-required $$p"; \
-		fi; \
-	    done; \
-	    if [ "$$ok" = "yes" ]; then \
-		echo "CD$$DISK contains all packages needed by debootstrap"; \
-		touch $(BDIR)/CD$$DISK/.disk/base_installable; \
+	    if [ -x "/usr/sbin/debootstrap" ]; then \
+	        ok=yes; \
+	        DISK=$${DISK##CD}; \
+	        for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
+		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
+		        ok=no; \
+		        echo "Missing debootstrap-required $$p"; \
+		    fi; \
+	        done; \
+	        if [ "$$ok" = "yes" ]; then \
+		    echo "CD$$DISK contains all packages needed by debootstrap"; \
+		    touch $(BDIR)/CD$$DISK/.disk/base_installable; \
+	        else \
+		    echo "CD$$DISK missing some packages needed by debootstrap"; \
+	        fi; \
 	    else \
-		echo "CD$$DISK missing some packages needed by debootstrap"; \
+	        echo "Unable to find debootstrap program"; \
 	    fi; \
-	else \
-	    echo "Unable to find debootstrap program"; \
-	fi; \
-	echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
-	if [ -n "$(LOCAL)" ]; then \
-	    echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
-	fi; \
+	    echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
+	    if [ -n "$(LOCAL)" ]; then \
+	        echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
+	    fi; \
+	    if [ -n "$(BASE_INCLUDE)" ] ; then \
+		if [ -r "$(BASE_INCLUDE)" ] ; then \
+		    cp -af "$(BASE_INCLUDE)" \
+		        "$(BDIR)/CD$$DISK/.disk/base_include"; \
+		else \
+		    echo "ERROR: Unable to read BASE_INCLUDE file $(BASE_INCLUDE)"; \
+		fi; \
+	    fi; \
+	    if [ -n "$(BASE_EXCLUDE)" ] ; then \
+		if [ -r "$(BASE_EXCLUDE)" ] ; then \
+		    cp -af $(BASE_EXCLUDE) \
+			$(BDIR)/CD$$DISK/.disk/base_exclude; \
+		else \
+		    echo "ERROR: Unable to read BASE_EXCLUDE file $(BASE_EXCLUDE)"; \
+		fi; \
+	    fi; \
 	done
 	$(Q)set -e; \
 	 for i in $(BDIR)/*.packages; do \
@@ -485,13 +501,6 @@ $(BDIR)/packages-stamp:
 		dir=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$dir; \
 		$(scanpackages) install $$dir; \
-	done
-	$(Q)for DISK in $(FIRSTDISKS); do \
-	    DISK=$${DISK##CD}; \
-	    echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
-	    if [ -n "$(LOCAL)" ]; then \
-		echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
-	    fi; \
 	done
 	$(Q)touch $(BDIR)/packages-stamp
 

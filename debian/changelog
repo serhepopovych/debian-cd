@@ -14,7 +14,9 @@ debian-cd (2.2.16) UNRELEASED; urgency=low
     have a mirror of main.
   * Petter Reinholdtsen:
     - Add CONTRIB flag to debian/CONF.sh.
-    - Create cdrom/.disk/base_components used by debian-installer.
+    - Add support for BASE_INCLUDE and BASE_EXCLUDE, making files
+      cdrom/.disk/base_include and .../base_exclude used by
+      debian-installer.
 
  -- Tollef Fog Heen <tfheen@debian.org>  Sat,  7 Dec 2002 10:58:53 +0100
 
