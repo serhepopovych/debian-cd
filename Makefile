@@ -81,7 +81,7 @@ endif
 endif
 # Default udeb_include files.
 ifndef UDEB_INCLUDE
-UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_udeb_include
+UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_udeb_include
 endif
 
 
