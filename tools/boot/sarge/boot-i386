@@ -51,7 +51,7 @@ DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
 if [ "$INSTALLER_CD" =! 1 ] && [ "$INSTALLER_CD" =! 2 ]; then
 	# Note that floppy/access/drivers.img was renamed to cd-drivers, both
 	# present for the transition.
-	EXTRA_DISK_IMAGES="floppy/net-drivers.img floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img floppy/asian-root.img floppy/cyrillic-root.img floppy/mideast-root.img"
+	EXTRA_DISK_IMAGES="floppy/net-drivers.img floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img"
 fi
 
 # Download boot images and floppies.
