@@ -22,10 +22,14 @@ DISTS=""
 DISTSNONUS=""
 for i in `cd dists; echo *; cd ..`; do
     if [ ! -L "dists/$i" -a -d "dists/$i" ]; then
-        if [ -d "dists/$i/main/source" ]; then
+        if [ -d "dists/$i/main/source" -o \
+	     -d "dists/$i/non-free/source" -o \
+	     -d "dists/$i/contrib/source" ]; then
             DISTS="$DISTS $i"
         fi
-        if [ -d "dists/$i/non-US/main/source" ]; then
+        if [ -d "dists/$i/non-US/main/source" -o \
+	     -d "dists/$i/non-US/non-free/source" -o \
+	     -d "dists/$i/non-US/contrib/source" ]; then
             DISTSNONUS="$DISTSNONUS $i"
         fi
     fi

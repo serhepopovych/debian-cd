@@ -147,10 +147,14 @@ DISTS=""
 DISTSNONUS=""
 for i in `cd dists; echo *; cd ..`; do
     if [ ! -L "dists/$i" -a -d "dists/$i" ]; then
-	if [ -d "dists/$i/main/binary-$ARCH" ]; then
+	if [ -d "dists/$i/main/binary-$ARCH" -o \
+	     -d "dists/$i/non-free/binary-$ARCH" -o \
+	     -d "dists/$i/contrib/binary-$ARCH" ]; then
 	    DISTS="$DISTS $i"
 	fi
-	if [ -d "dists/$i/non-US/main/binary-$ARCH" ]; then
+	if [ -d "dists/$i/non-US/main/binary-$ARCH" -o \
+	     -d "dists/$i/non-US/non-free/binary-$ARCH" -o \
+	     -d "dists/$i/non-US/contrib/binary-$ARCH" ]; then
 	    DISTSNONUS="$DISTSNONUS $i"
 	fi
     fi
