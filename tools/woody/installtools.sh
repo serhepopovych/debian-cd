@@ -14,10 +14,9 @@ DOCDIR=doc
 
 if [ -f $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/res
 cue.bin ]; then
-        echo "Using woody bootdisks"
         CODENAME1=$CODENAME
 else
-        echo "Using potato bootdisks"
+        echo "Using potato bootdisk documentation"
         CODENAME1=potato
 fi
 
