@@ -12,7 +12,7 @@ DIR=$1
 
 DOCDIR=doc
 
-if [ -f $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ] ; then
+if [ -e $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR ] ; then
         CODENAME1=$CODENAME
 else
         echo "Using potato bootdisk documentation"

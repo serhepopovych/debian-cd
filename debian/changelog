@@ -1,3 +1,10 @@
+debian-cd (2.2.7) unstable; urgency=low
+
+  * UNRELEASED 
+  * Minor fix in tools/woody/installtools.sh
+
+ -- Raphael Hertzog <hertzog@debian.org>  Tue, 24 Jul 2001 18:56:33 +0200
+
 debian-cd (2.2.6) unstable; urgency=medium
 
   * Updated tasks/base-woody to be in sync with debootstrap 0.1.15.
