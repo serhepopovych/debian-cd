@@ -218,7 +218,7 @@ computer, does all the basic housekeeping and lets you start other programs.
 Debian is kernel independent. It currently uses the
 <A href="http://www.linux.org/">Linux</A> kernel but work is
 in progress to provide Debian for other kernels, using
-<A href="http://www.gnu.org/software/hurd/hurd.html"> the Hurd</A>.
+<A href="http://www.gnu.org/software/hurd/hurd.html">the Hurd</A>.
 <P>
 
 Debian is available for various kinds of computers
@@ -277,9 +277,9 @@ Binary-TOTALNUM, contain mostly special-interest programs.
 the source code of programs in the Debian OS.
 <P>
 The source packages on the Source CDs are ordered by popularity, like
-the programs on the Binary CDs. This means that, for example, most (but
-not all) source packages for programs on the Binary-1 CD are on the
-Source-1 CD.
+the programs on the Binary CDs. This means that the source code of the
+programs on the Binary-DISKNUM CD can most likely be found on this CD
+(there may be some variation due to size issues).
 #endif
 
 <A name="install">
@@ -404,6 +404,22 @@ Last-Minute Notes
 </a>
 
 <UL>
+
+<LI>
+The version of the X Window System on these CDs has a slight problem
+with reading the X resource files. A simple fix is described at
+<a href="http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html">http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html</a>
+
+<BR>&nbsp;
+</LI>
+
+<LI>
+The Linux kernel version 2.2.15 on these CDs has been patched 
+to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
+<!-- http://www.debian.org/Lists-Archives/debian-release-0006/msg00011.html -->
+
+<BR>&nbsp;
+</LI>
 
 <LI>
 Last-minutes notes for these testing images may be available on
