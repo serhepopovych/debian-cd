@@ -1,3 +1,9 @@
+debian-cd (2.2.12) unstable; urgency=low
+
+  * UNRELEASED. 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sat, 29 Dec 2001 19:57:23 +0100
+
 debian-cd (2.2.11) unstable; urgency=medium
 
   * Changed "==" test by "=" test that works with ash also. Closes: #125727
