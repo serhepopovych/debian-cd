@@ -1,18 +1,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <title>Debian GNU/Linux -- The Universal Operating System</title>
-  <meta name="Description" content="Debian GNU/Linux is a free distribution of the GNU/Linux operating system. It is maintained and updated through the work of many users who volunteer their time and effort.">
-  <meta name="Keywords" content="debian, GNU, linux, unix, open source, free, DFSG">
-  <meta name="Language" content="English">
-  <meta name="Author" content="J.A. Bezemer, debian-boot@lists.debian.org">
-  <link rev="made" href="mailto:debian-boot@lists.debian.org">
-</head>
-<body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" alink="#FF0000">
+<HTML lang="en">
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<TITLE>Debian GNU/Linux -- The Universal Operating System</TITLE>
+<META NAME="Description" CONTENT="Debian GNU/Linux is a free distribution of the GNU/Linux operating system. It is maintained and updated through the work of many users who volunteer their time and effort.">
+<META NAME="Keywords" CONTENT="debian, GNU, linux, unix, open source, free, DFSG">
+<META NAME="Language" CONTENT="English">
+<meta name="Author" content="J.A. Bezemer, costar@panic.et.tudelft.nl">
+</HEAD>
+<BODY text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" alink="#FF0000">
 
-  <!-- The HTML and TEXT file are NOT the actual source code. -->
-  <!-- For that, see http://cvs.debian.org/debian-cd/data/woody/README.html.in?cvsroot=debian-boot -->
+
+        <!-- The HTML and TEXT file are NOT the actual source code... -->
+        <!-- For that, see the debian-cd CVS. -->
 #if 0
         If you read THIS, you're viewing the actual source file ;-)
 #endif
@@ -25,6 +25,11 @@
 #undef ultrasparc
 #undef m68k
 #undef arm
+#undef hppa
+#undef ia64
+#undef mips
+#undef mipsel
+#undef s390
 #undef binary
 #undef bin
 #undef source
@@ -41,14 +46,16 @@
 <div align=right>
 (<a href="README.txt">Text version</a>)
 </div>
-<table border="0" cellpadding="3" cellspacing="0" align="center" summary="">
-<tr>
-<td>
-<img src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt="" width="50" height="61">
-<img src="pics/debian.jpg" border="0" hspace="0" vspace="0" alt="Debian" width="179" height="61">
-</td>
-</tr>
-</table>
+<TABLE border="0" cellpadding="3" cellspacing="0" align="center" summary="">
+<TR>
+<TD>
+<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt=""
+  width="50" height="61"></A>
+<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0"
+  alt="Debian" width="179" height="61">
+</TD>
+</TR>
+</TABLE>
 #endif 
 #if OUTPUTtext
 <div align=right>
@@ -57,79 +64,81 @@
 #endif
 
 
-<table bgcolor="#DF0451" border="0" cellpadding="0" cellspacing="0"
+<TABLE bgcolor="#DF0451" border="0" cellpadding="0" cellspacing="0"
   width="100%" summary="">
-<tr>
-<td valign="top">
+<TR>
+<TD valign="top">
 <img src="pics/red-upperleft.png" align="left" border="0" hspace="0"
   vspace="0" alt="" width="15" height="16">
-</td>
-<td rowspan="2" align="center">
+</TD>
+<TD rowspan="2" align="center">
 
- <table align="center" border="0" cellpadding="2" cellspacing="0">
- <tr><td bgcolor="#000084">
- <div align="center"><font color="#FFFFFF" face="helvetica,arial"><B>&nbsp;&nbsp;
+ <CENTER>
+ <TABLE border="0" cellpadding="2" cellspacing="0" align="center">
+ <TR><TD bgcolor="#000084">
+ <CENTER><FONT COLOR="#FFFFFF" FACE="helvetica,arial"><B>&nbsp;&nbsp;
 #if 0
- Debian GNU/Linux 2.2 "Potato" - Official i386 Binary-1 CD
+ Debian GNU/Linux 3.0 "Woody" - Official i386 Binary-1 CD
 #endif
  DISKNAME CD
- &nbsp;&nbsp;</B></font></div>
- </td></tr>
- </table>
+ &nbsp;&nbsp;</B></FONT></CENTER>
+ </TD><TR>
+ </TABLE>
+ </CENTER>
 
-</td>
-<td valign="top">
+</TD>
+<TD valign="top">
 <img src="pics/red-upperright.png" align="right" border="0" hspace="0"
   vspace="0" alt="" width="16" height="16">
-</td>
-</tr>
-<tr>
-<td valign="bottom">
+</TD>
+</TR>
+<TR>
+<TD valign="bottom">
 <img src="pics/red-lowerleft.png" align="left" border="0" hspace="0"
   vspace="0" alt="" width="16" height="16">
-</td>
-<td valign="bottom">
+</TD>
+<TD valign="bottom">
 <img src="pics/red-lowerright.png" align="right" border="0" hspace="0"
 vspace="0" alt="" width="15" height="16">
-</td>
-</tr>
-</table>
+</TD>
+</TR>
+</TABLE>
 
-<table border="0" cellpadding="2" cellspacing="0" width="100%" summary="">
-<tr>
-        <td></td>
-</tr>
-</table>
+<TABLE border="0" cellpadding="2" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD></TD>
+</TR>
+</TABLE>
 
 
-<table border="0" cellpadding="0" cellspacing="0" width="100%" summary="">
-<tr>
-        <td colspan="3" valign="top" width="20%" bgcolor="#BBDDFF">
+<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD colspan="3" valign="top" width="20%" bgcolor="#BBDDFF">
           <img src="pics/blue-upperleft.png" align="left" border="0"
             hspace="0" vspace="0" alt="" width="16" height="16">
           <img src="pics/blue-upperright.png" align="right" border="0"
             hspace="0" vspace="0" alt="" width="16" height="16">
-        </td>
-</tr>
-<tr>
-        <td bgcolor="#BBDDFF">&nbsp;&nbsp;</td>
+        </TD>
+</TR>
+<TR>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
 
-        <td valign="TOP" bgcolor="#BBDDFF">
+        <TD valign="TOP" bgcolor="#BBDDFF">
 
-<font face="Arial,Helvetica">
+<FONT face="Arial,Helvetica">
 
 #if OUTPUThtml
-<P><B><A href="http://www.debian.org/">Debian home&nbsp;page</A></B></P>
+<P><B><A href="http://www.debian.org/">Debian homepage</A></B></P>
 #endif
 
-&nbsp;<br>
+&nbsp;<BR>
 <P>
 
 #if OUTPUTtext
-&nbsp;<br>
+&nbsp;<BR>
 CONTENTS:
-<br>
-&nbsp;<br>
+<BR>
+&nbsp;<BR>
 <UL>
 #endif
 
@@ -158,7 +167,7 @@ CONTENTS:
 </LI><LI>
 #endif
 
-#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
+#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc || ARCHarm || ARCHpowerpc
  <A href="#upgrade">Upgrading</A>
  <P>
 
@@ -177,7 +186,7 @@ CONTENTS:
 #endif
 
 #if TYPEbinary
- <A href="#apt">Using CDs with dselect and apt</A>
+ <A href="#apt">Using CDs with Dselect and Apt</A>
  <P>
 
 #if OUTPUTtext
@@ -186,7 +195,7 @@ CONTENTS:
 #endif
 
 #ifndef UNOFFEXTRAS
-<A href="#nonfree">Non-Free/Non-US</A>
+<A href="#nonfree">Non-free/Non-US</A>
 <P>
 
 #if OUTPUTtext
@@ -216,7 +225,7 @@ CONTENTS:
 #endif
 
 
-</font>
+</FONT>
 
 #if OUTPUTtext
 </LI>
@@ -224,30 +233,34 @@ CONTENTS:
 #endif
 
 
-        </td>
-        <td bgcolor="#BBDDFF">&nbsp;&nbsp;</td>
-        <td>&nbsp;&nbsp;</td>
+        </TD>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
+        <TD>&nbsp;&nbsp;</TD>
 
-  <td valign="TOP" width="80%">
+  <TD valign="TOP" width="80%">
 
-<div align="center">
-<big><big><B><I>
+<CENTER>
+<FONT SIZE="+2"><B><I>
 Welcome to the exciting world of
-</I></B></big></big>
-<br>
-<big><big><big><B><I>
+</I></B></FONT>
+<BR>
+<FONT SIZE="+3"><B><I>
 Debian GNU/Linux!
-</I></B></big></big></big>
-</div>
+</I></B></FONT>
+</CENTER>
 
-<P><H2><A name="intro">
+<A name="intro">
+<P><H2>
 Intro
 #if OUTPUTtext
-<br>
+<BR>
 =====
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 This is one of the CD-ROMs of the
 <a href="http://www.debian.org/">Debian GNU/Linux</a>
@@ -293,19 +306,23 @@ Read more at <P>
 <A href="http://www.debian.org/intro/about">Read more...</A>
 #endif
 
+<A name="thiscd">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="thiscd">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="thiscd">
+<P><HR><P><H2>
 #endif
 About This CD
 #if OUTPUTtext
-<br>
+<BR>
 =============
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 This CD-ROM is labeled
 <P>
@@ -335,20 +352,23 @@ programs on the Binary-DISKNUM CD can most likely be found on this CD
 #include <unoffextrascd.html.in>
 #endif
 
-
+<A name="install">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="install">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="install">
+<P><HR><P><H2>
 #endif
 Installing
 #if OUTPUTtext
-<br>
+<BR>
 ==========
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 #if DISKNUM1 && TYPEbinary
 
@@ -411,106 +431,82 @@ Installing
  See the README on that CD for more info.
 #endif
 
-#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc
+#if ARCHi386 || ARCHalpha || ARCHm68k || ARCHsparc || ARCHarm || ARCHpowerpc
+ <A name="upgrade">
 #if OUTPUTtext
-  <P>&nbsp;<P><H2><A name="upgrade">
+  <P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-  <P><HR><P><H2><A name="upgrade">
+  <P><HR><P><H2>
 #endif
  Upgrading
 #if OUTPUTtext
-  <br>
+  <BR>
   =========
 #endif
  </H2>
  </a>
+#if OUTPUTtext
+ <P>
+#endif
 
-#if DISKNUM1 && TYPEbinary
+#if TYPEbinary
 
   If you are already running an older version of the Debian GNU/Linux
   Operating System, you may want to upgrade to version 3.0.
   <P>
-  At this moment, woody-specific upgrade procedures are not yet
-  available. In the mean time, use the potato procedures, available
-  on your local Debian mirror in the
-  <tt>/debian/dists/potato/main/upgrade-ARCH/<tt> directory.
+  Upgrade instructions can be found in the Release Notes, available
+  online at:
+<P>
+<tt>&nbsp; </tt><A href="http://www.debian.org/releases/woody/releasenotes">http://www.debian.org/releases/woody/releasenotes</a>
 
-#else
-  Procedures describing the upgrade from an older version of the Debian
-  Operating System are also located on the Binary-1 CD.
-  See the README on that CD for more info.
 #endif
 #endif
 
 #ifndef UNOFFEXTRAS
+<A name="lastmin">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="lastmin">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="lastmin">
+<P><HR><P><H2>
 #endif
 Last-Minute Notes
 #if OUTPUTtext
-<br>
+<BR>
 =================
 #endif
 </H2>
 </a>
-
-<UL>
-
-#if 0
-<LI>
-The version of the X Window System on these CDs has a slight problem
-with reading the X resource files. A simple fix is described at
-<a href="http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html">http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html</a>
-
-<br>&nbsp;
-</LI>
-
-<LI>
-The Linux kernel version 2.2.15 on these CDs has been patched 
-to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
-<!-- http://www.debian.org/Lists-Archives/debian-release-0006/msg00011.html -->
-
-<br>&nbsp;
-</LI>
+#if OUTPUTtext
+<P>
 #endif
 
-<LI>
-You should keep in mind that this is an unofficial CD of the current
-development version of the Debian system. This means that all sorts of
-bugs may be present anywhere in the system.
+Sometimes, a slight problem with a Debian CD may be discovered well after
+it has been released. If there are any such issues, they will be discussed
+in the Last Minute Notes section of the Debian CD webpage at
+<a href="http://www.debian.org/CD/">http://www.debian.org/CD</a>.
 
-<br>&nbsp;
-</LI>
-
-#if 0
--------- This can't be an official image, so also no official notes.
-<LI>
-Last-minutes notes for this CD may be available on
-<a href="http://www.debian.org/CD/releases/">http://www.debian.org/CD/releases/</a>
-</LI>
-#endif
-
-</UL>
 #endif
 
 #if TYPEbinary
+ <A name="apt">
 #if OUTPUTtext
-  <P>&nbsp;<P><H2><A name="apt">
+  <P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-  <P><HR><P><H2><A name="apt">
+  <P><HR><P><H2>
 #endif
  Using CDs with Dselect and Apt
 #if OUTPUTtext
-  <br>
+  <BR>
   ==============================
 #endif
  </H2>
  </a>
+#if OUTPUTtext
+ <P>
+#endif
 
  After installing or upgrading, Debian's packaging system can use CD-ROMs,
  local collections, or networked servers (FTP, HTTP) to automatically
@@ -550,23 +546,28 @@ Last-minutes notes for this CD may be available on
 
 
 #ifndef UNOFFEXTRAS
+<A name="nonfree">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="nonfree">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="nonfree">
+<P><HR><P><H2>
 #endif
 Non-free and Non-US
 #if OUTPUTtext
-<br>
+<BR>
 ===================
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 The package sections `non-free' and `non-US' contain packages that either
-have a restrictive license, or can't be exported from the US (like `pgp'
-or `ssh'). It may well be that this CD does not contain (all of) these
+have a restrictive license, or can't be used in some countries like the US
+because of patent problems.
+It may well be that this CD does not contain (all of) these
 packages. You can get them from our FTP/HTTP mirror sites.
 
 <P>
@@ -579,24 +580,26 @@ packages. You can get them from our FTP/HTTP mirror sites.
 <a href="README.non-US">README.non-US</a> on this CD, or on
 <a href="http://www.debian.org/misc/README.non-US">http://www.debian.org/misc/README.non-US</a>.
 
-<P>
-Note that you <i>are</i> allowed to <i>import</i> non-US packages into the US.
 #endif
 
 #ifndef UNOFFEXTRAS
+<A name="cdmanuf">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="cdmanuf">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="cdmanuf">
+<P><HR><P><H2>
 #endif
 CD Manufacturers
 #if OUTPUTtext
-<br>
+<BR>
 ================
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 You are completely free to manufacture and (re-)distribute CD-ROMs of the
 Debian GNU/Linux Operating System, like this one. There is no charge from
@@ -604,31 +607,35 @@ us (but of course donations are always welcome).
 
 <P>
 
-For all needed information and contact addresses, please refer to
+For all needed information, and contact addresses, please refer to
 <P>
 <tt>&nbsp;
-  <a href="http://www.debian.org/CD/">http://www.debian.org/CD/</a>
+  <a href="http://www.debian.org/CD/">http://www.debian.org/CD</a>
 </tt>
 #endif
 
+<A name="other">
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="other">
+<P>&nbsp;<P><H2>
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="other">
+<P><HR><P><H2>
 #endif
 More Information
 #if OUTPUTtext
-<br>
+<BR>
 ================
 #endif
 </H2>
 </a>
+#if OUTPUTtext
+<P>
+#endif
 
 #if DISKNUM1 && TYPEbinary
 
 There is much more information present on this CD. Besides the already
-mentioned installation and upgrading procedures, this is the most
+mentioned installation procedure, this is the most
 interesting:  <P>
 
 <UL>
@@ -722,10 +729,10 @@ http://www.debian.org/support
 <LI>
 
 #if OUTPUTtext
-http://www.linuxdoc.org
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+http://www.tldp.org
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 #endif
-<A href="http://www.linuxdoc.org/">The Linux Documentation Project</a>
+<A href="http://www.tldp.org/">The Linux Documentation Project</a>
 
 </LI>
 <LI>
@@ -764,20 +771,20 @@ for information on contacting us.
 
 Last Modified: Wed Apr 18 19:09:34 CEST 2001
 
-<br></SMALL>
+<BR></SMALL>
 </DIV>
 
-  </td>
-  </tr>
-  <tr>
-        <td colspan="3" valign="bottom" width="20%" bgcolor="#BBDDFF">
+  </TD>
+  </TR>
+  <TR>
+        <TD colspan="3" valign="bottom" width="20%" bgcolor="#BBDDFF">
           <img src="pics/blue-lowerleft.png" align="left" border="0"
             hspace="0" vspace="0" alt="" width="17" height="16">
           <img src="pics/blue-lowerright.png" align="right" border="0"
             hspace="0" vspace="0" alt="" width="16" height="16">
-        </td>
-  </tr>
-  </table>
+        </TD>
+  </TR>
+  </TABLE>
 
-</body>
-</html>
+</BODY>
+</HTML>
