@@ -55,11 +55,6 @@ cd $CDDIR/install
 # Redo work of installtools.sh
 ln -sf install.en.html doc/index.html
 
-# Extra tools not yet in boot floppies
-wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg.readme -O dmesg.readme
-wget -q sunsite.auc.dk:/pub/os/linux/680x0/tools/dmesg        -O dmesg
-chmod a+x dmesg
-
 # Amiboot needs to be executable
 chmod a+x amiga/amiboot-5.6
 
