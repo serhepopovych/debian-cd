@@ -8,6 +8,7 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Exclude xmail from CD1 (new MTA), and exim (old MTA)
     - Exclude some kernel-headers with no matching kernel-images from CD1.
     - Update task lists to reflect tasksel changes.
+    - Exclude new kernels from CD1.
   * Steve McIntyre
     - Substantially updated update-cd:
        - Cope with Woody r3 updates taking more than 1 CD per
