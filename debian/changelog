@@ -1,3 +1,9 @@
+debian-cd (2.2.8) unstable; urgency=low
+
+  * UNRELEASED. 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 19 Aug 2001 13:42:27 +0200
+
 debian-cd (2.2.7) unstable; urgency=low
 
   * Minor fix in tools/woody/installtools.sh
