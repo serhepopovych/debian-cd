@@ -65,12 +65,12 @@ rm -rf $tmp
 rm -f $inst/{boot_message,type.txt}
 
 # Make writable areas point to /tmp
-rmdir $inst/var/{log,run}
-ln -s ../tmp/log $inst/var/log
-ln -s ../tmp/run $inst/var/run
+rm -rf $inst/var
+ln -s ../tmp/var $inst/var
 
 # Hack...need a better way
 ln -s ../tmp/resolv.conf $inst/etc/resolv.conf
 ln -s ../../target/usr/bin/whiptail $inst/usr/bin/whiptail
 rmdir $inst/lib/modules
 ln -s ../target/lib/modules $inst/lib/modules
+ln -s ../tmp/log $inst/dev/log
