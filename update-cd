@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# update-cd v 0.2
+# $Id$
 # 
 # (c) Steve McIntyre <stevem@chiark.greenend.org.uk> Released under
 # GNU GPL v2 1st January 2001
@@ -10,7 +10,7 @@
 #
 # Configuration goes here.
 # Where is your mirror?
-MIRROR=${MIRROR:-/scratch/debian}
+MIRROR=${MIRROR:-/mirror/debian}
 
 # If you have a non-US mirror, where is it? Leave blank if you don't have one.
 NONUS=${NONUS:-$MIRROR/non-US}
@@ -25,18 +25,18 @@ VER=2.2r3
 MKISOFS=${MKISOFS:-"mkhybrid"}
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/scratch/debian-cd
+TDIR=/mirror/debian-cd
 
 # Building potato cd set ...
 CODENAME=potato
 
 # Path where the images will be written
-OUT=/scratch/debian-cd
+OUT=/mirror/debian-cd
 
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/wibble #~/r2.diff
+DIFF=/mirror/lists/r0-r3.diff #~/r2.diff
 
 REL=Debian"$VER"
 CLOG=dists/potato/ChangeLog
@@ -46,6 +46,7 @@ DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
 INFO1="Debian GNU/Linux $VER Update CD $DATE for Alpha, Arm and i386"
 INFO2="Debian GNU/Linux $VER Update CD $DATE for M68k, PowerPC and Sparc"
+INFO3="Debian GNU/Linux $VER Update CD $DATE source"
 ARCH1="alpha arm i386"
 ARCH2="m68k powerpc sparc"
 
@@ -59,7 +60,7 @@ addfiles=$BASEDIR/tools/add_files
 
 echo Cleaning up
 rm -rf $UPD
-mkdir $UPD $UPD/CD1 $UPD/CD2
+mkdir $UPD $UPD/CD1 $UPD/CD2 $UPD/CD3
 
 echo Creating directory trees
 for ARCH in $ARCH1
@@ -74,49 +75,64 @@ do
 	$adddirs $UPD/CD2
 done
 
+$adddirs $UPD/CD3
+
 cd $MIRROR
 
 echo Creating main-section list
 
 if [ -e $DIFF ] ; then
 	grep -v non-US $DIFF >$UPD/list
+	egrep -e \\.deb$ $UPD/list >$UPD/bin-list
+	egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $UPD/list >$UPD/src-list
 else
-	egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/list
+	egrep -e ^dists.*\\.deb$ $CLOG >$UPD/bin-list
+	egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $CLOG >$UPD/src-list
 fi
 if [ "$NONFREE"x != "1"x ] ; then
 	echo Removing non-free
-	grep -v non-free $UPD/list > $UPD/list1
-	mv -f $UPD/list1 $UPD/list
+	grep -v non-free $UPD/bin-list > $UPD/bin-list1
+	mv -f $UPD/bin-list1 $UPD/bin-list
+	grep -v non-free $UPD/src-list > $UPD/src-list1
+	mv -f $UPD/src-list1 $UPD/src-list
 fi
 
 echo Creating trees
-cat $UPD/list | xargs $addfiles $UPD/CD1 $MIRROR
-cat $UPD/list | xargs $addfiles $UPD/CD2 $MIRROR
+cat $UPD/bin-list | xargs $addfiles $UPD/CD1 $MIRROR
+cat $UPD/bin-list | xargs $addfiles $UPD/CD2 $MIRROR
+cat $UPD/src-list | xargs $addfiles $UPD/CD3 $MIRROR
 
 if [ "$NONUS"x != ""x ] ; then
 	echo Creating non-US list
 	cd $NONUS
 	if [ -e $DIFF ] ; then
 		grep non-US $DIFF >$UPD/nu-list
+		egrep -e \\.deb$ $UPD/nu-list >$UPD/bin-nu-list
+		egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $UPD/nu-list >$UPD/src-nu-list
 	else
-		egrep -e ^dists.*\\.deb$ -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/nu-list
+		egrep -e ^dists.*\\.deb$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/bin-nu-list
+		egrep -e ^dists.*\\.gz$ -e ^dists.*\\.dsc$ $NUCLOG | sed 's?^stable?dists/potato?g' > $UPD/src-nu-list
 	fi
 
 	if [ "$NONFREE"x != "1"x ] ; then
 		echo Removing non-free
-		grep -v non-free $UPD/nu-list > $UPD/nu-list1
-		mv -f $UPD/nu-list1 $UPD/nu-list
+		grep -v non-free $UPD/bin-nu-list > $UPD/bin-nu-list1
+		mv -f $UPD/bin-nu-list1 $UPD/bin-nu-list
+		grep -v non-free $UPD/src-nu-list > $UPD/src-nu-list1
+		mv -f $UPD/src-nu-list1 $UPD/src-nu-list
 	fi
 
 	echo Creating non-US trees
-	cat $UPD/nu-list | xargs $addfiles $UPD/CD1 $MIRROR
-	cat $UPD/nu-list | xargs $addfiles $UPD/CD2 $MIRROR
+	cat $UPD/bin-nu-list | xargs $addfiles $UPD/CD1 $MIRROR
+	cat $UPD/bin-nu-list | xargs $addfiles $UPD/CD2 $MIRROR
+	cat $UPD/src-nu-list | xargs $addfiles $UPD/CD3 $MIRROR
 fi
 
 # The full update will not fit on a single CD, so split it by architecture, arbitrarily
 # CD 1 gets alpha/arm/i386
 # CD 2 gets m68k/sparc/powerpc
-# binary-all goes on both, as does source
+# binary-all goes on both
+# CD 3 gets source
 
 cd $UPD
 
@@ -125,9 +141,17 @@ for ARCH in $ARCH2
 do
 	find CD1 -type d | egrep -e binary-$ARCH$ | xargs rm -r
 done
+find CD1 -type d | egrep -e source | xargs rm -r
+
 for ARCH in $ARCH1
 do
 	find CD2 -type d | egrep -e binary-$ARCH$ | xargs rm -r
+done
+find CD2 -type d | egrep -e source | xargs rm -r
+
+for ARCH in sparc all
+do
+	find CD3 -type d | egrep -e binary-$ARCH$ | xargs rm -r
 done
 
 # Now create the binary-all symlinks
@@ -167,6 +191,7 @@ done
 echo Creating .disk/info files
 echo $INFO1 >CD1/.disk/info
 echo $INFO2 >CD2/.disk/info
+echo $INFO3 >CD3/.disk/info
 
 echo Creating Packages files
 for ARCH in $ARCH1
@@ -186,10 +211,10 @@ do
 done
 
 echo Creating Sources files
-$scansources CD1
-$scansources CD2
+$scansources CD3
 
 rm CD?/CD?.*
 
 ${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-1.raw CD1
 ${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-2.raw CD2
+${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/potato-update-3.raw CD3
