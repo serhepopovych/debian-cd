@@ -73,7 +73,7 @@ endif
 ifndef UDEB_INCLUDE
 # Netinst/businesscard CD should have udeb_include file by default
 ifeq ($(INSTALLER_CD),1)
-UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_netinst_udeb_include
+UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_businesscard_udeb_include
 endif
 ifeq ($(INSTALLER_CD),2)
 UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_netinst_udeb_include

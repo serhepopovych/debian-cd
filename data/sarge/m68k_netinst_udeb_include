@@ -1,8 +1,2 @@
-choose-mirror
-netcfg-dhcp
-netcfg-static
+netcfg
 ethdetect
-pump-udeb
-console-keymaps-atari
-console-keymaps-amiga
-console-keymaps-mac
