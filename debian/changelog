@@ -138,6 +138,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Unexclude zlib1g-udeb, needed for ssh support in d-i.
     - Make sure quik is on the powerpc netinst CD; debootstrap no longer
       installs it.
+    - Bump initrd-size to 10MB for powerpc 2.4. Current d-i initrds exceed
+      that.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 
