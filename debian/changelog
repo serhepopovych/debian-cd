@@ -22,6 +22,7 @@ debian-cd (2.2.21) UNRELEASED; urgency=low
     - Exclude new kernels from CD1.
     - Switch mips daily builds to new builds by ths.
     - Update task files for tasksel 2.22.
+    - Exclude more new kernel images from CD1.
   * Steve McIntyre
     - Substantially updated update-cd:
        - Cope with Woody r3 updates taking more than 1 CD per

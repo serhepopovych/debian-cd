@@ -61,7 +61,7 @@ fi
 # This may be an url, or "default", which will make it use the default url
 # for the daily d-i builds. If not set, uses the official d-i images from
 # the Debian mirror.
-#export DI_WWW_HOME=default
+export DI_WWW_HOME=default
 
 # Version number, "2.2 r0", "2.2 r1" etc.
 export DEBVERSION="3.1"
@@ -82,7 +82,7 @@ export ARCH=`dpkg --print-installation-architecture`
 #	      images, however. Also, if you are using an NFS partition for
 #	      some part of this, you must use this option.
 # Paths to the mirrors
-export MIRROR=/ftp/debian
+export MIRROR=/home/debian
 
 # Comment the following line if you don't have/want non-US
 #export NONUS=/ftp/debian-non-US
@@ -93,14 +93,14 @@ export MIRROR=/ftp/debian
 #export FORCENONUSONCD1=1
 
 # Path of the temporary directory
-export TDIR=/ftp/tmp
+export TDIR=/home/joey/tmp/debian-cd
 
 # Path where the images will be written
-export OUT=/rack/debian-cd
+export OUT=/home/joey/tmp/
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.
-export APTTMP=/ftp/tmp/apt
+export APTTMP=/home/joey/tmp/debian-cd-apt
 
 # Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
@@ -190,7 +190,7 @@ export NORECOMMENDS=1
 #     since they need the actual .iso to make it bootable. For these archs,
 #     the temp-iso will be generated, but deleted again immediately after the
 #     jigdo stuff is made; needs temporary space as big as the biggest image.
-#export DOJIGDO=2
+export DOJIGDO=0
 #
 # jigdo-file command & options
 # Note: building the cache takes hours, so keep it around for the next run
@@ -232,7 +232,7 @@ export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigd
 
 # If set, use the md5sums from the main archive, rather than calculating
 # them locally
-#export FASTSUMS=1
+export FASTSUMS=1
 
 # A couple of things used only by publish_cds, so it can tweak the
 # jigdo files, and knows where to put the results.
@@ -274,7 +274,7 @@ export PUBLISH_PATH="/home/jigdo-area/"
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.
-#export MAXCDS=1
+export MAXCDS=1
 
 # If set, overrides the boot picture used.
 #export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
@@ -282,4 +282,4 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # Used by build.sh to determine what to build, this is the name of a target
 # in the Makefile. Use bin-official_images to build only binary CDs. The
 # default, official_images, builds everything.
-#IMAGETARGET=official_images
+IMAGETARGET=bin-official_images
