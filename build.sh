@@ -10,11 +10,15 @@ fi
 
 make distclean
 make ${CODENAME}_status
-echo " ... checking your mirror"
-make mirrorcheck
-if [ $? -gt 0 ]; then
-	echo "ERROR: Your mirror has a problem, please correct it." >&2
-	exit 1
+if [ "$SKIPMIRRORCHECK" = "yes" ]; then
+    echo " ... WARNING: skipping mirror check"
+else
+    echo " ... checking your mirror"
+    make mirrorcheck
+    if [ $? -gt 0 ]; then
+	    echo "ERROR: Your mirror has a problem, please correct it." >&2
+	    exit 1
+    fi
 fi
 echo " ... selecting packages to include"
 if [ -e ${MIRROR}/dists/${CODENAME}/main/disks-${ARCH}/current/. ] ; then

@@ -196,7 +196,7 @@ while (defined($_=<LIST>)) {
 	# nevertheless ... this may be removed once the udebs have a
 	# better depencency system
 	if ($packages{$_}{"IsUdeb"}) {
-	    add_to_cd($cd, $packages{$_}{"Size"}, []);
+	    add_to_cd($cd, $packages{$_}{"Size"}, [$_]);
 	} else {
 	    add_package ($_, ! $norecommends, ! $nosuggests);
 	}
