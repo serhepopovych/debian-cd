@@ -62,6 +62,7 @@ fi
 
 # Amiboot needs to be executable
 chmod a+x amiga/amiboot-5.6
+chmod a+x amiga/dmesg
 
 # Need a .info file for the install directory (AmigaOS) (icon?)
 cp amiga/amiga.info  $CDDIR/install.info
