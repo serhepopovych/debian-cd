@@ -86,6 +86,13 @@ debian-cd (2.2.21) unstable; urgency=low
     - Exclude more new kernel images from CD1.
     - Stop hardcoding sid as the distribution to take the installation manual
       from, use DI_CODENAME instead.
+    - Add OMIT_MANUAL variable, which can be set to 1 to drop the install
+      manual from small CDs to save space. We will probably be adding several
+      new translations, and possibly PDFs, and that would use too much space
+      on the small CDs.
+    - Also make the README link to the manual on the Debian web site if
+      OMIT_MANUAL=1.
+    - Update the README to mention manual translations are available.
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
     - add ramdisk_size=16384 to palo call in post-boot-hppa 

@@ -25,6 +25,7 @@ for i in $BDIR/*.packages; do
 		$dir/README.pgp $dir/README.non-US ; \
 
 	cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
+	    -D OMIT_MANUAL="$OMIT_MANUAL" \
 	    -D OUTPUTtext $BASEDIR/data/$CODENAME/README.html.in \
 		| sed -e 's/%%.//g' > $dir/README.html
 
@@ -32,6 +33,7 @@ for i in $BDIR/*.packages; do
 	> $dir/README.txt ; \
 
 	cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
+	    -D OMIT_MANUAL="$OMIT_MANUAL" \
 	    -D OUTPUThtml $BASEDIR/data/$CODENAME/README.html.in \
 		| sed -e 's/%%.//g' > $dir/README.html
 

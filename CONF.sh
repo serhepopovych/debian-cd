@@ -43,6 +43,7 @@ unset INSTALLER_CD      || true
 unset DI_CODENAME       || true
 unset MAXCDS            || true
 unset SPLASHPNG         || true
+unset OMIT_MANUAL	|| true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -283,3 +284,7 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # in the Makefile. Use bin-official_images to build only binary CDs. The
 # default, official_images, builds everything.
 #IMAGETARGET=official_images
+
+# Set to 1 to save space by omitting the installation manual. 
+# If so the README will link to the manual on the web site.
+#export OMIT_MANUAL=1
