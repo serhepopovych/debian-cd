@@ -202,4 +202,14 @@ EOF
 
 cat >> debian-installer+kernel << EOF
 #endif
+#ifdef ARCH_arm
+discover1
+EOF
+
+/bin/sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-arm/Packages|tail -n5 \
+  >> debian-installer+kernel
+
+cat >> debian-installer+kernel << EOF
+#endif
 EOF
