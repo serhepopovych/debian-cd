@@ -5,6 +5,7 @@ debian-cd (2.2.1) frozen unstable; urgency=low
   * Added the "needed" task file as tasks/forcd1.
   * Update for m68k, they should at least build now.
   * Include upgrade-{i386,sparc,alpha,m68k} dir when available.
+  * Updated README.html.in (new version provided by Anne Bezemer).
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 

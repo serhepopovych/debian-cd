@@ -276,9 +276,10 @@ Binary-TOTALNUM, contain mostly special-interest programs.
 #if TYPEsource
 the source code of programs in the Debian OS.
 <P>
-The source packages on the Source CDs are ordered alphabetically by
-section name. So for example the `admin' section is on the Source-1 CD,
-and the `x11%%'' section is on the Source-TOTALNUM CD.
+The source packages on the Source CDs are ordered by popularity, like
+the programs on the Binary CDs. This means that, for example, most (but
+not all) source packages for programs on the Binary-1 CD are on the
+Source-1 CD.
 #endif
 
 <A name="install">
@@ -380,16 +381,6 @@ Installing
   <P>
   directory.
 
-  <P>
-  <B>Note:</B> if this directory is not present on this CD, see
-  <P>
-  <tt>&nbsp;
-  <A href="http://panic.et.tudelft.nl/~costar/potato/">http://panic.et.tudelft.nl/~costar/potato</a>
-  </tt>
-  <P>
-  (You might want to look there anyway, because there may be more
-  recent information.)
-  
 #else
   Procedures describing the upgrade from an older version of the Debian
   Operating System are also located on the Binary-1 CD.
@@ -415,20 +406,7 @@ Last-Minute Notes
 <UL>
 
 <LI>
-The version of `apt' in this release has some known problems with CD
-handling. This shows itself sometimes in random deadlocks when a CD-ROM is
-being accessed. In that case, use the "pstree" command on another
-terminal, and then kill the last command in the `apt' line.
-<BR>
-You may wish to install the newest version of apt, which is likely to be
-in <a href="http://incoming.debian.org">http://incoming.debian.org</a> or
-<a href=%%""http://ftp.debian.org/debian/dists/potato/main/binary-ARCH/base/%%"">http://ftp.debian.org/debian/dists/potato/main/binary-ARCH/base/</a>
-</LI>
-
-<BR>&nbsp;<BR>
-
-<LI>
-More last-minutes notes for these testing images may be available on
+Last-minutes notes for these testing images may be available on
 <a href="http://cdimage.debian.org/potato_pre.html">http://cdimage.debian.org/potato_pre.html</a>
 </LI>
 
@@ -701,7 +679,7 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Wed May 17 23:37:10 CEST 2000
+Last Modified: Sat Jun  3 20:14:42 CEST 2000
 
 <BR></SMALL>
 </DIV>
