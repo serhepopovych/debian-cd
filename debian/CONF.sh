@@ -1,11 +1,11 @@
 # The debian-cd dir
 export BASEDIR=/usr/share/debian-cd
 
-# Building potato cd set ...
-export CODENAME=potato
+# Building woody cd set ...
+export CODENAME=woody
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="2.2 r0"
+export DEBVERSION="3.0 prerelease"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE

@@ -436,7 +436,7 @@ Installing
 #if DISKNUM1 && TYPEbinary
 
   If you are already running an older version of the Debian GNU/Linux
-  Operating System, you may want to upgrade to version 2.3.
+  Operating System, you may want to upgrade to version 3.0.
   <P>
   At this moment, woody-specific upgrade procedures are not yet
   available. In the mean time, use the potato procedures, available

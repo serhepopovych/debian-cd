@@ -2,7 +2,7 @@ YACS - Yet Another CD Script :-)
 ================================
 (better known as debian-cd)
 
-Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
+Copyright 1999-2001 Raphaël Hertzog <hertzog@debian.org>
 This set of tools is licensed under the General Public License
 version 2 or any later version. You can find it in 
 /usr/share/common-licenses/GPL on a Debian GNU system.
@@ -52,7 +52,8 @@ $ make official_images
   $ make bin-official_images ]
 
 But you really should consider reading further for more information.
-
+You can also give a look at build.sh and build_all.sh for an automatized
+way of building CD images. 
 
 How to build a CD set - step by step
 ====================================
@@ -183,10 +184,35 @@ The process of building a CD is decomposed as follow :
   $ make bin-images
   And "make src-images" will generate the sources images.
 
+  Note: I use here make images, but you could as well use make
+  official_images since the latter is the same as the former with
+  some dependencies on targets that you already launched
+  (make bootable packages sources).
+
 - if you want to generate a MD5SUMS file with the md5sums of the
   images you can do it with :
   $ make imagesums
 
+
+Official images
+===============
+
+If you use make official_images you're building CD images that have
+the same properties than official CD images but they still doesn't
+have the name of "Official Images". The name of the images is given
+by setting the OFFICIAL and DEBVERSION environment variable (check
+CONF.sh). 
+
+Please never ever use the "Official" name for a CD image that you
+built yourself. The only images that can be called "Official" are the
+ones built by Debian itself and which are provided on Debian's
+servers.
+
+The default configuration shipped with this package will automatically
+name the images "Unofficial". CD will work exactly in the same way
+with all Debian tools, only the label is different. That means you
+can use build.sh and build_all.sh to build your "Unofficial" images
+without modifying anything.
 
 Local packages
 ==============
