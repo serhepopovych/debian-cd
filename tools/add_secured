@@ -43,6 +43,8 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     if [ -e "$MIRROR/dists/$CODENAME/Release.gpg" ]; then
 	cp $MIRROR/dists/$CODENAME/Release.gpg dists/$CODENAME-secured/
     fi
+    # Create the .aptignr file in the standard tree
+    :> dists/$CODENAME/.aptignr
     # Include files listed in Release that corresponds to our arch
     grep "^ " dists/$CODENAME-secured/Release | \
     egrep "binary-$ARCH/|source/" | \
@@ -51,6 +53,9 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
 	test -d "$dir" || mkdir -p $dir; \
 	cp $MIRROR/dists/$CODENAME/$file $dir/; \
     done)
+    # Create the files.list.gz
+    (find pool/ -type f; find dists/ -type f) | \
+    gzip --best -c > dists/$CODENAME-secured/files.list.gz
 fi
     
 if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
@@ -71,5 +76,7 @@ if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/Release" ]; then
 	test -d "$dir" || mkdir -p $dir; \
 	cp $NONUS/dists/$CODENAME/non-US/$file $dir/; \
     done)
+    # The non-US files.list.gz is the same than the main one
+    ln -sf ../files.list.gz dists/$CODENAME-secured/non-US/files.list.gz
 fi
 
