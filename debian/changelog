@@ -2,6 +2,7 @@ debian-cd (2.2.4) unstable; urgency=low
 
   * UNRELEASED
     ----------
+  * All (i386) CD's now have a different kernel from boot-disks.
   * Updated pi-makelist, now excludes all of the sparc live filesystem.
   * Added Recommends: debianutils because pi-makelist uses tempfile(1)
     since 2.2.3; also mentioned this in the debian-cd/YACS README.
