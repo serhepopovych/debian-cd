@@ -191,26 +191,26 @@ $(ADIR):
 # CLeans the current arch tree (but not packages selection info)
 clean: ok bin-clean src-clean
 bin-clean:
-	$(Q)-rm -rf $(BDIR)/CD[1234567890]
-	$(Q)-rm -rf $(BDIR)/*_NONUS
-	$(Q)-rm -f $(BDIR)/*.filelist*
-	$(Q)-rm -f  $(BDIR)/packages-stamp $(BDIR)/bootable-stamp \
+	$(Q)rm -rf $(BDIR)/CD[1234567890]
+	$(Q)rm -rf $(BDIR)/*_NONUS
+	$(Q)rm -f $(BDIR)/*.filelist*
+	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/bootable-stamp \
 	         $(BDIR)/upgrade-stamp $(BDIR)/secured-stamp
 src-clean:
-	$(Q)-rm -rf $(SDIR)/CD[1234567890]
-	$(Q)-rm -rf $(SDIR)/*_NONUS
-	$(Q)-rm -rf $(SDIR)/sources-stamp $(SDIR)/secured-stamp
+	$(Q)rm -rf $(SDIR)/CD[1234567890]
+	$(Q)rm -rf $(SDIR)/*_NONUS
+	$(Q)rm -rf $(SDIR)/sources-stamp $(SDIR)/secured-stamp
 
 # Completely cleans the current arch tree
 realclean: distclean
 distclean: ok bin-distclean src-distclean
 bin-distclean:
-	$(Q)-rm -rf $(BDIR)
-	$(Q)-rm -rf $(ADIR)
-	$(Q)-rm -rf $(TDIR)/jigdofilelist
+	$(Q)rm -rf $(BDIR)
+	$(Q)rm -rf $(ADIR)
+	$(Q)rm -rf $(TDIR)/jigdofilelist
 src-distclean:
-	$(Q)-rm -rf $(SDIR)
-	$(Q)-rm -rf $(TDIR)/jigdofilelist
+	$(Q)rm -rf $(SDIR)
+	$(Q)rm -rf $(TDIR)/jigdofilelist
 
 ## STATUS and APT ##
 
