@@ -54,7 +54,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Update m68k support for sarge.
         - Fix m68k/amiga icons.
         - Add 2.2 kernel-based cdrom initrd.
-        - Redo m68k subarch boot/install for sarge.
+        - Redo mz68k subarch boot/install for sarge.
+		- Bump all subarchs to 2.4 kernel, except mac.
+		- Add bvme6000 boot code.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.

@@ -42,6 +42,7 @@ install_languages $CDDIR
 # remove i386 stuff
 rm -rf $CDDIR/tools
 
+
 cd $INSTALLDIR
 
 # This setup is designed to automatically use whatever subarchs are 
@@ -74,7 +75,7 @@ else
 		cd ..
 	done
 	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
-	if ! `wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"` ; then
+	if ! wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz" ; then
 		rm root22.bin
 	fi
 	wget -O MANIFEST "$DI_WWW_HOME/MANIFEST"
@@ -89,30 +90,6 @@ for subarch in $SUBARCHS; do
 	rm -f $TARF
 done
 
-# old way, get rid of it once the above is validated.
-# create directories for different sub-archs
-#mkdir {amiga,atari,bvme6000,mac,mvme147,mvme16x}
-
-#wget -O bootloaders.tar.bz2 "$DI_BOOTLOADER"/../../bootloaders.tar.bz2
-#tar -xvjf bootloaders.tar.bz2
-#rm bootloaders.tar.bz2
-
-#if [ ! "$DI_WWW_HOME" ];then
-#	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
-#	cp "$DI_DIR"/amiga/nativehd-vmlinuz* amiga/vmlinuz
-#	cp "$DI_DIR"/mac/nativehd-vmlinuz* mac/vmlinuz
-#	cp "$DI_DIR/cdrom-initrd.gz" root.bin
-#	cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
-#else
-#	kernel_amiga=$(wget "$DI_WWW_HOME/amiga/" -O - | \
-#	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-amiga\)".*/\1/p')
-#	kernel_mac=$(wget "$DI_WWW_HOME/mac/" -O - | \
-#	sed -n 's/.*a href="\(nativehd-vmlinuz-[0-9\.]\+-mac\)".*/\1/p')
-#	wget -O amiga/vmlinuz "$DI_WWW_HOME/amiga/$kernel_amiga"
-#	wget -O mac/vmlinuz "$DI_WWW_HOME/mac/$kernel_mac"
-#	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
-#	wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz"
-#fi
 
 # amiga specific stuff
 if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
@@ -123,6 +100,14 @@ if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
 	# Setup amiga icons
 	cp amiga/amiga.info  $CDDIR/install.info
 	mv amiga/amiga.info  .
+fi
+
+# bvme6000 specific stuff
+if [ "" != "`echo $SUBARCHS | grep bvme6000`" ]; then
+	mkdir -p $CDDIR/boot1/boot
+	cp bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
+	echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+    	>> $N.mkisofs_opts
 fi
 
 ##-----------------------------< end of file >------------------------------##
