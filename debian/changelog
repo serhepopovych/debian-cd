@@ -1,4 +1,3 @@
-
 debian-cd (2.1.92) unstable; urgency=low
 
   * Changes to installtools.sh, change to check for documentation
@@ -9,7 +8,7 @@ debian-cd (2.1.92) unstable; urgency=low
     confuzed.  Not fixed. Temporary solution, move old i386 boot
     disks out of the source archive. 
 
- -- Jim Westveer  <jwest@netnw.com>  Mon, 27 Dec 1999 08:00:00 -0700
+ -- Jim Westveer <jwest@netnw.com>  Mon, 27 Dec 1999 08:00:00 -0700
 
 debian-cd (2.1.91) unstable; urgency=low
 
