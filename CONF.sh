@@ -80,3 +80,10 @@ export APTTMP=/ftp/tmp/apt
 # export MKISOFS=/usr/bin/mkhybrid
 # export MKISOFS_OPTS="-a -r -T"	#For normal users
 # export MKISOFS_OPTS="-a -r -F . -T"	#For symlink farmers
+
+# uncomment this to if you want to see more of what the Makefile is doing
+#export VERBOSE_MAKE=1
+
+# uncoment this to make build_all.sh try to build a simple CD image if
+# the proper official CD run does not work
+#ATTEMPT_FALLBACK=yes

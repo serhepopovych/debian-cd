@@ -22,10 +22,14 @@ if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0; 
 fi
 
-# Hack for bootable disks
-mkdir -p boot1/boot
-
 echo -n "-J boot1" > $N.mkisofs_opts
+
+# Hack for bootable disks
+test -d boot1 && {
+  echo "skipping the rest, because boot1 exists already"
+  exit 0
+}
+mkdir -p boot1/boot
 
 # Use the generic linux image
 cp -f $CDDIR/dists/stable/main/disks-$ARCH/current/linux \

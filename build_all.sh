@@ -53,10 +53,14 @@ do
 		make bin-official_images
 		if [ $? -gt 0 ]; then
 			echo "ERROR WHILE BUILDING OFFICIAL IMAGES !!" >&2
-			echo "I'll try to build a simple (non-bootable) CD" >&2
-			make clean
-			make installtools
-			make bin-images
+			if [ "$ATTEMPT_FALLBACK" = "yes" ]; then
+				echo "I'll try to build a simple (non-bootable) CD" >&2
+				make clean
+				make installtools
+				make bin-images
+			else
+				exit 1
+			fi
 		fi
 		echo Generating MD5Sums of the images
 		make imagesums
