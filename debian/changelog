@@ -1,3 +1,9 @@
+debian-cd (2.2.10) unstable; urgency=low
+
+  * UNRELEASED 
+
+ -- Raphael Hertzog <hertzog@debian.org>  Fri, 16 Nov 2001 08:27:21 +0100
+
 debian-cd (2.2.9) unstable; urgency=low
 
   * Added i386 boot blocks for udam100-ext3 to disk 5 -jwest
