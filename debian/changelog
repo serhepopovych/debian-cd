@@ -57,6 +57,12 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Uncomment exclude lines.
     - Remove the boot.bat script and redundant and incorrect README.tools.
       The alternative is to maintain and document them.
+    - Exclude kernel sources from popcon results, old data skews this badly.
+    - Remove old kernel sources from interesting-fromcd23, and various other
+      removals and updates.
+    - Update the task lists and popcon again.
+    - Stop excluding 686 and 686-smp kernels, as these are probably the most
+      popular, and they fit on CD#1 now.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
@@ -79,7 +85,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         - Redo m68k subarch boot/install for sarge.
         - Bump all subarchs to 2.4 kernel, except mac.
         - Add bvme6000 boot code.
-		- Workaround boot/install for non-DI_WWW_HOME case.
+        - Workaround boot/install for non-DI_WWW_HOME case.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.

@@ -13,7 +13,6 @@ grep-dctrl -s Key -n -e '.*' /usr/share/tasksel/debian-tasks.desc | sed -e 's? *
 
 apache2-mpm-prefork
 bind9
-canna
 chinput
 console-cyrillic
 cpanel
@@ -24,7 +23,6 @@ exim4
 gnome-desktop-environment
 jfbterm
 kde
-kterm
 language-env
 locales
 manpages-de
@@ -38,15 +36,12 @@ manpages-pt
 manpages-ru
 manpages-tr
 manpages-zh
-nabi
 nfs-kernel-server
 postgresql
 rxvt-ml
 samba
-ttf-unfonts
 x-window-system-core
 xcin
-xfonts-intl-japanese
 xfonts-thai
 xiterm+thai
 zhcon

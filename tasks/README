@@ -11,14 +11,6 @@ not supported.
 
 -----
 
-Popularity contest results:
-
- wget http://popcon.debian.org/main/by_inst
- wget http://popcon.debian.org/contrib/by_inst
- grep -h '^[^#]' by_inst* | egrep -v '(Total|-----)' | sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $2}'
-
------
-
 THE "USEFUL CD 1 PROJECT" RATIONALE                  J.A. Bezemer, Jan-Apr 2001
                                                      costar@panic.et.tudelft.nl
 
