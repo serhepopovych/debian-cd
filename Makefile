@@ -363,12 +363,14 @@ endif
 
 # Build the raw list (cpp output) with doubles and spaces for excluded packages
 $(BDIR)/rawlist-exclude:
-	$(Q)if [ -n $(EXCLUDE) ]; then \
+	$(Q)if [ -n "$(EXCLUDE)" ]; then \
 	 	perl -npe 's/\@ARCH\@/$(ARCH)/g' $(EXCLUDE) | \
 			cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
 				-U $(ARCH) -U i386 -U linux -U unix \
 	     			-DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     			-I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist-exclude; \
+	else \
+		echo > $(BDIR)/rawlist-exclude; \
 	fi
 
 ## DIRECTORIES && PACKAGES && INFOS ##
