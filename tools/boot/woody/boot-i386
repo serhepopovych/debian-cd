@@ -121,10 +121,10 @@ you can safely ignore that.
 smartdrv /c
 
 echo Please choose a linux kernel now
-echo 1= standard kernel     (2.2)
+echo 1= IDEPCI kernel       (2.2)
 echo 2= compact kernel      (2.2)
 echo 3= 2.4.x kernel        (2.4)
-echo 4= IDEPCI kernel       (2.2)
+echo 4= standard kernel     (2.2)
 
 choice /c:1234
 if errorlevel 4 goto FOUR
@@ -136,8 +136,8 @@ echo doing default somehow and going to ONE
 goto ONE
 
 :ONE
-echo using standard kernel
-loadlin.exe linux root=/dev/ram ro initrd=root.bin cdrom
+echo using IDEPCI kernel
+loadlin.exe linpci root=/dev/ram ro initrd=root.bin cdrom
 
 :TWO
 echo using compact kernel
@@ -148,8 +148,8 @@ echo using 2.4.x kernel
 loadlin.exe lin24 root=/dev/ram ro initrd=root.bin cdrom
 
 :FOUR
-echo using IDEPCI kernel
-loadlin.exe linpci root=/dev/ram ro initrd=root.bin cdrom
+echo using standard kernel
+loadlin.exe linux root=/dev/ram ro initrd=root.bin cdrom
 
 EOF
 ) |todos > $CDDIR/install/boot.bat
