@@ -6,7 +6,7 @@ debian-cd (2.2.4) unstable; urgency=low
   * Added Recommends: debianutils because pi-makelist uses tempfile(1)
     since 2.2.3; also mentioned this in the debian-cd/YACS README.
   * Some minor updates/rewordings in CD's top-level README.
-
+  * Typo. tools/add_dirs line #26 changed to if [ -n     --jwest
 
 debian-cd (2.2.3) unstable; urgency=low
 
