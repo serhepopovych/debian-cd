@@ -22,6 +22,7 @@ eject
 grub
 locales
 lvm10
+aptitude
 #ifdef ARCH_i386
 EOF
 

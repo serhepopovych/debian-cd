@@ -1,6 +1,9 @@
 debian-cd (2.2.17) UNRELEASED; urgency=low
 
   * Removed debian/conffiles (useless with debhelper 4).
+  * Added aptitude on netinst CD (but not on businesscard CD).
+    Closes: #220125, #219986
+    It is already on CD1 of a normal CD set.
 
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 20 Aug 2003 20:17:06 +0200
 
