@@ -7,6 +7,10 @@ if [ -z "$CF" ] ; then
 fi
 . $CF
 
+if [ -z "$COMPLETE" ] ; then
+    export COMPLETE=1
+fi
+
 if [ -n "$1" ] ; then
     export ARCH=$1
 fi
@@ -51,7 +55,7 @@ for CD in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
 done
 
 FULL_SIZE=`echo "($DEFSRCSIZE - $size) * 1024 * 1024" | bc`
-make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
+make list $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 echo " ... building the images"
 if [ -z "$IMAGETARGET" ] ; then
     IMAGETARGET="official_images"

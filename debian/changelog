@@ -1,3 +1,10 @@
+debian-cd (2.2.19) UNRELEASED; urgency=low
+
+  * Santiago Garcia
+    - Change build.sh to allow building non complete CDs, like netinsts.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Fri, 20 Aug 2004 10:00:01 +0100
+
 debian-cd (2.2.18) unstable; urgency=medium
 
   * Steve McIntyre
@@ -14,9 +21,6 @@ debian-cd (2.2.18) unstable; urgency=medium
     - Various updates to update-cd to cope with changes r0->r2.
     - Updated copy of CONF.sh in debian directory to match the working copy in .
     - Small lintian fixes.
-  * Santiago Garcia Mantinan
-    - Generate PPC CD 1 with -chrp-boot. Closes: #252667
-    - Reduce the size of the catalogue size on PPC DVDs. Closes: #252652
   * Raphael Hertzog
     - Add missing Build-Depends-Indep. Closes: #258018
     - Remove debian-keyring.tar.gz from the doc dir.
@@ -124,7 +128,8 @@ debian-cd (2.2.18) unstable; urgency=medium
     - Update boot-sparc not to depend on a kernel version.
     - Remove ramdisk_size param of silo.conf.
     - Add initrd-tools to sparc di+k list.
-    - Add chrp-boot to powerpc and try to fix HFS catalog size problems.
+    - Generate PPC CD 1 with -chrp-boot. Closes: #252667
+    - Increase max catalog size on PPC DVDs. Closes: #252652
   * Bdale Garbee
     - shorten the command line in post-boot-hppa for sarge, as palo can't
       handle a command line longer than 127 chars right now
