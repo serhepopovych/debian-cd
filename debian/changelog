@@ -1,3 +1,25 @@
+debian-cd (2.2.3) unstable; urgency=low
+
+  * Fixes several bug caused by changes in the way binary-all packages
+    are referred to in the Packages files. Closes: #76178
+  * Does now handle sources for a local repository correctly. Closes: #76179
+  * Fix a bug in make extras. Closes: #76181
+  * Added a commodity local symlink for old-fashioned tools like multi_cd
+    which want local packages in dists/local/local. Closes: #76186
+  * Many thanks to Vladimir Michl who provided me patches for the 4 bug
+    mentionned above.
+  * Changed mirror_check to use case insensitive pattern matching for
+    detecting headers. Closes: #70838
+  * Documentation updates about the SIZELIMIT stuff and bootable CDs.
+    Closes: #72067, #68913
+  * There's still no good reasons to remove the unstable symlink. 
+    Closes: #68477
+  * OUT doesn't have to be a relative path. In fact, the default shipped
+    in the CONF.sh file is an absolute path and it does work. 
+    Closes: #75406
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sat,  4 Nov 2000 15:36:10 +0100
+
 debian-cd (2.2.2) frozen unstable; urgency=low
 
   * Still targeted to frozen. Documentations (README.html on the CD) updates

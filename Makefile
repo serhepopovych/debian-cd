@@ -440,7 +440,17 @@ $(SDIR)/sources-stamp:
 		n=$${dir##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$n; \
 		echo -n "$$n ... "; \
-		grep -v "non-US/" $$i | xargs $(addfiles) $$dir $(MIRROR); \
+		grep -vE "(non-US/|/local/)" $$i | xargs $(addfiles) \
+							 $$dir $(MIRROR); \
+		if [ -n "$(LOCAL)" ]; then \
+		    if [ -n "$(LOCALDEBS)" ]; then \
+		        grep "/local/" $$i | xargs $(addfiles) \
+		      					$$dir $(LOCALDEBS); \
+		    else \
+		        grep "/local/" $$i | xargs $(addfiles) \
+							$$dir $(MIRROR); \
+		    fi; \
+		fi; \
 		if [ -n "$(NONUS)" ]; then \
 			grep "non-US/" $$i | xargs $(addfiles) $$dir $(NONUS); \
 		fi; \
@@ -568,15 +578,15 @@ bin-extras: ok
 	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
 	  false; \
 	fi
-	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/$(CD)'" ...
-	$(Q)$(addfiles) $(BDIR)/$(CD) $(ROOTSRC) $(DIR)
+	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/CD$(CD)'" ...
+	$(Q)$(addfiles) $(BDIR)/CD$(CD) $(ROOTSRC) $(DIR)
 src-extras:
 	$(Q)if [ -z "$(DIR)" -o -z "$(CD)" -o -z "$(ROOTSRC)" ]; then \
 	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
 	  false; \
 	fi
-	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(SDIR)/$(CD)'" ...
-	$(Q)$(addfiles) $(SDIR)/$(CD) $(ROOTSRC) $(DIR)
+	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(SDIR)/CD$(CD)'" ...
+	$(Q)$(addfiles) $(SDIR)/CD$(CD) $(ROOTSRC) $(DIR)
 
 ## IMAGE BUILDING ##
 

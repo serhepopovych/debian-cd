@@ -22,6 +22,12 @@ ln -sf $CODENAME dists/stable
 ln -sf $CODENAME dists/unstable
 ln -sf $CODENAME dists/frozen
 
+# Commidity link for tools which want local in dists/local/local ...
+if [-n "$LOCAL" ]
+then
+    ln -sf $CODENAME dists/local
+fi
+
 for i in $SECTIONS
 do
 	mkdir -p dists/$CODENAME/main/binary-$ARCH/$i

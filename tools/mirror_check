@@ -13,10 +13,10 @@ $/=''; # Browse paragraph by paragraph
 
 while (defined($_ = <>)) {
 	# Get the infos about a package
-	m/^Package: (\S+)/m  and $p = $1;
-	m/^Size: (\d+)/m     and $size = $1;
+	m/^Package: (\S+)/mi  and $p = $1;
+	m/^Size: (\d+)/mi     and $size = $1;
 	m/^Filename: (\S+)/mi and $filename = $1;
-	m/^MD5sum: (\S+)/m   and $md5sum = $1;
+	m/^MD5sum: (\S+)/mi   and $md5sum = $1;
 
 	next if not $p;
 	
