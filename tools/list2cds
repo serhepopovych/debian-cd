@@ -138,6 +138,7 @@ msg(0, "-- Generating dependencies tree with apt-cache depends...\n");
 my (@list) = keys %packages;
 while (@list) {
 	my (@pkg) = splice(@list,0,200);
+	$ENV{'LC_ALL'} = 'C'; # Required since apt is now translated
 	open (APT, "$apt cache depends @pkg |") || die "Can't fork : $!\n";
 	my (@res) = (<APT>);
 	close APT or die "« apt-cache depends » failed ... \n" . 
@@ -359,7 +360,7 @@ sub dep_satisfied {
 	my $p = shift;
 	if (ref $p) {
 		foreach (@{$p}) {
-			return 1 if $included{$p};
+			return 1 if $included{$_};
 		}
 	} else {
 		return $included{$p};

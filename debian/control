@@ -1,8 +1,8 @@
 Source: debian-cd
 Section: admin
 Priority: extra
-Maintainer: Raphael Hertzog <hertzog@debian.org>
-Uploaders: Steve McIntyre <93sam@debian.org>
+Maintainer: Debian CD Group <debian-cd@lists.debian.org>
+Uploaders: Raphael Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty@debian.org>, Steve McIntyre <93sam@debian.org>
 Build-Depends-Indep: debhelper (>= 4), sysutils
 Standards-Version: 3.6.1.0
 

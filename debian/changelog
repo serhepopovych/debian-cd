@@ -1,5 +1,12 @@
 debian-cd (2.2.21) UNRELEASED; urgency=low
 
+  * Raphael Hertzog
+    - One line patch to correct a five year old bug that nobody noticed !
+      Closes: #285382
+    - Change maintainer to "Debian CD Group <debian-cd@lists.debian.org>" and
+      put myself into Uploaders (as well as Santiago Garcia Mantinan & Steve
+      McIntyre). That's because I'm not keeping up well enough with debian-cd
+      and I need more people involved in managing bugs.
   * Joey Hess
     - Exclude all the new amd64 kernel images from cd #1, no space.
     - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
