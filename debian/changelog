@@ -20,6 +20,8 @@ debian-cd (2.2.4) unstable; urgency=low
   * Redesigned and updated README to match new www.debian.org style.
   * Added exclude feature for source packages and un-exclude feature
     for binary packages.
+  * Updated and reorganized package/popularity lists, as produced by the
+    "Useful CD 1 Project". More info in tasks/README.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
  

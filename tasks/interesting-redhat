@@ -1,0 +1,23 @@
+
+/* A list of packages on the first (er, only) official Red Hat CD that
+   wouldn't have gotten on our first CD without a bit of help.
+   People who grab the first Debian CD at a tradeshow and try to mimic
+   their RH install will find this useful. */
+
+dhcpcd
+ee
+fetchmailconf
+fvwm95
+fvwm95-icons
+gphoto
+octave
+open
+playmidi
+plugger
+postgresql
+raidtools
+sane
+xbill
+xsane
+xtoolwait
+

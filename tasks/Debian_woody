@@ -11,59 +11,21 @@
 #include "Debian_woody_nonUS"
 #endif
 
-task-dialup
-task-dialup-isdn
-task-newbie-help
-task-gnome-desktop
-task-gnome-games
-task-gnome-net
-task-gnome-apps
-task-sgml
-task-tex
-task-samba
-task-games
-task-laptop
-task-debian-devel
-task-devel-common
-task-c-dev
-task-c++-dev
-task-debug
-task-sgml-dev
-task-tcltk
-task-fortran
-task-objc-dev
-task-database-pg
-task-news-server
-task-x-window-system-core
-task-x-window-system
-task-dns-server
-task-imap
-task-science
-task-python
-task-python-dev
-task-python-bundle
-task-python-web
-task-tcltk-dev
-task-parallel-computing-node
-task-parallel-computing-dev
+#include <interesting-tasks-potato>
 
 /* Packages that should really be on CD1 */
 #include <forcd1>
 
-/* Well I don't know if task for specific countries should be included
-   on the first CD ... 
-   I'll leave it there for now ..
-*/
-   
-task-german
-task-spanish
-task-chinese-s
-task-chinese-t
-task-japanese
-task-polish
+#include <xservers-XFree3>
+
+#include <interesting-redhat>
+
+#include <interesting-fromcd23>
 
 /* List of packages that may still fit on the first CD */
-#include <popularity-contest>
+#include <linuxtag2000>
+
+#include <popularity-contest-woody>
 
 /* Other packages to put on the others CDs */
 
