@@ -1,6 +1,7 @@
 debian-cd (2.2.1) frozen unstable; urgency=low
 
-  * Will probably go to frozen as well... 
+  * Will probably go to frozen as well...
+  * build.sh,build_all.sh: Better guess at size of bin CD 1
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 
