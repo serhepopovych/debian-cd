@@ -83,14 +83,14 @@ fi
 write_isolinix_config () {
 	cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
-APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+APPEND vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
 LABEL expert
   kernel /install/vmlinuz
-  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
@@ -110,20 +110,20 @@ EOF
 write_isolinux_config_26 () {
 	cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz
-APPEND $KERNEL_PARAMS vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+APPEND $KERNEL_PARAMS vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 LABEL linux
   kernel /install/vmlinuz
 LABEL cdrom
   kernel /install/vmlinuz
 LABEL linux26
   kernel /install/2.6/vmlinuz
-  append $KERNEL_PARAMS vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append $KERNEL_PARAMS vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 LABEL expert
   kernel /install/vmlinuz
-  append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 LABEL expert26
   kernel /install/2.6/vmlinuz
-  append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+  append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw --
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1

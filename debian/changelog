@@ -63,6 +63,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Update the task lists and popcon again.
     - Stop excluding 686 and 686-smp kernels, as these are probably the most
       popular, and they fit on CD#1 now.
+    - Add "--" end of installer kernel params markers to the isolinux.cfg.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
