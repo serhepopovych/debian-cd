@@ -64,3 +64,18 @@ Bugs / Problems :
   select NONFREE too. That's because contrib is broken
   without non-free. And the building process only allow
   functional packages to be added.
+
+Technical choices :
+-------------------
+
+For the multiboot on the first CD of an i386 CD set, we had two options
+isolinux and el-torito native multiboot. We selected isolinux
+because it works well and it lets you display information to the user.
+The el-torito multiboot just displays a menu with each item
+being the same "2.88Mb boot image". Both multiboot mechanism may
+not work on older hardware with very old BIOSes however the el-torito
+one works a bit better because it's usually able to boot the first choice
+without displaying the menu then. This is a non-issue since people
+may still boot on CD 2,3,4,5 with the usual boot method if the multiboot
+doesn't work.
+

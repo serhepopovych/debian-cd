@@ -38,8 +38,10 @@ debian-cd (2.2.14) unstable; urgency=low
     LOCAL, SECURITY, SECURED ...
   * Changed the test for ISOLINUX and MULTIBOOT to be coherent with the other
     boolean variables.
+  * Dropped old el-torito multiboot support. Documented the choice of
+    isolinux in README.devel.
 
- -- Raphael Hertzog <hertzog@debian.org>  Fri, 12 Apr 2002 17:34:31 +0200
+ -- Raphael Hertzog <hertzog@debian.org>  Mon, 15 Apr 2002 13:16:25 +0200
 
 debian-cd (2.2.13) unstable; urgency=low
 

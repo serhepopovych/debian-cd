@@ -78,32 +78,6 @@ install_languages $CDDIR
 if [ "$N" = "1" ] || [ "$N" = "1_NONUS" ] ; then
 
 
-
-# # new new new # #
-# The next chunk of code is only used if MULTIBOOT=1
-# Make disk1 a multi-boot image
-# ElTorito supports multiple boot images
-# Setup all boot-disk images (currently 4)
-
-
-if [ "${MULTIBOOT:-0}" != "0" ] && [ "${ISOLINUX:-0}" = "0" ]; then
-        echo "Adding additional boot images to CD1"
-
-    for i in 2 3 4 ; do
-	THISTYPE=${KTYPE[$i]}
-        # first copy/link the next boot block to the disk.
-        ln CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/$THISTYPE/rescue.bin boot$N/boot/${THISTYPE:-vanilla}.bin
-        # then the eltorito-alt-boot cmd to mkisofs_opts
-        echo -n "-eltorito-alt-boot " >> $N.mkisofs_opts
-        # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n "-b boot/${THISTYPE:-vanilla}.bin "  >> $N.mkisofs_opts
-
-    done
-fi
-
-
-
-
 # populate the install directory as well
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
 	cp -lf images-1.44/resc*.bin $CDDIR/install ; \
