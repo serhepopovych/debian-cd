@@ -6,6 +6,9 @@ debian-cd (2.2.13) unstable; urgency=low
   * Adapted to new s390 boot-floppies 3.0.19 directory structure (Stefan
     Gybas <sgybas@debian.org>).
   * Updated boot-i386 for the boot-floppies 3.0.19.
+  * Don't include the base-images-* directories on the CD. They
+    are meant for people wishing to install by floppy (who download the
+    floppy images from the net).
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 20 Jan 2002 15:42:29 +0100
 
