@@ -17,6 +17,12 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
     - Bump m68k 2.4 kernels to 2.4.27.
   * Petter Reinholdtsen
     - New variable SPLASHPNG pointing to replacement splash image on i386.
+  * Kenshi Muto
+    - Fix cp routine around EXTRA_DISK_IMAGES in tools/boot/sarge/boot-i386
+      (add space to cp arguments)
+    - Add floppy/asian-root.img, floppy/mideast-root.img and
+      floppy/cyrillic-root.img to EXTRA_DISK_IMAGES (but may it be treated
+      as DISK_IMAGES?)
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
@@ -199,7 +205,7 @@ debian-cd (2.2.17) unstable; urgency=low
   * Kenshi Muto
     - Add jfbterm, unifont into forcd1, d-i+kernel (second stage of
       debian-installer needs them).
-    - Add console-cyrillic, console-terminus, hotplug into forcd1,
+    - Add console-cyrillic, console-terminus, hotplug, iso-codes into forcd1,
       d-i+kernel.
   * Joey Hess
     - Add "expert" mode to isolinux.cfg for sarge.
