@@ -23,7 +23,7 @@ ln -sf $CODENAME dists/unstable
 ln -sf $CODENAME dists/frozen
 
 # Commidity link for tools which want local in dists/local/local ...
-if [-n "$LOCAL" ]
+if [ -n "$LOCAL" ]
 then
     ln -sf $CODENAME dists/local
 fi
