@@ -2,14 +2,18 @@
 
 # Install files in /install and some in /doc
 # 26-dec-99 changes for i386 (2.2.x) bootdisks --jwest
+# 11-mar-00 added sparc to boot-disk documentation test  --jwest
 
 set -e
 
 BDIR=$TDIR/$CODENAME-$ARCH
 
+# boot-disk location for documentation is inconsistant --jwest
 if [ "$ARCH" = "powerpc" ]; then
 	DOCDIR="docs"
- elif [ "$ARCH" = "i386" ] ; then
+ elif [ "$ARCH" = "i386" ]; then 
+         DOCDIR="doc"
+ elif [ "$ARCH" = "sparc" ]; then
          DOCDIR="doc"
 else
 	DOCDIR="documentation"
