@@ -138,7 +138,7 @@ EOF
 
 # Only include powerpc kernels that d-i base-installer installs.
 for subarch in powerpc power3 power4 power3-pmac power3-chrp-rs6k \
-		power4-pmac power4-chrp-rs6k powerpc-pmac powerpc-small-pmac \
+		power4-pmac power4-chrp-rs6k powerpc-pmac \
 		powerpc-prep powerpc-chrp powerpc-chrp-rs6k apus; do
 	sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' \
 		$MIRROR/dists/$CODENAME/main/binary-powerpc/Packages \

@@ -38,6 +38,9 @@ debian-cd (2.2.20) UNRELEASED; urgency=low
       exist.
     - Hardlink powerpc and powerpc/minimal vmlinux files together, since
       they're identical.
+    - Remove powerpc-small-pmac kernel from the netinst. base-installer
+      hasn't installed it since April, and according to Sven it's only
+      useful for building floppies.
 
  -- Joey Hess <joeyh@debian.org>  Mon, 30 Aug 2004 15:23:19 -0400
 
