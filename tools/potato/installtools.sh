@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Install files in /install and some in /doc
+# 26-dec-99 changes for i386 (2.2.x) bootdisks --jwest
 
 set -e
 
@@ -8,6 +9,8 @@ BDIR=$TDIR/$CODENAME-$ARCH
 
 if [ "$ARCH" = "powerpc" ]; then
 	DOCDIR="docs"
+ elif [ "$ARCH" = "i386" ] ; then
+         DOCDIR="doc"
 else
 	DOCDIR="documentation"
 fi

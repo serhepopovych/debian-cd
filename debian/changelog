@@ -1,3 +1,16 @@
+
+debian-cd (2.1.92) unstable; urgency=low
+
+  * Changes to installtools.sh, change to check for documentation
+    directory name by $ARCH.
+  * Changes to  potato/boot-i386 for support of the 2.2.3 bootdisks. 
+  * In Makefile, if there are multiple versions of the
+    bootdisks in the source tree, the section "boot:" seems to get 
+    confuzed.  Not fixed. Temporary solution, move old i386 boot
+    disks out of the source archive. 
+
+ -- Jim Westveer  <jwest@netnw.com>  Mon, 27 Dec 1999 08:00:00 -0700
+
 debian-cd (2.1.91) unstable; urgency=low
 
   * Splitted the boot scripts for slink & potato. Updated the Makefile

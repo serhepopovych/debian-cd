@@ -40,15 +40,19 @@ if [ $N != 1 ]; then
 fi
 
 # Now we do disk 1 ...
+# couple of changes for 2.2.x bootdisks 27-dec-99 -- jwest
 
-echo -n "-J -b boot/resc2880.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
+echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
 
 (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/ ; \
-	cp resc*.bin linux root.bin $CDDIR/install )
+	cp disks-2.88/resc*.bin  $CDDIR/install ; \
+	cp linux  $CDDIR/install ; \
+	cp disks-1.44/root.bin $CDDIR/install )
 
 mkdir -p boot1/boot
 
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/resc2880.bin	boot1/boot
+#cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/resc2880.bin boot1/boot
+cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/disks-2.88/rescue.bin boot1/boot
 
 
 #Extracting tools for disc 1
