@@ -13,20 +13,6 @@ debian-cd (2.2.21) unstable; urgency=low
       inclusion of local udebs. Closes: #258029
     - Apply another patch from horsm@debian.org to try to look for d-i images
       in "local" dirs first. Closes: #258026
-  * Joey Hess
-    - Exclude all the new amd64 kernel images from cd #1, no space.
-    - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
-    - Add network-console-config to forcd1 since it's needed by the
-      network-console udeb. Closes: #279238
-    - Exclude xmail from CD1 (new MTA), and exim (old MTA)
-    - Exclude some kernel-headers with no matching kernel-images from CD1.
-    - Update task lists to reflect tasksel changes.
-    - Exclude new kernels from CD1.
-    - Switch mips daily builds to new builds by ths.
-    - Update task files for tasksel 2.22.
-    - Exclude more new kernel images from CD1.
-    - Stop hardcoding sid as the distribution to take the installation manual
-      from, use DI_CODENAME instead.
   * Steve McIntyre
     - Substantially updated update-cd:
        - Cope with Woody r3 updates taking more than 1 CD per
@@ -85,6 +71,19 @@ debian-cd (2.2.21) unstable; urgency=low
          - libdb4.2, libgcrypt11, libgcrypt7, libgnutls10, libgnutls11,
            libgpg-error0, libtasn1-2: new libraries
          - console-tools: now installed by debootstrap even on s390
+    - Exclude all the new amd64 kernel images from cd #1, no space.
+    - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
+    - Add network-console-config to forcd1 since it's needed by the
+      network-console udeb. Closes: #279238
+    - Exclude xmail from CD1 (new MTA), and exim (old MTA)
+    - Exclude some kernel-headers with no matching kernel-images from CD1.
+    - Update task lists to reflect tasksel changes.
+    - Exclude new kernels from CD1.
+    - Switch mips daily builds to new builds by ths.
+    - Update task files for tasksel 2.22.
+    - Exclude more new kernel images from CD1.
+    - Stop hardcoding sid as the distribution to take the installation manual
+      from, use DI_CODENAME instead.
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
     - add ramdisk_size=16384 to palo call in post-boot-hppa 
