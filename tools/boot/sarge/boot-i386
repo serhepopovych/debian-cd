@@ -49,7 +49,7 @@ BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.t
 DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
 # Note that floppy/access/drivers.img was renamed to cd-drivers, both
 # present for the transition.
-EXTRA_DISK_IMAGES="floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img"
+EXTRA_DISK_IMAGES="floppy/net-drivers.img floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img"
 
 # Download boot images and floppies.
 for image in $BOOT_IMAGES $DISK_IMAGES; do
