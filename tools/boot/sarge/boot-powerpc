@@ -31,13 +31,25 @@ fi
 
 install_languages $CDDIR
 
-echo -n "--netatalk -hfs -probe -map $BASEDIR/data/hfs.map" \
+echo -n "--chrp-boot --netatalk -hfs -probe -map $BASEDIR/data/hfs.map" \
         > $N.mkisofs_opts
 # We are still missing this for prep
 #echo -n " -prep-boot install/prep/boot.bin" >> $N.mkisofs_opts
 # For newworld Mac booting  - Note, no spaces in volid!
 echo -n " -part -no-desktop -hfs-bless CD$N/install -hfs-volid Debian/PowerPC_${CODENAME}" \
 	>> $N.mkisofs_opts
+# Recommended size for a HFS Catalog is 4 megas per giga, defaults to 4 megas
+if [ -n "$SIZELIMIT1" ];then
+  if [ "$SIZELIMIT1" -gt 1000000000 ];then
+    let newsize="$SIZELIMIT1"/256
+    echo "-hfs-parms MAX_XTCSIZE=$newsize" >> $N.mkisofs_opts
+  fi
+else
+  if [ -n "$SIZELIMIT" ] && [ "$SIZELIMIT" -gt 1000000000 ];then
+    let newsize="$SIZELIMIT"/256
+    echo "-hfs-parms MAX_XTCSIZE=$newsize" >> $N.mkisofs_opts
+  fi
+fi
 
 cd $INSTALLDIR
 # Extract yaboot from the archive
