@@ -5,6 +5,8 @@ debian-cd (2.2.2) frozen unstable; urgency=low
   * Fixed targets bin-image and src-image to use CD$(CD) instead of $(CD).
   * Added "." after -F argument for symlink farm user. Closes: #66599
   * Misc changes for woody i386 bootdisks --jwest
+  * Fixed the patch from Joey. :) ${LOCALDEBS:-$MIRROR} instead of
+    ${LOCALDEBS:-MIRROR}. s/CODNAME/CODENAME/ too.
 
  -- Raphael Hertzog <hertzog@debian.org>  Fri, 30 Jun 2000 17:50:16 +0200
 

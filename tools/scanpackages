@@ -87,8 +87,8 @@ if [ -n "$NONUS" -a "$CODENAME" = "slink" ]; then
 fi
 
 if [ -n "$LOCAL" ]; then
-	if [ -e ${LOCALDEBS:-MIRROR}/dists/$CODNAME/local/binary-$ARCH/Release ]; then
-	   cp ${LOCALDEBS:-MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release \
+	if [ -e ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release ]; then
+	   cp ${LOCALDEBS:-$MIRROR}/dists/$CODENAME/local/binary-$ARCH/Release \
    		dists/$CODENAME/local/binary-$ARCH/
 	fi
 	grep -v ^X-Medium $PREFIX.Packages-local \

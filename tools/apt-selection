@@ -59,7 +59,7 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	fi
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then
-	  echo "deb file:${LOCALDEBS:-MIRROR} $CODENAME local" \
+	  echo "deb file:${LOCALDEBS:-$MIRROR} $CODENAME local" \
 	  >> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 	fi
 fi
