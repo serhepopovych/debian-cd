@@ -1,3 +1,11 @@
+debian-cd (2.2.21) UNRELEASED; urgency=low
+
+  * Joey Hess
+    - Exclude all the new amd64 kernel images from cd #1, no space.
+    - Forgot to exclude old kernel-image-2.6.7-1-686-smp from cd #1.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 25 Oct 2004 03:03:36 -0400
+
 debian-cd (2.2.20) unstable; urgency=medium
 
   * Joey Hess
