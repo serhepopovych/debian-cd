@@ -13,8 +13,8 @@ B
 #
 # $1 is the CD number
 # $2 is the temporary CD build dir
-# CODENAME1 used temporarly to point to potato boot disks
-# if potato boot disks do not exist 05-JUL-2000  -- jwest
+# CODENAME1 to point to potato boot disks if woody boot disks 
+#  do not exist 05-JUL-2000  -- jwest
 set -e
 
 N=$1
@@ -24,10 +24,9 @@ BOOTDIR=
 
 # set bootdisks to potato for the moment.
 if [ -f $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/compact/rescue.bin ]; then
-        echo "Using woody bootdisks"
         CODENAME1=$CODENAME
 else
-        echo "Using potato bootdisks"
+        echo "Using potato bootdisks - woody bootdisks not available"
         CODENAME1=potato
 fi
 
