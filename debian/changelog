@@ -27,6 +27,9 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       of hw-detect.
     - Add tools/get_diskusage.pl (originally by Petter).
     - Add update-popcon Makefile target (taken from Skolelinux).
+    - Add a KERNEL_PARAMS variable, which can be used to add kernel parameters
+      and is useful for creating things like CDs that install in critical
+      priority mode. I only implemented it for i386 so far.
     - Add MAXCDS config variable, which forces debian-cd to stop after a given
       number of binary CDs.
   * Petter Reinholdtsen
