@@ -17,6 +17,7 @@ debian-cd (2.2.4) unstable; urgency=low
     files from the archive. Closes: #93612
   * Some esthetic corrections to the Makefile.
   * Updated the popularity-contest file.
+  * Redesigned and updated README to match new www.debian.org style.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
  

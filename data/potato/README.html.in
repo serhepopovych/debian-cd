@@ -37,25 +37,36 @@
 #include <README.diskdefines>
 
 
-<TABLE border="0" cellpadding="3" cellspacing="0" width="100%">
+#if OUTPUThtml
+<div align=right>
+(<a href="README.txt">Text version</a>)
+</div>
+<TABLE border="0" cellpadding="3" cellspacing="0" align="center" summary="">
 <TR>
 <TD>
-
-<div align=right>
-#if OUTPUThtml
-<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt="" width="50" height="61" align="left">
-<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0" alt="Debian" width="179" height="61" align="left">
-(<a href="README.txt">Text version</a>)
-#endif 
-#if OUTPUTtext
-(HTML version in README.html)
-#endif
-</div>
-
+<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt=""
+  width="50" height="61"></A>
+<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0"
+  alt="Debian" width="179" height="61">
 </TD>
 </TR>
+</TABLE>
+#endif 
+#if OUTPUTtext
+<div align=right>
+(HTML version in README.html)
+</div>
+#endif
+
+
+<TABLE bgcolor="#DF0451" border="0" cellpadding="0" cellspacing="0"
+  width="100%" summary="">
 <TR>
-<TD bgcolor="#DF0451">
+<TD valign="top">
+<img src="pics/red-upperleft.png" align="left" border="0" hspace="0"
+  vspace="0" alt="" width="15" height="16">
+</TD>
+<TD rowspan="2" align="center">
 
  <CENTER>
  <TABLE border="0" cellpadding="2" cellspacing="0" align="center">
@@ -71,13 +82,43 @@
  </CENTER>
 
 </TD>
+<TD valign="top">
+<img src="pics/red-upperright.png" align="right" border="0" hspace="0"
+  vspace="0" alt="" width="16" height="16">
+</TD>
+</TR>
+<TR>
+<TD valign="bottom">
+<img src="pics/red-lowerleft.png" align="left" border="0" hspace="0"
+  vspace="0" alt="" width="16" height="16">
+</TD>
+<TD valign="bottom">
+<img src="pics/red-lowerright.png" align="right" border="0" hspace="0"
+vspace="0" alt="" width="15" height="16">
+</TD>
 </TR>
 </TABLE>
-<TABLE border="0" cellpadding="5" cellspacing="0" width="100%">
-<TR>
-<TD valign="TOP" width="140" bgcolor="#BBDDFF">
 
-<BR>
+<TABLE border="0" cellpadding="2" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD></TD>
+</TR>
+</TABLE>
+
+
+<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD colspan="3" valign="top" width="20%" bgcolor="#BBDDFF">
+          <img src="pics/blue-upperleft.png" align="left" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+          <img src="pics/blue-upperright.png" align="right" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+        </TD>
+</TR>
+<TR>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
+
+        <TD valign="TOP" bgcolor="#BBDDFF">
 
 <FONT face="Arial,Helvetica">
 
@@ -173,6 +214,9 @@ CONTENTS:
 #if OUTPUThtml
 &nbsp;<P>
 <A href=".">Browse this CD-ROM</A></P>
+<P>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>
+</P>
 #endif
 
 
@@ -181,14 +225,14 @@ CONTENTS:
 #if OUTPUTtext
 </LI>
 </UL>
-&nbsp;<BR>
-&nbsp;<BR>
 #endif
 
-</TD>
 
-<TD valign="TOP">
-<BR>
+        </TD>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
+        <TD>&nbsp;&nbsp;</TD>
+
+  <TD valign="TOP" width="80%">
 
 <CENTER>
 <FONT SIZE="+2"><B><I>
@@ -221,11 +265,15 @@ Operating System (OS) for your computer. And it is
 An operating system is the set of basic programs
 and utilities that make your computer run. At the core of an operating
 system is the kernel. The kernel is the most fundamental program on the
-computer, does all the basic housekeeping and lets you start other programs.
+computer, which does all the basic housekeeping and lets you start other
+programs.
 Debian is kernel independent. It currently uses the
 <A href="http://www.linux.org/">Linux</A> kernel but work is
 in progress to provide Debian for other kernels, using
 <A href="http://www.gnu.org/software/hurd/hurd.html">the Hurd</A>.
+Most of the basic operating system tools
+come from the <a href="http://www.gnu.org/">GNU project</A>; hence the name
+GNU/Linux.
 <P>
 
 Debian is available for various kinds of computers
@@ -424,15 +472,36 @@ Last-Minute Notes
 
 <UL>
 
-#if 0
 <LI>
-The version of the X Window System on these CDs has a slight problem
-with reading the X resource files. A simple fix is described at
-<a href="http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html">http://www.debian.org/Lists-Archives/debian-x-0006/msg00000.html</a>
-
+It is possible to run a Debian GNU/Linux 2.2 system with a new Linux kernel 
+version 2.4.x. For that, you may need to upgrade one or more software
+packages to a newer version than available on this CD. Read
+<a href="http://www.fs.tum.de/~bunk/kernel-24.html">http://www.fs.tum.de/~bunk/kernel-24.html</a>
+for more information.
+<BR>
+Note that Debian does not officially recommend running a Linux kernel 2.4.x
+at this moment.
 <BR>&nbsp;
 </LI>
 
+<LI>
+The K Desktop Environment (KDE) version 2 was not finished when Debian 2.2
+was released, and is therefore not included. However, KDE2 packages
+for Debian 2.2 are available for download at
+<a href="http://kde.debian.net/">http://kde.debian.net</a>&nbsp;.
+<BR>&nbsp;
+</LI>
+
+<LI>
+At this moment, there are no Debian 2.2 packages available of the recently
+released version 4.0 of XFree86 (the open-source implementation of the X Window
+System). If you really need to run XFree86&nbsp;4, you have to (partially)
+upgrade your system to the &quot;testing&quot; or &quot;unstable&quot;
+distribution.
+<BR>&nbsp;
+</LI>
+
+#if 0
 <LI>
 The Linux kernel version 2.2.15 on these CDs has been patched 
 to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
@@ -443,7 +512,7 @@ to correct the <tt>seteuid</tt> problem with the fix from 2.2.16.
 #endif
 
 <LI>
-Last-minutes notes for this CD may be available on
+More last-minutes notes for this CD may be available on
 <a href="http://cdimage.debian.org/lastmin.html">http://cdimage.debian.org/lastmin.html</a>
 </LI>
 
@@ -719,14 +788,22 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Mon Nov 13 17:37:52 CET 2000
+Last Modified: Wed Apr 18 19:09:34 CEST 2001
 
 <BR></SMALL>
 </DIV>
 
-</TD>
-</TR>
-</TABLE>
+  </TD>
+  </TR>
+  <TR>
+        <TD colspan="3" valign="bottom" width="20%" bgcolor="#BBDDFF">
+          <img src="pics/blue-lowerleft.png" align="left" border="0"
+            hspace="0" vspace="0" alt="" width="17" height="16">
+          <img src="pics/blue-lowerright.png" align="right" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+        </TD>
+  </TR>
+  </TABLE>
 
 </BODY>
 </HTML>

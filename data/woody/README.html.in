@@ -37,25 +37,36 @@
 #include <README.diskdefines>
 
 
-<TABLE border="0" cellpadding="3" cellspacing="0" width="100%">
+#if OUTPUThtml
+<div align=right>
+(<a href="README.txt">Text version</a>)
+</div>
+<TABLE border="0" cellpadding="3" cellspacing="0" align="center" summary="">
 <TR>
 <TD>
-
-<div align=right>
-#if OUTPUThtml
-<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt="" width="50" height="61" align="left">
-<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0" alt="Debian" width="179" height="61" align="left">
-(<a href="README.txt">Text version</a>)
-#endif 
-#if OUTPUTtext
-(HTML version in README.html)
-#endif
-</div>
-
+<IMG src="pics/logo-50.jpg" border="0" hspace="0" vspace="0" alt=""
+  width="50" height="61"></A>
+<IMG src="pics/debian.jpg" border="0" hspace="0" vspace="0"
+  alt="Debian" width="179" height="61">
 </TD>
 </TR>
+</TABLE>
+#endif 
+#if OUTPUTtext
+<div align=right>
+(HTML version in README.html)
+</div>
+#endif
+
+
+<TABLE bgcolor="#DF0451" border="0" cellpadding="0" cellspacing="0"
+  width="100%" summary="">
 <TR>
-<TD bgcolor="#DF0451">
+<TD valign="top">
+<img src="pics/red-upperleft.png" align="left" border="0" hspace="0"
+  vspace="0" alt="" width="15" height="16">
+</TD>
+<TD rowspan="2" align="center">
 
  <CENTER>
  <TABLE border="0" cellpadding="2" cellspacing="0" align="center">
@@ -71,13 +82,43 @@
  </CENTER>
 
 </TD>
+<TD valign="top">
+<img src="pics/red-upperright.png" align="right" border="0" hspace="0"
+  vspace="0" alt="" width="16" height="16">
+</TD>
+</TR>
+<TR>
+<TD valign="bottom">
+<img src="pics/red-lowerleft.png" align="left" border="0" hspace="0"
+  vspace="0" alt="" width="16" height="16">
+</TD>
+<TD valign="bottom">
+<img src="pics/red-lowerright.png" align="right" border="0" hspace="0"
+vspace="0" alt="" width="15" height="16">
+</TD>
 </TR>
 </TABLE>
-<TABLE border="0" cellpadding="5" cellspacing="0" width="100%">
-<TR>
-<TD valign="TOP" width="140" bgcolor="#BBDDFF">
 
-<BR>
+<TABLE border="0" cellpadding="2" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD></TD>
+</TR>
+</TABLE>
+
+
+<TABLE border="0" cellpadding="0" cellspacing="0" width="100%" summary="">
+<TR>
+        <TD colspan="3" valign="top" width="20%" bgcolor="#BBDDFF">
+          <img src="pics/blue-upperleft.png" align="left" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+          <img src="pics/blue-upperright.png" align="right" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+        </TD>
+</TR>
+<TR>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
+
+        <TD valign="TOP" bgcolor="#BBDDFF">
 
 <FONT face="Arial,Helvetica">
 
@@ -130,11 +171,13 @@ CONTENTS:
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A href="#lastmin">Last-Minute Notes</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
+#endif
 #endif
 
 #if TYPEbinary
@@ -146,18 +189,22 @@ CONTENTS:
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A href="#nonfree">Non-free/Non-US</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
 #endif
+#endif
 
+#ifndef UNOFFEXTRAS
 <A href="#cdmanuf">CD Manufacturers</A>
 <P>
 
 #if OUTPUTtext
 </LI><LI>
+#endif
 #endif
 
 <A href="#other">More Information</A>
@@ -167,6 +214,9 @@ CONTENTS:
 #if OUTPUThtml
 &nbsp;<P>
 <A href=".">Browse this CD-ROM</A></P>
+<P>
+<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>
+</P>
 #endif
 
 
@@ -175,14 +225,14 @@ CONTENTS:
 #if OUTPUTtext
 </LI>
 </UL>
-&nbsp;<BR>
-&nbsp;<BR>
 #endif
 
-</TD>
 
-<TD valign="TOP">
-<BR>
+        </TD>
+        <TD bgcolor="#BBDDFF">&nbsp;&nbsp;</TD>
+        <TD>&nbsp;&nbsp;</TD>
+
+  <TD valign="TOP" width="80%">
 
 <CENTER>
 <FONT SIZE="+2"><B><I>
@@ -215,11 +265,15 @@ Operating System (OS) for your computer. And it is
 An operating system is the set of basic programs
 and utilities that make your computer run. At the core of an operating
 system is the kernel. The kernel is the most fundamental program on the
-computer, does all the basic housekeeping and lets you start other programs.
+computer, which does all the basic housekeeping and lets you start other
+programs.
 Debian is kernel independent. It currently uses the
 <A href="http://www.linux.org/">Linux</A> kernel but work is
 in progress to provide Debian for other kernels, using
 <A href="http://www.gnu.org/software/hurd/hurd.html">the Hurd</A>.
+Most of the basic operating system tools
+come from the <a href="http://www.gnu.org/">GNU project</A>; hence the name
+GNU/Linux.
 <P>
 
 Debian is available for various kinds of computers
@@ -265,6 +319,7 @@ This CD-ROM is labeled
   DISKNAME
 </tt>
 <P>
+#ifndef UNOFFEXTRAS
 which means that this CD is number DISKNUM of totally TOTALNUM CDs containing
 #if TYPEbinary
 programs ("binaries") for `ARCH' computers.
@@ -281,6 +336,9 @@ The source packages on the Source CDs are ordered by popularity, like
 the programs on the Binary CDs. This means that the source code of the
 programs on the Binary-DISKNUM CD can most likely be found on this CD
 (though there may be some variation due to size issues).
+#endif
+#else
+#include <unoffextrascd.html.in>
 #endif
 
 <A name="install">
@@ -392,6 +450,7 @@ Installing
 #endif
 #endif
 
+#ifndef UNOFFEXTRAS
 <A name="lastmin">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -444,7 +503,7 @@ Last-minutes notes for this CD may be available on
 #endif
 
 </UL>
-
+#endif
 
 #if TYPEbinary
  <A name="apt">
@@ -499,6 +558,7 @@ Last-minutes notes for this CD may be available on
 #endif
 
 
+#ifndef UNOFFEXTRAS
 <A name="nonfree">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -531,7 +591,9 @@ packages. You can get them from our FTP/HTTP mirror sites.
 
 <P>
 Note that you <i>are</i> allowed to <i>import</i> non-US packages into the US.
+#endif
 
+#ifndef UNOFFEXTRAS
 <A name="cdmanuf">
 #if OUTPUTtext
 <P>&nbsp;<P><H2>
@@ -558,7 +620,7 @@ For all needed information, and contact addresses, please refer to
 <tt>&nbsp;
   <a href="http://cdimage.debian.org/">http://cdimage.debian.org</a>
 </tt>
-
+#endif
 
 <A name="other">
 #if OUTPUTtext
@@ -712,14 +774,22 @@ for information on contacting us.
 	</SMALL><P>
 <SMALL>
 
-Last Modified: Sat Aug 12 11:09:43 CEST 2000
+Last Modified: Wed Apr 18 19:09:34 CEST 2001
 
 <BR></SMALL>
 </DIV>
 
-</TD>
-</TR>
-</TABLE>
+  </TD>
+  </TR>
+  <TR>
+        <TD colspan="3" valign="bottom" width="20%" bgcolor="#BBDDFF">
+          <img src="pics/blue-lowerleft.png" align="left" border="0"
+            hspace="0" vspace="0" alt="" width="17" height="16">
+          <img src="pics/blue-lowerright.png" align="right" border="0"
+            hspace="0" vspace="0" alt="" width="16" height="16">
+        </TD>
+  </TR>
+  </TABLE>
 
 </BODY>
 </HTML>
