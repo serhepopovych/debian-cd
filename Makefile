@@ -134,22 +134,22 @@ default:
 # Basic checks in order to avoid problems
 ok:
 ifndef TDIR
-	@echo TDIR undefined; false
+	@echo TDIR undefined -- set up CONF.sh; false
 endif
 ifndef BASEDIR
-	@echo BASEDIR undefined; false
+	@echo BASEDIR undefined -- set up CONF.sh; false
 endif
 ifndef MIRROR
-	@echo MIRROR undefined; false
+	@echo MIRROR undefined -- set up CONF.sh; false
 endif
 ifndef ARCH
-	@echo ARCH undefined; false
+	@echo ARCH undefined -- set up CONF.sh; false
 endif
 ifndef CODENAME
-	@echo CODENAME undefined; false
+	@echo CODENAME undefined -- set up CONF.sh; false
 endif
 ifndef OUT
-	@echo OUT undefined; false
+	@echo OUT undefined -- set up CONF.sh; false
 endif
 ifdef NONFREE
 ifdef EXTRANONFREE
@@ -163,10 +163,10 @@ endif
 endif
 ifneq "$(DOJIGDO)" "0"
 ifndef JIGDOCMD
-	@echo JIGDOCMD undefined; false
+	@echo JIGDOCMD undefined -- set up CONF.sh; false
 endif
 ifndef JIGDOTEMPLATEURL
-	@echo JIGDOTEMPLATEURL undefined; false
+	@echo JIGDOTEMPLATEURL undefined -- set up CONF.sh; false
 endif
 else
 export JIGDOCMD=false
