@@ -44,8 +44,8 @@ KTYPE[1]=""
 KTYPE[2]="compact"
 KTYPE[3]="idepci"
 KTYPE[4]="ide"
-KTYPE[5]=""
-KTYPE[6]=""
+KTYPE[5]="udma100-ext3"
+KTYPE[6]="reiserfs"
 
 # Show user what is going on.
 #
