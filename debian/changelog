@@ -12,6 +12,8 @@ debian-cd (2.2.1) frozen unstable; urgency=low
   * Added extra file to help fine tune the CD sizes per archs
   * Edited boot-alpha to work (I hope) based on what was available in the
     README.txt in boot-floppies
+  * Modified build_all.sh so that it puts each arch under a subdir and
+    modified imagesums/pi-makelist to support the subdirs
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 20 May 2000 23:42:58 +0200
 

@@ -4,7 +4,9 @@
 
 . CONF.sh
 
-for ARCH in i386 m68k alpha sparc powerpc
+TMP_OUT=$OUT
+
+for ARCH in i386 m68k alpha sparc powerpc arm
 do
 	export ARCH
 	echo "Now we're going to build CD for $ARCH !"
@@ -33,8 +35,13 @@ do
 	make list COMPLETE=1 $SIZE_ARGS SRCSIZELIMIT=$((635 * 1024 * 1024))
 	echo " ... building the images"
 	if [ "$ARCH" = "i386" ]; then
-		make official_images
+		export OUT="$TMP_OUT/$ARCH"; mkdir -p $OUT
+		make bin-official_images
+
+		export OUT="$TMP_OUT/src"; mkdir -p $OUT
+		make src-official_images
 	else
+		export OUT=$TMP_OUT/$ARCH; mkdir -p $OUT
 		make bin-official_images
 		if [ $? -gt 0 ]; then
 			echo "ERROR WHILE BUILDING OFFICIAL IMAGES !!" >&2
@@ -48,3 +55,4 @@ do
 done
 
 make imagesums
+make pi-makelist

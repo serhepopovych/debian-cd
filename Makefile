@@ -596,7 +596,7 @@ src-images: ok src-md5list $(OUT)
 
 # Generate the *.list files for the Pseudo Image Kit
 pi-makelist:
-	@for file in $(OUT)/$(CODENAME)-*.raw; do \
+	@cd $(OUT); for file in `find * -name \*.raw`; do \
 		$(BASEDIR)/tools/pi-makelist \
 			$$file > $${file%%.raw}.list; \
 	done
@@ -621,7 +621,7 @@ src-image: ok src-md5list $(OUT)
 
 #Calculate the md5sums for the images
 imagesums:
-	@cd $(OUT); :> MD5SUMS; for file in *.raw; do \
+	@cd $(OUT); :> MD5SUMS; for file in `find * -name \*.raw`; do \
 	      md5sum $$file >>MD5SUMS; \
 	 done
 
