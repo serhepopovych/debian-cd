@@ -17,6 +17,7 @@ unset MKISOFS
 unset MKISOFS_OPTS
 unset EXCLUDE
 unset SRCEXCLUDE
+unset NORECOMMENDS
 
 
 # The debian-cd dir
@@ -119,3 +120,7 @@ export APTTMP=/ftp/tmp/apt
 
 # We also exclude some source packages
 #export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-potato
+
+# Set this if only the required (and NOT the recommended/suggested) packages
+# should be added on CDs when a package is added on the CD.
+#export NORECOMMENDS=1

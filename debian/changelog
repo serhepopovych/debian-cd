@@ -3,6 +3,10 @@ debian-cd (2.2.12) unstable; urgency=low
   * UNRELEASED. 
   * Get it right this time with the MULTIBOOT test ... Closes: #127234
   * Correct spelling mistake in README.devel. Closes: #127726
+  * Make the log output more consistent and offer the possibility
+    to not force the inclusion of recommended/suggested packages.
+    Thanks to Petter Reinholdtsen for the patches.
+    Closes: #127964, #127968
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 29 Dec 2001 19:57:23 +0100
 
