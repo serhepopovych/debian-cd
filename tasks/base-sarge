@@ -569,6 +569,7 @@ e2fslibs
 libcomerr2
 libss2
 libuuid1
+fileutils
 findutils
 grep
 gzip
