@@ -47,7 +47,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
         kernel-source-2.2.20, timidity-patches, tcl8.2 and tk8.2.
     - Update list2cds to allow #-comments in the exclude file.
   * Stephen R. Marenka
-    - m68k support.
+    - Update m68k support for sarge.
+	- Fix m68k/amiga icons.
   * Santiago Garcia
     - Update isolinux.bin to the version we are shipping with Sarge.
     - Update debian-installer tasks.

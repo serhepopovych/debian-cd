@@ -60,11 +60,12 @@ else
 	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
 fi
 
-# Amiboot needs to be executable
+# Amiboot and dmesg need to be executable
 chmod a+x amiga/amiboot-5.6
 chmod a+x amiga/dmesg
 
-# Need a .info file for the install directory (AmigaOS) (icon?)
+# Setup amiga icons
 cp amiga/amiga.info  $CDDIR/install.info
+mv amiga/amiga.info  .
 
 ##-----------------------------< end of file >------------------------------##
