@@ -81,7 +81,6 @@ kernel-source-2.2.25
 pcmcia-source
 mysql-client
 xfonts-base-transcoded
-dosemu
 g77
 ddd
 ccmalloc
