@@ -15,7 +15,7 @@ SECTIONS="main"
 if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ]; then
   SECTIONS="${SECTIONS} non-free"
 fi
-fi [ "${CONTRIB:-0}" != "0" ]; then
+if [ "${CONTRIB:-0}" != "0" ]; then
   SECTIONS="${SECTIONS} contrib"
 fi
 
