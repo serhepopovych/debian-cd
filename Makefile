@@ -207,10 +207,12 @@ src-clean:
 realclean: distclean
 distclean: ok bin-distclean src-distclean
 bin-distclean:
+	$(Q)echo "Cleaning the binary build directory"
 	$(Q)rm -rf $(BDIR)
 	$(Q)rm -rf $(ADIR)
 	$(Q)rm -rf $(TDIR)/jigdofilelist
 src-distclean:
+	$(Q)echo "Cleaning the source build directory"
 	$(Q)rm -rf $(SDIR)
 	$(Q)rm -rf $(TDIR)/jigdofilelist
 
