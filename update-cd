@@ -48,16 +48,7 @@ SECTS="main non-free contrib"
 VERBOSE=2
 export VERBOSE BASEDIR SECTS
 
-# The full update will not fit on a single CD, so split it arbitrarily
-# CD 1 gets arm/i386/source
-# CD 2 gets alpha/m68k/powerpc
-# CD 3 gets sparc
-# binary-all goes on all 3
-
-INFO1="Debian GNU/Linux $VER Update CD $DATE: Alpha, Arm, HPPA, I386, IA64, M68k and Source"
-INFO2="Debian GNU/Linux $VER Update CD $DATE: Mips, Mipsel, Powerpc, S390, Sparc and Source"
-ARCH1="src all alpha arm hppa i386 ia64 m68k"
-ARCH2="src all mips mipsel powerpc s390 sparc"
+ARCHLIST="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc src" # all dealt with specially
 
 export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
 
@@ -87,28 +78,28 @@ copy_trees () {
     BINLIST=$1
     shift
     ARCHES=$*
-    echo "  Copying \"$ARCHES\" files into $UPD/$CDDIR"
+    echo "    Copying \"$ARCHES\" files into $UPD/$CDDIR"
     for ARCH in $ARCHES
     do
         case "$ARCH" in
             src)
                 NUM=`cat $SRCLIST | wc -l`
                 if [ $NUM -gt 0 ] ; then
-                    echo "    $ARCH into $UPD/$CDDIR"
+                    echo "      $ARCH into $UPD/$CDDIR"
                     adddirs $UPD/$CDDIR $SRCLIST
                     cat $SRCLIST | xargs $addfiles $UPD/$CDDIR $MIRROR
                 else
-                    echo "    No updates needed for $ARCH"
+                    echo "      No updates needed for $ARCH"
                 fi                
                 ;;
             *)
                 NUM=`cat $BINLIST | grep _$ARCH.deb | wc -l`
                 if [ $NUM -gt 0 ] ; then
-                    echo "    $ARCH into $UPD/$CDDIR"
+                    echo "      $ARCH into $UPD/$CDDIR"
                     adddirs $UPD/$CDDIR $BINLIST
                     cat $BINLIST | grep _$ARCH.deb | xargs $addfiles $UPD/$CDDIR $MIRROR
                 else
-                    echo "    No updates needed for $ARCH"
+                    echo "      No updates needed for $ARCH"
                 fi                
                 ;;
         esac
@@ -152,7 +143,8 @@ create_control_files () {
 
 echo Cleaning up
 rm -rf $UPD
-mkdir $UPD $UPD/CD1 $UPD/CD2
+mkdir $UPD
+CDNUM=1
 
 cd $MIRROR
 echo Creating main-section list
@@ -172,11 +164,6 @@ if [ "$NONFREE"x != "1"x ] ; then
 	grep -v non-free $UPD/src-list > $UPD/src-list1
 	mv -f $UPD/src-list1 $UPD/src-list
 fi
-
-echo Creating trees
-
-copy_trees CD1 $UPD/src-list $UPD/bin-list $ARCH1
-copy_trees CD2 $UPD/src-list $UPD/bin-list $ARCH2
 
 if [ "$NONUS"x != ""x ] ; then
 	echo Creating non-US list
@@ -198,28 +185,40 @@ if [ "$NONUS"x != ""x ] ; then
 		mv -f $UPD/src-nu-list1 $UPD/src-nu-list
 	fi
 
-	echo Creating non-US trees
-    copy_trees CD1 $UPD/src-nu-list $UPD/bin-nu-list $ARCH1
-    copy_trees CD2 $UPD/src-nu-list $UPD/bin-nu-list $ARCH2
 fi
 
-echo Creating .disk/info files
-mkdir $UPD/CD1/.disk $UPD/CD2/.disk
-echo $INFO1 > $UPD/CD1/.disk/info
-echo $INFO2 > $UPD/CD2/.disk/info
-
-cd $UPD
-echo Creating Packages and Sources files
-create_control_files CD1 $ARCH1
-create_control_files CD2 $ARCH2
-
-echo Creating images
-echo "  CD1:"
-${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/$CODENAME-update-1.raw $UPD/CD1 2>&1 | grep "extents written"
-echo "  CD2:"
-${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/$CODENAME-update-2.raw $UPD/CD2 2>&1 | grep "extents written"
-#echo "  CD3:"
-#${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/$CODENAME-update-3.raw $UPD/CD3 2>&1 | grep "extents written"
+for THISARCH in $ARCHLIST
+do
+    if [ $THISARCH = "src" ] ; then
+        echo "Creating CD$CDNUM for source"
+    else
+        echo "Creating CD$CDNUM for binary-$THISARCH and binary-all"
+    fi
+    mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
+    INFO="Debian GNU/Linux $VER Update CD $DATE: $THISARCH"
+    echo $INFO > $UPD/CD$CDNUM/.disk/info
+    echo "  Copying normal files"
+    if [ $THISARCH = "src" ] ; then
+        copy_trees CD$CDNUM $UPD/src-list $UPD/bin-list $THISARCH
+    else
+        copy_trees CD$CDNUM $UPD/src-list $UPD/bin-list $THISARCH all
+    fi
+    if [ "$NONUS"x != ""x ] ; then
+        echo "  Copying non-US files"
+        if [ $THISARCH = "src" ] ; then
+            copy_trees CD$CDNUM $UPD/src-nu-list $UPD/bin-nu-list $THISARCH
+        else
+            copy_trees CD$CDNUM $UPD/src-nu-list $UPD/bin-nu-list $THISARCH all
+        fi
+    fi
+    echo "  Creating Packages and Sources files"
+    cd $UPD
+    create_control_files CD$CDNUM $THISARCH
+    echo "  Creating image for CD$CDNUM"
+    echo -n "    "
+    ${MKISOFS} -J -r -V "Debian $VER update CD" -o $OUT/$CODENAME-update-$THISARCH.raw $UPD/CD$CDNUM 2>&1 | grep "extents written"
+    CDNUM=$(($CDNUM + 1))
+done
 
 
 
