@@ -12,16 +12,16 @@ DIR=$1
 
 DOCDIR=doc
 
-if [ -e $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/$DOCDIR ] ; then
-        CODENAME1=$CODENAME
+if [ -e $BOOTDISKS/current/$DOCDIR ] ; then
+        DOCS=$BOOTDISKS/current/$DOCDIR
 else
         echo "Using potato bootdisk documentation"
-        CODENAME1=potato
+        DOCS=$MIRROR/dists/potato/main/disks-$ARCH/current/$DOCDIR
 fi
 
 
 # Put the install documentation in /install
-cd $MIRROR/dists/$CODENAME1/main/disks-$ARCH/current/$DOCDIR
+cd $DOCS
 mkdir -p $DIR/install/$DOCDIR
 cp -a * $DIR/install/$DOCDIR/
 ln -sf install.en.html $DIR/install/$DOCDIR/index.html

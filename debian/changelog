@@ -8,6 +8,7 @@ debian-cd (2.2.9) unstable; urgency=low
   * Does use the extra override file. Closes: #113794
   * Remove the use of unzip in boot-alpha. Nobody should use unzip...
   * Update yaboot.conf and ofboot.b to conform to current (1.3.4) yaboot (powerpc).
+  * If using BOOTDISK= pick up docs from there also (Richard Hirst).
 
  -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Sep 2001 14:57:22 +0200
 
