@@ -45,6 +45,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       debs as well as udebs used by d-i are included.
     - Exclude newer versions of i386 kernels to save space. Leave 2.6.x-386
       kernels on the CD.
+    - Update task-essential-sarge to tasksel 2.05. Fix the generator to work
+      with post-2002 tasksels.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
