@@ -2,13 +2,15 @@
 /* Generally useful/interesting (and mostly small) packages that
    would've ended up on CD 2 or 3 if we hadn't prevented it. */
 
-pgp5i
+hwtools
+bzip2
+elinks
+libghttp1
 bplay
 word2x
 xli
 pdmenu
-jargon
-xntp3
+ntpdate
 mp3blaster
 ghostview
 gnucash
@@ -18,18 +20,13 @@ nano
 xkeycaps
 xcolorsel
 csh
+zsh
 bible-kjv
 bible-kjv-text
 verse
-xanim-modules
-xaw95g
-ircd
 xmix
-xmixer
 ucbmpeg-play
 cd-discid
-pcmcia-source
-aptitude
 masqmail
 mikmod
 mkisofs
@@ -38,10 +35,7 @@ slay
 splay
 vlock
 xosview
-ddd
 xmp
-hwtools
-links
 id3
 mswordview
 licq
@@ -49,3 +43,15 @@ licq-plugin-qt2
 licq-data
 smpeg-gtv
 dosemu
+jargon
+ddd
+ccmalloc
+diffstat
+electric-fence
+memprof
+libgc6-dev
+libltdl3
+libltdl3-dev
+stl-manual
+pcmcia-source
+kernel-source-2.4.21
