@@ -1,9 +1,14 @@
-debian-cd (2.2.19) UNRELEASED; urgency=low
+debian-cd (2.2.19) unstable; urgency=medium
 
+  * Steve McIntyre
+    - (Hopefully this time) Final medium-urgency upload to get a
+      recent debian-cd in before the sarge release. A few bugfixes needed:
+    - Removed silly build-dep-indep on mkisofs. Closes: #258018
+    - Fixed typo in tools/boot/sarge/boot-i386. Closes: #267026
   * Santiago Garcia
     - Change build.sh to allow building non complete CDs, like netinsts.
 
- -- Raphael Hertzog <hertzog@debian.org>  Fri, 20 Aug 2004 10:00:01 +0100
+ -- Steve McIntyre <93sam@debian.org>  Fri, 20 Aug 2004 14:59:11 +0100
 
 debian-cd (2.2.18) unstable; urgency=medium
 
