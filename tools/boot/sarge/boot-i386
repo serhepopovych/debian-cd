@@ -181,35 +181,3 @@ F0 f10.txt
 EOF
 
 fi
-
-(echo "Tools for DOS :" ; \
-	echo "lodlin/         load Linux kernel from DOS" ;\
-	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
-	) |todos > $CDDIR/tools/README.tools
-
-# Loadlin script for starting install via dos/windows
-(cat <<EOF;
-@ echo off
-rem Flush any write-cached disk blocks before we leave DOS. 
-If your system does not use smartdrv an error message will appear, 
-you can safely ignore that.
-smartdrv /c
-
-echo using CDROM install
-loadlin.exe vmlinuz vga=normal initrd=initrd.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
-EOF
-) |todos > $CDDIR/install/boot.bat
-
-fi
-
-# write final lines to mkisofs_opts
-if [ "$NN" = "1" ]; then
-    echo -n "boot$N " >> $N.mkisofs_opts
-else
-    if [ -n "$THISTYPE" ]; then
-	echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
-    fi
-fi
-
-# th,th, thats all

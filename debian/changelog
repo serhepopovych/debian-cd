@@ -55,6 +55,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
     - Add libfribidi0 to generate_di+k_list, needed for BIDI.
     - Switch CONF.sh to sarge.
     - Uncomment exclude lines.
+    - Remove the boot.bat script and redundant and incorrect README.tools.
+      The alternative is to maintain and document them.
   * Petter Reinholdtsen
     - Regenereated tasks/popularity-contest-sarge based on the current data.
     - Avoid kernel versions 2.4.24 and 2.6.3 on the first i386 CD, as we
