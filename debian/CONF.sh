@@ -75,3 +75,20 @@ export APTTMP=/home/ftp/tmp/apt
 # export MKISOFS=/usr/bin/mkhybrid
 # export MKISOFS_OPTS="-a -r -T"	#For normal users
 # export MKISOFS_OPTS="-a -r -F . -T"	#For symlink farmers
+
+# uncomment this to if you want to see more of what the Makefile is doing
+#export VERBOSE_MAKE=1
+
+# uncoment this to make build_all.sh try to build a simple CD image if
+# the proper official CD run does not work
+#ATTEMPT_FALLBACK=yes
+
+# We don't want certain packages to take up space on CD1...
+#export EXCLUDE="$BASEDIR"/tasks/exclude-potato
+# ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)
+#export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-potato
+# Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
+# excluded completely.
+
+# We also exclude some source packages
+#export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-potato

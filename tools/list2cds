@@ -83,8 +83,8 @@ if (-e $exclude) {
 	while (defined($_=<EXCL>)) {
 		chomp;
 		if (not exists $packages{$_}) {
-			msg(1, "INIT: Package '$_' is in excluded but" .
-			       "doesn't exist. Ignored.");
+			msg(1, "INIT: Package '$_' is in excluded but " .
+			       "doesn't exist. Ignored.\n");
 			next;
 		}
 		$excluded{$_} = 'user choice';
@@ -461,6 +461,9 @@ sub add_package {
 		# New limit
 		$limit = $ENV{"SIZELIMIT$cd"} || $deflimit;
 		msg(2, "Limit for CD $cd is $limit.\n");
+
+		# Unexclude packages
+		unexclude ($cd);
 	}
 
 	msg(2, "  \$cd_size = $cd_size, \$size = $size\n");
@@ -636,3 +639,23 @@ sub add_to_cd {
 	push(@{$cds{$cd}}, @{$ref});
 }
 
+# Unexclude packages before given CD is started
+sub unexclude {
+	my $cd = shift;
+	my $unexclude = $ENV{"UNEXCLUDE$cd"} || "$list.unexclude$cd";
+
+    if (-e $unexclude) {
+	open (UNEXCL, "< $unexclude") || die "Can't open $unexclude : $!\n";
+	while (defined($_=<UNEXCL>)) {
+		chomp;
+		if (not exists $packages{$_}) {
+			msg(1, "Package '$_' is in unexcluded but " .
+			       "doesn't exist. Ignored.\n");
+			next;
+		}
+		$excluded{$_} = 0;
+		msg(1, "Unexcluding package '$_'\n");
+	}
+	close UNEXCL;
+    }
+}

@@ -18,6 +18,8 @@ debian-cd (2.2.4) unstable; urgency=low
   * Some esthetic corrections to the Makefile.
   * Updated the popularity-contest file.
   * Redesigned and updated README to match new www.debian.org style.
+  * Added exclude feature for source packages and un-exclude feature
+    for binary packages.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 14 Apr 2001 22:48:19 +0200
  

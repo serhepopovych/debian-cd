@@ -132,6 +132,24 @@ while (defined($_ = <SOURCES>)) {
 
 $/ = $oldrs;
 
+
+# Get the list of excluded packages
+my $exclude = $ENV{'SRCEXCLUDE'} || "sorry-no-srcexclude";
+if (-e $exclude) {    
+        open (EXCL, "< $exclude") || die "Can't open $exclude : $!\n";
+        while (defined($_=<EXCL>)) {
+                chomp;
+                if (not exists $sources{$_}) {
+                        msg(1, "INIT: Source '$_' is in srcexcluded but " .
+                               "doesn't exist. Ignored.\n");
+                        next;
+                }
+                $excluded{$_} = 'user choice';
+        }
+        close EXCL;
+}
+
+
 # Get the list of included packages
 my @list = ();
 my $i = 1;
@@ -287,6 +305,7 @@ sub add_src {
 	$total_size += $size;
 
 	add_to_cd ($cd, \@files);
+	msg(1, "  size: $size\n");
 	$included{$src} = $cd;
 }
 
