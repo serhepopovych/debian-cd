@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w 
 
-use MD5;
+use Digest::MD5;
 
 my $mirror = shift || $ENV{'MIRROR'};
 my $nonus = shift || $ENV{'NONUS'};
@@ -39,7 +39,7 @@ while (defined($_ = <>)) {
 
 	# Compute the MD5sum
 	open(FILE, "< $file") || die "Can't open $file : $!\n";
-	$ctx = MD5->new;
+	$ctx = Digest::MD5->new;
 	$ctx->addfile(*FILE);
 	$digest = $ctx->hexdigest;
 	undef $ctx;

@@ -1,9 +1,10 @@
 debian-cd (2.2.6) unstable; urgency=medium
 
-  * UNRELEASED
   * Updated tasks/base-woody to be in sync with debootstrap 0.1.15.
   * Improved documentation about Official images. Closes: #101578
   * Build woody CD set by default now. Updated CONF.sh accordingly.
+  * Use Digest::MD5 instead of MD5. Depends on libdigest-md5-perl
+    instead of "libdigest-md5-perl | libmd5-perl". Closes: #104184
 
  -- Raphael Hertzog <hertzog@debian.org>  Tue, 19 Jun 2001 00:43:04 +0200
 
