@@ -1,3 +1,9 @@
+debian-cd (2.2.11) unstable; urgency=low
+
+  * UNRELEASED.
+
+ -- Raphael Hertzog <hertzog@debian.org>  Sun, 16 Dec 2001 04:34:03 +0100
+
 debian-cd (2.2.10) unstable; urgency=low
 
   * first test of multi-boot cdimage for i386 disk #1
