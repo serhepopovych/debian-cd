@@ -4,7 +4,7 @@
 #
 # Do install stuff for sparc, including making first CD bootable
 
-. $BASEDIR/tools/boot/$CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
 

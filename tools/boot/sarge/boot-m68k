@@ -6,7 +6,7 @@
 # $1 is the CD number
 # $2 is the temporary CD build dir
 
-. $BASEDIR/tools/boot/$CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
 

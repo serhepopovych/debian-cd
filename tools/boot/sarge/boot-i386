@@ -6,7 +6,7 @@
 # $1 is the CD number
 # $2 is the temporary CD build dir
 
-. $BASEDIR/tools/boot/$CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
 
@@ -66,7 +66,7 @@ done
 if [ "$NN" = "1" ]; then
     echo "Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
-    cp -f $BASEDIR/data/$CODENAME/isolinux.bin boot$N/isolinux/
+    cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
     cp -lf cdrom/vmlinuz $CDDIR/install/
     cp -lf cdrom/initrd.gz $CDDIR/install/
     echo -n "-cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
@@ -99,10 +99,10 @@ done
 # ISOLINUX setup
 
 # Include Smart Boot Manager image for people where isolinux fails
-gzip -dc $BASEDIR/data/$CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
+gzip -dc $BASEDIR/data/$DI_CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
 # Keep the original file timestamp
-touch -r $BASEDIR/data/$CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
-cp -p $BASEDIR/data/$CODENAME/README.sbm $CDDIR/install/
+touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
+cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
 # Isolinux help files come from d-i.
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt

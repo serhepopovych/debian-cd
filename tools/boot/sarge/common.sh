@@ -8,11 +8,11 @@
 # This function should be called for all bootable images.
 install_languages() {
     # Param $1 is the CD directory
-    if [ -f "$MIRROR/dists/$CODENAME/main/disks-$ARCH/current/xlp.tgz" ]
+    if [ -f "$MIRROR/dists/$DI_CODENAME/main/disks-$ARCH/current/xlp.tgz" ]
     then
 	mkdir $1/.xlp
 	(cd $1/.xlp; \
-	tar zxf $MIRROR/dists/$CODENAME/main/disks-$ARCH/current/xlp.tgz )
+	tar zxf $MIRROR/dists/$DI_CODENAME/main/disks-$ARCH/current/xlp.tgz )
     fi
 }
 

@@ -70,6 +70,8 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       building if it is missing.
     - Make it possible to give different CONF.sh files to build.sh.
     - Make it possible to change which images to build using CONF.sh.
+    - Use DI_CODENAME to locate the installation system.  This make it
+      possible to use debian-installer with Woody CDs.
   * Stephen R. Marenka
     - Update m68k support for sarge.
         - Fix m68k/amiga icons.

@@ -7,7 +7,7 @@
 
 # genisovh is used to make ISOs bootable on mips.
 
-. $BASEDIR/tools/boot/$CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
 

@@ -58,9 +58,9 @@ endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
-ifneq "$(wildcard $(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH))" ""
+ifneq "$(wildcard $(MIRROR)/dists/$(DI_CODENAME)/main/disks-$(ARCH))" ""
 ifndef BOOTDISKS
-export BOOTDISKS=$(MIRROR)/dists/$(CODENAME)/main/disks-$(ARCH)
+export BOOTDISKS=$(MIRROR)/dists/$(DI_CODENAME)/main/disks-$(ARCH)
 endif
 endif
 ifndef DOJIGDO
@@ -73,10 +73,10 @@ endif
 ifndef UDEB_INCLUDE
 # Netinst/businesscard CD should have udeb_include file by default
 ifeq ($(INSTALLER_CD),1)
-UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_businesscard_udeb_include
+UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_businesscard_udeb_include
 endif
 ifeq ($(INSTALLER_CD),2)
-UDEB_INCLUDE=$(BASEDIR)/data/$(CODENAME)/$(ARCH)_netinst_udeb_include
+UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_netinst_udeb_include
 endif
 endif
 
@@ -175,7 +175,7 @@ endif
 ## INITIALIZATION ##
 
 # Creation of the directories needed
-init: ok $(OUT) $(TDIR) $(BDIR) $(SDIR) $(ADIR)
+init: ok $(OUT) $(TDIR) $(BDIR) $(SDIR) $(ADIR) unstable-map
 $(OUT):
 	$(Q)mkdir -p $(OUT)
 $(TDIR):
@@ -187,6 +187,15 @@ $(SDIR):
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 	$(Q)mkdir -p $(ADIR)/apt-ftparchive-db
+# Make sure unstable/sid points to testing/sarge, as there is no build
+# rule for unstable/sid.
+unstable-map:
+	$(Q)if [ ! -d $(BASEDIR)/data/sid ] ; then \
+		ln -s sarge $(BASEDIR)/data/sid ; \
+	fi
+	$(Q)if [ ! -d $(BASEDIR)/tools/boot/sid ] ; then \
+		ln -s sarge $(BASEDIR)/tools/boot/sid ; \
+	fi
 
 ## CLEANINGS ##
 
@@ -626,10 +635,10 @@ $(BDIR)/bootable-stamp:
 		dir=$${file%%.packages}; \
 		n=$${dir##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$n; \
-		if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) ]; then \
+		if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/boot-$(ARCH) ]; then \
 		    cd $(BDIR); \
-		    echo "Running tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir" ; \
-		    $(BASEDIR)/tools/boot/$(CODENAME)/boot-$(ARCH) $$n $$dir; \
+		    echo "Running tools/boot/$(DI_CODENAME)/boot-$(ARCH) $$n $$dir" ; \
+		    $(BASEDIR)/tools/boot/$(DI_CODENAME)/boot-$(ARCH) $$n $$dir; \
 		else \
 		    if [ "$${IGNORE_MISSING_BOOT_SCRIPT:-0}" = "0" ]; then \
 			echo "No script to make CDs bootable for $(ARCH) ..."; \
@@ -703,18 +712,18 @@ $(BDIR)/CD1/tools:
 	done
 
 # Add the disks-arch directories if/where needed
-disks: ok bin-infos $(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH)
-$(BDIR)/CD1/dists/$(CODENAME)/main/disks-$(ARCH):
+disks: ok bin-infos $(BDIR)/CD1/dists/$(DI_CODENAME)/main/disks-$(ARCH)
+$(BDIR)/CD1/dists/$(DI_CODENAME)/main/disks-$(ARCH):
 ifdef BOOTDISKS
 	@echo "Adding disks-$(ARCH) stuff ..."
 	$(Q)set -e; \
 	 for DISK in $(FIRSTDISKS) ; do \
-		mkdir -p $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) ; \
+		mkdir -p $(BDIR)/$$DISK/dists/$(DI_CODENAME)/main/disks-$(ARCH) ; \
 		$(add_files) \
-		  $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH) \
+		  $(BDIR)/$$DISK/dists/$(DI_CODENAME)/main/disks-$(ARCH) \
 		  $(BOOTDISKS) . ; \
 		touch $(BDIR)/$$DISK/.disk/kernel_installable ; \
-		cd $(BDIR)/$$DISK/dists/$(CODENAME)/main/disks-$(ARCH); \
+		cd $(BDIR)/$$DISK/dists/$(DI_CODENAME)/main/disks-$(ARCH); \
 		rm -rf base-images-*; \
 		if [ "$(SYMLINK)" != "" ]; then exit 0; fi; \
 		if [ -L current ]; then \
@@ -894,11 +903,11 @@ bin-images: ok bin-md5list $(OUT) $(TDIR)/jigdofilelist
 				$(BINDISKINFOND) \
 				> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
 		fi; \
-		if [ "$(DOJIGDO)" != "2" -o -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
+		if [ "$(DOJIGDO)" != "2" -o -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts CD$$n ; \
-			if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
-				$(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $$n $$dir \
+			if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
+				$(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) $$n $$dir \
 				 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
 			fi; \
 			if [ "$(DOJIGDO)" != "0" ]; then \
@@ -976,8 +985,8 @@ bin-image: ok bin-md5list $(OUT)
 	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
 	 $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD); \
-         if [ -f $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) ]; then \
-                $(BASEDIR)/tools/boot/$(CODENAME)/post-boot-$(ARCH) $(CD) $(BDIR)/CD$(CD) \
+         if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
+                $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) $(CD) $(BDIR)/CD$(CD) \
                  $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
          fi
 

@@ -7,7 +7,7 @@
 
 # palo is used to make ISOs bootable on HPPA.
 
-. $BASEDIR/tools/boot/$CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
 
