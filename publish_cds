@@ -1,0 +1,156 @@
+#! /usr/bin/perl -w
+    eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+        if 0; #$running_under_some_shell
+
+# Copyright (c) 2002 Philip Hands <phil@hands.com>
+# See the README file for the license
+
+# This script creates the md5sums files, using the precalculated md5sums
+# from the main archive
+# First arg = the place that gets published as http://.../debian-cd/
+
+use strict;
+use MIME::Base64;
+use File::Copy;
+
+my $to_dir = shift @ARGV || die "Usage: $0 <to_dir>\n" ;
+my %conf;
+my %jigdosums;
+
+sub jigsum_to_md5sum ($) {
+  my $str = shift;
+  
+  $str =~ tr%-_%+/% ;                     # convert to  normal base64
+  $str =~ tr|A-Za-z0-9+=/||cd;            # remove non-base64 chars
+  $str =~ tr|A-Za-z0-9+/| -_|;            # convert to uuencoded format
+  
+  return unpack('H32', join'',
+		map( unpack("u", chr(32 + length($_)*3/4). $_),
+		     $str =~ /(.{1,60})/gs));
+}
+
+sub mkdirs ($) {
+  my $path = shift;
+
+  return if (-d $path) ;
+
+  if ($path =~ m|^(.*)/[^/]*$|) {
+    mkdirs($1);
+  }
+
+  mkdir($path);
+}
+
+
+# Pick up settings from CONF.sh
+
+open(SHELL, "sh -x CONF.sh 2>&1|") || die;
+while(<SHELL>) {
+  chomp;
+  next unless (/^[+] export (.*)$/);
+  next unless ($1 =~ /^'([^=]+)=(.*)'$/ || $1 =~ /^([^=]+)=(.*)$/) ;
+  $conf{$1} = $2;
+}
+close(SHELL) ;
+
+my $from_dir = $conf{'OUT'} ;
+my $mirror_dir = $conf{'MIRROR'} ;
+my $nonus_dir = $conf{'NONUS'} ;
+
+for my $arch (<$from_dir/*>) {
+  my $bad_images ;
+
+  my $to_arch = $arch ;
+  $to_arch =~ s|^$from_dir|$to_dir/jigdo| ;
+  $to_arch =~ s%/src$%/source% ;
+  mkdirs($to_arch) || die ;
+
+  open(MD5OUT, ">$to_arch/MD5SUMS");
+
+  for my $jigdo (<$arch/*.jigdo>) {
+    my ($http, $filename, $size, $md5) ;
+
+    # find out the image name
+    open (JIGDO, $jigdo) || die;
+    my $section = "" ;
+    while(<JIGDO>) {
+      chomp;
+      if (/^\[(.*)\]$/) {
+	die "ERROR: don't know how to handle multi-image jigdo files"
+	  if ($section eq "Image" && $1 eq "Image") ;
+	$section = $1;
+	next ;
+      }
+      if ($section eq "Image") {
+	if (/^Filename=(.*)$/) { $filename = $1 ; }
+	if (/^Template=(.*)$/) { $http = $1 ; }
+      }
+      elsif ($section eq "Parts") {
+	if (/^([^=]*)=(.*)$/) {
+	  my $jigsum = $1 ;
+	  my $file = $2 ;
+	  if (defined($jigdosums{$file})) {
+	    die "sums don't match for $file" if ($jigdosums{$file} ne $jigsum);
+	  } else {
+	    $jigdosums{$file} = $jigsum ;
+	  }
+	}
+      }   
+    }
+    close(JIGDO);
+
+    # get the checksum & size from the template
+    my $template = $jigdo ;
+    $template =~ s/.jigdo$/.template/ ;
+    open (TPL, "jigdo-file ls --template $template|") || die;
+    while (<TPL>) {
+      chomp;
+      next unless (/^image-info\s+(\S+)\s+(\S*)\s+(\S+)$/) ;
+      $size = $1 ;
+      $md5 = jigsum_to_md5sum($2);
+    }
+    if (!defined($md5)) {
+      $bad_images++ ;
+      print STDERR "ERROR: md5 not available from $template\n";
+      next;
+    }
+    print STDERR "WARNING: image too small ($size in $template)\n"
+      if ($size < 10000000) ;
+    print STDERR "WARNING: image too big ($size in $template)\n"
+      if ($size > 681574400) ;
+    printf MD5OUT "%032s  %s\n", $md5, $filename;
+    close(TPL) ;
+
+    copy($template, $to_arch) ||
+      die "ERROR copying $template to $to_arch ($!)" ;
+    copy($jigdo, $to_arch) ||
+      die "ERROR copying $jigdo to $to_arch ($!)" ;
+  }
+  close(MD5OUT);
+  unlink ("$to_arch/MD5SUMS") if ($bad_images) ;
+
+}
+
+
+# and now we make the hardlink snapshot, and check that all the md5's match
+for my $file (sort(keys(%jigdosums))) {
+  my $frompath = $file ;
+  $frompath =~ s|^Debian:|$mirror_dir/| ;
+  $frompath =~ s|^Non-US:|$nonus_dir/| ;
+
+  my $topath = $file ;
+  $topath =~ s|^Debian:|$to_dir/snapshot/| ;
+  $topath =~ s|^Non-US:|$to_dir/snapshot/| ;
+
+  #    printf "%s  %s\n", jigsum_to_md5sum($jigdosums{$file}), $frompath ;
+  #printf "%s\n", $frompath ;
+  #printf " --> %s\n", $topath ;
+
+  $topath =~ m|^(.*)/[^/]*$| ;
+  mkdirs($1) ;
+  if (-f $frompath) {
+    link ($frompath, $topath) || die "ERROR: linking $frompath to $topath";
+  } else {
+    print STDERR "ERROR: $frompath is not a file\n" ;
+  }
+}
