@@ -63,9 +63,9 @@ MKISOFS=${MKISOFS:-"mkhybrid"}
 # Options to use with mkisofs/mkhybrid - one of these should do you
 # If you're using i386 then -J will be added later to add Joliet stuff
 # * Why can't Windows read RockRidge like any sensible OS? *
-#MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -T"} # For normal users
+MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -T"} # For normal users
 
-MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -F -T"} # For sym-link farmers. 
+#MKISOFS_OPTS=${MKISOFS_OPTS:-"-a -r -F -T"} # For sym-link farmers. 
 # Also make sure you have a patched mkhybrid - read the README
 
 # TDIR must be on the same partition as the mirror for hard links trick 
@@ -86,7 +86,13 @@ BOOTDIR=${BOOTDIR:-/boot}
 # which touches every file a symlink from potato points to (in slink). 
 # By changing only one line in dpkg-scanpackages I am able to generate 
 # potato only cds.  
-SCANPACKAGES=${SCANPACKAGES:-$BASEDIR/dpkg-scanpackages}
+
+# Take care to use the dpkg-scanpackages from multi_cd ...
+if [ -x $BASEDIR/dpkg-scanpackages ]; then
+  SCANPACKAGES=${SCANPACKAGES:-$BASEDIR/dpkg-scanpackages}
+else
+  SCANPACKAGES=${SCANPACKAGES:-/usr/bin/dpkg-scanpackages}
+fi
 
 # Default debug level
 VERBOSE=0
@@ -680,9 +686,9 @@ if [ $error -eq 0 ] ; then
 		if [ "$ARCH"x = "i386"x ] ; then
 			vecho "Disk 1"
 			vecho "   upgrade-2.0-i386"
-			(cd $TDIR/$(CODENAME)1 && ln -s dists/$CODENAME_STATUS/main/upgrade-2.0-i386)
+			(cd $TDIR/${CODENAME}1 && ln -s dists/$CODENAME_STATUS/main/upgrade-2.0-i386)
 			vecho "   upgrade-older-i386"
-			(cd $TDIR/$(CODENAME)1 && ln -s dists/$CODENAME_STATUS/main/upgrade-older-i386)
+			(cd $TDIR/${CODENAME}1 && ln -s dists/$CODENAME_STATUS/main/upgrade-older-i386)
 		fi
     fi
 fi
@@ -690,7 +696,7 @@ fi
 # Fix the crypt++el_2.84-2.deb brokenness in non-US - temporary workaround...
 if [ "$NU"x = "1"x ] ; then
 	vecho "Looking for broken crypt++el_2.84-2.deb link in non-US..."
-    cd $TDIR/$(CODENAME)2/dists/$CODENAME/non-US/binary-$ARCH
+    cd $TDIR/${CODENAME}2/dists/$CODENAME/non-US/binary-$ARCH
 	if [ -L crypt++el_2.84-2.deb ] ; then
 	    link=`ls -l crypt++el_2.84-2.deb | awk '{print $11}'`
 		if [ "$link"x != "../binary-all/crypt++el_2.84-2.deb"x ] ; then
@@ -833,7 +839,7 @@ if [ $error -eq 0 ] ; then
 		echo "   source"
         # Now check source - use the .dsc files
         vecho Creating MD5 list of source files for comparison
-        cat `cat dsc` | awk '
+        cat dsc | xargs cat | awk '
 			/^-----BEGIN PGP SIGNATURE/ {in_list=0}
 			{
 			if(in_list) {printf("%32.32s  %s\n",$1,$3)}
@@ -874,7 +880,7 @@ if [ $error -eq 0 ] ; then
         # Next we need to look at the boot-disks
 
         vecho Checking boot disks areas:
-        for dir in `find $TDIR | grep disks-$ARCH$`
+        for dir in `find $TDIR -type d | grep disks-$ARCH$`
         do
 			cd $dir
 			vecho $dir...
@@ -1068,11 +1074,11 @@ if [ $error -eq 0 ] ; then
         vecho "Making bootable images for $ARCH..."
         cd $TDIR
 
-        mkdir -m 755 $(CODENAME)1/install
-        (cd $(CODENAME)1/dists/$CODENAME_STATUS/main/disks-$ARCH/current/ ; \
-			cp *.txt *.html $TDIR/$(CODENAME)1/install )
+        mkdir -m 755 ${CODENAME}1/install
+        (cd ${CODENAME}1/dists/$CODENAME_STATUS/main/disks-$ARCH/current/ ; \
+			cp *.txt *.html $TDIR/${CODENAME}1/install )
 
-		(cd $(CODENAME)1/doc; 
+		(cd ${CODENAME}1/doc; 
 			for file in ../install/*.{html,txt}; do	ln -s $file; done)
 
         # Hack for bootable disks
@@ -1115,10 +1121,10 @@ case "$ARCH"x in
 		if [ -d boot1 ]; then
 			MKISOFS_OPTS_DISC1="boot1"
 			# move install tree to correct location
-			if [ -d $TDIR/$(CODENAME)1/install ] ; then
+			if [ -d $TDIR/${CODENAME}1/install ] ; then
 				vecho "Moving install to boot1"
 				rm -rf $TDIR/boot1/install || true
-				mv $TDIR/$(CODENAME)1/install $TDIR/boot1
+				mv $TDIR/${CODENAME}1/install $TDIR/boot1
 			fi
 		fi
 		;;
@@ -1195,52 +1201,52 @@ if [ $error -eq 0 ] ; then
     if [ "$IMAGE1"x = "1"x ] ; then
 		echo IMAGE1:
 		VOLID1=`cat $TDIR/cd1.volid`
-        vecho "Making image of cd1 to $OUT/$(CODENAME)1-$ARCH.raw"
+        vecho "Making image of cd1 to $OUT/${CODENAME}1-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 $(CODENAME)1 
+			-o $OUT/${CODENAME}1-$ARCH.raw $MKISOFS_OPTS_DISC1 ${CODENAME}1 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID1" \
-			-o $OUT/$(CODENAME)1-$ARCH.raw $MKISOFS_OPTS_DISC1 $(CODENAME)1
+			-o $OUT/${CODENAME}1-$ARCH.raw $MKISOFS_OPTS_DISC1 ${CODENAME}1
     fi
 
     if [ "$IMAGE2"x = "1"x ] ; then
 		echo IMAGE2:
 		VOLID2=`cat $TDIR/cd2.volid`
-        vecho "Making image of cd2 to $OUT/$(CODENAME)2-$ARCH.raw"
+        vecho "Making image of cd2 to $OUT/${CODENAME}2-$ARCH.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 $(CODENAME)2
+	  -o $OUT/${CODENAME}2-$ARCH.raw $MKISOFS_OPTS_DISC2 ${CODENAME}2
         $MKISOFS $MKISOFS_OPTS -V "$VOLID2" \
-	  -o $OUT/$(CODENAME)2-$ARCH.raw $MKISOFS_OPTS_DISC2 $(CODENAME)2
+	  -o $OUT/${CODENAME}2-$ARCH.raw $MKISOFS_OPTS_DISC2 ${CODENAME}2
     fi
 
     if [ "$IMAGE3"x = "1"x ] ; then
 		echo IMAGE3:
 		VOLID3=`cat $TDIR/cd3.volid`
-        vecho "Making image of cd3 to $OUT/$(CODENAME)3.raw"
+        vecho "Making image of cd3 to $OUT/${CODENAME}3.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 $(CODENAME)3 
+	  -o $OUT/${CODENAME}3.raw $MKISOFS_OPTS_DISC3 ${CODENAME}3 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID3" \
-	  -o $OUT/$(CODENAME)3.raw $MKISOFS_OPTS_DISC3 $(CODENAME)3
+	  -o $OUT/${CODENAME}3.raw $MKISOFS_OPTS_DISC3 ${CODENAME}3
     fi
 
     if [ "$IMAGE4"x = "1"x ] ; then
 		echo IMAGE4:
 		VOLID4=`cat $TDIR/cd4.volid`
-        vecho "Making image of cd4 to $OUT/$(CODENAME)4.raw"
+        vecho "Making image of cd4 to $OUT/${CODENAME}4.raw"
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 $(CODENAME)4 
+	  -o $OUT/${CODENAME}4.raw $MKISOFS_OPTS_DISC4 ${CODENAME}4 
         $MKISOFS $MKISOFS_OPTS -V "$VOLID4" \
-	  -o $OUT/$(CODENAME)4.raw $MKISOFS_OPTS_DISC4 $(CODENAME)4
+	  -o $OUT/${CODENAME}4.raw $MKISOFS_OPTS_DISC4 ${CODENAME}4
     fi
 
     if [ "$IMAGE5"x = "1"x ] ; then
 		echo IMAGE5:
 		VOLID5=`cat $TDIR/cd5.volid`
-        vecho "Making image of cd5 to $OUT/$(CODENAME)5-$ARCH.raw"
+        vecho "Making image of cd5 to $OUT/${CODENAME}5-$ARCH.raw"
 		if [ "$NF"x = "1"x ] ; then
         vecho $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 $(CODENAME)5
+	  -o $OUT/${CODENAME}5-$ARCH.raw $MKISOFS_OPTS_DISC5 ${CODENAME}5
         $MKISOFS $MKISOFS_OPTS -V "$VOLID5" \
-	  -o $OUT/$(CODENAME)5-$ARCH.raw $MKISOFS_OPTS_DISC5 $(CODENAME)5
+	  -o $OUT/${CODENAME}5-$ARCH.raw $MKISOFS_OPTS_DISC5 ${CODENAME}5
         fi
     fi
 fi
@@ -1250,20 +1256,20 @@ if [ $error -eq 0 ] ; then
 	if [ "$IMAGE1"x = "1"x ] ; then
 		if [ "$ARCH"x = "alpha"x ] ; then
 		  vecho "Making $CODNAME1 image bootable"
-		  isomarkboot $OUT/$(CODENAME)1-$ARCH.raw /boot/bootlx /dists/$CODENAME/main/disks-al/1999-03-/root1440.bin
+		  isomarkboot $OUT/${CODENAME}1-$ARCH.raw /boot/bootlx /dists/$CODENAME/main/disks-al/1999-03-/root1440.bin
 		fi
 		if [ "$ARCH"x = "sparc"x ] ; then
 			# temporary mount point (eg. for silo to create the
 			# bootable CD image) only needed for Sparc so far...
 			vecho Checking for temporary mount point for SILO
-			mountpoint=/var/tmp/$(CODENAME)_cd.mnt
+			mountpoint=/var/tmp/${CODENAME}_cd.mnt
 			if [ -d $mountpoint ]; then
 					umount $mountpoint || true
 			else
 					mkdir -p $mountpoint
 			fi
 
-			vecho "Making $(CODENAME)1 image bootable"
+			vecho "Making ${CODENAME}1 image bootable"
 			EXECARCH=`dpkg --print-installation-architecture`
 			if [ "$EXECARCH"x = "sparc"x ]; then
 				siloprog=silo
@@ -1276,11 +1282,11 @@ if [ $error -eq 0 ] ; then
 				cd3=/install/linux-2.2.1-a.out
 				cd4=/install/linux-2.2.1-sun4u-a.out
 				cd5=/install/root.bin
-				echo "mount -o loop $OUT/$(CODENAME)1-$ARCH.raw $mountpoint"
-				mount -o loop $OUT/$(CODENAME)1-$ARCH.raw $mountpoint
-				vecho $siloprog -r $mountpoint -c $OUT/$(CODENAME)1-$ARCH.raw \
+				echo "mount -o loop $OUT/${CODENAME}1-$ARCH.raw $mountpoint"
+				mount -o loop $OUT/${CODENAME}1-$ARCH.raw $mountpoint
+				vecho $siloprog -r $mountpoint -c $OUT/${CODENAME}1-$ARCH.raw \
 					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
-				$siloprog -r $mountpoint -c $OUT/$(CODENAME)1-$ARCH.raw \
+				$siloprog -r $mountpoint -c $OUT/${CODENAME}1-$ARCH.raw \
 					-C /boot/silo.conf -l $cd1,$cd2,$cd3,$cd4,$cd5
 				umount $mountpoint
 			else
