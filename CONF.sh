@@ -268,4 +268,4 @@ export PUBLISH_PATH="/home/jigdo-area/"
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.
-#MAXCDS=1
+#export MAXCDS=1
