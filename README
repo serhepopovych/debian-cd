@@ -96,7 +96,7 @@ The process of building a CD is decomposed as follow :
   $ export NONFREE=1; make list TASK=tasks/kde COMPLETE=1
   or for something like an official image for the USA (without non-US &
   non-free) :
-  $ make COMPLETE=1 SIZELIMIT1=576716800
+  $ make list COMPLETE=1 SIZELIMIT1=576716800
   .... take a look at the file tasks/* to see the options you can have :)
   
   You can change the behaviour of this command with the following
@@ -140,6 +140,12 @@ The process of building a CD is decomposed as follow :
   real directory, it must follow the same setup than in the FTP
   mirror). Your boot-floppies must also be on the same partiton than
   your mirror & temporary dir (hardlinks are used here too).
+
+  All CD1 of officials images are bootable (CD for ARM are the exception)
+  and the space required for this stuff may not always be taken into
+  account in the size calculation. That's why you may need to adjust
+  manually SIZELIMIT1 following the size of the boot-floppies set that
+  you're using.
 
 - now, we'll add the binary packages to the temporary tree :
   $ make packages
