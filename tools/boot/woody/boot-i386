@@ -54,7 +54,8 @@ echo "Using ${KTYPE[$NN]} boot-disks image on CD$N"
 :> $N.mkisofs_opts
 mkdir -p boot$N/boot
 cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[$NN]}/rescue.bin boot$N/boot/
-echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot$N "  > $N.mkisofs_opts
+
+echo -n "-J -b boot/rescue.bin "  > $N.mkisofs_opts
 
 
 
@@ -68,32 +69,23 @@ if [ $N == "1" ] || [ $N == "1_NONUS" ] ; then
 # The next chunk of code is only used if MULTIBOOT=yes
 # Make disk1 a multi-boot image
 # ElTorito supports multiple boot images
+# Setup all boot-disk images (currently 6 of em)
+# note: this is a copy, but could this be a link  to save space ?
+
 
 if [ $MULTIBOOT == "yes" ] ; then
         echo "Adding additional boot images to CD1"
 
+    for (( i=2; i != 7; ++i )) ; do
+
         # first copy/link the next boot block to the disk.
-        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[2]}/rescue.bin boot$N/boot/${KTYPE[2]}.bin
+        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[i]}/rescue.bin boot$N/boot/${KTYPE[i]}.bin
         # then the eltorito-alt-boot cmd to mkisofs_opts
         echo -n " -eltorito-alt-boot " >> $N.mkisofs_opts
         # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n " -b boot/${KTYPE[2]}.bin "  >> $N.mkisofs_opts
+        echo -n " -b boot/${KTYPE[i]}.bin "  >> $N.mkisofs_opts
 
-
-
-        # first copy/link the next boot block to the disk.
-        cp -f CD1/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/${KTYPE[3]}/rescue.bin boot$N/boot/${KTYPE[3]}.bin
-        # then the eltorito-alt-boot cmd to mkisofs_opts
-        echo -n " -eltorito-alt-boot " >> $N.mkisofs_opts
-        # then copy the mkisofs command for this image to the mkisofs_opts
-        echo -n " -b boot/${KTYPE[3]}.bin "  >> $N.mkisofs_opts
-
-
-
-
-
-
-#...and so on...or loop 2-n???
+    done
 fi
 
 
@@ -160,4 +152,11 @@ EOF
 ) |todos > $CDDIR/install/boot.bat
 
 fi
+
+
+
+# write final lines to mkisofs_opts
+echo -n " -c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+
+
 # th,th, thats all
