@@ -20,7 +20,7 @@ my $nonus = $ENV{'NONUS'} || 0;
 my $forcenonusoncd1 = $ENV{'FORCENONUSONCD1'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
-my $exclude = $ENV{'EXCLUDE'} || "$list.exclude";
+my $exclude = "$list.exclude";
 my $norecommends = $ENV{'NORECOMMENDS'} || 0;
 my $nosuggests = $ENV{'NOSUGGESTS'} || 1;
 

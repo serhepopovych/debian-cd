@@ -273,7 +273,9 @@ apt-update: status
 # Deleting the list only
 deletelist: ok
 	$(Q)-rm $(BDIR)/rawlist
+	$(Q)-rm $(BDIR)/rawlist-exclude
 	$(Q)-rm $(BDIR)/list
+	$(Q)-rm $(BDIR)/list.exclude
 
 # Generates the list of packages/files to put on each CD
 list: bin-list src-list
@@ -321,13 +323,21 @@ endif
 
 # Generate the complete listing of packages from the task
 # Build a nice list without doubles and without spaces
-genlist: ok $(BDIR)/list
+genlist: ok $(BDIR)/list $(BDIR)/list.exclude
 $(BDIR)/list: $(BDIR)/rawlist
 	@echo "Generating the complete list of packages to be included ..."
 	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
 	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
 		  $(BDIR)/rawlist \
 		  > $(BDIR)/list
+
+
+$(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
+	@echo "Generating the complete list of packages to be removed ..."
+	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
+	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
+		  $(BDIR)/rawlist-exclude \
+		  > $(BDIR)/list.exclude
 
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
@@ -350,6 +360,16 @@ endif
 	     -U $(ARCH) -U i386 -U linux -U unix \
 	     -DFORCENONUSONCD1=$(forcenonusoncd1) \
 	     -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist
+
+# Build the raw list (cpp output) with doubles and spaces for excluded packages
+$(BDIR)/rawlist-exclude:
+	$(Q)if [ -n $(EXCLUDE) ]; then \
+	 	perl -npe 's/\@ARCH\@/$(ARCH)/g' $(EXCLUDE) | \
+			cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(ARCH) \
+				-U $(ARCH) -U i386 -U linux -U unix \
+	     			-DFORCENONUSONCD1=$(forcenonusoncd1) \
+	     			-I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist-exclude; \
+	fi
 
 ## DIRECTORIES && PACKAGES && INFOS ##
 
