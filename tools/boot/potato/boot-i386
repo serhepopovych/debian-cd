@@ -52,21 +52,29 @@ echo -n "-J -b boot/rescue.bin -c boot/boot.catalog boot1" > 1.mkisofs_opts
 
 mkdir -p boot1/boot
 
+##	24-Mar-2000 notes from Ben Collins on using cd as live file-system
+##	for 2.2.9 bootdisks	jwest
+# (cd $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-1.44/ ; \
+#	gzip -dc root.bin > /tmp/root.bin.uncompressed ; \
+#	mount -o loop /tmp/root.bin.uncompressed /mnt ; \
+#	touch /mnt/cdrom_image ; \
+#	umount /mnt ; \
+#	sync ; \
+#	gzip -c9 /tmp/root.bin.uncompressed > $CDDIR/install/root.bin ; \
+#	rm /tmp/root.bin.uncompressed  )
+## end notes
+
 cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/images-2.88/rescue.bin boot1/boot
 
 
 #Extracting tools for disc 1
 
-mkdir -p $CDDIR/install/dosutils
-
-cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/dosutils/
-
+cp $CDDIR/dists/$CODENAME/main/disks-$ARCH/current/dosutils/* $CDDIR/install/
 
 (echo "Tools for DOS :" ; \
 	echo "lodlin/         load Linux kernel from DOS" ;\
 	echo "rawrite2/       rawrite 2.0 : create disks from disk images (*.bin)"; \
 	) |todos > $CDDIR/tools/README.tools
-
 
 (echo "@ echo off" ; \
 	echo "rem Flush any write-cached disk blocks before we leave DOS. " ; \
