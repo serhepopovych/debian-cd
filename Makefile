@@ -325,7 +325,7 @@ $(BDIR)/list: $(BDIR)/rawlist
 $(BDIR)/rawlist:
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
-		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us/main)' - | \
+		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us)' - | \
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
 	$(Q)if [ -x "/usr/sbin/debootstrap" ]; then \
