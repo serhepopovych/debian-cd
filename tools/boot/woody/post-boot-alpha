@@ -20,7 +20,11 @@ fi
 
 # isomarkboot can't resolve symlinks within the ISO image, so we do it
 # manually.
-BOOTVER=`readlink $CDROOT/dists/$CODENAME/main/disks-alpha/current`
+if [ -L $CDROOT/dists/$CODENAME/main/disks-alpha/current ];then
+	BOOTVER=`readlink $CDROOT/dists/$CODENAME/main/disks-alpha/current`
+else
+	BOOTVER=current
+fi
 BOOTDISKS=dists/$CODENAME/main/disks-alpha/$BOOTVER
 
 isomarkboot $CDIMAGE $BOOTDISKS/bootlx $BOOTDISKS/images-1.44/root.bin

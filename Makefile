@@ -729,7 +729,7 @@ $(SDIR)/CD1/dists/$(CODENAME)-secured:
 # this list when really necessary (saves many minutes per run).
 # Don't depend on anything else as this will not work as intended, so
 # make $(TDIR) ourselves just to be sure.
-$(TDIR)/jigdofilelist: $(MIRROR)/dists/unstable/main/binary-i386/Packages.gz
+$(TDIR)/jigdofilelist: $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.gz
 	@echo "Generating file list for jigdo (if requested) ..."
 	$(Q)set -e; \
 	if [ "$(DOJIGDO)" != 0 ]; then \
