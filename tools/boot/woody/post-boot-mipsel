@@ -3,6 +3,7 @@
 # post-boot-mipsel - (C) 2002 by Karsten Merker <merker@debian.org>
 #
 # Do post-image-building tasks for mipsel, to make CDs bootable.
+# requires mkdecbootcd >= 0.2
 #
 # You may copy, modify and distribute this under the terms of the GNU
 # General Public License as published by the Free Software Foundation;
@@ -49,12 +50,14 @@ KTYPE[6]=""
 KTYPE[7]=""
 KTYPE[8]=""
 
-mkdir -p /tmp/debian-cd-loop.$$
-mount -o ro,loop ${CDIMAGE} /tmp/debian-cd-loop.$$
-KERNEL_ENTRY=`objdump -f CD1/dists/$CODENAME/main/disks-$ARCH/current/tftpimage-${KTYPE[$NN]} | grep "start address" | cut -f 3 -d " "`
-echo "kernel_entry=$KERNEL_ENTRY"
-mkdecbootcd /tmp/debian-cd-loop.$$/cdboot/tftpimage-${KTYPE[$NN]}.raw ${CDIMAGE} $KERNEL_ENTRY
-umount /tmp/debian-cd-loop.$$
-rmdir /tmp/debian-cd-loop.$$
+LINE=$(isoinfo -i ${CDIMAGE} -lR |grep tftpimage-${KTYPE[$NN]}.raw)
+CDSTARTEXTEND=$(echo $LINE | cut -d "[" -f 2 | cut -d "]" -f 1)
+CDNUMBLOCKS=$((($(echo $LINE |tr -s " "| cut -f 5 -d " ") + 2047)/2048))
+KERNEL_ENTRY=$(objdump -f CD1/dists/$CODENAME/main/disks-$ARCH/current/tftpimage-${KTYPE[$NN]} | grep "start address" | cut -f 3 -d " ")
+# echo "LINE=${LINE}"
+# echo "CDSTARTEXTEND=${CDSTARTEXTEND}"
+# echo "CDNUMBLOCKS=${CDNUMBLOCKS}"
+# echo "KERNEL_ENTRY=${KERNEL_ENTRY}"
+mkdecbootcd -m ${CDSTARTEXTEND} ${CDNUMBLOCKS} ${CDIMAGE} ${KERNEL_ENTRY}
 
 exit 0
