@@ -118,6 +118,7 @@ debian-cd (2.2.18) UNRELEASED; urgency=low
       along the same lines as exclude-udebs-i386. Saves about 11 megabytes.
     - Add bootable CD support for arm, following Vince Sanders' advice.
     - Include kernel-image-2.4-* metapackages for ia64.
+    - Unexclude zlib1g-udeb, needed for ssh support in d-i.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 25 Mar 2004 07:33:23 +0100
 

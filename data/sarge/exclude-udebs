@@ -51,7 +51,6 @@ libgtk+2.0-directfb0-udeb
 libpango1.0-udeb
 libpng12-0-udeb
 ttf-freefont-udeb
-zlib1g-udeb
 # This udeb is not in good shape and is largely supersceded by
 # cdebconf-newt-udeb
 cdebconf-slang-udeb
