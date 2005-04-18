@@ -51,7 +51,7 @@ KTYPE[7]=""
 KTYPE[8]=""
 
 LINE=$(isoinfo -i ${CDIMAGE} -lR |grep tftpimage-${KTYPE[$NN]}.raw)
-CDSTARTEXTEND=$(echo $LINE | cut -d "[" -f 2 | cut -d "]" -f 1)
+CDSTARTEXTEND=$(echo $LINE | cut -d "[" -f 2 | cut -d "]" -f 1 | awk '{print $1}')
 CDNUMBLOCKS=$((($(echo $LINE |tr -s " "| cut -f 5 -d " ") + 2047)/2048))
 KERNEL_ENTRY=$(objdump -f CD1/dists/$CODENAME/main/disks-$ARCH/current/tftpimage-${KTYPE[$NN]} | grep "start address" | cut -f 3 -d " ")
 # echo "LINE=${LINE}"
