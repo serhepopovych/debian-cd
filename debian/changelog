@@ -7,7 +7,9 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
     - Make woody's post-boot-mipsel script cope with extra fields in the
       output of sarge's isoinfo
     - Add Suggests: on netpbm and syslinux. Closes: #301345
-
+    - Count the total number of binary and source discs better; sarge can
+      have more than 9 CDs, so ?.packages doesn't cut it any more.
+	
  -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
 
 debian-cd (2.2.21) unstable; urgency=low
