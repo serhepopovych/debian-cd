@@ -111,7 +111,7 @@ if [ -e boot$N/isolinux/f3.txt.with26 ];then
 	fi
     fi
   done
-  cp -a cdrom $CDDIR/install
+
 # Isolinux config file.
 cat > boot$N/isolinux/isolinux.cfg <<EOF
 DEFAULT /install/vmlinuz

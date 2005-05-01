@@ -9,6 +9,8 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
     - Add Suggests: on netpbm and syslinux. Closes: #301345
     - Count the total number of binary and source discs better; sarge can
       have more than 9 CDs, so ?.packages doesn't cut it any more.
+    - Don't copy the whole d-i cdrom directory onto CD1 for amd64.
+      Closes: #306926
 	
  -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
 
