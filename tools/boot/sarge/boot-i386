@@ -114,6 +114,9 @@ LABEL cdrom
 LABEL expert
   kernel /install/vmlinuz
   append DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
+LABEL rescue
+  kernel /install/vmlinuz
+  append rescue/enable=true vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1
@@ -147,6 +150,12 @@ LABEL expert
 LABEL expert26
   kernel /install/2.6/vmlinuz
   append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
+LABEL rescue
+  kernel /install/vmlinuz
+  append $KERNEL_PARAMS rescue/enable=true vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
+LABEL rescue26
+  kernel /install/2.6/vmlinuz
+  append $KERNEL_PARAMS rescue/enable=true vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
 DISPLAY isolinux.txt
 TIMEOUT 0
 PROMPT 1

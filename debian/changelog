@@ -3,6 +3,10 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
   * Joey Hess
     - Add post-sarge udebs rescue-check, initrd-preseed, and preseed-common
       to the udeb exclude list since these will be/are inluded on sid initrds.
+    - Add rescue stanzas to isolinux.cfg. Rescue mode is supported in
+      post-sarge d-i images only, but I guess it won't hurt to have the
+      stanzas there even for sarge images. We may add rescue mode in r1
+      or something even..
   * Steve McIntyre
     - Make woody's post-boot-mipsel script cope with extra fields in the
       output of sarge's isoinfo
@@ -11,7 +15,7 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
       have more than 9 CDs, so ?.packages doesn't cut it any more.
     - Don't copy the whole d-i cdrom directory onto CD1 for amd64.
       Closes: #306926
-	
+
  -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
 
 debian-cd (2.2.21) unstable; urgency=low
