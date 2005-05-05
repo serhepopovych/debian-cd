@@ -193,7 +193,7 @@ $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 	$(Q)mkdir -p $(ADIR)/apt-ftparchive-db
 # Make sure unstable/sid points to testing/sarge, as there is no build
-# rule for unstable/sid.
+# rule for unstable/sid. TODO: switch it to point to etch.
 unstable-map:
 	$(Q)if [ ! -d $(BASEDIR)/data/sid ] ; then \
 		ln -s sarge $(BASEDIR)/data/sid ; \

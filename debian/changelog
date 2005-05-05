@@ -3,10 +3,9 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
   * Joey Hess
     - Add post-sarge udebs rescue-check, initrd-preseed, and preseed-common
       to the udeb exclude list since these will be/are inluded on sid initrds.
-    - Add rescue stanzas to isolinux.cfg. Rescue mode is supported in
-      post-sarge d-i images only, but I guess it won't hurt to have the
-      stanzas there even for sarge images. We may add rescue mode in r1
-      or something even..
+    - Add etch directories; point sid symlinks to them.
+    - Add rescue stanzas to etch isolinux.cfg. Rescue mode is supported in
+      post-sarge d-i images only.
   * Steve McIntyre
     - Make woody's post-boot-mipsel script cope with extra fields in the
       output of sarge's isoinfo

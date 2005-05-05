@@ -1,0 +1,144 @@
+#!/bin/bash
+#
+# Do install stuff for m68k, including making bootable CDs for bvme6000
+# Works with debian-installer
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
+
+set -e
+
+N=$1
+CDDIR=$2
+INSTALLDIR=$CDDIR/install
+
+# the ! case further down doesn't seem to work.
+#if [ ! "$DI_WWW_HOME" ];then
+#	DI_WWW_HOME="default" 
+#fi
+if [ "$DI_WWW_HOME" = "default" ];then
+   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/images-m68k/daily/"
+elif [ "$DI_WWW_HOME" = "test" ];then
+   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/test/cd/"
+fi
+if [ ! "$DI_DIST" ]; then
+   DI_DIST="$DI_CODENAME"
+fi
+
+DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+DI_BOOTLOADER="http://people.debian.org/~smarenka/d-i"
+
+cd $CDDIR/..
+
+echo -n "--netatalk -J -hfs -probe -map $BASEDIR/data/hfs.map" \
+        > $N.mkisofs_opts
+
+# Only disk 1 bootable
+if [ $N != 1 ]; then
+	exit 0
+fi
+
+echo "DI_WWW_HOME: $DI_WWW_HOME"
+echo "DI_BOOTLOADER: $DI_BOOTLOADER"
+echo "DI_DIR: $DI_DIR"
+
+install_languages $CDDIR
+
+# remove i386 stuff
+rm -rf $CDDIR/tools
+
+
+cd $INSTALLDIR
+
+# This setup is designed to automatically use whatever subarchs are 
+# available to build the cd.
+
+if [ ! "$DI_WWW_HOME" ];then
+	if [ ! $DI_DIR ]; then
+		echo "Rats, can't find: $DI_DIR!"
+	fi
+	cp -a $DI_DIR/* .
+
+#	SUBARCHS=`find "$DI_DIR/*" -type d -print | sed -e 's,.*/,,'`
+#	for subarch in $SUBARCHS; do
+#		echo "subarch: $subarch"
+#		mkdir $subarch
+#		cp -a "$DI_DIR"/$subarch/* $subarch
+#	done
+#	cp "$DI_DIR/cdrom-initrd.gz" root.bin
+#	if [ -f "$DI_DIR/cdrom22-initrd.gz" ]; then 
+#		cp "$DI_DIR/cdrom22-initrd.gz" root22.bin
+#	fi
+#	cp "$DI_DIR/MANIFEST" .
+else
+	wget -q -np -nH --cut-dirs=4 -r -l 3 -R '.gif,.log,stats.txt,index*' "$DI_WWW_HOME"
+
+#	SUBARCHS=$(wget -q "$DI_WWW_HOME/" -O - | \
+#		sed -n -e 's/.*>\(.*\)\/<.*/\1/p')
+
+#	for subarch in $SUBARCHS; do
+#		echo "subarch: $subarch"
+#		mkdir $subarch
+#		cd $subarch
+#		wget -q -np -nd -r -l 1 -R '.gif' "$DI_WWW_HOME/$subarch"
+#		rm index*
+#		cd ..
+#	done
+#	wget -O root.bin "$DI_WWW_HOME/cdrom-initrd.gz"
+#	if ! wget -O root22.bin "$DI_WWW_HOME/cdrom22-initrd.gz" ; then
+#		rm root22.bin
+#	fi
+#	wget -O MANIFEST "$DI_WWW_HOME/MANIFEST"
+
+fi
+
+SUBARCHS=`grep vmlinu MANIFEST | cut -d'-' -f3 | sort -u | awk '{printf "%s ", $1}'`
+# grab unpackged stuff
+if [ -d tools ]; then
+	cd tools
+fi
+for subarch in $SUBARCHS; do
+	TARF="bootloaders-$subarch.tar.bz2"
+	if `wget -q -O $TARF "$DI_BOOTLOADER/$TARF"` ; then
+		tar -xjf $TARF
+	fi
+	rm -f $TARF
+done
+
+
+# amiga specific stuff
+if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
+	# Amiboot and dmesg need to be executable
+	chmod a+x amiga/amiboot-5.6
+	chmod a+x amiga/dmesg
+
+	# Setup amiga icons
+	cp amiga/amiga.info  $CDDIR/install.info
+	if [ -d $INSTALLDIR/tools ]; then
+		cp amiga/amiga.info  $INSTALLDIR/tools.info
+	fi
+	mv amiga/amiga.info  .
+fi
+
+cd $INSTALLDIR
+
+# bvme6000 specific stuff
+if [ "" != "`echo $SUBARCHS | grep bvme6000`" ]; then
+	if [ -f bvme6000/cdrom-boot.img.gz ]; then
+		mkdir -p $CDDIR/boot1/boot
+		cp bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
+		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+    		>> $N.mkisofs_opts
+	elif [ -f cdrom/bvme6000-boot.img.gz ]; then
+		mkdir -p $CDDIR/boot1/boot
+		cp cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
+		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+    		>> $N.mkisofs_opts
+	else
+		echo "bvme6000 not bootable"
+	fi
+fi
+
+##-----------------------------< end of file >------------------------------##
