@@ -191,6 +191,7 @@ if [ "$NN" = "1" ]; then
 	# Isolinux help files come from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 	mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
+	# TODO: is using the .with26 file as a flag really the best way?
 	if [ -e boot$N/isolinux/f3.txt.with26 ];then
 		mv boot$N/isolinux/f3.txt.with26 boot$N/isolinux/f3.txt
 		for image in cdrom/2.6/initrd.gz cdrom/2.6/vmlinuz; do
@@ -208,6 +209,9 @@ if [ "$NN" = "1" ]; then
 		write_isolinux_config_26
 	else 
 		write_isolinux_config
+	fi
+	if [ -e boot$N/isolinux/f4.txt.with26 ];then
+		mv boot$N/isolinux/f4.txt.with26 boot$N/isolinux/f4.txt
 	fi
 
 	if [ "$SPLASHPNG" ] ; then
