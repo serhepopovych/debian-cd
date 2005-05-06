@@ -7,6 +7,8 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
     - Add rescue stanzas to etch isolinux.cfg. Rescue mode is supported in
       post-sarge d-i images only.
     - Add support for f4.txt that is for systems with the 2.6 kernel.
+    - Exclude new mouse-modules udebs from CDs until something in d-i uses
+      them.
   * Steve McIntyre
     - Make woody's post-boot-mipsel script cope with extra fields in the
       output of sarge's isoinfo

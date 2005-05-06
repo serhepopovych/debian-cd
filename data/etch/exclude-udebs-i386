@@ -25,3 +25,5 @@ userdevfs
 # The speakup kernel modules are not useful unless the access images are
 # provided.
 *-speakup-di
+# These udebs are not used yet.
+mouse-modules-*
