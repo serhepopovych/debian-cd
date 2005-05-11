@@ -59,8 +59,9 @@ DISK_IMAGES=""
 ln -s sarge $CDDIR/dists/sid
 
 mkdir cdrom
-cp $MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/hd-media/boot.img.gz cdrom
-gunzip cdrom/boot.img.gz
+# Next 2 lines not needed for now... (SAM)
+#cp $MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/hd-media/boot.img.gz cdrom
+#gunzip cdrom/boot.img.gz
 cp $MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/cdrom/vmlinuz cdrom
 cp $MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/cdrom/initrd.gz cdrom
 cp $MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/cdrom/debian-cd_info.tar.gz cdrom
