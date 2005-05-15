@@ -10,7 +10,7 @@
  * Last update: Sun Feb 20 16:43:53 MST 2005
  */
 
-#include <debian-installer>
+#include <debian-installer-sarge>
 eject
 locales
 lvm10

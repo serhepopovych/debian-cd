@@ -9,7 +9,7 @@
 #endif
 
 /* Packages that should really be on CD1 */
-#include <debian-installer+kernel>
+#include <debian-installer+kernel-sarge>
 #include <base-sarge>
 #include <forcd1>
 #include <task-essential-sarge>

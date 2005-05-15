@@ -2,11 +2,14 @@
 # Generate a list of packages required for debian-installer
 # This script makes use of the following variables that need to be preset:
 # MIRROR, DI_CODENAME, BASEDIR
+die "Missing \$MIRROR variable" unless $ENV{MIRROR};
+die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
+
 my @ARCHES=qw{alpha arm hppa hurd-i386 i386 ia64 m68k mips mipsel
               powerpc s390 sparc sh amd64};
 my $DATE=`date`;
 chomp $DATE;
-open(OUT, ">debian-installer") || die "write: $!";
+open(OUT, ">debian-installer-$ENV{DI_CODENAME}") || die "write: $!";
 print OUT << "EOF";
 /* List of udebs to be included so that debian-installer works fine 
  *
@@ -20,9 +23,6 @@ print OUT << "EOF";
 EOF
 
 my @common_excludes = read_exclude("exclude-udebs");
-
-die "Missing \$MIRROR variable" unless $ENV{MIRROR};
-die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
 
 foreach my $arch (@ARCHES) {
 	my $packagefile="$ENV{MIRROR}/dists/$ENV{DI_CODENAME}/main/debian-installer/binary-$arch/Packages";

@@ -266,8 +266,8 @@ export PUBLISH_PATH="/home/jigdo-area/"
 
 # Only put the installer onto the cd (set NORECOMMENDS,... as well).
 # INSTALLER_CD=0: nothing special (default)
-# INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer)
-# INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel)
+# INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer-$CODENAME)
+# INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
 #export INSTALLER_CD=0
 
 # Parameters to pass to kernel when the CD boots. Not currently supported
