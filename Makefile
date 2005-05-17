@@ -902,40 +902,41 @@ bin-images: ok bin-md5list $(OUT) $(TDIR)/jigdofilelist
 		cd $$dir/..; \
 		opts=`cat $(BDIR)/$$n.mkisofs_opts`; \
 		volid=`cat $(BDIR)/$$n.volid`; \
-		rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+		relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
+		rm -f $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw; \
 		if [ "$(DOJIGDO)" != "0" ]; then \
 			$(JIGDOSCRIPT) \
-				"debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-$(ARCH)-binary-$$n.iso" \
-				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`$(CODENAME)-$(ARCH)-$$n.template" \
+				debian-$$relname-$(ARCH)-binary-$$n.iso \
+				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`debian-$$relname-$(ARCH)-binary-$$n.template" \
 				$(BINDISKINFOND) \
-				> $(TDIR)/$(CODENAME)-$(ARCH).jigdo; \
+				> $(TDIR)/debian-$$relname-$(ARCH).jigdo; \
 		fi; \
 		if [ "$(DOJIGDO)" != "2" -o -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-			  -o $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw $$opts CD$$n ; \
+			  -o $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw $$opts CD$$n ; \
 			if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
 				$(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) $$n $$dir \
-				 $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+				 $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw; \
 			fi; \
 			if [ "$(DOJIGDO)" != "0" ]; then \
-				$(BASEDIR)/tools/jigdo_create "$(OUT)/$(CODENAME)-$(ARCH)-$$n.raw" \
-				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo" \
-				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.template" \
-				  "$(TDIR)/$(CODENAME)-$(ARCH).jigdo"; \
+				$(BASEDIR)/tools/jigdo_create $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw \
+				  $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.jigdo \
+				  $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.template \
+				  $(TDIR)/debian-$$relname-$(ARCH).jigdo; \
 			fi; \
 		else \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  $$opts CD$$n \
 			| $(BASEDIR)/tools/jigdo_create "-" \
-				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.jigdo" \
-				  "$(OUT)/$(CODENAME)-$(ARCH)-$$n.template" \
-				  "$(TDIR)/$(CODENAME)-$(ARCH).jigdo"; \
+				  $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.jigdo \
+				  $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.template \
+				  $(TDIR)/debian-$$relname-$(ARCH).jigdo; \
 		fi; \
 		if [ "$(DOJIGDO)" = "2" ]; then \
-			rm -f $(OUT)/$(CODENAME)-$(ARCH)-$$n.raw; \
+			rm -f $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw; \
 		fi; \
 	done
-	rm -f "$(TDIR)/$(CODENAME)-$(ARCH).jigdo"
+	rm -f $(TDIR)/debian-$$relname-$(ARCH).jigdo
 src-images: ok src-md5list $(OUT) $(TDIR)/jigdofilelist
 	@echo "Generating the source iso images ..."
 	$(Q)set -e; \
@@ -947,33 +948,34 @@ src-images: ok src-md5list $(OUT) $(TDIR)/jigdofilelist
 		cd $$dir/..; \
 		opts=`cat $(SDIR)/$$n.mkisofs_opts`; \
 		volid=`cat $(SDIR)/$$n.volid`; \
-		rm -f $(OUT)/$(CODENAME)-src-$$n.raw; \
+		relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
+		rm -f $(OUT)/debian-$$relname-$(ARCH)-source-$$n.raw; \
 		if [ "$(DOJIGDO)" != "0" ]; then \
 			$(JIGDOSCRIPT) \
-				"debian-`echo $(DEBVERSION) | sed -e 's/[. ]//g'`-source-$$n.iso" \
-				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`$(CODENAME)-src-$$n.template" \
+				debian-$$relname-source-$$n.iso \
+				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|source|g'`debian-$$relname-source-$$n.template" \
 				$(SRCDISKINFOND) \
-				> $(TDIR)/$(CODENAME)-src.jigdo; \
+				> $(TDIR)/debian-$$relname-source.jigdo; \
 		fi; \
 		if [ "$(DOJIGDO)" != "2" ]; then \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-			  -o $(OUT)/$(CODENAME)-src-$$n.raw $$opts CD$$n ; \
+			  -o $(OUT)/debian-$$relname-source-$$n.raw $$opts CD$$n ; \
 			if [ "$(DOJIGDO)" != "0" ]; then \
-				$(BASEDIR)/tools/jigdo_create "$(OUT)/$(CODENAME)-src-$$n.raw" \
-				  "$(OUT)/$(CODENAME)-src-$$n.jigdo" \
-				  "$(OUT)/$(CODENAME)-src-$$n.template" \
-				  "$(TDIR)/$(CODENAME)-src.jigdo"; \
+				$(BASEDIR)/tools/jigdo_create $(OUT)/debian-$$relname-source-$$n.raw \
+				  $(OUT)/debian-$$relname-source-$$n.jigdo \
+				  $(OUT)/debian-$$relname-source-$$n.template \
+				  $(TDIR)/debian-$$relname-source.jigdo; \
 			fi; \
 		else \
 			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
 			  $$opts CD$$n \
 			| $(BASEDIR)/tools/jigdo_create "-" \
-				  "$(OUT)/$(CODENAME)-src-$$n.jigdo" \
-				  "$(OUT)/$(CODENAME)-src-$$n.template" \
-				  "$(TDIR)/$(CODENAME)-src.jigdo"; \
+				  $(OUT)/debian-$$relname-source-$$n.jigdo \
+				  $(OUT)/debian-$$relname-source-$$n.template \
+				  $(TDIR)/debian-$$relname-source.jigdo; \
 		fi; \
 	done
-	rm -f "$(TDIR)/$(CODENAME)-src.jigdo"
+	rm -f $(TDIR)/debian-$$relname-source.jigdo
 
 # Generate the *.list files for the Pseudo Image Kit
 pi-makelist:
@@ -989,21 +991,25 @@ bin-image: ok bin-md5list $(OUT)
 	@echo "Generating the binary iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 	set -e; cd $(BDIR); opts=`cat $(CD).mkisofs_opts`; \
-	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
+	 volid=`cat $(CD).volid`; \
+	 relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
+	 rm -f $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw; \
 	 $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw $$opts CD$(CD); \
+	  -o $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw $$opts CD$(CD); \
          if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
                 $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) $(CD) $(BDIR)/CD$(CD) \
-                 $(OUT)/$(CODENAME)-$(ARCH)-$(CD).raw; \
+                 $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw; \
          fi
 
 src-image: ok src-md5list $(OUT)
 	@echo "Generating the source iso image n°$(CD) ..."
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 	set -e; cd $(SDIR); opts=`cat $(CD).mkisofs_opts`; \
-	 volid=`cat $(CD).volid`; rm -f $(OUT)/$(CODENAME)-src-$(CD).raw; \
+	 volid=`cat $(CD).volid`; \
+	 relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
+	 rm -f $(OUT)/debian-$$relname-source-$(CD).raw; \
          $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/$(CODENAME)-src-$(CD).raw $$opts CD$(CD)
+	  -o $(OUT)/debian-$relname-source-$(CD).raw $$opts CD$(CD)
 
 
 #Calculate the md5sums for the images (if available), or get from templates
