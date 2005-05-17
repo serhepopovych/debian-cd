@@ -61,6 +61,10 @@ EOF
 cat >> debian-installer+kernel-$CODENAME << EOF
 #endif
 #ifdef ARCH_amd64
+discover
+discover1
+grub
+lilo
 EOF
 
 if [ ! -e $MIRROR/dists/$CODENAME/main/binary-amd64/Packages ]; then
