@@ -12,6 +12,10 @@ N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~stappers/d-i/images/daily/cdrom"
+   if [ -n "$DI_DIR" ];then
+      DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
+      DI_WWW_HOME=""                     
+   fi
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
@@ -52,7 +56,9 @@ cat $BASEDIR/data/sarge/sparc/debian.txt \
 # uncompress it before hand.
 
 if [ ! "$DI_WWW_HOME" ];then
-	DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom"
+	if [ ! "$DI_DIR" ];then
+	   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom"
+	fi
 else
 	DI_DIR="."
 	wget "$DI_WWW_HOME" -O di.dir
