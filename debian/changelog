@@ -24,6 +24,9 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
     - Allow the usage of a local mirror of the daily d-i builds to be used
       for sid_d-i builds, this is done by setting DI_WWW_HOME=default and
       DI_DIR=/path/to/the/mirror
+    - Add autorun capabilities to i386 cds so that instead of getting the
+      "what do you want Windows to do" question under XP, we get the html
+      README started.
 
 -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
 
