@@ -31,6 +31,7 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
       proposal to the list.
     - Add some amd64 patches from Goswin: Fixed boot-amd64 and added
       some packages missing on netinsts.
+    - Port to etch previous changes I commited for sarge.
 
  -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
 

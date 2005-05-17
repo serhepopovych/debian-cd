@@ -15,6 +15,10 @@ CDDIR=$2
 BOOTDIR=
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~joeyh/d-i/images/daily"
+   if [ -n "$DI_DIR" ];then
+      DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
+      DI_WWW_HOME=""                     
+   fi
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
@@ -62,7 +66,10 @@ for image in $BOOT_IMAGES $DISK_IMAGES; do
 	if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
 		cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$image"
 	elif [ ! "$DI_WWW_HOME" ];then
-		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
+		if [ ! "$DI_DIR" ];then
+		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+		fi
+		cp "$DI_DIR/$image" "$image"
 	else
 		wget "$DI_WWW_HOME/$image" -O "$image"
 	fi
@@ -77,7 +84,10 @@ for image in $EXTRA_DISK_IMAGES; do
 	if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
 		cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$image"
 	elif [ ! "$DI_WWW_HOME" ];then
-		cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image" || true
+		if [ ! "$DI_DIR" ];then
+		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+		fi
+		cp "$DI_DIR/$image" "$image" || true
 	else
 		wget "$DI_WWW_HOME/$image" -O "$image" || rm -f "$image"
 	fi
@@ -199,7 +209,10 @@ if [ "$NN" = "1" ]; then
 				dir=$(dirname $image)
 				mkdir -p $dir
 				if [ ! "$DI_WWW_HOME" ];then
-					cp "$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/$image" "$image"
+					if [ ! "$DI_DIR" ];then
+					   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+					fi
+					cp "$DI_DIR/$image" "$image"
 				else
 					wget "$DI_WWW_HOME/$image" -O "$image"
 				fi
@@ -221,6 +234,20 @@ if [ "$NN" = "1" ]; then
 		pngtopnm < $SPLASHPNG | ppmquant 16 | \
 			ppmtolss16 "#ffffff=7" "#000000=15" > boot$N/isolinux/splash.rle
 	fi
+fi
+
+# Add autorun if we have README.html
+
+if [ -f $CDDIR/README.html ]; then
+	todos > $CDDIR/autorun.inf <<EOF
+[autorun]
+open=autorun.bat
+EOF
+	todos > $CDDIR/autorun.bat <<EOF
+@echo Starting "README.html"...
+@start README.html
+@exit
+EOF
 fi
 
 # write final lines to mkisofs_opts
