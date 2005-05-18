@@ -1009,7 +1009,7 @@ src-image: ok src-md5list $(OUT)
 	 relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
 	 rm -f $(OUT)/debian-$$relname-source-$(CD).raw; \
          $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/debian-$relname-source-$(CD).raw $$opts CD$(CD)
+	  -o $(OUT)/debian-$$relname-source-$(CD).raw $$opts CD$(CD)
 
 
 #Calculate the md5sums for the images (if available), or get from templates

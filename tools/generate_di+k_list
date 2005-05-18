@@ -18,7 +18,7 @@ cat > debian-installer+kernel-$CODENAME << EOF
  * Last update: $DATE
  */
 
-#include <debian-installer>
+#include <debian-installer-$CODENAME>
 eject
 locales
 lvm10
