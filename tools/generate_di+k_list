@@ -69,14 +69,14 @@ EOF
 
 if [ ! -e $MIRROR/dists/$CODENAME/main/binary-amd64/Packages ]; then
 	echo "Cannot find amd64 packages file, inserting static entry as workaround" >&2
-	echo kernel-image-2.6.8-9-amd64-generic >> debian-installer+kernel
+	echo kernel-image-2.6.8-11-amd64-generic >> debian-installer+kernel-$CODENAME
 else
 	/bin/sed -n 's/Package: \(kernel-image-2.6.*-generic\)$/\1/p' \
 	  $MIRROR/dists/$CODENAME/main/binary-amd64/Packages|/usr/bin/tail -n 1 \
-	  >> debian-installer+kernel
+	  >> debian-installer+kernel-$CODENAME
 	/bin/sed -n 's/Package: \(kernel-pcmcia-modules-2.6.*-generic\)$/\1/p' \
 	  $MIRROR/dists/$CODENAME/main/binary-amd64/Packages|/usr/bin/tail -n 1 \
-	  >> debian-installer+kernel
+	  >> debian-installer+kernel-$CODENAME
 fi
 	 
 cat >> debian-installer+kernel-$CODENAME << EOF
