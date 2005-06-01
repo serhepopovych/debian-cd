@@ -1,5 +1,8 @@
-debian-cd (2.2.22) UNRELEASED; urgency=low
+debian-cd (2.2.22) unstable; urgency=critical
 
+  * Steve McIntyre
+    - Prepared YA "last before sarge" debian-cd release
+    - Urgency "Critical" to make sure we make it in...
   * Joey Hess
     - Add post-sarge udebs rescue-check, initrd-preseed, and preseed-common
       to the udeb exclude list since these will be/are inluded on sid initrds.
@@ -33,7 +36,7 @@ debian-cd (2.2.22) UNRELEASED; urgency=low
       some packages missing on netinsts.
     - Port to etch previous changes I commited for sarge.
 
- -- Joey Hess <joeyh@debian.org>  Thu, 14 Apr 2005 00:59:49 -0400
+ -- Steve McIntyre <93sam@debian.org>  Wed, 01 Jun 2005 13:04:33 +0100
 
 debian-cd (2.2.21) unstable; urgency=low
 
