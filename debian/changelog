@@ -23,6 +23,8 @@ debian-cd (2.2.22) unstable; urgency=critical
     - Don't copy the whole d-i cdrom directory onto CD1 for amd64.
       Closes: #306926
     - Don't copy boot.img.gz onto amd64 CD1.
+    - Added Manty's testingcds script as an example of debian-cd use
+    - Updated sarge task lists to match the latest sarge CD build
   * Santiago Garcia
     - Allow the usage of a local mirror of the daily d-i builds to be used
       for sid_d-i builds, this is done by setting DI_WWW_HOME=default and
