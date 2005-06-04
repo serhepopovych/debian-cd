@@ -45,6 +45,8 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ]; then
     # Update some other information as well
     sed -e "s/^Architectures: .*$/Architectures: $ARCH/" \
     $MIRROR/dists/$CODENAME/Release | \
+    sed -e "s/^Suite: .*$/Suite: stable/" | \
+    sed -e "s/^Description: .*$/Description: Debian $DEBVERSION/" | \
     sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
     perl -ne 'if (/^(MD5Sum|SHA1):/i) { $f=1; next } 
     if ($f) { 

@@ -43,7 +43,8 @@ unset INSTALLER_CD      || true
 unset DI_CODENAME       || true
 unset MAXCDS            || true
 unset SPLASHPNG         || true
-unset OMIT_MANUAL	|| true
+unset OMIT_MANUAL	    || true
+unset OMIT_RELEASE_NOTES || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -288,3 +289,10 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # Set to 1 to save space by omitting the installation manual. 
 # If so the README will link to the manual on the web site.
 #export OMIT_MANUAL=1
+
+# Set to 1 to save space by omitting the release notes
+# If so we will link to them on the web site.
+export OMIT_RELEASE_NOTES=0
+
+# Set this to override the defaul location
+#export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"

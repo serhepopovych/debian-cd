@@ -26,6 +26,7 @@ for i in $BDIR/*.packages; do
 
 	cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
 	    -D OMIT_MANUAL="$OMIT_MANUAL" \
+	    -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \
 	    -D OUTPUTtext $BASEDIR/data/$CODENAME/README.html.in \
 		| sed -e 's/%%.//g' > $dir/README.html
 
@@ -34,6 +35,7 @@ for i in $BDIR/*.packages; do
 
 	cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
 	    -D OMIT_MANUAL="$OMIT_MANUAL" \
+	    -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \
 	    -D OUTPUThtml $BASEDIR/data/$CODENAME/README.html.in \
 		| sed -e 's/%%.//g' > $dir/README.html
 

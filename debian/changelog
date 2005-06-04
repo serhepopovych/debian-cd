@@ -1,3 +1,13 @@
+debian-cd (2.2.23) unstable; UNRELEASED
+
+  * Steve McIntyre
+    - Added sed hack to make sarge appear as "stable" in the Release
+      files we generate on the CDs.
+    - Download the release notes and try to fit them onto
+      CD#1. Updated sarge's README.html.in to point to them
+    - Added patch from Sven Luther to add a forth script to make
+	  ppc/pegasos easier to boot.  Closes: #311925
+	
 debian-cd (2.2.22) unstable; urgency=critical
 
   * Steve McIntyre
