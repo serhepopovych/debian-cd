@@ -9,6 +9,14 @@ SDIR=$TDIR/$CODENAME-src
 
 DEBMAINVER="`echo $DEBVERSION | sed -e 's/[ _r].*//'`"
 
+if [ "$OMIT_RELEASE_NOTES"x = ""x ] ; then
+	OMIT_RELEASE_NOTES=0
+fi
+
+if [ "$OMIT_MANUAL"x = ""x ] ; then
+	OMIT_MANUAL=0
+fi
+
 for i in $BDIR/*.packages; do 
 	dir=${i%%.packages}
 	DISK=${dir##$BDIR/}
