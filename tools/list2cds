@@ -483,8 +483,9 @@ sub add_package {
 
 	# Creation of a new CD when needed
 	if ($cd_size + $size > $limit) {
+		my $try_size = $cd_size + $size;
 		msg(0, "CD $cd filled with $cd_size bytes ... ",
-		       "(limit was $limit)\n");
+		       "(limit was $limit, would have taken $try_size)\n");		
 		$cd++;
 		$cd_size = 0;
 		# New limit

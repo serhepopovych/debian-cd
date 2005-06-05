@@ -10,6 +10,7 @@ debian-cd (2.2.23) unstable; UNRELEASED
  	  ppc/pegasos easier to boot.  Closes: #311925
     - Re-add the kernel-headers packages to match kernel images (only
 	  on i386 and amd64). Closes: #249386
+    - Made list2cds more verbose
 	
 debian-cd (2.2.22) unstable; urgency=critical
 
