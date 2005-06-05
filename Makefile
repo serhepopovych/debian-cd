@@ -751,7 +751,7 @@ $(BDIR)/upgrade-stamp:
 		$(BASEDIR)/tools/$(CODENAME)/upgrade.sh; \
 	 fi
 	$(Q)if [ -x "$(BASEDIR)/tools/$(CODENAME)/upgrade-$(ARCH).sh" ]; then \
-		$(BASEDIR)/tools/$(CODENAME)/upgrade-$(ARCH).sh; \
+		$(BASEDIR)/tools/$(CODENAME)/upgrade-$(ARCH).sh $(BDIR); \
 	 fi
 	$(Q)touch $(BDIR)/upgrade-stamp
 

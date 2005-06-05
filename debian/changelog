@@ -11,6 +11,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Re-add the kernel-headers packages to match kernel images (only
 	  on i386 and amd64). Closes: #249386
     - Made list2cds more verbose
+    - Added tools/sarge/upgrade-hppa.sh and tools/sarge/upgrade-sparc.sh
+      to install the upgrade-kernel bits on CD#1
 	
 debian-cd (2.2.22) unstable; urgency=critical
 
