@@ -13,6 +13,9 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Made list2cds more verbose
     - Added tools/sarge/upgrade-hppa.sh and tools/sarge/upgrade-sparc.sh
       to install the upgrade-kernel bits on CD#1
+    - Added tools/dedicated_source: simple script used to add extra
+      source packages onto _binary_ CDs. Used for the amd64 sarge release
+      so far.
 	
 debian-cd (2.2.22) unstable; urgency=critical
 
