@@ -124,4 +124,12 @@ do
   fi
 done
 
+# Copy pegasos forth script, since pegasos machines don't support yaboot yet.
+BUILD_DATE=$(date +%Y%m%d)
+cat $BASEDIR/data/etch/pegasos/pegasos \
+ | sed "s/\${MEDIA_TYPE}/CDROM/" \
+ | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
+ | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
+ > pegasos
+
 exit 0

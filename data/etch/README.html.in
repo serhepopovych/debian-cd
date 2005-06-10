@@ -305,6 +305,23 @@ The programs on the Binary CDs are ordered by popularity. The Binary-1 CD
 contains the most popular programs and the installation tools; it is possible
 to install and run Debian with only the Binary-1 CD. The other CDs, up to
 Binary-TOTALNUM, contain mostly special-interest programs.
+<p>
+#if OMIT_RELEASE_NOTES
+The Release Notes for "etch" are available on the <A
+href="http://www.debian.org/releases/etch/releasenotes">Debian web
+site</A>.
+#else
+#if DISKNUM == 1
+The Release Notes for Debian GNU/Linux "etch" are included on this CD
+in <A href=%%""doc/release-notes/%%"">/doc/release-notes/</a>, in
+several languages. Additional translations and updated versions for
+the Release Notes may be available from the <A
+href="http://www.debian.org/releases/etch/releasenotes">Debian web
+site</A>.
+else
+See the first CD in this set for the "etch" Release Notes.
+#endif
+#endif
 #endif
 #if TYPEsource
 the source code of programs in the Debian OS.

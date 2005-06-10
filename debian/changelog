@@ -16,6 +16,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Added tools/dedicated_source: simple script used to add extra
       source packages onto _binary_ CDs. Used for the amd64 sarge release
       so far.
+  * Joey Hess
+    - Synced up all sarge changes to etch.
 	
 debian-cd (2.2.22) unstable; urgency=critical
 

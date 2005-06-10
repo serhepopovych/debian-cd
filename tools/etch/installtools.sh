@@ -3,6 +3,10 @@
 
 set -e
 
+if [ "$RELEASE_NOTES_LOCATION"x = ""x ] ; then
+	export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/etch"
+fi
+
 # The location of the tree for CD#1, passed in
 DIR=$1
 
@@ -25,5 +29,20 @@ if [ "$OMIT_MANUAL" != 1 ]; then
 	mkdir -p $DIR/$DOCDIR/install
 	if ! cp -a * $DIR/$DOCDIR/install; then
 	    echo "ERROR: Unable to copy installer documentation to CD."
+	fi
+fi
+
+if [ "$OMIT_RELEASE_NOTES" != 1 ]; then
+	RN=$DIR/doc/release-notes
+	mkdir -p $RN
+	cd $RN
+	echo "Downloading most recent release notes"
+	wget $RELEASE_NOTES_LOCATION/release-notes-$ARCH.tar.gz
+	if [ -e release-notes-$ARCH.tar.gz ] ; then
+		tar xzvf release-notes-$ARCH.tar.gz
+		rm -f release-notes-$ARCH.tar.gz
+		rm -f */*.ps
+	else
+		echo "No release notes found at $RELEASE_NOTES_LOCATION/release-notes-$ARCH.tar.gz"
 	fi
 fi
