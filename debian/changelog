@@ -18,6 +18,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
       so far.
   * Joey Hess
     - Synced up all sarge changes to etch.
+    - Use dpkg --print-architecture instead of now-deprecated
+      --print-installation-architecture
 	
 debian-cd (2.2.22) unstable; urgency=critical
 

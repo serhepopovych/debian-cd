@@ -76,7 +76,7 @@ export OFFICIAL="Unofficial"
 #export OFFICIAL="Official Beta"
 
 # ... for arch  
-export ARCH=`dpkg --print-installation-architecture`
+export ARCH=`dpkg --print-architecture`
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
 #	      If they aren't then you must set COPYLINK below to 1. This
