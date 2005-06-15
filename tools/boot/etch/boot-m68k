@@ -27,8 +27,6 @@ if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-DI_BOOTLOADER="http://people.debian.org/~smarenka/d-i"
-
 cd $CDDIR/..
 
 echo -n "--netatalk -J -hfs -probe -map $BASEDIR/data/hfs.map" \
@@ -40,7 +38,6 @@ if [ $N != 1 ]; then
 fi
 
 echo "DI_WWW_HOME: $DI_WWW_HOME"
-echo "DI_BOOTLOADER: $DI_BOOTLOADER"
 echo "DI_DIR: $DI_DIR"
 
 install_languages $CDDIR
@@ -64,45 +61,33 @@ else
 fi
 
 SUBARCHS=`grep vmlinu MANIFEST | cut -d'-' -f3 | sort -u | awk '{printf "%s ", $1}'`
-# grab unpackged stuff
-if [ -d tools ]; then
-	cd tools
-fi
-for subarch in $SUBARCHS; do
-	TARF="bootloaders-$subarch.tar.bz2"
-	if `wget -q -O $TARF "$DI_BOOTLOADER/$TARF"` ; then
-		tar -xjf $TARF
-	fi
-	rm -f $TARF
-done
-
 
 # amiga specific stuff
 if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
 	# Amiboot and dmesg need to be executable
-	chmod a+x amiga/amiboot-5.6
-	chmod a+x amiga/dmesg
+	chmod a+x tools/amiga/amiboot
+	# chmod a+x tools/amiga/dmesg
 
 	# Setup amiga icons
-	cp amiga/amiga.info  $CDDIR/install.info
+	cp tools/amiga/amiga.info  $CDDIR/install.info
 	if [ -d $INSTALLDIR/tools ]; then
-		cp amiga/amiga.info  $INSTALLDIR/tools.info
+		cp tools/amiga/amiga.info  $INSTALLDIR/tools.info
 	fi
-	mv amiga/amiga.info  .
+	mv tools/amiga/amiga.info  .
 fi
 
 cd $INSTALLDIR
 
 # bvme6000 specific stuff
 if [ "" != "`echo $SUBARCHS | grep bvme6000`" ]; then
-	if [ -f bvme6000/cdrom-boot.img.gz ]; then
+	if [ -f tools/bvme6000/cdrom-boot.img.gz ]; then
 		mkdir -p $CDDIR/boot1/boot
-		cp bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
+		cp tools/bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
 		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
     		>> $N.mkisofs_opts
-	elif [ -f cdrom/bvme6000-boot.img.gz ]; then
+	elif [ -f tools/cdrom/bvme6000-boot.img.gz ]; then
 		mkdir -p $CDDIR/boot1/boot
-		cp cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
+		cp tools/cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
 		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
     		>> $N.mkisofs_opts
 	else

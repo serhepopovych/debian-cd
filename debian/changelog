@@ -20,6 +20,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Synced up all sarge changes to etch.
     - Use dpkg --print-architecture instead of now-deprecated
       --print-installation-architecture
+  * Stephen R. Marenka
+    - Changed m68k boot for etch to handle etch changes in d-i.
 	
 debian-cd (2.2.22) unstable; urgency=critical
 
