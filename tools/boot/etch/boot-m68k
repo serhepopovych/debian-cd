@@ -54,16 +54,15 @@ cd $INSTALLDIR
 if [ ! "$DI_WWW_HOME" ];then
 	if [ ! $DI_DIR ]; then
 		DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+		echo "DI_DIR: $DI_DIR"
 	fi
 	cp -a $DI_DIR/* .
 else
 	wget -q -np -nH --cut-dirs=4 -r -l 3 -R '.gif,.log,stats.txt,index*' "$DI_WWW_HOME"
 fi
 
-SUBARCHS=`grep vmlinu MANIFEST | cut -d'-' -f3 | sort -u | awk '{printf "%s ", $1}'`
-
 # amiga specific stuff
-if [ "" != "`echo $SUBARCHS | grep amiga`" ]; then
+if [ -d tools/amiga ]; then
 	# Amiboot and dmesg need to be executable
 	chmod a+x tools/amiga/amiboot
 	# chmod a+x tools/amiga/dmesg
@@ -79,20 +78,11 @@ fi
 cd $INSTALLDIR
 
 # bvme6000 specific stuff
-if [ "" != "`echo $SUBARCHS | grep bvme6000`" ]; then
-	if [ -f tools/bvme6000/cdrom-boot.img.gz ]; then
-		mkdir -p $CDDIR/boot1/boot
-		cp tools/bvme6000/cdrom-boot.img.gz $CDDIR/boot1/boot/boot.bin
-		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
-    		>> $N.mkisofs_opts
-	elif [ -f tools/cdrom/bvme6000-boot.img.gz ]; then
-		mkdir -p $CDDIR/boot1/boot
-		cp tools/cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
-		echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
-    		>> $N.mkisofs_opts
-	else
-		echo "bvme6000 not bootable"
-	fi
+if [ -f tools/cdrom/bvme6000-boot.img.gz ]; then
+	mkdir -p $CDDIR/boot1/boot
+	cp tools/cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
+	echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
+   		>> $N.mkisofs_opts
 fi
 
 ##-----------------------------< end of file >------------------------------##
