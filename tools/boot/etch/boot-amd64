@@ -41,7 +41,6 @@ fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
 
-echo mierda, joer -"$DI_WWW_HOME"-
 # Download boot images.
 for image in $BOOT_IMAGES; do
     if [ ! -e "$image" ]; then
