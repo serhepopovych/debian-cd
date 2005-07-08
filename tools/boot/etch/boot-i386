@@ -53,9 +53,7 @@ BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.t
 DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
 # Only include extra disk images on full CDs, not on smaller images.
 if [ "$INSTALLER_CD" != 1 ] && [ "$INSTALLER_CD" != 2 ]; then
-	# Note that floppy/access/drivers.img was renamed to cd-drivers, both
-	# present for the transition.
-	EXTRA_DISK_IMAGES="floppy/net-drivers.img floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/access/drivers.img"
+	EXTRA_DISK_IMAGES="floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/net-drivers.cfg"
 fi
 
 # Download boot images and floppies.
@@ -127,7 +125,7 @@ LABEL expert
 LABEL rescue
   kernel /install/vmlinuz
   append rescue/enable=true vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
-DISPLAY isolinux.txt
+DISPLAY boot.txt
 TIMEOUT 0
 PROMPT 1
 F1 f1.txt
@@ -166,7 +164,7 @@ LABEL rescue
 LABEL rescue26
   kernel /install/2.6/vmlinuz
   append $KERNEL_PARAMS rescue/enable=true vga=normal initrd=/install/2.6/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
-DISPLAY isolinux.txt
+DISPLAY boot.txt
 TIMEOUT 0
 PROMPT 1
 F1 f1.txt
@@ -198,9 +196,9 @@ if [ "$NN" = "1" ]; then
 	# Keep the original file timestamp
 	touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
 	cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
-	# Isolinux help files come from d-i.
+	
+	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
-	mv -f boot$N/isolinux/syslinux.txt boot$N/isolinux/isolinux.txt
 	# TODO: is using the .with26 file as a flag really the best way?
 	if [ -e boot$N/isolinux/f3.txt.with26 ];then
 		mv boot$N/isolinux/f3.txt.with26 boot$N/isolinux/f3.txt
