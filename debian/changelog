@@ -23,6 +23,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Completed access cd-drivers transition.
     - d-i renamed syslinux.txt to boot.txt, us new name instead of
       renaming file from d-i.
+    - Use isolinux config files included in the d-i debian-cd_info tarball
+      so it does not need to be maintained in both places.
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
 	

@@ -66,47 +66,29 @@ cp -lf cdrom/vmlinuz $CDDIR/install/
 cp -lf cdrom/initrd.gz $CDDIR/install/
 echo -n "-cache-inodes -J -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
 
-cat > boot$N/isolinux/isolinux.cfg <<EOF
-DEFAULT /install/vmlinuz
-APPEND $KERNEL_PARAMS vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
-LABEL linux
-  kernel /install/vmlinuz
-LABEL cdrom
-  kernel /install/vmlinuz
-LABEL expert
-  kernel /install/vmlinuz
-  append $KERNEL_PARAMS DEBCONF_PRIORITY=low vga=normal initrd=/install/initrd.gz ramdisk_size=10240 root=/dev/rd/0 devfs=mount,dall rw --
-DISPLAY boot.txt
-TIMEOUT 0
-PROMPT 1
-F1 f1.txt
-F2 f2.txt
-F3 f3.txt
-F4 f4.txt
-F5 f5.txt
-F6 f6.txt
-F7 f7.txt
-F8 f8.txt
-F9 f9.txt
-F0 f10.txt
-EOF
-
 # Include Smart Boot Manager image for people where isolinux fails
 gzip -dc $BASEDIR/data/$DI_CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
 # Keep the original file timestamp
 touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
 cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
-# Isolinux help files come from d-i.
+# Isolinux setup including config and help files comes from d-i.
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 if [ -e boot$N/isolinux/f3.txt.only26 ];then
 	mv boot$N/isolinux/f3.txt.only26 boot$N/isolinux/f3.txt
 fi
+
 if [ "$SPLASHPNG" ] ; then
 	# Insert our own splash screen.  Color index 15 is
 	# background, and index 7 is foreground.  Set to black and
 	# white respecively
 	pngtopnm < $SPLASHPNG | ppmquant 16 | \
 		ppmtolss16 "#ffffff=7" "#000000=15" > boot$N/isolinux/splash.rle
+fi
+
+if [ -n "$KERNEL_PARAMS" ]; then
+	# Substitute custom kernel params into the isolinux config
+	# file.
+	sed -i "s/append /append $KERNEL_PARAMS/" boot$N/isolinux/isolinux.cfg
 fi
 
 # write final lines to mkisofs_opts
