@@ -41,8 +41,7 @@ install-stamp: build-stamp
 	cp debian/CONF.sh debian/debian-cd/etc/debian-cd/conf.sh
 	ln -sf /etc/debian-cd/conf.sh \
                debian/debian-cd/usr/share/debian-cd/CONF.sh
-	find debian/debian-cd -name 'CVS' | xargs -r rm -rf
-	find debian/debian-cd -name '.#*' | xargs -r rm -f
+	find debian/debian-cd -name '.svn' | xargs -r rm -rf
 	find debian/debian-cd/usr/share/debian-cd/tools/boot \
 	  \( -name 'boot-*' -o -name 'post-boot-*' \) -a \! -name '*.txt' \
 	  -a \! -name '*.calc' |  xargs chmod 0755

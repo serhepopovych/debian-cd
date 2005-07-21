@@ -4,13 +4,13 @@ README for those who want to hack on yacs/debian-cd
 Organisation :
 --------------
 
-The main source is in the Debian CVS. If you want to hack on debian-cd
+The main source is in the Debian svn. If you want to hack on debian-cd
 and if you want to send me patches, please work on the latest version
-available in the CVS.
+available in svn.
 
-http://cvs.debian.org/debian-cd/
-
-$ cvs -d :pserver:anonymous@cvs.debian.org:/cvs/debian-boot co debian-cd
+auth: svn+ssh://svn.debian.org/svn/debian-cd/trunk
+anon: svn://svn.debian.org/debian-cd/trunk
+web:  http://svn.debian.org/wsvn/debian-cd
 
 If you want to discuss anything related to the debian-cd development, you
 can contact me directly or, better, you can mail the

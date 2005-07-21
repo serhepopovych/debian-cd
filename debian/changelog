@@ -25,6 +25,7 @@ debian-cd (2.2.23) unstable; UNRELEASED
       renaming file from d-i.
     - Use isolinux config files included in the d-i debian-cd_info tarball
       so it does not need to be maintained in both places.
+    - Repository moved to svn, update docs to reflect move.
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
 	

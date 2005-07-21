@@ -12,7 +12,7 @@
 <body text="#000000" bgcolor="#FFFFFF" link="#0000FF" vlink="#800080" alink="#FF0000">
 
   <!-- The HTML and TEXT file are NOT the actual source code. -->
-  <!-- For that, see http://cvs.debian.org/debian-cd/data/woody/README.html.in?cvsroot=debian-boot -->
+  <!-- For that, see http://svn.debian.org/wsvn/debian-cd -->
 #if 0
         If you read THIS, you're viewing the actual source file ;-)
 #endif

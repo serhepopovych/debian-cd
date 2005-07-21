@@ -12,7 +12,7 @@
 
 
         <!-- The HTML and TEXT file are NOT the actual source code... -->
-        <!-- For that, see the debian-cd CVS. -->
+        <!-- For that, see the debian-cd svn. -->
 #if 0
         If you read THIS, you're viewing the actual source file ;-)
 #endif
