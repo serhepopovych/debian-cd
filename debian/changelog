@@ -1,5 +1,8 @@
 debian-cd (2.2.23) unstable; UNRELEASED
 
+  * Raphael Hertzog
+    - Patch from Sven Luther for pegasos support already applied
+      by Steve McIntyre. Closes: #311925
   * Steve McIntyre
     - Added sed hack to make sarge appear as "stable" in the Release
       files we generate on the CDs.
