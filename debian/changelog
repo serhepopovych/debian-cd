@@ -5,7 +5,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
       by Steve McIntyre. Closes: #311925
   * Steve McIntyre
     - Added sed hack to make sarge appear as "stable" in the Release
-      files we generate on the CDs.
+      files we generate on the CDs (for the sarge release). Removed the
+      hack sgain before the 2.2.23 package build.
     - Download the release notes and try to fit them onto
       CD#1. Updated sarge's README.html.in to point to them
 	- Updated tools/add-bin-doc to stop warnings on this.
@@ -19,6 +20,8 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Added tools/dedicated_source: simple script used to add extra
       source packages onto _binary_ CDs. Used for the amd64 sarge release
       so far.
+    - Added patch from Frans Pop to use $CODENAME for exclusions.
+      Closes: #320206
   * Joey Hess
     - Synced up all sarge changes to etch.
     - Use dpkg --print-architecture instead of now-deprecated

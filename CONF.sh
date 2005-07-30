@@ -166,14 +166,14 @@ export DEFBINSIZE=630
 export DEFSRCSIZE=635
 
 # We don't want certain packages to take up space on CD1...
-export EXCLUDE="$BASEDIR"/tasks/exclude-sarge
+export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)
-export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-sarge
+export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
 
 # We also exclude some source packages
-#export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-potato
+#export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-$CODENAME
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
