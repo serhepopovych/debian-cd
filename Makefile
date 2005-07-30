@@ -100,7 +100,7 @@ add_files=$(BASEDIR)/tools/add_files
 set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 strip_nonus_bin=$(BASEDIR)/tools/strip-nonUS-bin
 add_secured=$(BASEDIR)/tools/add_secured
-md5sum=/usr/bin/md5sum.textutils
+md5sum=/usr/bin/md5sum
 fastsums=$(BASEDIR)/tools/fast_sums
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)

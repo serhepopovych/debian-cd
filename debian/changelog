@@ -22,6 +22,9 @@ debian-cd (2.2.23) unstable; UNRELEASED
       so far.
     - Added patch from Frans Pop to use $CODENAME for exclusions.
       Closes: #320206
+    - We no longer need to use md5sum.textutils, as dpkg no longer ships a
+      non-64-clean version. We can now just use plain "md5sum".
+      Closes: #313613
   * Joey Hess
     - Synced up all sarge changes to etch.
     - Use dpkg --print-architecture instead of now-deprecated
