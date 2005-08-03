@@ -92,3 +92,5 @@ module-init-tools-udeb
 rescue-check
 # Not used yet. When it is, will go in the initrd.
 localechooser
+# Obsolete
+hw-detect-full
