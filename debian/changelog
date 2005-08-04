@@ -36,6 +36,7 @@ debian-cd (2.2.23) unstable; UNRELEASED
       so it does not need to be maintained in both places.
     - Repository moved to svn, update docs to reflect move.
     - Add hw-detect-full to exclude list for etch, renamed to disk-detect.
+    - Switch mipsel to use my builds.
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
 	
