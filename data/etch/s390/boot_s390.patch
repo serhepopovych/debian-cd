@@ -1,0 +1,182 @@
+Index: tools/boot/etch/boot-s390
+===================================================================
+--- tools/boot/etch/boot-s390	(revision 0)
++++ tools/boot/etch/boot-s390	(revision 0)
+@@ -0,0 +1,98 @@
++#!/bin/bash
++#
++# boot-s390 version 0.2
++#
++# (C) 2001 Jochen Röhrig <jr@debian.org>
++#     2005 Frans Pop <fjp@debian.org>
++#
++# Released under the GNU general Public License.
++# See the copyright file for license details.
++# Released as part of the debian_cd package, not much use stand alone.
++#
++# Install stuff for booting an s390 system from VM-reader, tape,
++# FTP-server, CD-ROM  or emulated tape.
++#
++# $1 is the CD number
++# $2 is the temporary CD build dir
++
++. $BASEDIR/tools/boot/$CODENAME/common.sh
++
++set -e
++
++N=$1
++CDDIR=$2
++
++cd $CDDIR/..
++
++if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
++	echo "-J" > $N.mkisofs_opts
++	exit 0
++fi
++
++if [ "$DI_WWW_HOME" = "default" ];then
++   DI_WWW_HOME="https://lophos.multibuild.org/d-i/images/daily"
++      if [ -n "$DI_DIR" ];then
++            DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
++	    DI_WWW_HOME=""
++      fi
++fi
++if [ ! "$DI_DIST" ]; then
++   DI_DIST="$DI_CODENAME"
++fi
++
++imagedir="boot$N/boot"
++mkdir -p $imagedir
++
++# Install the two kernel images, the ramdisk and the parameter file
++# The following files need to be included:
++# - generic/parmfile.debian    : parameter file
++# - generic/initrd.debian      : initrd; to be used for both VM-reader and tape
++# - generic/kernel.debian      : kernel for WM-reader
++# - tape/kernel.debian         : kernel for tape
++# - tape/kernel.debian-nolabel : kernel for tape (nolabel)
++
++images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
++
++for image in $images_S390; do
++	case $image in
++		generic/parmfile.debian)
++			imagedest=parmfile ;;
++		generic/initrd.debian)
++			imagedest=root.bin ;;
++		generic/kernel.debian)
++			imagedest=linux_vm ;;
++		tape/kernel.debian)
++			imagedest=linux_tp ;;
++		tape/kernel.debian-nolabel)
++			imagedest=linux_nl ;;
++	esac
++	imagedest="$imagedir/$imagedest"
++
++	if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
++		cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$imagedest"
++	elif [ ! "$DI_WWW_HOME" ];then
++		if [ ! "$DI_DIR" ];then
++			DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
++		fi
++		cp "$DI_DIR/$image" "$imagedest"
++	else
++		wget "$DI_WWW_HOME/$image" -O "$imagedest"
++	fi
++done
++
++# Copy the different boot files
++# - d390.ins    : for booting from CD-ROM or FTP-Server
++# - d390oco.ins : same, using object-code-only-modules-ramdisk (example)
++# - d390.tdf    : for booting from emulated tape
++# - d390oco.tdf : same, using object-code-only-modules-ramdisk (example)
++
++cp $BASEDIR/data/$CODENAME/s390/d390* "$imagedir/"
++
++# Copy the README file
++
++cp $BASEDIR/data/$CODENAME/s390/README.boot "boot$N/"
++
++
++# Include the boot$N/-tree into the iso-image
++
++echo -n "-J boot$N "  >> $N.mkisofs_opts
+
+Property changes on: tools/boot/etch/boot-s390
+___________________________________________________________________
+Name: svn:executable
+   + *
+
+Index: data/etch/s390/README.boot
+===================================================================
+--- data/etch/s390/README.boot	(revision 0)
++++ data/etch/s390/README.boot	(revision 0)
+@@ -0,0 +1,24 @@
++About the S/390 installation CD
++===============================
++
++It is possible to "boot" the installation system off this CD using
++the files provided in the /boot directory.
++
++Note that the /boot/d390oco.* files are only provided as an example
++as Debian cannot ship the object-code-only-modules-ramdisk (oco.bin).
++
++Although you can boot the installer from this CD, the installation
++itself is *not* actually done from the CD. Once the initrd is loaded,
++the installer will ask you to configure your network connection and
++uses the network-console component to allow you to continue the
++installation over SSH. The rest of the installation is done over the
++network: all installer components and Debian packages are retrieved
++from a mirror.
++
++
++Tip for users of the Hercules emulator
++--------------------------------------
++If you want to ipl the installer off this CD, mount it on the host
++system (e.g. on /media/cdrom) and enter the following in the Hercules
++management console:
++   ipl /media/cdrom/boot/d390.ins
+Index: data/etch/s390/d390.ins
+===================================================================
+--- data/etch/s390/d390.ins	(revision 0)
++++ data/etch/s390/d390.ins	(revision 0)
+@@ -0,0 +1,4 @@
++* Debian GNU/Linux for S/390 (boot from CD-ROM or FTP-Server)
++linux_vm 0x00000000
++parmfile 0x00010480
++root.bin 0x00800000
+Index: data/etch/s390/d390oco.ins
+===================================================================
+--- data/etch/s390/d390oco.ins	(revision 0)
++++ data/etch/s390/d390oco.ins	(revision 0)
+@@ -0,0 +1,5 @@
++* Debian GNU/Linux for S/390 (boot from CD-ROM or FTP-Server with OCO-Modules)
++linux_vm 0x00000000
++parmfile 0x00010480
++root.bin 0x00800000
++oco.bin 0x00c00000
+Index: data/etch/s390/d390.tdf
+===================================================================
+--- data/etch/s390/d390.tdf	(revision 0)
++++ data/etch/s390/d390.tdf	(revision 0)
+@@ -0,0 +1,7 @@
++@TDF
++H:\BOOT\LINUX_TP  UNDEFINED RECSIZE 1024
++H:\BOOT\PARMFILE  UNDEFINED RECSIZE 1024
++H:\BOOT\ROOT.BIN  UNDEFINED RECSIZE 1024
++TM
++TM
++EOT
+Index: data/etch/s390/d390oco.tdf
+===================================================================
+--- data/etch/s390/d390oco.tdf	(revision 0)
++++ data/etch/s390/d390oco.tdf	(revision 0)
+@@ -0,0 +1,8 @@
++@TDF
++H:\BOOT\LINUX_TP  UNDEFINED RECSIZE 1024
++H:\BOOT\PARMFILE  UNDEFINED RECSIZE 1024
++H:\BOOT\ROOT.BIN  UNDEFINED RECSIZE 1024
++H:\BOOT\OCO.BIN   UNDEFINED RECSIZE 1024
++TM
++TM
++EOT

@@ -1,4 +1,4 @@
-debian-cd (2.2.23) unstable; UNRELEASED
+debian-cd (2.2.23) UNRELEASED; urgency=low
 
   * Raphael Hertzog
     - Patch from Sven Luther for pegasos support already applied
@@ -9,11 +9,11 @@ debian-cd (2.2.23) unstable; UNRELEASED
       hack sgain before the 2.2.23 package build.
     - Download the release notes and try to fit them onto
       CD#1. Updated sarge's README.html.in to point to them
-	- Updated tools/add-bin-doc to stop warnings on this.
+    - Updated tools/add-bin-doc to stop warnings on this.
     - Added patch from Sven Luther to add a forth script to make
  	  ppc/pegasos easier to boot.  Closes: #311925
     - Re-add the kernel-headers packages to match kernel images (only
-	  on i386 and amd64). Closes: #249386
+      on i386 and amd64). Closes: #249386
     - Made list2cds more verbose
     - Added tools/sarge/upgrade-hppa.sh and tools/sarge/upgrade-sparc.sh
       to install the upgrade-kernel bits on CD#1
@@ -37,9 +37,12 @@ debian-cd (2.2.23) unstable; UNRELEASED
     - Repository moved to svn, update docs to reflect move.
     - Add hw-detect-full to exclude list for etch, renamed to disk-detect.
     - Switch mipsel to use my builds.
+    - Applied s390 boot support patch by Frans Pop. Closes: #318021
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
-	
+
+ -- Joey Hess <joeyh@debian.org>  Mon,  8 Aug 2005 13:51:24 -0400
+
 debian-cd (2.2.22) unstable; urgency=critical
 
   * Steve McIntyre
