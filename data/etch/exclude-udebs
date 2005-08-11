@@ -17,8 +17,10 @@ lowmemcheck
 busybox-cvs-udeb
 busybox-udeb
 rootskel-locale
+installation-locale
 languagechooser
 countrychooser
+localechooser
 iso-3166-udeb
 hw-detect
 cdrom-detect
@@ -90,7 +92,5 @@ debian-edu-profile-udeb
 # If needed, will be on the initrd already.
 module-init-tools-udeb
 rescue-check
-# Not used yet. When it is, will go in the initrd.
-localechooser
 # Obsolete
 hw-detect-full
