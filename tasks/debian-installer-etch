@@ -97,7 +97,7 @@ parport-modules-2.4.27-2-generic-di
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -218,7 +218,7 @@ os-prober
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -344,7 +344,7 @@ palo-installer
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -483,7 +483,7 @@ parport-modules-2.6.8-2-386-di
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -637,7 +637,7 @@ parport-modules-2.6.8-2-itanium-smp-di
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -783,7 +783,7 @@ partconf-find-partitions
 partconf-mkfstab
 parted-udeb
 partitioner
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -925,7 +925,7 @@ partconf-find-partitions
 partconf-mkfstab
 parted-udeb
 partitioner
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -1058,7 +1058,7 @@ os-prober
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -1248,7 +1248,7 @@ parport-modules-2.4.27-powerpc-small-di
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -1379,7 +1379,7 @@ partconf-find-partitions
 partconf-mkfstab
 parted-udeb
 partitioner
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods
@@ -1507,7 +1507,7 @@ os-prober
 partconf-find-partitions
 partconf-mkfstab
 parted-udeb
-partman
+partman-base
 partman-auto
 partman-basicfilesystems
 partman-basicmethods

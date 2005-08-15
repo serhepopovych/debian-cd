@@ -38,10 +38,11 @@ debian-cd (2.2.23) UNRELEASED; urgency=low
     - Add hw-detect-full to exclude list for etch, renamed to disk-detect.
     - Switch mipsel to use my builds.
     - Applied s390 boot support patch by Frans Pop. Closes: #318021
+    - partman udeb renamed to partman-base
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
 
- -- Joey Hess <joeyh@debian.org>  Mon,  8 Aug 2005 13:51:24 -0400
+ -- Joey Hess <joeyh@debian.org>  Mon, 15 Aug 2005 14:36:26 -0400
 
 debian-cd (2.2.22) unstable; urgency=critical
 
