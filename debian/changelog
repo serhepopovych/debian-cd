@@ -1,4 +1,4 @@
-debian-cd (2.2.23) UNRELEASED; urgency=low
+debian-cd (2.2.23) unstable; urgency=low
 
   * Raphael Hertzog
     - Patch from Sven Luther for pegasos support already applied
@@ -42,7 +42,7 @@ debian-cd (2.2.23) UNRELEASED; urgency=low
   * Stephen R. Marenka
     - Changed m68k boot for etch to handle etch changes in d-i.
 
- -- Joey Hess <joeyh@debian.org>  Mon, 15 Aug 2005 14:36:26 -0400
+ -- Steve McIntyre <93sam@debian.org>  Tue, 23 Aug 2005 00:02:40 +0100
 
 debian-cd (2.2.22) unstable; urgency=critical
 
