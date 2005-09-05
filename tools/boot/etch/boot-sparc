@@ -36,7 +36,7 @@ rm -rf boot1
 inst=boot1
 
 # Setup directories
-mkdir -p $inst/boot
+mkdir -p $inst/boot/2.6
 
 silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
 # put the relevant parts of SILO boot loader
@@ -67,7 +67,18 @@ else
 	wget "$DI_WWW_HOME/$sparc32" -O vmlinuz-x-sparc32
 	wget "$DI_WWW_HOME/$sparc64" -O vmlinuz-x-sparc64
 	wget "$DI_WWW_HOME/initrd.gz"
+
+	mkdir ./2.6
+	DI_WWW_HOME=$DI_WWW_HOME/2.6
+	wget "$DI_WWW_HOME" -O ./2.6/di.dir
+	sparc64=$(sed -n 's/.*a href="\(vmlinuz-.*-sparc64\)".*/\1/p' ./2.6/di.dir)
+	wget "$DI_WWW_HOME/$sparc64" -O ./2.6/vmlinuz-x-sparc64
+	wget "$DI_WWW_HOME/initrd.gz" -O ./2.6/initrd.gz
 fi
+
 cp "$DI_DIR"/initrd.gz "$inst/boot/initrd.gz"
 cp "$DI_DIR"/vmlinuz-*-sparc32 "$inst/boot/sparc32"
 zcat "$DI_DIR"/vmlinuz-*-sparc64 > "$inst/boot/sparc64"
+
+cp "$DI_DIR"/2.6/initrd.gz "$inst/boot/2.6/initrd.gz"
+zcat "$DI_DIR"/2.6/vmlinuz-*-sparc64 > "$inst/boot/2.6/sparc64"

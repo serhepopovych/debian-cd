@@ -1,3 +1,15 @@
+debian-cd (2.2.24) UNRELEASED; urgency=low
+
+  * Frans Pop
+    - Update for Sparc:
+      - sparc64: switch to 2.6.12 kernel; make CD multiboot 2.6 and 2.4,
+        using 2.6.12 by default
+      - sparc32: drop 2.6 kernel support as it has no 2.6.12 kernel
+      - restructure silo.conf with proper support for install, expert and
+        rescue boot options
+
+ -- Frans Pop <fjp@debian.org>  Mon,  5 Sep 2005 22:58:18 +0200
+
 debian-cd (2.2.23) unstable; urgency=low
 
   * Raphael Hertzog
