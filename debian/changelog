@@ -1,6 +1,6 @@
 debian-cd (2.2.24) UNRELEASED; urgency=low
 
-  * Frans Pop
+  [ Frans Pop ]
     - Update for Sparc:
       - sparc64: switch to 2.6.12 kernel; make CD multiboot 2.6 and 2.4,
         using 2.6.12 by default
@@ -8,7 +8,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
       - restructure silo.conf with proper support for install, expert and
         rescue boot options
 
- -- Frans Pop <fjp@debian.org>  Mon,  5 Sep 2005 22:58:18 +0200
+  [ Joey Hess ]
+  * Remove contrib/testingcds. For now the entire setup directory used to
+    build Debian CDs is in svn at svn+ssh://svn.debian.org/svn/debian-cd/setup
+
+ -- Joey Hess <joeyh@debian.org>  Tue,  6 Sep 2005 10:24:36 -0400
 
 debian-cd (2.2.23) unstable; urgency=low
 
