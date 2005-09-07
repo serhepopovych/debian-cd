@@ -12,8 +12,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Remove contrib/testingcds. For now the entire setup directory used to
     build Debian CDs is in svn at svn+ssh://svn.debian.org/svn/debian-cd/setup
   * Point sid symlinks at etch.
-  * Now build etch CDs by default. Closes: #326814 (except the unset bit
-    possibly) 
+  * Now build etch CDs by default.
+  * Remove DH_CODENAME unset from CONF.sh, to allow it to be passed in
+    via the environemtn. Closes: #326814
 
  -- Joey Hess <joeyh@debian.org>  Wed,  7 Sep 2005 15:13:46 -0400
 

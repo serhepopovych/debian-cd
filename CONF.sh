@@ -40,7 +40,6 @@ unset UDEB_EXCLUDE      || true
 unset BASE_INCLUDE      || true
 unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
-unset DI_CODENAME       || true
 unset MAXCDS            || true
 unset SPLASHPNG         || true
 unset OMIT_MANUAL	    || true
