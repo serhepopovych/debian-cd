@@ -12,8 +12,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Remove contrib/testingcds. For now the entire setup directory used to
     build Debian CDs is in svn at svn+ssh://svn.debian.org/svn/debian-cd/setup
   * Point sid symlinks at etch.
+  * Now build etch CDs by default. Closes: #326814 (except the unset bit
+    possibly) 
 
- -- Joey Hess <joeyh@debian.org>  Tue,  6 Sep 2005 10:24:36 -0400
+ -- Joey Hess <joeyh@debian.org>  Wed,  7 Sep 2005 15:13:46 -0400
 
 debian-cd (2.2.23) unstable; urgency=low
 

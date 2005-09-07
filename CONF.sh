@@ -50,8 +50,8 @@ unset OMIT_RELEASE_NOTES || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building sarge cd set ...
-export CODENAME=sarge
+# Building etch cd set ...
+export CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
