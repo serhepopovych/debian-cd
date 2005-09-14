@@ -13,11 +13,10 @@ my $codename = $ENV{'CODENAME'};
 my $basedir = $ENV{'BASEDIR'};
 my @archs = qw(alpha arm i386 m68k powerpc sparc);
 my $master = "$basedir/data/$codename/master";
-my $slice = "/usr/bin/slice";
 
 # Creating master.* files
 chdir $ENV{'TDIR'};
-system "$slice $master";
+system "slice $master";
 
 # Loop over all archs
 my $arch;

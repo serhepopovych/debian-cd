@@ -174,7 +174,7 @@ sub writelist {
 @samemaint=();
 
 if ($override =~ /\.gz$/) {
-open(O, "/bin/zcat $override|")
+open(O, "zcat $override|")
     or die "Couldn't open override file $override: $!\n";
 } else {
 open(O, $override)
