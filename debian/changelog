@@ -19,8 +19,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     the CDs, and adds IBM chrp boot files. Closes: #328274
   * Remove Debian_sid task, which dates from before woody and should not be
     used.
+  * Don't hardcode the path to debootstrap. And assume there is a debootstrap
+    available, as it is a dependency.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 11:32:30 -0400
+ -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 14:20:46 -0400
 
 debian-cd (2.2.23) unstable; urgency=low
 
