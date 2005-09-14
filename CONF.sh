@@ -144,7 +144,7 @@ export CONTRIB=1
 # export COPYLINK=1
 
 # Options
-# export MKISOFS=/usr/bin/mkisofs
+# export MKISOFS=mkisofs
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
 

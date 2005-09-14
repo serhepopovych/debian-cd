@@ -21,8 +21,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     used.
   * Don't hardcode the path to debootstrap. And assume there is a debootstrap
     available, as it is a dependency.
+  * Since debootstrap is in sbin, add sbin to PATH.
+  * Remove other random hadcoded paths to programs in bin.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 14:20:46 -0400
+ -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 14:26:36 -0400
 
 debian-cd (2.2.23) unstable; urgency=low
 

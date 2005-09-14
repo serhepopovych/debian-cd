@@ -47,7 +47,7 @@ ifndef SRCVOLID
 SRCVOLID="Debian $(DEBVERSION) Src-$$num"
 endif
 ifndef MKISOFS
-export MKISOFS=/usr/bin/mkisofs
+export MKISOFS=mkisofs
 endif
 ifndef MKISOFS_OPTS
 #For normal users
@@ -100,7 +100,7 @@ add_files=$(BASEDIR)/tools/add_files
 set_mkisofs_opts=$(BASEDIR)/tools/set_mkisofs_opts
 strip_nonus_bin=$(BASEDIR)/tools/strip-nonUS-bin
 add_secured=$(BASEDIR)/tools/add_secured
-md5sum=/usr/bin/md5sum
+md5sum=md5sum
 fastsums=$(BASEDIR)/tools/fast_sums
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
@@ -114,6 +114,9 @@ forcenonusoncd1=1
 else
 forcenonusoncd1=0
 endif
+
+# Ensure that debootstrap is in the path.
+PATH=$PATH:/usr/sbin
 
 ## DEBUG STUFF ##
 
@@ -499,7 +502,7 @@ $(BDIR)/packages-stamp:
 	$(Q)for DISK in $(FIRSTDISKS); do \
 	    DISK=$${DISK##CD}; \
 	    ok=yes; \
-	    for p in `/usr/sbin/debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
+	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
 		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
 			if [ -n "$(BASE_EXCLUDE)" ] && grep -q ^$$p$$ $(BASE_EXCLUDE); then \
 				echo "Missing debootstrap-required $$p but included in $(BASE_EXCLUDE)"; \
