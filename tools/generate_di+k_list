@@ -41,6 +41,7 @@ jfsutils
 reiserfsprogs
 libfribidi0
 localization-config
+
 #ifdef ARCH_i386
 discover
 discover1
@@ -54,13 +55,14 @@ EOF
 /bin/sed -n 's/Package: \(kernel-pcmcia-modules-2.4.*-386\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-i386/Packages| tail -n 1 \
   >> debian-installer+kernel-$DI_CODENAME
-/bin/sed -n 's/Package: \(kernel-image-2.6.*-386\)$/\1/p' \
-  $MIRROR/dists/$CODENAME/main/binary-i386/Packages| tail -n 1 \
-  >> debian-installer+kernel-$DI_CODENAME
 /bin/sed -n 's/Package: \(kernel-headers-2.4.*-386\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-i386/Packages| tail -n 1 \
   >> debian-installer+kernel-$DI_CODENAME
-/bin/sed -n 's/Package: \(kernel-headers-2.6.*-386\)$/\1/p' \
+
+/bin/sed -n 's/Package: \(linux-image-2.6.*-386\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-i386/Packages| tail -n 1 \
+  >> debian-installer+kernel-$DI_CODENAME
+/bin/sed -n 's/Package: \(linux-headers-2.6.*-386\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-i386/Packages| tail -n 1 \
   >> debian-installer+kernel-$DI_CODENAME
 
@@ -75,15 +77,12 @@ EOF
 
 if [ ! -e $MIRROR/dists/$CODENAME/main/binary-amd64/Packages ]; then
 	echo "Cannot find amd64 packages file, inserting static entry as workaround" >&2
-	echo kernel-image-2.6.8-11-amd64-generic >> debian-installer+kernel-$DI_CODENAME
+	echo linux-image-2.6.8-12-amd64-generic >> debian-installer+kernel-$DI_CODENAME
 else
-	/bin/sed -n 's/Package: \(kernel-image-2.6.*-generic\)$/\1/p' \
+	/bin/sed -n 's/Package: \(linux-image-2.6.*-generic\)$/\1/p' \
 	  $MIRROR/dists/$CODENAME/main/binary-amd64/Packages| tail -n 1 \
 	  >> debian-installer+kernel-$DI_CODENAME
-	/bin/sed -n 's/Package: \(kernel-pcmcia-modules-2.6.*-generic\)$/\1/p' \
-	  $MIRROR/dists/$CODENAME/main/binary-amd64/Packages| tail -n 1 \
-	  >> debian-installer+kernel-$DI_CODENAME
-	/bin/sed -n 's/Package: \(kernel-headers-2.6.*-generic\)$/\1/p' \
+	/bin/sed -n 's/Package: \(linux-headers-2.6.*-generic\)$/\1/p' \
 	  $MIRROR/dists/$CODENAME/main/binary-amd64/Packages| tail -n 1 \
 	  >> debian-installer+kernel-$DI_CODENAME
 fi
@@ -106,7 +105,7 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 discover1
 EOF
 
-/bin/sed -n 's/Package: \(kernel-image-2.6.*\)$/\1/p' \
+/bin/sed -n 's/Package: \(linux-image-2.6.*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-hppa/Packages| tail -n4 \
   >> debian-installer+kernel-$DI_CODENAME
 
@@ -123,10 +122,10 @@ EOF
 /bin/sed -n 's/Package: \(kernel-image-2\.4-.*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-ia64/Packages \
   >> debian-installer+kernel-$DI_CODENAME
-/bin/sed -n 's/Package: \(kernel-image-2\.6\..*\)$/\1/p' \
+/bin/sed -n 's/Package: \(linux-image-2\.6\..*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-ia64/Packages | tail -n 4 \
   >> debian-installer+kernel-$DI_CODENAME
-/bin/sed -n 's/Package: \(kernel-image-2\.6-.*\)$/\1/p' \
+/bin/sed -n 's/Package: \(linux-image-2\.6-.*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-ia64/Packages \
   >> debian-installer+kernel-$DI_CODENAME
 
@@ -186,7 +185,10 @@ discover1
 initrd-tools
 EOF
 
-/bin/sed -n 's/Package: \(kernel-image-.*-sparc.*\)$/\1/p' \
+/bin/sed -n 's/Package: \(kernel-image-2.4.*-sparc.*\)$/\1/p' \
+  $MIRROR/dists/$CODENAME/main/binary-sparc/Packages \
+  >> debian-installer+kernel-$DI_CODENAME
+/bin/sed -n 's/Package: \(linux-image-2.6.*-sparc.*\)$/\1/p' \
   $MIRROR/dists/$CODENAME/main/binary-sparc/Packages \
   >> debian-installer+kernel-$DI_CODENAME
 
