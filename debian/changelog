@@ -15,8 +15,12 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Now build etch CDs by default.
   * Remove DH_CODENAME unset from CONF.sh, to allow it to be passed in
     via the environemtn. Closes: #326814
+  * Applied patch from Sven Luther which adds powerpc64 kernels to
+    the CDs, and adds IBM chrp boot files. Closes: #328274
+  * Remove Debian_sid task, which dates from before woody and should not be
+    used.
 
- -- Joey Hess <joeyh@debian.org>  Wed,  7 Sep 2005 15:13:46 -0400
+ -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 11:32:30 -0400
 
 debian-cd (2.2.23) unstable; urgency=low
 

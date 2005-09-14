@@ -88,7 +88,7 @@ cat $BASEDIR/data/etch/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
 cp $BASEDIR/data/etch/yaboot/ofboot.b ofboot.b
 
-for subarch in powerpc power3 power4
+for subarch in powerpc powerpc64
 do
   if [ ! "$DI_WWW_HOME" ];then
         if [ ! "$DI_DIR" ];then 
@@ -105,23 +105,8 @@ do
 	fi
   else
 	wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom/"
-	if [ $subarch = powerpc ]; then
-		wget -r -nd --no-parent --level=1 -P "$subarch/2.4" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom/2.4/"
-		wget -r -nd --no-parent --level=1 -P "$subarch/minimal" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom-minimal/"
-		wget -r -nd --no-parent --level=1 -P "$subarch/minimal/2.4" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom-minimal/2.4/"
-	else
-		# POWER3 and POWER4 PReP machines do not exist.
-		rm -f "$subarch/vmlinuz-prep.initrd"
-	fi
   fi
 
-  # Save some space with hardlinks; these kernels are identical.
-  if [ -e powerpc/vmlinux ] && [ -e powerpc/minimal/vmlinux ]; then
-	ln -f powerpc/vmlinux powerpc/minimal/vmlinux
-  fi
-  if [ -e powerpc/2.4/vmlinux ] && [ -e powerpc/minimal/2.4/vmlinux ]; then
-	ln -f powerpc/2.4/vmlinux powerpc/minimal/2.4/vmlinux
-  fi
 done
 
 # Copy pegasos forth script, since pegasos machines don't support yaboot yet.
@@ -131,5 +116,13 @@ cat $BASEDIR/data/etch/pegasos/pegasos \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
  > pegasos
+
+# Let's copy the IBM CHRP stuff into place now.
+cd $CDDIR
+mkdir ppc
+mkdir ppc/chrp
+cp $BASEDIR/data/etch/chrp/bootinfo.txt ppc
+mkdir etc
+cp $INSTALLDIR/yaboot.conf etc
 
 exit 0
