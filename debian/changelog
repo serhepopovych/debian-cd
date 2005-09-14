@@ -25,6 +25,12 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Remove other random hadcoded paths to programs in bin.
   * generate_di+k_list: Deal with kernel package name change. All arches
     with 2.6 kernels will now include only linux-image packages.
+  * generate_di+k_list: Add some mips and mipsel subarches that are new in
+    etch or were missing before.
+  * generate_di+k_list: Use kernel-image-2.4-<subarch> and
+    linux-image-2.4-<subarch> packages for as many architectures as we can,
+    instead of enumerating the versions of the kernels to include. Much
+    cleaner and more robust and will make d-i more robust as well.
 
  -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 16:05:02 -0400
 
