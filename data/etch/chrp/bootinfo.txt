@@ -1,0 +1,5 @@
+<chrp-boot>
+<description>Debian/GNU Linux Installation on IBM CHRP hardware</description>
+<os-name>Debian/GNU Linux for PowerPC</os-name>
+<boot-script>boot &device;:\install\yaboot</boot-script>
+
