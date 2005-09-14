@@ -375,7 +375,7 @@ ifdef FORCENONUSONCD1
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
 	$(Q)if [ _$(INSTALLER_CD) != _1 ]; then \
-		debootstrap --resolve-deps --arch $(ARCH) --print-debs $(CODENAME) \
+		debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
 		| tr ' ' '\n' >>$(BDIR)/rawlist; \
 	fi
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
