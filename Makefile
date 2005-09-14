@@ -116,7 +116,7 @@ forcenonusoncd1=0
 endif
 
 # Ensure that debootstrap is in the path.
-PATH=$$PATH:/usr/sbin
+PATH:=$(PATH):/usr/sbin
 
 ## DEBUG STUFF ##
 
