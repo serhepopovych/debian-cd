@@ -10,7 +10,7 @@
  * Last update: Wed Sep 14 23:37:35 CEST 2005
  */
 
-#include <debian-installer-sid>
+#include <debian-installer-etch>
 eject
 locales
 lvm10
