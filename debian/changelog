@@ -15,8 +15,6 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Now build etch CDs by default.
   * Remove DH_CODENAME unset from CONF.sh, to allow it to be passed in
     via the environemtn. Closes: #326814
-  * Applied patch from Sven Luther which adds powerpc64 kernels to
-    the CDs, and adds IBM chrp boot files. Closes: #328274
   * Remove Debian_sid task, which dates from before woody and should not be
     used.
   * Don't hardcode the path to debootstrap. And assume there is a debootstrap
@@ -32,7 +30,12 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     instead of enumerating the versions of the kernels to include. Much
     cleaner and more robust and will make d-i more robust as well.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 14 Sep 2005 16:05:02 -0400
+  [ Sven Luther ]
+  * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped
+    2.6.8 and remaining 2.4.27 kernels, except the nubus/apus ones. Added IBM
+    chrp boot files. (Closes: #328274)
+
+ -- Sven Luther <sven@localhost.localdomain>  Wed, 21 Sep 2005 00:10:36 +0200
 
 debian-cd (2.2.23) unstable; urgency=low
 
