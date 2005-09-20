@@ -16,8 +16,12 @@ CDDIR=$2
 INSTALLDIR=$CDDIR/install
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~luther/d-i/images/daily"
-   if [ -d "$DI_DIR" ];then
-      DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
+   if [ -n "$DI_DIR" ];then
+      if [ ! -d "$DI_DIR" ];then
+         DI_DIR="/org/gluck.debian.org/chroot/sid/home/luther/public_html/d-i/images/daily"
+      else
+         DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
+      fi
       DI_WWW_HOME=""
    fi
 fi
