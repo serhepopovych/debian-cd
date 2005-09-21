@@ -1,5 +1,8 @@
 debian-cd (2.2.24) UNRELEASED; urgency=low
 
+  [ Richard Hirst ]
+    - Fix ramdisk_size value for hppa
+
   [ Frans Pop ]
     - Update for Sparc:
       - sparc64: switch to 2.6.12 kernel; make CD multiboot 2.6 and 2.4,
