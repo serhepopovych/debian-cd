@@ -1,7 +1,7 @@
 debian-cd (2.2.24) UNRELEASED; urgency=low
 
   [ Richard Hirst ]
-    - Fix ramdisk_size value for hppa
+    - Fix ramdisk_size value for hppa for both etch and sarge
 
   [ Frans Pop ]
     - Update for Sparc:
