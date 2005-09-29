@@ -46,8 +46,8 @@ else
 	wget -r -nd --no-parent -P "$DI_DIR" "$DI_WWW_HOME"
 fi
 	
-cp "$DI_DIR"/vmlinux-*-32 "$CDROOT/install"
-cp "$DI_DIR"/vmlinux-*-64 "$CDROOT/install"
+cp "$DI_DIR"/vmlinux-*-parisc "$CDROOT/install"
+cp "$DI_DIR"/vmlinux-*-parisc64 "$CDROOT/install"
 cp "$DI_DIR"/initrd.gz "$CDROOT/install"
 
 install_languages "$CDROOT"
