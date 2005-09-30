@@ -11,10 +11,11 @@ symptom is a white screen which doesn't go away),
 use 'install video=ofonly' or 'expert video=ofonly'.
 
 The plain options are for the powerpc family of
-processors (from 601 to G4). The *-power3 options
-are for IBM Power3 boxes, and the *-power4 options
-are for IBM Power4 and Apple G5 boxes. Press the tab
-key for a list of options, or type 'help' for help.
+processors (from 601 to G4). The *64 options are for
+64bit powerpc processors, which include the IBM 
+Power3, Power4, Power5, ... boxes, as well as the 
+Apple G5 boxes. Press the tab key for a list of
+options, or type 'help' for help.
 
 ************************************
 If in doubt, just choose 'install', and if that 
