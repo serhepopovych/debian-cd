@@ -1,5 +1,8 @@
 debian-cd (2.2.24) UNRELEASED; urgency=low
 
+  [ Bdale Garbee ]
+  * update lists of udebs for hppa to reflect kernel name changes, etc
+
   [ Richard Hirst ]
     - Fix ramdisk_size value for hppa for both etch and sarge
 
