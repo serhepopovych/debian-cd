@@ -4,15 +4,15 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * update lists of udebs for hppa to reflect kernel name changes, etc
 
   [ Richard Hirst ]
-    - Fix ramdisk_size value for hppa for both etch and sarge
+  * Fix ramdisk_size value for hppa for both etch and sarge
 
   [ Frans Pop ]
-    - Update for Sparc:
-      - sparc64: switch to 2.6.12 kernel; make CD multiboot 2.6 and 2.4,
-        using 2.6.12 by default
-      - sparc32: drop 2.6 kernel support as it has no 2.6.12 kernel
-      - restructure silo.conf with proper support for install, expert and
-        rescue boot options
+  * Update for Sparc:
+    - sparc64: switch to 2.6.12 kernel; make CD multiboot 2.6 and 2.4,
+      using 2.6.12 by default
+    - sparc32: drop 2.6 kernel support as it has no 2.6.12 kernel
+    - restructure silo.conf with proper support for install, expert and
+      rescue boot options
 
   [ Joey Hess ]
   * Remove contrib/testingcds. For now the entire setup directory used to
