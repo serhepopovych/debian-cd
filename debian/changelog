@@ -35,6 +35,8 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     linux-image-2.4-<subarch> packages for as many architectures as we can,
     instead of enumerating the versions of the kernels to include. Much
     cleaner and more robust and will make d-i more robust as well.
+  * Update task.list with new etch (and some old sarge) tasks.
+  * Update task-full-etch and improve the generation recipe.
 
   [ Sven Luther ]
   * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped

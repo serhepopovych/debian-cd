@@ -1,5 +1,8 @@
 desktop
+gnome-desktop
+kde-desktop
 web-server
+laptop
 mail-server
 print-server
 database-server
@@ -49,3 +52,15 @@ turkish
 turkish-desktop
 ukrainian
 ukrainian-desktop
+arabic
+arabic-desktop
+bulgarian
+bulgarian-desktop
+czech
+czech-desktop
+dutch
+dutch-desktop
+romanian
+romanian-desktop
+slovak
+slovak-desktop
