@@ -1,12 +1,8 @@
 /*
  *
- * This file will be used to build official complete set of Etch CD
+ * This file will be used to build official complete sets of Etch CDs
  *
  */
-
-#if (FORCENONUSONCD1 == 1)
-#include "Debian_etch_nonUS"
-#endif
 
 /* Packages that should really be on CD1 */
 #include <debian-installer+kernel-etch>
@@ -20,4 +16,3 @@
 
 /* The rest ordered by popularity */
 #include <popularity-contest-etch>
-
