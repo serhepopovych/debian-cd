@@ -80,14 +80,14 @@ fi
 # generate/download images for "powerpc"
 # (missing: bootvars1.3b.sit.hqx, BootX_1.2.2.sit, boot-floppy-hfs.img)
 BUILD_DATE=$(date +%Y%m%d)
-cat $BASEDIR/data/etch/yaboot/boot.msg \
+cat $BASEDIR/data/$DI_CODENAME/yaboot/boot.msg \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
  > boot.msg
-cat $BASEDIR/data/etch/yaboot/yaboot.conf \
+cat $BASEDIR/data/$DI_CODENAME/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
-cp $BASEDIR/data/etch/yaboot/ofboot.b ofboot.b
+cp $BASEDIR/data/$DI_CODENAME/yaboot/ofboot.b ofboot.b
 
 for subarch in powerpc powerpc64
 do
@@ -105,7 +105,7 @@ done
 
 # Copy pegasos forth script, since pegasos machines don't support yaboot yet.
 BUILD_DATE=$(date +%Y%m%d)
-cat $BASEDIR/data/etch/pegasos/pegasos \
+cat $BASEDIR/data/$DI_CODENAME/pegasos/pegasos \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
@@ -115,7 +115,7 @@ cat $BASEDIR/data/etch/pegasos/pegasos \
 cd $CDDIR
 mkdir ppc
 mkdir ppc/chrp
-cp $BASEDIR/data/etch/chrp/bootinfo.txt ppc
+cp $BASEDIR/data/$DI_CODENAME/chrp/bootinfo.txt ppc
 mkdir etc
 cp $INSTALLDIR/yaboot.conf etc
 
