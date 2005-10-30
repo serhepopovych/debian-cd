@@ -375,8 +375,10 @@ ifdef FORCENONUSONCD1
 		sort | uniq > $(BDIR)/Debian_$(CODENAME)_nonUS
 endif
 	$(Q)if [ _$(INSTALLER_CD) != _1 ]; then \
-		debootstrap --arch $(ARCH) --print-debs $(CODENAME) \
+		mkdir -p $(TDIR); \
+		debootstrap --arch $(ARCH) --print-debs $(CODENAME) $(TDIR)/debootstrap.tmp file:$(MIRROR) \
 		| tr ' ' '\n' >>$(BDIR)/rawlist; \
+		rm -rf $(TDIR)/debootstrap.tmp; \
 	fi
 	$(Q)perl -npe 's/\@ARCH\@/$(ARCH)/g' $(TASK) | \
 	 cpp -nostdinc -nostdinc++ -P -undef -D ARCH=$(ARCH) -D ARCH_$(subst -,_,$(ARCH)) \
@@ -499,10 +501,11 @@ $(BDIR)/packages-stamp:
 	@# Check that all packages required by debootstrap are included
 	@# and create .disk/base_installable if yes
 	@# Also create .disk/base_components
+	mkdir -p $(TDIR)
 	$(Q)for DISK in $(FIRSTDISKS); do \
 	    DISK=$${DISK##CD}; \
 	    ok=yes; \
-	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME)`; do \
+	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME) $(TDIR)/debootstrap.tmp file:$(MIRROR)`; do \
 		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
 			if [ -n "$(BASE_EXCLUDE)" ] && grep -q ^$$p$$ $(BASE_EXCLUDE); then \
 				echo "Missing debootstrap-required $$p but included in $(BASE_EXCLUDE)"; \
@@ -512,6 +515,7 @@ $(BDIR)/packages-stamp:
 		        echo "Missing debootstrap-required $$p"; \
 		    fi; \
 	    done; \
+	    rm -rf $(TDIR)/debootstrap.tmp; \
 	    if [ "$$ok" = "yes" ]; then \
 		    echo "CD$$DISK contains all packages needed by debootstrap"; \
 		    touch $(BDIR)/CD$$DISK/.disk/base_installable; \

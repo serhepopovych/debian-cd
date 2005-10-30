@@ -37,6 +37,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     cleaner and more robust and will make d-i more robust as well.
   * Update task.list with new etch (and some old sarge) tasks.
   * Update task-full-etch and improve the generation recipe.
+  * Change debootstrap --print-debs calls to pass debootstrap a mirror to use
+    and a temporary directory to work in, so it will avoid downloading the
+    Packages files from its hardcoded mirror, and work on amd64 and other
+    situations with a non-official Debian mirror. Neccessary since the new
+    version of debootstrap has dependency resolution enabled by default.
 
   [ Sven Luther ]
   * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped
