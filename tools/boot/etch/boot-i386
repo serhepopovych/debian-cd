@@ -9,7 +9,6 @@
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
-set -x # Debug why daily m68k builds are not build from smarenka's home (for comparison)
 
 N=$1
 CDDIR=$2
