@@ -42,13 +42,14 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     Packages files from its hardcoded mirror, and work on amd64 and other
     situations with a non-official Debian mirror. Neccessary since the new
     version of debootstrap has dependency resolution enabled by default.
+  * Don't chmod amiboot if it doesn't exist.
 
   [ Sven Luther ]
   * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped
     2.6.8 and remaining 2.4.27 kernels, except the nubus/apus ones. Added IBM
     chrp boot files. (Closes: #328274)
 
- -- Sven Luther <sven@localhost.localdomain>  Wed, 21 Sep 2005 00:10:36 +0200
+ -- Joey Hess <joeyh@debian.org>  Mon, 31 Oct 2005 10:20:25 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 

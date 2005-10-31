@@ -64,7 +64,9 @@ fi
 # amiga specific stuff
 if [ -d tools/amiga ]; then
 	# Amiboot and dmesg need to be executable
-	chmod a+x tools/amiga/amiboot
+	if [ -e tools/amiga/amiboot ]; then
+		chmod a+x tools/amiga/amiboot
+	fi
 	# chmod a+x tools/amiga/dmesg
 
 	# Setup amiga icons
