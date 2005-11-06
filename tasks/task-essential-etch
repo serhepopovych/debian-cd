@@ -2,49 +2,65 @@
  *
  * Generated with: 
  
-grep-dctrl -s Key -n -e '.*' /usr/share/tasksel/debian-tasks.desc | sed -e 's? *??' | grep -v ^$ | sort | uniq
-
- * If the list is too big for the first CD, then we'll have to sort it
- * better, but hopefully this will never be needed since the goal of that
- * file is to have the more important packages of each task.
- *
+ 
+ for i in $(cat task.list); do
+  grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
+    grep-dctrl -s Key -n -e '.*'
+ done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch
+  
  * Last updated: $Date$
  */
 
-apache2-mpm-prefork
-bind9
-console-cyrillic
-cupsys
-cupsys-bsd
-cupsys-client
-exim4
+x-window-system-core
 gnome-desktop-environment
+apache2-mpm-prefork
+exim4
+cupsys
+cupsys-client
+cupsys-bsd
+postgresql
+bind9
+nfs-kernel-server
+samba
+manpages-pt
+language-env
 jfbterm
-kde-core
-kdeadmin
-kdeartwork
-kdegraphics
-kdemultimedia
-kdenetwork
-kdepim
-kdeutils
+zhcon
+jfbterm
+zhcon
+console-cyrillic
+t1-cyrillic
+language-env
+language-env
+manpages-fr
+language-env
+manpages-de
+language-env
+language-env
+manpages-it
+language-env
+jfbterm
+manpages-ja
+language-env
+jfbterm
+manpages-ko
 language-env
 locales
-manpages-de
-manpages-es
-manpages-fr
-manpages-it
-manpages-ja
-manpages-ko
+language-env
 manpages-pl
-manpages-pt
+language-env
+language-env
 manpages-ru
-manpages-tr
-nfs-kernel-server
-postgresql
-samba
-t1-cyrillic
-x-window-system-core
-xfonts-thai
+language-env
+manpages-es
+locales
+language-env
 xiterm+thai
-zhcon
+xfonts-thai
+language-env
+locales
+manpages-tr
+language-env
+language-env
+language-env
+locales

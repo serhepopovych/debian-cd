@@ -23,8 +23,8 @@ mozilla-firefox
 mozilla-psm
 myspell-en-gb
 myspell-en-us
-openoffice.org-bin
 openoffice.org-help-en
+openoffice.org-kde
 synaptic
 twm
 x-window-system-core
@@ -185,7 +185,6 @@ kde-i18n-he
 koffice-i18n-he
 mozilla-firefox-locale-he-il
 mozilla-firefox-theme-rtlclassic
-openoffice.org-l10n-he
 apt-howto-it
 aspell-it
 debian-reference-it
@@ -244,7 +243,6 @@ xfonts-baekmuk
 aspell-lt
 ilithuanian
 myspell-lt
-openoffice.org-l10n-lt
 aspell-no
 inorwegian
 myspell-nb
@@ -291,11 +289,9 @@ koffice-i18n-sv
 openoffice.org-help-sv
 openoffice.org-l10n-sv
 cttex
-nonlock
 ttmkfdir
 xfonts-thai
 xiterm+thai
-openoffice.org-l10n-th
 manpages-tr
 kde-i18n-tr
 koffice-i18n-tr
@@ -309,7 +305,6 @@ myspell-uk
 ttf-arabeyes
 xfonts-intl-arabic
 kde-i18n-ar
-openoffice.org-l10n-ar
 aspell-bg
 ibulgarian
 wbulgarian
