@@ -130,6 +130,7 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 discover1
 quik
 yaboot
+hfsutils
 mkvmlinuz
 module-init-tools
 initrd-tools
