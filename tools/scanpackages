@@ -164,7 +164,16 @@ for SECT in $SECTIONS; do
 	done
     fi
 done
+
 # Creating the config files
+
+# SAM 2005-11-01:
+# Nasty hack - we may need to look at extra override files from sid.
+# See if the extra override exists; if not redirect.
+EXTRA_CODENAME=$CODENAME
+if [ ! -e $BDIR/indices/override.$EXTRA_CODENAME.extra.main.gz ] ; then
+    EXTRA_CODENAME=sid
+fi
 cat >$PREFIX.generate-binary <<EOF
 Dir::ArchiveDir "$2";
 Dir::OverrideDir "$BDIR/indices";
@@ -178,7 +187,7 @@ Tree "dists/$CODENAME" {
     Architectures "$ARCH";
     
     BinOverride "override.$CODENAME.\$(SECTION)";
-    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    ExtraOverride "override.$EXTRA_CODENAME.extra.\$(SECTION)";
     SrcOverride "override.$CODENAME.\$(SECTION).src";
 }
 EOF
@@ -195,7 +204,7 @@ Tree "dists/$CODENAME/non-US" {
     Architectures "$ARCH";
     
     BinOverride "override.$CODENAME.\$(SECTION)";
-    ExtraOverride "override.$CODENAME.extra.\$(SECTION)";
+    ExtraOverride "override.$EXTRA_CODENAME.extra.\$(SECTION)";
     SrcOverride "override.$CODENAME.\$(SECTION).src";
 }
 EOF
@@ -212,7 +221,7 @@ Tree "dists/$CODENAME/main" {
     Architectures "$ARCH";
     
     BinOverride "override.$CODENAME.main.\$(SECTION)";
-    ExtraOverride "override.$CODENAME.extra.main";
+    ExtraOverride "override.$EXTRA_CODENAME.extra.main";
     SrcOverride "override.$CODENAME.main.src";
     Packages::Extensions ".udeb";
 }
@@ -226,7 +235,7 @@ Tree "dists/$CODENAME/local" {
     Architectures "$ARCH";
     
     BinOverride "override.$CODENAME.local.\$(SECTION)";
-    ExtraOverride "override.$CODENAME.extra.local";
+    ExtraOverride "override.$EXTRA_CODENAME.extra.local";
     SrcOverride "override.$CODENAME.local.src";
     Packages::Extensions ".udeb";
 }
@@ -244,7 +253,7 @@ if [ ! -d "$BDIR/indices" ]; then
     gunzip -f $BDIR/indices/*.gz
     for SECT in $SECTIONS; do
 	touch $BDIR/indices/override.$CODENAME.$SECT
-	touch $BDIR/indices/override.$CODENAME.extra.$SECT
+	touch $BDIR/indices/override.$EXTRA_CODENAME.extra.$SECT
 	touch $BDIR/indices/override.$CODENAME.$SECT.src
     done
     if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
@@ -252,7 +261,7 @@ if [ ! -d "$BDIR/indices" ]; then
     fi
     if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 	touch $BDIR/indices/override.$CODENAME.local.debian-installer
-	touch $BDIR/indices/override.$CODENAME.extra.local
+	touch $BDIR/indices/override.$EXTRA_CODENAME.extra.local
 	touch $BDIR/indices/override.$CODENAME.local.src
     fi
 fi
@@ -262,7 +271,7 @@ if [ -n "$NONUS" -a ! -d "$BDIR/indices-non-US" ]; then
     gunzip -f $BDIR/indices-non-US/*.gz
     for SECT in `echo $SECTIONSNONUS | sed -e 's#non-US/##g'`; do
 	touch $BDIR/indices-non-US/override.$CODENAME.$SECT
-	touch $BDIR/indices-non-US/override.$CODENAME.extra.$SECT
+	touch $BDIR/indices-non-US/override.$EXTRA_CODENAME.extra.$SECT
 	touch $BDIR/indices-non-US/override.$CODENAME.$SECT.src
     done
 fi

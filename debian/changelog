@@ -57,7 +57,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * generate_di+k_list: Add hfsutils for powerpc; it's no longer in base but
     yaboot-installer needs it.
 
- -- Joey Hess <joeyh@debian.org>  Sun,  6 Nov 2005 18:14:40 -0500
+  [ Steve McIntyre ]
+  * For full CD/DVD builds, check that we have an "extra" override
+    containing task info. If not, use the sid override instead.
+	
+ -- Joey Hess <joeyh@debian.org>  Wed, 10 Nov 2005 00:48:24 +0000
 
 debian-cd (2.2.23) unstable; urgency=low
 
