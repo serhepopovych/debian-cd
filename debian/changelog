@@ -52,7 +52,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Order task-essential-etch using task.list, and regen to match current
     tasksel.
-  * Add acpi and acpid to generate_di+k_list so they're on the netinst.
+  * Add acpid to generate_di+k_list so it's on the netinst.
 
   [ Colin Watson ]
   * generate_di+k_list: Add hfsutils for powerpc; it's no longer in base but

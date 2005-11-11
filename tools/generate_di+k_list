@@ -41,7 +41,6 @@ jfsutils
 reiserfsprogs
 libfribidi0
 localization-config
-acpi
 acpid
 
 #ifdef ARCH_i386
