@@ -1,4 +1,4 @@
-# These udebs build the d-i cdrom initrd. As such, there is no reason
+# tHEse udebs build the d-i cdrom initrd. As such, there is no reason
 # to keep another copy of them on the CD in udeb form.
 # 
 # This duplicates data found in the file build/pkg-lists/kernel, in d-i svn
@@ -40,6 +40,8 @@ floppy-retriever
 libfribidi0-udeb
 # Already on the initrd, thanks to library reduction.
 libdebconfclient0-udeb
+libdebian-installer-extra4-udeb
+libdebian-installer-udeb
 # A reduced version is on the initrd. Nothing currently needs the full
 # version.
 slang1a-utf8-udeb
@@ -48,8 +50,7 @@ busybox-cvs-floppy-udeb
 busybox-floppy-udeb
 di-utils-bootfloppy
 rootskel-bootfloppy
-# Until someone gets the gtk cdebconf frontend going, all this is not worth
-# including.
+# gtk stuff
 cdebconf-gtk-udeb
 fontconfig-udeb
 libatk1.0-udeb
@@ -61,11 +62,17 @@ libgtk+2.0-directfb0-udeb
 libpango1.0-udeb
 libpng12-0-udeb
 ttf-freefont-udeb
+libdirectfb-0.9-22-udeb
+fbset-udeb
 # This udeb is not in good shape and is largely supersceded by
 # cdebconf-newt-udeb
 cdebconf-slang-udeb
 # We're currently using busybox's own shell, and do not need this one.
 dash-udeb
+# Not currently used
+cdebootstrap-udeb
+hdparm-udeb
+laptop-detect-udeb
 # These dhcp clients are not the currently preferred one.
 dhcp3-client-udeb
 pump-udeb
@@ -89,8 +96,15 @@ netcfg-dhcp
 # skolelinux stuff, not for the stock CDs
 debian-edu-install-udeb
 debian-edu-profile-udeb
+ltsp-client-builder
+autopartkit
+lvm10-udeb
 # If needed, will be on the initrd already.
 module-init-tools-udeb
 rescue-check
+rootskel-gtk
+cdebconf-text-udeb
 # Obsolete
 hw-detect-full
+# Eh?
+gnumach-udeb

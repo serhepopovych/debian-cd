@@ -53,6 +53,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Order task-essential-etch using task.list, and regen to match current
     tasksel.
   * Add acpid to generate_di+k_list so it's on the netinst.
+  * Add more udebs to excludes trying to trim the netinst size down.
 
   [ Colin Watson ]
   * generate_di+k_list: Add hfsutils for powerpc; it's no longer in base but
@@ -62,7 +63,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * For full CD/DVD builds, check that we have an "extra" override
     containing task info. If not, use the sid override instead.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 11 Nov 2005 13:25:07 -0500
+ -- Joey Hess <joeyh@debian.org>  Fri, 11 Nov 2005 14:25:43 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 

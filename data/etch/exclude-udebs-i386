@@ -27,3 +27,5 @@ userdevfs
 *-speakup-di
 # These udebs are not used yet.
 mouse-modules-*
+# Only needed on arches that use partconf or autopartkit.
+partconf-mkfstab
