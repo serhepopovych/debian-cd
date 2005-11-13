@@ -42,7 +42,6 @@ reiserfsprogs
 libfribidi0
 localization-config
 acpid
-debconf
 
 #ifdef ARCH_i386
 discover

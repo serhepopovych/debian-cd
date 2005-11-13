@@ -43,9 +43,6 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     situations with a non-official Debian mirror. Neccessary since the new
     version of debootstrap has dependency resolution enabled by default.
   * Don't chmod amiboot if it doesn't exist.
-  * Try forcing debconf onto CDs to attempt to get debian-cd not to include
-    both it and cdebconf for | dependencies. cdebconf isn't usable right now
-    and has a large dependency chain.
 
   [ Sven Luther ]
   * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped
@@ -57,6 +54,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     tasksel.
   * Add acpid to generate_di+k_list so it's on the netinst.
   * Add more udebs to excludes trying to trim the netinst size down.
+  * Exclude cdebconf from CD1s to prevent both it and debconf being pulled in
+    by | dependencies. cdebconf isn't usable right now and has a large
+    dependency chain.
 
   [ Colin Watson ]
   * generate_di+k_list: Add hfsutils for powerpc; it's no longer in base but
