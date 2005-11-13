@@ -19,3 +19,5 @@ xserver-xfree86-dbg
 zmailer
 xmail
 cdebconf
+inetutils-inetd
+openbsd-inetd

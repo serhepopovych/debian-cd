@@ -57,6 +57,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Exclude cdebconf from CD1s to prevent both it and debconf being pulled in
     by | dependencies. cdebconf isn't usable right now and has a large
     dependency chain.
+  * Exclude inetutils-inetd and openbsd-inetd from CD1 for similar resons.
 
   [ Colin Watson ]
   * generate_di+k_list: Add hfsutils for powerpc; it's no longer in base but
@@ -66,7 +67,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * For full CD/DVD builds, check that we have an "extra" override
     containing task info. If not, use the sid override instead.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 11 Nov 2005 14:25:43 -0500
+ -- Joey Hess <joeyh@debian.org>  Sun, 13 Nov 2005 15:49:20 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
