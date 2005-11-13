@@ -43,6 +43,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     situations with a non-official Debian mirror. Neccessary since the new
     version of debootstrap has dependency resolution enabled by default.
   * Don't chmod amiboot if it doesn't exist.
+  * Try forcing debconf onto CDs to attempt to get debian-cd not to include
+    both it and cdebconf for | dependencies. cdebconf isn't usable right now
+    and has a large dependency chain.
 
   [ Sven Luther ]
   * Fixed powerpc cd builds, added powerpc64 kernels to etch/sid, dropped
