@@ -70,8 +70,8 @@ ifndef JIGDOSCRIPT
 JIGDOSCRIPT=$(BASEDIR)/tools/jigdo_header
 endif
 
+# Netinst/businesscard CD have different udeb_include and udeb_exclude files
 ifndef UDEB_INCLUDE
-# Netinst/businesscard CD have different udeb_include files
 ifeq ($(INSTALLER_CD),1)
 UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_businesscard_udeb_include
 endif
@@ -79,11 +79,20 @@ ifeq ($(INSTALLER_CD),2)
 UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_netinst_udeb_include
 endif
 endif
-# Default udeb_include files.
 ifndef UDEB_INCLUDE
 UDEB_INCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/$(ARCH)_udeb_include
 endif
-
+ifndef UDEB_EXCLUDE
+ifeq ($(INSTALLER_CD),1)
+UDEB_EXCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/businesscard_udeb_exclude
+endif
+ifeq ($(INSTALLER_CD),2)
+UDEB_EXCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/netinst_udeb_exclude
+endif
+endif
+ifndef UDEB_EXCLUDE
+UDEB_EXCLUDE=$(BASEDIR)/data/$(DI_CODENAME)/udeb_exclude
+endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection

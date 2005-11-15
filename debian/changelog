@@ -67,7 +67,16 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * For full CD/DVD builds, check that we have an "extra" override
     containing task info. If not, use the sid override instead.
 
- -- Joey Hess <joeyh@debian.org>  Sun, 13 Nov 2005 15:49:20 -0500
+  [ Joey Hess ]
+  * Add default UDEB_EXCLUDE files that differ for businesscard, netinst, and
+    full CDs.
+  * Make the full CD have apt-mirror-setup in its udeb_exclude file, to avoid
+    that component being installed to satisfy apt-setup's dependency on it (I
+    hope), so that the user is not unncessarily asked for a mirror during a
+    full CD install, but is still asked for one during installs from the
+    smaller CDs.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 14 Nov 2005 19:26:31 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
