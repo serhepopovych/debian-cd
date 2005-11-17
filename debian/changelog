@@ -75,8 +75,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     hope), so that the user is not unncessarily asked for a mirror during a
     full CD install, but is still asked for one during installs from the
     smaller CDs.
+  * Add initramfs-tools to generate_d-i+k_list
 
- -- Joey Hess <joeyh@debian.org>  Mon, 14 Nov 2005 19:26:31 -0500
+ -- Joey Hess <joeyh@debian.org>  Wed, 16 Nov 2005 18:32:19 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 

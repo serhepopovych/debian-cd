@@ -42,6 +42,7 @@ reiserfsprogs
 libfribidi0
 localization-config
 acpid
+initramfs-tools
 
 #ifdef ARCH_i386
 discover
