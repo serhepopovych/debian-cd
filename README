@@ -25,8 +25,6 @@ Software:
 - the perl Digest::MD5 module
 - lynx (for text version of README.html) and todos from sysutils
   to convert docs to DOS format (although you can rip that out, too)
-- if you want to generate .list files: tempfile, as included in debianutils
-  >= 1.6 (not absolutely necessary, workaround described in tools/pi-makelist)
 - if you want to generate jigdo files: jigdo-file (see below)
 Other:
 - lots of free space on your disks
@@ -273,21 +271,6 @@ instead of MIRROR when looking for local packages.
 
 Additional targets
 ==================
-
-Pseudo Image Kit
-----------------
-Those of you who will make images available to people for download may
-consider using the Pseudo Image Kit. See http://www.debian.org/CD/pik/
-for more information on the PIK.
-
-You can launch "make pi-makelist" in order to generate
-the *.list files for the images you've just generated.
-
-The tools/pi-makelist script needs the isoinfo binary. You can get the
-sources from http://www.fokus.gmd.de/research/cc/glone/employees/joerg.schilling/private/cdrecord.html
-
-Alternatively (and certainly simpler for people using Debian system), the
-isoinfo binary is in the mkisofs package (since Debian potato at least).
 
 Jigdo
 -----
