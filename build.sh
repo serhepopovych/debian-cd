@@ -21,7 +21,8 @@ if [ "$SKIPMIRRORCHECK" = "yes" ]; then
     echo " ... WARNING: skipping mirror check"
 else
     echo " ... checking your mirror"
-    make mirrorcheck
+    make mirrorcheck-binary
+    make mirrorcheck-source
     if [ $? -gt 0 ]; then
 	    echo "ERROR: Your mirror has a problem, please correct it." >&2
 	    exit 1

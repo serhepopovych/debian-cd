@@ -15,7 +15,10 @@ do
 	make ${CODENAME}_status
 	echo " ... checking your mirror"
 	if [ "$SKIPMIRRORCHECK" != "yes" ] ; then 
-		make mirrorcheck
+		make mirrorcheck-binary
+        if [ "$ARCH" = "i386" ]; then
+            make mirrorcheck-source
+        fi
 	else
 		echo "WARNING: skipping mirrorcheck"
 	fi
@@ -58,15 +61,11 @@ do
 		make bin-official_images
 		echo Generating MD5Sums of the images
 		make imagesums
-		echo Generating list files for images
-		make pi-makelist
 
 		export OUT="$TMP_OUT/src"; mkdir -p $OUT
 		make src-official_images
 		echo Generating MD5Sums of the images
 		make imagesums
-		echo Generating list files for images
-		make pi-makelist
 	else
 		export OUT=$TMP_OUT/$ARCH; mkdir -p $OUT
 		make bin-official_images
