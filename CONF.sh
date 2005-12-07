@@ -24,11 +24,11 @@ unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
 unset DOJIGDO           || true
-unset JIGDOCMD          || true
 unset JIGDOTEMPLATEURL  || true
 unset JIGDOFALLBACKURLS || true
 unset JIGDOINCLUDEURLS  || true
 unset JIGDOSCRIPT       || true
+unset JIGDO_OPTS        || true
 unset DEFBINSIZE        || true
 unset DEFSRCSIZE        || true
 unset FASTSUMS          || true
@@ -241,6 +241,31 @@ export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigd
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
+
+# Specify files and directories to *exclude* from jigdo processing. These
+# files on each CD are expected to be different to those on the mirror, or
+# are often subject to change. Any files matching entries in this list will
+# simply be placed straight into the template file.
+export JIGDO_EXCLUDE="'README*' /doc/ /md5sum.txt /.disk/ /pics/ 'Release*' 'Packages*' 'Sources*'"
+
+# Specify files that MUST match entries in the externally-supplied
+# md5-list. If they do not, the CD build process will fail; something
+# must have been corrupted. Replaces the old mirrorcheck code.
+export JIGDO_INCLUDE="/pool/"
+
+# Specify the minimum file size to consider for jigdo processing. Any files
+# smaller than this will simply be placed straight into the template file.
+export JIGDO_OPTS="-jigdo-min-file-size 0"
+
+for EXCL in $JIGDO_EXCLUDE
+do
+    JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
+done
+
+for INCL in $JIGDO_INCLUDE
+do
+    JIGDO_OPTS="$JIGDO_OPTS -jigdo-force-md5 $INCL"
+done
 
 # Where to find the boot disks
 #export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies

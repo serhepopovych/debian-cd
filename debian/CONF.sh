@@ -24,11 +24,11 @@ unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
 unset DOJIGDO           || true
-unset JIGDOCMD          || true
 unset JIGDOTEMPLATEURL  || true
 unset JIGDOFALLBACKURLS || true
 unset JIGDOINCLUDEURLS  || true
 unset JIGDOSCRIPT       || true
+unset JIGDO_OPTS        || true
 unset DEFBINSIZE        || true
 unset DEFSRCSIZE        || true
 unset FASTSUMS          || true
@@ -40,16 +40,17 @@ unset UDEB_EXCLUDE      || true
 unset BASE_INCLUDE      || true
 unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
-unset DI_CODENAME       || true
 unset MAXCDS            || true
 unset SPLASHPNG         || true
+unset OMIT_MANUAL	    || true
+unset OMIT_RELEASE_NOTES || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building sarge cd set ...
-export CODENAME=sarge
+# Building etch cd set ...
+export CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
@@ -241,6 +242,31 @@ export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
 export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
 
+# Specify files and directories to *exclude* from jigdo processing. These
+# files on each CD are expected to be different to those on the mirror, or
+# are often subject to change. Any files matching entries in this list will
+# simply be placed straight into the template file.
+export JIGDO_EXCLUDE="'README*' /doc/ /md5sum.txt /.disk/ /pics/ 'Release*' 'Packages*' 'Sources*'"
+
+# Specify files that MUST match entries in the externally-supplied
+# md5-list. If they do not, the CD build process will fail; something
+# must have been corrupted. Replaces the old mirrorcheck code.
+export JIGDO_INCLUDE="/pool/"
+
+# Specify the minimum file size to consider for jigdo processing. Any files
+# smaller than this will simply be placed straight into the template file.
+export JIGDO_OPTS="-jigdo-min-file-size 0"
+
+for EXCL in $JIGDO_EXCLUDE
+do
+    JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
+done
+
+for INCL in $JIGDO_INCLUDE
+do
+    JIGDO_OPTS="$JIGDO_OPTS -jigdo-force-md5 $INCL"
+done
+
 # Where to find the boot disks
 #export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies
 
@@ -283,3 +309,14 @@ export PUBLISH_PATH="/home/jigdo-area/"
 # in the Makefile. Use bin-official_images to build only binary CDs. The
 # default, official_images, builds everything.
 #IMAGETARGET=official_images
+
+# Set to 1 to save space by omitting the installation manual. 
+# If so the README will link to the manual on the web site.
+#export OMIT_MANUAL=1
+
+# Set to 1 to save space by omitting the release notes
+# If so we will link to them on the web site.
+export OMIT_RELEASE_NOTES=0
+
+# Set this to override the defaul location
+#export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
