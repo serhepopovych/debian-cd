@@ -1,0 +1,94 @@
+#!/bin/sh
+#
+# grab_md5
+# (c) 2004 Steve McIntyre <steve@einval.com>
+#
+# GPL v2
+#
+# Parse Packages and Sources files out of a mirror and pre-process
+# them into a single list ready for mkisofs to check later
+
+MIRROR=$1
+ARCH=$2
+SUITE=$3
+OUT=$4
+
+case $ARCH in
+    source)
+        FILES=`find $MIRROR/dists/$SUITE/ -name Sources.gz`
+        echo -e "Using MD5 sums from Sources files:\n$FILES"
+        zcat -f $FILES | awk -v MIRROR=$MIRROR '
+            /^Directory:/      {
+                                DIR = $2
+                                next
+                            }
+            /^Files:/       {
+                                in_files = 1
+                                next
+                            }
+            /^ /            {
+                                if (in_files) { 
+                                    gsub("^ ", "", $0)
+                                    MD5 = $1
+                                                                       SIZE = $2
+                                    FILE = $3
+                                    printf("%s  %12s  %s/%s/%s\n", MD5, SIZE, MIRROR, DIR, FILE);
+                                }
+                            }
+            /.*/            {
+                                if (!length($0)) {
+                                    in_files = 0
+                                    next
+                                }
+                            }' | sort | uniq >> $OUT
+        ;;
+    alpha|amd64|arm|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
+        FILES=`find $MIRROR/dists/$SUITE/ -name Packages -o -name Packages.gz | grep binary-$ARCH`
+        echo -e "Using MD5 sums from Packages files:\n$FILES"
+        zcat -f $FILES | awk -v MIRROR=$MIRROR '
+            /^Filename:/    {
+                                FILE = $2
+                            }
+            /^Size:/        {
+                                SIZE = $2
+                            }
+            /^MD5sum:/      {
+                                MD5 = $2
+                                printf("%s  %12d  %s/%s\n", MD5, SIZE, MIRROR, FILE)
+                            }' | sort | uniq >> $OUT
+        case $SUITE in
+            woody)
+                # Use the old boot-floppies images
+                FILE=$MIRROR/dists/$SUITE/main/disks-$ARCH/current/md5sum.txt
+                echo "Using MD5 sums from boot-floppies: $FILE"
+                LOC=dists/$SUITE/main/disks-$ARCH/current
+                for ENTRY in `cat $FILE | sed 's/  /:/g'`
+                do
+                    PATH=`echo $ENTRY | /bin/sed "s?^.*:\./?$MIRROR/$LOC/?g"`
+                    MD5=`echo $ENTRY | /bin/sed 's/:.*$//g'`
+                    SIZE=`/usr/bin/stat -c %s $PATH`
+                    printf '%s  %12.12s  %s\n' $MD5 $SIZE $PATH
+                done | sort | uniq >> $OUT
+                ;;
+            *)
+                # Use the new D-I images
+                FILE=$MIRROR/dists/$SUITE/main/installer-$ARCH/current/images/MD5SUMS
+                echo "Using MD5 sums from d-i: $FILE"
+                LOC=dists/$SUITE/main/installer-$ARCH/current/images
+                for ENTRY in `cat $FILE | sed 's/  /:/g'`
+                do
+                    PATH=`echo $ENTRY | /bin/sed "s?^.*:\./?$MIRROR/$LOC/?g"`
+                    MD5=`echo $ENTRY | /bin/sed 's/:.*$//g'`
+                    SIZE=`/usr/bin/stat -c %s $PATH`
+                    printf '%s  %12.12s  %s\n' $MD5 $SIZE $PATH
+                done | sort | uniq >> $OUT
+                ;;
+        esac
+        ;;             
+    *)
+        echo "Unknown arch/source $ARCH!"
+        exit 1
+        ;;
+esac
+
+exit 0
