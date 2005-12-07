@@ -95,7 +95,7 @@ EOF
     #cp -lf floppy-initrd.gz $CDDIR/install
 
     # write final lines to mkisofs_opts
-    echo -n "boot$N " >> $N.mkisofs_opts
+    echo -n "-alpha-boot boot/bootlx boot$N " >> $N.mkisofs_opts
 
 else
     echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts

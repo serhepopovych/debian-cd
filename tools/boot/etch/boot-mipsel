@@ -68,4 +68,6 @@ cp "$DI_DIR"/vmlinux-*-r4k-kn04 "$CDROOT/boot/vmlinux-r4k-kn04"
 
 install_languages $CDROOT
 
+echo -n "-mipsel-boot boot/delo.2nd" >> $1.mkisofs_opts
+
 exit 0

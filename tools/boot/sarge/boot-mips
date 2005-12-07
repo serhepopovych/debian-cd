@@ -45,4 +45,7 @@ install -m 644 -D "$DI_DIR"/r5k-ip22/cdrom-boot.img "$CDROOT"/install/r5k-ip22-b
 
 install_languages $CDROOT
 
+echo " -mips-boot install/r4k-ip22-boot.img" >> $1.mkisofs_opts
+echo " -mips-boot install/r5k-ip22-boot.img" >> $1.mkisofs_opts
+
 exit 0
