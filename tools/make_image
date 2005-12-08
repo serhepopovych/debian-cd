@@ -1,0 +1,90 @@
+#!/bin/sh
+#
+# Debian-cd helper script for making ISO / jigdo images
+#
+# Split out from the top-level Makefile SAM 2005/12/08
+
+set -e
+
+DIR=$1
+ARCH=$2
+OUT=$3
+DOJIGDO=$4
+DEBVERSION=$5
+MIRROR=$6
+MKISOFS=$7
+MKISOFS_OPTS=$8
+JIGDO_OPTS=$9
+JIGDO_CLEANUP=$10
+
+if [ "$CD"x = ""x ] ; then
+	echo "Generating the $ARCH iso/jigdo images ..."
+	FILES=$DIR/*.volid
+else
+	echo "Generating $ARCH iso/jigdo image number $CD ..."
+	FILES=$DIR/$CD.volid
+fi
+
+for file in $FILES
+do
+	dir=${file%%.volid}
+	n=${dir##$DIR/}
+	num=$n
+	dir=$DIR/CD$n
+
+	cd $dir/..
+
+	opts=`cat $DIR/$n.mkisofs_opts`
+	volid=`cat $DIR/$n.volid`
+	relname=`echo $DEBVERSION | sed -e 's/[. ]//g'`
+
+	if [ $ARCH = "source" ] ; then
+		OUTFILE="debian-$relname-$ARCH-$n"
+	else
+		OUTFILE="debian-$relname-$ARCH-binary-$n"
+	fi
+
+	# Clean up any old files
+	rm -f $OUT/$OUTFILE.raw $OUT/$OUTFILE.jigdo $OUT/$OUTFILE.template
+
+	# Actually make the ISO/jigdo images. Long command lines
+	# here... :-(
+	case $DOJIGDO in
+	
+		0) # No jigdo files, just straight ISO
+			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts CD$n
+			;;
+
+
+		1) # jigdo files _and_ ISO
+			$MKISOFS $MKISOFS_OPTS -V "$volid" \
+				-o $OUT/$OUTFILE.raw \
+				-jigdo-jigdo $OUT/$OUTFILE.jigdo
+				-jigdo-template $OUT/$OUTFILE.template
+				-jigdo-map Debian=$MIRROR/ \
+				-jigdo-exclude boot$n \
+				-md5-list $DIR/md5-check \
+				$JIGDO_OPTS $opts CD$n
+			;;
+
+		2) # jigdo only, no ISO
+			$MKISOFS $MKISOFS_OPTS -V "$volid" \
+				-o /dev/null -v \
+				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
+				-jigdo-template $OUT/$OUTFILE.template \
+				-jigdo-map Debian=$MIRROR/ \
+				-jigdo-exclude boot$n \
+				-md5-list $DIR/md5-check \
+				$JIGDO_OPTS $opts CD$n
+			;;
+	esac
+
+	# If we've made jigdo files, tweak them with extra info now
+	if [ "$DOJIGDO" != "0" ] ; then
+		$JIGDO_CLEANUP $OUT/$OUTFILE.jigdo \
+			$OUTFILE.iso $DIR/CD$n \
+			"`echo "$JIGDOTEMPLATEURL" | sed -e 's|%ARCH%|$ARCH|g'`$OUTFILE.template" \
+			$BINDISKINFOND \
+			$JIGDOFALLBACKURLS
+	fi
+done

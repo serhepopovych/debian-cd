@@ -111,6 +111,7 @@ fastsums=$(BASEDIR)/tools/fast_sums
 jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
 grab_md5=$(BASEDIR)/tools/grab_md5
 dedicated-src=$(BASEDIR)/tools/dedicated_source
+make_image=$(BASEDIR)/tools/make_image
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
 ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
@@ -874,117 +875,18 @@ images: bin-images src-images
 #    2    jigdo, cleanup_jigdo
 #
 bin-images: ok bin-md5list $(OUT)
-	@echo "Generating the binary iso/jigdo images ..."
-	$(Q)set -e; \
-	 for file in $(BDIR)/*.packages; do \
-		dir=$${file%%.packages}; \
-		n=$${dir##$(BDIR)/}; \
-		num=$$n; \
-		dir=$(BDIR)/CD$$n; \
-		cd $$dir/..; \
-		opts=`cat $(BDIR)/$$n.mkisofs_opts`; \
-		volid=`cat $(BDIR)/$$n.volid`; \
-		relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
-		rm -f $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw; \
-		if [ "$(DOJIGDO)" = "0" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-				-o $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw $$opts CD$$n; \
-		elif [ "$(DOJIGDO)" = "1" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-			-o $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.raw \
-			-jigdo-jigdo $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.jigdo \
-			-jigdo-template $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.template \
-			-jigdo-map Debian=$(MIRROR)/ \
-			-jigdo-exclude boot$$n \
-			-md5-list $(BDIR)/md5-check \
-			$(JIGDO_OPTS) $$opts CD$$n; \
-		elif [ "$(DOJIGDO)" = "2" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-				-o /dev/null -v \
-				-jigdo-jigdo $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.jigdo \
-				-jigdo-template $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.template \
-				-jigdo-map Debian=$(MIRROR)/ \
-				-jigdo-exclude boot$$n \
-				-md5-list $(BDIR)/md5-check \
-				$(JIGDO_OPTS) $$opts CD$$n; \
-		fi; \
-		if [ "$(DOJIGDO)" != "0" ]; then \
-			$(jigdo_cleanup) $(OUT)/debian-$$relname-$(ARCH)-binary-$$n.jigdo \
-			debian-$$relname-$(ARCH)-binary-$$n.iso $(BDIR)/CD$$n \
-			"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|$(ARCH)|g'`debian-$$relname-$(ARCH)-binary-$$n.template" \
-			$(BINDISKINFOND) \
-			$(JIGDOFALLBACKURLS) ; \
-		fi; \
-	done
+	$(make_image) $(BDIR) $(ARCH) $(OUT) $(DOJIGDO) $(DEBVERSION) $(MIRROR) $(MKISOFS) $(MKISOFS_OPTS) $(JIGDO_OPTS) $(JIGDO_CLEANUP)
 
 src-images: ok src-md5list $(OUT)
-	@echo "Generating the source iso/jigdo images ..."
-	$(Q)set -e; \
-	 for file in $(SDIR)/*.sources; do \
-		dir=$${file%%.sources}; \
-		n=$${dir##$(SDIR)/}; \
-		num=$$n; \
-		dir=$(SDIR)/CD$$n; \
-		cd $$dir/..; \
-		opts=`cat $(SDIR)/$$n.mkisofs_opts`; \
-		volid=`cat $(SDIR)/$$n.volid`; \
-		relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
-		rm -f $(OUT)/debian-$$relname-source-$$n.raw; \
-		if [ "$(DOJIGDO)" = "0" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-				-o $(OUT)/debian-$$relname-source-$$n.raw $$opts CD$$n ; \
-		elif [ "$(DOJIGDO)" = "1" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-				-o $(OUT)/debian-$$relname-source-$$n.raw \
-				-jigdo-jigdo $(OUT)/debian-$$relname-source-$$n.jigdo \
-				-jigdo-template $(OUT)/debian-$$relname-source-$$n.template \
-				-jigdo-map Debian=$(MIRROR)/ \
-				-md5-list $(SDIR)/md5-check \
-				$(JIGDO_OPTS) $$opts CD$$n ; \
-		elif [ "$(DOJIGDO)" = "2" ]; then \
-			$(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-				-o /dev/null \
-				-jigdo-jigdo $(OUT)/debian-$$relname-source-$$n.jigdo \
-				-jigdo-template $(OUT)/debian-$$relname-source-$$n.template \
-				-jigdo-map Debian=$(MIRROR)/ \
-				-md5-list $(SDIR)/md5-check \
-				$(JIGDO_OPTS) $$opts CD$$n ; \
-		fi; \
-		if [ "$(DOJIGDO)" != "0" ]; then \
-			$(jigdo_cleanup) $(OUT)/debian-$$relname-source-$$n.jigdo \
-			debian-$$relname-source-$$n.iso $(SDIR)/CD$$n \
-				"`echo "$(JIGDOTEMPLATEURL)" | sed -e 's|%ARCH%|source|g'`debian-$$relname-source-$$n.template" \
-				$(SRCDISKINFOND) \
-				$(JIGDOFALLBACKURLS) ; \
-		fi; \
-	done
+	$(make_image) $(SDIR) source $(OUT) $(DOJIGDO) $(DEBVERSION) $(MIRROR) $(MKISOFS) $(MKISOFS_OPTS) $(JIGDO_OPTS) $(JIGDO_CLEANUP)
+
+check-number-given:
+	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 
 # Generate only one image number $(CD)
 image: bin-image
-bin-image: ok bin-md5list $(OUT)
-	@echo "Generating the binary iso image n°$(CD) ..."
-	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
-	set -e; cd $(BDIR); opts=`cat $(CD).mkisofs_opts`; \
-	 volid=`cat $(CD).volid`; \
-	 relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
-	 rm -f $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw; \
-	 $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw $$opts CD$(CD); \
-         if [ -f $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) ]; then \
-                $(BASEDIR)/tools/boot/$(DI_CODENAME)/post-boot-$(ARCH) $(CD) $(BDIR)/CD$(CD) \
-                 $(OUT)/debian-$$relname-$(ARCH)-binary-$(CD).raw; \
-         fi
-
-src-image: ok src-md5list $(OUT)
-	@echo "Generating the source iso image n°$(CD) ..."
-	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
-	set -e; cd $(SDIR); opts=`cat $(CD).mkisofs_opts`; \
-	 volid=`cat $(CD).volid`; \
-	 relname=`echo $(DEBVERSION) | sed -e 's/[. ]//g'`; \
-	 rm -f $(OUT)/debian-$$relname-source-$(CD).raw; \
-         $(MKISOFS) $(MKISOFS_OPTS) -V "$$volid" \
-	  -o $(OUT)/debian-$$relname-source-$(CD).raw $$opts CD$(CD)
-
+bin-image: check-number-given bin-images
+src-image: check-number-given src-images
 
 #Calculate the md5sums for the images (if available), or get from templates
 imagesums:

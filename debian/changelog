@@ -80,8 +80,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Merged in MAJOR changes for jigdo creation - the long-separated JTE
     patch.
+  * Split out the actual ISO/jigdo creation code from the Makefile into
+	tools/make_image
 
- -- Joey Hess <joeyh@debian.org>  Wed,  7 Dec 2005 00:26:04 +0000
+ -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
 debian-cd (2.2.23) unstable; urgency=low
 
