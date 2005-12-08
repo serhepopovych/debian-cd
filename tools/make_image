@@ -15,7 +15,8 @@ MIRROR=$6
 MKISOFS=$7
 MKISOFS_OPTS=$8
 JIGDO_OPTS=$9
-JIGDO_CLEANUP=$10
+shift
+JIGDO_CLEANUP=$9
 
 if [ "$CD"x = ""x ] ; then
 	echo "Generating the $ARCH iso/jigdo images ..."
@@ -69,7 +70,7 @@ do
 
 		2) # jigdo only, no ISO
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
-				-o /dev/null -v \
+				-o /dev/null \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
 				-jigdo-map Debian=$MIRROR/ \

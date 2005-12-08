@@ -875,10 +875,10 @@ images: bin-images src-images
 #    2    jigdo, cleanup_jigdo
 #
 bin-images: ok bin-md5list $(OUT)
-	$(make_image) $(BDIR) $(ARCH) $(OUT) $(DOJIGDO) $(DEBVERSION) $(MIRROR) $(MKISOFS) $(MKISOFS_OPTS) $(JIGDO_OPTS) $(JIGDO_CLEANUP)
+	$(make_image) "$(BDIR)" "$(ARCH)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 src-images: ok src-md5list $(OUT)
-	$(make_image) $(SDIR) source $(OUT) $(DOJIGDO) $(DEBVERSION) $(MIRROR) $(MKISOFS) $(MKISOFS_OPTS) $(JIGDO_OPTS) $(JIGDO_CLEANUP)
+	$(make_image) "$(SDIR)" source "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
