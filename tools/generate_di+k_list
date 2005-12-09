@@ -43,6 +43,8 @@ libfribidi0
 localization-config
 acpid
 initramfs-tools
+ppp
+pppoeconf
 
 #ifdef ARCH_i386
 discover

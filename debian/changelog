@@ -66,7 +66,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * For full CD/DVD builds, check that we have an "extra" override
     containing task info. If not, use the sid override instead.
-	
+
   [ Joey Hess ]
   * Add default UDEB_EXCLUDE files that differ for businesscard, netinst, and
     full CDs.
@@ -83,6 +83,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Split out the actual ISO/jigdo creation code from the Makefile into
 	tools/make_image
 
+  [ Joey Hess ]
+  * Explicitly list ppp and pppoeconf in generate_d-i+k_list, since they are
+    not installed by debootstrap and we do want them on netinst CDs.
+ 
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
 debian-cd (2.2.23) unstable; urgency=low
