@@ -86,6 +86,12 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Explicitly list ppp and pppoeconf in generate_d-i+k_list, since they are
     not installed by debootstrap and we do want them on netinst CDs.
+
+  [ Steve McIntyre ]
+  * Split out the code that copies debs into the temporary trees and
+    creates Packages files from the Makefile into tools/add_debs
+  * Split out the code that copies sources into the temporary trees and
+    creates Sources files from the Makefile into tools/add_source_packages
  
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 

@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# add_source_packages
+#
+# Simple helper script for debian-cd
+#
+# Split out of the top-level Makefile by SAM 2005/12/10
+#
+# 1. Add source files into each CD root
+#
+# 2. Create Sources files within each CD root
+
+set -e
+
+SDIR=$1
+ADD_FILES=$2
+MIRROR=$3
+LOCAL=$4
+LOCALDEBS=$5
+SCANSOURCES=$6
+
+echo "Adding the selected sources to each CD."
+for i in $SDIR/*.sources
+do
+	dir=${i%%.sources}
+	n=${dir##$SDIR/}
+	dir=$SDIR/CD$n
+	echo -n "$n ... "
+	echo -n "main ... "
+	grep -vE "(non-US/|/local/)" $i > $i.main || true
+	if [ -s $i.main ] ; then
+		cat $i.main | xargs $ADD_FILES $dir $MIRROR
+	fi
+
+	if [ -n "$LOCAL" ] ; then
+		echo -n "local ... "
+		grep "/local/" $i > $i.local || true
+		if [ -s $i.local ] ; then
+			if [ -n "$LOCALDEBS" ] ; then
+				cat $i.local | xargs $ADD_FILES	$dir $LOCALDEBS
+		    else
+				cat $i.local | xargs $ADD_FILES $dir $MIRROR
+			fi
+	    fi
+	fi
+
+	if [ -n "$NONUS" ] ; then
+		echo -n "non-US ... "
+		grep "non-US/" $i > $i.nonus || true
+		if [ -s $i.nonus ] ; then
+			cat $i.nonus | xargs $ADD_FILES $dir $NONUS
+		fi
+	fi
+
+	$SCANSOURCES $dir
+	echo "done."
+done

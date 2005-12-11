@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-# Main Makefile for YACS
+# Main Makefile for debian-cd
 #
 # Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
 # See the README file for the license
@@ -112,6 +112,8 @@ jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
 grab_md5=$(BASEDIR)/tools/grab_md5
 dedicated-src=$(BASEDIR)/tools/dedicated_source
 make_image=$(BASEDIR)/tools/make_image
+add_debs=$(BASEDIR)/tools/add_debs
+add_source_packages=$(BASEDIR)/tools/add_source_packages
 
 BDIR=$(TDIR)/$(CODENAME)-$(ARCH)
 ADIR=$(APTTMP)/$(CODENAME)-$(ARCH)
@@ -496,130 +498,12 @@ $(SDIR)/CD1/.disk/info:
 # Adding the deb files to the images
 packages: bin-infos bin-list $(BDIR)/packages-stamp
 $(BDIR)/packages-stamp:
-	@echo "Current disk usage on the binary CDs (before the debs are added) :"
-	@cd $(BDIR) && du -sm CD[0123456789]*
-	@echo "Adding the selected packages to each CD :"
-	@# Check that all packages required by debootstrap are included
-	@# and create .disk/base_installable if yes
-	@# Also create .disk/base_components
-	mkdir -p $(TDIR)
-	$(Q)for DISK in $(FIRSTDISKS); do \
-	    DISK=$${DISK##CD}; \
-	    ok=yes; \
-	    for p in `debootstrap --arch $(ARCH) --print-debs $(CODENAME) $(TDIR)/debootstrap.tmp file:$(MIRROR)`; do \
-		    if ! grep -q ^$$p$$ $(BDIR)/$$DISK.packages; then \
-			if [ -n "$(BASE_EXCLUDE)" ] && grep -q ^$$p$$ $(BASE_EXCLUDE); then \
-				echo "Missing debootstrap-required $$p but included in $(BASE_EXCLUDE)"; \
-				continue; \
-			fi; \
-		        ok=no; \
-		        echo "Missing debootstrap-required $$p"; \
-		    fi; \
-	    done; \
-	    rm -rf $(TDIR)/debootstrap.tmp; \
-	    if [ "$$ok" = "yes" ]; then \
-		    echo "CD$$DISK contains all packages needed by debootstrap"; \
-		    touch $(BDIR)/CD$$DISK/.disk/base_installable; \
-	    else \
-		    echo "CD$$DISK missing some packages needed by debootstrap"; \
-	    fi; \
-	    echo 'main' > $(BDIR)/CD$$DISK/.disk/base_components; \
-	    if [ -n "$(LOCAL)" ]; then \
-	        echo 'local' >> $(BDIR)/CD$$DISK/.disk/base_components; \
-	    fi; \
-	    if [ -n "$(UDEB_INCLUDE)" ] ; then \
-		if [ -r "$(UDEB_INCLUDE)" ] ; then \
-		    cp -af "$(UDEB_INCLUDE)" \
-		        "$(BDIR)/CD$$DISK/.disk/udeb_include"; \
-		else \
-		    echo "ERROR: Unable to read UDEB_INCLUDE file $(UDEB_INCLUDE)"; \
-		fi; \
-	    fi; \
-	    if [ -n "$(UDEB_EXCLUDE)" ] ; then \
-		if [ -r "$(UDEB_EXCLUDE)" ] ; then \
-		    cp -af "$(UDEB_EXCLUDE)" \
-		        "$(BDIR)/CD$$DISK/.disk/udeb_exclude"; \
-		else \
-		    echo "ERROR: Unable to read UDEB_EXCLUDE file $(UDEB_EXCLUDE)"; \
-		fi; \
-	    fi; \
-	    if [ -n "$(BASE_INCLUDE)" ] ; then \
-		if [ -r "$(BASE_INCLUDE)" ] ; then \
-		    cp -af "$(BASE_INCLUDE)" \
-		        "$(BDIR)/CD$$DISK/.disk/base_include"; \
-		else \
-		    echo "ERROR: Unable to read BASE_INCLUDE file $(BASE_INCLUDE)"; \
-		fi; \
-	    fi; \
-	    if [ -n "$(BASE_EXCLUDE)" ] ; then \
-		if [ -r "$(BASE_EXCLUDE)" ] ; then \
-		    cp -af $(BASE_EXCLUDE) \
-			$(BDIR)/CD$$DISK/.disk/base_exclude; \
-		else \
-		    echo "ERROR: Unable to read BASE_EXCLUDE file $(BASE_EXCLUDE)"; \
-		fi; \
-	    fi; \
-	done
-	$(Q)set -e; \
-	 for i in $(BDIR)/*.packages; do \
-		dir=$${i%%.packages}; \
-		n=$${dir##$(BDIR)/}; \
-		dir=$(BDIR)/CD$$n; \
-		echo "$$n ... "; \
-	  	cat $$i | xargs -n 200 -r $(add_packages) $$dir; \
-		if [ -x "$(HOOK)" ]; then \
-		   cd $(BDIR) && $(HOOK) $$n before-scanpackages; \
-		fi; \
-		$(scanpackages) scan $$dir; \
-		echo "done."; \
-	done
-	@#Now install the Packages and Packages.cd files
-	$(Q)set -e; \
-	 for i in $(BDIR)/*.packages; do \
-		dir=$${i%%.packages}; \
-		dir=$${dir##$(BDIR)/}; \
-		dir=$(BDIR)/CD$$dir; \
-		$(scanpackages) install $$dir; \
-	done
+	$(Q)$(add_debs) "$(BDIR)" "$(TDIR)" "$(FIRSTDISKS)" "$(ARCH)" "$(BASE_INCLUDE)" "$(BASE_EXCLUDE)" "$(UDEB_INCLUDE)" "$(UDEB_EXCLUDE)" "$(add_packages)" "$(scanpackages)"
 	$(Q)touch $(BDIR)/packages-stamp
 
 sources: src-infos src-list $(SDIR)/sources-stamp
 $(SDIR)/sources-stamp:
-	@echo "Adding the selected sources to each CD."
-	$(Q)set -e; \
-	 for i in $(SDIR)/*.sources; do \
-		dir=$${i%%.sources}; \
-		n=$${dir##$(SDIR)/}; \
-		dir=$(SDIR)/CD$$n; \
-		echo -n "$$n ... "; \
-		echo -n "main ... "; \
-		grep -vE "(non-US/|/local/)" $$i > $$i.main || true ; \
-		if [ -s $$i.main ] ; then \
-			cat $$i.main | xargs $(add_files) $$dir $(MIRROR); \
-		fi ; \
-		if [ -n "$(LOCAL)" ]; then \
-			echo -n "local ... "; \
-			grep "/local/" $$i > $$i.local || true ; \
-			if [ -s $$i.local ] ; then \
-				if [ -n "$(LOCALDEBS)" ] ; then \
-					cat $$i.local | xargs $(add_files) \
-						$$dir $(LOCALDEBS); \
-			    else \
-					cat $$i.local | xargs $(add_files) \
-						$$dir $(MIRROR); \
-				fi; \
-		    fi; \
-		fi; \
-		if [ -n "$(NONUS)" ]; then \
-			echo -n "non-US ... "; \
-			grep "non-US/" $$i > $$i.nonus || true ; \
-			if [ -s $$i.nonus ] ; then \
-				cat $$i.nonus | xargs $(add_files) $$dir $(NONUS); \
-			fi; \
-		fi; \
-		$(scansources) $$dir; \
-		echo "done."; \
-	done
+	$(Q)$(add_source_packages) "$(SDIR)" "$(add_files)" "$(MIRROR)" "$(LOCAL)" "$(LOCALDEBS)" "$(scansources)"
 	$(Q)touch $(SDIR)/sources-stamp
 
 ## BOOT & DOC & INSTALL ##
@@ -878,7 +762,7 @@ bin-images: ok bin-md5list $(OUT)
 	$(make_image) "$(BDIR)" "$(ARCH)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 src-images: ok src-md5list $(OUT)
-	$(make_image) "$(SDIR)" source "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+	$(make_image) "$(SDIR)" "source" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
