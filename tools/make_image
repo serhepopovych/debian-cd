@@ -53,15 +53,24 @@ do
 	case $DOJIGDO in
 	
 		0) # No jigdo files, just straight ISO
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts CD$n
 			;;
 
 
 		1) # jigdo files _and_ ISO
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
+				-o $OUT/$OUTFILE.raw \
+				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
+				-jigdo-template $OUT/$OUTFILE.template \
+				-jigdo-map Debian=$MIRROR/ \
+				-jigdo-exclude boot$n \
+				-md5-list $DIR/md5-check \
+				$JIGDO_OPTS $opts CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o $OUT/$OUTFILE.raw \
-				-jigdo-jigdo $OUT/$OUTFILE.jigdo
-				-jigdo-template $OUT/$OUTFILE.template
+				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
+				-jigdo-template $OUT/$OUTFILE.template \
 				-jigdo-map Debian=$MIRROR/ \
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
@@ -69,6 +78,14 @@ do
 			;;
 
 		2) # jigdo only, no ISO
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
+				-o /dev/null \
+				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
+				-jigdo-template $OUT/$OUTFILE.template \
+				-jigdo-map Debian=$MIRROR/ \
+				-jigdo-exclude boot$n \
+				-md5-list $DIR/md5-check \
+				$JIGDO_OPTS $opts CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o /dev/null \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
