@@ -48,6 +48,8 @@ do
 	# Clean up any old files
 	rm -f $OUT/$OUTFILE.raw $OUT/$OUTFILE.jigdo $OUT/$OUTFILE.template
 
+	date
+
 	# Actually make the ISO/jigdo images. Long command lines
 	# here... :-(
 	case $DOJIGDO in

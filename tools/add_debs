@@ -92,33 +92,38 @@ do
     fi
     if [ -n "$BASE_EXCLUDE" ] ; then
 		if [ -r "$BASE_EXCLUDE" ] ; then
-			cp -af $BASE_EXCLUDE $BDIR/CD$DISK/.disk/base_exclude
+			cp -af "$BASE_EXCLUDE" "$BDIR/CD$DISK/.disk/base_exclude"
 		else
 			echo "ERROR: Unable to read BASE_EXCLUDE file $BASE_EXCLUDE"
 		fi
 	fi
 done
 
-# Generate the Packages files
+# Copy the debs in place, and generate Packages files as we go
 for i in $BDIR/*.packages
 do
 	dir=${i%%.packages}
 	n=${dir##$BDIR/}
 	dir=$BDIR/CD$n
 	echo "$n ... "
-  	cat $i | xargs -n 200 -r $ADDPACKAGES $dir
+
+	# Copy the deb files in; addpackages also creates the Packages
+	# files as it runs
+  	sort $i | xargs -n 200 -r $ADDPACKAGES $dir
 	if [ -x "$HOOK" ] ; then
 	   cd $BDIR && $HOOK $n before-scanpackages
 	fi
-	$SCANPACKAGES scan $dir
-	echo "done."
-done
 
-# Now install the Packages and Packages.cd files
-for i in $BDIR/*.packages
-do
-	dir=${i%%.packages}
-	dir=${dir##$BDIR/}
-	dir=$BDIR/CD$dir
-	$SCANPACKAGES install $dir
+	# Create the Packages.gz files. Should we also make Packages.bz2?
+	for file in `find $dir -name Packages`
+	do
+		echo "  $file.gz"
+		gzip -9 < $file > $file.gz
+	done
+
+	# Now the Release files; has to be done last, as they contain the
+	# md5sums of the Packages and Packages.gz files
+	$SCANPACKAGES $dir
+
+	echo "done."
 done
