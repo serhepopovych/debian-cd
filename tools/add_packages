@@ -29,12 +29,14 @@ while (defined($_ = <LIST>)) {
 	m/^Architecture: (\S+)/m and $arch = $1;
 	m/^Section: (\S+)/m and $section = $1;
 
-	if ($file =~ /main/) {
+	if ($file =~ /\/main\//) {
 		$dist = "main";
-	} elsif ($file =~ /contrib/) {
+	} elsif ($file =~ /\/contrib\//) {
 		$dist = "contrib";
-	} elsif ($file =~ /non-free/) {
+	} elsif ($file =~ /\/non-free\//) {
 		$dist = "non-free";
+	} elsif ($file =~ /\/local\//) {
+		$dist = "local";
 	}
 
 	$pdir = "$dir/dists/$codename/$dist/binary-$ENV{'ARCH'}";

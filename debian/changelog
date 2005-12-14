@@ -81,7 +81,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Merged in MAJOR changes for jigdo creation - the long-separated JTE
     patch.
   * Split out the actual ISO/jigdo creation code from the Makefile into
-	tools/make_image
+    tools/make_image
 
   [ Joey Hess ]
   * Explicitly list ppp and pppoeconf in generate_d-i+k_list, since they are
@@ -94,20 +94,24 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     creates Sources files from the Makefile into tools/add_source_packages
 
   * MAJOR CHANGE: Stop using apt-ftparchive to generate the Packages
-	files on each CD/DVD; instead grab the details for each package
-	directly from the Packages file in the archive. MUCH MUCH faster,
-	and uses less code too. Affected scripts:
+    files on each CD/DVD; instead grab the details for each package
+    directly from the Packages file in the archive. MUCH MUCH faster,
+    and uses less code too. Affected scripts:
 
     + tools/scanpackages now just generates Release files. argv[1]
       used to be "scan" or "install", but no longer used
 
-	+ tools/add_debs slightly simplified - old code removed
+    + tools/add_debs slightly simplified - old code removed
 
     + tools/add_packages now dumps out Packages file fragments as each
       .deb and .udeb is copied into the temporary trees
 
     + WARNING: Any uses of the "before-scanpackages" hook may now
       break - shout if you're affected.
+
+  * Fix the new Packages file generation to cope with LOCAL packages
+    too. A simple change to add checking for /local/ ; hopefully it
+    will do the trick.
  
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
