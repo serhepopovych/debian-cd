@@ -116,6 +116,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Use "|" rather than "/" as a sed separator in the etch boot-amd64
     and boot-i386 scripts. Closes: #342344
  
+  * Add the ppptp-linux package to CD#1. Quick hack adds this from the
+    Makefile for now; FIXME later... Closes: #255367
+ 
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
 debian-cd (2.2.23) unstable; urgency=low

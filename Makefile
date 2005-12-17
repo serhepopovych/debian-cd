@@ -370,7 +370,7 @@ $(BDIR)/rawlist:
 # silly so that this is not needed. For more info have a look at
 # http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
 ifneq ($(INSTALLER_CD),1)
-	/bin/echo -e "mawk\nexim4-daemon-light\nunifont" >>$(BDIR)/rawlist
+	/bin/echo -e "mawk\nexim4-daemon-light\nunifont\nppptp-linux" >>$(BDIR)/rawlist
 endif
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
