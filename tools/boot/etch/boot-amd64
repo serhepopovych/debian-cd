@@ -88,7 +88,7 @@ fi
 if [ -n "$KERNEL_PARAMS" ]; then
 	# Substitute custom kernel params into the isolinux config
 	# file.
-	sed -i "s/append /append $KERNEL_PARAMS/" boot$N/isolinux/isolinux.cfg
+	sed -i "s|append |append $KERNEL_PARAMS|" boot$N/isolinux/isolinux.cfg
 fi
 
 # write final lines to mkisofs_opts

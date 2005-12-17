@@ -112,6 +112,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Fix the new Packages file generation to cope with LOCAL packages
     too. A simple change to add checking for /local/ ; hopefully it
     will do the trick.
+
+  * Use "|" rather than "/" as a sed separator in the etch boot-amd64
+    and boot-i386 scripts. Closes: #342344
  
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
