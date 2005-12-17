@@ -58,7 +58,9 @@ way of building CD images.
 How to build a CD set - step by step
 ====================================
 
-If you haven't already, change to the /usr/share/debian-cd/ directory.
+If you haven't already, change to the /usr/share/debian-cd/ directory
+(or, alternatively, set the variable BASEDIR in CONF.sh to point
+there).
 
 The process of building a CD is composed of the following steps:
 

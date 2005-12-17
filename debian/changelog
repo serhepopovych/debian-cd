@@ -118,6 +118,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
  
   * Add the ppptp-linux package to CD#1. Quick hack adds this from the
     Makefile for now; FIXME later... Closes: #255367
+
+  * Minor change to correct the README - BASEDIR var means we don't
+    have to cd to /usr/share/debian-cd/ any more. Closes: #280191
  
  -- Joey Hess <joeyh@debian.org>  Thu,  8 Dec 2005 22:53:16 +0000
 
