@@ -442,6 +442,7 @@ $(BDIR)/CD1/.disk/info:
 		num=$${i%%.packages}; num=$${num##$(BDIR)/}; \
 		dir=$(BDIR)/CD$$num; \
 		echo -n $(BINDISKINFO) | sed 's/_NONUS//g' > $$dir/.disk/info; \
+		echo -n $(BINDISKINFOND) | sed 's/_NONUS//g' > $(BDIR)/$$num.diskinfo; \
 		echo '#define DISKNAME ' $(BINDISKINFOND) | sed 's/_NONUS//g' \
 					> $$dir/README.diskdefines; \
 		echo '#define TYPE  binary' \
@@ -473,6 +474,7 @@ $(SDIR)/CD1/.disk/info:
 		num=$${i%%.sources}; num=$${num##$(SDIR)/}; \
 		dir=$(SDIR)/CD$$num; \
 		echo -n $(SRCDISKINFO) | sed 's/_NONUS//g' > $$dir/.disk/info; \
+		echo -n $(SRCDISKINFOND) | sed 's/_NONUS//g' > $(SDIR)/$$num.diskinfo; \
 		echo '#define DISKNAME ' $(SRCDISKINFOND) | sed 's/_NONUS//g' \
 					> $$dir/README.diskdefines; \
 		echo '#define TYPE  source' \
