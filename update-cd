@@ -26,6 +26,10 @@ NONFREE=1
 # What release version is this?
 VER=3.1r1
 
+# Is this an official CD?
+OFFICIAL=Official
+# OFFICIAL="Unofficial snapshot"
+
 # Path to use with mkisofs/mkhybrid
 #MKISOFS=${MKISOFS:-"mkhybrid"}
 MKISOFS=mkisofs
@@ -40,7 +44,10 @@ TDIR=/mirror/sarge-update
 CODENAME=sarge
 
 # Path where the images will be written
-OUT=/mirror/sarge-update/r1
+OUT=/mirror/sarge-update
+
+# Location(s) for the snapshot(s)
+SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
 
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
@@ -58,6 +65,13 @@ SECTS="main non-free contrib"
 VERBOSE=2
 GRAB_MD5=$BASEDIR/tools/grab_md5
 export VERBOSE BASEDIR SECTS
+
+
+FIRSTVER=`echo $VER | sed 's?r.*$?r0?g'`
+VERSPACE=`echo $VER | sed 's?r? r?g'`
+CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
+
+export FIRSTVER VERSPACE CAPCODE
 
 ARCHLIST="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
 
@@ -145,13 +159,19 @@ make_cd () {
 	if [ $JTE = 1 ] ; then
 		${MKISOFS} -J -r -V "Debian $VER update CD" -o \
 			/dev/null \
-			-jigdo-jigdo $OUT/$CODENAME-update-$THISARCH-$THISNUM.jigdo \
-			-jigdo-template $OUT/$CODENAME-update-$THISARCH-$THISNUM.template \
+			-jigdo-jigdo $OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
+			-jigdo-template $OUT/debian-update-$VER-$THISARCH-$THISNUM.template \
 			-jigdo-map Debian=$MIRROR/ \
 			-jigdo-map Non-US=$NONUS/ \
 			-jigdo-force-md5 /pool/ \
 			-md5-list $UPD/md5-check \
 			$UPD/CD$CDNUM 2>&1 | grep "extents written"
+		$BASEDIR/tools/jigdo_cleanup \
+			$OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
+			debian-update-$VER-$THISARCH-$THISNUM.iso \
+			$OUT debian-update-$VER-$THISARCH-$THISNUM.template \
+			"Debian GNU/Linux $VERSPACE - $OFFICIAL $THISARCH $FIRSTVER->$VER update CD #$THISNUM"
+		echo $SNAPSHOT >> $OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo
 	else
 		${MKISOFS} -J -r -V "Debian $VER update CD" -o \
 		$OUT/$CODENAME-update-$THISARCH-$THISNUM.raw \
