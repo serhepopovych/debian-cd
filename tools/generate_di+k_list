@@ -21,7 +21,6 @@ cat > debian-installer+kernel-$DI_CODENAME << EOF
 #include <debian-installer-$DI_CODENAME>
 eject
 locales
-lvm10
 libdevmapper1.01
 lvm-common
 lvm2
