@@ -135,8 +135,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     silo, vmelilo.
     Some of the bootloaders were alredy included via debootstrap, but as they
     are being removed from there, it's better to add them explicitly here.
+  * Remove iso-codes from netinst, not used.
 
- -- Joey Hess <joeyh@debian.org>  Tue, 27 Dec 2005 00:14:20 -0500
+ -- Joey Hess <joeyh@debian.org>  Tue, 27 Dec 2005 00:36:24 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
