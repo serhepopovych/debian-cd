@@ -129,8 +129,14 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     insane cruft already in the Makefile. (debootstrap no longer installs an
     MTA, so this should save some useful space on the netinsts)
   * Remove lvm10 from generate_di+k_list, d-i uses lvm2 now.
+  * Audited all the apt-install commands in d-i, and added these packages
+    to generate_di+k_list: pcmciautils, dosfsutils (barely needed),
+    udev, installation-report, palo, elilo, sibyl, sibyl, colo, powerpc-utils,
+    silo, vmelilo.
+    Some of the bootloaders were alredy included via debootstrap, but as they
+    are being removed from there, it's better to add them explicitly here.
 
- -- Joey Hess <joeyh@debian.org>  Mon, 26 Dec 2005 23:40:19 -0500
+ -- Joey Hess <joeyh@debian.org>  Tue, 27 Dec 2005 00:14:20 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
