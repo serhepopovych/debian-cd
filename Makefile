@@ -365,13 +365,17 @@ $(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
 
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
-# Dirty workaround for saving space on netinst images, we add some hints.
+# Dirty workaround for saving space, we add some hints to break ties.
 # This is just a temporal solution, list2cds should be a little bit less
 # silly so that this is not needed. For more info have a look at
 # http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
 ifneq ($(INSTALLER_CD),1)
+ifeq ($(INSTALLER_CD),2)
+	/bin/echo -e "mawk\nunifont\npptp-linux" >>$(BDIR)/rawlist
+else
 	/bin/echo -e "mawk\nexim4-daemon-light\nunifont\npptp-linux" >>$(BDIR)/rawlist
 endif
+endif # INSTALLER_CD 1
 ifdef FORCENONUSONCD1
 	$(Q)$(apt) cache dumpavail | \
 		grep-dctrl -FSection -n -sPackage -e '^(non-US|non-us)' - | \

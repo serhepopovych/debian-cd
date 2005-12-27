@@ -125,8 +125,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Update base-etch with current debootstrap, and also update the recipe to
     create it due to changes in debootstrap.
+  * Remove exim4 from the netinst CDs by adding further insane cruft to the
+    insane cruft already in the Makefile. (debootstrap no longer installs an
+    MTA, so this should save some useful space on the netinsts)
 
- -- Joey Hess <joeyh@debian.org>  Mon, 26 Dec 2005 23:04:43 -0500
+ -- Joey Hess <joeyh@debian.org>  Mon, 26 Dec 2005 23:23:08 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
