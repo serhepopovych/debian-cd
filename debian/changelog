@@ -136,8 +136,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     Some of the bootloaders were alredy included via debootstrap, but as they
     are being removed from there, it's better to add them explicitly here.
   * Remove iso-codes from netinst, not used.
+  * Drop floppies from i386 netinst and businesscard; this will make the
+    netinst small enough to fit on 128 mb usb keychains again.
 
- -- Joey Hess <joeyh@debian.org>  Tue, 27 Dec 2005 00:36:24 -0500
+ -- Joey Hess <joeyh@debian.org>  Wed, 28 Dec 2005 13:07:04 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 

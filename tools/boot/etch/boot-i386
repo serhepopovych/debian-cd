@@ -50,14 +50,14 @@ KTYPE[10]=""
 THISTYPE=${KTYPE[$NN]}
 
 BOOT_IMAGES="cdrom/boot.img cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
-DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
-# Only include extra disk images on full CDs, not on smaller images.
+# Only include disk images on full CDs, not on smaller images.
 if [ "$INSTALLER_CD" != 1 ] && [ "$INSTALLER_CD" != 2 ]; then
+	DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
 	EXTRA_DISK_IMAGES="floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img floppy/net-drivers.cfg"
 fi
 
 # Download boot images and floppies.
-for image in $BOOT_IMAGES $DISK_IMAGES; do
+for image in $BOOT_IMAGES; do
     if [ ! -e "$image" ]; then
 	dir=$(dirname $image)
 	mkdir -p $dir
@@ -75,7 +75,7 @@ for image in $BOOT_IMAGES $DISK_IMAGES; do
 done
 
 # Floppies that are not really required or may be unavailable.
-for image in $EXTRA_DISK_IMAGES; do
+for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
     if [ ! -e "$image" ]; then
 	dir=$(dirname $image)
 	mkdir -p $dir
