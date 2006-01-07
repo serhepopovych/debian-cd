@@ -65,6 +65,9 @@ kernel-pcmcia-modules-2.4-386
 kernel-headers-2.4-386
 linux-image-2.6-386
 linux-headers-2.6-386
+/* 486 are same images, new name */
+linux-image-2.6-486
+linux-headers-2.6-486
 #endif
 
 #ifdef ARCH_amd64

@@ -62,6 +62,7 @@ libgtk+2.0-directfb0-udeb
 libpango1.0-udeb
 libpng12-0-udeb
 ttf-freefont-udeb
+ttf-cjk-compact-udeb
 libdirectfb-0.9-22-udeb
 fbset-udeb
 # This udeb is not in good shape and is largely supersceded by

@@ -138,8 +138,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Remove iso-codes from netinst, not used.
   * Drop floppies from i386 netinst and businesscard; this will make the
     netinst small enough to fit on 128 mb usb keychains again.
+  * Deal with 386 -> 486 name change in kernel images.
+  * Exclude ttf-cjk-compact-udeb.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 28 Dec 2005 13:07:04 -0500
+ -- Joey Hess <joeyh@debian.org>  Sat,  7 Jan 2006 16:56:49 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
