@@ -122,9 +122,9 @@ EOF
 # Creating the indices directory
 if [ ! -d "$SDIR/indices" ]; then
     mkdir $SDIR/indices
-    cp $MIRROR/indices/* $SDIR/indices/
+    cp -LR $MIRROR/indices/* $SDIR/indices/
     if [ -n "$LOCALDEBS" -a -d $LOCALDEBS/indices ]; then
-         cp $LOCALDEBS/indices/* $SDIR/indices/
+         cp -LR $LOCALDEBS/indices/* $SDIR/indices/
     fi
     gunzip -f $SDIR/indices/*.gz
     for SECT in $SECTIONS; do
@@ -135,7 +135,7 @@ if [ ! -d "$SDIR/indices" ]; then
 fi
 if [ -n "$NONUS" -a ! -d "$SDIR/indices-non-US" ]; then
     mkdir $SDIR/indices-non-US
-    cp $NONUS/indices-non-US/* $SDIR/indices-non-US/
+    cp -LR $NONUS/indices-non-US/* $SDIR/indices-non-US/
     gunzip -f $SDIR/indices-non-US/*.gz
     for SECT in `echo $SECTIONSNONUS | sed -e 's#non-US/##g'`; do
         touch $SDIR/indices-non-US/override.$CODENAME.$SECT
