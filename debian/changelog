@@ -141,6 +141,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Deal with 386 -> 486 name change in kernel images.
   * Exclude ttf-cjk-compact-udeb.
 
+   [ Steve McIntyre ]
+   * Cope with mipsel boot images moving location. Closes: #349563.
+
  -- Joey Hess <joeyh@debian.org>  Sat,  7 Jan 2006 16:56:49 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
