@@ -2,8 +2,6 @@
 
 use Digest::MD5;
 
-exit 0;
-
 my $mirror = shift || $ENV{'MIRROR'};
 my $nonus = shift || $ENV{'NONUS'};
 my $security = shift || $ENV{'SECURITY'};
