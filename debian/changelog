@@ -143,6 +143,8 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
 
    [ Steve McIntyre ]
    * Cope with mipsel boot images moving location. Closes: #349563.
+   * Make sure that all the scripts use Packages.gz rather than Packages
+     when looking up metadata in the archive - Packages is deprecated.
 
  -- Joey Hess <joeyh@debian.org>  Sat,  7 Jan 2006 16:56:49 -0500
 
