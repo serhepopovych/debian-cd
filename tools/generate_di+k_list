@@ -115,7 +115,7 @@ EOF
 # XXX once mips gets kernel-image-2.4-<subarch> packages, use those
 # instead.
 for subarch in r4k-ip22 r5k-ip22 sb1-swarm-bn; do
-    zcat $MIRROR/dists/$CODENAME/main/binary-mips/Packages.gz | \ 
+    zcat $MIRROR/dists/$CODENAME/main/binary-mips/Packages.gz | \
 	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
 		grep -- "-$subarch$" | sort -n | tail -n 1 \
                 >> debian-installer+kernel-$DI_CODENAME
@@ -134,7 +134,7 @@ EOF
 # XXX once mips gets kernel-image-2.4-<subarch> packages, use those
 # instead.
 for subarch in r3k-kn02 r4k-kn04 cobalt lasat; do
-    zcat $MIRROR/dists/$CODENAME/main/binary-mipsel/Packages.gz | \ 
+    zcat $MIRROR/dists/$CODENAME/main/binary-mipsel/Packages.gz | \
 	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
 		grep -- "-$subarch$" | sort -n | tail -n 1 \
                 >> debian-installer+kernel-$DI_CODENAME

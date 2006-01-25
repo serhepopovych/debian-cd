@@ -35,7 +35,7 @@ foreach my $arch (@ARCHES) {
 	my @exclude = @common_excludes;
 	push @exclude, read_exclude("exclude-udebs-$arch")
 		if -e exclude_path("exclude-udebs-$arch");
-UDEB:	foreach my $udeb (map { chomp; $_ } `zcat $packagefile | awk '/^Package:/ {print $2}'`) {
+UDEB:	foreach my $udeb (map { chomp; $_ } `zcat $packagefile | awk '/^Package:/ {print \$2}'`) {
 		foreach my $pattern (@exclude) {
 			if ($udeb =~ /^$pattern$/) {
 				next UDEB;
