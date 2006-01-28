@@ -33,13 +33,11 @@ case $ARCH in
                                                                        SIZE = $2
                                     FILE = $3
                                     printf("%s  %12s  %s/%s/%s\n", MD5, SIZE, MIRROR, DIR, FILE);
+									next
                                 }
                             }
-            /.*/            {
-                                if (!length($0)) {
+            /^[^ ]/            {
                                     in_files = 0
-                                    next
-                                }
                             }' | sort | uniq >> $OUT
         ;;
     alpha|amd64|arm|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
