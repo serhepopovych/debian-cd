@@ -94,6 +94,8 @@ reiserfsprogs-udeb
 # reiser4 is not in the Debian kernel.
 mkreiser4-udeb
 reiser4progs-udeb
+# No longer used by parted.
+libreiserfs0.3-udeb
 # These are not really needed, the regular netcfg subsumes them.
 netcfg-static
 netcfg-dhcp
