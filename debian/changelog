@@ -147,7 +147,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
      when looking up metadata in the archive - Packages is deprecated.
    * Cope better with badly-formatted stanzas in Sources.gz
 
- -- Joey Hess <joeyh@debian.org>  Sat,  7 Jan 2006 16:56:49 -0500
+  [ Joey Hess ]
+  * Exclude reiser4progs udebs from CD, since there is no reiser4 in the
+    Debian kernel.
+
+ -- Joey Hess <joeyh@debian.org>  Fri,  3 Feb 2006 14:13:30 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
