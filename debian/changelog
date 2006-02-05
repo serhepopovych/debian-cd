@@ -141,16 +141,19 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Deal with 386 -> 486 name change in kernel images.
   * Exclude ttf-cjk-compact-udeb.
 
-   [ Steve McIntyre ]
-   * Cope with mipsel boot images moving location. Closes: #349563.
-   * Make sure that all the scripts use Packages.gz rather than Packages
-     when looking up metadata in the archive - Packages is deprecated.
-   * Cope better with badly-formatted stanzas in Sources.gz
+  [ Steve McIntyre ]
+  * Cope with mipsel boot images moving location. Closes: #349563.
+  * Make sure that all the scripts use Packages.gz rather than Packages
+    when looking up metadata in the archive - Packages is deprecated.
+  * Cope better with badly-formatted stanzas in Sources.gz
 
   [ Joey Hess ]
   * Exclude reiser4progs udebs from CD, since there is no reiser4 in the
     Debian kernel.
   * Exclude libreiserfs0.3-udeb from CD, no longer used by parted.
+
+  [ Steve McIntyre ]
+  * Add an initial copy of boot-amd64.calc for etch
 
  -- Joey Hess <joeyh@debian.org>  Fri,  3 Feb 2006 14:22:51 -0500
 
