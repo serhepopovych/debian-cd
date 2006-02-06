@@ -12,23 +12,30 @@ DIR=$1
 
 if [ "$OMIT_MANUAL" != 1 ]; then
 	DOCDIR=doc
+	MANTDIR=$TDIR/installguide
 
-	if [ -n "$BOOTDISKS" -a -e $BOOTDISKS/current/$DOCDIR ] ; then
-	        DOCS=$BOOTDISKS/current/$DOCDIR
+	INSTALLGUIDE=$(zcat $MIRROR/dists/etch/main/binary-$ARCH//Packages.gz | \
+	    sed -n "s/Filename: \(pool\/main\/i\/installation-guide\/installation-guide-$ARCH.*deb\)$/\1/p")
+
+	if [ -f "$MIRROR/$INSTALLGUIDE" ]; then
+		rm -rf $MANTDIR
+		# Extract documentation from package
+		dpkg -x $MIRROR/$INSTALLGUIDE $MANTDIR || true
+
+		if [ -d $MANTDIR/usr/share/doc/installation-guide-$ARCH/ ]; then
+			cd $MANTDIR/usr/share/doc/installation-guide-$ARCH
+			rm -f changelog* copyright
+			gunzip *.gz || true
+
+			mkdir -p $DIR/$DOCDIR/install
+			if ! cp -a * $DIR/$DOCDIR/install; then
+				echo "ERROR: Unable to copy installer documentation to CD."
+			fi
+		else
+			echo "ERROR: installlation-guide package not unpacked correctly."
+		fi
 	else
-	        echo "WARNING: Using $DI_CODENAME bootdisk documentation"
-	        DOCS=$MIRROR/dists/$DI_CODENAME/main/installer-$ARCH/current/$DOCDIR
-	fi
-
-	# Put the install documentation in /doc/install
-	if [ ! -d $DOCS ]; then
-	    echo "ERROR: Unable to copy installer documentation to CD."
-	    exit
-	fi
-	cd $DOCS
-	mkdir -p $DIR/$DOCDIR/install
-	if ! cp -a * $DIR/$DOCDIR/install; then
-	    echo "ERROR: Unable to copy installer documentation to CD."
+		echo "ERROR: package installlation-guide-$ARCH not found."
 	fi
 fi
 
