@@ -158,6 +158,7 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Frans Pop ]
   * For etch, pick up the installation guide from the appropriate
     package in the archive rather than from the d-i area.
+  * Add missing envvar checks in tools/generate_di*_list scripts.
 
  -- Joey Hess <joeyh@debian.org>  Fri,  3 Feb 2006 14:22:51 -0500
 

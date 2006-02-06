@@ -3,6 +3,9 @@
 # Generate a list of packages required for debian-installer
 # This script makes use of the following variables that need to be preset:
 # MIRROR, CODENAME, DI_CODENAME
+die "Missing \$MIRROR variable" unless $ENV{MIRROR};
+die "Missing \$CODENAME variable" unless $ENV{CODENAME};
+die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
 
 DATE=`date`
 cat > debian-installer+kernel-$DI_CODENAME << EOF
