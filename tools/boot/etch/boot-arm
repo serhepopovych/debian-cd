@@ -40,7 +40,7 @@ fi
 
 cd $INSTALLDIR
 
-for subarch in bast netwinder riscpc riscstation; do
+for subarch in bast netwinder; do
 	if [ ! "$DI_WWW_HOME" ];then
 		if [ ! "$DI_DIR" ];then
 		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"

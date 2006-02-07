@@ -159,8 +159,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * For etch, pick up the installation guide from the appropriate
     package in the archive rather than from the d-i area.
   * Add missing envvar checks in tools/generate_di*_list scripts.
+  * arm: risc* flavours are no longer built. Closes: #351818.
 
- -- Joey Hess <joeyh@debian.org>  Fri,  3 Feb 2006 14:22:51 -0500
+ -- Frans Pop <fjp@debian.org>  Tue,  7 Feb 2006 19:32:50 +0100
 
 debian-cd (2.2.23) unstable; urgency=low
 
