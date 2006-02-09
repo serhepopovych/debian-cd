@@ -86,8 +86,8 @@ linux-headers-2.6-amd64-generic
 aboot
 aboot-base
 discover1
-kernel-image-2.4-generic
-kernel-image-2.4-smp
+linux-image-2.6-alpha-generic
+linux-image-2.6-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
