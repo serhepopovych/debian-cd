@@ -217,5 +217,7 @@ zcat $MIRROR/dists/$CODENAME/main/binary-arm/Packages.gz | \
     >> debian-installer+kernel-$DI_CODENAME
 
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
+linux-image-2.6-s3c2410
+linux-image-2.6-footbridge
 #endif
 EOF

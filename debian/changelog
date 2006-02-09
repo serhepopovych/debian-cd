@@ -165,8 +165,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Switch alpha to 2.6 kernels.
+  * Add linux-image-2.6-footbridge and linux-image-2.6-s3c2410
+    arm kernels as d-i now uses these.
 
- -- Joey Hess <joeyh@debian.org>  Wed,  8 Feb 2006 10:45:34 -0500
+ -- Joey Hess <joeyh@debian.org>  Thu,  9 Feb 2006 15:18:35 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
