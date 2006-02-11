@@ -168,6 +168,9 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Add linux-image-2.6-footbridge and linux-image-2.6-s3c2410
     arm kernels as d-i now uses these.
 
+  [ Steve McIntyre ]	
+  * Fix the environment variable checks in tools/generate_di+k_list.
+	
  -- Joey Hess <joeyh@debian.org>  Thu,  9 Feb 2006 15:18:35 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
