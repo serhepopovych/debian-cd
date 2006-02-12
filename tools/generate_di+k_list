@@ -56,7 +56,6 @@ reiserfsprogs
 libfribidi0
 localization-config
 acpid
-initramfs-tools
 ppp
 pppoeconf
 udev
@@ -64,6 +63,7 @@ installation-report
 
 
 #ifdef ARCH_i386
+initramfs-tools
 discover
 discover1
 grub
@@ -83,6 +83,7 @@ linux-headers-2.6-486
 #endif
 
 #ifdef ARCH_amd64
+initramfs-tools
 discover
 discover1
 grub
@@ -92,6 +93,7 @@ linux-headers-2.6-amd64-generic
 #endif
 
 #ifdef ARCH_alpha
+initramfs-tools
 aboot
 aboot-base
 discover1
@@ -100,6 +102,7 @@ linux-image-2.6-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
+yaird
 discover1
 linux-image-2.6-parisc
 linux-image-2.6-parisc-smp
@@ -109,6 +112,7 @@ palo
 #endif
 
 #ifdef ARCH_ia64
+yaird
 discover1
 initrd-tools
 linux-image-2.6-itanium
@@ -119,6 +123,7 @@ elilo
 #endif
 
 #ifdef ARCH_mips
+yaird
 arcboot
 sibyl
 EOF
@@ -137,6 +142,7 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_mipsel
+yaird
 sibyl
 colo
 delo
@@ -156,6 +162,7 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_powerpc
+initramfs-tools
 discover1
 quik
 yaboot
@@ -185,6 +192,7 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_sparc
+yaird
 silo
 discover1
 initrd-tools
@@ -197,6 +205,7 @@ kernel-image-2.4-sparc64-smp
 #endif
 
 #ifdef ARCH_m68k
+yaird
 fileutils
 vmelilo
 EOF
@@ -217,6 +226,7 @@ zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 #ifdef ARCH_arm
+initramfs-tools
 discover1
 EOF
 

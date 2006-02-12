@@ -168,14 +168,20 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Add linux-image-2.6-footbridge and linux-image-2.6-s3c2410
     arm kernels as d-i now uses these.
 
-  [ Steve McIntyre ]	
-  * Fix the environment variable checks in tools/generate_di+k_list.  
+  [ Steve McIntyre ]
+  * Fix the environment variable checks in tools/generate_di+k_list.
   * Update the boot-sparc scripts to improve the algorithm for finding
     the right version of silo to use - grab the filename from the
     appropriate Packages file rather than looking in the silo
     directory in the pool.
-	
- -- Joey Hess <joeyh@debian.org>  Thu,  9 Feb 2006 15:18:35 -0500
+
+  [ Joey Hess ]
+  * generate_di+k_list: Switch initamfs generator to per-arch,
+    based on what base-installer installs:
+    - initramfs-tools on i386, amd64, alpha, powerpc, arm
+    - yaird on hppa, ia64, mips, mipsel, sparc, m68k
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 12 Feb 2006 16:42:29 -0500
 
 debian-cd (2.2.23) unstable; urgency=low
 
