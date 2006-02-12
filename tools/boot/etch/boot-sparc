@@ -38,7 +38,8 @@ inst=boot1
 # Setup directories
 mkdir -p $inst/boot/2.6
 
-silo_deb=`ls $MIRROR/pool/main/s/silo/silo_*.deb | tail -1`
+silo_deb=$MIRROR/`zcat $MIRROR/dists/$DI_CODENAME/main/binary-sparc/Packages.gz | \
+	awk '/^Filename: .*\/silo/ {print $2}'`
 # put the relevant parts of SILO boot loader
 (ar p $silo_deb data.tar.gz | \
 	tar zxf - -C $inst/ ./boot/{isofs,second}.b)
