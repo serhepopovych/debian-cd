@@ -181,7 +181,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     - initramfs-tools on i386, amd64, alpha, powerpc, arm
     - yaird on hppa, ia64, mips, mipsel, sparc, m68k
 
- -- Joey Hess <joeyh@debian.org>  Sun, 12 Feb 2006 16:42:29 -0500
+  [ Sven Luther ]
+  * Added icon to powerpc/chrp bootinfo.txt, which will allow booting on IBM
+    RS6K and pSeries. Closes: 352672
+
+ -- Sven Luther <luther@debian.org>  Wed, 15 Feb 2006 12:01:52 +0000
 
 debian-cd (2.2.23) unstable; urgency=low
 
