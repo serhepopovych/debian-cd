@@ -52,6 +52,9 @@ install -m 644 -D "$DELOROOT"/boot/delo.2nd "$CDROOT"/boot/delo.2nd
 if [ ! "$DI_WWW_HOME" ];then
 	if [ ! "$DI_DIR" ];then
 	   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/decstation/cdrom/"
+       if [ ! -e $DI_DIR ] ; then
+           DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom/"
+       fi
 	fi
 else
         DI_DIR="."

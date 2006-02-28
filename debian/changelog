@@ -186,6 +186,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Added icon to powerpc/chrp bootinfo.txt, which will allow booting on IBM
     RS6K and pSeries. Closes: #352672
 
+  [ Steve McIntyre ]
+  * Mipsel boot images haven't actually moved yet in etch. Cope with this
+    - fall back to the old location if the new one isn't there.
+
  -- Frans Pop <fjp@debian.org>  Wed, 15 Feb 2006 23:18:19 +0100
 
 debian-cd (2.2.23) unstable; urgency=low
