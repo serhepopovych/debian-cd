@@ -190,7 +190,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   * Mipsel boot images haven't actually moved yet in etch. Cope with this
     - fall back to the old location if the new one isn't there.
 
- -- Frans Pop <fjp@debian.org>  Wed, 15 Feb 2006 23:18:19 +0100
+  [ Frans Pop ]
+  * Switch to initramfs-tools by default for netinst CDs for hppa.
+
+ -- Frans Pop <fjp@debian.org>  Fri,  3 Mar 2006 02:57:15 +0100
 
 debian-cd (2.2.23) unstable; urgency=low
 

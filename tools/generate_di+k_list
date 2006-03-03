@@ -102,7 +102,7 @@ linux-image-2.6-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
-yaird
+initramfs-tools
 discover1
 linux-image-2.6-parisc
 linux-image-2.6-parisc-smp
@@ -225,6 +225,7 @@ zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
 
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
+
 #ifdef ARCH_arm
 initramfs-tools
 discover1
