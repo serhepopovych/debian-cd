@@ -191,9 +191,11 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
     - fall back to the old location if the new one isn't there.
 
   [ Frans Pop ]
-  * Switch to initramfs-tools by default for netinst CDs for hppa.
+  * generate_di+k_list:
+    - switch to initramfs-tools by default for hppa
+    - include openssh-server; in installed when network-console is used
 
- -- Frans Pop <fjp@debian.org>  Fri,  3 Mar 2006 02:57:15 +0100
+ -- Frans Pop <fjp@debian.org>  Fri,  3 Mar 2006 03:26:57 +0100
 
 debian-cd (2.2.23) unstable; urgency=low
 

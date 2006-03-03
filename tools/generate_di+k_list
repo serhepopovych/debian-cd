@@ -60,6 +60,7 @@ ppp
 pppoeconf
 udev
 installation-report
+openssh-server
 
 
 #ifdef ARCH_i386
