@@ -193,9 +193,10 @@ debian-cd (2.2.24) UNRELEASED; urgency=low
   [ Frans Pop ]
   * generate_di+k_list:
     - switch to initramfs-tools by default for hppa
-    - include openssh-server; in installed when network-console is used
+    - include openssh-server; is installed when network-console is used
+    - add libsysfs1; is not included otherwise because the udeb provides it
 
- -- Frans Pop <fjp@debian.org>  Fri,  3 Mar 2006 03:26:57 +0100
+ -- Frans Pop <fjp@debian.org>  Sat,  4 Mar 2006 01:53:07 +0100
 
 debian-cd (2.2.23) unstable; urgency=low
 
