@@ -1,3 +1,9 @@
+debian-cd (2.2.25) UNRELEASED; urgency=low
+
+  * Remove net-drivers floppy from full CD images.
+
+ -- Joey Hess <joeyh@debian.org>  Wed,  8 Mar 2006 13:02:01 -0500
+
 debian-cd (2.2.24) unstable; urgency=low
 
   [ Bdale Garbee ]
