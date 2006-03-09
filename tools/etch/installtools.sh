@@ -27,8 +27,8 @@ if [ "$OMIT_MANUAL" != 1 ]; then
 			rm -f changelog* copyright
 			gunzip *.gz || true
 
-			mkdir -p $DIR/$DOCDIR/install
-			if ! cp -a * $DIR/$DOCDIR/install; then
+			mkdir -p $DIR/$DOCDIR/manual
+			if ! cp -a * $DIR/$DOCDIR/manual; then
 				echo "ERROR: Unable to copy installer documentation to CD."
 			fi
 		else
