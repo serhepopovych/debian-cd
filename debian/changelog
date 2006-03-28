@@ -6,13 +6,15 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Consistently change location for installation guide to /doc/manual
     on the CD.
+  * Update author (and timestamp) in README.
+  * Colin Watson has taken over daily d-i builds for PowerPC.
 
   [ Steve McIntyre ]
   * Fix to tools/grab_md5: when building the md5-list, DO NOT use the
     "current" symlink in the d-i directories - that causes jigdo problems
     later on. Use the real dirs (as dated) instead.
 
- -- Frans Pop <fjp@debian.org>  Thu,  9 Mar 2006 02:18:47 +0100
+ -- Frans Pop <fjp@debian.org>  Tue, 28 Mar 2006 18:20:30 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
