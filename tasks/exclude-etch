@@ -20,4 +20,4 @@ zmailer
 xmail
 cdebconf
 inetutils-inetd
-openbsd-inetd
+netkit-inetd
