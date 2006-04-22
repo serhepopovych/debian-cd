@@ -19,9 +19,8 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     dependency from netbase. For some reason debootstrap requires both inetd
     packages, so don't exclude netkit-inetd.
     Makes full/netinst images have base_installable again.
-  * Temporarily take over daily builds for i386 from Joey.
 
- -- Frans Pop <fjp@debian.org>  Sat, 22 Apr 2006 04:15:42 +0200
+ -- Frans Pop <fjp@debian.org>  Sun, 23 Apr 2006 01:58:38 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
