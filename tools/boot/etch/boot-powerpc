@@ -38,8 +38,6 @@ install_languages $CDDIR
 
 echo -n " --iso-level 2 --chrp-boot --netatalk -hfs -probe -map $BASEDIR/data/hfs.map" \
         > $N.mkisofs_opts
-# We are still missing this for prep
-echo -n " -prep-boot install/powerpc/vmlinuz-prep.initrd" >> $N.mkisofs_opts
 # For newworld Mac booting  - Note, no spaces in volid!
 echo -n " -part -no-desktop -hfs-bless CD$N/install -hfs-volid Debian/PowerPC_${CODENAME}" \
 	>> $N.mkisofs_opts
@@ -102,6 +100,11 @@ do
   fi
 
 done
+
+if [ -f powerpc/vmlinuz-prep.initrd ]; then
+  # We are still missing this for prep
+  echo -n " -prep-boot install/powerpc/vmlinuz-prep.initrd" >> $CDDIR/../$N.mkisofs_opts
+fi
 
 # Copy pegasos forth script, since pegasos machines don't support yaboot yet.
 BUILD_DATE=$(date +%Y%m%d)
