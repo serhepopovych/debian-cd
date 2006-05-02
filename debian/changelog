@@ -25,6 +25,11 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Only tell mkisofs to use the prep initrd if it's available (which it
     currently isn't for 2.6.16).
 
+  [ Steve McIntyre ]
+  * Fix to tools/grab_md5: reset the file and dir name after each source
+    package is finished with.
+  * Add extra debug in tools/boot/etch/boot-i386
+	
  -- Frans Pop <fjp@debian.org>  Sun, 23 Apr 2006 20:09:44 +0200
 
 debian-cd (2.2.24) unstable; urgency=low

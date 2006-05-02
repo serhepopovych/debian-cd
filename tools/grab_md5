@@ -38,6 +38,8 @@ case $ARCH in
                             }
             /^[^ ]/            {
                                     in_files = 0
+                                    FILE = ""
+                                    DIR = ""
                             }' | sort | uniq >> $OUT
         ;;
     alpha|amd64|arm|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)

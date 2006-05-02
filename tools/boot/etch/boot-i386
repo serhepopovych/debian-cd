@@ -18,6 +18,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""                     
+      echo "Using images from $DI_DIR"
    fi
 fi
 if [ ! "$DI_DIST" ]; then
