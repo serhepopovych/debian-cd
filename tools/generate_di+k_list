@@ -67,6 +67,9 @@ openssh-server
  */
 libsysfs1
 
+/* Needed for rootless installs. */
+sudo
+
 #ifdef ARCH_i386
 initramfs-tools
 discover

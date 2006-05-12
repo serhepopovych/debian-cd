@@ -32,8 +32,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * ths has taken over mipsel builds
+  * Add sudo to generate_di+k_list, it's needed for installs w/o a root user.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 10 May 2006 16:08:29 -0400
+ -- Joey Hess <joeyh@debian.org>  Fri, 12 May 2006 00:53:25 -0500
 
 debian-cd (2.2.24) unstable; urgency=low
 
