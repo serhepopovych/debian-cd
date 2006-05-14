@@ -33,8 +33,12 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Joey Hess ]
   * ths has taken over mipsel builds
   * Add sudo to generate_di+k_list, it's needed for installs w/o a root user.
+  * Add support to boot/etch/boot-i386 for adding gtk images. If the
+    isolinux files include .with26+gtk, include gtk initrd along with the
+    2.4 kernel. If .withgtk, include gtk initrd along with the default
+    (presumably 2.6) kernel.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 12 May 2006 00:53:25 -0500
+ -- Joey Hess <joeyh@debian.org>  Sun, 14 May 2006 12:25:58 -0500
 
 debian-cd (2.2.24) unstable; urgency=low
 
