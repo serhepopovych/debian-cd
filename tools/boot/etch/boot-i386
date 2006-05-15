@@ -124,7 +124,7 @@ extra_image () {
 	image=$1
 	dir=$(dirname "$image")
 	
-	if [ ! -e "cdrom/$image" ]; then
+	if [ ! -e "$image" ]; then
 		mkdir -p $dir
 		if [ ! "$DI_WWW_HOME" ];then
 			if [ ! "$DI_DIR" ];then
@@ -137,8 +137,9 @@ extra_image () {
 	fi
 	
 	if [ ! -d $CDDIR/install/$dir ]; then
-		cp -a "$image" $CDDIR/install/$dir
+		mkdir -p $CDDIR/install/$dir
 	fi
+	cp -a "$image" $CDDIR/install/$dir/
 }
 
 # Only disk one gets the extra files installed
