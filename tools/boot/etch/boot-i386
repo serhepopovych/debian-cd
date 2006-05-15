@@ -172,9 +172,8 @@ if [ "$NN" = "1" ]; then
 		extra_image 2.6/initrd.gz
 		extra_image 2.6/vmlinuz
 		syslinux_files with26
-	else 
-		rm -f boot$N/isolinux/isolinux.cfg.with* 2>/dev/null || true
 	fi
+	rm -f boot$N/isolinux/isolinux.cfg.with* 2>/dev/null || true
 
 	if [ "$SPLASHPNG" ] ; then
 		# Insert our own splash screen.  Color index 15 is
