@@ -168,7 +168,7 @@ if [ "$NN" = "1" ]; then
 	elif [ -e boot$N/isolinux/f3.txt.withgtk ]; then
 		extra_image gtk/initrd.gz
 		syslinux_files withgtk
-	if [ -e boot$N/isolinux/f3.txt.with26 ];then
+	elif [ -e boot$N/isolinux/f3.txt.with26 ];then
 		extra_image 2.6/initrd.gz
 		extra_image 2.6/vmlinuz
 		syslinux_files with26
