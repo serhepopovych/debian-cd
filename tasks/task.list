@@ -1,6 +1,5 @@
 desktop
 gnome-desktop
-kde-desktop
 web-server
 laptop
 mail-server
@@ -64,3 +63,14 @@ romanian
 romanian-desktop
 slovak
 slovak-desktop
+bengali
+bangali-desktop
+hindi
+hindi-desktop
+hungarian
+hungarian-desktop
+persian
+persian-desktop
+punjabi
+punjabi-desktop
+kde-desktop

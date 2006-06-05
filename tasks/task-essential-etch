@@ -4,8 +4,10 @@
  
  
  for i in $(cat task.list); do
-  grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
-    grep-dctrl -s Key -n -e '.*'
+   if [ "$i" != kde-desktop ]; then
+     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
+     grep-dctrl -s Key -n -e '.*'
+   fi
  done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch
   
  * Last updated: $Date$
@@ -64,3 +66,7 @@ language-env
 language-env
 language-env
 locales
+language-env
+language-env
+language-env
+language-env
