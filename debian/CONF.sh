@@ -74,13 +74,13 @@ export OFFICIAL="Unofficial"
 #export OFFICIAL="Official"
 #export OFFICIAL="Official Beta"
 
-# ... for arch  
-CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null`
-if [ $? -ne 0 ] ; then
+# ... for arch
+CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null || true`
+if [ "$CPU"x = ""x ] ; then
     CPU=`dpkg-architecture -qDEB_HOST_ARCH`
 fi
-KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null`
-if [ $? -ne 0 ] ; then
+KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null || true`
+if [ "$KERNEL"x = ""x ] ; then
     KERNEL=linux
 fi
 if [ $KERNEL = linux ] ; then
