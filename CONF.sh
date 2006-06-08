@@ -75,7 +75,20 @@ export OFFICIAL="Unofficial"
 #export OFFICIAL="Official Beta"
 
 # ... for arch  
-export ARCH=`dpkg --print-architecture`
+CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null`
+if [ $? -ne 0 ] ; then
+    CPU=`dpkg-architecture -qDEB_HOST_ARCH`
+fi
+KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null`
+if [ $? -ne 0 ] ; then
+    KERNEL=linux
+fi
+if [ $KERNEL = linux ] ; then
+    ARCH=$CPU
+else
+    ARCH="$KERNEL-$CPU"
+fi
+export CPU KERNEL ARCH
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
 #	      If they aren't then you must set COPYLINK below to 1. This

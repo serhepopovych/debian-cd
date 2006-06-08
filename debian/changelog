@@ -47,6 +47,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Move kde-desktop to end of task.list for same reason.
   * Update task-full-etch to current tasksel.
 
+  [ Steve McIntyre ]
+  * Add better GNU/kFreeBSD support in setting ARCH in CONF.sh.
+    Closes: #327470 
+
  -- Joey Hess <joeyh@debian.org>  Mon,  5 Jun 2006 15:09:01 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
