@@ -49,9 +49,14 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Add better GNU/kFreeBSD support in setting ARCH in CONF.sh.
-    Closes: #327470 
+    Closes: #327470
 
- -- Joey Hess <joeyh@debian.org>  Mon,  5 Jun 2006 15:09:01 -0400
+  [ Joey Hess ]
+  * Applied patch from smarenka to add 2.6 kernels for m68k, also 2.4 kernels
+    for appropriate m68k subarches, and also emile, amiboot, atari-bootstrap,
+    and initramfs-tools for m68k.
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 13 Jun 2006 17:16:30 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
 

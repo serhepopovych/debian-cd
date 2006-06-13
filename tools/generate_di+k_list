@@ -214,24 +214,34 @@ kernel-image-2.4-sparc64-smp
 
 #ifdef ARCH_m68k
 yaird
+initramfs-tools
 fileutils
+amiboot
+atari-bootstrap
+emile
 vmelilo
+linux-image-2.6-amiga
+linux-image-2.6-mac
 EOF
 
-# Get all the latest 2.2 for mac kernel
+# Get the latest 2.2 kernel for mac 
   zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
       sed -n 's/Package: \(kernel-image-2.2.*-mac\)$/\1/p' | \
       tail -n 1 \
       >> debian-installer+kernel-$DI_CODENAME
-# Get the latest 2.4 kernels, except mac
+	  
+# Get the latest kernels for 2.4 d-i subarchs
 # XXX once m68k gets kernel-image-2.4-<subarch> packages, use those
 # instead.
-zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
+for subarch in amiga atari bvme6000 mvme147 mvme16x q40; do
+  zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
     sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' | \
-    tail -n 7 | \
-    grep -v mac >> debian-installer+kernel-$DI_CODENAME
+    grep -- "-$subarch$" | sort -n | tail -n 1 \
+		>> debian-installer+kernel-$DI_CODENAME
+done
 
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
+
 #endif
 
 #ifdef ARCH_arm
