@@ -17,9 +17,6 @@ fs-common-modules-*
 ide-modules-*
 input-modules-*
 kbd-chooser
-pcmcia-cs-udeb
-pcmcia-modules-*
-pcmcia-storage-modules-*
 scsi-common-modules-*
 scsi-core-modules-*
 scsi-modules-*

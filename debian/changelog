@@ -65,8 +65,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Add gtk initrd to amd64 images if available.
   * Add autorun file to amd64 images if there's a README.html, same as for
     i386.
+  * Add pcmciautils-udeb to udeb_include lists; something needs to pull it
+    in and like pcmcia-cs-udeb its priority won't.
 
- -- Joey Hess <joeyh@debian.org>  Thu, 15 Jun 2006 15:25:08 -0400
+ -- Joey Hess <joeyh@debian.org>  Thu, 15 Jun 2006 18:42:51 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
 
