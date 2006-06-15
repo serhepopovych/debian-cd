@@ -247,6 +247,9 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #ifdef ARCH_arm
 initramfs-tools
 discover1
+nwutil
+slugimage
+nslu2-utils
 EOF
 
 zcat $MIRROR/dists/$CODENAME/main/binary-arm/Packages.gz | \
@@ -255,7 +258,10 @@ zcat $MIRROR/dists/$CODENAME/main/binary-arm/Packages.gz | \
     >> debian-installer+kernel-$DI_CODENAME
 
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
-linux-image-2.6-s3c2410
 linux-image-2.6-footbridge
+linux-image-2.6-ixp4xx
+linux-image-2.6-nslu2
+linux-image-2.6-rpc
+linux-image-2.6-s3c2410
 #endif
 EOF

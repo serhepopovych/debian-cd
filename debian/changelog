@@ -56,6 +56,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     for appropriate m68k subarches, and also emile, amiboot, atari-bootstrap,
     and initramfs-tools for m68k.
 
+  [ Steve McIntyre ]
+  * Add extra arm kernels and more utilities into the task lists.
+    Closes: #373225
+
  -- Joey Hess <joeyh@debian.org>  Tue, 13 Jun 2006 17:16:30 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
