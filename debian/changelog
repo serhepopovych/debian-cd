@@ -60,7 +60,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Add extra arm kernels and more utilities into the task lists.
     Closes: #373225
 
- -- Joey Hess <joeyh@debian.org>  Tue, 13 Jun 2006 17:16:30 -0400
+  [ Joey Hess ]
+  * Correct url to the amd64 dailys.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 15 Jun 2006 15:25:08 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
 
