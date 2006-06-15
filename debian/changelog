@@ -62,6 +62,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Correct url to the amd64 dailys.
+  * Add gtk initrd to amd64 images if available.
+  * Add autorun file to amd64 images if there's a README.html, same as for
+    i386.
 
  -- Joey Hess <joeyh@debian.org>  Thu, 15 Jun 2006 15:25:08 -0400
 
