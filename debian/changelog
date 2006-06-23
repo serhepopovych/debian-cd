@@ -68,7 +68,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Add pcmciautils-udeb to udeb_include lists; something needs to pull it
     in and like pcmcia-cs-udeb its priority won't.
 
- -- Joey Hess <joeyh@debian.org>  Thu, 15 Jun 2006 18:42:51 -0400
+  [ Frans Pop ]
+  * Wouter Verhelst has taken over daily d-i builds for powerpc.
+
+ -- Frans Pop <fjp@debian.org>  Fri, 23 Jun 2006 22:49:03 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
