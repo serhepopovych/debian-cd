@@ -71,7 +71,11 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Wouter Verhelst has taken over daily d-i builds for powerpc.
 
- -- Frans Pop <fjp@debian.org>  Fri, 23 Jun 2006 22:49:03 +0200
+  [ Joey Hess ]
+  * Add 686 kernels, since the netinst CD is much larger and can now easily
+    fit them and this makes the CD much more attractive for many users.
+
+ -- Joey Hess <joeyh@debian.org>  Sat,  1 Jul 2006 19:11:19 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
 
