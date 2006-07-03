@@ -19,7 +19,9 @@ LOCAL=$4
 LOCALDEBS=$5
 SCANSOURCES=$6
 
-echo "Adding the selected sources to each CD."
+export TDIR
+
+echo "Adding the selected sources to each CD under $TDIR"
 for i in $SDIR/*.sources
 do
 	dir=${i%%.sources}
