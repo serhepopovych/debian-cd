@@ -13,10 +13,14 @@ set -e
 N=$1
 CDDIR=$2
 BOOTDIR=
+
+echo "DI_WWW_HOME is $DI_WWW_HOME"
+echo "DI_DIR is $DI_DIR"
+
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~kroeckx/d-i/images/daily"
    if [ -n "$DI_DIR" ];then
-      DI_DIR="$DI_DIR/${DI_WWW_HOME##*/}"
+      DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""
       echo "Using images from $DI_DIR"
    fi
@@ -42,6 +46,7 @@ fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
 
+
 # Download boot images.
 for image in $BOOT_IMAGES; do
     if [ ! -e "$image" ]; then
@@ -52,6 +57,7 @@ for image in $BOOT_IMAGES; do
 	elif [ ! "$DI_WWW_HOME" ];then
 		if [ ! "$DI_DIR" ];then
 		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+           echo "Copying images from $DI_DIR"
 		fi
 		cp "$DI_DIR/$image" "$image"
 	else
