@@ -4,7 +4,7 @@
 
 dpkg-repack
 grep-dctrl
-martmontools
+smartmontools
 irda-tools
 hwtools
 acpid
