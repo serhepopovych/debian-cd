@@ -71,12 +71,14 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Wouter Verhelst has taken over daily d-i builds for powerpc.
   * AMD64 d-i images are now available from people.d.o.
+  * Add cryptsetup to first CD; needed for installations using encrypted
+    partitions.
 
   [ Joey Hess ]
   * Add 686 kernels, since the netinst CD is much larger and can now easily
     fit them and this makes the CD much more attractive for many users.
 
- -- Frans Pop <fjp@debian.org>  Sun,  2 Jul 2006 23:03:50 +0200
+ -- Frans Pop <fjp@debian.org>  Sun, 16 Jul 2006 20:27:58 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
