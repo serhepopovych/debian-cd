@@ -82,8 +82,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Drop 2.4 support for sparc64; switch from 2.4 to 2.6 for sparc32.
   * Exclude 2.4 kernel udebs for sparc and s/390 (s/390 has switched to 2.6).
   * Include only 2.6 kernel images for sparc.
+  * Update to libdevmapper1.02.
+  * No need to include yaird for m68k.
 
- -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 01:35:45 +0200
+ -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 01:39:01 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 

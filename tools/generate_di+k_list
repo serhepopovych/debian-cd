@@ -35,7 +35,7 @@ cat > debian-installer+kernel-$DI_CODENAME << EOF
 #include <debian-installer-$DI_CODENAME>
 eject
 locales
-libdevmapper1.01
+libdevmapper1.02
 lvm-common
 lvm2
 mdadm
@@ -212,7 +212,6 @@ linux-image-2.6-sparc64-smp
 #endif
 
 #ifdef ARCH_m68k
-yaird
 initramfs-tools
 fileutils
 amiboot
