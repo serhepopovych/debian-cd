@@ -121,9 +121,8 @@ palo
 #endif
 
 #ifdef ARCH_ia64
-yaird
+initramfs-tools
 discover1
-initrd-tools
 linux-image-2.6-itanium
 linux-image-2.6-itanium-smp
 linux-image-2.6-mckinley
@@ -179,7 +178,6 @@ powerpc-utils
 hfsutils
 mkvmlinuz
 module-init-tools
-initrd-tools
 linux-image-2.6-powerpc
 linux-image-2.6-powerpc-smp
 linux-image-2.6-powerpc64
@@ -201,10 +199,9 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_sparc
-yaird
+initramfs-tools
 silo
 discover1
-initrd-tools
 linux-image-2.6-sparc32
 linux-image-2.6-sparc32-smp
 linux-image-2.6-sparc64
