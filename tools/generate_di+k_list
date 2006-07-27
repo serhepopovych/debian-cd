@@ -205,12 +205,10 @@ yaird
 silo
 discover1
 initrd-tools
+linux-image-2.6-sparc32
+linux-image-2.6-sparc32-smp
 linux-image-2.6-sparc64
 linux-image-2.6-sparc64-smp
-kernel-image-2.4-sparc32
-kernel-image-2.4-sparc32-smp
-kernel-image-2.4-sparc64
-kernel-image-2.4-sparc64-smp
 #endif
 
 #ifdef ARCH_m68k
