@@ -77,6 +77,7 @@ discover
 discover1
 grub
 lilo
+elilo
 /* Note that we do not have to include every optimised kernel flavor for
  * i386, but this does control what kernels are available on the netinst CD.
  * Kernel headers are included as third party modules are commonly
@@ -131,42 +132,48 @@ elilo
 #endif
 
 #ifdef ARCH_mips
-yaird
+initramfs-tools
 arcboot
 sibyl
-EOF
-
-# Only include mips kernels that d-i base-installer installs.
-# XXX once mips gets kernel-image-2.4-<subarch> packages, use those
-# instead.
-for subarch in r4k-ip22 r5k-ip22 sb1-swarm-bn; do
-    zcat $MIRROR/dists/$CODENAME/main/binary-mips/Packages.gz | \
-	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
-		grep -- "-$subarch$" | sort -n | tail -n 1 \
-                >> debian-installer+kernel-$DI_CODENAME
-done
-
-cat >> debian-installer+kernel-$DI_CODENAME << EOF
+linux-image-2.6-r4k-ip22
+linux-image-2.6-r5k-ip32
+linux-image-2.6-sb1-bcm91250a
+linux-image-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
-yaird
+initramfs-tools
 sibyl
 colo
 delo
-EOF
+linux-image-2.6-r3k-kn02
+linux-image-2.6-r4k-kn04
+linux-image-2.6-r5k-cobalt
+linux-image-2.6-sb1-bcm91250a
+linux-image-2.6-sb1a-bcm91480b
+#endif
 
-# Only include mipsel kernels that d-i base-installer installs.
-# XXX once mips gets kernel-image-2.4-<subarch> packages, use those
-# instead.
-for subarch in r3k-kn02 r4k-kn04 cobalt lasat; do
-    zcat $MIRROR/dists/$CODENAME/main/binary-mipsel/Packages.gz | \
-	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
-		grep -- "-$subarch$" | sort -n | tail -n 1 \
-                >> debian-installer+kernel-$DI_CODENAME
-done
+#ifdef ARCH_arm
+initramfs-tools
+discover1
+nwutil
+slugimage
+nslu2-utils
+linux-image-2.6-footbridge
+linux-image-2.6-ixp4xx
+linux-image-2.6-nslu2
+linux-image-2.6-rpc
+linux-image-2.6-s3c2410
+#endif
 
-cat >> debian-installer+kernel-$DI_CODENAME << EOF
+#ifdef ARCH_sparc
+initramfs-tools
+silo
+discover1
+linux-image-2.6-sparc32
+linux-image-2.6-sparc32-smp
+linux-image-2.6-sparc64
+linux-image-2.6-sparc64-smp
 #endif
 
 #ifdef ARCH_powerpc
@@ -196,16 +203,6 @@ for subarch in powerpc power3 power4 power3-pmac power3-chrp-rs6k \
 done
 
 cat >> debian-installer+kernel-$DI_CODENAME << EOF
-#endif
-
-#ifdef ARCH_sparc
-initramfs-tools
-silo
-discover1
-linux-image-2.6-sparc32
-linux-image-2.6-sparc32-smp
-linux-image-2.6-sparc64
-linux-image-2.6-sparc64-smp
 #endif
 
 #ifdef ARCH_m68k
@@ -239,24 +236,6 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 
 #endif
 
-#ifdef ARCH_arm
-initramfs-tools
-discover1
-nwutil
-slugimage
-nslu2-utils
 EOF
 
-zcat $MIRROR/dists/$CODENAME/main/binary-arm/Packages.gz | \
-    sed -n 's/Package: \(kernel-image-2.4.*\)$/\1/p' | \
-    tail -n5 \
-    >> debian-installer+kernel-$DI_CODENAME
 
-cat >> debian-installer+kernel-$DI_CODENAME << EOF
-linux-image-2.6-footbridge
-linux-image-2.6-ixp4xx
-linux-image-2.6-nslu2
-linux-image-2.6-rpc
-linux-image-2.6-s3c2410
-#endif
-EOF
