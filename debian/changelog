@@ -95,7 +95,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     fragments any more.
   * Added elilo for i386.
 
- -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 02:13:13 +0200
+  [ Frans Pop ]
+  * Mips has dropped r5k-ip22 kernels and gained r5k-ip32.
+
+ -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 23:17:44 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
