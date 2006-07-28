@@ -38,14 +38,17 @@ if [ ! "$DI_WWW_HOME" ];then
 else
 	DI_DIR="di_stuff"
 	wget -P "$DI_DIR/r4k-ip22" "$DI_WWW_HOME/r4k-ip22/cdrom-boot.img"
-	wget -P "$DI_DIR/r5k-ip32" "$DI_WWW_HOME/r5k-ip32/cdrom-boot.img"
+#   r5k-ip32 has no cdrom boot image yet
+#	wget -P "$DI_DIR/r5k-ip32" "$DI_WWW_HOME/r5k-ip32/cdrom-boot.img"
 fi
 install -m 644 -D "$DI_DIR"/r4k-ip22/cdrom-boot.img "$CDROOT"/install/r4k-ip22-boot.img
-install -m 644 -D "$DI_DIR"/r5k-ip32/cdrom-boot.img "$CDROOT"/install/r5k-ip32-boot.img
+#r5k-ip32 has no cdrom boot image yet
+#install -m 644 -D "$DI_DIR"/r5k-ip32/cdrom-boot.img "$CDROOT"/install/r5k-ip32-boot.img
 
 install_languages $CDROOT
 
 echo " -mips-boot install/r4k-ip22-boot.img" >> $1.mkisofs_opts
-echo " -mips-boot install/r5k-ip32-boot.img" >> $1.mkisofs_opts
+#r5k-ip32 has no cdrom boot image yet
+#echo " -mips-boot install/r5k-ip32-boot.img" >> $1.mkisofs_opts
 
 exit 0
