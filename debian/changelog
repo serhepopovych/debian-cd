@@ -86,15 +86,16 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * No need to include yaird for m68k.
   * Drop initrd-tools for ia64, powerpc and sparc.
   * Include initramfs-tools instead of yaird for ia64 and sparc.
+  * No initramfs generator needed for mips, mipsel and m68k.
 
   [ Steve McIntyre ]
-  * Switch from 2.4 to 2.6 kernels for arm, mips and mipsel
-  * Switch from yaird over to initramfs-tools (same arches)
+  * Switch from 2.4 to 2.6 kernels for arm, mips and mipsel.
+  * Switch from yaird over to initramfs-tools for arm.
   * Much simplified generate_di+k_list - mips and mipsel don't need script
-    fragments any more
-  * Added elilo for i386
-	
- -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 01:45:13 +0200
+    fragments any more.
+  * Added elilo for i386.
+
+ -- Frans Pop <fjp@debian.org>  Fri, 28 Jul 2006 02:13:13 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 

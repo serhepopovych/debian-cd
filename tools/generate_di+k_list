@@ -132,7 +132,6 @@ elilo
 #endif
 
 #ifdef ARCH_mips
-initramfs-tools
 arcboot
 sibyl
 linux-image-2.6-r4k-ip22
@@ -142,7 +141,6 @@ linux-image-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
-initramfs-tools
 sibyl
 colo
 delo
@@ -206,7 +204,6 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_m68k
-initramfs-tools
 fileutils
 amiboot
 atari-bootstrap
@@ -237,5 +234,4 @@ cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 EOF
-
 
