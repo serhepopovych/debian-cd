@@ -42,7 +42,9 @@ language-env
 manpages-it
 language-env
 jfbterm
+unifont
 manpages-ja
+lv
 language-env
 jfbterm
 manpages-ko
@@ -57,8 +59,6 @@ language-env
 manpages-es
 locales
 language-env
-xiterm+thai
-xfonts-thai
 language-env
 locales
 manpages-tr

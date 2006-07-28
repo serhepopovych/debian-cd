@@ -95,6 +95,11 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     fragments any more.
   * Added elilo for i386.
 
+  [ Joey Hess ]
+  * Update task-essential-etch.
+  * Update task.list to include all the new language tasks.
+  * Update task-full-etch.
+  
   [ Frans Pop ]
   * Mips has dropped r5k-ip22 kernels and gained r5k-ip32.
 
