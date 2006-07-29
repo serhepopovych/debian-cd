@@ -107,8 +107,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * There are no "tape" images with 2.6.16 for S/390.
+  * Exclude floppy and el-torito images for i386 as they are not being built.
 
- -- Frans Pop <fjp@debian.org>  Sat, 29 Jul 2006 21:09:45 +0200
+ -- Frans Pop <fjp@debian.org>  Sat, 29 Jul 2006 23:07:48 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
