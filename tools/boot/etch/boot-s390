@@ -51,7 +51,9 @@ mkdir -p $imagedir
 # - tape/kernel.debian         : kernel for tape
 # - tape/kernel.debian-nolabel : kernel for tape (nolabel)
 
-images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
+# Tape images not available with 2.6.16
+#images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
+images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian"
 
 for image in $images_S390; do
 	case $image in
@@ -85,14 +87,10 @@ done
 # - d390oco.ins : same, using object-code-only-modules-ramdisk (example)
 # - d390.tdf    : for booting from emulated tape
 # - d390oco.tdf : same, using object-code-only-modules-ramdisk (example)
-
 cp $BASEDIR/data/$CODENAME/s390/d390* "$imagedir/"
 
 # Copy the README file
-
 cp $BASEDIR/data/$CODENAME/s390/README.boot "boot$N/"
 
-
 # Include the boot$N/-tree into the iso-image
-
 echo -n "-J boot$N "  >> $N.mkisofs_opts
