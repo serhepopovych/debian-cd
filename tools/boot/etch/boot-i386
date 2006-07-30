@@ -37,7 +37,9 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 
 # List of boot image for each CD
 KTYPE[1]="" #isolinux multiboot in fact
-KTYPE[2]="cdrom"
+# Disable el-torito boot CD for Etch Beta 3
+#KTYPE[2]="cdrom"
+KTYPE[2]=""
 # XXX add net-image back when it's fixed
 KTYPE[3]=""
 KTYPE[4]=""
