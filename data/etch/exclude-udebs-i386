@@ -25,7 +25,8 @@ userdevfs
 # The speakup kernel modules are not useful unless the access images are
 # provided.
 *-speakup-di
-# These udebs are not used yet.
-mouse-modules-*
 # Only needed on arches that use partconf or autopartkit.
 partconf-mkfstab
+# Not needed on arches that use partman
+mdcfg
+lvmcfg

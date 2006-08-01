@@ -25,11 +25,8 @@ userdevfs
 # The speakup kernel modules are not useful unless the access images are
 # provided.
 *-speakup-di
-# These packages are for the old partitioning system, and should not be
-# included as they confuse users.
-# Note that partconf-find-partitions is used by lvmcfg-utils, so is not
-# excluded likewise, partconf-mkfstab is used by autopartkit.
-partconf
-partitioner
-# This is obsolete.
-discover2-data-udeb
+# Only needed on arches that use partconf or autopartkit.
+partconf-mkfstab
+# Not needed on arches that use partman
+mdcfg
+lvmcfg

@@ -25,3 +25,8 @@ usb-modules-*
 usb-storage-modules-*
 # Not needed with the 2.4 kernel on powerpc.
 userdevfs
+# Only needed on arches that use partconf or autopartkit.
+partconf-mkfstab
+# Not needed on arches that use partman
+mdcfg
+lvmcfg

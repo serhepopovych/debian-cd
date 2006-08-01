@@ -1,3 +1,8 @@
 # 2.4 kernels no longer supported
 *-2.4.27-2-sparc32-di
 *-2.4.27-2-sparc64-di
+# Only needed on arches that use partconf or autopartkit.
+partconf-mkfstab
+# Not needed on arches that use partman
+mdcfg
+lvmcfg

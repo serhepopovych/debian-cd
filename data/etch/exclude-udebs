@@ -54,16 +54,18 @@ rootskel-bootfloppy
 cdebconf-gtk-udeb
 fontconfig-udeb
 libatk1.0-udeb
-libdirectfb-0.9-19-udeb
+libcairo2-directfb-udeb
+libcairo-directfb2-udeb
+libdirectfb-0.9-22-udeb
+libdirectfb-0.9-24-udeb
+libdirectfb-0.9-25-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-udeb
 libgtk+2.0-directfb0-udeb
 libpango1.0-udeb
 libpng12-0-udeb
-ttf-freefont-udeb
-ttf-cjk-compact-udeb
-libdirectfb-0.9-22-udeb
+ttf-*
 fbset-udeb
 # This udeb is not in good shape and is largely supersceded by
 # cdebconf-newt-udeb
@@ -106,12 +108,20 @@ ltsp-client-builder
 autopartkit
 lvm10-udeb
 # If needed, will be on the initrd already.
+modutils-full
 module-init-tools-udeb
+arch-detect
+env-preseed
 rescue-check
 rootskel-gtk
 cdebconf-text-udeb
+brltty-udeb
+klibc-utils-udeb
+libklibc-udeb
+udev-udeb
+mouse-modules-*
 # Obsolete
-hw-detect-full
+libslang1-utf8-udeb
 # Eh?
 gnumach-udeb
 # Exclude apt-setup components; they will be included 
