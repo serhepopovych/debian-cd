@@ -160,3 +160,9 @@ linux-image-xen-em64t-p4
 linux-image-xen-k7
 linux-image-xen-vserver-686
 linux-image-xen-vserver-amd64-k8
+linux-modules-2.6.16-2-xen-686
+linux-modules-2.6.16-2-xen-amd64-k8
+linux-modules-2.6.16-2-xen-em64t-p4
+linux-modules-2.6.16-2-xen-k7
+linux-modules-2.6.16-2-xen-vserver-686
+linux-modules-2.6.16-2-xen-vserver-amd64-k8
