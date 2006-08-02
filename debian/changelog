@@ -113,8 +113,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Exclude 2.6.15 kernel header and image packages from CD1.
   * Exclude 2.6.16 xen and vserver kernel  packages from CD1.
   * Update generate_di+k_list to include libsysfs2.
+  * Update popularity contest data for etch.
 
- -- Frans Pop <fjp@debian.org>  Wed,  2 Aug 2006 02:09:52 +0200
+ -- Frans Pop <fjp@debian.org>  Wed,  2 Aug 2006 02:22:32 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
