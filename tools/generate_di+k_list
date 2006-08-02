@@ -63,10 +63,10 @@ installation-report
 openssh-server
 cryptsetup
 
-/* libsysfs1-udeb provides libsysfs1 so we have to make sure the deb
+/* libsysfs2-udeb provides libsysfs2 so we have to make sure the deb
  * gets included on the first CD too
  */
-libsysfs1
+libsysfs2
 
 /* Needed for rootless installs. */
 sudo
