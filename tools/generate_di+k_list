@@ -71,10 +71,15 @@ libsysfs2
 /* Needed for rootless installs. */
 sudo
 
+/* libdiscover1-udeb provides libdiscover1 so we have to make sure the
+ * deb gets included on the first CD too for arches that get discover1
+ */
+
 #ifdef ARCH_i386
 initramfs-tools
 discover
 discover1
+libdiscover1
 grub
 lilo
 elilo
@@ -96,6 +101,7 @@ linux-headers-2.6-686
 initramfs-tools
 discover
 discover1
+libdiscover1
 grub
 lilo
 linux-image-2.6-amd64-generic
@@ -107,6 +113,7 @@ initramfs-tools
 aboot
 aboot-base
 discover1
+libdiscover1
 linux-image-2.6-alpha-generic
 linux-image-2.6-alpha-smp
 #endif
@@ -114,6 +121,7 @@ linux-image-2.6-alpha-smp
 #ifdef ARCH_hppa
 initramfs-tools
 discover1
+libdiscover1
 linux-image-2.6-parisc
 linux-image-2.6-parisc-smp
 linux-image-2.6-parisc64
@@ -124,6 +132,7 @@ palo
 #ifdef ARCH_ia64
 initramfs-tools
 discover1
+libdiscover1
 linux-image-2.6-itanium
 linux-image-2.6-itanium-smp
 linux-image-2.6-mckinley
@@ -154,6 +163,7 @@ linux-image-2.6-sb1a-bcm91480b
 #ifdef ARCH_arm
 initramfs-tools
 discover1
+libdiscover1
 nwutil
 slugimage
 nslu2-utils
@@ -168,6 +178,7 @@ linux-image-2.6-s3c2410
 initramfs-tools
 silo
 discover1
+libdiscover1
 linux-image-2.6-sparc32
 linux-image-2.6-sparc32-smp
 linux-image-2.6-sparc64
@@ -177,6 +188,7 @@ linux-image-2.6-sparc64-smp
 #ifdef ARCH_powerpc
 initramfs-tools
 discover1
+libdiscover1
 quik
 yaboot
 powerpc-utils
