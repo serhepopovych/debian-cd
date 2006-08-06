@@ -8,6 +8,11 @@
 
 use warnings;
 use strict;
+use Text::Format; # From debian package libtext-format-perl
+use Getopt::Std;
+
+my %opts;
+getopts('t', \%opts); 
 
 my $logfile = ($ARGV[0] ||
             "/skolelinux/developer/local0/ftp/tmp/woody-i386/log.list2cds");
@@ -15,11 +20,16 @@ my $cdlimit = ($ARGV[1] || 1) + 1;
 
 open(LOG, $logfile) || die "Unable to open $logfile";
 
+
+my $text = Text::Format->new(leftMargin   =>   16,
+			     rightMargin  =>   0,
+			     firstIndent  => 0);
 my $curcd = 1;
 my $pkg;
 my @order;
 my %cdsize;
 my %size;
+my %deps;
 my $curcdsize;
 my $cursize;
 while (<LOG>) {
@@ -29,11 +39,12 @@ while (<LOG>) {
 	$curcdsize = $1;
 	$cursize = $2;
     }
-    if (/^  Adding (\S+) .+/) {
+    if (/^  Adding (\S+) (.+) to CD \d+/) {
 	$pkg = $1;
 	$cdsize{$pkg} = $curcdsize;
 	$size{$pkg} = $cursize;
 	push @order, $pkg;
+	$deps{$pkg} = $2;
     }
     if (/Limit for CD (.+) is/) {
 	last  if $cdlimit == $1;
@@ -57,4 +68,5 @@ print "-----------------------\n";
 
 for $pkg (@order) {
     printf "%7d %7d %s\n", $size{$pkg} / 1024, $cdsize{$pkg} / 1024, $pkg;
+    print $text->format($deps{$pkg}) if ($opts{'t'} && $deps{$pkg});
 }
