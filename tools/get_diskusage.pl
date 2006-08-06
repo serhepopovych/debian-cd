@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # Author: Petter Reinholdtsen <pere@hungry.com>
 # Date:   2001-11-20
@@ -6,25 +6,48 @@
 # Parse logfile from Debian debian-cd build, and report how much each package
 # added to the CD size.
 
-$logfile = ($ARGV[0] ||
-            "$ENV{TDIR}/$ENV{CODENAME}-$ENV{ARCH}/log.list2cds");
+use warnings;
+use strict;
+
+my $logfile = ($ARGV[0] ||
+            "/skolelinux/developer/local0/ftp/tmp/woody-i386/log.list2cds");
+my $cdlimit = ($ARGV[1] || 1) + 1;
 
 open(LOG, $logfile) || die "Unable to open $logfile";
 
+my $curcd = 1;
 my $pkg;
+my @order;
+my %cdsize;
+my %size;
+my $curcdsize;
+my $cursize;
 while (<LOG>) {
     chomp;
-    $pkg = $1 if (/^\+ Trying to add (.+)\.\.\./);
+#    $pkg = $1 if (/^\+ Trying to add (.+)\.\.\./);
     if (/  \$cd_size = (\d+), \$size = (\d+)/) {
-	$cdsize{$pkg} = $1;
-	$size{$pkg} = $2;
+	$curcdsize = $1;
+	$cursize = $2;
     }
-    last if (/Limit for CD 2 is/);
+    if (/^  Adding (\S+) .+/) {
+	$pkg = $1;
+	$cdsize{$pkg} = $curcdsize;
+	$size{$pkg} = $cursize;
+	push @order, $pkg;
+    }
+    if (/Limit for CD (.+) is/) {
+	last  if $cdlimit == $1;
+	my $txt = "<=============== start of CD $1";
+        $size{$txt} = 0;
+        $cdsize{$txt} = 0;
+	push @order, $txt;
+    }
     # Add delimiter
     if (/Standard system already takes (.\d+)/) {
-	my $pkg = "<=============== end of standard pkgs";
-        $size{$pkg} = 0;
-        $cdsize{$pkg} = $1;
+	my $txt = "<=============== end of standard pkgs";
+        $size{$txt} = 0;
+        $cdsize{$txt} = $1;
+	push @order, $txt;
     }
 }
 close(LOG);
@@ -32,6 +55,6 @@ close(LOG);
 print "  +size  cdsize pkgname\n";
 print "-----------------------\n";
 
-for $pkg (sort { $cdsize{$a} <=> $cdsize{$b} } keys %size) {
+for $pkg (@order) {
     printf "%7d %7d %s\n", $size{$pkg} / 1024, $cdsize{$pkg} / 1024, $pkg;
 }
