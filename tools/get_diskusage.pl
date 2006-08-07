@@ -39,12 +39,12 @@ while (<LOG>) {
 	$curcdsize = $1;
 	$cursize = $2;
     }
-    if (/^  Adding (\S+) (.+) to CD \d+/) {
-	$pkg = $1;
+    if (/^  Adding (.+) to CD \d+/) {
+	my ($pkg, $deplist) = split(/\s+/, $1, 2);
 	$cdsize{$pkg} = $curcdsize;
 	$size{$pkg} = $cursize;
 	push @order, $pkg;
-	$deps{$pkg} = $2;
+	$deps{$pkg} = $deplist;
     }
     if (/Limit for CD (.+) is/) {
 	last  if $cdlimit == $1;
