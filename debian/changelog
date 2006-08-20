@@ -120,6 +120,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Add more features to get_diskusage.pl, making it easier to track
     dependencies and rejected packages.
 
+  [ Steve McIntyre ]
+  * Try to fix the "unofficial development version" bug on official CDs.
+	
  -- Frans Pop <fjp@debian.org>  Wed,  2 Aug 2006 16:47:57 +0200
 
 debian-cd (2.2.24) unstable; urgency=low

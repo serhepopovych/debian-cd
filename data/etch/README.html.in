@@ -432,6 +432,7 @@ Last-Minute Notes
 #endif
 </H2>
 </a>
+#if OFFICIAL != Official
 <p>
 <UL>
 
@@ -443,15 +444,8 @@ bugs may be present anywhere in the system.
 <br>&nbsp;
 </LI>
 
-#if 0
--------- This can't be an official image, so also no official notes.
-<LI>
-Last-minutes notes for this CD may be available on
-<a href="http://www.debian.org/CD/releases/">http://www.debian.org/CD/releases/</a>
-</LI>
-#endif
-
 </UL>
+#endif
 #endif
 
 #if TYPEbinary
