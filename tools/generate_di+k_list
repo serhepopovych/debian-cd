@@ -180,6 +180,8 @@ initramfs-tools
 silo
 discover1
 libdiscover1
+libc6-sparcv9b
+libc6-sparcv9
 linux-image-2.6-sparc32
 linux-image-2.6-sparc32-smp
 linux-image-2.6-sparc64
