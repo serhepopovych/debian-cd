@@ -122,8 +122,14 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Try to fix the "unofficial development version" bug on official CDs.
-	
- -- Frans Pop <fjp@debian.org>  Wed,  2 Aug 2006 16:47:57 +0200
+
+  [ Joey Hess ]
+  * Include libc6-i686 in generate_di+k_list, base-installer will
+    soon begin installing this onto machines that can use it.
+    (To regain some space, libc6-amd64 will soon stop being standard priority,
+    and drop off.)
+
+ -- Joey Hess <joeyh@debian.org>  Tue, 22 Aug 2006 17:44:49 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
 

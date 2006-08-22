@@ -83,6 +83,7 @@ libdiscover1
 grub
 lilo
 elilo
+libc6-i686
 /* Note that we do not have to include every optimised kernel flavor for
  * i386, but this does control what kernels are available on the netinst CD.
  * Kernel headers are included as third party modules are commonly
