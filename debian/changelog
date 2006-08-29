@@ -131,6 +131,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * On sparc, include libc6-sparcv9 and libc6-sparcv9b, which base-installer
     will also pull in.
 
+  [ Colin Watson ]
+  * Cope with cdrom64 -> cdrom renaming for powerpc64 subarchitecture.
+
  -- Joey Hess <joeyh@debian.org>  Tue, 22 Aug 2006 17:57:09 -0400
 
 debian-cd (2.2.24) unstable; urgency=low
