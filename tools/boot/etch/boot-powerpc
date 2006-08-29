@@ -94,9 +94,13 @@ do
         if [ ! "$DI_DIR" ];then 
            DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
         fi
-	cp -a "$DI_DIR/$subarch/cdrom${bitness}" "$subarch"
+	if ! cp -a "$DI_DIR/$subarch/cdrom" "$subarch" && [ "$bitness" ]; then
+	   cp -a "$DI_DIR/$subarch/cdrom${bitness}" "$subarch"
+	fi
   else
-	wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom${bitness}/"
+	if ! wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom/" && [ "$bitness" ]; then
+	   wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom${bitness}/"
+	fi
   fi
 
 done
