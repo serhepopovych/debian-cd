@@ -119,6 +119,8 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Petter Reinholdtsen ]
   * Add more features to get_diskusage.pl, making it easier to track
     dependencies and rejected packages.
+  * Correct splash screen generation for sarge and etch, making sure the
+    correct background colour (black) is selected.
 
   [ Steve McIntyre ]
   * Try to fix the "unofficial development version" bug on official CDs.
