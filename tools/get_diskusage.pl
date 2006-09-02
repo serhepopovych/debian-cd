@@ -24,13 +24,13 @@ open(LOG, $logfile) || die "Unable to open $logfile";
 my $text = Text::Format->new(leftMargin   =>   16,
 			     rightMargin  =>   0,
 			     firstIndent  => 0);
-my $curcd = 1;
 my $markerstep = $opts{m} || 0;
 my $pkg;
 my @order;
 my %cdsize;
 my %size;
 my %deps;
+my $curcd = 1;
 my $curcdsize;
 my $cursize;
 my @excluded;
@@ -54,7 +54,7 @@ while (<LOG>) {
 	$cursize = $2;
 	if ($markerstep) {
 	    while ($curcdsize > $nextmarker) {
-		my $txt = sprintf("<=============== CD fill level passing %d KiB",
+		my $txt = sprintf("<=============== CD $curcd fill level passing %d KiB",
 				  $nextmarker / 1024);
 		$size{$txt} = 0;
 		$cdsize{$txt} = $curcdsize;
@@ -72,6 +72,7 @@ while (<LOG>) {
     }
     if (/Limit for CD (.+) is/) {
 	last if $cdlimit == $1;
+	$curcd = $1;
 	my $txt = "<=============== start of CD $1";
         $size{$txt} = 0;
         $cdsize{$txt} = 0;
