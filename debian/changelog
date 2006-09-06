@@ -136,7 +136,11 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Colin Watson ]
   * Cope with cdrom64 -> cdrom renaming for powerpc64 subarchitecture.
 
- -- Joey Hess <joeyh@debian.org>  Tue, 22 Aug 2006 17:57:09 -0400
+  [ Sven Luther ]
+  * [powerpc] Added a rescue option to yaboot.conf as well as the pegasos boot
+    script.
+
+ -- Sven Luther <sven@tael.powerlinux.fr>  Wed,  6 Sep 2006 21:38:33 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 

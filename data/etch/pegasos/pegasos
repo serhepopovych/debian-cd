@@ -9,7 +9,7 @@
 \
 \ boot menu stuff
 \
-: my-max-boot-num 3 ;
+: my-max-boot-num 4 ;
 : my-boot-default 1 ;
 : my-boot-delay d# 300 ; \ unit = 100 ms
 : my-print-menu ( -- )
@@ -29,7 +29,8 @@
   ."  "								cr
   ." 1: install"   						cr
   ." 2: expert"   						cr
-  ." 3: return to OF prompt"					cr
+  ." 3: rescue"   						cr
+  ." 4: return to OF prompt"					cr
   ."  "								cr
 ;
 : my-boot-case ( num -- )
@@ -37,7 +38,8 @@
   case
     1 of " cd install/powerpc/vmlinuz-chrp.initrd devfs=mount,dall init=/linuxrc --" endof
     2 of " cd install/powerpc/vmlinuz-chrp.initrd DEBCONF_PRIORITY=low devfs=mount,dall init=/linuxrc --" endof
-    3 of " none" endof
+    3 of " cd install/powerpc/vmlinuz-chrp.initrd devfs=mount,dall init=/linuxrc rescue/enable=true --" endof
+    4 of " none" endof
   endcase
   $boot
 ;
