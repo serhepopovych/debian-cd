@@ -36,9 +36,9 @@
 : my-boot-case ( num -- )
   ."  " cr
   case
-    1 of " cd install/powerpc/vmlinuz-chrp.initrd devfs=mount,dall init=/linuxrc --" endof
-    2 of " cd install/powerpc/vmlinuz-chrp.initrd DEBCONF_PRIORITY=low devfs=mount,dall init=/linuxrc --" endof
-    3 of " cd install/powerpc/vmlinuz-chrp.initrd devfs=mount,dall init=/linuxrc rescue/enable=true --" endof
+    1 of " cd install/powerpc/vmlinuz-chrp.initrd --" endof
+    2 of " cd install/powerpc/vmlinuz-chrp.initrd DEBCONF_PRIORITY=low --" endof
+    3 of " cd install/powerpc/vmlinuz-chrp.initrd rescue/enable=true --" endof
     4 of " none" endof
   endcase
   $boot

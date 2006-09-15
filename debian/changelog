@@ -140,6 +140,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * [powerpc] Added a rescue option to yaboot.conf as well as the pegasos boot
     script.
 
+  [ Colin Watson ]
+  * Remove obsolete devfs=mount,dall and init=/linuxrc options from
+    yaboot.conf and pegasos boot script.
+
  -- Sven Luther <sven@tael.powerlinux.fr>  Wed,  6 Sep 2006 21:38:33 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
