@@ -25,7 +25,7 @@ K32=$(ls $CDROOT/install/vmlinux-*-parisc|head -1)
 K64=$(ls $CDROOT/install/vmlinux-*-parisc64|head -1)
 RSIZE=$(expr $(zcat "$CDROOT/install/initrd.gz" | wc --bytes) / 1024)
 /sbin/palo \
-     --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk ramdisk_size=$RSIZE init=/linuxrc" \
+     --commandline="0/vmlinux root=/dev/ram initrd=0/ramdisk ramdisk_size=$RSIZE" \
      --recoverykernel="$K32" \
      --recoverykernel="$K64" \
      --bootloader="$CDROOT/install/iplboot" \
