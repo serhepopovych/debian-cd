@@ -41,9 +41,9 @@ do
 	DISKINFO=`cat $DIR/$n.diskinfo`
 
 	if [ $ARCH = "source" ] ; then
-		OUTFILE="debian-$relname-$ARCH-$n"
+		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$n"
 	else
-		OUTFILE="debian-$relname-$ARCH-binary-$n"
+		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-binary-$n"
 	fi
 
 	# Clean up any old files

@@ -40,7 +40,7 @@ for DISK in $FIRSTDISKS
 do 
     DISK=${DISK##CD}
 	ok=yes
-    for p in `debootstrap --arch $ARCH --print-debs $CODENAME $TDIR/debootstrap.tmp file:$MIRROR`
+    for p in `debootstrap --arch $ARCH --print-debs $CODENAME $TDIR/debootstrap.tmp file:$MIRROR $DEBOOTSTRAP_SCRIPT`
 	do
 		if ! grep -q ^$p$ $BDIR/$DISK.packages ; then
 			if [ -n "$BASE_EXCLUDE" ] && grep -q ^$p$ $BASE_EXCLUDE ; then

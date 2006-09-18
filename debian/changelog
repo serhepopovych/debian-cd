@@ -145,7 +145,14 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     yaboot.conf and pegasos boot script.
   * Remove init=/linuxrc from hppa.
 
- -- Sven Luther <sven@tael.powerlinux.fr>  Wed,  6 Sep 2006 21:38:33 +0200
+  [ Otavio Salvador ]
+  * Applied patches that are being in use at O.S. Systems and that are
+    useful to others:
+    - allow to use different name for final iso image;
+    - allow to set the script to be used in debootstrap to check if all
+      base need package are present;
+
+ -- Otavio Salvador <otavio@debian.org>  Fri, 15 Sep 2006 14:56:28 -0300
 
 debian-cd (2.2.24) unstable; urgency=low
 
