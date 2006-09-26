@@ -15,7 +15,7 @@ my %opts;
 getopts('cm:t', \%opts); 
 
 my $logfile = ($ARGV[0] ||
-            "/skolelinux/developer/local0/ftp/tmp/woody-i386/log.list2cds");
+            "$ENV{TDIR}/$ENV{CODENAME}-$ENV{ARCH}/log.list2cds");
 my $cdlimit = ($ARGV[1] || 1) + 1;
 
 open(LOG, $logfile) || die "Unable to open $logfile";
