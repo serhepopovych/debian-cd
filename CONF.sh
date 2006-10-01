@@ -20,6 +20,7 @@ unset MKISOFS           || true
 unset MKISOFS_OPTS      || true
 unset ISOLINUX          || true
 unset EXCLUDE           || true
+unset NOSOURCE          || true
 unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
@@ -187,6 +188,11 @@ export DEFSRCSIZE=635
 # We also exclude some source packages
 #export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-$CODENAME
 
+# Set this if building source packages CDs should be skipped.
+# You won't need source packages on your local mirror in that case.
+# (Setting IMAGETARGET is now deprecated, though still supported.)
+#export NOSOURCE=1
+
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
 export NORECOMMENDS=1
@@ -317,11 +323,6 @@ done
 
 # If set, overrides the boot picture used.
 #export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
-
-# Used by build.sh to determine what to build, this is the name of a target
-# in the Makefile. Use bin-official_images to build only binary CDs. The
-# default, official_images, builds everything.
-IMAGETARGET=bin-official_images
 
 # Set to 1 to save space by omitting the installation manual. 
 # If so the README will link to the manual on the web site.

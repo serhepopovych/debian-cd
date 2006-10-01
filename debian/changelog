@@ -150,9 +150,15 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     useful to others:
     - allow to use different name for final iso image;
     - allow to set the script to be used in debootstrap to check if all
-      base need package are present;
+      base need package are present.
 
- -- Otavio Salvador <otavio@debian.org>  Fri, 15 Sep 2006 14:56:28 -0300
+  [ Frans Pop ]
+  * Introduce new environment variable NOSOURCE that allows to build CD images
+    using a local mirror that does not contain source files. This new variable
+    obsoletes setting IMAGETARGET, though that is still supported for
+    backwards compatibility. Closes: #320205.
+
+ -- Frans Pop <fjp@debian.org>  Sun,  1 Oct 2006 21:34:38 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
