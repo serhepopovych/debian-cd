@@ -164,6 +164,7 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Minor changes to README.html.in and generation of README.html:
     cope with unofficial, official beta and official release CDs
     better. Let's not repeat the sarge mistake. Closes: #312604
+  * Trivial updates to update-cd
 
  -- Steve McIntyre <93sam@debian.org>  Thu,  5 Oct 2006 23:51:42 +0100
 
