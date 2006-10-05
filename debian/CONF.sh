@@ -20,6 +20,7 @@ unset MKISOFS           || true
 unset MKISOFS_OPTS      || true
 unset ISOLINUX          || true
 unset EXCLUDE           || true
+unset NOSOURCE          || true
 unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
@@ -50,7 +51,7 @@ unset OMIT_RELEASE_NOTES || true
 export BASEDIR=`pwd`
 
 # Building etch cd set ...
-export CODENAME=etch
+export CODENAME=sarge
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
@@ -96,7 +97,7 @@ export CPU KERNEL ARCH
 #	      images, however. Also, if you are using an NFS partition for
 #	      some part of this, you must use this option.
 # Paths to the mirrors
-export MIRROR=/ftp/debian
+export MIRROR=/mirror/debian
 
 # Comment the following line if you don't have/want non-US
 #export NONUS=/ftp/debian-non-US
@@ -107,14 +108,14 @@ export MIRROR=/ftp/debian
 #export FORCENONUSONCD1=1
 
 # Path of the temporary directory
-export TDIR=/ftp/tmp
+export TDIR=/mirror/tmp
 
 # Path where the images will be written
-export OUT=/rack/debian-cd
+export OUT=/mirror/debian-cd-test
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.
-export APTTMP=/ftp/tmp/apt
+export APTTMP=/mirror/tmp/apt
 
 # Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
@@ -165,27 +166,32 @@ export CONTRIB=1
 export ISOLINUX=1
 
 # uncomment this to if you want to see more of what the Makefile is doing
-#export VERBOSE_MAKE=1
+export VERBOSE_MAKE=1
 
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work
-#ATTEMPT_FALLBACK=yes
+ATTEMPT_FALLBACK=yes
 
 # Set your disk size here in MB. Used in calculating package and
 # source file layouts in build.sh and build_all.sh. Defaults are for
-# CD-R, try ~4600 for DVD-R.
+# CD-R, try ~4400 for DVD-R.
 export DEFBINSIZE=630
 export DEFSRCSIZE=635
 
 # We don't want certain packages to take up space on CD1...
-export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
+#export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)
-export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
+#export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
 
 # We also exclude some source packages
 #export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-$CODENAME
+
+# Set this if building source packages CDs should be skipped.
+# You won't need source packages on your local mirror in that case.
+# (Setting IMAGETARGET is now deprecated, though still supported.)
+#export NOSOURCE=1
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
@@ -246,7 +252,7 @@ export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigd
 
 # If set, use the md5sums from the main archive, rather than calculating
 # them locally
-#export FASTSUMS=1
+export FASTSUMS=1
 
 # A couple of things used only by publish_cds, so it can tweak the
 # jigdo files, and knows where to put the results.
@@ -306,22 +312,17 @@ done
 # INSTALLER_CD=0: nothing special (default)
 # INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer-$CODENAME)
 # INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
-#export INSTALLER_CD=0
+#export INSTALLER_CD=2
 
 # Parameters to pass to kernel when the CD boots. Not currently supported
 # for all architectures.
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.
-#export MAXCDS=1
+# export MAXCDS=1
 
 # If set, overrides the boot picture used.
 #export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
-
-# Used by build.sh to determine what to build, this is the name of a target
-# in the Makefile. Use bin-official_images to build only binary CDs. The
-# default, official_images, builds everything.
-#IMAGETARGET=official_images
 
 # Set to 1 to save space by omitting the installation manual. 
 # If so the README will link to the manual on the web site.
@@ -329,7 +330,7 @@ done
 
 # Set to 1 to save space by omitting the release notes
 # If so we will link to them on the web site.
-export OMIT_RELEASE_NOTES=0
+export OMIT_RELEASE_NOTES=1
 
 # Set this to override the defaul location
 #export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"

@@ -174,7 +174,7 @@ ATTEMPT_FALLBACK=yes
 
 # Set your disk size here in MB. Used in calculating package and
 # source file layouts in build.sh and build_all.sh. Defaults are for
-# CD-R, try ~4600 for DVD-R.
+# CD-R, try ~4400 for DVD-R.
 export DEFBINSIZE=630
 export DEFSRCSIZE=635
 

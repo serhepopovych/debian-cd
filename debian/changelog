@@ -158,7 +158,11 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     obsoletes setting IMAGETARGET, though that is still supported for
     backwards compatibility. Closes: #320205.
 
- -- Frans Pop <fjp@debian.org>  Sun,  1 Oct 2006 21:34:38 +0200
+  [ Steve McIntyre ]
+  * Update the suggested DVD size in CONF.sh to a saner number
+  * Re-sync CONF.sh over debian/CONF.sh
+
+ -- Steve McIntyre <93sam@debian.org>  Thu,  5 Oct 2006 23:51:42 +0100
 
 debian-cd (2.2.24) unstable; urgency=low
 
