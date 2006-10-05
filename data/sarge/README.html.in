@@ -432,20 +432,31 @@ Last-Minute Notes
 #endif
 </H2>
 </a>
-#if OFFICIAL != Official
 <p>
 <UL>
-
 <LI>
-You should keep in mind that this is an unofficial CD of the current
+
+#if OFFICIAL_VAL == 0
+You should keep in mind that this is an unofficial CD of the Debian
+system. This means that all sorts of bugs may be present anywhere in
+the system. Please report any bugs you find to the person that gave
+you this CD, not Debian.
+#endif
+#if OFFICIAL_VAL == 1
+You should keep in mind that this is a beta CD of the current
 development version of the Debian system. This means that all sorts of
 bugs may be present anywhere in the system.
+#endif
+#if OFFICIAL_VAL == 2
+This is an official release of the Debian system. Please report any
+bugs you find in the Debian Bug Tracking System; details at <A
+HREF="http://bugs.debian.org/">bugs.debian.org</A>.
+#endif
 
 <br>&nbsp;
 </LI>
 
 </UL>
-#endif
 #endif
 
 #if TYPEbinary

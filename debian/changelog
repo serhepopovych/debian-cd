@@ -161,6 +161,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Update the suggested DVD size in CONF.sh to a saner number
   * Re-sync CONF.sh over debian/CONF.sh
+  * Minor changes to README.html.in and generation of README.html:
+    cope with unofficial, official beta and official release CDs
+    better. Let's not repeat the sarge mistake. Closes: #312604
 
  -- Steve McIntyre <93sam@debian.org>  Thu,  5 Oct 2006 23:51:42 +0100
 

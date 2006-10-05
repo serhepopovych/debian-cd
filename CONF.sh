@@ -334,3 +334,15 @@ export OMIT_RELEASE_NOTES=1
 
 # Set this to override the defaul location
 #export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
+
+case "$OFFICIAL"x in
+       "Official"x)
+               export OFFICIAL_VAL=2
+               ;;
+       "Official Beta"x)
+               export OFFICIAL_VAL=1
+               ;;
+       *)
+               export OFFICIAL_VAL=0
+               ;;
+esac

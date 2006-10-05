@@ -586,14 +586,14 @@ $(SDIR)/CD1/README.html:
 			$$dir/README.mirrors.html $$dir/README.non-US; \
 		cpp -traditional -undef -P -C -Wall -nostdinc -I $$dir/ \
 		    -D OMIT_MANUAL="$(OMIT_MANUAL)" \
-			-D OFFICIAL=$(OFFICIAL) \
+			-D OFFICIAL_VAL=$(OFFICIAL_VAL) \
 		    -D OUTPUTtext $(BASEDIR)/data/$(CODENAME)/README.html.in \
 			| sed -e 's/%%.//g' > $$dir/README.html ; \
 		lynx -dump -force_html $$dir/README.html | todos \
 			> $$dir/README.txt ; \
 		cpp -traditional -undef -P -C -Wall -nostdinc -I $$dir/ \
 		    -D OMIT_MANUAL="$(OMIT_MANUAL)" \
-			-D OFFICIAL=$(OFFICIAL) \
+			-D OFFICIAL_VAL=$(OFFICIAL_VAL) \
 		    -D OUTPUThtml $(BASEDIR)/data/$(CODENAME)/README.html.in \
 			| sed -e 's/%%.//g' > $$dir/README.html ; \
 		rm -f $$dir/README.diskdefines ; \
