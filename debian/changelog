@@ -166,7 +166,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
     better. Let's not repeat the sarge mistake. Closes: #312604
   * Trivial updates to update-cd
 
- -- Steve McIntyre <93sam@debian.org>  Thu,  5 Oct 2006 23:51:42 +0100
+  [ Frans Pop ]
+  * Update base-etch and popularity-contest-etch in tasks.
+
+ -- Frans Pop <fjp@debian.org>  Fri,  6 Oct 2006 23:37:31 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 
