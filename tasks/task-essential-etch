@@ -3,15 +3,16 @@
  * Generated with: 
  
  
- for i in $(cat task.list); do
-   if [ "$i" != kde-desktop ]; then
-     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
-     grep-dctrl -s Key -n -e '.*'
-   fi
+ for i in $(cat task.list); do \
+   if [ "$i" != kde-desktop ]; then \
+     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc | \
+     grep-dctrl -s Key -n -e '.*'; \
+   fi; \
  done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch
   
  * Last updated: $Date$
  */
+
 
 x-window-system-core
 gnome-desktop-environment
@@ -24,6 +25,9 @@ postgresql
 bind9
 nfs-kernel-server
 samba
+language-env
+language-env
+language-env
 manpages-pt
 language-env
 jfbterm
@@ -39,6 +43,11 @@ language-env
 manpages-de
 language-env
 language-env
+gsfonts-x11
+ttf-dejavu
+ttf-freefont
+xfonts-terminus
+language-env
 manpages-it
 language-env
 jfbterm
@@ -49,10 +58,15 @@ language-env
 jfbterm
 manpages-ko
 language-env
+language-env
 locales
+language-env
 language-env
 manpages-pl
 language-env
+language-env
+language-env
+locales
 language-env
 manpages-ru
 language-env
@@ -62,11 +76,4 @@ language-env
 language-env
 locales
 manpages-tr
-language-env
-language-env
-language-env
-locales
-language-env
-language-env
-language-env
 language-env

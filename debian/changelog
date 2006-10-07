@@ -168,8 +168,9 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * Update base-etch and popularity-contest-etch in tasks.
+  * Update task-full-etch and task-essential-etch in tasks.
 
- -- Frans Pop <fjp@debian.org>  Fri,  6 Oct 2006 23:37:31 +0200
+ -- Frans Pop <fjp@debian.org>  Sat,  7 Oct 2006 05:13:59 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
 

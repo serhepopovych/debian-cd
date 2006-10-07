@@ -4,9 +4,9 @@
  * The content should be regenerated from time to time, like this:
  *
 
-for i in $(cat task.list); do \
- grep-aptavail --regex -F Task "^$i$" -s Package -n; \
-done >> ./task-full-etch
+ for i in $(cat task.list); do \
+   grep-aptavail --regex -F Task "^$i$" -s Package -n; \
+ done >> ./task-full-etch
 
  *
  * The file task.list lists the tasks in the order they are to 
@@ -19,19 +19,23 @@ done >> ./task-full-etch
 
 alsa-base
 alsa-utils
+discover1
+eject
 firefox
 gimp
-mdetect
 menu
 myspell-en-us
 openoffice.org
 openoffice.org-help-en-us
 openoffice.org-thesaurus-en-us
-read-edid
 twm
 x-window-system-core
+xdg-utils
+xresprobe
+xsane
 xterm
 alacarte
+bonfire
 deskbar-applet
 evolution-exchange
 evolution-plugins
@@ -42,17 +46,19 @@ gdebi
 gnome-btdownload
 gnome-cups-manager
 gnome-desktop-environment
+gnome-power-manager
 gnome-screensaver
 gnome-themes-extras
 gparted
 grdesktop
 hardinfo
-libtheora0
+libgnome2-perl
 liferea
 openoffice.org-evolution
 openoffice.org-gnome
 rhythmbox
 synaptic
+totem-mozilla
 update-notifier
 analog
 apache2-doc
@@ -67,10 +73,10 @@ anacron
 apmd
 cpufrequtils
 hibernate
-pbbuttonsd
 pcmcia-cs
+uswsusp
 wireless-tools
-xfree86-driver-synaptics
+xserver-xorg-input-synaptics
 exim4
 exim4-config
 exim4-daemon-light
@@ -82,7 +88,6 @@ qpopper
 sa-exim
 spamassassin
 uw-imapd
-pgaccess
 postgresql
 postgresql-client
 postgresql-contrib
@@ -119,6 +124,7 @@ aspell-pt-br
 ibrazilian
 manpages-pt
 myspell-pt-br
+wbrazilian
 firefox-locale-pt-br
 kde-i18n-ptbr
 openoffice.org-help-pt-br
@@ -129,7 +135,7 @@ myspell-bg
 wbulgarian
 firefox-locale-bg
 kde-i18n-bg
-openoffice.org-l10n-bg
+openoffice.org-help-bg
 aspell-ca
 icatalan
 myspell-ca
@@ -178,6 +184,7 @@ xfonts-cronyx-isocyr-misc
 xxkb
 aspell-cs
 iczech
+myspell-cs-cz
 firefox-locale-cs
 kde-i18n-cs
 openoffice.org-help-cs
@@ -205,7 +212,9 @@ kde-i18n-et
 openoffice.org-help-et
 openoffice.org-l10n-et
 aspell-fi
+ifinnish
 myspell-fi
+wfinnish
 firefox-locale-fi
 kde-i18n-fi
 openoffice.org-l10n-fi
@@ -235,6 +244,7 @@ wngerman
 firefox-locale-de
 kde-i18n-de
 openoffice.org-help-de
+openoffice.org-hyphenation-de
 openoffice.org-l10n-de
 openoffice.org-thesaurus-de
 openoffice.org-thesaurus-de-ch
@@ -270,8 +280,8 @@ openoffice.org-l10n-hu
 ttf-isabella
 ttf-junicode
 ttf-opensymbol
-xfonts-biznet-100dpi
-xfonts-biznet-base
+ttf-sil-charis
+ttf-sil-doulos
 aspell-is
 kde-i18n-is
 aspell-ga
@@ -301,6 +311,7 @@ lv
 manpages-ja
 manpages-ja-dev
 nkf
+uim-anthy
 uim-fep
 uim-utils
 doc-linux-ja-html
@@ -313,6 +324,7 @@ ttf-kochi-mincho
 uim
 khmerconverter
 kde-i18n-km
+openoffice.org-help-km
 openoffice.org-l10n-km
 ttf-khmeros
 manpages-ko
@@ -337,6 +349,7 @@ openoffice.org-hyphenation-lt
 openoffice.org-l10n-lt
 firefox-locale-mk
 kde-i18n-mk
+openoffice.org-help-mk
 openoffice.org-l10n-mk
 openoffice.org-l10n-ne
 kde-i18n-se
@@ -360,9 +373,11 @@ manpages-pl-dev
 wpolish
 firefox-locale-pl
 kde-i18n-pl
+openoffice.org-help-pl
 openoffice.org-l10n-pl
 aspell-pt
 kde-i18n-pt
+openoffice.org-l10n-pt
 aspell-pa
 firefox-locale-pa-in
 kde-i18n-pa
@@ -377,16 +392,19 @@ myspell-ru
 re
 firefox-locale-ru
 kde-i18n-ru
+openoffice.org-help-ru
 aspell-sk
 myspell-sk
 firefox-locale-sk
 kde-i18n-sk
+openoffice.org-help-sk
 openoffice.org-l10n-sk
 openoffice.org-thesaurus-sk
 aspell-sl
 myspell-sl
 firefox-locale-sl
 kde-i18n-sl
+openoffice.org-help-sl
 openoffice.org-l10n-sl
 aspell-es
 debian-reference-es
@@ -435,6 +453,7 @@ aspell-cy
 kde-i18n-cy
 openoffice.org-l10n-cy
 openoffice.org-l10n-xh
+k3b
 kde
 kde-core
 kdeadmin
@@ -446,4 +465,5 @@ kdepim
 kdeutils
 kdm
 kpackage
+libqt-perl
 openoffice.org-kde
