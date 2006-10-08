@@ -175,6 +175,8 @@ debian-cd (2.2.25) unstable; urgency=low
     to Petr Salinger for the patch. Closes: #378977
   * Fix KERNEL_PARAM breakage. Thanks to Vagrant Cascadian for the patch,
     closes: #387255
+  * Removed reference to obsolete "mirrorcheck" target in the README
+    file. Closes: #384064.
 
  -- Frans Pop <fjp@debian.org>  Sat,  7 Oct 2006 05:13:59 +0200
 

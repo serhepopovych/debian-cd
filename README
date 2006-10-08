@@ -90,10 +90,6 @@ The process of building a CD is composed of the following steps:
 
     $ make distclean
 
-- now we'll check if your mirror is ok (with good Packages files):
-
-    $ make mirrorcheck
-
 - then we initialize the temporary directory used for the build:
 
     $ make status
