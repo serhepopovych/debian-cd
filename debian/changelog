@@ -1,4 +1,4 @@
-debian-cd (2.2.25) UNRELEASED; urgency=low
+debian-cd (2.2.25) unstable; urgency=low
 
   [ Joey Hess ]
   * Remove net-drivers access floppy from full CD images.
@@ -170,6 +170,10 @@ debian-cd (2.2.25) UNRELEASED; urgency=low
   * Update base-etch and popularity-contest-etch in tasks.
   * Update task-full-etch and task-essential-etch in tasks.
 
+  [ Steve McIntyre ]
+  * Update Dependencies to allow installation/use on GNU/kFreeBSD. Thanks
+    to Petr Salinger for the patch. Closes: #378977
+	
  -- Frans Pop <fjp@debian.org>  Sat,  7 Oct 2006 05:13:59 +0200
 
 debian-cd (2.2.24) unstable; urgency=low
