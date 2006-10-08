@@ -51,7 +51,7 @@ unset OMIT_RELEASE_NOTES || true
 export BASEDIR=`pwd`
 
 # Building etch cd set ...
-export CODENAME=sarge
+export CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
@@ -66,7 +66,7 @@ fi
 #export DI_WWW_HOME=default
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="3.1"
+export DEBVERSION="3.2"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
