@@ -1,3 +1,12 @@
+debian-cd (2.2.26) UNRELEASED; urgency=low
+
+  [ Petter Reinholdtsen ]
+  * Update tools/boot/*/boot-amd64 to use the correct isolinux
+    splash image settings, and to insert $KERNEL_PARAMS correctly into
+    isolinux.cfg.  Based on patches already implemented in boot-i386.
+
+ -- Petter Reinholdtsen <pere@debian.org>  Sun, 15 Oct 2006 18:40:18 +0200
+
 debian-cd (2.2.25) unstable; urgency=low
 
   [ Joey Hess ]
