@@ -5,7 +5,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     splash image settings, and to insert $KERNEL_PARAMS correctly into
     isolinux.cfg.  Based on patches already implemented in boot-i386.
 
- -- Petter Reinholdtsen <pere@debian.org>  Sun, 15 Oct 2006 18:40:18 +0200
+  [ Joey Hess ]
+  * Remove 2.4 kernels from generate_di+k_list for i386.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 16 Oct 2006 13:57:05 -0400
 
 debian-cd (2.2.25) unstable; urgency=low
 
