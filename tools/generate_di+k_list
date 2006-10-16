@@ -225,12 +225,6 @@ linux-image-2.6-amiga
 linux-image-2.6-mac
 EOF
 
-# Get the latest 2.2 kernel for mac 
-  zcat $MIRROR/dists/$CODENAME/main/binary-m68k/Packages.gz | \
-      sed -n 's/Package: \(kernel-image-2.2.*-mac\)$/\1/p' | \
-      tail -n 1 \
-      >> debian-installer+kernel-$DI_CODENAME
-	  
 # Get the latest kernels for 2.4 d-i subarchs
 # XXX once m68k gets kernel-image-2.4-<subarch> packages, use those
 # instead.

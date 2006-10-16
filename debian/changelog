@@ -7,8 +7,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Remove 2.4 kernels from generate_di+k_list for i386.
+  * Remove 2.2 kernel for mac from generate_di+k_list, as it's no longer in
+    the archive.
 
- -- Joey Hess <joeyh@debian.org>  Mon, 16 Oct 2006 13:57:05 -0400
+ -- Joey Hess <joeyh@debian.org>  Mon, 16 Oct 2006 14:09:55 -0400
 
 debian-cd (2.2.25) unstable; urgency=low
 
