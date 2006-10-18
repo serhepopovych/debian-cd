@@ -193,6 +193,10 @@ if [ "$NN" = "1" ]; then
 		# file.
 		sed -i "s|append |append $KERNEL_PARAMS |" boot$N/isolinux/isolinux.cfg
 	fi
+
+    if [ -n "$ISOLINUX_DEFAULT" ]; then
+        sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" boot$N/isolinux/isolinux.cfg
+    fi
 fi
 
 # Add autorun if we have README.html

@@ -11,6 +11,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     the archive.
   * Deal with new xfce-desktop task.
 
+  [ Steve McIntyre ]
+  * Merge patch from Petter to allow override of the default boot choice
+    in syslinux using the ISOLINUX_DEFAULT config option. Closes: #393229
+	
  -- Joey Hess <joeyh@debian.org>  Tue, 17 Oct 2006 14:59:53 -0400
 
 debian-cd (2.2.25) unstable; urgency=low
