@@ -62,6 +62,7 @@ udev
 installation-report
 openssh-server
 cryptsetup
+brltty
 
 /* libsysfs2-udeb provides libsysfs2 so we have to make sure the deb
  * gets included on the first CD too
