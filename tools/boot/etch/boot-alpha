@@ -78,9 +78,9 @@ if [ $NN = 1 ]; then
 
     mkdir -p boot$N/etc
     cat <<EOF > boot$N/etc/aboot.conf
-0:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall
-1:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
-2:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
+0:boot/vmlinuz ramdisk_size=20480 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall
+1:boot/vmlinuz ramdisk_size=20480 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
+2:boot/vmlinuz ramdisk_size=20480 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
 EOF
 
     echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts

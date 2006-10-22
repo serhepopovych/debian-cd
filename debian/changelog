@@ -17,8 +17,9 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Include brltty in generate_di+k_list.
+  * Increase alpha hardcoded ramdisk_size to 20 mb, 16 is too small now.
 
- -- Joey Hess <joeyh@debian.org>  Sat, 21 Oct 2006 15:25:56 -0400
+ -- Joey Hess <joeyh@debian.org>  Sun, 22 Oct 2006 18:23:11 -0400
 
 debian-cd (2.2.25) unstable; urgency=low
 
