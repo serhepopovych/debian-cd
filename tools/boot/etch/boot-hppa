@@ -54,9 +54,8 @@ install_languages "$CDROOT"
 
 K32=$(ls $CDROOT/install/vmlinux-*-parisc|head -1 | sed 's?^.*/install/?install/?g')
 K64=$(ls $CDROOT/install/vmlinux-*-parisc64|head -1 | sed 's?^.*/install/?install/?g')
-RSIZE=$(expr $(zcat "$CDROOT/install/initrd.gz" | wc --bytes) / 1024)
 
-echo " -hppa-cmdline '0/vmlinux,root=/dev/ram,initrd=0/ramdisk,ramdisk_size=$RSIZE'" >> $1.mkisofs_opts
+echo " -hppa-cmdline '0/vmlinux,initrd=0/ramdisk'" >> $1.mkisofs_opts
 echo " -hppa-kernel-32 $K32" >> $1.mkisofs_opts
 echo " -hppa-kernel-64 $K64" >> $1.mkisofs_opts
 echo " -hppa-bootloader install/iplboot" >> $1.mkisofs_opts
