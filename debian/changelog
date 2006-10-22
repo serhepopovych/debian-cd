@@ -19,7 +19,11 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * Include brltty in generate_di+k_list.
   * Increase alpha hardcoded ramdisk_size to 20 mb, 16 is too small now.
 
- -- Joey Hess <joeyh@debian.org>  Sun, 22 Oct 2006 18:23:11 -0400
+  [ Frans Pop ]
+  * Remove boot parameters from silo.conf that are no longer needed after
+    switch to initramfs initrds.
+
+ -- Frans Pop <fjp@debian.org>  Mon, 23 Oct 2006 00:35:44 +0200
 
 debian-cd (2.2.25) unstable; urgency=low
 
