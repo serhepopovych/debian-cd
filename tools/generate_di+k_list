@@ -165,8 +165,12 @@ discover1
 libdiscover1
 nwutil
 slugimage
+glantank
+flash-kernel
 nslu2-utils
+apex-nslu2
 linux-image-2.6-footbridge
+linux-image-2.6-iop32x
 linux-image-2.6-ixp4xx
 linux-image-2.6-nslu2
 linux-image-2.6-rpc
