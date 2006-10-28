@@ -103,8 +103,8 @@ discover1
 libdiscover1
 grub
 lilo
-linux-image-2.6-amd64-generic
-linux-headers-2.6-amd64-generic
+linux-image-2.6-amd64
+linux-headers-2.6-amd64
 #endif
 
 #ifdef ARCH_alpha
