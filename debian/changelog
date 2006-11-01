@@ -35,12 +35,14 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * Add boot option "auto" for powerpc (yaboot) and sparc to support the
     installer's new auto-install functionality.
   * Update exclude-udebs:
+    - S/390 installs do not support loading udebs from the CD, so exclude all
     - add debian-edu-archive-keyring-udeb
     - add ai-choosers, auto-install
     - add some new gtk frontend related udebs
     - globally exclude any discover udebs
+    - clean up obsolete exclusions
 
- -- Frans Pop <fjp@debian.org>  Wed,  1 Nov 2006 03:20:47 +0100
+ -- Frans Pop <fjp@debian.org>  Wed,  1 Nov 2006 03:27:10 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
