@@ -14,12 +14,8 @@ di-utils-reboot
 lowmemcheck
 # build/pkg-lists/cdrom/common, in d-i svn (also included in the
 # root+cd-drivers floppies)
-busybox-cvs-udeb
 busybox-udeb
-rootskel-locale
 installation-locale
-languagechooser
-countrychooser
 localechooser
 iso-3166-udeb
 hw-detect
@@ -41,28 +37,19 @@ libfribidi0-udeb
 # Already on the initrd, thanks to library reduction.
 libdebconfclient0-udeb
 libdebian-installer-extra4-udeb
-libdebian-installer-udeb
-# A reduced version is on the initrd. Nothing currently needs the full
-# version.
-slang1a-utf8-udeb
 # These udebs are only useful in building the boot floppy image.
-busybox-cvs-floppy-udeb
 busybox-floppy-udeb
-di-utils-bootfloppy
 rootskel-bootfloppy
 # gtk stuff
 cdebconf-gtk-udeb
 fontconfig-udeb
 libatk1.0-udeb
-libcairo2-directfb-udeb
 libcairo-directfb2-udeb
 libdirectfb-0.9-22-udeb
-libdirectfb-0.9-24-udeb
 libdirectfb-0.9-25-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-udeb
-libgtk+2.0-directfb0-udeb
 libgtk-directfb-2.0-0-udeb
 libgtk2-engines-udeb
 libpango1.0-udeb
@@ -71,9 +58,6 @@ libsdl1.2debian-udeb
 mouse-modules-*
 ttf-*
 fbset-udeb
-# This udeb is not in good shape and is largely supersceded by
-# cdebconf-newt-udeb
-cdebconf-slang-udeb
 # We're currently using busybox's own shell, and do not need this one.
 dash-udeb
 # Not currently used
@@ -82,11 +66,9 @@ hdparm-udeb
 laptop-detect-udeb
 # These dhcp clients are not the currently preferred one.
 dhcp3-client-udeb
-pump-udeb
 # This package is only useful in the d-i-demo.
 di-utils-exit-installer
 # No need for these loaders.
-load-installer
 download-installer
 load-floppy
 # Only useful in the hd-media initrd.
@@ -104,7 +86,6 @@ reiser4progs-udeb
 libreiserfs0.3-udeb
 # These are not really needed, the regular netcfg subsumes them.
 netcfg-static
-netcfg-dhcp
 # skolelinux stuff, not for the stock CDs
 debian-edu-install-udeb
 debian-edu-profile-udeb
@@ -115,7 +96,6 @@ lvm10-udeb
 # If needed, will be on the initrd already.
 modutils-full
 module-init-tools-udeb
-arch-detect
 env-preseed
 rescue-check
 rootskel-gtk
