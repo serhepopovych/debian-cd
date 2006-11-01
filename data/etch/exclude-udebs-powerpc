@@ -7,10 +7,6 @@
 cdrom-core-modules-*
 console-keymaps-at
 console-keymaps-usb
-discover-data-udeb
-discover-udeb
-discover1-data-udeb
-discover1-udeb
 eject-udeb
 firewire-core-modules-*
 fs-common-modules-*

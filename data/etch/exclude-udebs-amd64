@@ -5,10 +5,6 @@ isa-pnp-modules-*
 socket-modules-*
 console-keymaps-at
 console-keymaps-usb
-discover-data-udeb
-discover-udeb
-discover1-data-udeb
-discover1-udeb
 fat-modules-*
 cdrom-core-modules-*
 cdrom-modules-*

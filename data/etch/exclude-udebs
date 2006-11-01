@@ -63,8 +63,12 @@ libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-udeb
 libgtk+2.0-directfb0-udeb
+libgtk-directfb-2.0-0-udeb
+libgtk2-engines-udeb
 libpango1.0-udeb
 libpng12-0-udeb
+libsdl1.2debian-udeb
+mouse-modules-*
 ttf-*
 fbset-udeb
 # This udeb is not in good shape and is largely supersceded by
@@ -120,9 +124,15 @@ brltty-udeb
 klibc-utils-udeb
 libklibc-udeb
 udev-udeb
-mouse-modules-*
+ai-choosers
+auto-install
 # Obsolete
 libslang1-utf8-udeb
+discover-udeb
+discover-data-udeb
+discover1-udeb
+discover1-data-udeb
+libdiscover1-udeb
 # Eh?
 gnumach-udeb
 # Exclude apt-setup components; they will be included 

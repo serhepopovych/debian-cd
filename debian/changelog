@@ -36,8 +36,11 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     installer's new auto-install functionality.
   * Update exclude-udebs:
     - add debian-edu-archive-keyring-udeb
+    - add ai-choosers, auto-install
+    - add some new gtk frontend related udebs
+    - globally exclude any discover udebs
 
- -- Frans Pop <fjp@debian.org>  Wed,  1 Nov 2006 02:32:45 +0100
+ -- Frans Pop <fjp@debian.org>  Wed,  1 Nov 2006 03:20:47 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 

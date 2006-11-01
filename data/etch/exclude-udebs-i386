@@ -6,10 +6,6 @@ socket-modules-*
 console-keymaps-at
 console-keymaps-usb
 floppy-modules-*
-discover-data-udeb
-discover-udeb
-discover1-data-udeb
-discover1-udeb
 cdrom-core-modules-*
 cdrom-modules-*
 ide-modules-*
