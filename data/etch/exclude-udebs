@@ -104,6 +104,7 @@ netcfg-dhcp
 # skolelinux stuff, not for the stock CDs
 debian-edu-install-udeb
 debian-edu-profile-udeb
+debian-edu-archive-keyring-udeb
 ltsp-client-builder
 autopartkit
 lvm10-udeb
