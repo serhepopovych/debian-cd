@@ -51,9 +51,7 @@ mkdir -p $imagedir
 # - tape/kernel.debian         : kernel for tape
 # - tape/kernel.debian-nolabel : kernel for tape (nolabel)
 
-# Tape images not available with 2.6.16
-#images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
-images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian"
+images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
 
 for image in $images_S390; do
 	case $image in
