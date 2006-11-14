@@ -248,7 +248,7 @@ $(ADIR)/status:
 	else \
 		zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$(ARCH)/Packages.gz | \
 		perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; \
-	               print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
+		     print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
 		> $(ADIR)/status ; \
 	fi
 	# Updating the apt database
