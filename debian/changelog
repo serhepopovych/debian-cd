@@ -45,6 +45,9 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * Makefile: remove line continuation inside perl command as that breaks with
     GNU Make 3.81.
 
+  [ Steve McIntyre ]
+  * Change the default DEBVERSION from 3.2 to 4.0 to match etch.
+	
  -- Frans Pop <fjp@debian.org>  Tue, 14 Nov 2006 11:03:13 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
