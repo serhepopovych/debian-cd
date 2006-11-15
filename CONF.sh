@@ -314,8 +314,8 @@ done
 # INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
 #export INSTALLER_CD=2
 
-# Parameters to pass to kernel when the CD boots. Not currently supported
-# for all architectures.
+# Parameters to pass to kernel (or d-i) when the CD boots. Not currently
+# supported for all architectures.
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.

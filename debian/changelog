@@ -47,8 +47,18 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Change the default DEBVERSION from 3.2 to 4.0 to match etch.
-	
- -- Frans Pop <fjp@debian.org>  Tue, 14 Nov 2006 11:03:13 +0100
+
+  [ Joey Hess ]
+  * Add new language tasks to task.list.
+  * Add files to support building KDE CDs/DVDs. These would be images
+    hardcoded to install the KDE desktop task, and to create them, configure
+    CONF.sh as follows:
+      TASK=tasks/Debian_etch-kde
+      KERNEL_PARAMS='tasksel/first="kde-desktop, standard"'
+      MAXCDS=1
+      NOSOURCE=1
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 15 Nov 2006 18:00:57 -0500
 
 debian-cd (2.2.25) unstable; urgency=low
 
