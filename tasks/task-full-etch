@@ -19,27 +19,23 @@
 
 alsa-base
 alsa-utils
-avahi-daemon
-desktop-base
 discover1
 eject
 firefox
 gimp
-libnss-mdns
 menu
 myspell-en-us
 openoffice.org
 openoffice.org-help-en-us
 openoffice.org-thesaurus-en-us
 twm
+x-window-system-core
 xdg-utils
-xorg
 xresprobe
 xsane
 xterm
 alacarte
 bonfire
-brasero
 deskbar-applet
 evolution-exchange
 evolution-plugins
@@ -77,7 +73,7 @@ anacron
 apmd
 cpufrequtils
 hibernate
-pcmciautils
+pcmcia-cs
 uswsusp
 wireless-tools
 xserver-xorg-input-synaptics
@@ -125,7 +121,6 @@ openoffice.org-l10n-bn
 kde-i18n-bs
 openoffice.org-l10n-bs
 aspell-pt-br
-broffice.org
 ibrazilian
 manpages-pt
 myspell-pt-br
@@ -177,8 +172,11 @@ openoffice.org-l10n-sr-cs
 t1-cyrillic
 t1-teams
 ttf-arhangai
+xfonts-bolkhov-75dpi
 xfonts-bolkhov-cp1251-75dpi
 xfonts-bolkhov-cp1251-misc
+xfonts-bolkhov-misc
+xfonts-cronyx-100dpi
 xfonts-cronyx-cp1251-100dpi
 xfonts-cronyx-isocyr-100dpi
 xfonts-cronyx-isocyr-75dpi
@@ -233,7 +231,6 @@ openoffice.org-help-fr
 openoffice.org-l10n-fr
 aspell-gl-minimos
 kde-i18n-gl
-openoffice.org-l10n-ka
 ttf-bpg-georgian-fonts
 ding
 doc-linux-de
@@ -324,7 +321,6 @@ openoffice.org-help-ja
 openoffice.org-l10n-ja
 ttf-kochi-gothic
 ttf-kochi-mincho
-ttf-vlgothic
 uim
 khmerconverter
 kde-i18n-km

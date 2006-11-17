@@ -14,7 +14,7 @@
  */
 
 
-xorg
+x-window-system-core
 gnome-desktop-environment
 apache2-mpm-prefork
 exim4
