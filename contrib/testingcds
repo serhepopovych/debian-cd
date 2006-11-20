@@ -1,0 +1,258 @@
+#!/bin/bash
+#
+# testingcds (c) 2005 Santiago Garcia Mantinan <manty@manty.net>
+#
+# GPL v2
+#
+# This file is included here just as an example, it was used when building the
+# official testing cds at some point, it was written for a very specific setup
+# and then went over a lot of changes during its life, so now this code is
+# horrible, hoever some fellows feel it should be included in debian-cd,
+# well, I (manty) will leave that on their hands.
+#
+# The setup we have uses normal debian-cd for daily builds, while it uses a jte
+# patched debian-cd for weekly builds, this is done just for speed, the script
+# should work with normal debian-cd for all kind of builds just removing -jte
+# down there. We are currently just building isos for dailies and jigdos for
+# weeklies, no snapshots being generated on the build machine, so I cannot
+# waranty that all the code down here works, again, I must stress that you
+# should take this just as an example, because part of it is untested and
+# the rest is written for a very very specific setup, so... no waranties at all
+#
+# This is how this script is called for the daily images:
+# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 TASK=tasks/debian-installer-sarge DOJIGDO=0 DI=sarge DI_DIST=sarge ./testingcds "$arch"
+# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 TASK=tasks/debian-installer+kernel-sarge DOJIGDO=0 DI=sarge DI_DIST=sarge ./testingcds "$arch"
+# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 TASK=tasks/debian-installer-sid DOJIGDO=0 DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" ./testingcds "$arch"
+# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 TASK=tasks/debian-installer+kernel-sid DOJIGDO=0 DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" ./testingcds "$arch"
+# This is respectively for sarge_d-i businesscards, sarge_d-i netinsts,
+# sid_d-i businesscards, and sid_d-i netinsts.
+# Where $ARCH_DI_DIR is set to the path for the local mirror of the d-i daily
+# built images, this parameter can be omited if no mirror of the images is used
+
+# For the weekly images it is run for normal cds like this:
+# DI_DIST=sarge ./testingcds "$arch"
+# and for the dvds like this:
+# PUBDIRJIG=/path_to_the/dvd INSTALLER_CD=3 DEFBINSIZE=4440 DEFSRCSIZE=4432 DI_DIST=sarge ./testingcds "$arch"
+
+
+# Set up and cleaning
+if [ $# -lt 1 ]
+then
+  echo $0 \$ARCH
+  echo "variables: PUBDIR[ISO|JIG]"
+  exit 1
+fi
+
+if [ ! "$DATE" ];then DATE=`/bin/date -u +%Y%m%d`;fi
+
+export ARCH=$1
+export PATH=$PATH:/sbin:/usr/sbin
+if [ ! "$PUBDIRJIG" ];then PUBDIRJIG=/org/cdimage.debian.org/www/testing/cd;fi
+if [ ! "$PUBDIRISO" ];then PUBDIRISO=/org/cdimage.debian.org/www/testing;fi
+if [ ! "$JIGDOFALLBACKURLS" ];then
+   if [ "$ARCH" = "amd64" ];then
+     export JIGDOFALLBACKURLS="Debian=http://amd64-cdsnap.debian.net/cdimage/snapshot-amd64/Debian/"
+   else
+     export JIGDOFALLBACKURLS="Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/"
+   fi
+fi
+# $DI is used to set DI_CODENAME and also to specify the directory for images
+if [ "$DI" ];then
+  export DI_CODENAME="$DI"
+  PUBDIRJIG="$PUBDIRJIG"/"$DI"_d-i
+  PUBDIRISO="$PUBDIRISO"/"$DI"_d-i  
+fi
+
+CALC="Using previous sizes estimations."
+if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ]
+then
+  # Do a tradicional build for the ISOs of the small cds
+  cd /org/cdimage.debian.org/setup/debian-cd &&
+    . ../CONF.sh
+    # this is for build.sh
+    export CF=../CONF.sh
+    export IMAGETARGET=bin-official_images
+    # to save some time
+    export SKIPMIRRORCHECK=yes
+else
+  # Do the size stimation and a JTE build for jigdos
+  cd /org/cdimage.debian.org/setup/debian-cd-jte &&
+    . ../CONF.sh &&
+    export IMAGETARGET="ok bootable upgrade bin-infos bin-list" &&
+    export CF=../CONF.sh &&
+    ./build.sh $ARCH >/dev/null 2>&1 &&
+    cd tools && CALC=`./calc` && cd ..
+    # this is for build.sh
+    if [ "$ARCH" = "i386" ]
+    then
+      export IMAGETARGET=official_images
+    else
+      export IMAGETARGET=bin-official_images
+    fi
+fi
+
+if [ ! "$OUT" ];then echo Error on the config;exit 1;fi
+
+if [ "$INSTALLER_CD" = "1" ];then export OFFICIAL="Official BusinessCard Snapshot";fi
+if [ "$INSTALLER_CD" = "2" ];then export OFFICIAL="Official NetInst Snapshot";fi
+
+export LOG="`pwd`/../log/"
+
+rm -rf "$OUT"
+mkdir -p "$OUT"
+mkdir -p "$LOG"
+
+overview_log="$LOG/overview"
+overview () {
+    if [ -e $overview_log ]; then
+    	grep -v " $1 " $overview_log > $overview_log.new
+        mv $overview_log.new $overview_log
+    fi
+    LANG=C echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname | cut -d . -f 1) $1 $2" >> $overview_log
+}
+
+# Upgrade sarge's debian-installer task file
+# changed this old line into the new one so that amd64 doesn't break
+# cd tasks && ../tools/generate_di_list && ../tools/generate_di+k_list && cd .. || exit 1
+cd tasks && ../tools/generate_di_list ; ../tools/generate_di+k_list ; cd ..
+DEBOOTUDEB=`/bin/sed -n \
+  's/Filename: \(pool\/main\/d\/debootstrap\/debootstrap-udeb.*udeb\)$/\1/p' \
+  $MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Packages`
+if [ -z "$DEBOOTUDEB" ];then exit 1;fi
+echo "$CALC" >"$LOG/$INSTALLER_CD$DI$ARCH"
+echo Using ${DEBOOTUDEB##*/} to get packages used by d-i. >>"$LOG/$INSTALLER_CD$DI$ARCH"
+rm -rf ../debootstrap
+dpkg -x "$MIRROR/$DEBOOTUDEB" ../debootstrap
+
+# Do the actual building
+if ./build.sh $ARCH >>"$LOG/$INSTALLER_CD$DI$ARCH" 2>&1;then
+
+# if it went ok get things ready for publishing
+
+# we treat the netinst images in a different way
+
+if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ]
+then
+
+# NETINST STUFF (ISO ONLY)
+
+# make the dirs we'll use to publish things
+  mkdir -p "$OUT"/$ARCH
+# rename the isos from .raw to .iso and put them in their place
+  for i in "$OUT"/*-1.raw
+  do
+    I=${i##*/}
+    if [ "$INSTALLER_CD" = "1" ];then
+      NETINSTNAME=${I%-binary-1.raw}-businesscard.iso
+    else
+      NETINSTNAME=${I%-binary-1.raw}-netinst.iso
+    fi
+    mv $i "$OUT"/$ARCH/$NETINSTNAME
+  done
+# change images names from raw to iso on the MD5SUMS
+  sed "s/[^ ]*-1.raw$/$NETINSTNAME/" "$OUT"/MD5SUMS >>"$OUT"/$ARCH/MD5SUMS
+# Publish the new version
+  mkdir -p "$PUBDIRISO"/$ARCH/$DATE
+  if [ -e "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS ];then
+    grep -v $NETINSTNAME "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS > "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS.tmp
+  fi
+  cat "$OUT"/$ARCH/MD5SUMS >> "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS.tmp
+  mv "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS.tmp "$PUBDIRISO"/$ARCH/$DATE/MD5SUMS
+  mv "$OUT"/$ARCH/$NETINSTNAME "$PUBDIRISO"/$ARCH/$DATE/
+  rm -f "$PUBDIRISO"/$ARCH/current
+  ln -s $DATE "$PUBDIRISO"/$ARCH/current
+# Remove the oldest daily builds, leave only the last 3
+  NUM=`/bin/ls -d "$PUBDIRISO"/$ARCH/20*/|wc -l`
+  NUM=$(($NUM-3))
+  /bin/ls -d "$PUBDIRISO"/$ARCH/20*/|head -n $NUM|tr '\012' '\000'|xargs -0 /bin/rm -rf --
+
+else 
+
+# NORMAL STUFF, IE NORMAL ISO and JIGDO
+
+# ISO STUFF
+
+if [ "$DOJIGDO" != 2 ]
+then
+# make the dirs we'll use to publish things
+  mkdir -p "$OUT"/isos/$ARCH
+# rename the isos from .raw to .iso and put them in their place
+  for i in "$OUT"/*.raw
+  do
+    I=${i##*/}
+    mv $i "$OUT"/isos/$ARCH/${I%.raw}.iso
+  done
+# change images names from raw to iso on the MD5SUMS
+  sed 's/raw$/iso/' "$OUT"/MD5SUMS >"$OUT"/isos/$ARCH/MD5SUMS
+# Remove the old version and publish the new one
+  rm -rf "$PUBDIRISO"/isos/$ARCH/
+  mkdir -p "$PUBDIRISO"/isos/
+  mv "$OUT"/isos/$ARCH/ "$PUBDIRISO"/isos/$ARCH/
+fi
+
+# JIGDO STUFF
+
+if [ "$DOJIGDO" != 0 ]
+then
+# make the dirs we'll use to publish things
+  mkdir -p "$OUT"/jigdo-area/$ARCH/jigdotemplates
+# change images names from raw to iso on the MD5SUMS
+  sed 's/raw$/iso/' "$OUT"/MD5SUMS >"$OUT"/jigdo-area/$ARCH/MD5SUMS
+# put the templates aside
+  mv "$OUT"/*.template "$OUT"/jigdo-area/$ARCH/jigdotemplates
+# finish up the jigdos (compress & move them)
+  gzip --best --no-name "$OUT"/*.jigdo
+  for i in "$OUT"/*.jigdo.gz;do mv $i ${i%.gz};done
+  mv "$OUT"/*.jigdo "$OUT"/jigdo-area/$ARCH/
+# Remove the old version and publish the new one
+  if [ "$IMAGETARGET" = "official_images" ]
+  then
+    rm -rf "$PUBDIRJIG"/jigdo-area/source/
+    mkdir -p "$PUBDIRJIG"/jigdo-area/source/jigdotemplates/
+    mv "$OUT"/jigdo-area/$ARCH/*-source-*.jigdo "$PUBDIRJIG"/jigdo-area/source/
+    grep "source-.*.iso$" "$OUT"/jigdo-area/$ARCH/MD5SUMS > "$PUBDIRJIG"/jigdo-area/source/MD5SUMS
+    mv "$OUT"/jigdo-area/$ARCH/jigdotemplates/*-source-*.template "$PUBDIRJIG"/jigdo-area/source/jigdotemplates/
+    grep -v "source-.*.iso$" "$OUT"/jigdo-area/$ARCH/MD5SUMS > "$OUT"/jigdo-area/$ARCH/MD5SUMS.new
+    mv "$OUT"/jigdo-area/$ARCH/MD5SUMS.new "$OUT"/jigdo-area/$ARCH/MD5SUMS
+  fi
+  rm -rf "$PUBDIRJIG"/jigdo-area/$ARCH/
+  mkdir -p "$PUBDIRJIG"/jigdo-area/
+  mv "$OUT"/jigdo-area/$ARCH/ "$PUBDIRJIG"/jigdo-area/$ARCH/
+# Calculate snapshot path, remove the old snapshot and publish the new one
+#  SNAP=${JIGDOFALLBACKURLS##Debian=http://us.cdimage.debian.org/cdimage/}
+#  SNAP=${PUBDIRJIG%%testing*}${SNAP%%/Debian*}
+#  mkdir -p "$SNAP"
+#  mv "$OUT"/snapshot/* "$SNAP"
+# Remove the oldest snapshots, leave only the last 2
+#  NUM=`/bin/ls -d "${SNAP%%/$DATE}"/20*/|wc -l`
+#  NUM=$(($NUM-2))
+#  /bin/ls -d "${SNAP%%/$DATE}"/20*/|head -n $NUM|tr '\012' '\000'|xargs -0 /bin/rm -rf --
+fi
+
+fi
+
+# Mail the cd sizes of the cds
+if [ -e "../.debian-cd.mail" ]
+then
+  MYEMAIL=`grep -v "^#" "../.debian-cd.mail"`
+else
+  MYEMAIL=`whoami`
+fi
+  for i in $MYEMAIL
+  do
+    grep "extents written" "$LOG/$INSTALLER_CD$DI$ARCH"|mail -s "testingcds $INSTALLER_CD$DI$ARCH went ok" "$i"
+  done
+  overview "$INSTALLER_CD$DI$ARCH" success
+else
+if [ -e "../.debian-cd.mail" ]
+then
+  MYEMAIL=`grep -v "^#" "../.debian-cd.mail"`
+else
+  MYEMAIL=`whoami`
+fi
+  for i in $MYEMAIL
+  do
+    echo Error when trying to create cds for $INSTALLER_CD$DI$ARCH|mail -s "testingcds $INSTALLER_CD$DI$ARCH has failed" "$i"
+  done
+  overview "$INSTALLER_CD$DI$ARCH" failed
+fi
