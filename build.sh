@@ -7,6 +7,8 @@ if [ -z "$CF" ] ; then
 fi
 . $CF
 
+echo "Using defs from $CF" > /tmp/log
+
 if [ -z "$COMPLETE" ] ; then
     export COMPLETE=1
 fi
