@@ -54,11 +54,10 @@ THISTYPE=${KTYPE[$NN]}
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
 # Only include disk images on full CDs, not on smaller images.
-# Exclude disk images for Etch Beta 3 as they are not being built (size problems)
-#if [ "$INSTALLER_CD" != 1 ] && [ "$INSTALLER_CD" != 2 ]; then
-#	DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
-#	EXTRA_DISK_IMAGES="cdrom/boot.img floppy/access/root.img floppy/access/boot.img floppy/access/cd-drivers.img"
-#fi
+if [ "$INSTALLER_CD" != 1 ] && [ "$INSTALLER_CD" != 2 ]; then
+	DISK_IMAGES="floppy/cd-drivers.img floppy/boot.img floppy/root.img"
+	#EXTRA_DISK_IMAGES="cdrom/boot.img"
+fi
 
 # Download boot images and floppies.
 for image in $BOOT_IMAGES; do

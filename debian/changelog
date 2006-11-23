@@ -58,7 +58,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
       MAXCDS=1
       NOSOURCE=1
 
- -- Joey Hess <joeyh@debian.org>  Wed, 15 Nov 2006 18:00:57 -0500
+  [ Frans Pop ]
+  * Include floppy disk images again for i386.
+
+ -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
