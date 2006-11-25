@@ -4,7 +4,7 @@ cd $1
 
 :> MD5SUMS
 
-case $DO_JIGDO in
+case $DOJIGDO in
 	0)
 		for file in `find * -name \*.raw`
 		do
@@ -26,7 +26,7 @@ case $DO_JIGDO in
 		done
 		;;
 	*)
-		echo "DO_JIGDO not defined!"
+		echo "DOJIGDO not defined!"
 		exit 1
 		;;
 esac
