@@ -779,18 +779,9 @@ image: bin-image
 bin-image: check-number-given bin-images
 src-image: check-number-given src-images
 
-#Calculate the md5sums for the images (if available), or get from templates
+# Calculate the md5sums for the images (if available), or get from templates
 imagesums:
-	$(Q)cd $(OUT); :> MD5SUMS; for file in `find * -name \*.raw`; do \
-		$(md5sum) $$file >>MD5SUMS; \
-	done; \
-	for file in `find * -name \*.template`; do \
-		if [ "`tail --bytes=33 "$$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 05 ]; then \
-			echo "Possibly invalid template $$file"; exit 1; \
-		fi; \
-		grep -q " $${file%%.template}.raw"'$$' MD5SUMS \
-		 || echo "`tail --bytes=26 "$$file" | head --bytes=16 | od -tx1 -An | sed -e 's/ //g'`  $${file%%.template}.raw" >>MD5SUMS; \
-	done
+	$(Q)$(BASEDIR)/tools/imagesums $(OUT)
 
 # Likewise, the file size can be extracted from the .template with:
 # tail --bytes=32 $$file | head --bytes=6 | od -tx1 -An \

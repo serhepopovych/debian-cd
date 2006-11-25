@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cd $1
+
+:> MD5SUMS
+
+case $DO_JIGDO in
+	0)
+		for file in `find * -name \*.raw`
+		do
+			md5sum $file >> MD5SUMS
+		done
+		;;
+	1|2)
+		for file in `find * -name \*.template`
+		do
+			if [ "`tail --bytes=33 "$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 05 ]; then
+				echo "Possibly invalid template $file"
+				exit 
+			fi
+			grep -q " ${file%%.template}.raw"'$$' MD5SUMS \
+				 || echo "`tail --bytes=26 "$file" | \
+					head --bytes=16 | \
+					od -tx1 -An | \
+					sed -e 's/ //g'` ${file%%.template}.raw" >> MD5SUMS
+		done
+		;;
+	*)
+		echo "DO_JIGDO not defined!"
+		exit 1
+		;;
+esac
