@@ -46,7 +46,6 @@ silo_deb=$MIRROR/`zcat $MIRROR/dists/$DI_CODENAME/main/binary-sparc/Packages.gz 
 
 # Some custom etc files
 cp -f -p $BASEDIR/data/etch/sparc/silo.conf $inst/boot/
-BUILD_DATE=$(date +%Y%m%d)
 cat $BASEDIR/data/etch/sparc/debian.txt \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \

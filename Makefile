@@ -10,6 +10,8 @@
 # file in your shell
 
 
+BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
+
 ## DEFAULT VALUES
 ifndef VERBOSE_MAKE
 Q=@
@@ -24,10 +26,10 @@ ifndef CAPCODENAME
 CAPCODENAME:=$(shell perl -e "print ucfirst("$(CODENAME)")")
 endif
 ifndef BINDISKINFO
-export BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num ($$DATE)"
+export BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num ($$BUILD_DATE)"
 endif
 ifndef SRCDISKINFO
-export SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num ($$DATE)"
+export SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num ($$BUILD_DATE)"
 endif
 # ND=No-Date versions for README
 ifndef BINDISKINFOND
@@ -134,7 +136,6 @@ PATH:=$(PATH):/usr/sbin
 
 PrintVars:
 	@num=1; \
-	DATE=`date +%Y%m%d` ; \
 	echo BINDISKINFO: ; \
         echo $(BINDISKINFO) ; \
 	echo SRCDISKINFO: ; \

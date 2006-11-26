@@ -65,6 +65,8 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * Split final md5sum of images out from Makefile into tools/imagesums;
     if we've made jigdo files then *don't* waste time running md5sum on
     the images as well!
+  * Add the build date/time into a few more places so people can see them
+    more easily; add the build time into the .disk/info file.
 
  -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
 
