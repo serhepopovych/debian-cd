@@ -6,7 +6,7 @@ cd $1
 
 case $DOJIGDO in
 	0)
-		for file in `find * -name \*.raw`
+		for file in `find * -name \*.iso`
 		do
 			md5sum $file >> MD5SUMS
 		done
@@ -18,11 +18,11 @@ case $DOJIGDO in
 				echo "Possibly invalid template $file"
 				exit 
 			fi
-			grep -q " ${file%%.template}.raw"'$$' MD5SUMS \
+			grep -q " ${file%%.template}.iso"'$$' MD5SUMS \
 				 || echo "`tail --bytes=26 "$file" | \
 					head --bytes=16 | \
 					od -tx1 -An | \
-					sed -e 's/ //g'` ${file%%.template}.raw" >> MD5SUMS
+					sed -e 's/ //g'` ${file%%.template}.iso" >> MD5SUMS
 		done
 		;;
 	*)
