@@ -66,6 +66,16 @@ do
         echo 'local' >> $BDIR/CD$DISK/.disk/base_components
     fi
 
+    if [ $COMPLETE = 1 ]; then
+        if [ $DISKTYPE = DVD ]; then
+            echo "dvd" > .disk/cd_type
+        else
+            echo "full_cd" > .disk/cd_type
+        fi
+    else
+        echo "not_complete" > .disk/cd_type
+    fi
+
 	# Sort out the udeb include and exclude files
     if [ -n "$UDEB_INCLUDE" ] ; then
 		if [ -r "$UDEB_INCLUDE" ] ; then

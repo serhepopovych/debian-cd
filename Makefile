@@ -26,17 +26,17 @@ ifndef CAPCODENAME
 CAPCODENAME:=$(shell perl -e "print ucfirst("$(CODENAME)")")
 endif
 ifndef BINDISKINFO
-export BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num $(BUILD_DATE)"
+export BINDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(DISKTYPE) $(ARCH) Binary-$$num $(BUILD_DATE)"
 endif
 ifndef SRCDISKINFO
-export SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num $(BUILD_DATE)"
+export SRCDISKINFO="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(DISKTYPE) Source-$$num $(BUILD_DATE)"
 endif
 # ND=No-Date versions for README
 ifndef BINDISKINFOND
-export BINDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(ARCH) Binary-$$num"
+export BINDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(DISKTYPE) $(ARCH) Binary-$$num"
 endif
 ifndef SRCDISKINFOND
-export SRCDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) Source-$$num"
+export SRCDISKINFOND="Debian GNU/Linux $(DEBVERSION) \"$(CAPCODENAME)\" - $(OFFICIAL) $(DISKTYPE) Source-$$num"
 endif
 ifndef BINVOLID
 ifeq ($(ARCH),powerpc)

@@ -42,13 +42,13 @@ do
 	DISKINFO=`cat $DIR/$n.diskinfo`
 
 	if [ $ARCH = "source" ] ; then
-		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$n"
+		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$DISKTYPE-$n"
 	else
-		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-binary-$n"
+		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$DISKTYPE-binary-$n"
 	fi
 
 	# Clean up any old files
-	rm -f $OUT/$OUTFILE.raw $OUT/$OUTFILE.jigdo $OUT/$OUTFILE.template
+	rm -f $OUT/$OUTFILE.iso $OUT/$OUTFILE.jigdo $OUT/$OUTFILE.template
 
 	date
 
@@ -57,14 +57,14 @@ do
 	case $DOJIGDO in
 	
 		0) # No jigdo files, just straight ISO
-			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts $dirs CD$n
-			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts $dirs CD$n
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
+			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
 			;;
 
 
 		1) # jigdo files _and_ ISO
 			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
-				-o $OUT/$OUTFILE.raw \
+				-o $OUT/$OUTFILE.iso \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
 				-jigdo-map Debian=$MIRROR/ \
@@ -72,7 +72,7 @@ do
 				-md5-list $DIR/md5-check \
 				$JIGDO_OPTS $opts $dirs CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
-				-o $OUT/$OUTFILE.raw \
+				-o $OUT/$OUTFILE.iso \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
 				-jigdo-map Debian=$MIRROR/ \

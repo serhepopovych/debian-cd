@@ -178,6 +178,13 @@ ATTEMPT_FALLBACK=yes
 export DEFBINSIZE=630
 export DEFSRCSIZE=635
 
+# Set the disk type, used later in various places. Soon this will also
+# be used to work out the disk size automatically
+if [ "$DISKTYPE"x = ""x ] ; then
+    DISKTYPE=CD
+fi
+export DISKTYPE
+
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)

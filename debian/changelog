@@ -71,6 +71,14 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     for the boot-$arch scripts to use rather than simply appending to the
     $N.mkisofs_opts file directly. Needed for forthcoming multi-arch
     support.
+  * Stop using the silly .raw extension for output images, use .iso instead
+  * Improve support for different disk types. Specify DISKTYPE in CONF.sh,
+    and it will affect both the output name later (so it's now possible to
+    distinguish between CDs and DVDs). Defaults to CD if not otherwise
+    set. DISKTYPE will be used more in the future for sizing too, but that
+    merge can wait a while longer yet. Closes: #361422
+  * Use DISKTYPE and COMPLETE values to create the file .disk/cd_type for
+    the installer to use.
 
  -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
 
