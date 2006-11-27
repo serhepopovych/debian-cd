@@ -36,6 +36,7 @@ do
 	cd $dir/..
 
 	opts=`cat $DIR/$n.mkisofs_opts`
+	dirs=`cat $DIR/$n.mkisofs_dirs`
 	volid=`cat $DIR/$n.volid`
 	relname=`echo $DEBVERSION | sed -e 's/[. ]//g'`
 	DISKINFO=`cat $DIR/$n.diskinfo`
@@ -56,8 +57,8 @@ do
 	case $DOJIGDO in
 	
 		0) # No jigdo files, just straight ISO
-			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts CD$n
-			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts CD$n
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts $dirs CD$n
+			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.raw $opts $dirs CD$n
 			;;
 
 
@@ -69,7 +70,7 @@ do
 				-jigdo-map Debian=$MIRROR/ \
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
-				$JIGDO_OPTS $opts CD$n
+				$JIGDO_OPTS $opts $dirs CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o $OUT/$OUTFILE.raw \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
@@ -77,7 +78,7 @@ do
 				-jigdo-map Debian=$MIRROR/ \
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
-				$JIGDO_OPTS $opts CD$n
+				$JIGDO_OPTS $opts $dirs CD$n
 			;;
 
 		2) # jigdo only, no ISO
@@ -88,7 +89,7 @@ do
 				-jigdo-map Debian=$MIRROR/ \
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
-				$JIGDO_OPTS $opts CD$n
+				$JIGDO_OPTS $opts $dirs CD$n
 			$MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o /dev/null \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
@@ -96,7 +97,7 @@ do
 				-jigdo-map Debian=$MIRROR/ \
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
-				$JIGDO_OPTS $opts CD$n
+				$JIGDO_OPTS $opts $dirs CD$n
 			;;
 	esac
 

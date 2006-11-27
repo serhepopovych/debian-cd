@@ -83,7 +83,6 @@ if [ $NN = 1 ]; then
 2:boot/vmlinuz ramdisk_size=20480 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
 EOF
 
-    echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
     mkdir -p boot$N/milo
     # XXX: we need to build milo first.
     #cp linload.exe ldmilo.exe boot$N/milo
@@ -95,10 +94,15 @@ EOF
     #cp -lf floppy-initrd.gz $CDDIR/install
 
     # write final lines to mkisofs_opts
-    echo -n "-alpha-boot boot/bootlx boot$N " >> $N.mkisofs_opts
-    
+    add_mkisofs_opt $N.mkisofs_opts "-J"
+    add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+    add_mkisofs_opt $N.mkisofs_opts "-l"
+    add_mkisofs_opt $N.mkisofs_opts "-alpha-boot boot/bootlx"
+    add_mkisofs_opt $N.mkisofs_dirs "boot$N"
 else
-    echo -n "-cache-inodes -J -l "  > $N.mkisofs_opts
+    add_mkisofs_opt $N.mkisofs_opts "-J"
+    add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+    add_mkisofs_opt $N.mkisofs_opts "-l"
 fi
 
 #install_languages $CDDIR

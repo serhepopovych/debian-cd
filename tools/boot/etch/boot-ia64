@@ -28,7 +28,7 @@ cd $CDDIR/..
 
 # Only disc 1 bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then 
-	echo "-J" > $N.mkisofs_opts
+    add_mkisofs_opt $N.mkisofs_opts "-J"
 	exit 0; 
 fi
 
@@ -52,7 +52,13 @@ install_languages $CDDIR
 
 mkdir -p boot$N/boot
 cp -f boot.img boot$N/boot/
-echo -n "-no-emul-boot -J -b boot/boot.img -c boot/boot.catalog boot$N"  > $N.mkisofs_opts
+
+add_mkisofs_opt $N.mkisofs_opts "-J"
+add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
+add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.img"
+add_mkisofs_opt $N.mkisofs_opts "-c boot/boot.catalog"
+
+add_mkisofs_opt $N.mkisofs_dirs "boot$N"
 
 # done
 

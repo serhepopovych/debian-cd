@@ -71,7 +71,14 @@ mkdir -p boot$N/isolinux
 cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
 cp -lf cdrom/vmlinuz $CDDIR/install/
 cp -lf cdrom/initrd.gz $CDDIR/install/
-echo -n "-cache-inodes -J -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
+
+add_mkisofs_opt $N.mkisofs_opts "-J"
+add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $N.mkisofs_opts "-b isolinux/isolinux.bin"
+add_mkisofs_opt $N.mkisofs_opts "-c isolinux/boot.cat"
+add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
+add_mkisofs_opt $N.mkisofs_opts "-boot-load-size 4"
+add_mkisofs_opt $N.mkisofs_opts "-boot-info-table"
 
 syslinux_files () {
 	type=$1
@@ -152,6 +159,6 @@ EOF
 fi
 
 # write final lines to mkisofs_opts
-echo -n "boot$N " >> $N.mkisofs_opts
+add_mkisofs_opt $N.mkisofs_dirs "boot$N"
 
 # th,th, thats all

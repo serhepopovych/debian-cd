@@ -21,8 +21,6 @@ if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-:> $N.mkisofs_opts
-
 # Only disc 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then 
 	exit 0; 
@@ -30,8 +28,8 @@ fi
 
 install_languages $CDDIR
 
-echo "-G boot1/boot/isofs.b -B ... boot1" > $N.mkisofs_opts
-rm -rf boot1
+add_mkisofs_opt $N.mkisofs_opts "-G boot1/boot/isofs.b -B ..."
+add_mkisofs_opt $N.mkisofs_dirs "boot1"
 
 inst=boot1
 

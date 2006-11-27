@@ -29,8 +29,11 @@ fi
 
 cd $CDDIR/..
 
-echo -n "--netatalk -J -hfs -probe -map $BASEDIR/data/hfs.map" \
-        > $N.mkisofs_opts
+add_mkisofs_opt $N.mkisofs_opts "-J"
+add_mkisofs_opt $N.mkisofs_opts "--netatalk"
+add_mkisofs_opt $N.mkisofs_opts "-hfs"
+add_mkisofs_opt $N.mkisofs_opts "-probe"
+add_mkisofs_opt $N.mkisofs_opts "-map $BASEDIR/data/hfs.map"
 
 # Only disk 1 bootable
 if [ $N != 1 ]; then
@@ -83,8 +86,9 @@ cd $INSTALLDIR
 if [ -f tools/cdrom/bvme6000-boot.img.gz ]; then
 	mkdir -p $CDDIR/boot1/boot
 	cp tools/cdrom/bvme6000-boot.img.gz $CDDIR/boot1/boot/boot.bin
-	echo -n " -b boot/boot.bin -c boot/boot.catalog boot1" \
-   		>> $N.mkisofs_opts
+    add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.bin"
+    add_mkisofs_opt $N.mkisofs_opts "-c boot/boot.catalog"
+    add_mkisofs_opt $N.mkisofs_dirs "boot1"
 fi
 
 ##-----------------------------< end of file >------------------------------##

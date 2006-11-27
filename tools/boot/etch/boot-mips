@@ -24,7 +24,7 @@ if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-echo -J > $1.mkisofs_opts
+add_mkisofs_opt $N.mkisofs_opts "-J"
 
 # Only disk 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then
@@ -47,7 +47,7 @@ install -m 644 -D "$DI_DIR"/r4k-ip22/cdrom-boot.img "$CDROOT"/install/r4k-ip22-b
 
 install_languages $CDROOT
 
-echo " -mips-boot install/r4k-ip22-boot.img" >> $1.mkisofs_opts
+add_mkisofs_opt $N.mkisofs_opts "-mips-boot install/r4k-ip22-boot.img"
 #r5k-ip32 has no cdrom boot image yet
 #echo " -mips-boot install/r5k-ip32-boot.img" >> $1.mkisofs_opts
 

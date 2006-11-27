@@ -16,3 +16,14 @@ install_languages() {
     fi
 }
 
+# Add an option to the mkisofs options for this CD _only_ if it's not
+# already set. $1 is the opts file location, "$2" is the new
+# option. Call this with _logical groupings_ of options
+add_mkisofs_opt() {
+   OPTS_FILE=$1
+   NEW_OPT="$2"
+
+   if ! ( grep -q -- "$NEW_OPT" $OPTS_FILE 2>/dev/null) ; then
+       echo -n "$NEW_OPT " >> $OPTS_FILE
+   fi
+}

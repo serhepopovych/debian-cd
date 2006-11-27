@@ -24,8 +24,6 @@ if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-:> $1.mkisofs_opts
-
 # Only disk 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0
@@ -55,10 +53,10 @@ install_languages "$CDROOT"
 K32=$(ls $CDROOT/install/vmlinux-*-parisc|head -1 | sed 's?^.*/install/?install/?g')
 K64=$(ls $CDROOT/install/vmlinux-*-parisc64|head -1 | sed 's?^.*/install/?install/?g')
 
-echo " -hppa-cmdline '0/vmlinux,initrd=0/ramdisk'" >> $1.mkisofs_opts
-echo " -hppa-kernel-32 $K32" >> $1.mkisofs_opts
-echo " -hppa-kernel-64 $K64" >> $1.mkisofs_opts
-echo " -hppa-bootloader install/iplboot" >> $1.mkisofs_opts
-echo " -hppa-ramdisk install/initrd.gz" >> $1.mkisofs_opts
+add_mkisofs_opt $1.mkisofs_opts "-hppa-cmdline '0/vmlinux,root=/dev/ram,initrd=0/ramdisk,ramdisk_size=$RSIZE'"
+add_mkisofs_opt $1.mkisofs_opts "-hppa-kernel-32 $K32"
+add_mkisofs_opt $1.mkisofs_opts "-hppa-kernel-64 $K64"
+add_mkisofs_opt $1.mkisofs_opts "-hppa-bootloader install/iplboot"
+add_mkisofs_opt $1.mkisofs_opts "-hppa-ramdisk install/initrd.gz"
 
 exit 0

@@ -67,6 +67,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     the images as well!
   * Add the build date/time into a few more places so people can see them
     more easily; add the build time into the .disk/info file.
+  * DEVEL BRANCH MERGE: Change mkisofs_opts usage: add a shell function
+    for the boot-$arch scripts to use rather than simply appending to the
+    $N.mkisofs_opts file directly. Needed for forthcoming multi-arch
+    support.
 
  -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
 

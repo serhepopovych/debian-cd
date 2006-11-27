@@ -97,21 +97,32 @@ for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
 done
 
 if [ "$NN" = "1" ]; then
-    echo "Using ISOLINUX boot-disks image on CD$N"
+    echo "  Using ISOLINUX boot-disks image on CD$N"
     mkdir -p boot$N/isolinux
     cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
     cp -lf cdrom/vmlinuz $CDDIR/install/
     cp -lf cdrom/initrd.gz $CDDIR/install/
-    echo -n "-cache-inodes -J -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table " > $N.mkisofs_opts
+
+    add_mkisofs_opt $N.mkisofs_opts "-J"
+    add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+    add_mkisofs_opt $N.mkisofs_opts "-b isolinux/isolinux.bin"
+    add_mkisofs_opt $N.mkisofs_opts "-c isolinux/boot.cat"
+    add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
+    add_mkisofs_opt $N.mkisofs_opts "-boot-load-size 4"
+    add_mkisofs_opt $N.mkisofs_opts "-boot-info-table"
 else
     if [ -n "$THISTYPE" ]; then
-	echo "Using $THISTYPE boot-disks image on CD$N"
-	mkdir -p boot$N/boot
-	cp $THISTYPE/boot.img boot$N/boot/
-	echo -n "-cache-inodes -J -b boot/boot.img "  > $N.mkisofs_opts
+        echo "  Using $THISTYPE boot-disks image on CD$N"
+        mkdir -p boot$N/boot
+        cp $THISTYPE/boot.img boot$N/boot/
+
+        add_mkisofs_opt $N.mkisofs_opts "-J"
+        add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+        add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.img"
     else
-	mkdir boot$N
-	echo -n "-cache-inodes -J " > $N.mkisofs_opts
+        mkdir boot$N
+        add_mkisofs_opt $N.mkisofs_opts "-J"
+        add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
     fi
 fi
 
@@ -216,10 +227,11 @@ fi
 
 # write final lines to mkisofs_opts
 if [ "$NN" = "1" ]; then
-	echo -n "boot$N " >> $N.mkisofs_opts
+    add_mkisofs_opt $N.mkisofs_dirs "boot$N"
 else
 	if [ -n "$THISTYPE" ]; then
-		echo -n "-c boot/boot.catalog boot$N "  >> $N.mkisofs_opts
+        add_mkisofs_opt $N.mkisofs_opts "-c boot/boot.catalog"
+        add_mkisofs_opt $N.mkisofs_dirs "boot$N"
 	fi
 fi
 
