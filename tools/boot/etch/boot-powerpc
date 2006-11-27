@@ -27,6 +27,10 @@ fi
 
 cd $CDDIR/..
 
+if [ $N != 1 -a $N != 1_NONUS ]; then
+    exit 0
+fi
+
 install_languages $CDDIR
 
 add_mkisofs_opt $N.mkisofs_opts "--iso-level 2"
