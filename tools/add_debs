@@ -68,12 +68,12 @@ do
 
     if [ $COMPLETE = 1 ]; then
         if [ $DISKTYPE = DVD ]; then
-            echo "dvd" > .disk/cd_type
+            echo "dvd" > $BDIR/CD$DISK/.disk/cd_type
         else
-            echo "full_cd" > .disk/cd_type
+            echo "full_cd" > $BDIR/CD$DISK/.disk/cd_type
         fi
     else
-        echo "not_complete" > .disk/cd_type
+        echo "not_complete" > $BDIR/CD$DISK/.disk/cd_type
     fi
 
 	# Sort out the udeb include and exclude files
