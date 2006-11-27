@@ -36,7 +36,7 @@ do
 	cd $dir/..
 
 	opts=`cat $DIR/$n.mkisofs_opts`
-	dirs=`cat $DIR/$n.mkisofs_dirs`
+	dirs=`cat $DIR/$n.mkisofs_dirs` || true
 	volid=`cat $DIR/$n.volid`
 	relname=`echo $DEBVERSION | sed -e 's/[. ]//g'`
 	DISKINFO=`cat $DIR/$n.diskinfo`
