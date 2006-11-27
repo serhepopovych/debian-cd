@@ -76,6 +76,9 @@ sudo
  * deb gets included on the first CD too for arches that get discover1
  */
 
+/* #231583: Make life easier for Australian ISP users */
+bpalogin
+
 #ifdef ARCH_i386
 initramfs-tools
 discover

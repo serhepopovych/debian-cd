@@ -79,6 +79,8 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     merge can wait a while longer yet. Closes: #361422
   * Use DISKTYPE and COMPLETE values to create the file .disk/cd_type for
     the installer to use.
+  * Add bpalogin near the top of the task list, as requested a long time
+    ago. Closes: #231583
 
  -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
 
