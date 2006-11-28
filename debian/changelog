@@ -84,7 +84,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * Dump the mkisofs command-line used for each CD into .disk/mkisofs
     as we make it. Closes: #258099
 
- -- Frans Pop <fjp@debian.org>  Thu, 23 Nov 2006 01:42:00 +0100
+  [ Frans Pop ]
+  * Fixed double target in yaboot.conf; reported on IRC by jbrand.
+
+ -- Frans Pop <fjp@debian.org>  Tue, 28 Nov 2006 21:03:46 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
