@@ -54,7 +54,7 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
     hardcoded to install the KDE desktop task, and to create them, configure
     CONF.sh as follows:
       TASK=tasks/Debian_etch-kde
-      KERNEL_PARAMS='tasksel/first="kde-desktop, standard"'
+      KERNEL_PARAMS='tasks="kde-desktop, standard"'
       MAXCDS=1
       NOSOURCE=1
 
