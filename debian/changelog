@@ -90,8 +90,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Add a temporary hack in Debian_etch-kde to use sid d-i, to get a fixed
     preseed that supports preseeding of tasks.
+  * build.sh: Don't force IMAGETARGET to bin-official_images when NOSOURCE
+    is set, if IMAGETARGET is also already set, as in a kde cd build.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 29 Nov 2006 16:24:30 -0500
+ -- Joey Hess <joeyh@debian.org>  Wed, 29 Nov 2006 17:56:56 -0500
 
 debian-cd (2.2.25) unstable; urgency=low
 
