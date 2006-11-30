@@ -3,11 +3,11 @@
  * Generated with: 
  
  
- for i in $(cat task.list); do \
-   if [ "$i" != kde-desktop ] && [ "$i" != xfce-desktop ]; then \
-     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc | \
-     grep-dctrl -s Key -n -e '.*'; \
-   fi; \
+ for i in $(cat task.list); do
+   if [ "$i" != kde-desktop ] && [ "$i" != xfce-desktop ]; then
+     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
+     grep-dctrl -s Key -n -e '.*';
+   fi;
  done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch
   
  * Last updated: $Date$

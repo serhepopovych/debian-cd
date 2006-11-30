@@ -4,8 +4,8 @@
  * The content should be regenerated from time to time, like this:
  *
 
- for i in $(cat task.list); do \
-   grep-aptavail --regex -F Task "^$i$" -s Package -n; \
+ for i in $(cat task.list); do
+   grep-aptavail --regex -F Task "^$i$" -s Package -n;
  done >> ./task-full-etch
 
  *
