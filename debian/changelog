@@ -95,6 +95,11 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Remove sh from the arch list in generate_di_list, to make builds quieter.
+  * Another devel branch merge: Change tools/grab_md5 to also look for
+    md5sums in the installer suite as well as the archive suite in
+    case they're different. Also removed old woody support, to clean
+    up the code a little. Updated Makefile and update-cd to match the
+    command-line interface change.
 
  -- Joey Hess <joeyh@debian.org>  Wed, 29 Nov 2006 17:56:56 -0500
 
