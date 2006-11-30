@@ -70,7 +70,7 @@ make $LISTTARGET $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 
 echo " ... building the images"
 # Setting IMAGETARGET directly is deprecated; NOSOURCE is preferred
-if [ -z "$INAGETARGET" ]; then
+if [ -z "$IMAGETARGET" ]; then
 	if [ -n "$NOSOURCE" ] ; then
 	    IMAGETARGET="bin-official_images"
 	fi
