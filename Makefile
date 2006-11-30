@@ -802,9 +802,9 @@ conf:
 
 mirrorcheck-binary: ok
 	rm -f $(BDIR)/md5-check
-	$(Q)$(grab_md5) $(MIRROR) $(ARCH) $(CODENAME) $(BDIR)/md5-check
+	$(Q)$(grab_md5) $(MIRROR) $(ARCH) $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check
 	if [ -n "$(NONUS)" ]; then \
-		$(grab_md5) $(NONUS) $(ARCH) $(CODENAME) $(BDIR)/md5-check; \
+		$(grab_md5) $(NONUS) $(ARCH) $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
 	fi
 	$(Q)if [ -e $(BASEDIR)/data/$(CODENAME)/$(ARCH)/extra-sources ]; then \
 		echo "Extra dedicated source added; need to grab source MD5 info too"; \
