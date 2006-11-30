@@ -93,6 +93,9 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * build.sh: Don't force IMAGETARGET to bin-official_images when NOSOURCE
     is set, if IMAGETARGET is also already set, as in a kde cd build.
 
+  [ Steve McIntyre ]
+  * Remove sh from the arch list in generate_di_list, to make builds quieter.
+
  -- Joey Hess <joeyh@debian.org>  Wed, 29 Nov 2006 17:56:56 -0500
 
 debian-cd (2.2.25) unstable; urgency=low
