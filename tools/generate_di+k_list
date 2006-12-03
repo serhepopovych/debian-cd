@@ -211,16 +211,17 @@ EOF
 # Only include powerpc kernels that d-i base-installer installs.
 # XXX once powerpc 2.4 gets kernel-image-2.4-<subarch> packages, use those
 # instead, but beware of apus.
-for subarch in powerpc power3 power4 power3-pmac power3-chrp-rs6k \
-		power4-pmac power4-chrp-rs6k powerpc-pmac \
-		powerpc-prep powerpc-chrp powerpc-chrp-rs6k apus; do
-	zcat $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages.gz | \
-	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
-		grep -- "-$subarch$" | sort -n | tail -n 1 \
-                >> debian-installer+kernel-$DI_CODENAME
-done
+# Commented out as no longer relevant for Etch (see #401429)
+#for subarch in powerpc power3 power4 power3-pmac power3-chrp-rs6k \
+#		power4-pmac power4-chrp-rs6k powerpc-pmac \
+#		powerpc-prep powerpc-chrp powerpc-chrp-rs6k apus; do
+#	zcat $MIRROR/dists/$CODENAME/main/binary-powerpc/Packages.gz | \
+#	    sed -n 's/Package: \(kernel-image-.*-.*\)$/\1/p' | \
+#		grep -- "-$subarch$" | sort -n | tail -n 1 \
+#                >> debian-installer+kernel-$DI_CODENAME
+#done
+#cat >> debian-installer+kernel-$DI_CODENAME << EOF
 
-cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_m68k

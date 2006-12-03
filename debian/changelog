@@ -103,8 +103,10 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * tasks/exclude-etch: clean up packages no longer in the archive.
+  * tools/generate_di+k_list: no longer include kernel-image packages for
+    powerpc as we don't support 2.4 based installs anymore. Closes #401429.
 
- -- Frans Pop <fjp@debian.org>  Sun,  3 Dec 2006 19:58:42 +0100
+ -- Frans Pop <fjp@debian.org>  Sun,  3 Dec 2006 20:10:21 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
