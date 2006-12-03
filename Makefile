@@ -784,11 +784,6 @@ src-image: check-number-given src-images
 imagesums:
 	$(Q)$(BASEDIR)/tools/imagesums $(OUT)
 
-# Likewise, the file size can be extracted from the .template with:
-# tail --bytes=32 $$file | head --bytes=6 | od -tx1 -An \
-#  | tr ' abcdef' '\nABCDEF' | tac | tr '\n' ' ' \
-#  | sed -e 's/ //g; s/^.*$/ibase=16 & /' | tr ' ' '\n' | bc
-
 ## MISC TARGETS ##
 
 tasks: ok $(BASEDIR)/data/$(CODENAME)/master
