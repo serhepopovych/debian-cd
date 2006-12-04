@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # Generate a list of packages required for debian-installer
 # This script makes use of the following variables that need to be preset:
 # MIRROR, CODENAME, DI_CODENAME
@@ -220,8 +222,8 @@ EOF
 #		grep -- "-$subarch$" | sort -n | tail -n 1 \
 #                >> debian-installer+kernel-$DI_CODENAME
 #done
-#cat >> debian-installer+kernel-$DI_CODENAME << EOF
 
+cat >> debian-installer+kernel-$DI_CODENAME << EOF
 #endif
 
 #ifdef ARCH_m68k
