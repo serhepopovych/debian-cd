@@ -68,16 +68,15 @@ if [ -n "$NOSOURCE" ] ; then
 fi
 make $LISTTARGET $SIZE_ARGS SRCSIZELIMIT=$FULL_SIZE
 
-echo " ... building the images"
 # Setting IMAGETARGET directly is deprecated; NOSOURCE is preferred
 if [ -z "$IMAGETARGET" ]; then
 	if [ -n "$NOSOURCE" ] ; then
 	    IMAGETARGET="bin-official_images"
-	fi
-	if [ -z "$IMAGETARGET" ] ; then
+	else
 	    IMAGETARGET="official_images"
 	fi
 fi
+echo " ... building the images; using target(s) \"$IMAGETARGET\""
 make $IMAGETARGET
 
 make imagesums
