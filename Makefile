@@ -811,9 +811,9 @@ mirrorcheck-binary: ok
 
 mirrorcheck-source: ok
 	rm -f $(SDIR)/md5-check
-	$(Q)$(grab_md5) $(MIRROR) source $(CODENAME) $(SDIR)/md5-check
+	$(Q)$(grab_md5) $(MIRROR) source $(CODENAME) $(CODENAME) $(SDIR)/md5-check
 	if [ -n "$(NONUS)" ]; then \
-		$(grab_md5) $(NONUS) source $(CODENAME) $(SDIR)/md5-check; \
+		$(grab_md5) $(NONUS) source $(CODENAME) $(CODENAME) $(SDIR)/md5-check; \
 	fi
 
 update-popcon:
