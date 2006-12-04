@@ -91,9 +91,16 @@ cat $BASEDIR/data/$DI_CODENAME/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
 cp $BASEDIR/data/$DI_CODENAME/yaboot/ofboot.b ofboot.b
 
-for subarch in powerpc powerpc64
+for subarch in powerpc powerpc64 prep
 do
-  bitness=${subarch#powerpc}
+  case $subarch in
+    powerpc|prep)
+      bitness=
+      ;;
+    powerpc64)
+      bitness=64
+      ;;
+  esac
   if [ ! "$DI_WWW_HOME" ];then
         if [ ! "$DI_DIR" ];then 
            DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
@@ -109,7 +116,9 @@ do
 
 done
 
-if [ -f powerpc/vmlinuz-prep.initrd ]; then
+if [ -f prep/vmlinuz-prep.initrd ]; then
+  add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-prep-boot install/prep/vmlinuz-prep.initrd"
+elif [ -f powerpc/vmlinuz-prep.initrd ]; then
   # We are still missing this for prep
   add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-prep-boot install/powerpc/vmlinuz-prep.initrd"
 fi

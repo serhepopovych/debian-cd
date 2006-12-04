@@ -106,6 +106,9 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
   * tools/generate_di+k_list: no longer include kernel-image packages for
     powerpc as we don't support 2.4 based installs anymore. Closes #401429.
 
+  [ Colin Watson ]
+  * Include prep support on powerpc images again.
+
  -- Frans Pop <fjp@debian.org>  Sun,  3 Dec 2006 20:10:21 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
