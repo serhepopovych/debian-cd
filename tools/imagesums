@@ -22,7 +22,7 @@ case $DOJIGDO in
 				 || echo "`tail --bytes=26 "$file" | \
 					head --bytes=16 | \
 					od -tx1 -An | \
-					sed -e 's/ //g'` ${file%%.template}.iso" >> MD5SUMS
+					sed -e 's/ //g'`  ${file%%.template}.iso" >> MD5SUMS
 		done
 		;;
 	*)
