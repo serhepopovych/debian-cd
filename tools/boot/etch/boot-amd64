@@ -18,7 +18,7 @@ echo "DI_WWW_HOME is $DI_WWW_HOME"
 echo "DI_DIR is $DI_DIR"
 
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~kroeckx/d-i/images/daily"
+   DI_WWW_HOME="http://people.debian.org/~aba/d-i/images/daily"
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""
