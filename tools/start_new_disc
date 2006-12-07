@@ -125,12 +125,12 @@ if [ $DISKNUM = 1 ] ; then
 	echo "  Adding .disk/cd_type"
     if [ $COMPLETE = 1 ]; then
         if [ $DISKTYPE = DVD ]; then
-            echo "dvd" > $BDIR/CD$DISK/.disk/cd_type
+            echo "dvd" > $CDDIR/.disk/cd_type
         else
-            echo "full_cd" > $BDIR/CD$DISK/.disk/cd_type
+            echo "full_cd" > $CDDIR/.disk/cd_type
         fi
     else
-        echo "not_complete" > $BDIR/CD$DISK/.disk/cd_type
+        echo "not_complete" > $CDDIR/.disk/cd_type
     fi
 
 	echo "  Adding udeb/base includes/excludes"

@@ -157,7 +157,7 @@ for PKG in `cat $BDIR/packages` # | head -2000`
 do
 	CDDIR=$BDIR/CD${DISKNUM}
     if [ ! -d $CDDIR ] ; then
-		if [ $DISKNUM -gt $MAXCDS ] ; then
+		if [ "$MAXCDS"x != ""x ] && [ $DISKNUM -gt $MAXCDS ] ; then
 			echo "Disk #$DISKNUM is beyond the configured MAXCDS of $MAXCDS; exiting now..."
 			MAX_DONE=1
 			break

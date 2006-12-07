@@ -152,7 +152,7 @@ extra_image () {
 	if [ ! -d $CDDIR/install.386/$dir ]; then
 		mkdir -p $CDDIR/install.386/$dir
 	fi
-	cp -a "$image" $CDDIR/install/$dir/
+	cp -a "$image" $CDDIR/install.386/$dir/
 }
 
 # Only disk one gets the extra files installed
@@ -161,8 +161,8 @@ if [ "$NN" = "1" ]; then
 	for disk in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
           if [ -e "$disk" ]; then
 		dir=$(dirname $disk)
-		mkdir -p $CDDIR/install/$dir
-		cp -lf $disk $CDDIR/install/$dir
+		mkdir -p $CDDIR/install.386/$dir
+		cp -lf $disk $CDDIR/install.386/$dir
           fi
 	done
 
@@ -172,6 +172,12 @@ if [ "$NN" = "1" ]; then
 	touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
 	cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
 	
+    # If the isolinux dir already exists, rename it aside for now
+	if [ -e boot$N/isolinux/isolinux.cfg ] ; then
+		mv boot$N/isolinux boot$N/isolinux-amd64
+        mkdir boot$N/isolinux
+    fi
+
 	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 	if [ -e boot$N/isolinux/f3.txt.with26+gtk ]; then
