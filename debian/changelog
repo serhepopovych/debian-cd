@@ -1,4 +1,39 @@
-debian-cd (2.2.26) UNRELEASED; urgency=low
+debian-cd (3.0.0) UNRELEASED; urgency=low
+
+  * Support now added for multi-arch CDs/DVDs, including mixed
+    binary/source discs. Multi-arch discs should be bootable on those
+    multiple arches, modulo boot-sector clashes. Extra support added
+    in boot-i386 and boot-amd64 to make the 2 main arches happily
+    co-exist.
+
+  * Disc sizing is now much more intelligent - sizes are defined
+    depending on the disk type chosen at the start, and discs are now
+    filled exactly to those sizes while files are added rather than
+    the old up-front guessing method. Equally, the metadata on the
+    disc (Packages, Packages.gz, Sources, Sources.gz, md5sums.txt) is
+    generated as much as possible while this is happening to make the
+    sizing code incredibly accurate. Using this method of disc sizing
+    means that customising discs should be much easier/safer - either
+    add custom contents at the start and debian-cd will fill the
+    remainder of the disc, or afterwards roll back the packages on the
+    disc and add extras later.
+
+  * Source is now treated as (almost) just another arch, with most of
+    the special casing for source hidden internally. If asking for
+    source-only discs, they will simply be built using all the
+    available sources. If combined with other arches, the sources will
+    automatically be chosen to match the binary packages. Meeting GPL
+    requirements was never so easy!
+
+  * Removed lots of old cruft to clean up the codebase:
+    + non-US support
+    + woody support
+    + lots of old support scripts that have been made redundant
+    + significantly simpler Makefile, much easier to follow
+    + old boot-$ARCH.calc files for estimating boot-file sizes are now
+      (obviously) obsolete and therefore gone
+
+  Other changes:
 
   [ Petter Reinholdtsen ]
   * Update tools/boot/*/boot-amd64 to use the correct isolinux
@@ -110,9 +145,6 @@ debian-cd (2.2.26) UNRELEASED; urgency=low
 
   [ Colin Watson ]
   * Include prep support on powerpc images again.
-
-  [ Frans Pop ]
-  * 
 
  -- Frans Pop <fjp@debian.org>  Thu,  7 Dec 2006 02:00:04 +0100
 

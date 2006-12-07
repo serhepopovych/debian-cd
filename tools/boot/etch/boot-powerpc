@@ -9,7 +9,7 @@
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
-set -x
+#set -x
 
 N=$1
 CDDIR=$2
@@ -27,9 +27,12 @@ fi
 
 cd $CDDIR/..
 
-if [ $N != 1 -a $N != 1_NONUS ]; then
-    exit 0
-fi
+# Only disk 1* bootable
+#if [ $N != 1 -a $N != 1_NONUS ]; then
+#    # we don't need HFS cruft on anything but CD 1
+#	:> $N.mkisofs_opts
+#	exit 0
+#fi
 
 install_languages $CDDIR
 
@@ -47,24 +50,9 @@ add_mkisofs_opt $N.mkisofs_opts "-hfs-bless CD$N/install"
 add_mkisofs_opt $N.mkisofs_opts "-hfs-volid Debian/PowerPC_${CODENAME}"
 
 # Recommended size for a HFS Catalog is 4 megas per giga, defaults to 4 megas
-if [ -n "$SIZELIMIT1" ];then
-  if [ "$SIZELIMIT1" -gt 1000000000 ];then
-    let newsize="$SIZELIMIT1"/256
-    add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
-  fi
-else
-  if [ -n "$SIZELIMIT" ];then
-    if [ "$SIZELIMIT" -gt 1000000000 ];then
-      let newsize="$SIZELIMIT"/256
-      add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
-    fi
-  else
-    if [ -n "$DEFBINSIZE" ] && [ "$DEFBINSIZE" -gt 1000 ];then
-      let newsize="$DEFBINSIZE"*4096
-      add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
-    fi
-  fi
-fi
+# MAXDISKBLOCKS is measured in 2K blocks
+newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
+add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
 
 cd $INSTALLDIR
 # Extract yaboot from the archive

@@ -1,0 +1,226 @@
+#!/bin/sh
+#
+# make_disc_trees
+#
+# From the list of packages we have, lay out the CD trees
+
+set -e
+
+BASEDIR=$1
+MIRROR=$2
+TDIR=$3
+CODENAME=$4
+ARCHES=$5
+
+LIST=$TDIR/list
+LIST_EX=$TDIR/list.exclude
+
+DISKNUM=1
+MAX_DONE=0
+
+BDIR=$TDIR/$CODENAME
+LOG=$BDIR/make_disc_tree.log
+
+MiB=1048576
+MB=1000000
+BLOCKSIZE=2048
+
+# Calculate the maximum number of 2K blocks in the output images
+case $DISKTYPE in
+	BC)
+		MAXDISKBLOCKS=`echo "680 * $MB / $BLOCKSIZE" | bc`
+		DISKDESC="businesscard"
+		;;
+	NETINST)
+		MAXDISKBLOCKS=`echo "680 * $MB / $BLOCKSIZE" | bc`
+		DISKDESC="netinst"
+		;;
+	CD)
+		MAXDISKBLOCKS=`echo "680 * $MB / $BLOCKSIZE" | bc`
+		DISKDESC="650MiB CD"
+		;;
+	CD700)
+		MAXDISKBLOCKS=`echo "737 * $MB / $BLOCKSIZE" | bc`
+		DISKDESC="700MiB CD"
+		;;
+	DVD)
+		MAXDISKBLOCKS=`echo "4700 * $MB / $BLOCKSIZE" | bc`
+		DISKDESC="4.7GB DVD"
+		;;
+	CUSTOM)
+		MAXDISKBLOCKS=$CUSTOMSIZE
+		DISKDESC="User-supplied size"
+		;;
+esac
+
+export MAXDISKBLOCKS DISKDESC
+
+# Cope with HFS-hybrid disks using extra space for the HFS metadata
+case "$ARCHES" in
+	*m68k*|*powerpc*) SIZE_CHECK_PERCENT="90 / 100";;
+	*)                SIZE_CHECK_PERCENT="95 / 100";;
+esac
+
+# How full should we let the disc get before we stop estimating and
+# start running mkisofs?
+SIZE_SWAP_CHECK=`echo "$MAXDISKBLOCKS * $SIZE_CHECK_PERCENT" | bc`
+
+PKGS_THIS_CD=0
+PKGS_DONE=0
+SIZE=0
+OVERFLOWPKG=""
+MKISOFS_CHECK="mkisofs -r -print-size -quiet"
+
+#############################################
+#
+#  Local helper functions
+#
+#############################################
+check_base_installable () {
+	ARCH=$1
+	CDDIR=$2
+	ok=0
+
+	for p in `debootstrap --arch $ARCH --print-debs $CODENAME $TDIR/debootstrap.tmp file:$MIRROR $DEBOOTSTRAP_SCRIPT 2>/dev/null`
+	do
+		if ! grep -q "^Package: $p$" $CDDIR/dists/$CODENAME/main/binary-$ARCH/Packages ; then
+			if [ -n "$BASE_EXCLUDE" ] && grep -q ^$p$ $BASE_EXCLUDE ; then
+				echo "Missing debootstrap-required $p but included in $BASE_EXCLUDE" >> $LOG
+				continue
+			fi
+			ok=$(($ok + 1))
+			echo "Missing debootstrap-required $p" >> $LOG
+		fi
+	done
+	rm -rf $TDIR/debootstrap.tmp
+	echo $ok
+}
+
+finish_disc () {
+	CDDIR=$1
+	NOT=$2
+
+	if [ $DISKNUM = 1 ] ; then
+		for ARCH in $ARCHES_NOSRC
+		do
+			echo "  Checking base is installable for $ARCH" 
+			ARCHOK=`check_base_installable $ARCH $CDDIR`
+			if [ $ARCHOK -gt 0 ] ; then
+				echo "  $ARCH is missing $ARCHOK files needed for debootstrap, look in $LOG for the list"
+			fi
+			ok=$(($ok + $ARCHOK))
+		done
+		if [ $ok = 0 ] ; then
+			touch $CDDIR/.disk/base_installable
+			echo "  all files needed for debootstrap"
+		else
+			echo "  $ok files missing for debootstrap, not creating base_installable"
+		fi
+		echo "$ok files missing for debootstrap" >> $LOG
+	fi
+
+	echo "  Finishing off md5sum.txt"
+	cd $CDDIR
+	# Just md5 the bits we won't have seen already
+	find ./.disk ./dists -type f | xargs md5sum >> md5sum.txt
+	# And sort; it should make things faster for people checking
+	# the md5sums, as ISO9660 dirs are sorted alphabetically
+	LANG=C sort -uk2 md5sum.txt > md5sum.txt.tmp
+	mv -f md5sum.txt.tmp md5sum.txt
+	cd $BDIR
+
+	SIZE=`$SIZE_CHECK $CDDIR` 
+	BYTES=`echo "$SIZE * 2048" | bc`
+	echo "CD #$DISKNUM $NOT filled with $PKGS_THIS_CD packages, $SIZE blocks, $BYTES bytes" >> $LOG
+	echo "  CD #$DISKNUM $NOT filled with $PKGS_THIS_CD packages, $SIZE blocks, $BYTES bytes"
+	date >> $LOG
+}
+
+cd $BDIR
+
+# Size calculation is slightly complicated:
+#
+# 1. At the start, ask mkisofs for a size so far (including all the
+#    stuff in the initial tree like docs and boot stuff
+#
+# 2. After that, add_packages will tell us the sizes of the files it
+#    has added. This will not include directories / metadata so is
+#    only a rough guess, but it's a _cheap_ guess
+#
+# 3. Once we get >90% of the max size we've been configured with,
+#    start asking mkisofs after each package addition. This will
+#    be slow, but we want to be exact at the end
+
+echo "Starting to lay out packages into $DISKTYPE ($DISKDESC) images: $MAXDISKBLOCKS 2K-blocks maximum per image"
+
+for PKG in `cat $BDIR/packages` # | head -2000`
+do
+	CDDIR=$BDIR/CD${DISKNUM}
+    if [ ! -d $CDDIR ] ; then
+		if [ $DISKNUM -gt $MAXCDS ] ; then
+			echo "Disk #$DISKNUM is beyond the configured MAXCDS of $MAXCDS; exiting now..."
+			MAX_DONE=1
+			break
+		fi
+		echo "Starting new disc $DISKNUM at "`date` >> $LOG
+		start_new_disc $BASEDIR $MIRROR $TDIR $CODENAME "$ARCHES" $DISKNUM
+
+		echo "  Starting the md5sum.txt file"
+		# Grab all the early stuff, apart from dirs that will change later
+		cd $CDDIR && \
+			find . -type f | grep -v -e ^\./\.disk -e ^\./dists | \
+			xargs md5sum > md5sum.txt && \
+			cd $BDIR
+
+		echo "  Placing packages into image $DISKNUM"
+		MKISOFS_OPTS=`cat $BDIR/$DISKNUM.mkisofs_opts` || true
+		MKISOFS_DIRS=`cat $BDIR/$DISKNUM.mkisofs_dirs` || true
+		SIZE_CHECK="$MKISOFS_CHECK $MKISOFS_OPTS $MKISOFS_DIRS"
+		SIZE=`$SIZE_CHECK $CDDIR`
+		echo "CD #$DISKNUM: size is $SIZE before starting to add packages" >> $LOG
+		if [ "$OVERFLOWPKG"x != ""x ] ; then
+			echo "Starting with the package that failed on the last disc: $OVERFLOWPKG" >> $LOG
+			GUESS_SIZE=`add_packages $CDDIR $OVERFLOWPKG`
+			SIZE=$(($SIZE + $GUESS_SIZE))
+			echo "CD #$DISKNUM: GUESS_TOTAL is $SIZE after adding $OVERFLOWPKG" >> $LOG
+			OVERFLOWPKG=""
+			PKGS_THIS_CD=1
+			PKGS_DONE=$(($PKGS_DONE + 1))
+		fi
+	fi
+
+	GUESS_SIZE=`add_packages $CDDIR $PKG`
+	SIZE=$(($SIZE + $GUESS_SIZE))
+	echo "CD #$DISKNUM: GUESS_TOTAL is $SIZE after adding $PKG" >> $LOG
+	if [ $SIZE -gt $SIZE_SWAP_CHECK ] ; then
+		SIZE=`$SIZE_CHECK $CDDIR` 
+		echo "CD #$DISKNUM: Real current size is $SIZE blocks after adding $PKG" >> $LOG
+	fi
+	if [ $SIZE -gt $MAXDISKBLOCKS ] ; then
+		echo "CD #$DISKNUM over-full. Rollback!" >> $LOG
+		GUESS_SIZE=`add_packages --rollback $CDDIR $PKG`
+		SIZE=`$SIZE_CHECK $CDDIR` 
+		echo "CD #$DISKNUM: Real current size is $SIZE blocks after rolling back $PKG" >> $LOG
+
+		finish_disc $CDDIR ""
+		# Put this package first on the next disc
+		OVERFLOWPKG=$PKG
+		# And reset, to start the next disc
+		SIZE=0
+		DISKNUM=$(($DISKNUM + 1))		
+	else
+		PKGS_THIS_CD=$(($PKGS_THIS_CD + 1))
+		PKGS_DONE=$(($PKGS_DONE + 1))
+	fi
+	
+done
+
+if [ "$MAX_DONE" = 0 ] ; then
+	finish_disc $CDDIR "(not)"
+fi
+
+echo "Finished: $PKGS_DONE packages placed" >> $LOG
+echo "Finished: $PKGS_DONE packages placed"
+BYTES=`echo "$SIZE * 2048" | bc`
+date >> $LOG
+	

@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# update_popcon
+#
+# Simple helper script to update our popularity-contest generated task
+# list from the data available at popcon.debian.org
+
+DATE=`date`
+
+OUT=$1
+
+rm -f $OUT
+
+echo "/*" >> $OUT
+echo "   Popularity Contest results" >> $OUT
+echo "   See the README for details on updating." >> $OUT
+echo "" >> $OUT
+echo "   Last update: $DATE" >> $OUT
+echo "*/" >> $OUT
+echo "" >> $OUT
+	wget --output-document - \
+		http://popcon.debian.org/main/by_inst \
+		http://popcon.debian.org/contrib/by_inst | \
+		grep -h '^[^#]'| egrep -v '(Total|-----)' | \
+		sort -rn -k3,3 -k7,7 -k4,4 | grep -v kernel-source | \
+		awk '{print $$2}' >> $OUT

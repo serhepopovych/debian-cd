@@ -7,7 +7,7 @@
 set -e
 
 DIR=$1
-ARCH=$2
+ARCHES="$2"
 OUT=$3
 DOJIGDO=$4
 DEBVERSION=$5
@@ -18,11 +18,13 @@ JIGDO_OPTS=$9
 shift
 JIGDO_CLEANUP=$9
 
+NUM_ARCHES=`echo $ARCHES | wc -w`
+
 if [ "$CD"x = ""x ] ; then
-	echo "Generating the $ARCH iso/jigdo images ..."
+	echo "Generating the $ARCHES iso/jigdo images ..."
 	FILES=$DIR/*.volid
 else
-	echo "Generating $ARCH iso/jigdo image number $CD ..."
+	echo "Generating $ARCHES iso/jigdo image number $CD ..."
 	FILES=$DIR/$CD.volid
 fi
 
@@ -35,16 +37,16 @@ do
 
 	cd $dir/..
 
-	opts=`cat $DIR/$n.mkisofs_opts`
+	opts=`cat $DIR/$n.mkisofs_opts` || true
 	dirs=`cat $DIR/$n.mkisofs_dirs` || true
 	volid=`cat $DIR/$n.volid`
 	relname=`echo $DEBVERSION | sed -e 's/[. ]//g'`
 	DISKINFO=`cat $DIR/$n.diskinfo`
 
-	if [ $ARCH = "source" ] ; then
-		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$DISKTYPE-$n"
+	if [ $NUM_ARCHES = 1 ] ; then
+		OUTFILE="${CDNAME:-debian}-$relname-$ARCHES-$DISKTYPE-$n"
 	else
-		OUTFILE="${CDNAME:-debian}-$relname-$ARCH-$DISKTYPE-binary-$n"
+		OUTFILE="${CDNAME:-debian}-$relname-MULTI-$DISKTYPE-$n"
 	fi
 
 	# Clean up any old files
@@ -57,14 +59,14 @@ do
 	case $DOJIGDO in
 	
 		0) # No jigdo files, just straight ISO
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' -o $OUT/$OUTFILE.iso $opts $dirs CD$n
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' -o $OUT/$OUTFILE.iso $opts $dirs CD$n > CD$n/.disk/mkisofs
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n > CD$n/.disk/mkisofs
 			$MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
 			;;
 
 
 		1) # jigdo files _and_ ISO
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' \
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o $OUT/$OUTFILE.iso \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
@@ -72,7 +74,7 @@ do
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
 				$JIGDO_OPTS $opts $dirs CD$n
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' \
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o $OUT/$OUTFILE.iso \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
@@ -91,7 +93,7 @@ do
 			;;
 
 		2) # jigdo only, no ISO
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' \
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o /dev/null \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \
@@ -99,7 +101,7 @@ do
 				-jigdo-exclude boot$n \
 				-md5-list $DIR/md5-check \
 				$JIGDO_OPTS $opts $dirs CD$n
-			echo $MKISOFS $MKISOFS_OPTS -V \'"$volid"\' \
+			echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
 				-o /dev/null \
 				-jigdo-jigdo $OUT/$OUTFILE.jigdo \
 				-jigdo-template $OUT/$OUTFILE.template \

@@ -13,7 +13,6 @@ unset LOCALDEBS         || true
 unset SECURED           || true
 unset SECURITY          || true
 unset BOOTDIR           || true
-unset BOOTDISKS         || true
 unset SYMLINK           || true
 unset COPYLINK          || true
 unset MKISOFS           || true
@@ -52,6 +51,7 @@ export BASEDIR=`pwd`
 
 # Building etch cd set ...
 export CODENAME=etch
+export DI_CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
@@ -85,11 +85,11 @@ if [ "$KERNEL"x = ""x ] ; then
     KERNEL=linux
 fi
 if [ $KERNEL = linux ] ; then
-    ARCH=$CPU
+    ARCHES=$CPU
 else
-    ARCH="$KERNEL-$CPU"
+    ARCHES="$KERNEL-$CPU"
 fi
-export CPU KERNEL ARCH
+export CPU KERNEL ARCHES
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
 #	      If they aren't then you must set COPYLINK below to 1. This
@@ -172,18 +172,17 @@ export VERBOSE_MAKE=1
 # the proper official CD run does not work
 ATTEMPT_FALLBACK=yes
 
-# Set your disk size here in MB. Used in calculating package and
-# source file layouts in build.sh and build_all.sh. Defaults are for
-# CD-R, try ~4400 for DVD-R.
-export DEFBINSIZE=630
-export DEFSRCSIZE=635
-
-# Set the disk type, used later in various places. Soon this will also
-# be used to work out the disk size automatically
-if [ "$DISKTYPE"x = ""x ] ; then
-    DISKTYPE=CD
-fi
-export DISKTYPE
+# Set your disk type here. Known types are:
+# BC (businesscard): 650 MiB max (should be limited elsewhere,
+#                    should never fill a CD anyway)
+# NETINST:           650 MiB max (ditto)
+# CD:                standard 74-min CD (650 MiB)
+# CD700:             (semi-)standard 80-min CD (700 MiB)
+# DVD:               standard 4.7 GB DVD
+# CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
+export DISKTYPE=DVD
+#export DISKTYPE=CUSTOM
+#export CUSTOMSIZE=XXXX
 
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
@@ -194,11 +193,6 @@ export DISKTYPE
 
 # We also exclude some source packages
 #export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-$CODENAME
-
-# Set this if building source packages CDs should be skipped.
-# You won't need source packages on your local mirror in that case.
-# (Setting IMAGETARGET is now deprecated, though still supported.)
-#export NOSOURCE=1
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
@@ -217,8 +211,8 @@ export NORECOMMENDS=1
 #     since they need the actual .iso to make it bootable. For these archs,
 #     the temp-iso will be generated, but deleted again immediately after the
 #     jigdo stuff is made; needs temporary space as big as the biggest image.
-#export DOJIGDO=2
-#
+export DOJIGDO=1
+
 # jigdo-file command & options
 # Note: building the cache takes hours, so keep it around for the next run
 #export JIGDOCMD="/usr/local/bin/jigdo-file --cache=$HOME/jigdo-cache.db"
@@ -292,9 +286,6 @@ for INCL in $JIGDO_INCLUDE
 do
     JIGDO_OPTS="$JIGDO_OPTS -jigdo-force-md5 $INCL"
 done
-
-# Where to find the boot disks
-#export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies
 
 # File with list of packages to include when fetching modules for the
 # first stage installer (debian-installer). One package per line.

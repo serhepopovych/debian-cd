@@ -27,12 +27,14 @@ my $maxcds = $ENV{'MAXCDS'} || 0;
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
 my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
-my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
+my $arch = "$ENV{'ARCH'}";
+my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}";
 my $verbose = $ENV{'VERBOSE'} || 0;
 
 $| = 1; # Autoflush for debugging
 
-open(LOG, ">$dir/log.list2cds") || die "Can't write in $dir/log.list2cds !\n";
+open(LOG, ">$dir/log.list2cds.$arch")
+       || die "Can't write in $dir/log.list2cds.$arch !\n";
 
 sub msg {
 	my $level = shift;
@@ -48,8 +50,10 @@ my %packages;
 
 msg(0, "======================================================================
 Here are the settings you've chosen for making the list:
+Architecture: $arch
 List of prefered packages: $list
 Exclude file: $exclude
+Output file: $dir/packages.$arch
 ");
 msg(0, "Complete selected packages with all the rest: "); msg(0, yesno($complete)."\n");
 msg(0, "Include non-free packages: "); msg(0, yesno($nonfree)."\n");
@@ -122,8 +126,8 @@ Number of excluded: $count_excl of @{ [scalar(keys %excluded)] }
 
 ");
 
-open(STATS, "> $dir/stats.excluded") 
-			|| die "Can't write in stats.excluded: $!\n";
+open(STATS, "> $dir/stats.excluded.$arch") 
+                       || die "Can't write in stats.excluded.$arch: $!\n";
 foreach (keys %excluded) {
 	print STATS "$_ => $excluded{$_}\n";
 }
@@ -162,7 +166,7 @@ while (@list) {
 msg(0, "-- Adding standard, required, important and base packages \n" .
        "   on the first CD ...\n");
 # Automatically include packages listed in the status file
-open(STATUS, "< $adir/status") || die "Can't open status file : $!\n";
+open(STATUS, "< $adir/status") || die "Can't open status file $adir/status: $!\n";
 while (defined($_ = <STATUS>)) {
        next if not m/^Package: (\S+)/;
        $p = $1;
@@ -281,7 +285,7 @@ if ($extranonfree and (! $nonfree))
 }
 
 # Remove old files
-foreach (glob("$dir/*.packages")) {
+foreach (glob("$dir/*.packages*")) {
 	unlink $_;
 }
 
@@ -295,10 +299,10 @@ foreach (sort { $a <=> $b } keys %cds) {
 	$numcds++;
 	
 	my $count = 0;
-	open(CDLIST, "> $dir/$_.packages") 
-			|| die "Can't write in $dir/$_.packages: $!\n";
+	open(CDLIST, "> $dir/packages.$arch") 
+		|| die "Can't write in $dir/$_.packages.$arch: $!\n";
 	foreach (@{$cds{$_}}) {
-		print CDLIST "$_\n";
+		print CDLIST "$arch:$_\n";
 		$count++;
 	}
 	close CDLIST;

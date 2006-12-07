@@ -9,34 +9,37 @@ my $link_copy = $ENV{'COPYLINK'} || 0;
 sub good_link ($$) {
 	my ($src, $dest) = @_;
 
-	# Check if the destination directory does exist
-	my $ddir = $dest;
-	$ddir =~ s#/?[^/]+$##g;
-	if ($ddir eq "") 
-	{
-		$ddir = ".";
-	}
-	if (! -d $ddir) # Create it if not
-	{
-		system("mkdir -p $ddir");
-	}
-	# Link the files
-	if ($symlink_farm) {
-		print "Symlink: $dest => $src\n" if ($link_verbose >= 3);
-		if (not symlink ($src, $dest)) {
-			print STDERR "Symlink from $src to $dest failed: $!\n";
+	if (! -e $dest) {
+
+		# Check if the destination directory does exist
+		my $ddir = $dest;
+		$ddir =~ s#/?[^/]+$##g;
+		if ($ddir eq "") 
+		{
+			$ddir = ".";
 		}
-	} elsif ($link_copy) {
-		print "Copy: $dest => $src\n" if ($link_verbose >= 3);
-		if (system("cp -ap $src $dest")) {
-			my $err_num = $? >> 8;
-			my $sig_num = $? & 127;
-			print STDERR "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
+		if (! -d $ddir) # Create it if not
+		{
+			system("mkdir -p $ddir");
 		}
-	} else {
-		print "Hardlink: $dest => $src\n" if ($link_verbose >= 3);
-		if (not link ($src, $dest)) {
-			print STDERR "Link from $src to $dest failed: $!\n";
+		# Link the files
+		if ($symlink_farm) {
+			print "Symlink: $dest => $src\n" if ($link_verbose >= 3);
+			if (not symlink ($src, $dest)) {
+				print STDERR "Symlink from $src to $dest failed: $!\n";
+			}
+		} elsif ($link_copy) {
+			print "Copy: $dest => $src\n" if ($link_verbose >= 3);
+			if (system("cp -ap $src $dest")) {
+				my $err_num = $? >> 8;
+				my $sig_num = $? & 127;
+				print STDERR "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
+			}
+		} else {
+			print "Hardlink: $dest => $src\n" if ($link_verbose >= 3);
+			if (not link ($src, $dest)) {
+				print STDERR "Link from $src to $dest failed: $!\n";
+			}
 		}
 	}
 }

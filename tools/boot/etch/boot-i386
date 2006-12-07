@@ -70,7 +70,7 @@ for image in $BOOT_IMAGES; do
 		if [ ! "$DI_DIR" ];then
 		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
 		fi
-                echo "Copying images from $DI_DIR"
+#       echo "Copying images from $DI_DIR"
 		cp "$DI_DIR/$image" "$image"
 	else
 		wget "$DI_WWW_HOME/$image" -O "$image"
@@ -97,32 +97,31 @@ for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
 done
 
 if [ "$NN" = "1" ]; then
-    echo "  Using ISOLINUX boot-disks image on CD$N"
-    mkdir -p boot$N/isolinux
-    cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
-    cp -lf cdrom/vmlinuz $CDDIR/install/
-    cp -lf cdrom/initrd.gz $CDDIR/install/
+    echo "      Using ISOLINUX boot-disks image on CD$N"
+    mkdir -p boot$N/isolinux $CDDIR/install.386
+    cp -lf cdrom/vmlinuz $CDDIR/install.386/
+    cp -lf cdrom/initrd.gz $CDDIR/install.386/
 
-    add_mkisofs_opt $N.mkisofs_opts "-J"
-    add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-    add_mkisofs_opt $N.mkisofs_opts "-b isolinux/isolinux.bin"
-    add_mkisofs_opt $N.mkisofs_opts "-c isolinux/boot.cat"
-    add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
-    add_mkisofs_opt $N.mkisofs_opts "-boot-load-size 4"
-    add_mkisofs_opt $N.mkisofs_opts "-boot-info-table"
+	add_mkisofs_opt $N.mkisofs_opts "-J"
+	add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+	add_mkisofs_opt $N.mkisofs_opts "-b isolinux/isolinux.bin"
+	add_mkisofs_opt $N.mkisofs_opts "-c isolinux/boot.cat"
+	add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
+	add_mkisofs_opt $N.mkisofs_opts "-boot-load-size 4"
+	add_mkisofs_opt $N.mkisofs_opts "-boot-info-table"	
 else
     if [ -n "$THISTYPE" ]; then
-        echo "  Using $THISTYPE boot-disks image on CD$N"
-        mkdir -p boot$N/boot
-        cp $THISTYPE/boot.img boot$N/boot/
+		echo "      Using $THISTYPE boot-disks image on CD$N"
+		mkdir -p boot$N/boot
+		cp $THISTYPE/boot.img boot$N/boot/
 
-        add_mkisofs_opt $N.mkisofs_opts "-J"
-        add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-        add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.img"
+		add_mkisofs_opt $N.mkisofs_opts "-J"
+		add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+		add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.img"
     else
-        mkdir boot$N
-        add_mkisofs_opt $N.mkisofs_opts "-J"
-        add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+		mkdir boot$N
+		add_mkisofs_opt $N.mkisofs_opts "-J"
+		add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
     fi
 fi
 
@@ -150,8 +149,8 @@ extra_image () {
 		fi
 	fi
 	
-	if [ ! -d $CDDIR/install/$dir ]; then
-		mkdir -p $CDDIR/install/$dir
+	if [ ! -d $CDDIR/install.386/$dir ]; then
+		mkdir -p $CDDIR/install.386/$dir
 	fi
 	cp -a "$image" $CDDIR/install/$dir/
 }
@@ -198,6 +197,28 @@ if [ "$NN" = "1" ]; then
 			ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
 	fi
 
+	sed -i "s|/install/|/install.386/|" boot$N/isolinux/isolinux.cfg
+
+	if [ -e boot$N/isolinux-amd64/isolinux.cfg ] ; then
+		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*
+		do
+			cat $file | awk '
+				NR==3 { next }
+				NR==5 { printf " (i386 is default; prepend 'amd64-' to use an amd64 kernel instead)\n" }
+				/.*/  { print $0 }' > $file.tmp
+			mv $file.tmp $file
+		done
+
+		cat boot$N/isolinux-amd64/isolinux.cfg | awk '
+				/^LABEL/ { printf("LABEL amd64-%s\n", $2) }
+				/kernel/ { print $0 }
+				/append/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
+
+	    rm -rf boot$N/isolinux-amd64
+	fi
+
+    cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
+
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config
 		# file.
@@ -210,6 +231,8 @@ if [ "$NN" = "1" ]; then
     sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 
 fi
+
+rm -rf cdrom
 
 # Add autorun if we have README.html
 
