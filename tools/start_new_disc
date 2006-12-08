@@ -206,9 +206,9 @@ if [ $DISKNUM = 1 ] ; then
 		mkdir $CDDIR/doc/FAQ/html
 		cd $CDDIR/doc/FAQ/html
 		if [ -e "../debian-faq.en.html.tar.gz" ] ; then
-			tar xzvf ../debian-faq.en.html.tar.gz
+			tar xzf ../debian-faq.en.html.tar.gz
 		else
-			tar xzvf ../debian-faq.html.tar.gz
+			tar xzf ../debian-faq.html.tar.gz
 		fi
 	fi
 
