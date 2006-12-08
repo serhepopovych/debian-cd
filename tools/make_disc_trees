@@ -11,6 +11,7 @@ MIRROR=$2
 TDIR=$3
 CODENAME=$4
 ARCHES=$5
+MKISOFS=$6
 
 LIST=$TDIR/list
 LIST_EX=$TDIR/list.exclude
@@ -69,7 +70,7 @@ PKGS_THIS_CD=0
 PKGS_DONE=0
 SIZE=0
 OVERFLOWPKG=""
-MKISOFS_CHECK="mkisofs -r -print-size -quiet"
+MKISOFS_CHECK="$MKISOFS -r -print-size -quiet"
 
 #############################################
 #
@@ -83,7 +84,7 @@ check_base_installable () {
 
 	for p in `debootstrap --arch $ARCH --print-debs $CODENAME $TDIR/debootstrap.tmp file:$MIRROR $DEBOOTSTRAP_SCRIPT 2>/dev/null`
 	do
-		if ! grep -q "^Package: $p$" $CDDIR/dists/$CODENAME/main/binary-$ARCH/Packages ; then
+		if ! grep -q "^Package: $p$" $CDDIR/dists/$CODENAME/main/binary-$ARCH/Packages 2>/dev/null; then
 			if [ -n "$BASE_EXCLUDE" ] && grep -q ^$p$ $BASE_EXCLUDE ; then
 				echo "Missing debootstrap-required $p but included in $BASE_EXCLUDE" >> $LOG
 				continue
@@ -115,6 +116,9 @@ finish_disc () {
 			echo "  all files needed for debootstrap"
 		else
 			echo "  $ok files missing for debootstrap, not creating base_installable"
+			if [ "$DISKTYPE"x = "BC"x ] ; then
+			    echo "  This is expected - building a BC"
+			fi
 		fi
 		echo "$ok files missing for debootstrap" >> $LOG
 	fi

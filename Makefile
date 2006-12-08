@@ -277,7 +277,7 @@ image-trees: ok genlist
 	else \
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi
-	make_disc_trees $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)"
+	make_disc_trees $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
 # Generate the complete listing of packages from the task
 # Build a nice list without doubles and without spaces
