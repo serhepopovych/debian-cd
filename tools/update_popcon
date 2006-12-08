@@ -23,4 +23,4 @@ echo "" >> $OUT
 		http://popcon.debian.org/contrib/by_inst | \
 		grep -h '^[^#]'| egrep -v '(Total|-----)' | \
 		sort -rn -k3,3 -k7,7 -k4,4 | grep -v kernel-source | \
-		awk '{print $$2}' >> $OUT
+		awk '{print $2}' >> $OUT
