@@ -7,6 +7,8 @@ if [ -z "$CF" ] ; then
 fi
 . $CF
 
+echo "Using CONF from $CF"
+
 if [ -z "$COMPLETE" ] ; then
     export COMPLETE=1
 fi
