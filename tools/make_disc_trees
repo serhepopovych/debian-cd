@@ -177,8 +177,16 @@ do
 			cd $BDIR
 
 		echo "  Placing packages into image $DISKNUM"
-		MKISOFS_OPTS=`cat $BDIR/$DISKNUM.mkisofs_opts` || true
-		MKISOFS_DIRS=`cat $BDIR/$DISKNUM.mkisofs_dirs` || true
+		if [ -e $BDIR/$DISKNUM.mkisofs_opts ] ; then
+		    MKISOFS_OPTS=`cat $BDIR/$DISKNUM.mkisofs_opts`
+		else
+		    unset MKISOFS_OPTS
+		fi
+		if [ -e $BDIR/$DISKNUM.mkisofs_dirs ] ; then
+		    MKISOFS_DIRS=`cat $BDIR/$DISKNUM.mkisofs_dirs`
+		else
+		    unset MKISOFS_DIRS
+		fi
 		SIZE_CHECK="$MKISOFS_CHECK $MKISOFS_OPTS $MKISOFS_DIRS"
 		SIZE=`$SIZE_CHECK $CDDIR`
 		echo "CD #$DISKNUM: size is $SIZE before starting to add packages" >> $LOG
