@@ -35,7 +35,7 @@ case $DISKTYPE in
 		MAXDISKBLOCKS=`echo "680 * $MB / $BLOCKSIZE" | bc`
 		DISKDESC="netinst"
 		;;
-	CD)
+	*CD)
 		MAXDISKBLOCKS=`echo "680 * $MB / $BLOCKSIZE" | bc`
 		DISKDESC="650MiB CD"
 		;;
