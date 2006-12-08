@@ -101,26 +101,26 @@ finish_disc () {
 	CDDIR=$1
 	NOT=$2
 
-	if [ $DISKNUM = 1 ] ; then
-		for ARCH in $ARCHES_NOSRC
-		do
-			echo "  Checking base is installable for $ARCH" 
-			ARCHOK=`check_base_installable $ARCH $CDDIR`
-			if [ $ARCHOK -gt 0 ] ; then
-				echo "  $ARCH is missing $ARCHOK files needed for debootstrap, look in $LOG for the list"
-			fi
-			ok=$(($ok + $ARCHOK))
-		done
-		if [ $ok = 0 ] ; then
-			touch $CDDIR/.disk/base_installable
-			echo "  all files needed for debootstrap"
-		else
-			echo "  $ok files missing for debootstrap, not creating base_installable"
-			if [ "$DISKTYPE"x = "BC"x ] ; then
-			    echo "  This is expected - building a BC"
-			fi
+	if [ $DISKNUM = 1 ] && [ "$ARCHES"x != "source"x ] ; then
+	    for ARCH in $ARCHES_NOSRC
+	    do
+	        echo "  Checking base is installable for $ARCH" 
+		ARCHOK=`check_base_installable $ARCH $CDDIR`
+		if [ $ARCHOK -gt 0 ] ; then
+		    echo "  $ARCH is missing $ARCHOK files needed for debootstrap, look in $LOG for the list"
 		fi
-		echo "$ok files missing for debootstrap" >> $LOG
+		ok=$(($ok + $ARCHOK))
+	    done
+	    if [ $ok = 0 ] ; then
+		touch $CDDIR/.disk/base_installable
+		echo "  all files needed for debootstrap"
+	    else
+		echo "  $ok files missing for debootstrap, not creating base_installable"
+		if [ "$DISKTYPE"x = "BC"x ] ; then
+		    echo "  This is expected - building a BC"
+		fi
+	    fi
+	    echo "$ok files missing for debootstrap" >> $LOG
 	fi
 
 	echo "  Finishing off md5sum.txt"
