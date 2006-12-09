@@ -123,14 +123,26 @@ finish_disc () {
 	    echo "$ok files missing for debootstrap" >> $LOG
 	fi
 
-	echo "  Finishing off md5sum.txt"
 	cd $CDDIR
+	echo "  Finishing off the Release file"
+	cd dists/$CODENAME
+	echo "MD5Sum:" >> Release
+	for FILE in `find */* -name Packages* -o -name Sources* -name Release`
+	do
+		SIZE=`stat -c '%s' $FILE`
+		MD5=`md5sum $FILE | awk '{print $1}'`
+		printf " %s %8d %s\n" $MD5 $SIZE $FILE >> Release
+	done
+	cd ../..
+
+	echo "  Finishing off md5sum.txt"
 	# Just md5 the bits we won't have seen already
 	find ./.disk ./dists -type f | xargs md5sum >> md5sum.txt
 	# And sort; it should make things faster for people checking
 	# the md5sums, as ISO9660 dirs are sorted alphabetically
 	LANG=C sort -uk2 md5sum.txt > md5sum.txt.tmp
 	mv -f md5sum.txt.tmp md5sum.txt
+
 	cd $BDIR
 
 	SIZE=`$SIZE_CHECK $CDDIR` 
