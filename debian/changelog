@@ -153,6 +153,11 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     #402354. Fixes the long-standing warnings from list2cds about "Use
     of uninitialized value in string comparison", and allows some poor
     packages to make it onto CDs for the first time...
+  * Improve performance: rewritten tools/make_disc_trees in perl so we
+    can call add_packages directly as a perl function rather than via
+    fork/exec all the time. Re-arranged tools/add_packages to make
+    this work.
+  * Improved logging in add_packages.
 
  -- Frans Pop <fjp@debian.org>  Thu,  7 Dec 2006 02:00:04 +0100
 
