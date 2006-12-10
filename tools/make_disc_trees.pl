@@ -169,6 +169,13 @@ sub md5_files_for_release {
 	my ($md5, $size, $filename);
 
 	$filename = $File::Find::name;
+
+	# Recompress the Packages and Sources files; workaround for bug
+	# #402482
+	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
+		system("gzip -9c < $_ >$_.gz");
+	}
+
 	if ($filename =~ m/\/.*\/(Packages|Sources|Release)/o) {
 		$filename =~ s/^\.\///g;
 		($md5, $size) = md5_file($_);
