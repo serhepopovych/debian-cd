@@ -23,6 +23,8 @@ $codename = shift;
 $archlist = shift;
 $mkisofs = shift;
 
+require "$basedir/tools/add_packages";
+
 if (defined($ENV{'MAXCDS'})) {
 	$maxcds = $ENV{'MAXCDS'};
 } else {
@@ -281,6 +283,9 @@ while (defined (my $pkg = <INLIST>)) {
 		system("find . -type f | grep -v -e ^\./\.disk -e ^\./dists | xargs md5sum > md5sum.txt");
 		chdir $bdir;
 
+		$mkisofs_opts = "";
+		$mkisofs_dirs = "";
+
 		print "  Placing packages into image $disknum\n";
 		if ( -e "$bdir/$disknum.mkisofs_opts" ) {
 			open(OPTS, "<$bdir/$disknum.mkisofs_opts");
@@ -318,7 +323,7 @@ while (defined (my $pkg = <INLIST>)) {
 		}
 	}
 
-	$guess_size = `add_packages $cddir $pkg`;
+	$guess_size = add_packages($cddir, $pkg);
 	$size += $guess_size;
 	print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
 	if ($size > $size_swap_check) {
@@ -328,7 +333,7 @@ while (defined (my $pkg = <INLIST>)) {
 	}
 	if ($size > $maxdiskblocks) {
 		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-		$guess_size=`add_packages --rollback $cddir $pkg`;
+		$guess_size = add_packages("--rollback", $cddir, $pkg);
 		$size=`$size_check $cddir`;
 		chomp $size;
 		print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";

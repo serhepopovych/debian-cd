@@ -2,20 +2,7 @@
 
 use strict;
 use Compress::Zlib;
-
-my $dir;
-my $rollback = 0;
-my $option = shift;
-if ($option =~ /--rollback/) {
-	$rollback = 1;
-	$dir = shift;
-} else {	
-	$dir = $option;
-}
-
-if (! -d $dir) { 
-	die "$dir is not a directory ..."; 
-}
+use File::stat;
 
 my $mirror  = $ENV{'MIRROR'}  || die "Set the MIRROR var ...\n";
 my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
@@ -24,27 +11,25 @@ my $basedir = $ENV{'BASEDIR'} || die "Set the BASEDIR var ...\n";
 my $codename = $ENV{'CODENAME'} || die "Set the CODENAME var ...\n";
 my $tdir = $ENV{'TDIR'} || die "Set the TDIR var ...\n";
 
-my $total_size = 0;
-my $iso_blksize = 2048;
-my $pkgname;
-my $arch;
-
-open(LOG, ">> $tdir/$codename/log.add_packages")
-	|| die "Can't write in $tdir/log.add_packages!\n";
-
-sub msg {
-	my $level = shift;
-	print LOG @_;
-}
-
 require "$basedir/tools/link.pl";
 
+my $iso_blksize = 2048;
+my $log_opened = 0;
 my $old_split = $/;
-$/ = ''; # Browse by paragraph
+
+sub msg_ap {
+	my $level = shift;
+	if (!$log_opened) {
+		open(AP_LOG, ">> $tdir/$codename/log.add_packages")
+			|| die "Can't write in $tdir/log.add_packages!\n";
+	}
+	print AP_LOG @_;
+}
 
 # From a package name and section, work out the directory where its
 # corresponding Packages file should live
 sub Packages_dir {
+	my $dir = shift;
 	my $file = shift;
 	my $section = shift;
 
@@ -71,22 +56,24 @@ sub Packages_dir {
 # for the Packages file if necesssary
 sub add_Packages_entry {
 	my ($p, $file, $section, $pdir, $pkgfile, $gz);
+	my $dir = shift;
 	my $arch = shift;
+	my ($st1, $st2, $size1, $size2);
 
 	m/^Package: (\S+)/m and $p = $1;
 	m/^Section: (\S+)/m and $section = $1;
 
 	if ($arch eq "source") {
 		m/^Directory: (\S+)/mi and $file = $1;
-		$pdir = Packages_dir($file, $section) . "/source";
+		$pdir = Packages_dir($dir, $file, $section) . "/source";
 		$pkgfile = "$pdir/Sources";
 	} else {
 		m/^Filename: (\S+)/mi and $file = $1;
-		$pdir = Packages_dir($file, $section) . "/binary-$arch";
+		$pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
 		$pkgfile = "$pdir/Packages";
 	}
 
-	msg(0, "  Adding $p to $pkgfile(.gz)\n");
+	msg_ap(0, "  Adding $p to $pkgfile(.gz)\n");
 	
 	if (! -d $pdir) {
 		system("mkdir -p $pdir");
@@ -99,13 +86,22 @@ sub add_Packages_entry {
 	$gz = gzopen("$pkgfile.gz", "ab9") or die "Failed to open $pkgfile.gz: $gzerrno\n";
 	$gz->gzwrite($_) or die "Failed to write $pkgfile.gz: $gzerrno\n";
 	$gz->gzclose();
+	$st1 = stat("$pkgfile");
+	$st2 = stat("$pkgfile.gz");
+	$size1 = $st1->size;
+	$size2 = $st2->size;
+	msg_ap(0, "    now $size1 / $size2 bytes\n");
 }
 
 sub add_md5_entry {
+	my $dir = shift;
 	my $arch = shift;
 	my ($pdir, $file, $md5);
 	my $md5file = "$dir/md5sum.txt";
+	my ($st, $size);
+	my $p;
 
+	m/^Package: (\S+)/mi and $p = $1;
 	open(MD5FILE, ">>$md5file");
 
 	if ($arch eq "source") {
@@ -119,29 +115,35 @@ sub add_md5_entry {
 	}
 
 	close(MD5FILE);
+	msg_ap(0, "  Adding $p to md5sum.txt\n");
+	$st = stat("$dir/md5sum.txt");
+	$size = $st->size;
+	msg_ap(0, "    now $size bytes\n");
 }
 
 # Roll back the results of add_Packages_entry()
 sub remove_Packages_entry {
 	my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz);
+	my $dir = shift;
 	my $arch = shift;
+	my ($st1, $st2, $size1, $size2);
 
 	m/^Package: (\S+)/m and $p = $1;
 	m/^Section: (\S+)/m and $section = $1;
 
 	if ($arch eq "source") {
 		m/^Directory: (\S+)/mi and $file = $1;
-		$pdir = Packages_dir($file, $section) . "/source";
+		$pdir = Packages_dir($dir, $file, $section) . "/source";
 		$pkgfile = "$pdir/Sources";
 	} else {
 		m/^Filename: (\S+)/mi and $file = $1;
-		$pdir = Packages_dir($file, $section) . "/binary-$arch";
+		$pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
 		$pkgfile = "$pdir/Packages";
 	}
 
 	$tmp_pkgfile = "$pkgfile" . ".rollback";
 
-	msg(0, "  Removing $p from $pkgfile\n");
+	msg_ap(0, "  Removing $p from $pkgfile(.gz)\n");
 
 	open(IFILE, "<$pkgfile");
 	open(OFILE, ">>$tmp_pkgfile");
@@ -160,17 +162,25 @@ sub remove_Packages_entry {
 	close(OFILE);
 
 	rename $tmp_pkgfile, $pkgfile;
+	$st1 = stat("$pkgfile");
+	$st2 = stat("$pkgfile.gz");
+	$size1 = $st1->size;
+	$size2 = $st2->size;
+	msg_ap(0, "    now $size1 / $size2 bytes\n");
 }
 
 sub remove_md5_entry {
+	my $dir = shift;
 	my $arch = shift;
 	my ($pdir, $file, $md5, $match, $present);
 	my $md5file = "$dir/md5sum.txt";
 	my $tmp_md5file = "$dir/md5sum.txt.tmp";
 	my @fileslist;
+	my ($st, $size, $p);
 
 	$/ = $old_split; # Browse by line again
 
+	m/^Package: (\S+)/mi and $p = $1;
 	if ($arch eq "source") {
 		m/^Directory: (\S+)/mi and $pdir = $1;
 		m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@fileslist, "$1  ./$pdir/$3");
@@ -199,22 +209,46 @@ sub remove_md5_entry {
 
 	$/ = ''; # Browse by paragraph again
 	rename $tmp_md5file, $md5file;
+	msg_ap(0, "  Removing $p from md5sum.txt\n");
+	$st = stat("$dir/md5sum.txt");
+	$size = $st->size;
+	msg_ap(0, "    now $size bytes\n");
 }
 
 sub get_file_size {
 	my $realfile = shift;
-	my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks) = stat($realfile);
-	$size = 1 + int(($size + $iso_blksize - 1) / $iso_blksize);
-	return $size;
+	my $st;
+	$st = stat($realfile);
+	return (1 + int(($st->size + $iso_blksize - 1) / $iso_blksize));
 }
 
-my ($p, @files, $d, $realfile, $source, $section, $name, $pkgfile, $pdir);
+sub add_packages {
+	my ($p, @files, $d, $realfile, $source, $section, $name, $pkgfile, $pdir);
+	my ($pkgname, $arch, $dir, $pkg);
 
-foreach my $package (@ARGV) {
-	$pkgname = $package;
+	my $total_size = 0;
+	my $rollback = 0;
+	my $option = shift;	
+	if ($option =~ /--rollback/) {
+		$rollback = 1;
+		$dir = shift;
+	} else {	
+		$dir = $option;
+	}
+
+	if (! -d $dir) { 
+		die "add_packages: $dir is not a directory ..."; 
+	}
+
+	$pkg = shift;
+	$pkgname = $pkg;
 	$pkgname =~ s/^.*://;
-	$arch = $package;
+	$arch = $pkg;
 	$arch =~ s/:.*$//g;
+
+	msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
+	
+	$/ = ''; # Browse by paragraph
 
 	$ENV{'ARCH'} = $arch;
 	if ($arch eq "source") {
@@ -227,8 +261,6 @@ foreach my $package (@ARGV) {
 
 	while (defined($_ = <LIST>)) {
 		undef @files;
-
-		msg(0, "Looking at $package: arch $arch, package $pkgname\n");
 
 		m/^Package: (\S+)/m and $p = $1;
 		m/^Section: (\S+)/m and $section = $1;
@@ -249,8 +281,8 @@ foreach my $package (@ARGV) {
 
 		if ($rollback) {
 			# Remove the Packages entry/entries for the specified package
-			remove_Packages_entry($arch, $_);
-			remove_md5_entry($arch, $_);
+			remove_Packages_entry($dir, $arch, $_);
+			remove_md5_entry($dir, $arch, $_);
 
 			foreach my $file (@files) {
 				# Count how big the file is we're removing, for checking if the disc is full
@@ -259,11 +291,11 @@ foreach my $package (@ARGV) {
 
 				# Remove the link
 				unlink ("$dir/$file") or die "Failed to remove $dir/$file\n";
-				msg(0, "  Rollback: removing $dir/$file\n");
+				msg_ap(0, "  Rollback: removing $dir/$file\n");
 			}
 		} else {
-			add_Packages_entry($arch, $_);
-			add_md5_entry($arch, $_);
+			add_Packages_entry($dir, $arch, $_);
+			add_md5_entry($dir, $arch, $_);
 
 			foreach my $file (@files) {
 				# And put the file in the CD tree (with a (hard) link)
@@ -276,19 +308,19 @@ foreach my $package (@ARGV) {
 					# multi-arch disc
 					$total_size += get_file_size($realfile);
 					good_link ($realfile, "$dir/$file");
-					msg(0, "  Linked $dir/$file\n");
+					msg_ap(0, "  Linked $dir/$file\n");
 				} else {
-					msg(0, "  $dir/$file already linked in\n");
+					msg_ap(0, "  $dir/$file already linked in\n");
 				}
 			}
 		}
 	}
 	close LIST or die "Something went wrong with apt-cache : $@ ($!)\n";
+	msg_ap(0, "  size $total_size\n");
+	$/ = $old_split; # Return to line-orientation
+	return $total_size;
 }
 
-msg(0, "  size $total_size\n");
-print "$total_size\n";
-
-close LOG
 
 
+1;
