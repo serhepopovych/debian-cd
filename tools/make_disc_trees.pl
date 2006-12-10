@@ -70,7 +70,7 @@ if ($disktype eq "BC") {
 	$maxdiskblocks = int(737 * $MB / $blocksize);
 	$diskdesc = "700MiB CD";
 } elsif ($disktype eq "DVD") {
-	$maxdiskblocks = (4700 * $MB / $blocksize);
+	$maxdiskblocks = int(4700 * $MB / $blocksize);
 	$diskdesc = "4.7GB CD";
 } elsif ($disktype eq "CUSTOM") {
 	$maxdiskblocks = $ENV{'CUSTOMSIZE'} || die "Need to specify a custom size for the CUSTOM disktype\n";
