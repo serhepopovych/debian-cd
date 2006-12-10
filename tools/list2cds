@@ -48,17 +48,21 @@ my %included;
 my %excluded;
 my %packages;
 
-msg(0, "======================================================================
+msg(0, "Running list2cds to sort packages for $arch:\n");
+msg(1, "======================================================================
 Here are the settings you've chosen for making the list:
 Architecture: $arch
 List of prefered packages: $list
 Exclude file: $exclude
 Output file: $dir/packages.$arch
 ");
-msg(0, "Complete selected packages with all the rest: "); msg(0, yesno($complete)."\n");
-msg(0, "Include non-free packages: "); msg(0, yesno($nonfree)."\n");
-msg(0, "Include non-US packages: "); msg(0, yesno($nonus)."\n");
-msg(0, "======================================================================
+msg(1, "Complete selected packages with all the rest: ");
+msg(1, yesno($complete)."\n");
+msg(1, "Include non-free packages: ");
+msg(1, yesno($nonfree)."\n");
+msg(1, "Include non-US packages: ");
+msg(1, yesno($nonus)."\n");
+msg(1, "======================================================================
 ");
 
 # Get the information on all packages
@@ -119,7 +123,7 @@ if (not $nonus) {
 	}
 }
 
-msg(0, "Statistics:
+msg(1, "Statistics:
 Number of packages: @{ [scalar(keys %packages)] }
 Number of excluded: $count_excl of @{ [scalar(keys %excluded)] }
 ======================================================================
@@ -138,7 +142,7 @@ my ($total_size, $cd_size, $size, $cd) = (0, 0, 0, 1);
 my %cds;
 
 # Generate a dependency tree for each package
-msg(0, "-- Generating dependencies tree with apt-cache depends...\n");
+msg(0, "  Generating dependency tree with apt-cache depends...\n");
 my (@list) = keys %packages;
 while (@list) {
 	my (@pkg) = splice(@list,0,200);
@@ -163,8 +167,7 @@ while (@list) {
 	
 }
 
-msg(0, "-- Adding standard, required, important and base packages \n" .
-       "   on the first CD ...\n");
+msg(0, "  Adding standard, required, important and base packages first\n");
 # Automatically include packages listed in the status file
 open(STATUS, "< $adir/status") || die "Can't open status file $adir/status: $!\n";
 while (defined($_ = <STATUS>)) {
@@ -181,10 +184,10 @@ while (defined($_ = <STATUS>)) {
        add_package($p, ! $norecommends, ! $nosuggests);
 }
 close STATUS;
-msg(0, "   Standard system already takes $cd_size bytes on the first CD.\n");
+msg(0, "  S/R/I/B packages take $cd_size bytes\n");
 
 # Now start to look for packages wanted by the user ...
-msg(0, "-- Starting to add packages to the CDs ...\n");
+msg(0, "  Adding the rest of the requested packages\n");
 open (LIST, "< $list") || die "Can't open $list : $!\n";
 while (defined($_=<LIST>)) {
 	chomp;
@@ -210,10 +213,11 @@ while (defined($_=<LIST>)) {
 }
 close LIST;
 
+msg(0, "  Now up to $cd_size bytes\n");
 # All requested packages have been included
 # But we'll continue to add if $complete was requested
 if ($complete) {
-    msg(0, "-- Now we'll add all the packages not yet included ...\n");
+    msg(0, "  COMPLETE=1; add all remaining packages\n");
     # Try to sort them by section even if packages from
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
@@ -223,7 +227,6 @@ if ($complete) {
 		add_package (lc $p, 0, 0);
     }
 }
-msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
 
 # Now select the non-free packages for an extra CD
 if ($extranonfree and (! $nonfree))
@@ -283,7 +286,7 @@ if ($extranonfree and (! $nonfree))
 	    }
 	}
 
-	msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
+#	msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
 }
 
 # Remove old files
@@ -308,7 +311,7 @@ foreach (sort { $a <=> $b } keys %cds) {
 		$count++;
 	}
 	close CDLIST;
-	msg(0, "CD $_ will have $count packages.\n");
+	msg(0, "Done: processed/sorted $count packages, total size $cd_size bytes.\n");
 }
 
 close LOG;
