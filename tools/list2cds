@@ -156,7 +156,7 @@ while (@list) {
 			msg(0, "UNEXPECTED: Line `$res[$i]' while parsing " .
 			       "end of deptree from '$p'\n");
 		}
-		$p = $1; $i++;
+		$p = lc $1; $i++;
 		msg(2, "   Dependency tree of `$p' ...\n");
 		read_depends (\$i, \@res, $p);
 	}
@@ -217,10 +217,10 @@ if ($complete) {
     # Try to sort them by section even if packages from
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
-    foreach my $p (sort { ($packages{$a}{"Section"} cmp $packages{$b}{"Section"})
-                       || ($a cmp $b) }
+    foreach my $p (sort { ($packages{lc $a}{"Section"} cmp $packages{lc $b}{"Section"})
+                       || (lc $a cmp lc $b) }
              grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
-	add_package ($p, 0, 0);
+		add_package (lc $p, 0, 0);
     }
 }
 msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
@@ -258,13 +258,15 @@ if ($extranonfree and (! $nonfree))
 		chomp;
 		next if m/^\s*$/;
 		next if $included{$_};
+		next if $included{lc $_};
 		next if $excluded{$_};
-		if (not exists $packages{$_}) { 
+		next if $excluded{lc $_};
+		if (not exists $packages{$_} && not exists $packages{lc $_}) { 
 		  msg(1, "WARNING: '$_' does not appear to be available ... " . 
 	          	 "(ignored)\n");
 		  next;
 		}
-		add_package ($_, 1, 1);
+		add_package (lc $_, 1, 1);
 	}
 	close LIST;
 
@@ -588,15 +590,15 @@ sub add_missing {
 			$ok &&= $or_ok;
 		# Else it's a simple dependency
 		} else {
-			if (not exists $packages{$_}) {
+			if (not exists $packages{lc $_}) {
 				msg(1, "$_ doesn't exist...\n");
 				$ok = 0;
 				last;
 			}
-			next if $included{$_}; # Already included, don't worry
-			next if is_in ($_, $list);
-			push @{$list}, $_;
-			if (not add_missing ($list, $packages{$_}{"Depends"})) {
+			next if $included{lc $_}; # Already included, don't worry
+			next if is_in (lc $_, $list);
+			push @{$list}, lc $_;
+			if (not add_missing ($list, $packages{lc $_}{"Depends"})) {
 				pop @{$list};
 				$ok = 0;
 			}
