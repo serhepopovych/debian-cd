@@ -201,7 +201,7 @@ sub finish_disc {
 	my $bytes = 0;
 	my $ctx;
 
-	if (($disknum == 1) && !($archlist eq "source")) {
+	if (($disknum == 1) && !($archlist eq "source") && !($disktype eq "BC")) {
 		foreach my $arch (@arches_nosrc) {
 			print "  Checking base is installable for $arch\n";
 			$archok = check_base_installable($arch, $cddir);

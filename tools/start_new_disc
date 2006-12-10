@@ -123,7 +123,7 @@ if [ $DISKNUM = 1 ] ; then
 	fi
 
 	echo "  Adding .disk/cd_type"
-    if [ $COMPLETE = 1 ]; then
+    if [ "$COMPLETE"x = "1"x ]; then
         if [ $DISKTYPE = DVD ]; then
             echo "dvd" > $CDDIR/.disk/cd_type
         else
