@@ -30,13 +30,13 @@ if [ $NUM_ARCHES = 1 ] ; then
 	case $ARCHES in
 		source)
 			SOURCEDISK=1
-			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM"
+			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
 			export VOLID="Debian $DEBVERSION Src-$DISKNUM"
 			export SOURCEONLY=yes
 			;;
 		*)
 			BINARYDISK=1
-			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM"
+			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
 			if [ $ARCHES = powerpc ] ; then
 				export VOLID="Debian $DEBVERSION ppc Bin-$DISKNUM"
 			else
@@ -51,7 +51,7 @@ else
 		*source*) SOURCEDISK=1;;
 	esac
 	export ARCHDEF=`echo $ARCHES | sed 's? ?/?g'`
-	export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM"
+	export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
 	export VOLID="Debian $DEBVERSION M-A $DISKNUM"
 fi
 
