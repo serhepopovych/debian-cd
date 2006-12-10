@@ -13,8 +13,6 @@
 # file in your shell
 
 
-export BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
-
 ## DEFAULT VALUES
 ifndef VERBOSE_MAKE
 Q=@
@@ -41,6 +39,7 @@ ifndef DOJIGDO
 export DOJIGDO=0
 endif
 
+export BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
 export ARCHES_NOSRC=$(shell echo $(ARCHES) | sed 's/source//')
 ifeq ($(ARCHES),source)
 	export SOURCEONLY=yes
@@ -143,7 +142,7 @@ $(BDIR):
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 $(BDIR)/DATE:
-	date '+%Y%m%d' > $(BDIR)/DATE
+	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	@dpkg -x $(LATEST_DB) $(DB_DIR)
@@ -184,9 +183,9 @@ distclean: ok clean
 status: init $(ADIR)/status
 $(ADIR)/status:
 	@echo "Generating a fake status file for apt-get and apt-cache..."
-	for ARCH in $(ARCHES); do \
+	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH; \
-		$(Q)if [ $$ARCH = "source" -o "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" ];then \
+		if [ $$ARCH = "source" -o "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" ];then \
 			:> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
 		else \
 			zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
@@ -196,17 +195,17 @@ $(ADIR)/status:
 	done;
 	:> $(ADIR)/status
     # Updating the apt database
-	for ARCH in $(ARCHES); do \
+	$(Q)for ARCH in $(ARCHES); do \
 		export ARCH=$$ARCH; \
-		$(Q)$(apt) update; \
+		$(apt) update; \
 	done
     #
     # Checking the consistency of the standard system
     # If this does fail, then launch make correctstatus
     #
-	for ARCH in $(ARCHES); do \
+	$(Q)for ARCH in $(ARCHES); do \
 		export ARCH=$$ARCH; \
-		$(Q)$(apt) check || $(MAKE) correctstatus; \
+		$(apt) check || $(MAKE) correctstatus; \
 	done
 
 # Only useful if the standard system is broken
@@ -245,14 +244,14 @@ correctstatus: status apt-update
     #
     # Showing the output of apt-get check :
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		ARCH=$$ARCH $(Q)$(apt) check; \
+		ARCH=$$ARCH $(apt) check; \
 	done
 
 apt-update: status
-	if [ "$(ARCHES)" != "source" ] ; then \
+	$(Q)if [ "$(ARCHES)" != "source" ] ; then \
 		for ARCH in $(ARCHES); do \
 			echo "Apt-get is updating his files ..."; \
-			ARCH=$$ARCH $(Q)$(apt) update; \
+			ARCH=$$ARCH $(apt) update; \
 		done; \
     fi
 
@@ -272,12 +271,12 @@ image-trees: ok genlist
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
 		ARCH=$$ARCH $(list2cds) $(BDIR)/list $(SIZELIMIT); \
 	done
-	if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
+	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
 		awk '{printf("source:%s\n",$$0)}' $(BDIR)/list > $(BDIR)/packages; \
 	else \
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi
-	make_disc_trees $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
+	$(Q)make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
 # Generate the complete listing of packages from the task
 # Build a nice list without doubles and without spaces
@@ -313,7 +312,7 @@ $(BDIR)/rawlist:
 	fi
 
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
-		$(Q)if [ _$(INSTALLER_CD) != _1 ]; then \
+		if [ _$(INSTALLER_CD) != _1 ]; then \
 			for ARCH in $(ARCHES_NOSRC); do \
 				debootstrap --arch $$ARCH --print-debs $(CODENAME) $(TDIR)/debootstrap.tmp file:$(MIRROR) 2>/dev/null \
 				| tr ' ' '\n' >>$(BDIR)/rawlist; \
@@ -321,19 +320,21 @@ $(BDIR)/rawlist:
 			done; \
 		fi; \
 	fi
-	for ARCH in $(ARCHES_NOSRC); do \
+
+	$(Q)for ARCH in $(ARCHES_NOSRC); do \
 		ARCHDEFS="$$ARCHDEFS -D ARCH_$(subst -,_,$$ARCH)"; \
 		ARCHUNDEFS="$$ARCHUNDEFS -U $$ARCH"; \
 	done; \
-	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
-		$(Q)cat $(TASK) | \
-		 cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS \
-	    	 $$ARCHUNDEFS -U i386 -U linux -U unix \
-		     -DFORCENONUSONCD1=0 \
-		     -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist; \
+	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
+		cat $(TASK) | \
+		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS \
+	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
+		    -DFORCENONUSONCD1=0 \
+		    -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist; \
 	fi
-	# If we're *only* doing source, then we need to build a list of all the
-	# available source packages. Deliberately ignore the tasks too.
+
+    # If we're *only* doing source, then we need to build a list of all the
+    # available source packages. Deliberately ignore the tasks too.
 	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
 		awk '/^Package:/ {print $$2}' $(ADIR)/$(CODENAME)-source/apt-state/lists/*Sources | \
 			sort -u > $(BDIR)/rawlist; \
@@ -434,7 +435,7 @@ mirrorcheck: ok
 	$(Q)$(grab_md5) $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check
 	$(Q)if [ -e $(BASEDIR)/data/$(CODENAME)/$(ARCH)/extra-sources ]; then \
 		echo "Extra dedicated source added; need to grab source MD5 info too"; \
-		$(Q)$(grab_md5) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
+		$(grab_md5) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
 	fi
 
 update-popcon:
