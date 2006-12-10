@@ -321,7 +321,7 @@ while (defined (my $pkg = <INLIST>)) {
 		print LOG "CD $disknum: size is $size before starting to add packages\n";
 		if (defined($overflowpkg)) {
 			print LOG "Starting with the package that failed on the last disc: $overflowpkg\n";
-			$guess_size = add_packages($cddir, $overflowpkg)
+			$guess_size = add_packages($cddir, $overflowpkg);
 			$size += $guess_size;
 			print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
 			undef $overflowpkg;
