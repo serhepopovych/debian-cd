@@ -86,9 +86,9 @@ my $size_swap_check;
 # start running mkisofs?
 # Cope with HFS-hybrid disks using extra space for the HFS metadata
 if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
-	$size_swap_check = int($maxdiskblocks * 90 / 100);
-} else {
 	$size_swap_check = int($maxdiskblocks * 95 / 100);
+} else {
+	$size_swap_check = int($maxdiskblocks * 98 / 100);
 }
 
 my $pkgs_this_cd = 0;
