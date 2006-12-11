@@ -151,7 +151,7 @@ sub remove_Packages_entry {
 	$gz = gzopen("$pkgfile.gz", "wb9");
 
 	while (defined($match = <IFILE>)) {
-		if (! ($match =~ /^Package: $p$/m)) {
+		if (! ($match =~ /^Package: \Q$p\E$/m)) {
 			print OFILE $match;
 			$gz->gzwrite($match) or die "Failed to write $pkgfile.gz: $gzerrno\n";
 		}
@@ -196,9 +196,9 @@ sub remove_md5_entry {
 	while (defined($match = <IFILE>)) {
 		$present = 0;
 		foreach my $entry (@fileslist) {
-			if (($match =~ /$entry$/m)) {
-				$present++;
-			}
+		    if (($match =~ /\Q$entry\E$/m)) {
+			$present++;
+		    }
 		}
 		if (!$present) {
 			print OFILE $match;
