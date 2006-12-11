@@ -1,0 +1,75 @@
+/* Essential task packages for Xfce
+ *
+ * Generated with: 
+ 
+ 
+ for i in $(cat task.list.xfce); do
+   if [ "$i" != kde-desktop ] && [ "$i" != gnome-desktop ]; then
+     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
+     grep-dctrl -s Key -n -e '.*';
+   fi;
+ done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch-xfce
+  
+ * Last updated: $Date: 2006-10-28 17:40:33 -0400 (Sat, 28 Oct 2006) $
+ */
+xorg
+xfce4
+language-env
+language-env
+language-env
+locales
+bosnian 
+manpages-pt
+language-env
+jfbterm
+zhcon
+jfbterm
+zhcon
+locales
+croatian
+console-cyrillic
+t1-cyrillic
+language-env
+language-env
+manpages-fr
+language-env
+manpages-de
+language-env
+language-env
+gsfonts-x11
+ttf-dejavu
+ttf-freefont
+xfonts-base
+xfonts-base-transcoded
+language-env
+manpages-it
+language-env
+jfbterm
+unifont
+manpages-ja
+lv
+language-env
+jfbterm
+manpages-ko
+language-env
+language-env
+locales
+language-env
+language-env
+manpages-pl
+language-env
+language-env
+language-env
+locales
+language-env
+manpages-ru
+language-env
+serbian 
+language-env
+manpages-es
+locales
+language-env
+language-env
+locales
+manpages-tr
+language-env

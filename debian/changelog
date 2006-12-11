@@ -92,6 +92,7 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
       KERNEL_PARAMS='tasks="kde-desktop, standard"'
       MAXCDS=1
       NOSOURCE=1
+  * Add similar files for Xfce.
 
   [ Frans Pop ]
   * Include floppy disk images again for i386.
