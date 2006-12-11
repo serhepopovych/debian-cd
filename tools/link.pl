@@ -8,6 +8,7 @@ my $link_copy = $ENV{'COPYLINK'} || 0;
 
 sub good_link ($$) {
 	my ($src, $dest) = @_;
+	my $dir_added = 0;
 
 	if (! -e $dest) {
 
@@ -21,6 +22,7 @@ sub good_link ($$) {
 		if (! -d $ddir) # Create it if not
 		{
 			system("mkdir -p $ddir");
+			$dir_added++;
 		}
 		# Link the files
 		if ($symlink_farm) {
@@ -42,6 +44,7 @@ sub good_link ($$) {
 			}
 		}
 	}
+	return $dir_added;
 }
 
 sub real_file ($) {

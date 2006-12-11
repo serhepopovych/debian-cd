@@ -85,11 +85,13 @@ my $size_swap_check;
 # How full should we let the disc get before we stop estimating and
 # start running mkisofs?
 # Cope with HFS-hybrid disks using extra space for the HFS metadata
-if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
-	$size_swap_check = int($maxdiskblocks * 95 / 100);
-} else {
-	$size_swap_check = int($maxdiskblocks * 98 / 100);
-}
+$size_swap_check = $maxdiskblocks  - (40 * $MB / $blocksize);
+
+# And count how many packages added since the last size check was done
+# - the estimation code is getting very accurate, so let's reduce the
+# number of times we fork mkisofs
+my $count_since_last_check = 0;
+my $size_check_period = 10;
 
 my $pkgs_this_cd = 0;
 my $pkgs_done = 0;
@@ -333,10 +335,11 @@ while (defined (my $pkg = <INLIST>)) {
 	$guess_size = add_packages($cddir, $pkg);
 	$size += $guess_size;
 	print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
-	if ($size > $size_swap_check) {
-		$size = `$size_check $cddir`;
-		chomp $size;
-		print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
+	if (($size > $size_swap_check) && ($count_since_last_check > $size_check_period)) {
+	    $count_since_last_check = 0;
+	    $size = `$size_check $cddir`;
+	    chomp $size;
+	    print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
 	}
 	if ($size > $maxdiskblocks) {
 		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
@@ -356,6 +359,7 @@ while (defined (my $pkg = <INLIST>)) {
 	} else {
 		$pkgs_this_cd++;
 		$pkgs_done++;
+		$count_since_last_check++;
 	}	
 }
 close(INLIST);
