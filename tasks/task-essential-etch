@@ -12,9 +12,7 @@
   
  * Last updated: $Date$
  */
-
-
-x-window-system-core
+xorg
 gnome-desktop-environment
 apache2-mpm-prefork
 exim4
@@ -28,12 +26,16 @@ samba
 language-env
 language-env
 language-env
+locales
+bosnian 
 manpages-pt
 language-env
 jfbterm
 zhcon
 jfbterm
 zhcon
+locales
+croatian
 console-cyrillic
 t1-cyrillic
 language-env
@@ -46,7 +48,8 @@ language-env
 gsfonts-x11
 ttf-dejavu
 ttf-freefont
-xfonts-terminus
+xfonts-base
+xfonts-base-transcoded
 language-env
 manpages-it
 language-env
@@ -69,6 +72,8 @@ language-env
 locales
 language-env
 manpages-ru
+language-env
+serbian 
 language-env
 manpages-es
 locales
