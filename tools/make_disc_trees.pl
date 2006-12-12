@@ -81,11 +81,19 @@ $ENV{'MAXDISKBLOCKS'} = $maxdiskblocks;
 $ENV{'DISKDESC'} = $diskdesc;
 
 my $size_swap_check;
+my $hfs_extra = 0;
+my $hfs_mult = 1;
 
 # How full should we let the disc get before we stop estimating and
 # start running mkisofs?
 # Cope with HFS-hybrid disks using extra space for the HFS metadata
 $size_swap_check = $maxdiskblocks  - (40 * $MB / $blocksize);
+
+# Add space for extra HFS crap
+if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
+	$hfs_extra = int($maxdiskblocks * 8 / $blocksize);
+	$hfs_mult = 1.1;
+}
 
 # And count how many packages added since the last size check was done
 # - the estimation code is getting very accurate, so let's reduce the
@@ -320,10 +328,11 @@ while (defined (my $pkg = <INLIST>)) {
 		$size_check = "$mkisofs_check $mkisofs_opts $mkisofs_dirs";
 		$size=`$size_check $cddir`;
 		chomp $size;
+		$size += $hfs_extra;
 		print LOG "CD $disknum: size is $size before starting to add packages\n";
 		if (defined($overflowpkg)) {
 			print LOG "Starting with the package that failed on the last disc: $overflowpkg\n";
-			$guess_size = add_packages($cddir, $overflowpkg);
+			$guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
 			$size += $guess_size;
 			print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
 			undef $overflowpkg;
@@ -332,7 +341,7 @@ while (defined (my $pkg = <INLIST>)) {
 		}
 	}
 
-	$guess_size = add_packages($cddir, $pkg);
+	$guess_size = int($hfs_mult * add_packages($cddir, $pkg));
 	$size += $guess_size;
 	print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
 	if (($size > $size_swap_check) && ($count_since_last_check > $size_check_period)) {
@@ -343,7 +352,7 @@ while (defined (my $pkg = <INLIST>)) {
 	}
 	if ($size > $maxdiskblocks) {
 		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-		$guess_size = add_packages("--rollback", $cddir, $pkg);
+		$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
 		$size=`$size_check $cddir`;
 		chomp $size;
 		print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
