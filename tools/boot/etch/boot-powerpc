@@ -27,32 +27,30 @@ fi
 
 cd $CDDIR/..
 
-# Only disk 1* bootable
-#if [ $N != 1 -a $N != 1_NONUS ]; then
-#    # we don't need HFS cruft on anything but CD 1
-#	:> $N.mkisofs_opts
-#	exit 0
-#fi
-
 install_languages $CDDIR
 
 add_mkisofs_opt $N.mkisofs_opts "--iso-level 2"
-add_mkisofs_opt $N.mkisofs_opts "--chrp-boot"
 add_mkisofs_opt $N.mkisofs_opts "--netatalk"
 add_mkisofs_opt $N.mkisofs_opts "-hfs"
 add_mkisofs_opt $N.mkisofs_opts "-probe"
 add_mkisofs_opt $N.mkisofs_opts "-map $BASEDIR/data/hfs.map"
 
+# Recommended size for a HFS Catalog is 4 megas per giga, defaults to 4 megas
+# MAXDISKBLOCKS is measured in 2K blocks
+newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
+add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
+
+# Only disk 1* bootable
+if [ $N != 1 ] ; then
+	exit 0
+fi
+
+add_mkisofs_opt $N.mkisofs_opts "--chrp-boot"
 # For newworld Mac booting  - Note, no spaces in volid!
 add_mkisofs_opt $N.mkisofs_opts "-part"
 add_mkisofs_opt $N.mkisofs_opts "-no-desktop"
 add_mkisofs_opt $N.mkisofs_opts "-hfs-bless CD$N/install"
 add_mkisofs_opt $N.mkisofs_opts "-hfs-volid Debian/PowerPC_${CODENAME}"
-
-# Recommended size for a HFS Catalog is 4 megas per giga, defaults to 4 megas
-# MAXDISKBLOCKS is measured in 2K blocks
-newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
-add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
 
 cd $INSTALLDIR
 # Extract yaboot from the archive

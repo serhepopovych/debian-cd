@@ -29,6 +29,10 @@ fi
 
 cd $CDDIR/..
 
+# Recommended size for a HFS Catalog is 4 megas per giga, defaults to 4 megas
+# MAXDISKBLOCKS is measured in 2K blocks
+newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
+add_mkisofs_opt $N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
 add_mkisofs_opt $N.mkisofs_opts "-J"
 add_mkisofs_opt $N.mkisofs_opts "--netatalk"
 add_mkisofs_opt $N.mkisofs_opts "-hfs"

@@ -162,6 +162,8 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   * When we've finished making a CD tree in make_disc_trees.pl,
     re-compress the gzipped Sources and Packages. Workaround for bug
     #402482 in busybox gunzip code.
+  * Don't put ppc boot files on discs >1.
+  * Add more hfs options to m68k discs, to match ppc.
 
  -- Frans Pop <fjp@debian.org>  Thu,  7 Dec 2006 02:00:04 +0100
 
