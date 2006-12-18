@@ -53,7 +53,7 @@ export BASEDIR=`pwd`
 export CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
-if [ ! "$DI_CODENAME" ]; then
+if [ -z "$DI_CODENAME" ]; then
 	export DI_CODENAME=$CODENAME
 fi
 
@@ -74,20 +74,22 @@ export OFFICIAL="Unofficial"
 #export OFFICIAL="Official Beta"
 
 # ... for arch
-CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null || true`
-if [ "$CPU"x = ""x ] ; then
-    CPU=`dpkg-architecture -qDEB_HOST_ARCH`
+if [ -z "$ARCHES" ]; then
+	CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null || true`
+	if [ -z "$CPU" ]; then
+		CPU=`dpkg-architecture -qDEB_HOST_ARCH`
+	fi
+	KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null || true`
+	if [ -z "$KERNEL" ]; then
+		KERNEL=linux
+	fi
+	if [ $KERNEL = linux ] ; then
+		ARCHES=$CPU
+	else
+		ARCHES="$KERNEL-$CPU"
+	fi
+	export ARCHES
 fi
-KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null || true`
-if [ "$KERNEL"x = ""x ] ; then
-    KERNEL=linux
-fi
-if [ $KERNEL = linux ] ; then
-    ARCHES=$CPU
-else
-    ARCHES="$KERNEL-$CPU"
-fi
-export CPU KERNEL ARCHES
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
 #	      If they aren't then you must set COPYLINK below to 1. This

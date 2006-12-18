@@ -165,12 +165,14 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   * Don't put ppc boot files on discs >1.
   * Add more hfs options to m68k discs, to match ppc.
   * Make list2cds more verbose in log output, especially when
-    dependencies have failed so a package can't be added
+    dependencies have failed so a package can't be added.
 
   [ Frans Pop ]
-  * CONF.sh: case can handle empty variables fine; whitespace cleanup
+  * CONF.sh: case can handle empty variables fine; whitespace cleanup.
+  * CONF.sh: don't determine ARCHES if already set; don't export CPU and
+    KERNEL.
 
- -- Frans Pop <fjp@debian.org>  Mon, 18 Dec 2006 16:14:02 +0100
+ -- Frans Pop <fjp@debian.org>  Mon, 18 Dec 2006 16:20:22 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
