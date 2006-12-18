@@ -53,9 +53,8 @@ export BASEDIR=`pwd`
 export CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
-if [ ! "$DI_CODENAME" ]
-then
-  export DI_CODENAME=$CODENAME
+if [ ! "$DI_CODENAME" ]; then
+	export DI_CODENAME=$CODENAME
 fi
 
 # If set, controls where the d-i components are downloaded from.
@@ -276,14 +275,12 @@ export JIGDO_INCLUDE="/pool/"
 # smaller than this will simply be placed straight into the template file.
 export JIGDO_OPTS="-jigdo-min-file-size 0"
 
-for EXCL in $JIGDO_EXCLUDE
-do
-    JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
+for EXCL in $JIGDO_EXCLUDE; do
+	JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
 done
 
-for INCL in $JIGDO_INCLUDE
-do
-    JIGDO_OPTS="$JIGDO_OPTS -jigdo-force-md5 $INCL"
+for INCL in $JIGDO_INCLUDE; do
+	JIGDO_OPTS="$JIGDO_OPTS -jigdo-force-md5 $INCL"
 done
 
 # File with list of packages to include when fetching modules for the
@@ -332,14 +329,14 @@ export OMIT_RELEASE_NOTES=1
 # Set this to override the defaul location
 #export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
 
-case "$OFFICIAL"x in
-       "Official"x)
-               export OFFICIAL_VAL=2
-               ;;
-       "Official Beta"x)
-               export OFFICIAL_VAL=1
-               ;;
-       *)
-               export OFFICIAL_VAL=0
-               ;;
+case "$OFFICIAL" in
+    "Official")
+	export OFFICIAL_VAL=2
+	;;
+    "Official Beta")
+	export OFFICIAL_VAL=1
+	;;
+    *)
+	export OFFICIAL_VAL=0
+	;;
 esac
