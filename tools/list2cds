@@ -522,7 +522,7 @@ sub add_suggests {
 	my @copy = @{$list}; # A copy is needed since I'll modify the array
 	
 	foreach $p (@copy) {
-		add_missing($list, $packages{$p}{"Suggests"});
+		add_missing($list, $packages{$p}{"Suggests"}, $p);
 	}
 		
 }
@@ -533,7 +533,7 @@ sub add_recommends {
 	my @copy = @{$list}; # A copy is needed since I'll modify the array
 	
 	foreach $p (@copy) {
-		add_missing($list, $packages{$p}{"Recommends"});
+		add_missing($list, $packages{$p}{"Recommends"}, $p);
 	}
 		
 }
@@ -542,7 +542,7 @@ sub get_missing {
 	my $p = shift;
 	my @list = ($p);
 	
-	if (not add_missing (\@list, $packages{$p}{"Depends"})) {
+	if (not add_missing (\@list, $packages{$p}{"Depends"}, $p)) {
 		return ();
 	}
 	
@@ -553,11 +553,21 @@ sub get_missing {
 sub add_missing {
 	my $list = shift;
 	my $new = shift;
+	my $pkgin = shift;
 	my @backup = @{$list};
 	my $ok = 1;
 	
 	# Check all dependencies 
 	foreach (@{$new}) {
+		if (ref) {
+			my $textout = "";
+			foreach my $orpkg (@{$_}) {
+				$textout .= "$orpkg ";
+			}
+			msg(3, "    $pkgin Dep: ( OR $textout)\n");
+		} else {
+			msg(3, "    $pkgin Dep: $_\n");
+		}
 		next if dep_satisfied ($_);
 		# If it's an OR
 		if (ref) {
@@ -581,9 +591,7 @@ sub add_missing {
 					#including all packages that do
 					#fit to the needs
 					push (@{$list}, $pkg);
-					if (add_missing ($list,
-					         $packages{$pkg}{"Depends"})) 
-					{
+					if (add_missing ($list, $packages{$pkg}{"Depends"}, $pkg)) {
 						$or_ok = 1;
 					} else {
 						pop @{$list};
@@ -591,17 +599,23 @@ sub add_missing {
 				}
 			}
 			$ok &&= $or_ok;
+			if (not $ok) {
+				msg(1, "  $pkgin failed, couldn's satisfy OR dep\n");
+			}				
 		# Else it's a simple dependency
 		} else {
 			if (not exists $packages{lc $_}) {
-				msg(1, "$_ doesn't exist...\n");
+				msg(1, "  $_ doesn't exist...\n");
+				msg(1, "  $pkgin failed, couldn't satisfy dep on $_\n");
 				$ok = 0;
 				last;
 			}
 			next if $included{lc $_}; # Already included, don't worry
 			next if is_in (lc $_, $list);
 			push @{$list}, lc $_;
-			if (not add_missing ($list, $packages{lc $_}{"Depends"})) {
+			if (not add_missing ($list, $packages{lc $_}{"Depends"}, lc $_)) {
+				msg(1, "couldn't add $_ ...\n");
+				msg(1, "$pkgin failed, couldn't satisfy dep on $_\n");
 				pop @{$list};
 				$ok = 0;
 			}

@@ -164,6 +164,8 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     #402482 in busybox gunzip code.
   * Don't put ppc boot files on discs >1.
   * Add more hfs options to m68k discs, to match ppc.
+  * Make list2cds more verbose in log output, especially when
+    dependencies have failed so a package can't be added
 
  -- Frans Pop <fjp@debian.org>  Thu,  7 Dec 2006 02:00:04 +0100
 
