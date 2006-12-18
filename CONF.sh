@@ -51,7 +51,6 @@ export BASEDIR=`pwd`
 
 # Building etch cd set ...
 export CODENAME=etch
-export DI_CODENAME=etch
 
 # By default use Debian installer packages from $CODENAME
 if [ ! "$DI_CODENAME" ]
