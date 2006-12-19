@@ -42,9 +42,9 @@ if [ $NUM_ARCHES = 1 ] ; then
 			else
 				export VOLID="Debian $DEBVERSION $ARCHES Bin-$DISKNUM"
 			fi
-			export ARCHDEF=$ARCHES
 			;;
 	esac
+    export ARCHDEF=$ARCHES
 else
 	BINARYDISK=1
 	case "$ARCHES" in
