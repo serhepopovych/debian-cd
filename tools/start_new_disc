@@ -238,10 +238,12 @@ if [ $DISKNUM = 1 ] ; then
 	done
 fi
 
+# Create an empty dirs file; will be appended to later if needed
+> $BDIR/$DISKNUM.mkisofs_dirs
+
 # Common stuff for all disks
 if [ "$SOURCEONLY"x = "yes"x ] ; then
 	echo -n "-J " >> $BDIR/$DISKNUM.mkisofs_opts
-	> $BDIR/$DISKNUM.mkisofs_dirs
 else
 	echo "  Adding common docs on binary CD#$DISKNUM"
 	add-bin-doc $DISKNUM "$ARCHES"
