@@ -81,6 +81,11 @@ if [ ! -d $CDDIR/.disk ] ; then
     mkdir $CDDIR/.disk
 fi
 
+if [ "$DISC_START_HOOK"x != ""x ] ; then
+    echo "  Calling start hook: $DISC_START_HOOK"
+    $DISC_START_HOOK $TDIR $MIRROR $DISKNUM $CDDIR "$ARCHES"
+fi
+
 echo "  Generating the image label and volume id"
 echo -n $DISKINFO                   > $CDDIR/.disk/info
 echo -n "$DISKINFO ($DATE)"         >  $BDIR/$DISKNUM.diskinfo
@@ -350,5 +355,10 @@ do
 		fi
 	fi
 done
+
+if [ "$DISC_PKG_HOOK"x != ""x ] ; then
+    echo "  Calling pkg hook: $DISC_PKG_HOOK"
+    $DISC_PKG_HOOK $TDIR $MIRROR $DISKNUM $CDDIR "$ARCHES"
+fi
 
 exit 0

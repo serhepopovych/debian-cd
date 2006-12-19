@@ -1,16 +1,16 @@
-YACS - Yet Another CD Script :-)
-================================
-(better known as debian-cd)
+debian-cd
+=========
 
-Copyright 1999-2001 Raphaël Hertzog <hertzog@debian.org>
-This set of tools is licensed under the General Public License
-version 2 or any later version. You can find it in 
+Copyright 1999-2001 Raphaël Hertzog <hertzog@debian.org> and others,
+2004-2006 Steve McIntyre <steve@einval.com>
+This set of tools is licensed under the General Public License version
+2 or any later version. You can find it in
 /usr/share/common-licenses/GPL on a Debian GNU system.
 
-Thanks to Steve McIntyre <stevem@chiark.greenend.org.uk> for his
-work on slink_cd/debian_cd. Some ideas come from his script.
+Some of the ideas here (a loooong time ago) came from Steve McIntyre's
+slink_cd script.
 
-Thanks to all the contributors on the debian-cd mailing list.
+Thanks also to all the contributors on the debian-cd mailing list.
 
 What is needed?
 ===============
@@ -20,9 +20,10 @@ Software:
 - perl (>= 5.004)
 - bash (or another POSIX shell)
 - make
-- mkisofs/mkhybrid (mkisofs also provides the isoinfo binary used by the
-  Pseudo Image Kit)
+- cpp
+- mkisofs/genisoimage
 - the perl Digest::MD5 module
+- the perl Compress::Zlib module
 - lynx (for text version of README.html) and todos from sysutils
   to convert docs to DOS format (although you can rip that out, too)
 - if you want to generate jigdo files: jigdo-file (see below)
@@ -46,10 +47,7 @@ $ sensible-editor CONF.sh
 $ . CONF.sh
 $ make distclean
 $ make status
-$ make list COMPLETE=1 SIZELIMIT1=625000000 SRCSIZELIMIT=665000000
 $ make official_images
-[ alternatively, if you only want binary images:
-  $ make bin-official_images ]
 
 However, you really should consider reading further for more information.
 You can also take a look at build.sh and build_all.sh for an automatized
@@ -103,33 +101,25 @@ The process of building a CD is composed of the following steps:
 
 - now you can decide what you want on your CDs
 
-    $ make list TASK=tasks/debian-2.2 COMPLETE=1
+    $ make packagelists TASK=tasks/debian-2.2 COMPLETE=1
 
   or
 
-    $ make list TASK=tasks/gnome COMPLETE=0 SIZELIMIT=576716800
+    $ make packagelists TASK=tasks/gnome COMPLETE=0
 
   or
 
-    $ export NONFREE=1; make list TASK=tasks/your-task-here COMPLETE=1
+    $ export NONFREE=1; make packagelists TASK=tasks/your-task-here COMPLETE=1
 
   or for something like an official image for the USA (without non-US &
   non-free) :
 
-    $ make list COMPLETE=1 SIZELIMIT1=576716800
+    $ make packagelists COMPLETE=1
 
   .... take a look at the file tasks/* to see the options you can have :)
   
   You can change the behaviour of this command with the following
   variables:
-  - if NONUS is set, then packages from non-US will be allowed (the value
-    of NONUS must be the path to the non-US mirror if you have one)
-  - if FORCENONUSONCD1 is set also, then packages will be
-    rearranged so that non-US packages are all on CD#1. This
-    includes the non-free ones if you specify NONFREE. Then 2 separate
-    copies of CD#1 will be produced, identical in every respect except
-    for the inclusion/lack of non-US packages. The same happens for
-    the source CDs when they are built.
   - if NONFREE is set, then packages from non-free will be allowed
     (NONFREE must be exported to all sub-shells)
   - if EXTRANONFREE is set, then non-free packages will be included
@@ -138,23 +128,30 @@ The process of building a CD is composed of the following steps:
     (EXTRANONFREE must be exported to all sub-shells)
   - if COMPLETE is set, all packages that are not listed in the
     selected task file will be included at the end
-  - if SIZELIMIT is set, it will be used as the maximum size that
-    we can put into each CD
-  - if SIZELIMIT<X> (with <X> beeing a integer) is set, it will be used 
-    as the maximum size of the X'th binary CD. SIZELIMIT<X> overrides
-    SIZELIMIT ...
-  - if SRCSIZELIMIT is set, it's used as the maximum size for source CD
-  - if SRCSIZELIMIT<X> (with <X> beeing an integer) is set, it will be
-    used as the maximum size of the X'th source CD
+  - setting INSTALLER_CD will use an appropriate task file for
+    building small CDs (businesscard and netinst)
 
-  This target calls the targets "bin-list" and "src-list" that can be used to
-  build only binary CDs or only source CDs.
+- now, we'll start making temporary trees:
 
-- it may be time to add the disks-arch stuff and to make the CDs bootable:
+    $ make image-trees
 
-    $ make bootable
+  This will first work sort the list of packages for each architecture
+  into order so that standard, required, important and base packages
+  are placed first, then other packages will be added in the order
+  given modulo dependency ordering. Once the sorted list is created,
+  the different architecture lists will be merged (if more than one
+  architecture is selected).
 
-  This affects only the binary CDs.
+  Then the code will start laying out temporary directory trees for
+  the CDs. In order, this includes the following steps:
+
+  - Creating an empty directory layout
+  - Generating an image label and volume ID and other metadata such as
+    debian-installer information files
+  - Add documentation and installation/upgrade tools
+  - Add Release files and other archive metadata
+  - Make the image bootable for the selected architecture(s)
+  - Start generating the md5sum.txt file
 
   If you want to use boot-floppies built by yourself you can add
   a parameter BOOTDISKS=<dir> which specifies the directory where
@@ -163,57 +160,40 @@ The process of building a CD is composed of the following steps:
   mirror. Your boot-floppies must also be on the same partition as
   your mirror and temporary dir (hardlinks are used here too).
 
-  Size calculation is imprecise for bootable CDs (usually the first CDs
-  in the set), so you may need to manually adjust SIZELIMIT* variables
-  to account for the size of the booting stuff used.
+  Once the disc tree has all of this start data, we start filling the
+  directory trees with packages from the sorted list. The size of the
+  image to be created is set using DISKTYPE in CONF.sh; if the
+  standard sizes do not match what you're after, use DISKTYPE=CUSTOM
+  and specify your own size using CUSTOMSIZE. The algorithm is simple
+  for adding packages:
 
-- now, we'll add the binary packages to the temporary tree:
+  - link the package into the temporary disc tree
+  - append the metadata to the appropriate Packages or Sources file
+  - add md5sum information for the added file(s) to the md5sum.txt file
 
-    $ make packages
+  This continues until the temporary tree grows one package *too
+  large* for the selected image size. At that point, we roll back the
+  last set of changes associated with that package. Then:
 
-- and we'll add the sources to the temporary tree:
+  - check if the disc contains all the packages needed to install a base system
+  - finish off the Release file, using the checksums of the
+    Packages/Sources files we generated
+  - finish off the md5sum.txt file
 
-    $ make sources
-
-- if you want to install additional files:
-
-    $ make bin-extras CD=1 ROOTSRC=/home/ftp/ DIR=goodies/wordperfect
-    $ make src-extras CD=3 ROOTSRC=/home/ftp/ DIR=goodies/kernel-2.3
-
-  The first will copy /home/ftp/goodies/wordperfect/ to the first binary
-  CD. It will be in <root of the cd>/goodies/wordperfect/. You can call
-  make extras multiple times if you need more.
-
-  Please note that the files to be copied should be on the same partition
-  than your mirror (unless you use a symlink farm).
-
-  If you want to do customize your CD even more, you can use the hook
-  system. Read more about that below.
-
-- We can add an md5sum.txt file on each CD to enable users to check their
-  files:
-
-    $ make md5list
-
-  This calls the targets 'bin-md5list' and 'src-md5list'. You can
-  choose to call only bin-md5list if you're building only binary images.
+  Next, we continue to the next disc tree, using the same process:
+  start it, copy packages in until they overflow, roll back and
+  finish. And repeat. Each time a package is found to be too large to
+  fit inside an image, it will be kept back and will (obviously) be
+  the first package placed into the next disc tree.
 
 - now we can create the images:
 
     $ make images
 
   If you don't have enough space for all images, you can generate 
-  only one image (of the second binary CD for example) with:
+  only one image (of the second CD for example) with:
 
-    $ make bin-image CD=2
-
-  Of course if you want to build all binary images you'll use:
-
-    $ make bin-images
-
-  The following will generate the source images:
-
-    $ make src-images
+    $ make image CD=2
 
   Note: here we use "make images", but you could as well use
   "make official_images" since the latter is the same as the former
@@ -224,7 +204,6 @@ The process of building a CD is composed of the following steps:
   images you can do it with:
 
     $ make imagesums
-
 
 Official images
 ===============
@@ -281,16 +260,9 @@ for jigdo, merely a modification of the "images" targets. You can choose
 only .iso generation (default), only .jigdo generation (for highly reduced
 disk usage), or both .iso and .jigdo generation.
 
-To generate the jigdo files and templates, you need the "jigdo-file" program,
-which is available via the same URL.
-
-Jigdo-file creates and maintains a cache/database file with checksums of
-all files on your Debian mirror. The first time, this may take hours to be
-generated (use "top" to see what's going on), so it's wise to keep the
-cache in your homedir and not delete it ever. 
-
-Note that jigdo-file can easily use 60+ MB of working memory, so don't use
-this on machines with less than 128 MB RAM.
+To generate the jigdo files and templates, you need an
+appropriately-patched version of mkisofs/genisoimage, as shipped in
+Debian Etch.
 
 The MD5SUMS file generated by the "imagesums" target will contain the MD5
 checksums of all generated images, regardless of the DOJIGDO setting. If
@@ -322,24 +294,15 @@ debian-cd allows you to automatically create a directory on disc which
 is suitable for use as a fallback mirror. It is populated with hard
 links to the archive contents. In CONF.sh, simply supply as
 JIGDOFALLBACKPATH the name of the directory, and as JIGDOFALLBACKURLS
-the URLs under which it will be made available (two separate URLs are
-necessary, one for "Debian" and one for "Non-US").
-
+the URLs under which it will be made available.
 
 About the hook system
 =====================
 
-A hook script can be executed at different times. You can specify the
-script by setting the HOOK variable to the script filename. It will
-get 2 arguments, the first is the CD number. The second depends on
-where/when the hook script is called. It can be 'before-scanpackages'
-or 'before-mkisofs' (their values are explicit ...). When the script
-is called, the current directory will be the temporary directory used for
-the build (aka $TDIR/$CODENAME-$ARCH).
-
-There are hooks only for binary CDs at the present time. If HOOK is not
-set, it will look for a script $BASEDIR/tools/$CODENAME.hook.
-
+A hook script can be executed at different times during the CD build
+process to customise your CDs. You can specify the script by setting
+the various HOOK variables in CONF.sh; look there for more information
+about what hook points are available.
 
 About the symlink farm
 ======================

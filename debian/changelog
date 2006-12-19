@@ -172,6 +172,16 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   * CONF.sh: don't determine ARCHES if already set; don't export CPU and
     KERNEL.
 
+  [ Steve McIntyre ]
+  * Update documentation to at least vaguely match how things work.
+  * Added support for hook scripts in a few places around the CD
+ 	creation process, to help people customise their CDs. Quite a
+	lot of refactoring needed in make_disc_trees.pl needed to do that.
+  * Removed more cruft:
+    + old defs in CONF.sh
+    + old defs and rules in the Makefile
+    + tools/add_secured
+
  -- Frans Pop <fjp@debian.org>  Mon, 18 Dec 2006 16:20:22 +0100
 
 debian-cd (2.2.25) unstable; urgency=low

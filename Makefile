@@ -51,14 +51,9 @@ endif
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
 list2cds=$(BASEDIR)/tools/list2cds
-scansources=$(BASEDIR)/tools/scansources
-add_files=$(BASEDIR)/tools/add_files
-add_secured=$(BASEDIR)/tools/add_secured
 md5sum=md5sum
-fastsums=$(BASEDIR)/tools/fast_sums
 jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
 grab_md5=$(BASEDIR)/tools/grab_md5
-dedicated-src=$(BASEDIR)/tools/dedicated_source
 make_image=$(BASEDIR)/tools/make_image
 merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
@@ -165,7 +160,7 @@ clean: ok dir-clean
 dir-clean:
 	$(Q)rm -rf $(BDIR)/CD[1234567890]*
 	$(Q)rm -f $(BDIR)/*.filelist*
-	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/upgrade-stamp $(BDIR)/secured-stamp $(BDIR)/md5-check
+	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/upgrade-stamp $(BDIR)/md5-check
 
 # Completely cleans the current arch tree
 realclean: distclean
@@ -370,46 +365,7 @@ need-complete-mirror:
 	    exit 1; \
 	fi
 
-dedicated-src: ok
-#	false
-
-## EXTRAS ##
-
-# Launch the extras scripts correctly for customizing the CDs
-extras: bin-extras
-bin-extras: ok
-	$(Q)if [ -z "$(DIR)" -o -z "$(CD)" -o -z "$(ROOTSRC)" ]; then \
-	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
-	  false; \
-	fi
-	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/CD$(CD)'" ...
-	$(Q)$(add_files) $(BDIR)/CD$(CD) $(ROOTSRC) $(DIR)
-src-extras:
-	$(Q)if [ -z "$(DIR)" -o -z "$(CD)" -o -z "$(ROOTSRC)" ]; then \
-	  echo "Give me more parameters (DIR, CD and ROOTSRC are required)."; \
-	  false; \
-	fi
-	@echo "Adding dirs '$(DIR)' from '$(ROOTSRC)' to '$(BDIR)/CD$(CD)'" ...
-	$(Q)$(add_files) $(BDIR)/CD$(CD) $(ROOTSRC) $(DIR)
-
 ## IMAGE BUILDING ##
-
-# Generate $CODENAME-secured tree with Packages and Release(.gpg) files
-# from the official tree
-# Complete the Release file from the normal tree
-secured: bin-secured #src-secured
-bin-secured: $(BDIR)/secured-stamp
-$(BDIR)/secured-stamp:
-	@echo "Generating $(CODENAME)-secured on all the binary CDs ..."
-	$(Q)set -e; \
-	 for file in $(BDIR)/*.packages; do \
-		dir=$${file%%.packages}; \
-		n=$${dir##$(BDIR)/}; \
-		dir=$(BDIR)/CD$$n; \
-		cd $$dir; \
-		$(add_secured); \
-	done
-	$(Q)touch $(BDIR)/secured-stamp
 
 # DOJIGDO actions   (for both binaries and source)
 #    0    isofile
@@ -423,7 +379,7 @@ check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 
 # Generate only one image number $(CD)
-image: check-number-given image
+image: check-number-given images
 
 # Calculate the md5sums for the images (if available), or get from templates
 imagesums:

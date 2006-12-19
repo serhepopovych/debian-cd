@@ -3,14 +3,11 @@
 #
 
 # Unset all optional variables first to start from a clean state
-unset NONUS             || true
-unset FORCENONUSONCD1   || true
 unset NONFREE           || true
 unset CONTRIB           || true
 unset EXTRANONFREE      || true
 unset LOCAL             || true
 unset LOCALDEBS         || true
-unset SECURED           || true
 unset SECURITY          || true
 unset BOOTDIR           || true
 unset SYMLINK           || true
@@ -29,11 +26,7 @@ unset JIGDOFALLBACKURLS || true
 unset JIGDOINCLUDEURLS  || true
 unset JIGDOSCRIPT       || true
 unset JIGDO_OPTS        || true
-unset DEFBINSIZE        || true
-unset DEFSRCSIZE        || true
-unset FASTSUMS          || true
 unset PUBLISH_URL       || true
-unset PUBLISH_NONUS_URL || true
 unset PUBLISH_PATH      || true
 unset UDEB_INCLUDE      || true
 unset UDEB_EXCLUDE      || true
@@ -99,14 +92,6 @@ fi
 # Paths to the mirrors
 export MIRROR=/mirror/debian
 
-# Comment the following line if you don't have/want non-US
-#export NONUS=/ftp/debian-non-US
-
-# And this option will make you 2 copies of CD1 - one with all the
-# non-US packages on it, one with none. Useful if you're likely to
-# need both.
-#export FORCENONUSONCD1=1
-
 # Path of the temporary directory
 export TDIR=/mirror/tmp
 
@@ -137,11 +122,6 @@ export CONTRIB=1
 # containing dists/$CODENAME/local/binary-$ARCH
 # export LOCALDEBS=/home/joey/debian/va/debian
 
-# If you want a <codename>-secured tree with a copy of the signed
-# Release.gpg and files listed by this Release file, then
-# uncomment this line
-# export SECURED=1
-
 # Where to find the security patches.  This directory should be the
 # top directory of a security.debian.org mirror.
 #export SECURITY="$TOPDIR"/debian/debian-security
@@ -166,7 +146,7 @@ export CONTRIB=1
 export ISOLINUX=1
 
 # uncomment this to if you want to see more of what the Makefile is doing
-export VERBOSE_MAKE=1
+#export VERBOSE_MAKE=1
 
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work
@@ -180,7 +160,7 @@ ATTEMPT_FALLBACK=yes
 # CD700:             (semi-)standard 80-min CD (700 MiB)
 # DVD:               standard 4.7 GB DVD
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
-export DISKTYPE=DVD
+export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
 #export CUSTOMSIZE=XXXX
 
@@ -213,10 +193,6 @@ export NORECOMMENDS=1
 #     jigdo stuff is made; needs temporary space as big as the biggest image.
 export DOJIGDO=1
 
-# jigdo-file command & options
-# Note: building the cache takes hours, so keep it around for the next run
-#export JIGDOCMD="/usr/local/bin/jigdo-file --cache=$HOME/jigdo-cache.db"
-#
 # HTTP/FTP URL for directory where you intend to make the templates
 # available. You should not need to change this; the default value ""
 # means "template in same dir as the .jigdo file", which is usually
@@ -251,15 +227,10 @@ export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigd
 # data.
 #export JIGDOSCRIPT="myscript"
 
-# If set, use the md5sums from the main archive, rather than calculating
-# them locally
-export FASTSUMS=1
-
 # A couple of things used only by publish_cds, so it can tweak the
 # jigdo files, and knows where to put the results.
 # You need to run publish_cds manually, it is not run by the Makefile.
 export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
-export PUBLISH_NONUS_URL="http://non-US.cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
 
 # Specify files and directories to *exclude* from jigdo processing. These
@@ -315,7 +286,7 @@ done
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.
-# export MAXCDS=1
+export MAXCDS=1
 
 # If set, overrides the boot picture used.
 #export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
@@ -328,7 +299,7 @@ done
 # If so we will link to them on the web site.
 export OMIT_RELEASE_NOTES=1
 
-# Set this to override the defaul location
+# Set this to override the default location
 #export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
 
 case "$OFFICIAL" in
@@ -342,3 +313,51 @@ case "$OFFICIAL" in
 	export OFFICIAL_VAL=0
 	;;
 esac
+
+##################################
+# LOCAL HOOK DEFINITIONS
+##################################
+#
+# Set these to point to scripts/programs to be called at various 
+# points in the debian-cd image-making process. This is the ideal place
+# to customise what's on the CDs, for example to add extra files or
+# modify existing ones. Each will be called with the arguments in order:
+#
+# $TDIR (the temporary dir containing the build tree)
+# $MIRROR (the location of the mirror)
+# $DISKNUM (the image number in the set)
+# $CDDIR (the root of the temp disc tree)
+# $ARCHES (the set of architectures chosen)
+#
+# BE CAREFUL about what you do at each point: in the first couple of 
+# cases, files and directories you're looking to use may not exist yet,
+# you may need to worry about adding entries into md5sum.txt yourself
+# and (in the last couple of cases) if you add any extra files you may
+# end up over-filling the disc. If you *do* need to add files at the end
+# of the process, see RESERVED_BLOCKS_HOOK below. It's strongly
+# recommended to do this kind of customisation up-front if you can, it's
+# much simpler that way!
+
+# The disc_start hook. This will be called near the beginning of the
+# start_new_disc script, just after the directory tree has been created
+# but before any files have been added
+#export DISC_START_HOOK=/bin/true
+
+# The disc_pkg hook. This will be called just after the
+# start_new_disc script has finished, just before make_disc_trees.pl
+# starts to add package files.
+#export DISC_PKG_HOOK=/bin/true
+
+# The reserved_blocks hook; if set, this script should print the
+# number of 2K blocks that need to be reserved for data to be added
+# *after* a disc tree is filled with packages.
+#export RESERVED_BLOCKS_HOOK=/bin/true
+
+# The disc_finish hook. This will be called once a disc image is full,
+# just after the last package rollback but before the last bits of
+# cleanup are done on the temp disc tree
+#export DISC_FINISH_HOOK=/bin/true
+
+# The disc_end hook. This will be called *right* at the end of the
+# image-making process in make_disc_trees.pl.
+#export DISC_END_HOOK=/bin/true
