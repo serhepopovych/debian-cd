@@ -60,12 +60,6 @@ my $size_swap_check;
 my $hfs_extra = 0;
 my $hfs_mult = 1;
 
-# Space calculation for extra HFS crap
-if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
-        $hfs_extra = int($maxdiskblocks * 8 / $blocksize);
-        $hfs_mult = 1.1;
-}
-
 # And count how many packages added since the last size check was done
 # - the estimation code is getting very accurate, so let's reduce the
 # number of times we fork mkisofs
@@ -100,6 +94,12 @@ chdir $bdir;
 
 $cddir = "$bdir/CD$disknum";
 get_disc_size();
+# Space calculation for extra HFS crap
+if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
+    $hfs_mult = 1.1;
+    $hfs_extra = int($maxdiskblocks * 8 / $blocksize);
+}
+
 print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskblocks 2K-blocks maximum per image\n";
 
 open(INLIST, "$bdir/packages") || die "No packages file!\n";
