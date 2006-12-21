@@ -31,7 +31,7 @@ fi
 
 cd $CDDIR/..
 
-add_mkisofs_opt $N.mkisofs_opts "-J"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
 
 # Only disk 1* bootable
 if [ $N != 1 ] && [ $N != 1_NONUS ]; then

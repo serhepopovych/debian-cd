@@ -25,7 +25,7 @@ CDDIR=$2
 cd $CDDIR/..
 
 if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
-    add_mkisofs_opt $N.mkisofs_opts "-J"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
 	exit 0
 fi
 
@@ -91,5 +91,5 @@ cp $BASEDIR/data/$CODENAME/s390/d390* "$imagedir/"
 cp $BASEDIR/data/$CODENAME/s390/README.boot "boot$N/"
 
 # Include the boot$N/-tree into the iso-image
-add_mkisofs_opt $N.mkisofs_opts "-J"
-add_mkisofs_opt $N.mkisofs_dirs "boot$N"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"

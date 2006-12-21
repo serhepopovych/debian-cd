@@ -102,26 +102,26 @@ if [ "$NN" = "1" ]; then
     cp -lf cdrom/vmlinuz $CDDIR/install.386/
     cp -lf cdrom/initrd.gz $CDDIR/install.386/
 
-	add_mkisofs_opt $N.mkisofs_opts "-J"
-	add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-	add_mkisofs_opt $N.mkisofs_opts "-b isolinux/isolinux.bin"
-	add_mkisofs_opt $N.mkisofs_opts "-c isolinux/boot.cat"
-	add_mkisofs_opt $N.mkisofs_opts "-no-emul-boot"
-	add_mkisofs_opt $N.mkisofs_opts "-boot-load-size 4"
-	add_mkisofs_opt $N.mkisofs_opts "-boot-info-table"	
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
 else
     if [ -n "$THISTYPE" ]; then
 		echo "      Using $THISTYPE boot-disks image on CD$N"
 		mkdir -p boot$N/boot
 		cp $THISTYPE/boot.img boot$N/boot/
 
-		add_mkisofs_opt $N.mkisofs_opts "-J"
-		add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-		add_mkisofs_opt $N.mkisofs_opts "-b boot/boot.img"
+		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b boot/boot.img"
     else
 		mkdir boot$N
-		add_mkisofs_opt $N.mkisofs_opts "-J"
-		add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
+		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
     fi
 fi
 
@@ -254,13 +254,12 @@ EOF
 EOF
 fi
 
-# write final lines to mkisofs_opts
 if [ "$NN" = "1" ]; then
-    add_mkisofs_opt $N.mkisofs_dirs "boot$N"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 else
 	if [ -n "$THISTYPE" ]; then
-        add_mkisofs_opt $N.mkisofs_opts "-c boot/boot.catalog"
-        add_mkisofs_opt $N.mkisofs_dirs "boot$N"
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.catalog"
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 	fi
 fi
 

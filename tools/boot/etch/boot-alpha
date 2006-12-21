@@ -85,17 +85,17 @@ EOF
 
     mkdir -p boot$N/milo
 
-	add_mkisofs_opt $N.mkisofs_opts "-J"
-	add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-	add_mkisofs_opt $N.mkisofs_opts "-l"
-	add_mkisofs_opt $N.mkisofs_opts "-alpha-boot boot/bootlx"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-alpha-boot boot/bootlx"
 
-	add_mkisofs_opt $N.mkisofs_dirs "boot$N"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
 else
-	add_mkisofs_opt $N.mkisofs_opts "-J"
-	add_mkisofs_opt $N.mkisofs_opts "-cache-inodes"
-	add_mkisofs_opt $N.mkisofs_opts "-l"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
 fi
 
 #install_languages $CDDIR

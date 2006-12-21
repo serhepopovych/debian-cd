@@ -28,8 +28,8 @@ fi
 
 install_languages $CDDIR
 
-add_mkisofs_opt $N.mkisofs_opts "-G boot1/boot/isofs.b -B ..."
-add_mkisofs_opt $N.mkisofs_dirs "boot1"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-G boot1/boot/isofs.b -B ..."
+add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot1"
 
 inst=boot1
 
