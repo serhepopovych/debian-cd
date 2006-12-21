@@ -185,12 +185,7 @@ export NORECOMMENDS=1
 # Produce jigdo files:
 # 0/unset = Don't do jigdo at all, produce only the full iso image.
 # 1 = Produce both the iso image and jigdo stuff.
-# 2 = Produce ONLY jigdo stuff by piping mkisofs directly into jigdo-file,
-#     no temporary iso image is created (saves lots of disk space).
-#     NOTE: The no-temp-iso will not work for (at least) alpha and powerpc
-#     since they need the actual .iso to make it bootable. For these archs,
-#     the temp-iso will be generated, but deleted again immediately after the
-#     jigdo stuff is made; needs temporary space as big as the biggest image.
+# 2 = Produce only the jigdo stuff
 export DOJIGDO=1
 
 # HTTP/FTP URL for directory where you intend to make the templates
