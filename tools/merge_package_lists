@@ -90,16 +90,34 @@ if [ $source = "yes" ] ; then
 				    split($0,fields,":")
 					arch=fields[1]
 					pkg=fields[2]
-					if (!included[bin2src[pkg]]) {
-					  print "# Adding source " bin2src[pkg] " because of " pkg
-					  included[bin2src[pkg]] = pkg
-					  printf("%d:aaaaaaaaaaaaaaaaaa:%s\n", FNR, pkg)
+					source=bin2src[pkg]
+					if (!included[source]) {
+					  printf("# Adding source %s at %d because of %s:%s\n",
+					      source, FNR, arch, pkg)
+					  included[source] = pkg
+					  incarch[source] = arch
+					  indexnr[source] = FNR
 					} else {
-					  print "# Not adding pkg " pkg " source (" bin2src[pkg] "), already added due to " included[bin2src[pkg]]
+					  if (FNR < indexnr[source]) {
+					    printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
+						source, indexnr[source],
+						incarch[source], included[source],
+						FNR, arch, pkg);
+					    included[source] = pkg
+					    incarch[source] = arch
+					    indexnr[source] = FNR
+					  } else {
+					    printf("# Not adding pkg %s source (%d:%s:%s), already added due to %d:%s:%s\n", pkg, FNR, arch, source, indexnr[source], incarch[source], included[source])
+					    }
 					}
 					printf("%d:%s\n", FNR, $0)
 				  }
-				} ' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $list | sort -nk 1 -t : >> $BDIR/list.mid
+				}
+	END {
+	    for (source in included) {
+		printf("%d:aaaaaaaaaaaaaaaaaa:%s\n", indexnr[source], source)
+	    }
+	}' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $list | sort -nk 1 -t : >> $BDIR/list.mid
 else
 	awk '{printf("%d:%s\n", FNR, $0)}' $list | sort -nk 1 -t : >> $BDIR/list.mid
 fi
