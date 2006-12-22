@@ -33,6 +33,8 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot1"
 
 inst=boot1
 
+cd $CDDIR/..
+
 # Setup directories
 mkdir -p $inst/boot
 
