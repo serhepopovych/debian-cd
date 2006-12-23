@@ -40,8 +40,13 @@ if [ $NN != 1 ]; then
 	exit 0
 fi
 
+DELODEB="$($BASEDIR/tools/apt-selection cache show delo | \
+	sed -n 's/^Filename: \(.*_mipsel.deb\)$/\1/p')"
+ar p "${MIRROR}/${DELODEB}" data.tar.gz | tar xz ./boot/delo.2nd
+mkdir -p $CDROOT/boot
+mv boot/delo.2nd $CDROOT/boot/delo.2nd
+
 install -m 644 -D $BASEDIR/data/etch/delo.conf "$CDROOT"/etc/delo.conf
-install -m 644 -D "$DELOROOT"/boot/delo.2nd "$CDROOT"/boot/delo.2nd
 
 if [ ! "$DI_WWW_HOME" ];then
 	if [ ! "$DI_DIR" ];then

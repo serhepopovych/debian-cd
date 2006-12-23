@@ -189,9 +189,13 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     + remove the SKIPMIRRORCHECK variable, now completely obsolete
     + change the mkisofs dep from (mkisofs | mkhybrid) to (mkisofs | genisoimage)
     + remove Recommends on debianutils 
+	+ remove Suggests on palo - we grab and use the correct version
+      direct from the archive instead these days
+	+ remove Suggests on delo - we grab and use the correct version
+      direct from the archive instead these days
   * Other cleanups:
 	+ Make build_all.sh work again, adapting build.sh
-    + Promote Suggests: on delo, palo, netpbm, syslinux to Recommends:
+    + Promote Suggests: on netpbm, syslinux to Recommends:
 
  -- Frans Pop <fjp@debian.org>  Mon, 18 Dec 2006 16:20:22 +0100
 
