@@ -183,6 +183,8 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     + tools/add_secured
     + don't depend on jigdo-file any more
     + don't depend on apt-utils any more - we don't use apt-ftparchive now
+	+ don't depend on debootstrap any more - we grab and use the
+      latest version direct from the archive instead these days
     + remove the SKIPMIRRORCHECK variable, now completely obsolete
     + change the mkisofs dep from (mkisofs | mkhybrid) to (mkisofs | genisoimage)
     + remove Recommends on debianutils 
