@@ -337,8 +337,12 @@ sub get_disc_size {
 }
 
 sub start_disc {
+	my $error = 0;
 
-	system("start_new_disc $basedir $mirror $tdir $codename \"$archlist\" $disknum");
+	$error = system("start_new_disc $basedir $mirror $tdir $codename \"$archlist\" $disknum");
+	if ($error != 0) {
+		die "    Failed to start disc $disknum, error $error\n";
+	}
 
 	get_disc_size();
 

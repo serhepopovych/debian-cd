@@ -343,11 +343,15 @@ do
 			$BASEDIR/tools/$CODENAME/upgrade-$ARCH.sh $DISKNUM $CDDIR
 		fi
 
-		echo "  (Optionally) making the image bootable for $ARCH"
+		echo "  (Optionally) making the image bootable for $ARCH:"
 		if [ -f $BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH ] ; then
 			cd $TDIR
 			echo "    Running tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR"
-			$BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR
+			$BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR || booterror=$?
+			if [ "$booterror"x != ""x ] ; then
+				echo "      FAILED: error $booterror"
+				exit $booterror
+			fi
 		else
 			if [ "${IGNORE_MISSING_BOOT_SCRIPT:-0}" = "0" ] ; then
 				echo "    No script to make CDs bootable for $ARCH"
