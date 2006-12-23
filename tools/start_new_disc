@@ -347,7 +347,7 @@ do
 		if [ -f $BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH ] ; then
 			cd $TDIR
 			echo "    Running tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR"
-			$BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR || true # FIXME!
+			$BASEDIR/tools/boot/$DI_CODENAME/boot-$ARCH $DISKNUM $CDDIR
 		else
 			if [ "${IGNORE_MISSING_BOOT_SCRIPT:-0}" = "0" ] ; then
 				echo "    No script to make CDs bootable for $ARCH"
