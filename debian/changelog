@@ -182,7 +182,9 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     + old defs and rules in the Makefile
     + tools/add_secured
     + don't depend on jigdo-file any more
-    + Remove the SKIPMIRRORCHECK variable, now completely obsolete
+    + remove the SKIPMIRRORCHECK variable, now completely obsolete
+    + change the mkisofs dep from (mkisofs | mkhybrid) to (mkisofs | genisoimage)
+    + remove Recommends on debianutils 
   * Other cleanups:
 	+ Make build_all.sh work again, adapting build.sh
 
