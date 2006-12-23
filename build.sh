@@ -40,16 +40,12 @@ export TASK COMPLETE
 
 make distclean
 make ${CODENAME}_status
-if [ "$SKIPMIRRORCHECK" = "yes" ]; then
-    echo " ... WARNING: skipping mirror check"
-else
-    echo " ... checking your mirror"
-    RET=""
-    make mirrorcheck || RET=$?
-    if [ "$RET" ]; then
+echo " ... checking your mirror"
+RET=""
+make mirrorcheck || RET=$?
+if [ "$RET" ]; then
 	echo "ERROR: Your mirror has a problem, please correct it." >&2
 	exit 1
-    fi
 fi
 
 if [ -z "$IMAGETARGET" ] ; then
