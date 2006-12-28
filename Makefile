@@ -62,29 +62,11 @@ BDIR=$(TDIR)/$(CODENAME)
 ADIR=$(APTTMP)
 DB_DIR=$(BDIR)/debootstrap
 
-FIRSTDISKS=CD1 
-
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
-export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
 
 LATEST_DB := $(shell ls -1tr $(MIRROR)/pool/main/d/debootstrap/debootstrap*all.deb | tail -1)
 
 ## DEBUG STUFF ##
-
-PrintVars:
-	@num=1; \
-	echo BINDISKINFO: ; \
-        echo $(BINDISKINFO) ; \
-	echo SRCDISKINFO: ; \
-        echo $(SRCDISKINFO) ; \
-	echo BINDISKINFOND: ; \
-        echo $(BINDISKINFOND) ; \
-	echo SRCDISKINFOND: ; \
-        echo $(SRCDISKINFOND) ; \
-	echo BINVOLID: ; \
-        echo $(BINVOLID) ; \
-	echo SRCVOLID: ; \
-        echo $(SRCVOLID) ; \
 
 default:
 	@echo "Please refer to the README file for more information"
@@ -122,6 +104,19 @@ endif
 			echo "Including source is not supported on a netinst/bc CD"; \
 			false; \
 		fi; \
+	fi
+
+## BOOT & DOC & INSTALL ##
+
+# Basic checks
+$(MIRROR)/doc: need-complete-mirror
+$(MIRROR)/tools: need-complete-mirror
+need-complete-mirror:
+	@# Why the hell is this needed ??
+	@if [ ! -d $(MIRROR)/doc -o ! -d $(MIRROR)/tools ]; then \
+	    echo "You need a Debian mirror with the doc, tools and"; \
+	    echo "indices directories ! "; \
+	    exit 1; \
 	fi
 
 ## INITIALIZATION ##
@@ -172,6 +167,12 @@ distclean: ok clean
 ####################
 ## STATUS and APT ##
 ####################
+
+$(CODENAME)_status: ok init
+	$(Q)for ARCH in $(ARCHES_NOSRC); do \
+		echo "Using the provided status file for $(CODENAME)-$$ARCH ..."; \
+		cp $(BASEDIR)/data/$(CODENAME)/status.$$ARCH $(ADIR)/$(CODENAME)-$$ARCH/status 2>/dev/null || $(MAKE) status || $(MAKE) correctstatus ; \
+	done
 
 # Regenerate the status file with only packages that
 # are of priority standard or higher
@@ -261,35 +262,6 @@ deletelist: ok
 
 packagelists: ok apt-update genlist
 
-image-trees: ok genlist
-    # Use list2cds to do the dependency sorting
-	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		ARCH=$$ARCH $(list2cds) $(BDIR)/list $(SIZELIMIT); \
-	done
-	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
-		awk '{printf("source:%s\n",$$0)}' $(BDIR)/list > $(BDIR)/packages; \
-	else \
-		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
-	fi
-	$(Q)make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
-
-# Generate the complete listing of packages from the task
-# Build a nice list without doubles and without spaces
-genlist: ok $(BDIR)/list $(BDIR)/list.exclude
-$(BDIR)/list: $(BDIR)/rawlist
-	@echo "Generating the complete list of packages to be included in $(BDIR)/list..."
-	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
-	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
-		  $(BDIR)/rawlist \
-		  > $(BDIR)/list
-
-$(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
-	@echo "Generating the complete list of packages to be removed ..."
-	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
-	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
-		  $(BDIR)/rawlist-exclude \
-		  > $(BDIR)/list.exclude
-
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
 # Dirty workaround for saving space, we add some hints to break ties.
@@ -352,20 +324,36 @@ $(BDIR)/rawlist-exclude:
 		echo > $(BDIR)/rawlist-exclude; \
 	fi
 
-## BOOT & DOC & INSTALL ##
+# Generate the complete listing of packages from the task
+# Build a nice list without doubles and without spaces
+genlist: ok $(BDIR)/list $(BDIR)/list.exclude
+$(BDIR)/list: $(BDIR)/rawlist
+	@echo "Generating the complete list of packages to be included in $(BDIR)/list..."
+	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
+	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
+		  $(BDIR)/rawlist \
+		  > $(BDIR)/list
 
-# Basic checks
-$(MIRROR)/doc: need-complete-mirror
-$(MIRROR)/tools: need-complete-mirror
-need-complete-mirror:
-	@# Why the hell is this needed ??
-	@if [ ! -d $(MIRROR)/doc -o ! -d $(MIRROR)/tools ]; then \
-	    echo "You need a Debian mirror with the doc, tools and"; \
-	    echo "indices directories ! "; \
-	    exit 1; \
-	fi
+$(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
+	@echo "Generating the complete list of packages to be removed ..."
+	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
+	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
+		  $(BDIR)/rawlist-exclude \
+		  > $(BDIR)/list.exclude
 
 ## IMAGE BUILDING ##
+
+image-trees: ok genlist
+    # Use list2cds to do the dependency sorting
+	$(Q)for ARCH in $(ARCHES_NOSRC); do \
+		ARCH=$$ARCH $(list2cds) $(BDIR)/list $(SIZELIMIT); \
+	done
+	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
+		awk '{printf("source:%s\n",$$0)}' $(BDIR)/list > $(BDIR)/packages; \
+	else \
+		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
+	fi
+	$(Q)make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
 # DOJIGDO actions   (for both binaries and source)
 #    0    isofile
@@ -399,9 +387,3 @@ update-popcon:
 
 # Little trick to simplify things
 official_images: ok init packagelists image-trees images
-
-$(CODENAME)_status: ok init
-	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		echo "Using the provided status file for $(CODENAME)-$$ARCH ..."; \
-		cp $(BASEDIR)/data/$(CODENAME)/status.$$ARCH $(ADIR)/$(CODENAME)-$$ARCH/status 2>/dev/null || $(MAKE) status || $(MAKE) correctstatus ; \
-	done
