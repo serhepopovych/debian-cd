@@ -2,7 +2,7 @@
 <head>
 <title>Setup</title>
 </head>
-<body
+<body>
 <h1>Setup</h1>
 
 <p>Configuration for debian-cd is stored in the file CONF.sh. This
@@ -27,6 +27,17 @@ have sane defaults and can be ignored in common use.</p>
 <li><code>TDIR</code> - a path to a temporary directory; should be on the same filesystem as <code>MIRROR</code> so that hard links work
 <li><code>OUT</code> - the directory where ISO images and/or jigdo files will be created
 <li><code>APTTMP</code> - another temporary directory for layout code; can live anywhere
+<li><code>ARCHES</code> - (optionally) specify the architecture(s) to
+build for. If you you want a multi-arch disc set, specify all the
+arches you want as one argument, using quotes (e.g. "amd64 i386
+powerpc")
+<li><code>DISKTYPE</code> - the type of disc you're trying to
+build. Recognised values are: <code>BC</code>, <code>NETINST</code>,
+<code>CD</code>, <code>CD700</code>, <code>DVD</code> and
+<code>CUSTOM</code>. The disc type is mainly used to decide the
+allowable size per output image. If you choose <code>CUSTOM</code>,
+then you'll also need to set <code>CUSTOMSIZE</code> to the size of
+your media.
 </ul>
 
 <p>Setting these options is sufficient to allow creation of a standard
@@ -46,8 +57,9 @@ wanting to make different images include:</p>
 <li><code>NONFREE</code> - whether or not to allow packages from the non-free section onto the CDs
 <li><code>EXTRANONFREE</code> - like <code>NONFREE</code>, but sort the non-free packages to a separate last CD instead of mixing them in
 <li><code>LOCAL</code> - if you have a local set of packages that you want to merge into your CDs, specify the location here. The location should look just like the other sections (main, contrib, non-free) with Packages files etc.
-<li><code>DEFBINSIZE</code> - the <strong>approximate</strong> target size of a binary image, in megabytes. See <a href="conf.sh.html">CONF.sh</a> for more details on how this works.
-<li><code>DEFSRCSIZE</code> - the <strong>approximate</strong> target size of a source image, in megabytes. See <a href="conf.sh.html">CONF.sh</a> for more details on how this works.
+<li><code>LOCALDEBS</code> - if you have set <code>LOCAL</code> above
+and the local packages are outside of the <code>MIRROR</code> tree,
+specify the local here.
 <li><code>EXCLUDE</code> - specifies a file listing packages that should be omitted from consideration when laying out the CDs
 <li><code>UNEXCLUDE$N</code> - a way to re-add excluded packages back into the set, starting with CD number $N. Using <code>EXCLUDE</code> and <code>UNEXCLUDE</code> allows some finer-grained control of package placement if desired
 <li><code>DOJIGDO</code> - specify what to create: 0 means ISOs only; 1 means ISOs and jigdo files; 2 means jigdo files only
@@ -62,11 +74,16 @@ wanting to make different images include:</p>
 <li><code>SPLASHPNG</code> - specify the image to be used on the boot splash screen, on architectures where this is supported
 </ul>
 
-<p>If you do tweak some of these options, especially image sizes, it
-may take quite a few iterations of testing to get exactly what you're
-looking for...</p>
+<p>If you do tweak some of these options, it may take quite a few
+iterations of testing to get exactly what you're looking for. Be
+warned!</p>
 
+<p>For more information and yet more configuration, please see the
+comments in the shipped CONF.sh file. Or, if in doubt, ask!</p>
+
+<hr>
+(c) Steve McIntyre &lt;steve@einval.com&gt;, December 2006. GPL v2<br>
 <a href="requirements.html">Prev - debian-cd requirements</a><br>
-<a href="conf.sh.html">Next - Full details of CONF.sh configuration</a>
+<a href="running.html">Next - Running debian-cd to make some disc images</a>
 </body>
 </html>

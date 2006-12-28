@@ -2,7 +2,7 @@
 <head>
 <title>debian-cd</title>
 </head>
-<body
+<body>
 <h1>debian-cd</h1>
 <h2>An attempt at documentation!</h2>
 
@@ -44,8 +44,8 @@ href="cd-contents.html">CD contents</a>.</p>
 <p>debian-cd is made up of a large central Makefile and lots of
 small(ish) helper scripts written in sh and perl. It depends on
 various other packages to do lots of the hard work, for example apt to
-calculate t package dependencies and debootstrap to provide the list
-of packages needed for a base installation.</p>
+calculate package dependencies and debootstrap to provide the list of
+packages needed for a base installation.</p>
 
 <p>A typical debian-cd run will involve:</p>
 
@@ -57,12 +57,11 @@ there are other config options.
 <li>Running a build wrapper script (build.sh or build_all.sh); the wrapper script will call various rules in the Makefile
 <li>Parse Packages files from the mirror to work out what packages are
 available
-<li>Work out what will fit on each CD, and how many CDs are needed
 <li>Make temporary trees, one for each output image
 <li>Set up volume information in each tree
 <li>Copy in boot files and d-i bits onto each CD where they are wanted
 <li>Copy documentation files onto CDs as required
-<li>Copy the packages files onto each CD; generate Packages metadata
+<li>Copy packages files onto each CD; generate Packages metadata
 files along the way
 <li>Generate checksums of the files on each CD
 <li>Run mkisofs to turn the temporary trees into ISO images and/or
@@ -73,7 +72,7 @@ jigdo files
 details on each of the steps!</p>
 
 <hr>
-(c) Steve McIntyre &lt;steve@einval.com&gt;, April 2006. GPL v2<br>
+(c) Steve McIntyre &lt;steve@einval.com&gt;, December 2006. GPL v2<br>
 <a href="getting.html">Next - Getting debian-cd</a>
 </body>
 </html>
