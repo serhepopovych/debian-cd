@@ -165,8 +165,9 @@ export DISKTYPE=CD
 #export CUSTOMSIZE=XXXX
 
 # We don't want certain packages to take up space on CD1...
-#export EXCLUDE="$BASEDIR"/tasks/exclude-$CODENAME
-# ...but they are okay for other CDs (UNEXCLUDEx == may be included on CD >= x)
+#export EXCLUDE1="$BASEDIR"/tasks/exclude-$CODENAME
+# ...but they are okay for other CDs (UNEXCLUDEx == may be included
+# on CD x if not already covered)
 #export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
