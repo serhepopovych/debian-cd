@@ -2,7 +2,7 @@
 
 # Main Makefile for debian-cd
 #
-# Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
+# Copyright 1999 Rapha?l Hertzog <hertzog@debian.org>
 # See the README file for the license
 #
 # Significantly modified 2005-2006 Steve McIntyre <93sam@debian.org>
@@ -57,6 +57,7 @@ grab_md5=$(BASEDIR)/tools/grab_md5
 make_image=$(BASEDIR)/tools/make_image
 merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
+update_tasks=$(BASEDIR)/tools/update_tasks
 
 BDIR=$(TDIR)/$(CODENAME)
 ADIR=$(APTTMP)
@@ -384,6 +385,9 @@ mirrorcheck: ok
 
 update-popcon:
 	$(update_popcon) tasks/popularity-contest-$(CODENAME)
+
+update-tasks:
+	$(update_tasks) $(CODENAME)
 
 # Little trick to simplify things
 official_images: ok init packagelists image-trees images

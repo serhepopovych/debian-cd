@@ -1,19 +1,12 @@
 /* Essential task packages
  *
- * Generated with: 
- 
- 
- for i in $(cat task.list); do
-   if [ "$i" != kde-desktop ] && [ "$i" != xfce-desktop ]; then
-     grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
-     grep-dctrl -s Key -n -e '.*';
-   fi;
- done | sed -e 's? *??' | grep -v ^$ >> ./task-essential-etch
-  
+ * The list should be regenerated from time to time, using the
+ * update-tasks target of the Makefile.
+ *
  * Last updated: $Date$
  */
-xorg
 gnome-desktop-environment
+xorg
 apache2-mpm-prefork
 exim4
 cupsys
@@ -27,7 +20,6 @@ language-env
 language-env
 language-env
 locales
-bosnian 
 manpages-pt
 language-env
 jfbterm
@@ -35,7 +27,6 @@ zhcon
 jfbterm
 zhcon
 locales
-croatian
 console-cyrillic
 t1-cyrillic
 language-env
@@ -49,7 +40,6 @@ gsfonts-x11
 ttf-dejavu
 ttf-freefont
 xfonts-base
-xfonts-base-transcoded
 language-env
 manpages-it
 language-env
@@ -73,7 +63,6 @@ locales
 language-env
 manpages-ru
 language-env
-serbian 
 language-env
 manpages-es
 locales

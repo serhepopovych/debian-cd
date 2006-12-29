@@ -1,0 +1,50 @@
+#!/bin/sh
+set -e
+
+CODENAME="$1"
+if [ -z "$CODENAME" ]; then
+	echo "usage: update_tasks CODENAME" >&2
+	exit 1
+fi
+
+if [ ! -e /usr/share/tasksel/debian-tasks.desc ]; then
+	echo "tasksel must be installed to update task lists" >&2
+	exit 1
+fi
+
+update_full_list () {
+	file=$1
+	tasklist=$2
+
+	grep '\*' $file > $file.new
+	for i in $(cat $tasklist); do
+		grep-aptavail -e -F Task "(^| )$i(,|$)" -s Package -n;
+	done >> $file.new
+	mv $file.new $file
+}
+
+update_essential_list () {
+	file=$1
+	tasklist=$2
+	desktoptask=$3
+
+	grep '\*' $file > $file.new
+	for i in $(cat $tasklist); do
+		if ( [ "$i" != gnome-dekstop ] &&
+		     [ "$i" != kde-desktop ] &&
+		     [ "$i" != xfce-desktop ] ) ||
+		   [ "$i" = "$desktoptask" ]; then
+			grep-dctrl -F Task -e "^$i$" /usr/share/tasksel/debian-tasks.desc |
+			grep-dctrl -s Key -n -e '.*';
+		fi
+	done | sed -e 's? *??' | grep -v ^$ >> $file.new
+	mv $file.new $file
+}
+
+update_essential_list tasks/task-essential-$CODENAME tasks/task.list gnome-desktop
+update_essential_list tasks/task-essential-$CODENAME-kde tasks/task.list.kde kde-desktop
+update_essential_list tasks/task-essential-$CODENAME-xfce tasks/task.list.xfce xfce-desktop
+
+update_full_list tasks/task-full-$CODENAME tasks/task.list
+update_full_list tasks/task-full-$CODENAME-kde tasks/task.list.kde
+update_full_list tasks/task-full-$CODENAME-xfce tasks/task.list.xfce
