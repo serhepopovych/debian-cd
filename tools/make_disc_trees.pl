@@ -411,7 +411,7 @@ sub finish_disc {
 
 	# And sort; it should make things faster for people checking
 	# the md5sums, as ISO9660 dirs are sorted alphabetically
-	system("LANG=C sort -uk2 md5sum.txt > md5sum.txt.tmp");
+	system("LANG=C sort -uk2 md5sum.txt | grep -v \./md5sum.txt > md5sum.txt.tmp");
 	system("mv -f md5sum.txt.tmp md5sum.txt");
 	chdir $bdir;
 
