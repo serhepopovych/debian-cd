@@ -13,8 +13,12 @@ my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds);
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, $overflowpkg);
+my (@exclude_packages, @unexclude_packages, @excluded_package_list);
 
 undef $overflowpkg;
+undef @exclude_packages;
+undef @unexclude_packages;
+undef @excluded_package_list;
 
 $basedir = shift;
 $mirror = shift;
@@ -144,48 +148,74 @@ while (defined (my $pkg = <INLIST>)) {
 		chomp $size;
 		$size += $hfs_extra;
 		print LOG "CD $disknum: size is $size before starting to add packages\n";
+
+        $pkgs_this_cd = 0;
+
+        # If we have some unexcludes for this disc and have already
+        # previously excluded some packages, check now if the two
+        # lists intersect and we should re-include some packages
+        if (scalar @unexclude_packages && scalar @excluded_package_list) {
+            foreach my $reinclude_pkg (@excluded_package_list) {
+                my ($arch, $pkgname) = split /:/, $reinclude_pkg;
+                foreach my $entry (@unexclude_packages) {
+                    if (($pkgname =~ /^$entry$/m)) {
+                        print LOG "Re-including $reinclude_pkg due to match on \"\^$entry\$\"\n";
+                        $guess_size = int($hfs_mult * add_packages($cddir, $reinclude_pkg));
+                        $size += $guess_size;
+                        print LOG "CD $disknum: GUESS_TOTAL is $size after adding $reinclude_pkg\n";
+                        $pkgs_this_cd++;
+                        $pkgs_done++;                        
+                    }
+                }
+            }
+        }
+
 		if (defined($overflowpkg)) {
-			print LOG "Starting with the package that failed on the last disc: $overflowpkg\n";
+			print LOG "Adding the package that failed on the last disc: $overflowpkg\n";
 			$guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
 			$size += $guess_size;
 			print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
 			undef $overflowpkg;
-			$pkgs_this_cd = 1;
+			$pkgs_this_cd++;
 			$pkgs_done++;
 		}
-	}
+    }
 
-	$guess_size = int($hfs_mult * add_packages($cddir, $pkg));
-	$size += $guess_size;
-	print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
-	if (($size > $maxdiskblocks) ||
-		(($size > $size_swap_check) &&
-		 ($count_since_last_check > $size_check_period))) {
-	    $count_since_last_check = 0;
-	    $size = `$size_check $cddir`;
-	    chomp $size;
-	    print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
-	}
-	if ($size > $maxdiskblocks) {
-		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-		$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
-		$size=`$size_check $cddir`;
-		chomp $size;
-		print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
+    if (should_exclude_package($pkg)) {
+        push(@excluded_package_list, $pkg);
+    } else {
+        $guess_size = int($hfs_mult * add_packages($cddir, $pkg));
+        $size += $guess_size;
+        print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
+        if (($size > $maxdiskblocks) ||
+            (($size > $size_swap_check) &&
+             ($count_since_last_check > $size_check_period))) {
+            $count_since_last_check = 0;
+            $size = `$size_check $cddir`;
+            chomp $size;
+            print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
+        }
+        if ($size > $maxdiskblocks) {
+            print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
+            $guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
+            $size=`$size_check $cddir`;
+            chomp $size;
+            print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
 
-		finish_disc($cddir, "");
+            finish_disc($cddir, "");
 
-		# Put this package first on the next disc
-		$overflowpkg = $pkg;
+            # Put this package first on the next disc
+            $overflowpkg = $pkg;
 
-		# And reset, to start the next disc
-		$size = 0;
-		$disknum++;
-	} else {
-		$pkgs_this_cd++;
-		$pkgs_done++;
-		$count_since_last_check++;
-	}	
+            # And reset, to start the next disc
+            $size = 0;
+            $disknum++;
+        } else {
+            $pkgs_this_cd++;
+            $pkgs_done++;
+            $count_since_last_check++;
+        }	
+    }
 }
 close(INLIST);
 
@@ -204,6 +234,34 @@ close(LOG);
 #  Local helper functions
 #
 #############################################
+sub should_exclude_package {
+    my $pkg = shift;
+    my ($arch, $pkgname) = split /:/, $pkg;
+    my $should_exclude = 0;
+
+    foreach my $entry (@exclude_packages) {
+	    if (($pkgname =~ /^$entry$/m)) {
+            print LOG "Excluding $pkg due to match on \"\^$entry\$\"\n";
+            $should_exclude++;
+        }
+	}
+
+    if ($should_exclude) {
+        # Double-check that we're not being asked to include *and*
+        # exclude the package at the same time. If so, complain and
+        # bail out
+        foreach my $entry (@unexclude_packages) {
+            if (($pkgname =~ /^$entry$/m)) {
+                print LOG "But ALSO asked to unexclude $pkg due to match on \"\^$entry\$\"\n";
+                print LOG "Make your mind up! Bailing out...\n";
+                die "Incompatible exclude/unexclude entries for $pkg...\n";
+            }
+        }
+        return 1;
+    }
+    return 0;
+}
+
 sub check_base_installable {
 	my $arch = shift;
 	my $cddir = shift;
@@ -354,6 +412,40 @@ sub start_disc {
 
 	$mkisofs_opts = "";
 	$mkisofs_dirs = "";
+
+    undef @exclude_packages;
+    undef @unexclude_packages;
+
+    if (defined ($ENV{"EXCLUDE"})) {
+        my $excl_file = $ENV{"EXCLUDE"};
+        print LOG "Adding excludes from $excl_file\n";
+        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
+        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
+            chomp $excl_pkg;
+            push(@exclude_packages, $excl_pkg);
+        }
+        close (EXCLUDE_FILE);
+    }
+    if (defined ($ENV{"EXCLUDE$disknum"})) {
+        my $excl_file = $ENV{"EXCLUDE$disknum"};
+        print LOG "Adding excludes from $excl_file\n";
+        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
+        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
+            chomp $excl_pkg;
+            push(@exclude_packages, $excl_pkg);
+        }
+        close (EXCLUDE_FILE);
+    }
+    if (defined ($ENV{"UNEXCLUDE$disknum"})) {
+        my $excl_file = $ENV{"UNEXCLUDE$disknum"};
+        print LOG "Adding unexcludes from $excl_file\n";
+        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open unexclude file $excl_file: $!\n";
+        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
+            chomp $excl_pkg;
+            push(@unexclude_packages, $excl_pkg);
+        }
+        close (EXCLUDE_FILE);
+    }
 }
 
 sub finish_disc {

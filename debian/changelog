@@ -209,6 +209,12 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     useful on other platforms too.
   * As a last-minute step before building images, fill in the TOTALNUM
     value in the README files in the root of each image.
+  * Re-implemented exclude/unexclude support in make_disc_trees.pl instead
+    of in list2cds. Slight changes in semantics - the new code supports
+    regular expressions for matching package names (to make it easier to
+    exclude groups of related packages), and EXCLUDE<m> should be used in
+    preference to EXCLUDE for packages that are just being shifted to
+    later in the set by using UNEXCLUDE<n>.
 
  -- Frans Pop <fjp@debian.org>  Fri, 29 Dec 2006 04:11:53 +0100
 

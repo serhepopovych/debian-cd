@@ -90,24 +90,8 @@ $/ = $oldrs;
 # Get the list of excluded packages
 %excluded = %included;
 my $count_excl = 0;
-if (-e $exclude) {
-	open (EXCL, "< $exclude") || die "Can't open $exclude : $!\n";
-	while (defined($_=<EXCL>)) {
-		chomp;
-		s/\#.*$//;
-		next if m/^\s*$/;
-		if (not exists $packages{$_}) {
-			msg(1, "INIT: Package '$_' is in excluded but " .
-			       "doesn't exist. Ignored.\n");
-			next;
-		}
-		$excluded{$_} = 'user choice';
-		$count_excl++;
-	}
-	close EXCL;
-}
 
-# Now exclude more packages because of the non-free and non-us rules
+# Now exclude packages because of the non-free and non-us rules
 if (not $nonfree) {
 	foreach (grep { $packages{$_}{"Section"} =~ /non-free/ }
 	              (keys %packages)) {
