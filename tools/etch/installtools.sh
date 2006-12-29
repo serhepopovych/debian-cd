@@ -36,7 +36,7 @@ if [ "$OMIT_MANUAL" != 1 ]; then
                 if [ -d $MANTDIR/usr/share/doc/installation-guide-$ARCH/ ]; then
                     cd $MANTDIR/usr/share/doc/installation-guide-$ARCH
                     rm -f changelog* copyright
-                    gunzip *.gz || true
+                    find . -name '*.gz' | xargs gunzip || true
 
                     mkdir -p $INSTALLDIR
                     if ! cp -a * $INSTALLDIR; then
