@@ -208,6 +208,7 @@ module-init-tools
 linux-image-2.6-powerpc
 linux-image-2.6-powerpc-smp
 linux-image-2.6-powerpc64
+linux-image-2.6-prep
 EOF
 
 # Only include powerpc kernels that d-i base-installer installs.
