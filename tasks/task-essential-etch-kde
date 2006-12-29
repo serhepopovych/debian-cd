@@ -15,6 +15,15 @@ kdeutils
 kdepim
 kdm
 xorg
+desktop-base
+menu
+firefox
+iceweasel
+discover1
+xresprobe
+alsa-utils
+alsa-base
+eject
 language-env
 language-env
 language-env

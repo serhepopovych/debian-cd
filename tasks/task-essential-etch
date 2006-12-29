@@ -7,6 +7,15 @@
  */
 gnome-desktop-environment
 xorg
+desktop-base
+menu
+firefox
+iceweasel
+discover1
+xresprobe
+alsa-utils
+alsa-base
+eject
 apache2-mpm-prefork
 exim4
 cupsys
