@@ -206,6 +206,8 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Gunzip the installation manual in .txt and .pdf format, so it's
     useful on other platforms too.
+  * As a last-minute step before building images, fill in the TOTALNUM
+    value in the README files in the root of each image.
 
  -- Frans Pop <fjp@debian.org>  Fri, 29 Dec 2006 02:14:05 +0100
 
