@@ -175,30 +175,32 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Update documentation to at least vaguely match how things work.
   * Added support for hook scripts in a few places around the CD
- 	creation process, to help people customise their CDs. Quite a
-	lot of refactoring needed in make_disc_trees.pl needed to do that.
+    creation process, to help people customise their CDs. Quite a
+    lot of refactoring needed in make_disc_trees.pl needed to do that.
   * Removed more cruft:
     + old defs in CONF.sh
     + old defs and rules in the Makefile
     + tools/add_secured
     + don't depend on jigdo-file any more
     + don't depend on apt-utils any more - we don't use apt-ftparchive now
-	+ don't depend on debootstrap any more - we grab and use the
-      latest version direct from the archive instead these days
-	+ don't suggest binutils-multiarch, we haven't needed that for mipsel CDs since woody!
+      + don't depend on debootstrap any more - we grab and use the
+        latest version direct from the archive instead these days
+      + don't suggest binutils-multiarch, we haven't needed that for mipsel
+        CDs since woody!
     + remove the SKIPMIRRORCHECK variable, now completely obsolete
-    + change the mkisofs dep from (mkisofs | mkhybrid) to (mkisofs | genisoimage)
-    + remove Recommends on debianutils 
-	+ remove Suggests on palo - we grab and use the correct version
-      direct from the archive instead these days
-	+ remove Suggests on delo - we grab and use the correct version
-      direct from the archive instead these days
+    + change the mkisofs dep from (mkisofs | mkhybrid) to
+      (mkisofs | genisoimage)
+    + remove Recommends on debianutils
+      + remove Suggests on palo - we grab and use the correct version
+        direct from the archive instead these days
+      + remove Suggests on delo - we grab and use the correct version
+        direct from the archive instead these days
   * Other cleanups:
-	+ Make build_all.sh work again, adapting build.sh
+    + Make build_all.sh work again, adapting build.sh
     + Promote Suggests: on netpbm, syslinux to Recommends:
     + Make make_disc_trees.pl and start_new_disc fail better on errors
 
- -- Frans Pop <fjp@debian.org>  Mon, 18 Dec 2006 16:20:22 +0100
+ -- Frans Pop <fjp@debian.org>  Fri, 29 Dec 2006 02:11:16 +0100
 
 debian-cd (2.2.25) unstable; urgency=low
 
