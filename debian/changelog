@@ -215,7 +215,9 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     exclude groups of related packages), and EXCLUDE<m> should be used in
     preference to EXCLUDE for packages that are just being shifted to
     later in the set by using UNEXCLUDE<n>.
-
+  + Slightly change the output naming of the disc images to make it safer
+    to produce more then one type of multi-arch disc
+	
   [ Joey Hess ]
   * Added an update-tasks target to the Makefile and moved the code out of
     file header comments to there. Fix some bugs in passing.

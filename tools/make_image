@@ -64,11 +64,8 @@ do
 	relname=`echo $DEBVERSION | sed -e 's/[. ]//g'`
 	DISKINFO=`cat $DIR/$n.diskinfo`
 
-	if [ $NUM_ARCHES = 1 ] ; then
-		OUTFILE="${CDNAME:-debian}-$relname-$ARCHES-$DISKTYPE-$n"
-	else
-		OUTFILE="${CDNAME:-debian}-$relname-MULTI-$DISKTYPE-$n"
-	fi
+	ARCHLIST=`echo "$ARCHES" | tr ' ' '-'`
+	OUTFILE="${CDNAME:-debian}-$relname-$ARCHLIST-$DISKTYPE-$n"
 
 	# Clean up any old files
 	rm -f $OUT/$OUTFILE.iso $OUT/$OUTFILE.jigdo $OUT/$OUTFILE.template
