@@ -241,13 +241,13 @@ fi
 # Create an empty dirs file; will be appended to later if needed
 > $BDIR/$DISKNUM.mkisofs_dirs
 
+echo "  Adding common docs on CD#$DISKNUM"
+add-bin-doc $DISKNUM "$ARCHES"
+
 # Common stuff for all disks
 if [ "$SOURCEONLY"x = "yes"x ] ; then
 	echo -n "-J " >> $BDIR/$DISKNUM.mkisofs_opts
 else
-	echo "  Adding common docs on binary CD#$DISKNUM"
-	add-bin-doc $DISKNUM "$ARCHES"
-
 	# Installtools
 	mkdir $CDDIR/install
 	if [ -x "$BASEDIR/tools/$CODENAME/installtools.sh" ] ; then

@@ -217,7 +217,9 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     later in the set by using UNEXCLUDE<n>.
   + Slightly change the output naming of the disc images to make it safer
     to produce more then one type of multi-arch disc
-	
+  * In start_new_disc, make sure that we call the (badly-named) add-bin-doc
+    so that we get README.html and README.txt created even for source discs.
+
   [ Joey Hess ]
   * Added an update-tasks target to the Makefile and moved the code out of
     file header comments to there. Fix some bugs in passing.
