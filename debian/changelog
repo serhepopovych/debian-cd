@@ -219,6 +219,8 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
     to produce more then one type of multi-arch disc
   * In start_new_disc, make sure that we call the (badly-named) add-bin-doc
     so that we get README.html and README.txt created even for source discs.
+  * Cleanup of Etch version of REAMDE.html.in - use "disc" or "CD/DVD" rather
+    than "CD" in many places.
 
   [ Joey Hess ]
   * Added an update-tasks target to the Makefile and moved the code out of

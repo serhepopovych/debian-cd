@@ -70,10 +70,7 @@
  <table align="center" border="0" cellpadding="2" cellspacing="0">
  <tr><td bgcolor="#000084">
  <div align="center"><font color="#FFFFFF" face="helvetica,arial"><B>&nbsp;&nbsp;
-#if 0
- Debian GNU/Linux 2.2 "Potato" - Official i386 Binary-1 CD
-#endif
- DISKNAME CD
+ DISKNAME
  &nbsp;&nbsp;</B></font></div>
  </td></tr>
  </table>
@@ -145,7 +142,7 @@ CONTENTS:
 </LI><LI>
 #endif
 
-<A href="#thiscd">About This CD</A>
+<A href="#thisdisc">About This Disc</A>
 <P>
 
 #if OUTPUTtext
@@ -169,7 +166,7 @@ CONTENTS:
 #endif
 
 #if TYPEbinary
- <A href="#apt">Using CDs with apt</A>
+ <A href="#apt">Using CDs/DVDs with apt</A>
  <P>
 
 #if OUTPUTtext
@@ -178,7 +175,7 @@ CONTENTS:
 #endif
 
 #ifndef UNOFFEXTRAS
-<A href="#cdmanuf">CD Manufacturers</A>
+<A href="#cdmanuf">CD/DVD Manufacturers</A>
 <P>
 
 #if OUTPUTtext
@@ -192,7 +189,7 @@ CONTENTS:
 
 #if OUTPUThtml
 &nbsp;<P>
-<A href=".">Browse this CD-ROM</A></P>
+<A href=".">Browse This Disc</A></P>
 <P>
 <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>
 </P>
@@ -232,7 +229,7 @@ Intro
 </H2>
 </a>
 <p>
-This is one of the CD-ROMs of the
+This is one disc in a set containing the the
 <a href="http://www.debian.org/">Debian GNU/Linux</a>
 distribution. Debian is a
 very extensive collection of software. But it is more. It is a complete
@@ -277,12 +274,12 @@ Read more at <P>
 #endif
 
 #if OUTPUTtext
-<P>&nbsp;<P><H2><A name="thiscd">
+<P>&nbsp;<P><H2><A name="thisdisc">
 #endif
 #if OUTPUThtml
-<P><HR><P><H2><A name="thiscd">
+<P><HR><P><H2><A name="thisdisc">
 #endif
-About This CD
+About This Disc
 #if OUTPUTtext
 <br>
 =============
@@ -290,20 +287,20 @@ About This CD
 </H2>
 </a>
 <p>
-This CD-ROM is labeled
+This disc is labeled
 <P>
 <tt>&nbsp;
   DISKNAME
 </tt>
 <P>
 #ifndef UNOFFEXTRAS
-which means that this CD is number DISKNUM of TOTALNUM CDs containing
+which means that this disc is number DISKNUM of a set of TOTALNUM discs.
 #if TYPEbinary
-programs ("binaries") for `ARCH' computers.
+It contains programs ("binaries") for `ARCH' computers.
 <P>
-The programs on the Binary CDs are ordered by popularity. The Binary-1 CD
+The programs on the Binary discs are ordered by popularity. The Binary-1 disc
 contains the most popular programs and the installation tools; it is possible
-to install and run Debian with only the Binary-1 CD. The other CDs, up to
+to install and run Debian with only the Binary-1 disc. The other discs, up to
 Binary-TOTALNUM, contain mostly special-interest programs.
 <p>
 #if OMIT_RELEASE_NOTES
@@ -312,24 +309,19 @@ href="http://www.debian.org/releases/etch/releasenotes">Debian web
 site</A>.
 #else
 #if DISKNUM == 1
-The Release Notes for Debian GNU/Linux "etch" are included on this CD
+The Release Notes for Debian GNU/Linux "etch" are included on this disc
 in <A href=%%""doc/release-notes/%%"">/doc/release-notes/</a>, in
 several languages. Additional translations and updated versions for
 the Release Notes may be available from the <A
 href="http://www.debian.org/releases/etch/releasenotes">Debian web
 site</A>.
 else
-See the first CD in this set for the "etch" Release Notes.
+See the first disc in this set for the "etch" Release Notes.
 #endif
 #endif
 #endif
 #if TYPEsource
-the source code of programs in the Debian OS.
-<P>
-The source packages on the Source CDs are ordered by popularity, like
-the programs on the Binary CDs. This means that the source code of the
-programs on the Binary-DISKNUM CD can most likely be found on this CD
-(though there may be some variation due to size issues).
+This set includes the source code of programs in the Debian OS.
 #endif
 #else
 #include <unoffextrascd.html.in>
@@ -357,16 +349,16 @@ Installing
  <i>alongside</i> your current OS, or as the <i>only</i> OS on your computer.
 #if OMIT_MANUAL
  <P>
- An <b>Installation Guide</b> for this CD is available from
+ An <b>Installation Guide</b> for this disc is available from
  <A href="http://www.debian.org/releases/etch/installmanual">the Debian web site</a>.
 #else
  <P>
- An <b>Installation Guide</b> is included on this CD at
+ An <b>Installation Guide</b> is included on this disc at
  <P>
  <tt>&nbsp;
  <A href="doc/manual/en/index.html">doc/manual/en/index.html</a> &nbsp;&nbsp;&nbsp; (English version)</tt>
  <P>
- Several translations of the Installation Guide are included on this CD in
+ Several translations of the Installation Guide are included on this disc in
  the <tt><A href="doc">doc/</a></tt> directory, along with various other documents.
  <br>
  Note: additional translations, other formats (like PDF and TXT) and updated 
@@ -375,7 +367,7 @@ Installing
 #endif
  <P>
  Programs and other files that are needed for the installation can be found on
- this CD under
+ this disc under
  <P>
  <tt>&nbsp;
  <A href=%%""tools/%%"">/tools/</a>
@@ -390,8 +382,8 @@ Installing
   For the impatient ones:
 #endif
 
-#if ARCHi386 || ARCHalpha || ARCHsparc
-  you can start the installation program easily by booting off this CD-ROM.
+#if ARCHi386 || ARCHamd64 || ARCHalpha || ARCHsparc
+  you can start the installation program easily by booting off this disc.
   Note that not all (esp. older) systems support this. 
   <P>
 #endif
@@ -414,8 +406,8 @@ Installing
 
 #else
  The installation tools of the Debian Operating System are located on the
- Binary-1 CD.
- See the README on that CD for more info.
+ Binary-1 disc.
+ See the README on that disc for more info.
 #endif
 
 #ifndef UNOFFEXTRAS
@@ -437,13 +429,13 @@ Last-Minute Notes
 <LI>
 
 #if OFFICIAL_VAL == 0
-You should keep in mind that this is an unofficial CD of the Debian
+You should keep in mind that this is an unofficial disc of the Debian
 system. This means that all sorts of bugs may be present anywhere in
 the system. Please report any bugs you find to the person that gave
-you this CD, not Debian.
+you this disc, not Debian.
 #endif
 #if OFFICIAL_VAL == 1
-You should keep in mind that this is a beta CD of the current
+You should keep in mind that this is a beta disc of the current
 development version of the Debian system. This means that all sorts of
 bugs may be present anywhere in the system.
 #endif
@@ -474,7 +466,7 @@ HREF="http://bugs.debian.org/">bugs.debian.org</A>.
  </H2>
  </a>
  <p>
- After installing or upgrading, Debian's packaging system can use CD-ROMs,
+ After installing or upgrading, Debian's packaging system can use CDs, DVDs,
  local collections, or networked servers (FTP, HTTP) to automatically
  install software from (<tt>.deb</tt> <i>packages</i>). This is done
  preferably with the `apt' and `aptitude' programs. 
@@ -505,7 +497,7 @@ HREF="http://bugs.debian.org/">bugs.debian.org</A>.
 #if OUTPUThtml
 <P><HR><P><H2><A name="cdmanuf">
 #endif
-CD Manufacturers
+CD/DVD Manufacturers
 #if OUTPUTtext
 <br>
 ================
@@ -513,7 +505,7 @@ CD Manufacturers
 </H2>
 </a>
 <p>
-You are completely free to manufacture and re-distribute CD-ROMs of the
+You are completely free to manufacture and re-distribute CDs/DVDs of the
 Debian GNU/Linux Operating System, like this one. There is no charge from
 us (but of course donations are always welcome). 
 
@@ -542,7 +534,7 @@ More Information
 <p>
 #if DISKNUM1 && TYPEbinary
 
-There is much more information present on this CD. Besides the already
+There is much more information present on this disc. Besides the already
 mentioned installation and upgrading procedures, this is the most
 interesting:  <P>
 
@@ -596,9 +588,9 @@ interesting:  <P>
 
 #else
 
-The Binary-1 CD contains much more information about various aspects
+The Binary-1 disc contains much more information about various aspects
 of the Debian Operating System and the Debian organization.
- See the README on that CD for more info.
+ See the README on that disc for more info.
 
 #endif
 
