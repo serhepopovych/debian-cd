@@ -378,10 +378,12 @@ imagesums:
 
 mirrorcheck: ok
 	$(Q)$(grab_md5) $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check
-	$(Q)if [ -e $(BASEDIR)/data/$(CODENAME)/$(ARCH)/extra-sources ]; then \
-		echo "Extra dedicated source added; need to grab source MD5 info too"; \
-		$(grab_md5) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
-	fi
+	$(Q)for ARCH in $(ARCHES); do \
+		if [ -e $(BASEDIR)/data/$(CODENAME)/$$ARCH/extra-sources ]; then \
+			echo "Extra dedicated source added; need to grab source MD5 info too"; \
+			$(grab_md5) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
+		fi; \
+	done
 
 update-popcon:
 	$(update_popcon) tasks/popularity-contest-$(CODENAME)
