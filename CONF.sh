@@ -16,7 +16,6 @@ unset MKISOFS           || true
 unset MKISOFS_OPTS      || true
 unset ISOLINUX          || true
 unset EXCLUDE           || true
-unset NOSOURCE          || true
 unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
@@ -35,7 +34,7 @@ unset BASE_EXCLUDE      || true
 unset INSTALLER_CD      || true
 unset MAXCDS            || true
 unset SPLASHPNG         || true
-unset OMIT_MANUAL	    || true
+unset OMIT_MANUAL	 || true
 unset OMIT_RELEASE_NOTES || true
 
 # The debian-cd dir
