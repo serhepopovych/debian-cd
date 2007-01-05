@@ -247,7 +247,7 @@ correctstatus: status apt-update
 apt-update: status
 	$(Q)if [ "$(ARCHES)" != "source" ] ; then \
 		for ARCH in $(ARCHES); do \
-			echo "Apt-get is updating his files ..."; \
+			echo "Apt-get is updating its files ..."; \
 			ARCH=$$ARCH $(apt) update; \
 		done; \
     fi
