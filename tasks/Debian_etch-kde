@@ -15,8 +15,8 @@
 #include <task-essential-etch-kde>
 
 /* Other interesting packages */
-#include <interesting-fromcd23>
 #include <task-full-etch-kde>
+#include <interesting-fromcd23>
 
 /* The rest ordered by popularity */
 #include <popularity-contest-etch>

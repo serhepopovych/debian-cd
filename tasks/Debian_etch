@@ -11,8 +11,8 @@
 #include <task-essential-etch>
 
 /* Other interesting packages */
-#include <interesting-fromcd23>
 #include <task-full-etch>
+#include <interesting-fromcd23>
 
 /* The rest ordered by popularity */
 #include <popularity-contest-etch>

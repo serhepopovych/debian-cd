@@ -15,8 +15,8 @@
 #include <task-essential-etch-xfce>
 
 /* Other interesting packages */
-#include <interesting-fromcd23>
 #include <task-full-etch-xfce>
+#include <interesting-fromcd23>
 
 /* The rest ordered by popularity */
 #include <popularity-contest-etch>
