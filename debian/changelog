@@ -1,4 +1,4 @@
-debian-cd (3.0.0) UNRELEASED; urgency=low
+debian-cd (3.0.0) unstable; urgency=medium
 
   * Support now added for multi-arch CDs/DVDs, including mixed
     binary/source discs. Multi-arch discs should be bootable on those
@@ -236,7 +236,11 @@ debian-cd (3.0.0) UNRELEASED; urgency=low
   * Moved interesting-fromcd23 down to come after software from tasks in
     priority.
 
- -- Joey Hess <joeyh@debian.org>  Fri,  5 Jan 2007 21:06:06 -0500
+  [ Steve McIntyre ]
+  * Final (!?) upload before etch - time to actually close lots of these
+    bugs, and get the new code into a package.
+
+ -- Steve McIntyre <joeyh@debian.org>  Sun, 14 Jan 2007 15:41:53 +0000
 
 debian-cd (2.2.25) unstable; urgency=low
 
