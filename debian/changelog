@@ -112,7 +112,7 @@ debian-cd (3.0.0) unstable; urgency=medium
     and it will affect both the output name later (so it's now possible to
     distinguish between CDs and DVDs). Defaults to CD if not otherwise
     set. DISKTYPE will be used more in the future for sizing too, but that
-    merge can wait a while longer yet. Closes: #361422
+    merge can wait a while longer yet. Closes: #364122
   * Use DISKTYPE and COMPLETE values to create the file .disk/cd_type for
     the installer to use.
   * Add bpalogin near the top of the task list, as requested a long time
