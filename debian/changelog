@@ -1,3 +1,9 @@
+debian-cd (3.0.1) UNRELEASED; urgency=low
+
+  * Remove SRCEXCLUDE which is no longer supported.
+
+ -- Frans Pop <fjp@debian.org>  Fri, 19 Jan 2007 00:31:37 +0100
+
 debian-cd (3.0.0) unstable; urgency=medium
 
   * Support now added for multi-arch CDs/DVDs, including mixed

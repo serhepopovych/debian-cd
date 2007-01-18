@@ -16,7 +16,6 @@ unset MKISOFS           || true
 unset MKISOFS_OPTS      || true
 unset ISOLINUX          || true
 unset EXCLUDE           || true
-unset SRCEXCLUDE        || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
 unset DOJIGDO           || true
@@ -170,9 +169,6 @@ export DISKTYPE=CD
 #export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
-
-# We also exclude some source packages
-#export SRCEXCLUDE="$BASEDIR"/tasks/exclude-src-$CODENAME
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
