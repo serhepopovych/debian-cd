@@ -223,7 +223,7 @@ debian-cd (3.0.0) unstable; urgency=medium
     than "CD" in many places.
   * Fix whitespace issue in boot-amd64. Closes: #406320. Thanks to Matthew
     King for the patch.
-	
+  
   [ Joey Hess ]
   * Added an update-tasks target to the Makefile and moved the code out of
     file header comments to there. Fix some bugs in passing.
