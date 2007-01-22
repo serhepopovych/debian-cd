@@ -283,7 +283,7 @@ sub remove_md5_entry {
 sub get_file_blocks {
     my $realfile = shift;
     my $st;
-    $st = stat($realfile);
+    $st = stat($realfile) or die "unable to stat file $realfile: $!\n";
     return size_in_blocks($st->size);
 }
 
