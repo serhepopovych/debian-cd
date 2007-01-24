@@ -267,7 +267,8 @@ done
 #export BASE_EXCLUDE="$BASEDIR"/data/$CODENAME/base_exclude
 
 # Only put the installer onto the cd (set NORECOMMENDS,... as well,
-# and also make sure you set TASK appropriately)
+# and if you're not using build.sh then also make sure you set TASK
+# appropriately here)
 # INSTALLER_CD=0: nothing special (default)
 # INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer-$CODENAME)
 # INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
