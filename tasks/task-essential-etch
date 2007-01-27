@@ -7,9 +7,10 @@
  */
 gnome-desktop-environment
 xorg
+xserver-xorg-video-all
+xserver-xorg-input-all
 desktop-base
 menu
-firefox
 iceweasel
 discover1
 xresprobe
@@ -21,7 +22,7 @@ exim4
 cupsys
 cupsys-client
 cupsys-bsd
-postgresql
+postgresql-8.1
 bind9
 nfs-kernel-server
 samba

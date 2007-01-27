@@ -15,9 +15,10 @@ kdeutils
 kdepim
 kdm
 xorg
+xserver-xorg-video-all
+xserver-xorg-input-all
 desktop-base
 menu
-firefox
 iceweasel
 discover1
 xresprobe
