@@ -9,8 +9,10 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Updated tasks for tasksel 2.66.
+  * Use the 64 bit autodetection feature of syslinux 3.31-2, if available,
+    to default to the 64 bit target in multiarch isos.
 
- -- Frans Pop <fjp@debian.org>  Fri, 19 Jan 2007 00:31:37 +0100
+ -- Joey Hess <joeyh@debian.org>  Sun,  4 Feb 2007 18:38:38 -0500
 
 debian-cd (3.0.0) unstable; urgency=medium
 
