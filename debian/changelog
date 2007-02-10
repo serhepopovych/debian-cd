@@ -11,8 +11,9 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
   * Updated tasks for tasksel 2.66.
   * Use the 64 bit autodetection feature of syslinux 3.31-2, if available,
     to default to the 64 bit target in multiarch isos.
+  * Updated isolinux.bin to the version from syslinux 3.31-2.
 
- -- Joey Hess <joeyh@debian.org>  Sun,  4 Feb 2007 18:38:38 -0500
+ -- Joey Hess <joeyh@debian.org>  Fri,  9 Feb 2007 23:44:25 -0500
 
 debian-cd (3.0.0) unstable; urgency=medium
 
