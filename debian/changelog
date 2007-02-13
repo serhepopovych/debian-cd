@@ -12,6 +12,7 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
   * Use the 64 bit autodetection feature of syslinux 3.31-2, if available,
     to default to the 64 bit target in multiarch isos.
   * Updated isolinux.bin to the version from syslinux 3.31-2.
+  * Temporarily disable use of 64 bit detection due to syslinx's bug #410729.
 
  -- Joey Hess <joeyh@debian.org>  Fri,  9 Feb 2007 23:44:25 -0500
 
