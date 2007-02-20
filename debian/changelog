@@ -14,6 +14,14 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
   * Updated isolinux.bin to the version from syslinux 3.31-2.
   * Temporarily disable use of 64 bit detection due to syslinx's bug #410729.
 
+  [ Steve McIntyre ]
+  * Updates to update-cd:
+    + Updates for sarge r5
+    + Add support for update DVDs
+    + Change parameters used - argument should now be cd or dvd rather than
+    + arches to run
+	
+
  -- Joey Hess <joeyh@debian.org>  Fri,  9 Feb 2007 23:44:25 -0500
 
 debian-cd (3.0.0) unstable; urgency=medium
