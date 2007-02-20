@@ -14,8 +14,8 @@ set -e
 # Configuration goes here.
 
 # Where is your mirror?
-MIRROR_NORM=/mirror/debian
-MIRROR_AMD64=/mirror/debian-amd64
+MIRROR_NORM=/org/cdbuilder.debian.org/src/ftp/debian
+MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
 
 # If you have a non-US mirror, where is it? Leave blank if you don't have one.
 # NONUS=${NONUS:-/mirror/debian-non-US}
@@ -24,7 +24,7 @@ MIRROR_AMD64=/mirror/debian-amd64
 NONFREE=0
 
 # What release version is this?
-VER=3.1r4
+VER=3.1r5
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -32,29 +32,52 @@ OFFICIAL=Official
 
 # Path to use with mkisofs/mkhybrid
 #MKISOFS=${MKISOFS:-"mkhybrid"}
-MKISOFS=mkisofs
+MKISOFS=$PWD/../mkisofs/usr/bin/mkisofs
 
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/mirror/sarge-update
+TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/sarge-update/cd-work
 
 # Building woody cd set ...
 CODENAME=sarge
 
 # Path where the images will be written
-OUT=/mirror/sarge-update
+OUT=/org/cdbuilder.debian.org/src/deb-cd/tmp/sarge-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
 
+# Type of disc image, cd or dvd (lower case)
+if [ "$1"x = ""x ] ; then
+    TYPE=cd
+else
+    TYPE=$1
+fi
+case $TYPE in
+    cd|CD)
+    TYPE=cd
+    TYPEUP=CD;;
+    dvd|DVD)
+    TYPE=dvd
+    TYPEUP=DVD;;
+    *)
+    echo "Specify a disk type..."
+    exit 1;;
+esac
+
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/mirror/lists/$CODENAME/r0-r4.diff.full #~/r3.diff
+DIFF=/home/deb-cd/r0-r5.diff.full
 
-CDSIZE=620 # megabytes, leaving space for metadata
+if [ "$TYPE" = "cd" ] ; then
+    CDSIZE=610 # megabytes, leaving space for metadata
+else
+    CDSIZE=4300 # megabytes, leaving space for metadata
+fi
+
 REL=Debian"$VER"
 CLOG=dists/$CODENAME/ChangeLog
 NUCLOG=dists/$CODENAME/non-US/ChangeLog
@@ -66,14 +89,17 @@ VERBOSE=2
 GRAB_MD5=$BASEDIR/tools/grab_md5
 export VERBOSE BASEDIR SECTS
 
-
 FIRSTVER=`echo $VER | sed 's?r.*$?r0?g'`
 VERSPACE=`echo $VER | sed 's?r? r?g'`
 CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
 
 export FIRSTVER VERSPACE CAPCODE
 
-ARCHLIST="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
+if [ "$ARCHLIST"x = ""x ] ; then
+    ARCHLIST="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
+else
+    ARCHLIST=$@
+fi
 
 export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
 
@@ -111,10 +137,9 @@ create_control_files () {
                     mkdir -p $CDDIR/dists/$CODENAME/$SECT/binary-$ARCH
                     mkdir -p $CDDIR/dists/$CODENAME/non-US/$SECT/binary-$ARCH
                 done
-                ARCH=$ARCH $scanpackages scan $CDDIR > /dev/null 2>&1
-                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR > /dev/null 2>&1
-                rm -f $CDDIR/*.Packages* #>/dev/null 2>&1
-				find $CDDIR/ -name Packages | xargs rm -f
+                ARCH=$ARCH $scanpackages scan $CDDIR >/dev/null 2>&1
+                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR >/dev/null 2>&1
+                rm -f $CDDIR/*.Packages* >/dev/null 2>&1
                 ;;
         esac
     done
@@ -157,25 +182,31 @@ make_cd () {
 	create_control_files CD$CDNUM $THISARCH
 	echo "  Creating image for CD$CDNUM ($SRCFILES source files, $ARCHFILES $ARCH debs, $ALLFILES all debs)"
 	echo -n "    "
+	if [ ! -d $OUT/$THISARCH/iso-$TYPE ] ; then
+	    mkdir -p $OUT/$THISARCH/iso-$TYPE
+	fi
 	if [ $JTE = 1 ] ; then
-		${MKISOFS} -J -r -V "Debian $VER update CD" -o \
-			/dev/null \
-			-jigdo-jigdo $OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
-			-jigdo-template $OUT/debian-update-$VER-$THISARCH-$THISNUM.template \
+	    if [ ! -d $OUT/$THISARCH/jigdo-$TYPE ] ; then
+		mkdir -p $OUT/$THISARCH/jigdo-$TYPE
+	    fi
+		${MKISOFS} -J -r -V "Debian $VER update" -o \
+			$OUT/$THISARCH/iso-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.iso \
+			-jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
+			-jigdo-template $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.template \
 			-jigdo-map Debian=$MIRROR/ \
 			-jigdo-map Non-US=$NONUS/ \
 			-jigdo-force-md5 /pool/ \
 			-md5-list $UPD/md5-check \
 			$UPD/CD$CDNUM 2>&1 | grep "extents written"
 		$BASEDIR/tools/jigdo_cleanup \
-			$OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
+			$OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
 			debian-update-$VER-$THISARCH-$THISNUM.iso \
 			$OUT debian-update-$VER-$THISARCH-$THISNUM.template \
-			"Debian GNU/Linux $VERSPACE - $OFFICIAL $THISARCH $FIRSTVER->$VER update CD #$THISNUM"
-		echo $SNAPSHOT >> $OUT/debian-update-$VER-$THISARCH-$THISNUM.jigdo
+			"Debian GNU/Linux $VERSPACE - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
+		echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo
 	else
 		${MKISOFS} -J -r -V "Debian $VER update CD" -o \
-		$OUT/$CODENAME-update-$THISARCH-$THISNUM.raw \
+		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$THISNUM.raw \
 		$UPD/CD$CDNUM 2>&1 | grep "extents written"
 	fi
 }
@@ -216,9 +247,9 @@ do
 	fi
 
 	rm -f $UPD/md5-check
-	$GRAB_MD5 $MIRROR $THISARCH $CODENAME $CODENAME $UPD/md5-check
+	$GRAB_MD5 $MIRROR $THISARCH $CODENAME $UPD/md5-check
 	if [ "$NONUS"x != ""x ] ; then
-		$GRAB_MD5 $NONUS $THISARCH $CODENAME $CODENAME $UPD/md5-check
+		$GRAB_MD5 $NONUS $THISARCH $CODENAME $UPD/md5-check
 	fi
 
 	for file in `cat $UPD/list`
