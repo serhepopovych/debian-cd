@@ -20,9 +20,13 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
     + Add support for update DVDs
     + Change parameters used - argument should now be cd or dvd rather than
     + arches to run
-	
 
- -- Joey Hess <joeyh@debian.org>  Fri,  9 Feb 2007 23:44:25 -0500
+  [ Raphael Hertzog ]
+  * Don't rely on PATH to find make_disc_trees.pl, start_new_disc, add_files
+    and set_mkisofs_opts.
+  * Make sure "make mirrorcheck" has been called before "make images".
+
+ -- Raphael Hertzog <hertzog@debian.org>  Wed, 21 Feb 2007 12:30:27 +0100
 
 debian-cd (3.0.0) unstable; urgency=medium
 

@@ -354,14 +354,14 @@ image-trees: ok genlist
 	else \
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi
-	$(Q)make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
+	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
 # DOJIGDO actions   (for both binaries and source)
 #    0    isofile
 #    1    isofile + jigdo, cleanup_jigdo
 #    2    jigdo, cleanup_jigdo
 #
-images: ok $(OUT)
+images: ok $(OUT) $(BDIR)/md5-check
 	$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
@@ -375,6 +375,8 @@ imagesums:
 	$(Q)$(BASEDIR)/tools/imagesums $(OUT)
 
 ## MISC TARGETS ##
+
+$(BDIR)/md5-check: mirrorcheck	
 
 mirrorcheck: ok
 	$(Q)$(grab_md5) $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check
