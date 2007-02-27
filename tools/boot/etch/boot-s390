@@ -31,7 +31,7 @@ fi
 
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="https://lophos.multibuild.org/d-i/images/daily"
-      if [ -n "$DI_DIR" ];then
+      if [ -n "$DI_DIR" -a -e "$DI_DIR/~${DI_WWW_HOME#*~}" ] ; then
             DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
 	    DI_WWW_HOME=""
       fi

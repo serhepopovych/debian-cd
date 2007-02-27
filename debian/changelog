@@ -26,6 +26,13 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
     and set_mkisofs_opts.
   * Make sure "make mirrorcheck" has been called before "make images".
 
+  [ Steve McIntyre ]
+  * Cope with rolling back more than one package in case we go well
+    over the disc size
+  * Use a multiplier of 1.2 for HFS space - overkill, but it fixes
+    the multi-arch DVD overflowing. Also log if we're doing HFS.
+  * Tweak where we look for s390 boot files to make the weeklies work again.
+
  -- Raphael Hertzog <hertzog@debian.org>  Wed, 21 Feb 2007 12:30:27 +0100
 
 debian-cd (3.0.0) unstable; urgency=medium

@@ -347,13 +347,14 @@ sub add_packages {
             $total_blocks -= remove_md5_entry($dir, $arch, $_);
 
             foreach my $file (@files) {
+		my $missing = 0;
                 # Count how big the file is we're removing, for checking if the disc is full
                 $realfile = real_file ("$source/$file");
                 $total_blocks -= get_file_blocks($realfile);
 
                 # Remove the link
-                unlink ("$dir/$file") or die "Failed to remove $dir/$file\n";
-                msg_ap(0, "  Rollback: removing $dir/$file\n");
+                unlink ("$dir/$file") || msg_ap(0, "Couldn't delete file $dir/$file\n");
+                msg_ap(0, "  Rollback: removed $dir/$file\n");
             }
         } else {
             $total_blocks += add_Packages_entry($dir, $arch, $_);

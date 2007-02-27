@@ -12,10 +12,10 @@ use File::Find;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds);
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
-my (@arches, @arches_nosrc, $overflowpkg);
+my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
 my (@exclude_packages, @unexclude_packages, @excluded_package_list);
 
-undef $overflowpkg;
+undef @pkgs_added;
 undef @exclude_packages;
 undef @unexclude_packages;
 undef @excluded_package_list;
@@ -100,8 +100,9 @@ $cddir = "$bdir/CD$disknum";
 get_disc_size();
 # Space calculation for extra HFS crap
 if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
-    $hfs_mult = 1.1;
+    $hfs_mult = 1.2;
     $hfs_extra = int($maxdiskblocks * 8 / $blocksize);
+    print LOG "arches require HFS hybrid, multiplying sizes by $hfs_mult and marking $hfs_extra blocks for HFS use\n";
 }
 
 print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskblocks 2K-blocks maximum per image\n";
@@ -169,15 +170,14 @@ while (defined (my $pkg = <INLIST>)) {
                 }
             }
         }
-
-		if (defined($overflowpkg)) {
-			print LOG "Adding the package that failed on the last disc: $overflowpkg\n";
-			$guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
-			$size += $guess_size;
-			print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
-			undef $overflowpkg;
-			$pkgs_this_cd++;
-			$pkgs_done++;
+		while (scalar @overflowlist) {
+		    my $overflowpkg = pop @overflowlist;
+		    print LOG "Adding a package that failed on the last disc: $overflowpkg\n";
+		    $guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
+		    $size += $guess_size;
+		    print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
+		    $pkgs_this_cd++;
+		    $pkgs_done++;
 		}
     }
 
@@ -186,6 +186,7 @@ while (defined (my $pkg = <INLIST>)) {
     } else {
         $guess_size = int($hfs_mult * add_packages($cddir, $pkg));
         $size += $guess_size;
+	push (@pkgs_added, $pkg);
         print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
         if (($size > $maxdiskblocks) ||
             (($size > $size_swap_check) &&
@@ -196,20 +197,22 @@ while (defined (my $pkg = <INLIST>)) {
             print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
         }
         if ($size > $maxdiskblocks) {
-            print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-            $guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
-            $size=`$size_check $cddir`;
-            chomp $size;
-            print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
-
+	    while ($size > $maxdiskblocks) {
+		$pkg = pop(@pkgs_added);
+		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
+		$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
+		$size=`$size_check $cddir`;
+		chomp $size;
+		print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
+		# Put this package first on the next disc
+		push (@overflowlist, $pkg);
+	    }
             finish_disc($cddir, "");
-
-            # Put this package first on the next disc
-            $overflowpkg = $pkg;
 
             # And reset, to start the next disc
             $size = 0;
             $disknum++;
+	    undef(@pkgs_added);
         } else {
             $pkgs_this_cd++;
             $pkgs_done++;
@@ -391,7 +394,7 @@ sub get_disc_size {
 
     # How full should we let the disc get before we stop estimating and
     # start running mkisofs?
-    $size_swap_check = $maxdiskblocks  - (40 * $MB / $blocksize);
+    $size_swap_check = $maxdiskblocks - (40 * $MB / $blocksize);
 }
 
 sub start_disc {
