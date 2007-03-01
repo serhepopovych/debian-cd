@@ -33,7 +33,11 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
     the multi-arch DVD overflowing. Also log if we're doing HFS.
   * Tweak where we look for s390 boot files to make the weeklies work again.
 
- -- Raphael Hertzog <hertzog@debian.org>  Wed, 21 Feb 2007 12:30:27 +0100
+  [ Joey Hess ]
+  * Updated isolinux.bin to the version from syslinux 3.31-3.
+  * Re-enable use of 64 bit detection, fixed now.
+
+ -- Joey Hess <joeyh@debian.org>  Thu,  1 Mar 2007 14:17:09 -0500
 
 debian-cd (3.0.0) unstable; urgency=medium
 
