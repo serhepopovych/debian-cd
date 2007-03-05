@@ -37,7 +37,11 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
   * Updated isolinux.bin to the version from syslinux 3.31-3.
   * Re-enable use of 64 bit detection, fixed now.
 
- -- Joey Hess <joeyh@debian.org>  Thu,  1 Mar 2007 14:17:09 -0500
+  [ Raphael Hertzog ]
+  * Fix make_disc_trees.pl to not clash on unexcluded packages which contains
+    regex special characters. Closes: #413506
+
+ -- Raphael Hertzog <hertzog@debian.org>  Mon,  5 Mar 2007 17:00:44 +0100
 
 debian-cd (3.0.0) unstable; urgency=medium
 

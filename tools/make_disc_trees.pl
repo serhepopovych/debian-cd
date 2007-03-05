@@ -159,7 +159,7 @@ while (defined (my $pkg = <INLIST>)) {
             foreach my $reinclude_pkg (@excluded_package_list) {
                 my ($arch, $pkgname) = split /:/, $reinclude_pkg;
                 foreach my $entry (@unexclude_packages) {
-                    if (($pkgname =~ /^$entry$/m)) {
+                    if (($pkgname =~ /^\Q$entry\E$/m)) {
                         print LOG "Re-including $reinclude_pkg due to match on \"\^$entry\$\"\n";
                         $guess_size = int($hfs_mult * add_packages($cddir, $reinclude_pkg));
                         $size += $guess_size;
@@ -243,7 +243,7 @@ sub should_exclude_package {
     my $should_exclude = 0;
 
     foreach my $entry (@exclude_packages) {
-	    if (($pkgname =~ /^$entry$/m)) {
+	    if (($pkgname =~ /^\Q$entry\E$/m)) {
             print LOG "Excluding $pkg due to match on \"\^$entry\$\"\n";
             $should_exclude++;
         }
@@ -254,7 +254,7 @@ sub should_exclude_package {
         # exclude the package at the same time. If so, complain and
         # bail out
         foreach my $entry (@unexclude_packages) {
-            if (($pkgname =~ /^$entry$/m)) {
+            if (($pkgname =~ /^\Q$entry\E$/m)) {
                 print LOG "But ALSO asked to unexclude $pkg due to match on \"\^$entry\$\"\n";
                 print LOG "Make your mind up! Bailing out...\n";
                 die "Incompatible exclude/unexclude entries for $pkg...\n";
