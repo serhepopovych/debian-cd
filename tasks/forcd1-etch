@@ -2,6 +2,7 @@ openssh-client
 openssh-server
 gnupg
 build-essential
+kernel-package
 module-assistant
 deborphan
 debfoster

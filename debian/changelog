@@ -42,9 +42,10 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
     regex special characters. Closes: #413506
 
   [ Frans Pop ]
-  * forcd1-etch: remove network-console-config; add module-assistant.
+  * forcd1-etch: remove network-console-config (not in Etch).
+  * forcd1-etch: add kernel-package and module-assistant.
 
- -- Frans Pop <fjp@debian.org>  Sat, 10 Mar 2007 22:30:42 +0100
+ -- Frans Pop <fjp@debian.org>  Sat, 10 Mar 2007 22:40:34 +0100
 
 debian-cd (3.0.0) unstable; urgency=medium
 
