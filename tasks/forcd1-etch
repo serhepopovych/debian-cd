@@ -2,6 +2,7 @@ openssh-client
 openssh-server
 gnupg
 build-essential
+module-assistant
 deborphan
 debfoster
 debsums
@@ -40,4 +41,3 @@ unifont
 console-cyrillic
 console-terminus
 iso-codes
-network-console-config
