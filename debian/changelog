@@ -45,6 +45,9 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
   * forcd1-etch: remove network-console-config (not in Etch).
   * forcd1-etch: add kernel-package and module-assistant.
 
+  [ Steve McIntyre ]
+  * Fix path for creating splash image in boot-amd64. Closes: #413850.
+
  -- Frans Pop <fjp@debian.org>  Sat, 10 Mar 2007 22:40:34 +0100
 
 debian-cd (3.0.0) unstable; urgency=medium

@@ -164,7 +164,7 @@ if [ "$SPLASHPNG" ] ; then
 	# background, and index 7 is foreground.  Set to black and
 	# white respecively
 	pngtopnm < $SPLASHPNG | ppmquant 16 | \
-		ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux-amd64/splash.rle
+		ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
 fi
 
 rm -rf cdrom
