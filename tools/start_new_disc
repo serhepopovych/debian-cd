@@ -124,7 +124,7 @@ if [ $DISKNUM = 1 ] ; then
 	echo "  Adding .disk/base_components"
 	echo "main" > $CDDIR/.disk/base_components
 	if [ -n "$LOCAL" ] ; then
-		echo "local" > $CDDIR/.disk/base_components
+		echo "local" >> $CDDIR/.disk/base_components
 	fi
 
 	echo "  Adding .disk/cd_type"
