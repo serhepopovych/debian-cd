@@ -151,6 +151,7 @@ if [ -e boot$N/isolinux/isolinux.cfg ] ; then
 
 	cat boot$N/isolinux-amd64/isolinux.cfg | awk '
 			/^LABEL/ { printf("LABEL amd64-%s\n", $2) }
+			/^DEFAULT/ { printf("DEFAULT64 amd64-%s\n", $2) }
 			/kernel/ { print $0 }
 			/append/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
 else

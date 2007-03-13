@@ -47,6 +47,9 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Fix path for creating splash image in boot-amd64. Closes: #413850.
+  * Add the DEFAULT64 handling to boot-amd64 as well as boot-i386; needed
+    in both so that things are setup the same regardless of the order in
+    which the boot-$arch scripts are called
 
  -- Frans Pop <fjp@debian.org>  Sat, 10 Mar 2007 22:40:34 +0100
 
