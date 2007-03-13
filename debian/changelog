@@ -54,6 +54,7 @@ debian-cd (3.0.1) UNRELEASED; urgency=low
     sure we don't end up overwriting extra images from one arch with those
     from the other. Now the multi-arch netinst should work for the installgui
     target for both arches
+  * Check in current working versions of the tasks files.
 
  -- Frans Pop <fjp@debian.org>  Sat, 10 Mar 2007 22:40:34 +0100
 
