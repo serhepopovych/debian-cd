@@ -2,6 +2,7 @@ debian-cd (3.0.2) UNRELEASED; urgency=high
 
   [ Steve McIntyre ]
   * Remove mention of m68k in data/etc/README.html.in
+  * Other small wording changes and fixes in the README file
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 18 Mar 2007 22:09:44 +0000
 

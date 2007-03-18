@@ -296,6 +296,11 @@ This disc is labeled
 which means that this disc is number DISKNUM of a set of TOTALNUM discs.
 #if TYPEbinary
 It contains programs ("binaries") for `ARCH' computers.
+#if ARCHia64 && !ARCHamd64
+<P><strong>Note:</strong> this image only supports systems based on
+Intel Itanium processors; for the more common Intel EM64T processors,
+please see the Debian amd64 architecture.
+#endif
 <P>
 The programs on the Binary discs are ordered by popularity. The Binary-1 disc
 contains the most popular programs and the installation tools; it is possible
@@ -314,7 +319,7 @@ several languages. Additional translations and updated versions for
 the Release Notes may be available from the <A
 href="http://www.debian.org/releases/etch/releasenotes">Debian web
 site</A>.
-else
+#else
 See the first disc in this set for the "etch" Release Notes.
 #endif
 #endif
@@ -371,12 +376,14 @@ Installing
  <tt>&nbsp;
  <A href=%%""tools/%%"">/tools/</a>
  </tt>
+#if ARCHi386
  and
  <tt>&nbsp;
  <A href=%%""install/floppy/%%"">/install/floppy/</a>
  </tt>
+#endif
 
-#if ARCHi386 || ARCHamd64 || ARCHalpha || ARCHpowerpc || ARCHsparc
+#if ARCHi386 || ARCHamd64 || ARCHia64 || ARCHalpha || ARCHpowerpc || ARCHsparc
   <P>
   For the impatient ones:
 #endif
@@ -388,12 +395,7 @@ Installing
 #endif
 
 #if ARCHi386 || ARCHamd64 || ARCHpowerpc
-#if ARCHi386
-   You can also
-#else
-   you can
-#endif
-  examine the
+   You can examine the
   <P>
   <tt>&nbsp;
   <a href="install/">/install</a>
@@ -425,23 +427,31 @@ Last-Minute Notes
 </a>
 <p>
 <UL>
-<LI>
 
 #if OFFICIAL_VAL == 0
+<LI>
 You should keep in mind that this is an unofficial disc of the Debian
 system. This means that all sorts of bugs may be present anywhere in
 the system. Please report any bugs you find to the person that gave
 you this disc, not Debian.
 #endif
 #if OFFICIAL_VAL == 1
-You should keep in mind that this is a beta disc of the current
+<LI>You should keep in mind that this is a beta disc of the current
 development version of the Debian system. This means that all sorts of
-bugs may be present anywhere in the system.
+bugs may be present anywhere in the system. Please report any bugs you
+find in the Debian Bug Tracking System; details at <A
+HREF="http://bugs.debian.org/">bugs.debian.org</A>.
+<LI>If you're reporting bugs against this disc or the installation
+system, please also mention the version of this disc; this can be
+found in the file <a href="/.disk/info">/.disk/info</a>.
 #endif
 #if OFFICIAL_VAL == 2
-This is an official release of the Debian system. Please report any
+<LI>This is an official release of the Debian system. Please report any
 bugs you find in the Debian Bug Tracking System; details at <A
 HREF="http://bugs.debian.org/">bugs.debian.org</A>.
+<LI>If you're reporting bugs against this disc or the installation
+system, please also mention the version of this disc; this can be
+found in the file <a href="/.disk/info">/.disk/info</a>.
 #endif
 
 <br>&nbsp;
