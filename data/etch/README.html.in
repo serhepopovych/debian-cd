@@ -255,7 +255,6 @@ Debian is available for various kinds of computers
 (&quot;architectures&quot;), like
 &quot;IBM-compatible&quot; PCs (<i>i386</i>),
 Compaq's <i>Alpha</i>,
-Motorola's 680x0 (<i>m68k</i>),
 Sun's <i>Sparc</i>,
 Motorola/IBM's <i>PowerPC</i>, and <i>(Strong)ARM</i> processors.
 Check the <A href="http://www.debian.org/ports">ports</A> page
