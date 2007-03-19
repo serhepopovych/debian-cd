@@ -9,7 +9,7 @@
 /* Note that the use of debian-installer+kernel-sid is a TEMPORARY HACK
  * to make sid d-i be included on the kde CD. sid d-i is needed because
  * the version of preseed in sid is needed */
-#include <debian-installer+kernel-sid>
+#include <debian-installer+kernel-etch>
 #include <base-etch>
 #include <forcd1>
 #include <task-essential-etch-xfce>
