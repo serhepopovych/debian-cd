@@ -5,6 +5,8 @@ debian-cd (3.0.2) UNRELEASED; urgency=high
   * Other small wording changes and fixes in the README file
   * Fix up the Debian_etch, Debian_etch-kde and Debian_etch-xfce
     to use debian-installer+kernel-etch rather than -sid
+  * Fix up boot-alpha to calculate the size of the ramdisk needed, rather
+    than hard-coding to 16384. Also slight refactoring.
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 18 Mar 2007 22:09:44 +0000
 

@@ -75,13 +75,14 @@ if [ $NN = 1 ]; then
     echo "Using $THISTYPE boot-disks image on CD$N"
     mkdir -p boot$N/boot
     cp initrd.gz vmlinuz boot$N/boot/
-
     mkdir -p boot$N/etc
-    cat <<EOF > boot$N/etc/aboot.conf
-0:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall
-1:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS0
-2:boot/vmlinuz ramdisk_size=16384 initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall console=ttyS1
-EOF
+
+    RSIZE=$(expr $(zcat boot$N/boot/initrd.gz | wc --bytes) / 1024)
+    OPTS="ramdisk_size=$RSIZE initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall"
+
+    echo "0:boot/vmlinuz $OPTS"               >  boot$N/etc/aboot.conf
+    echo "1:boot/vmlinuz $OPTS console=ttyS0" >> boot$N/etc/aboot.conf
+    echo "2:boot/vmlinuz $OPTS console=ttyS1" >> boot$N/etc/aboot.conf
 
     mkdir -p boot$N/milo
 
