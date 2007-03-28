@@ -8,7 +8,10 @@ debian-cd (3.0.2) UNRELEASED; urgency=high
   * Fix up boot-alpha to calculate the size of the ramdisk needed, rather
     than hard-coding to 16384. Also slight refactoring.
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 18 Mar 2007 22:09:44 +0000
+  [ Frans Pop ]
+  * Add initrd-tools to forcd1 as it is needed for Sarge to Etch upgrades.
+
+ -- Frans Pop <fjp@debian.org>  Wed, 28 Mar 2007 23:06:01 +0200
 
 debian-cd (3.0.1) unstable; urgency=high
 
