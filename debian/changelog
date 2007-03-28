@@ -1,4 +1,4 @@
-debian-cd (3.0.2) UNRELEASED; urgency=high
+debian-cd (3.0.2) unstable; urgency=high
 
   [ Steve McIntyre ]
   * Remove mention of m68k in data/etc/README.html.in.
@@ -11,7 +11,10 @@ debian-cd (3.0.2) UNRELEASED; urgency=high
   [ Frans Pop ]
   * Add initrd-tools to forcd1 as it is needed for Sarge to Etch upgrades.
 
- -- Frans Pop <fjp@debian.org>  Wed, 28 Mar 2007 23:06:01 +0200
+  [ Steve McIntyre ]
+  * YA "last for etch" upload.
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 28 Mar 2007 22:57:41 +0100
 
 debian-cd (3.0.1) unstable; urgency=high
 
