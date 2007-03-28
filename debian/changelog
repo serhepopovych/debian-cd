@@ -1,10 +1,10 @@
 debian-cd (3.0.2) UNRELEASED; urgency=high
 
   [ Steve McIntyre ]
-  * Remove mention of m68k in data/etc/README.html.in
-  * Other small wording changes and fixes in the README file
+  * Remove mention of m68k in data/etc/README.html.in.
+  * Other small wording changes and fixes in the README file.
   * Fix up the Debian_etch, Debian_etch-kde and Debian_etch-xfce
-    to use debian-installer+kernel-etch rather than -sid
+    to use debian-installer+kernel-etch rather than -sid. Closes: #416551.
   * Fix up boot-alpha to calculate the size of the ramdisk needed, rather
     than hard-coding to 16384. Also slight refactoring.
 
