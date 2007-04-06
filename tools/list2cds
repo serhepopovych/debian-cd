@@ -208,7 +208,13 @@ if ($complete) {
     foreach my $p (sort { ($packages{lc $a}{"Section"} cmp $packages{lc $b}{"Section"})
                        || (lc $a cmp lc $b) }
              grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
-		add_package (lc $p, 0, 0);
+	# At this point, we should *not* be adding any more udebs,
+	# as they're no use to anybody.
+	if ($packages{lc $p}{"IsUdeb"}) {
+	    msg(2, "  Ignoring udeb $p ...\n");
+	} else {
+	    add_package (lc $p, 0, 0);
+	}
     }
 }
 

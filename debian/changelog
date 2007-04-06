@@ -1,9 +1,12 @@
+
 debian-cd (3.0.3) UNRELEASED; urgency=high
 
   [ Steve McIntyre ]
   * In start_new_disc, cope with $DEBVERSION containing spaces
   * Only put the release notes and installation guide on disc#1
-	
+  * In list2cds, don't add udebs in the final COMPLETE run - 
+    they're no use there
+
  -- Steve McIntyre <93sam@debian.org>  Wed, 28 Mar 2007 22:57:41 +0100
 
 debian-cd (3.0.2) unstable; urgency=high
