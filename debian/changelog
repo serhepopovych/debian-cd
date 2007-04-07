@@ -1,11 +1,10 @@
-
 debian-cd (3.0.3) UNRELEASED; urgency=high
 
   [ Steve McIntyre ]
-  * In start_new_disc, cope with $DEBVERSION containing spaces
-  * Only put the release notes and installation guide on disc#1
+  * In start_new_disc, cope with $DEBVERSION containing spaces.
+  * Only put the release notes and installation guide on disc#1.
   * In list2cds, don't add udebs in the final COMPLETE run - 
-    they're no use there
+    they're no use there.
   * Add some munging on the Release files if we're not building
     for "testing". Used in the etch release, and I'll back it out shortly.
 
@@ -400,7 +399,7 @@ debian-cd (2.2.25) unstable; urgency=low
     Closes: #373225
 
   [ Joey Hess ]
-  * Correct url to the amd64 dailys.
+  * Correct url to the amd64 dailies.
   * Add gtk initrd to amd64 images if available.
   * Add autorun file to amd64 images if there's a README.html, same as for
     i386.
