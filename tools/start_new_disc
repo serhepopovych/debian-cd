@@ -283,13 +283,16 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ] ; then
 	# Update some other information as well
 	sed -e "s/^Architectures: .*$/Architectures: $ARCHES/" \
 		$MIRROR/dists/$CODENAME/Release | \
-#     sed -e "s/^Suite: .*$/Suite: stable/" | \
-#     sed -e "s/^Description: .*$/Description: Debian $DEBVERSION/" | \
 		sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
 		perl -ne 'if (/^(MD5Sum|SHA1|SHA256):/i) { $f=1; next } 
 		if ($f) { 
 		unless (/^ /) { print; $f=0 }
 		} else { print }' > dists/$CODENAME/Release
+	if [ "$DEBVERSION" != "testing" ] ; then
+	    RDATE=`awk '/^Date:/ { print $2,$3,$4,$5}' dists/$CODENAME/Release`
+	    sed -i -e "s/^Suite: .*$/Suite: stable/" dists/$CODENAME/Release
+	    sed -i -e "s/^Description: .*$/Description: Debian $DEBVERSION Released $RDATE/" dists/$CODENAME/Release
+	fi
 else
 	echo "ERROR: Release file ($MIRROR/dists/$CODENAME/Release) is missing !"
 	exit 1
@@ -305,13 +308,17 @@ do
 			mkdir -p dists/$CODENAME/$SECT/binary-$ARCH
 			cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
 				dists/$CODENAME/$SECT/binary-$ARCH/
-#			sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/$SECT/binary-$ARCH/Release
+			if [ "$DEBVERSION" != "testing" ] ; then
+			    sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/$SECT/binary-$ARCH/Release
+			fi
 		fi
 		if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release" ] ; then
 			mkdir -p dists/$CODENAME/non-US/$SECT/binary-$ARCH
 			cp $NONUS/dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release \
 				dists/$CODENAME/non-US/$SECT/binary-$ARCH/
-#			sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release
+			if [ "$DEBVERSION" != "testing" ] ; then
+			    sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/non-US/$SECT/binary-$ARCH/Release
+			fi
 		fi
     done
 
@@ -327,7 +334,9 @@ do
 		mkdir -p dists/$CODENAME/main/debian-installer/binary-$ARCH
 		cp $MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Release \
 			dists/$CODENAME/main/debian-installer/binary-$ARCH/
-#		sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/main/debian-installer/binary-$ARCH/Release
+		if [ "$DEBVERSION" != "testing" ] ; then
+		    sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/main/debian-installer/binary-$ARCH/Release
+		fi
 	fi
 done
 

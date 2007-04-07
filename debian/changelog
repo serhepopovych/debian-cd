@@ -6,6 +6,8 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * Only put the release notes and installation guide on disc#1
   * In list2cds, don't add udebs in the final COMPLETE run - 
     they're no use there
+  * Add some munging on the Release files if we're not building
+    for "testing". Used in the etch release, and I'll back it out shortly.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 28 Mar 2007 22:57:41 +0100
 
