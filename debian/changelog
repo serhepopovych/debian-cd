@@ -17,6 +17,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * In README, recommend aptitude also for command line usage.
   * Clean up: remove files for potato and woody releases.
 
+  [ Steve McIntyre ]
+  * Removed m68k from the list of arches in generate_di+k_list and
+    generate_di_list to reduce warnings.
+
  -- Frans Pop <fjp@debian.org>  Wed, 11 Apr 2007 01:30:06 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
