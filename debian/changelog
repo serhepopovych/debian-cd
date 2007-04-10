@@ -10,11 +10,6 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * Copied etch files to lenny ready for the new testing work.
 
   [ Frans Pop ]
-  * Tweak README to better describe small images and images that are not part
-    of a larger set.
-  * Make link in README to /.disk/info relative so its still valid if the disk
-    is mounted in a regular system.
-  * In README, recommend aptitude also for command line usage.
   * Clean up: remove files for potato and woody releases.
 
   [ Steve McIntyre ]
