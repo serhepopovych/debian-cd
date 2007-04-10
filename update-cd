@@ -6,7 +6,7 @@
 # GNU GPL v2 1st January 2001
 #
 # Quick and dirty script to create update CDs for people to upgrade
-# from potato (2.2r0) to the latest release level
+# from an initial stable release (r0) to the latest point release level
 #
 
 set -e

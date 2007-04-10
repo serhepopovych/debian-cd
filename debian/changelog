@@ -20,6 +20,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   [ Steve McIntyre ]
   * Removed m68k from the list of arches in generate_di+k_list and
     generate_di_list to reduce warnings.
+  * Updated comments in update-cd; potato was a while ago!
 
  -- Frans Pop <fjp@debian.org>  Wed, 11 Apr 2007 01:30:06 +0200
 
