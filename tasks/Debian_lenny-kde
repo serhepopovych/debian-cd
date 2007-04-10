@@ -1,0 +1,19 @@
+/*
+ *
+ * This file will be used to build official complete sets of Lenny CDs
+ * with KDE.
+ *
+ */
+
+/* Packages that should really be on CD1 */\
+#include <debian-installer+kernel-lenny>
+#include <base-lenny>
+#include <forcd1>
+#include <task-essential-lenny-kde>
+
+/* Other interesting packages */
+#include <task-full-lenny-kde>
+#include <interesting-fromcd23>
+
+/* The rest ordered by popularity */
+#include <popularity-contest-lenny>

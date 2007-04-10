@@ -1,0 +1,22 @@
+/*
+ *
+ * This file will be used to build official complete sets of Lenny CDs
+ * with Xfce.
+ *
+ */
+
+/* Packages that should really be on CD1 */\
+/* Note that the use of debian-installer+kernel-sid is a TEMPORARY HACK
+ * to make sid d-i be included on the kde CD. sid d-i is needed because
+ * the version of preseed in sid is needed */
+#include <debian-installer+kernel-lenny>
+#include <base-lenny>
+#include <forcd1>
+#include <task-essential-lenny-xfce>
+
+/* Other interesting packages */
+#include <task-full-lenny-xfce>
+#include <interesting-fromcd23>
+
+/* The rest ordered by popularity */
+#include <popularity-contest-lenny>

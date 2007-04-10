@@ -1,0 +1,75 @@
+/* Essential task packages for Xfce
+ *
+ * The list should be regenerated from time to time, using the
+ * update-tasks target of the Makefile.
+ *
+ * Last updated: $Date: 2006-10-28 17:40:33 -0400 (Sat, 28 Oct 2006) $
+ */
+xfce4
+gdm
+xorg
+xserver-xorg-video-all
+xserver-xorg-input-all
+desktop-base
+menu
+iceweasel
+discover1
+xresprobe
+alsa-utils
+alsa-base
+eject
+language-env
+language-env
+language-env
+locales
+manpages-pt
+language-env
+jfbterm
+zhcon
+jfbterm
+zhcon
+locales
+console-cyrillic
+t1-cyrillic
+language-env
+language-env
+manpages-fr
+language-env
+manpages-de
+language-env
+language-env
+gsfonts-x11
+ttf-dejavu
+ttf-freefont
+xfonts-base
+language-env
+manpages-it
+language-env
+jfbterm
+unifont
+manpages-ja
+lv
+language-env
+jfbterm
+manpages-ko
+language-env
+language-env
+locales
+language-env
+language-env
+manpages-pl
+language-env
+language-env
+language-env
+locales
+language-env
+manpages-ru
+language-env
+language-env
+manpages-es
+locales
+language-env
+language-env
+locales
+manpages-tr
+language-env
