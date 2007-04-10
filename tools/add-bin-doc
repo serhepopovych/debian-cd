@@ -10,6 +10,10 @@ ARCHES="$2"
 
 DEBMAINVER="`echo $DEBVERSION | sed -e 's/[ _r].*//'`"
 
+if [ "$COMPLETE"x = ""x ] ; then
+	COMPLETE=0
+fi
+
 if [ "$OMIT_RELEASE_NOTES"x = ""x ] ; then
 	OMIT_RELEASE_NOTES=0
 fi
@@ -31,6 +35,7 @@ rm -f $dir/README $dir/README.1ST \
 	$dir/README.pgp $dir/README.non-US ; \
 
 cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
+    -D COMPLETE="$COMPLETE" \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
     -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \

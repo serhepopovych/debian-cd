@@ -3,13 +3,21 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   [ Steve McIntyre ]
   * In start_new_disc, cope with $DEBVERSION containing spaces.
   * Only put the release notes and installation guide on disc#1.
-  * In list2cds, don't add udebs in the final COMPLETE run - 
+  * In list2cds, don't add udebs in the final COMPLETE run -
     they're no use there.
   * Add some munging on the Release files if we're not building
     for "testing". Used in the etch release, and I'll back it out shortly.
   * Copied etch files to lenny ready for the new testing work.
 
- -- Steve McIntyre <93sam@debian.org>  Wed, 28 Mar 2007 22:57:41 +0100
+  [ Frans Pop ]
+  * Tweak README to better describe small images and images that are not part
+    of a larger set.
+  * Make link in README to /.disk/info relative so its still valid if the disk
+    is mounted in a regular system.
+  * In README, recommend aptitude also for command line usage.
+  * Clean up: remove files for potato and woody releases.
+
+ -- Frans Pop <fjp@debian.org>  Wed, 11 Apr 2007 01:30:06 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
 
