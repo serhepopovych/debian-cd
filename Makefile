@@ -58,6 +58,7 @@ make_image=$(BASEDIR)/tools/make_image
 merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
 update_tasks=$(BASEDIR)/tools/update_tasks
+grab_source_list=$(BASEDIR)/tools/grab_source_list
 
 BDIR=$(TDIR)/$(CODENAME)
 ADIR=$(APTTMP)
@@ -350,7 +351,7 @@ image-trees: ok genlist
 		ARCH=$$ARCH $(list2cds) $(BDIR)/list $(SIZELIMIT); \
 	done
 	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
-		awk '{printf("source:%s\n",$$0)}' $(BDIR)/list > $(BDIR)/packages; \
+		$(grab_source_list) $(BDIR) $(ADIR) $(BDIR)/list $(BDIR)/packages; \
 	else \
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi

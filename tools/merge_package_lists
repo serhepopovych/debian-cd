@@ -10,7 +10,7 @@
 #
 # expects multiple files containing lines of the form, one arch per file
 #
-#    <arch>:<pkgname>
+#    <arch>:<component>:<pkgname>
 #
 # and will output similar
 #
@@ -89,7 +89,8 @@ if [ $source = "yes" ] ; then
 				  if (parsed) {
 				    split($0,fields,":")
 					arch=fields[1]
-					pkg=fields[2]
+					component=fields[2]
+					pkg=fields[3]
 					source=bin2src[pkg]
 					if (!included[source]) {
 					  printf("# Adding source %s at %d because of %s:%s\n",
@@ -129,12 +130,12 @@ echo "# Ending merge pass 1 at "`date` >> $BDIR/list.mid
 # again
 grep -v ^# $BDIR/list.mid | awk -F : '
     {
-        if (!($3 in add))
+        if (!($4 in add))
         {
-            pkgname[number_packages++] = $3
+            pkgname[number_packages++] = $4
         }
 		gsub("aaaaaaaaaaaaaaaaaa", "source", $2) # Undo the source sorting hack
-        add[$3] = add[$3] $2 ":" $3 " "
+        add[$4] = add[$4] $2 ":" $3 ":" $4 " "
     }
 END {
         for (i = 0; i < number_packages; i++)

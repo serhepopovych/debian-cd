@@ -306,7 +306,7 @@ sub add_packages {
     }
 
     my $pkg = shift;
-    my ($arch, $pkgname) = split /:/, $pkg;
+	my ($arch, $component, $pkgname) = split /:/, $pkg;
 
     msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
     

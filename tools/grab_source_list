@@ -1,0 +1,50 @@
+#!/bin/sh
+
+BDIR=$1
+ADIR=$2
+IN="$3"
+OUT="$4"
+
+echo "DONEDONE" > $BDIR/DONE
+awk '
+	/^Package:/ {
+				  srcname=$2
+				  srcs_done++
+				}
+
+	/^Section: non-free/ {
+				  component[srcname]="non-free"
+				  next
+				}
+
+	/^Section: contrib/ {
+				  component[srcname]="contrib"
+				  next
+				}
+
+	/^Section:/ {
+				  component[srcname]="main"
+				  next
+				}
+
+	/^DONEDONE/ {
+				  parsed=1
+				  next
+				}
+
+	/.*/        {
+				    if (parsed) {
+						printf("source:%s:%s\n", component[$0], $0)
+					}
+				}
+' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $IN > $BDIR/list.mid
+
+if [ "$NONFREE"x = "1"x ] ; then
+	cat $BDIR/list.mid > $OUT
+else
+	grep -v :non-free: $BDIR/list.mid > $OUT
+fi
+
+if [ "$EXTRANONFREE"x = "1"x ] ; then 
+	grep :non-free: $BDIR/list.mid >> $OUT
+fi

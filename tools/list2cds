@@ -16,8 +16,6 @@ my $limit = $ENV{'SIZELIMIT1'} || $deflimit;
 
 my $nonfree = $ENV{'NONFREE'} || 0;
 my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
-my $nonus = $ENV{'NONUS'} || 0;
-my $forcenonusoncd1 = $ENV{'FORCENONUSONCD1'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $exclude = "$list.exclude";
@@ -60,8 +58,6 @@ msg(1, "Complete selected packages with all the rest: ");
 msg(1, yesno($complete)."\n");
 msg(1, "Include non-free packages: ");
 msg(1, yesno($nonfree)."\n");
-msg(1, "Include non-US packages: ");
-msg(1, yesno($nonus)."\n");
 msg(1, "======================================================================
 ");
 
@@ -83,6 +79,14 @@ while (defined($_=<AVAIL>)) {
 	$packages{$p}{"Suggests"} = [];
 	$packages{$p}{"Recommends"} = [];
 	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
+	if ($packages{$p}{"Section"} =~ /contrib\//) {
+		$packages{$p}{"Component"} = "contrib";
+	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
+		$packages{$p}{"Component"} = "non-free";
+	} else {
+		$packages{$p}{"Component"} = "main";
+	}
+
 }
 close AVAIL or die "apt-cache failed : $@ ($!)\n";
 $/ = $oldrs;
@@ -91,18 +95,11 @@ $/ = $oldrs;
 %excluded = %included;
 my $count_excl = 0;
 
-# Now exclude packages because of the non-free and non-us rules
+# Now exclude packages because of the non-free rules
 if (not $nonfree) {
 	foreach (grep { $packages{$_}{"Section"} =~ /non-free/ }
 	              (keys %packages)) {
 		$excluded{$_} = 'nonfree';
-		$count_excl++;
-	}
-}
-if (not $nonus) {
-	foreach (grep { $packages{$_}{"Section"} =~ /non-US/ }
-	              (keys %packages)) {
-		$excluded{$_} = 'nonus';
 		$count_excl++;
 	}
 }
@@ -223,6 +220,8 @@ if ($extranonfree and (! $nonfree))
 {
 	my ($p, @toinclude);
 	
+	msg(0, "  Adding non-free packages now\n");
+
 	# Finally accept non-free packages ...
 	foreach $p (grep { $excluded{$_} eq "nonfree" } (keys %excluded))
 	{
@@ -230,16 +229,10 @@ if ($extranonfree and (! $nonfree))
 		push @toinclude, $p;
 	}
 	
-	# Start a new CD
-	$cd++;
-	$cd_size = 0;
-	$limit = $ENV{"SIZELIMIT$cd"} || $deflimit;
-	msg(0, "Limit for non-free CD $cd is $limit.\n");
-	
 	# Include non-free packages
 	foreach $p (@toinclude)
 	{
-		add_package($p, 1, 1);
+		add_package(lc $p, 1, 1);
 	}
 
 	# If a contrib package was listed in the list of packages to
@@ -259,7 +252,11 @@ if ($extranonfree and (! $nonfree))
 	          	 "(ignored)\n");
 		  next;
 		}
-		add_package (lc $_, 1, 1);
+		if ($packages{lc $p}{"IsUdeb"}) {
+			msg(2, "  Ignoring udeb $p ...\n");
+		} else {
+			add_package (lc $_, 1, 1);
+		}
 	}
 	close LIST;
 
@@ -272,8 +269,12 @@ if ($extranonfree and (! $nonfree))
 			grep { not ($included{$_} or $excluded{$_}) } 
 			keys %packages) 
 	    {
-		add_package ($p, 0, 0);
-	    }
+			if ($packages{lc $p}{"IsUdeb"}) {
+				msg(2, "  Ignoring udeb $p ...\n");
+			} else {
+				add_package (lc $p, 0, 0);
+			}
+		}
 	}
 
 #	msg(0, "CD $cd will only be filled with $cd_size bytes ...\n");
@@ -297,7 +298,8 @@ foreach (sort { $a <=> $b } keys %cds) {
 	open(CDLIST, "> $dir/packages.$arch") 
 		|| die "Can't write in $dir/$_.packages.$arch: $!\n";
 	foreach (@{$cds{$_}}) {
-		print CDLIST "$arch:$_\n";
+		my $component = $packages{$_}{"Component"};
+		print CDLIST "$arch:$component:$_\n";
 		$count++;
 	}
 	close CDLIST;

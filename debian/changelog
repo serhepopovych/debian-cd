@@ -16,8 +16,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * Removed m68k from the list of arches in generate_di+k_list and
     generate_di_list to reduce warnings.
   * Updated comments in update-cd; potato was a while ago!
+  * It seems the changes for 3.0.0 completely broke extranonfree
+    support. Re-add it.
 
- -- Frans Pop <fjp@debian.org>  Wed, 11 Apr 2007 01:30:06 +0200
+ -- Steve McIntyre <93sam@debian.org>  Fri, 20 Apr 2007 00:37:09 +0100
 
 debian-cd (3.0.2) unstable; urgency=high
 

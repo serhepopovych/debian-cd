@@ -9,7 +9,7 @@ use Digest::MD5;
 use File::stat;
 use File::Find;
 
-my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds);
+my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds, $extranonfree);
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
@@ -33,6 +33,12 @@ if (defined($ENV{'MAXCDS'})) {
 	$maxcds = $ENV{'MAXCDS'};
 } else {
 	$maxcds = 0;
+}
+
+if (defined($ENV{'EXTRANONFREE'})) {
+	$extranonfree = $ENV{'EXTRANONFREE'};
+} else {
+	$extranonfree = 1;
 }
 	
 my $list = "$tdir/list";
@@ -157,7 +163,7 @@ while (defined (my $pkg = <INLIST>)) {
         # lists intersect and we should re-include some packages
         if (scalar @unexclude_packages && scalar @excluded_package_list) {
             foreach my $reinclude_pkg (@excluded_package_list) {
-                my ($arch, $pkgname) = split /:/, $reinclude_pkg;
+                my ($arch, $component, $pkgname) = split /:/, $reinclude_pkg;
                 foreach my $entry (@unexclude_packages) {
                     if (($pkgname =~ /^\Q$entry\E$/m)) {
                         print LOG "Re-including $reinclude_pkg due to match on \"\^$entry\$\"\n";
@@ -179,14 +185,23 @@ while (defined (my $pkg = <INLIST>)) {
 		    $pkgs_this_cd++;
 		    $pkgs_done++;
 		}
-    }
+    } # end of creating new CD dir
 
     if (should_exclude_package($pkg)) {
         push(@excluded_package_list, $pkg);
+	} elsif (should_start_extra_nonfree($pkg)) {
+		print LOG "Starting on extra non-free CDs\n";
+		finish_disc($cddir, "");
+		# And reset, to start the next disc
+		$size = 0;
+		$disknum++;
+		undef(@pkgs_added);
+		# Put this package first on the next disc
+		push (@overflowlist, $pkg);
     } else {
         $guess_size = int($hfs_mult * add_packages($cddir, $pkg));
         $size += $guess_size;
-	push (@pkgs_added, $pkg);
+		push (@pkgs_added, $pkg);
         print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
         if (($size > $maxdiskblocks) ||
             (($size > $size_swap_check) &&
@@ -197,22 +212,22 @@ while (defined (my $pkg = <INLIST>)) {
             print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
         }
         if ($size > $maxdiskblocks) {
-	    while ($size > $maxdiskblocks) {
-		$pkg = pop(@pkgs_added);
-		print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-		$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
-		$size=`$size_check $cddir`;
-		chomp $size;
-		print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
-		# Put this package first on the next disc
-		push (@overflowlist, $pkg);
-	    }
+			while ($size > $maxdiskblocks) {
+				$pkg = pop(@pkgs_added);
+				print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
+				$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
+				$size=`$size_check $cddir`;
+				chomp $size;
+				print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
+				# Put this package first on the next disc
+				push (@overflowlist, $pkg);
+			}
             finish_disc($cddir, "");
 
             # And reset, to start the next disc
             $size = 0;
             $disknum++;
-	    undef(@pkgs_added);
+			undef(@pkgs_added);
         } else {
             $pkgs_this_cd++;
             $pkgs_done++;
@@ -237,9 +252,21 @@ close(LOG);
 #  Local helper functions
 #
 #############################################
+sub should_start_extra_nonfree {
+    my $pkg = shift;
+    my ($arch, $component, $pkgname) = split /:/, $pkg;
+
+	if ( ($component eq "non-free") && $extranonfree) {
+		$extranonfree = 0; # Flag that we don't need to start new next time!
+		return 1;
+	}
+	
+	return 0;
+}
+
 sub should_exclude_package {
     my $pkg = shift;
-    my ($arch, $pkgname) = split /:/, $pkg;
+    my ($arch, $component, $pkgname) = split /:/, $pkg;
     my $should_exclude = 0;
 
     foreach my $entry (@exclude_packages) {
