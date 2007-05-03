@@ -19,7 +19,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * It seems the changes for 3.0.0 completely broke extranonfree
     support. Re-add it.
 
- -- Steve McIntyre <93sam@debian.org>  Fri, 20 Apr 2007 00:37:09 +0100
+  [ Frans Pop ]
+  * Dann Frazier has taken over from Jeff Bailey for daily IA64 D-I builds.
+
+ -- Frans Pop <fjp@debian.org>  Thu,  3 May 2007 23:59:24 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
 
