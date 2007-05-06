@@ -21,8 +21,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
 
   [ Frans Pop ]
   * Dann Frazier has taken over from Jeff Bailey for daily IA64 D-I builds.
+  * General update the template for the README file; explain the difference
+    between small and full images better.
 
- -- Frans Pop <fjp@debian.org>  Thu,  3 May 2007 23:59:24 +0200
+ -- Frans Pop <fjp@debian.org>  Mon,  7 May 2007 01:18:29 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
 
