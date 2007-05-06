@@ -22,7 +22,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   [ Frans Pop ]
   * Dann Frazier has taken over from Jeff Bailey for daily IA64 D-I builds.
   * General update the template for the README file; explain the difference
-    between small and full images better.
+    between small and full images better. Closes: #418195.
 
  -- Frans Pop <fjp@debian.org>  Mon,  7 May 2007 01:18:29 +0200
 
