@@ -46,7 +46,7 @@ sub Packages_dir {
         $dist = "contrib";
     } elsif ($file =~ /\/non-free\//) {
         $dist = "non-free";
-    } elsif ($file =~ /\/local\//) {
+    } else {
         $dist = "local";
     }	
 
