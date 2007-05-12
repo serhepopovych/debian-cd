@@ -330,14 +330,12 @@ sub add_packages {
         $source = $mirror;
         if ($arch eq "source") {
             m/^Directory: (\S+)/m and $pdir = $1;
-            $source=$localdebs if $pdir=~m:local/:;
             $source=$security if $pdir=~m:updates/:;
             m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@files, "$pdir/$3");
             m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and push(@files, "$pdir/$3");
             m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and push(@files, "$pdir/$3");
         } else {
             m/^Filename: (\S+)/mi and push(@files, $1);
-            $source=$localdebs if $1=~m:local/:;
             $source=$security if $1=~m:updates/:;
         }
 
@@ -347,8 +345,16 @@ sub add_packages {
             $total_blocks -= remove_md5_entry($dir, $arch, $_);
 
             foreach my $file (@files) {
-		my $missing = 0;
+                my $missing = 0;
                 # Count how big the file is we're removing, for checking if the disc is full
+                if (! -e "$source/$file") {
+                    msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                    if (-e "$localdebs/$file") {
+                        $source = $localdebs;
+                    } else {
+                        die "$file not found under either $source or $localdebs\n";
+                    }                        
+                }
                 $realfile = real_file ("$source/$file");
                 $total_blocks -= get_file_blocks($realfile);
 
@@ -361,7 +367,16 @@ sub add_packages {
             $total_blocks += add_md5_entry($dir, $arch, $_);
 
             foreach my $file (@files) {
+
                 # And put the file in the CD tree (with a (hard) link)
+                if (! -e "$source/$file") {
+                    msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                    if (-e "$localdebs/$file") {
+                        $source = $localdebs;
+                    } else {
+                        die "$file not found under either $source or $localdebs\n";
+                    }                        
+                }
                 $realfile = real_file ("$source/$file");
 
                 if (! -e "$dir/$file") {
