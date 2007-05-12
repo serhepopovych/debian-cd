@@ -305,6 +305,10 @@ case "$OFFICIAL" in
 	;;
 esac
 
+# Set this to force the Release file(s) to say "stable". Used in first
+# Etch builds to allow us to build before the archive updated
+#EARLY_BUILD_HACK=1
+
 ##################################
 # LOCAL HOOK DEFINITIONS
 ##################################

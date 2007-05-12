@@ -288,7 +288,7 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ] ; then
 		if ($f) { 
 		unless (/^ /) { print; $f=0 }
 		} else { print }' > dists/$CODENAME/Release
-	if [ "$DEBVERSION" != "testing" ] ; then
+	if [ "$EARLY_BUILD_HACK"x = "1"x ] ; then
 	    RDATE=`awk '/^Date:/ { print $2,$3,$4,$5}' dists/$CODENAME/Release`
 	    sed -i -e "s/^Suite: .*$/Suite: stable/" dists/$CODENAME/Release
 	    sed -i -e "s/^Description: .*$/Description: Debian $DEBVERSION Released $RDATE/" dists/$CODENAME/Release

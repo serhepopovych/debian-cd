@@ -26,6 +26,8 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
 
   [ Steve McIntyre ]
   * Re-added DEBOOTSTRAP_DIR definition in the Makefile
+  * Don't hack with the Release file unless EARLY_BUILD_HACK=1.
+    Closes: #423463
 
  -- Frans Pop <fjp@debian.org>  Mon,  7 May 2007 01:18:29 +0200
 
