@@ -29,7 +29,11 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   * Don't hack with the Release file unless EARLY_BUILD_HACK=1.
     Closes: #423463
 
- -- Frans Pop <fjp@debian.org>  Mon,  7 May 2007 01:18:29 +0200
+  [ Joey Hess ]
+  * Remove pcmcia-cs-udeb from udeb_include; we don't need this udeb with
+    modern kernels. (We didn't need it for etch either actually.)
+
+ -- Joey Hess <joeyh@debian.org>  Sun, 27 May 2007 01:18:08 -0400
 
 debian-cd (3.0.2) unstable; urgency=high
 
