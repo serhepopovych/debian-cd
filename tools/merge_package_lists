@@ -98,7 +98,7 @@ if [ $source = "yes" ] ; then
 					  included[source] = pkg
 					  incarch[source] = arch
 					  indexnr[source] = FNR
-                      sourcecomp[source] = component
+					  sourcecomp[source] = component
 					} else {
 					  if (FNR < indexnr[source]) {
 					    printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
