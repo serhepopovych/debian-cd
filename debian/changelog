@@ -1,4 +1,4 @@
-debian-cd (3.0.3) UNRELEASED; urgency=high
+debian-cd (3.0.3) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * In start_new_disc, cope with $DEBVERSION containing spaces.
@@ -32,6 +32,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=high
   [ Joey Hess ]
   * Remove pcmcia-cs-udeb from udeb_include; we don't need this udeb with
     modern kernels. (We didn't need it for etch either actually.)
+
+  [ Steve McIntyre ]
+  * Fix for multi-arch CDs including source - the extranonfree update
+    broke the source output
 
  -- Joey Hess <joeyh@debian.org>  Sun, 27 May 2007 01:18:08 -0400
 

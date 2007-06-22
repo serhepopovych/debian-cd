@@ -98,6 +98,7 @@ if [ $source = "yes" ] ; then
 					  included[source] = pkg
 					  incarch[source] = arch
 					  indexnr[source] = FNR
+                      sourcecomp[source] = component
 					} else {
 					  if (FNR < indexnr[source]) {
 					    printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
@@ -116,7 +117,7 @@ if [ $source = "yes" ] ; then
 				}
 	END {
 	    for (source in included) {
-		printf("%d:aaaaaaaaaaaaaaaaaa:%s\n", indexnr[source], source)
+		printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s\n", indexnr[source], sourcecomp[source], source)
 	    }
 	}' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $list | sort -nk 1 -t : >> $BDIR/list.mid
 else
