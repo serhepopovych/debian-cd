@@ -40,8 +40,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Include both dhcp-client-udeb and dhcp3-client udeb while we're
     transitioning in the installer.
+  * Remove tasks for sid as they were only needed temporarily for the KDE and
+    Xfce CD images; now they only help to confuse.
 
- -- Frans Pop <fjp@debian.org>  Fri, 13 Jul 2007 00:47:02 +0200
+ -- Frans Pop <fjp@debian.org>  Fri, 13 Jul 2007 00:49:55 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
 
