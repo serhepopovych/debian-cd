@@ -38,6 +38,7 @@ debian-archive-keyring-udeb
 debootstrap-udeb
 devio-udeb
 dhcp-client-udeb
+dhcp3-client-udeb
 di-utils
 di-utils-mapdevfs
 disk-detect
