@@ -42,8 +42,10 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
     transitioning in the installer.
   * Remove tasks for sid as they were only needed temporarily for the KDE and
     Xfce CD images; now they only help to confuse.
+  * Exclude live-installer, simple-cdd and nbd udebs as they are currently not
+    used in Debian Installer.
 
- -- Frans Pop <fjp@debian.org>  Fri, 13 Jul 2007 00:49:55 +0200
+ -- Frans Pop <fjp@debian.org>  Fri, 13 Jul 2007 02:00:41 +0200
 
 debian-cd (3.0.2) unstable; urgency=high
 

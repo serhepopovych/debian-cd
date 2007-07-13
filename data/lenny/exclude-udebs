@@ -94,6 +94,9 @@ debian-edu-archive-keyring-udeb
 ltsp-client-builder
 autopartkit
 lvm10-udeb
+# live CD stuff
+live-installer
+simple-cdd-profiles
 # If needed, will be on the initrd already.
 modutils-full
 module-init-tools-udeb
@@ -107,6 +110,8 @@ libklibc-udeb
 udev-udeb
 ai-choosers
 auto-install
+# Currently unused
+nbd-client-udeb
 # Obsolete
 libslang1-utf8-udeb
 discover-udeb
