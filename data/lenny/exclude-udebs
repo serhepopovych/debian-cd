@@ -112,6 +112,7 @@ ai-choosers
 auto-install
 # Currently unused
 nbd-client-udeb
+pwgen-udeb
 # Obsolete
 libslang1-utf8-udeb
 discover-udeb
