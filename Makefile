@@ -139,14 +139,14 @@ $(BDIR)/DATE:
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	@dpkg -x $(LATEST_DB) $(DB_DIR)
-# Make sure unstable/sid points to testing/etch, as there is no build
+# Make sure unstable/sid points to testing/lenny, as there is no build
 # rule for unstable/sid.
 unstable-map:
 	$(Q)if [ ! -d $(BASEDIR)/data/sid ] ; then \
-		ln -s etch $(BASEDIR)/data/sid ; \
+		ln -s lenny $(BASEDIR)/data/sid ; \
 	fi
 	$(Q)if [ ! -d $(BASEDIR)/tools/boot/sid ] ; then \
-		ln -s etch $(BASEDIR)/tools/boot/sid ; \
+		ln -s lenny $(BASEDIR)/tools/boot/sid ; \
 	fi
 
 #################
