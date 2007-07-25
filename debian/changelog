@@ -40,8 +40,6 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Include both dhcp-client-udeb and dhcp3-client udeb while we're
     transitioning in the installer.
-  * Remove tasks for sid as they were only needed temporarily for the KDE and
-    Xfce CD images; now they only help to confuse.
   * Exclude live-installer, simple-cdd, pwgen and nbd udebs as they are
     currently not used in Debian Installer.
   * Disable sparc32 for Lenny images as it is no longer supported.
