@@ -46,7 +46,7 @@ ar p "${MIRROR}/${DELODEB}" data.tar.gz | tar xz ./boot/delo.2nd
 mkdir -p $CDROOT/boot
 mv boot/delo.2nd $CDROOT/boot/delo.2nd
 
-install -m 644 -D $BASEDIR/data/etch/delo.conf "$CDROOT"/etc/delo.conf
+install -m 644 -D $BASEDIR/data/lenny/delo.conf "$CDROOT"/etc/delo.conf
 
 if [ ! "$DI_WWW_HOME" ];then
 	if [ ! "$DI_DIR" ];then

@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # 
-# boot-sparc etch+
+# boot-sparc lenny+
 #
 # Do install stuff for sparc, including making first CD bootable
 
@@ -45,8 +45,8 @@ silo_deb=$MIRROR/`zcat $MIRROR/dists/$DI_CODENAME/main/binary-sparc/Packages.gz 
 	tar zxf - -C $inst/ ./boot/{isofs,second}.b)
 
 # Some custom etc files
-cp -f -p $BASEDIR/data/etch/sparc/silo.conf $inst/boot/
-cat $BASEDIR/data/etch/sparc/debian.txt \
+cp -f -p $BASEDIR/data/lenny/sparc/silo.conf $inst/boot/
+cat $BASEDIR/data/lenny/sparc/debian.txt \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
