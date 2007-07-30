@@ -10,13 +10,13 @@
 
 MIRROR=$1
 ARCHES="$2"
-SUITE=$3
-DI_SUITE=$4
+CODENAME=$3
+DI_CODENAME=$4
 OUT=$5
 
 for ARCH in $ARCHES
 do
-	LOCATIONS="$MIRROR/dists/$SUITE/ $MIRROR/dists/$DI_SUITE/"
+	LOCATIONS="$MIRROR/dists/$CODENAME/ $MIRROR/dists/$DI_CODENAME/"
 	echo "Looking in $LOCATIONS"
 
 	case $ARCH in
@@ -64,12 +64,12 @@ do
 								}' | sort | uniq >> $OUT
             # Use the new D-I images. Do NOT use the "current"
             # link; it causes problems with overlaid files...
-            for VER in $MIRROR/dists/$DI_SUITE/main/installer-$ARCH/*
+            for VER in $MIRROR/dists/$DI_CODENAME/main/installer-$ARCH/*
             do
                 if [ -d $VER ] && [ ! -L $VER ] ; then
                     FILE=$VER/images/MD5SUMS
 					echo "Using MD5 sums from d-i: $FILE"
-                    LOC=dists/$DI_SUITE/main/installer-$ARCH/`basename $VER`/images
+                    LOC=dists/$DI_CODENAME/main/installer-$ARCH/`basename $VER`/images
                     for ENTRY in `cat $FILE | sed 's/  /:/g'`
                     do
                         PATH=`echo $ENTRY | /bin/sed "s?^.*:\./?$MIRROR/$LOC/?g"`
