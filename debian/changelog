@@ -54,8 +54,9 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Drop old with26 cruft for lenny.
   * Update lenny's isolinux.bin to the one from syslinux 3.51-1
+  * Parse isolinux.cfg case-insensatively.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 01 Aug 2007 22:30:08 -0400
+ -- Joey Hess <joeyh@debian.org>  Wed, 01 Aug 2007 22:42:56 -0400
 
 debian-cd (3.0.2) unstable; urgency=high
 

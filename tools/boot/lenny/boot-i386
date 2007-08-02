@@ -202,10 +202,10 @@ if [ "$NN" = "1" ]; then
 		done
 
 		cat boot$N/isolinux-amd64/isolinux.cfg | awk '
-				/^LABEL/ { printf("LABEL amd64-%s\n", $2) }
-				/^DEFAULT/ { printf("DEFAULT64 amd64-%s\n", $2) }
-				/kernel/ { print $0 }
-				/append/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
+				/^[Ll][Aa][Bb][Ee][Ll]/ { printf("label amd64-%s\n", $2) }
+				/^[Dd][Ee][Ff][Aa][Uu][Ll][Tt]/ { printf("default64 amd64-%s\n", $2) }
+				/[Kk][Ee][Rr][Nn][Ee][Ll]/ { print $0 }
+				/[Aa][Pp][Pp][Ee][Nn][Dd]/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
 
 	    rm -rf boot$N/isolinux-amd64
 	fi
