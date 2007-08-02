@@ -175,18 +175,9 @@ if [ "$NN" = "1" ]; then
 
 	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
-	if [ -e boot$N/isolinux/f3.txt.with26+gtk ]; then
-		extra_image 2.6/initrd.gz
-		extra_image 2.6/vmlinuz
-		extra_image gtk/initrd.gz
-		syslinux_files with26+gtk
-	elif [ -e boot$N/isolinux/f3.txt.withgtk ]; then
+	if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
 		extra_image gtk/initrd.gz
 		syslinux_files withgtk
-	elif [ -e boot$N/isolinux/f3.txt.with26 ];then
-		extra_image 2.6/initrd.gz
-		extra_image 2.6/vmlinuz
-		syslinux_files with26
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with* 2>/dev/null || true
 
