@@ -38,7 +38,7 @@ if (defined($ENV{'MAXCDS'})) {
 if (defined($ENV{'EXTRANONFREE'})) {
 	$extranonfree = $ENV{'EXTRANONFREE'};
 } else {
-	$extranonfree = 1;
+	$extranonfree = 0;
 }
 	
 my $list = "$tdir/list";
