@@ -57,7 +57,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   * Parse isolinux.cfg case-insensatively.
   * Merge boot-i386 and boot-amd64 into boot-x86.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 01 Aug 2007 23:47:14 -0400
+ -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 
 debian-cd (3.0.2) unstable; urgency=high
 
