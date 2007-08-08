@@ -52,6 +52,9 @@ fi
 if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt" ]; then
 	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt"
 fi
+if [ ! -e "$APTTMP/$CODENAME-$ARCH/status" ]; then
+    touch "$APTTMP/$CODENAME-$ARCH/status"
+fi
 if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 
 	# Generating a correct sources.list file

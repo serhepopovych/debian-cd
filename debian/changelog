@@ -60,6 +60,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Fix extranonfree support to be backward compatible with previous
     behaviour (default to false)
+  * Create dpkg status file before calling APT
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 
