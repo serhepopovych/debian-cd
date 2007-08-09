@@ -9,7 +9,7 @@
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
-#xet -x
+#set -x
 
 N=$1
 CDDIR=$2
@@ -19,6 +19,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
 		DI_WWW_HOME="http://people.debian.org/~joeyh/d-i/images/daily"
 	else
 		DI_WWW_HOME="http://people.debian.org/~aba/d-i/images/daily"
+	fi
 	if [ -n "$DI_DIR" ];then
 		DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
 		DI_WWW_HOME=""                     

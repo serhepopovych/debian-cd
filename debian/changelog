@@ -62,6 +62,9 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
     behaviour (default to false)
   * Create dpkg status file before calling APT
 
+  [ Steve McIntyre ]
+  * Fix boot-x86 shell syntax so it runs
+
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 
 debian-cd (3.0.2) unstable; urgency=high
