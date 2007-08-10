@@ -64,6 +64,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Fix boot-x86 shell syntax so it runs
+  * Further logic fixing in boot-x86: amd64 should now work
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 

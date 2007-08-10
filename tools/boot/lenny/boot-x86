@@ -9,7 +9,7 @@
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
-#set -x
+set -x
 
 N=$1
 CDDIR=$2
@@ -209,11 +209,10 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	else
 		if [ "$ARCH" = amd64 ]; then
+		        mkdir -p boot$N/isolinux
 			mv -f boot$N/isolinux-amd64/* boot$N/isolinux
-			rm -rf boot$N/isolinux-amd64
-		else
-			rm -rf boot$N/isolinux-amd64
 		fi
+		rm -rf boot$N/isolinux-amd64
 	fi
 	
 	if [ "$SPLASHPNG" ] ; then
