@@ -68,7 +68,7 @@ else
 	wget "$DI_WWW_HOME/initrd.gz" -O ./$DI_DIR/initrd.gz
 fi
 
-if [ -e "$DI_DIR"/initrd.gz ] ; then
+if [ ! -e "$DI_DIR"/initrd.gz ] ; then
     DI_DIR="$DI_DIR"/2.6
 fi
 cp "$DI_DIR"/initrd.gz "$inst/boot/initrd.gz"
