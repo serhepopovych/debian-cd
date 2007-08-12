@@ -67,6 +67,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   * Further logic fixing in boot-x86: amd64 should now work
   * Temporary fixup for daily lenny sparc builds - use older image locations
     if new ones not available.
+  * Remove Build-Dep-Indep on sysutils. Closes: #437497
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 
