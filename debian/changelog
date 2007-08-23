@@ -49,7 +49,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
 
   [ Petter Reinholdtsen ]
   * Update tools/grab_md5 to use the same variable name (SUITE->CODENAME)
-    as the rest of the code, to reduse confusion.
+    as the rest of the code, to reduce confusion.
 
   [ Joey Hess ]
   * Drop old with26 cruft for lenny.
