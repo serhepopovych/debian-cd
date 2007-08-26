@@ -72,6 +72,8 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
     $CODENAME - allows for sid builds more easily etc.	
   * Recompress the Packages files separately just before generating
     Release files. Closes: #423835, thanks to fjp for the patch.
+  * Check if required base packages might also be supplied by a local
+    repository too, not just the main distribution. Closes: #425600
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 

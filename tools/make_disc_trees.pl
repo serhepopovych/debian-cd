@@ -308,6 +308,15 @@ sub check_base_installable {
 	}
 	close PLIST;
 
+    $packages_file = "$cddir/dists/$codename/local/binary-$arch/Packages";
+    if (open (PLIST, $packages_file)) {
+        while (defined($p = <PLIST>)) {
+            chomp $p;
+            $p =~ m/^Package: (\S+)/ and $on_disc{$1} = $1;
+        }
+        close PLIST;
+    }
+
 	if (defined($ENV{'BASE_EXCLUDE'})) {
 		open (ELIST, $ENV{'BASE_EXCLUDE'})
 			|| die "Can't open base_exclude file $ENV{'BASE_EXCLUDE'} : $!\n";
