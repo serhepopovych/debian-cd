@@ -68,6 +68,8 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
   * Temporary fixup for daily lenny sparc builds - use older image locations
     if new ones not available.
   * Remove Build-Dep-Indep on sysutils. Closes: #437497
+  * In build.sh, use $DI_CODENAME for installer task files rather than
+    $CODENAME - allows for sid builds more easily etc.	
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 
