@@ -350,16 +350,22 @@ sub md5_file {
 	return ($md5, $st->size);
 }
 
+sub recompress {
+	# Recompress the Packages and Sources files; workaround for bug
+	# #402482
+	my ($filename);
+
+	$filename = $File::Find::name;
+
+	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
+		system("gzip -9c < $_ >$_.gz");
+	}
+}	
+
 sub md5_files_for_release {
 	my ($md5, $size, $filename);
 
 	$filename = $File::Find::name;
-
-	# Recompress the Packages and Sources files; workaround for bug
-	# #402482
-	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
-		system("gzip -9c < $_ >$_.gz");
-	}
 
 	if ($filename =~ m/\/.*\/(Packages|Sources|Release)/o) {
 		$filename =~ s/^\.\///g;
@@ -521,6 +527,7 @@ sub finish_disc {
 	chdir "dists/$codename";
 	open(RELEASE, ">>Release") || die "Failed to open Release file: $!\n";
 	print RELEASE "MD5Sum:\n";
+	find (\&recompress, ".");
 	find (\&md5_files_for_release, ".");
 	close(RELEASE);
 	chdir("../..");
