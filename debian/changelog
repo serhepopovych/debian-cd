@@ -74,6 +74,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
     Release files. Closes: #423835, thanks to fjp for the patch.
   * Check if required base packages might also be supplied by a local
     repository too, not just the main distribution. Closes: #425600
+  * Merge update-cd changes across from the version in etch.
 
  -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
 

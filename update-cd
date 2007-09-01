@@ -24,7 +24,7 @@ MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
 NONFREE=0
 
 # What release version is this?
-VER=3.1r5
+VER=4.0r1
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -38,13 +38,13 @@ MKISOFS=$PWD/../mkisofs/usr/bin/mkisofs
 JTE=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/sarge-update/cd-work
+TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/etch-update/cd-work
 
-# Building woody cd set ...
-CODENAME=sarge
+# Building etch cd set ...
+CODENAME=etch
 
 # Path where the images will be written
-OUT=/org/cdbuilder.debian.org/src/deb-cd/tmp/sarge-update/cd-out
+OUT=/org/cdbuilder.debian.org/src/deb-cd/tmp/etch-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
@@ -70,7 +70,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/deb-cd/r0-r5.diff.full
+DIFF=/home/deb-cd/r0-r1.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=610 # megabytes, leaving space for metadata
@@ -96,7 +96,7 @@ CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
 export FIRSTVER VERSPACE CAPCODE
 
 if [ "$ARCHLIST"x = ""x ] ; then
-    ARCHLIST="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
+    ARCHLIST="alpha amd64 arm hppa i386 ia64 mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
 else
     ARCHLIST=$@
 fi
@@ -189,24 +189,24 @@ make_cd () {
 	    if [ ! -d $OUT/$THISARCH/jigdo-$TYPE ] ; then
 		mkdir -p $OUT/$THISARCH/jigdo-$TYPE
 	    fi
-		${MKISOFS} -J -r -V "Debian $VER update" -o \
-			$OUT/$THISARCH/iso-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.iso \
-			-jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
-			-jigdo-template $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.template \
+		${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
+			$OUT/$THISARCH/iso-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.iso \
+			-jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo \
+			-jigdo-template $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.template \
 			-jigdo-map Debian=$MIRROR/ \
 			-jigdo-map Non-US=$NONUS/ \
 			-jigdo-force-md5 /pool/ \
 			-md5-list $UPD/md5-check \
 			$UPD/CD$CDNUM 2>&1 | grep "extents written"
 		$BASEDIR/tools/jigdo_cleanup \
-			$OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo \
-			debian-update-$VER-$THISARCH-$THISNUM.iso \
-			$OUT debian-update-$VER-$THISARCH-$THISNUM.template \
+			$OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo \
+			debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.iso \
+			$OUT debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.template \
 			"Debian GNU/Linux $VERSPACE - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
-		echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$THISNUM.jigdo
+		echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo
 	else
-		${MKISOFS} -J -r -V "Debian $VER update CD" -o \
-		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$THISNUM.raw \
+		${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
+		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$TYPEUP-$THISNUM.raw \
 		$UPD/CD$CDNUM 2>&1 | grep "extents written"
 	fi
 }
@@ -240,16 +240,12 @@ for THISARCH in $ARCHLIST
 do
 	THISNUM=0
 
-	if [ $THISARCH = amd64 ] ; then
-		MIRROR=$MIRROR_AMD64
-	else
-		MIRROR=$MIRROR_NORM
-	fi
+	MIRROR=$MIRROR_NORM
 
 	rm -f $UPD/md5-check
-	$GRAB_MD5 $MIRROR $THISARCH $CODENAME $UPD/md5-check
+	$GRAB_MD5 $MIRROR $THISARCH $CODENAME $CODENAME $UPD/md5-check
 	if [ "$NONUS"x != ""x ] ; then
-		$GRAB_MD5 $NONUS $THISARCH $CODENAME $UPD/md5-check
+		$GRAB_MD5 $NONUS $THISARCH $CODENAME $CODENAME $UPD/md5-check
 	fi
 
 	for file in `cat $UPD/list`
@@ -259,12 +255,12 @@ do
 			cd $MIRROR
 			THISNUM=$((THISNUM + 1))
 			if [ $THISARCH = "source" ] ; then
-				echo "Creating CD$CDNUM for source (part $THISNUM)"
+				echo "Creating $TYPEUP$CDNUM for source (part $THISNUM)"
 			else
-				echo "Creating CD$CDNUM for binary-$THISARCH (part $THISNUM)"
+				echo "Creating $TYPEUP$CDNUM for binary-$THISARCH (part $THISNUM)"
 			fi
 			mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
-			INFO="Debian GNU/Linux $VER Update CD $DATE: $THISARCH CD $THISNUM"
+			INFO="Debian GNU/Linux $VER Update $TYPEUP $DATE: $THISARCH $TYPEUP $THISNUM"
 	   		echo $INFO > $UPD/CD$CDNUM/.disk/info
 			SIZE_USED=0
 			SRCFILES=0
