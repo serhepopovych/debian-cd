@@ -1,4 +1,4 @@
-debian-cd (3.0.3) UNRELEASED; urgency=low
+debian-cd (3.0.3) unstable; urgency=low
 
   [ Steve McIntyre ]
   * In start_new_disc, cope with $DEBVERSION containing spaces.
@@ -76,7 +76,7 @@ debian-cd (3.0.3) UNRELEASED; urgency=low
     repository too, not just the main distribution. Closes: #425600
   * Merge update-cd changes across from the version in etch.
 
- -- Joey Hess <joeyh@debian.org>  Tue, 07 Aug 2007 18:57:05 -0700
+ -- Steve McIntyre <93sam@debian.org>  Sat, 01 Sep 2007 23:58:42 +0100
 
 debian-cd (3.0.2) unstable; urgency=high
 
