@@ -270,11 +270,11 @@ sub should_exclude_package {
     my $should_exclude = 0;
 
     foreach my $entry (@exclude_packages) {
-	    if (($pkgname =~ /^\Q$entry\E$/m)) {
+	if (($pkgname =~ /^\Q$entry\E$/m)) {
             print LOG "Excluding $pkg due to match on \"\^$entry\$\"\n";
             $should_exclude++;
         }
-	}
+    }
 
     if ($should_exclude) {
         # Double-check that we're not being asked to include *and*
@@ -308,14 +308,14 @@ sub check_base_installable {
 	}
 	close PLIST;
 
-    $packages_file = "$cddir/dists/$codename/local/binary-$arch/Packages";
-    if (open (PLIST, $packages_file)) {
-        while (defined($p = <PLIST>)) {
-            chomp $p;
-            $p =~ m/^Package: (\S+)/ and $on_disc{$1} = $1;
-        }
-        close PLIST;
-    }
+	$packages_file = "$cddir/dists/$codename/local/binary-$arch/Packages";
+	if (open (PLIST, $packages_file)) {
+		while (defined($p = <PLIST>)) {
+			chomp $p;
+			$p =~ m/^Package: (\S+)/ and $on_disc{$1} = $1;
+		}
+		close PLIST;
+	}
 
 	if (defined($ENV{'BASE_EXCLUDE'})) {
 		open (ELIST, $ENV{'BASE_EXCLUDE'})
@@ -500,15 +500,15 @@ sub finish_disc {
 	my $ok = 0;
 	my $bytes = 0;
 	my $ctx;
-    my $hook;
+	my $hook;
 	my $error = 0;
 
-    if (defined($ENV{'DISC_FINISH_HOOK'})) {
-        $hook = $ENV{'DISC_FINISH_HOOK'};
-        print "  Calling disc_finish hook: $hook\n";
-        $error = system("$hook $tdir $mirror $disknum $cddir \"$archlist\"");
+	if (defined($ENV{'DISC_FINISH_HOOK'})) {
+		$hook = $ENV{'DISC_FINISH_HOOK'};
+		print "  Calling disc_finish hook: $hook\n";
+		$error = system("$hook $tdir $mirror $disknum $cddir \"$archlist\"");
 		$error == 0 || die "DISC_FINISH_HOOK failed with error $error\n";
-    }
+	}
 
 	if (($disknum == 1) && !($archlist eq "source") && !($disktype eq "BC")) {
 		foreach my $arch (@arches_nosrc) {
@@ -553,12 +553,12 @@ sub finish_disc {
 	system("mv -f md5sum.txt.tmp md5sum.txt");
 	chdir $bdir;
 
-    if (defined($ENV{'DISC_END_HOOK'})) {
-        $hook = $ENV{'DISC_END_HOOK'};
-        print "  Calling disc_end hook: $hook\n";
-        $error = system("$hook $tdir $mirror $disknum $cddir \"$archlist\"");
+	if (defined($ENV{'DISC_END_HOOK'})) {
+		$hook = $ENV{'DISC_END_HOOK'};
+		print "  Calling disc_end hook: $hook\n";
+		$error = system("$hook $tdir $mirror $disknum $cddir \"$archlist\"");
 		$error == 0 || die "DISC_END_HOOK failed with error $error\n";
-    }
+	}
 
 	$size = `$size_check $cddir`;
 	chomp $size;
