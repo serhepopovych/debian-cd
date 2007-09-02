@@ -8,7 +8,7 @@
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
 set -e
-set -x
+#set -x
 
 N=$1
 CDDIR=$2
