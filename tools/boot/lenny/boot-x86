@@ -55,10 +55,13 @@ KTYPE[10]=""
 
 THISTYPE=${KTYPE[$NN]}
 
+INSTALLDIR_i386="install.386"
+INSTALLDIR_amd64="install.amd"
+
 if [ "$ARCH" = i386 ]; then
-	INSTALLDIR="install.386"
+	INSTALLDIR="$INSTALLDIR_i386"
 else
-	INSTALLDIR="install.amd"
+	INSTALLDIR="$INSTALLDIR_amd64"
 fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
@@ -168,6 +171,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	mkdir -p boot$N/$ISOLINUXDIR
 	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/$ISOLINUXDIR/; tar zx)
+	# Not everything in the tarball is isolinux stuff
+	mv boot$N/$ISOLINUXDIR/{g2ldr*,setup.exe,win32-loader.ini} boot$N/
 	if [ -e boot$N/$ISOLINUXDIR/f3.txt.withgtk ]; then
 		extra_image gtk/initrd.gz
 		mv boot$N/$ISOLINUXDIR/f3.txt.withgtk boot$N/$ISOLINUXDIR/f3.txt
@@ -177,6 +182,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	rm -f boot$N/$ISOLINUXDIR/isolinux.cfg.with* 2>/dev/null || true
 
 	sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/isolinux.cfg
+
+	sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
 
 	cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/$ISOLINUXDIR/
 
@@ -206,6 +213,9 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			/^[Dd][Ee][Ff][Aa][Uu][Ll][Tt]/ { printf("default64 amd64-%s\n", $2) }
 			/[Kk][Ee][Rr][Nn][Ee][Ll]/ { print $0 }
 			/[Aa][Pp][Pp][Ee][Nn][Dd]/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
+
+		sed -i -e "/^arch=/d ; /^i386\//p; s/^i386\//amd64\//; s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
+			boot$N/win32-loader.ini
 
 	else
 		if [ "$ARCH" = amd64 ]; then
