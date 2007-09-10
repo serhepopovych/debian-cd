@@ -172,7 +172,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/$ISOLINUXDIR/; tar zx)
 	# Not everything in the tarball is isolinux stuff
-	mv boot$N/$ISOLINUXDIR/{g2ldr*,setup.exe,win32-loader.ini} boot$N/
+	mv boot$N/$ISOLINUXDIR/g2ldr* boot$N/$ISOLINUXDIR/setup.exe \
+		boot$N/$ISOLINUXDIR/win32-loader.ini boot$N/
 	if [ -e boot$N/$ISOLINUXDIR/f3.txt.withgtk ]; then
 		extra_image gtk/initrd.gz
 		mv boot$N/$ISOLINUXDIR/f3.txt.withgtk boot$N/$ISOLINUXDIR/f3.txt
