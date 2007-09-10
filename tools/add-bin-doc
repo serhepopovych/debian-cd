@@ -34,6 +34,7 @@ rm -f $dir/README $dir/README.1ST \
 	$dir/README.CD-manufacture $dir/README.multicd \
 	$dir/README.pgp $dir/README.non-US ; \
 
+rm -f $dir/README.html
 cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
     -D COMPLETE="$COMPLETE" \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
@@ -42,6 +43,7 @@ cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
     -D OUTPUTtext $BASEDIR/data/$CODENAME/README.html.in \
 	| sed -e 's/%%.//g' > $dir/README.html
 
+rm -f $dir/README.txt
 lynx -dump -force_html $dir/README.html | todos \
 > $dir/README.txt ; \
 

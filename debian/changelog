@@ -6,6 +6,8 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Applied patch from Robert Millan <rmh@aybabtu.com> to integrate
     win32-loader. Closes: #440220.
+  * Applied patch from Robert Millan <rmh@aybabtu.com> to fix image
+    generation with read-only mirrors. Closes: #441397.
 
  -- Otavio Salvador <otavio@ossystems.com.br>  Mon, 10 Sep 2007 13:43:04 -0300
 
