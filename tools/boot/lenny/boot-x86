@@ -253,8 +253,14 @@ else
 	fi
 fi
 
-# Add autorun if we have README.html
-if [ -f $CDDIR/README.html ]; then
+# Add autorun
+if [ -f $CDDIR/setup.exe ]; then
+# when win32-loader is present, use that (it already checks for README.html)
+	todos > $CDDIR/autorun.inf <<EOF
+[autorun]
+open=setup.exe
+EOF
+elif [ -f $CDDIR/README.html ]; then
 	todos > $CDDIR/autorun.inf <<EOF
 [autorun]
 open=autorun.bat
