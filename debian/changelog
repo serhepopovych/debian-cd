@@ -14,8 +14,9 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     dhcp3-client-udeb has over.
   * Exclude multipath-udeb and libaio1-udeb since they're not being use
     yet.
+  * Fix autorun.inf generation when win32-loader is present.
 
- -- Otavio Salvador <otavio@debian.org>  Wed, 12 Sep 2007 13:31:32 -0300
+ -- Otavio Salvador <otavio@debian.org>  Thu, 13 Sep 2007 15:28:30 -0300
 
 debian-cd (3.0.3) unstable; urgency=low
 

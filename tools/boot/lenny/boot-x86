@@ -254,7 +254,7 @@ else
 fi
 
 # Add autorun
-if [ -f $CDDIR/setup.exe ]; then
+if [ -f boot$N/setup.exe ]; then
 # when win32-loader is present, use that (it already checks for README.html)
 	todos > $CDDIR/autorun.inf <<EOF
 [autorun]
