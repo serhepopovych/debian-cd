@@ -10,6 +10,10 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     generation with read-only mirrors. Closes: #441397.
   * Applied patch from Robert Millan <rmh@aybabtu.com> to use win32-loader
     for autorun when CD is being used on Windows. Closes: #441846.
+  * Exclude dhcp-client-udeb since it's not being used and transition for
+    dhcp3-client-udeb has over.
+  * Exclude multipath-udeb and libaio1-udeb since they're not being use
+    yet.
 
  -- Otavio Salvador <otavio@debian.org>  Wed, 12 Sep 2007 13:31:32 -0300
 
