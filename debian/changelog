@@ -16,6 +16,10 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     yet.
   * Fix autorun.inf generation when win32-loader is present.
 
+  [ Steve McIntyre ]
+  * Make daily i386/amd64 lenny builds work again - don't attempt to copy
+    the win32-loader files into place if they don't exist.
+
  -- Otavio Salvador <otavio@debian.org>  Thu, 13 Sep 2007 15:28:30 -0300
 
 debian-cd (3.0.3) unstable; urgency=low
