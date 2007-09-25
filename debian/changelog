@@ -21,6 +21,13 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     the win32-loader files into place if they don't exist.
   * Remove Depends: on sysutils. Closes: #437497 (again)
 
+  [ Jérémy Bobbio ]
+  * README.html: Integrate a new look for README.html done by Kalle Söderman.
+    Huge thanks to him!
+  * README: Improve the wording when building a netinst or business card by
+    being a little bit more specific than just saying: CD 1 out of 1.  This
+    meant adding new defines "DISKTYPE$DISKTYPE".
+
  -- Otavio Salvador <otavio@debian.org>  Thu, 13 Sep 2007 15:28:30 -0300
 
 debian-cd (3.0.3) unstable; urgency=low

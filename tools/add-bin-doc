@@ -36,6 +36,7 @@ rm -f $dir/README $dir/README.1ST \
 
 rm -f $dir/README.html
 cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
+    -D DISKTYPE$DISKTYPE \
     -D COMPLETE="$COMPLETE" \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
@@ -48,6 +49,7 @@ lynx -dump -force_html $dir/README.html | todos \
 > $dir/README.txt ; \
 
 cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
+    -D DISKTYPE$DISKTYPE \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
     -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \
@@ -57,6 +59,10 @@ cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
 rm -f $dir/README.diskdefines
 mkdir -p $dir/pics 
 cp -p $BASEDIR/data/pics/*.* $dir/pics/ 
+
+mkdir -p $dir/css
+cp -pf $BASEDIR/data/$CODENAME/*.css $dir/css/
+cp -pf $BASEDIR/data/$CODENAME/*.{png,gif} $dir/pics
 
 if [ -e $MIRROR/dists/$CODENAME/main/Release-Notes ] ; then 
    cp -pf $MIRROR/dists/$CODENAME/main/Release-Notes $dir/
