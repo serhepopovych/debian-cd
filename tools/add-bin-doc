@@ -61,8 +61,8 @@ mkdir -p $dir/pics
 cp -p $BASEDIR/data/pics/*.* $dir/pics/ 
 
 mkdir -p $dir/css
-cp -pf $BASEDIR/data/$CODENAME/*.css $dir/css/
-cp -pf $BASEDIR/data/$CODENAME/*.{png,gif} $dir/pics
+cp -pf $BASEDIR/data/$CODENAME/*.css $dir/css/ || true
+cp -pf $BASEDIR/data/$CODENAME/*.{png,gif} $dir/pics || true
 
 if [ -e $MIRROR/dists/$CODENAME/main/Release-Notes ] ; then 
    cp -pf $MIRROR/dists/$CODENAME/main/Release-Notes $dir/
