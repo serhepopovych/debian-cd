@@ -72,7 +72,11 @@
 	    src="pics/debian-61.png" alt="Debian GNU/Linux"
             height="94" width="211" /></span></h1>
 
+#if (defined(DISKTYPEBC) || defined(DISKTYPENETINST))
+    	<p>This disc contains the installer for the
+#else
         <p>This is one disc in a set containing the the
+#endif
         <a href="http://www.debian.org/">Debian GNU/Linux</a> distribution.
         Debian is a very extensive collection of software. But it
         is more. It is a complete Operating System (OS) for your
