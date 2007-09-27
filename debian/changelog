@@ -28,7 +28,10 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     being a little bit more specific than just saying: CD 1 out of 1.  This
     meant adding new defines "DISKTYPE$DISKTYPE".
 
- -- Otavio Salvador <otavio@debian.org>  Thu, 13 Sep 2007 15:28:30 -0300
+  [ Joey Hess ]
+  * Include dmraid deb. Closes: #443991
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 27 Sep 2007 13:44:56 -0400
 
 debian-cd (3.0.3) unstable; urgency=low
 

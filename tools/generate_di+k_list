@@ -65,9 +65,10 @@ installation-report
 openssh-server
 cryptsetup
 brltty
+dmraid
 
-/* libsysfs2-udeb provides libsysfs2 so we have to make sure the deb
- * gets included on the first CD too
+/* In etch, libsysfs2-udeb provides libsysfs2 so use this to 
+ * make sure the deb gets included on the first CD too
  */
 libsysfs2
 
