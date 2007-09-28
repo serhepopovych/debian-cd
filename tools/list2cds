@@ -104,6 +104,16 @@ if (not $nonfree) {
 	}
 }
 
+open (EXCLUDE_LIST, "< $exclude") || die "Can't open $exclude : $!\n";
+while (defined($_=<EXCLUDE_LIST>)) {
+	chomp;
+	next if m/^\s*$/;
+	next if $excluded{$_};
+	$excluded{$_} = 'list';
+	$count_excl++;
+}
+close EXCLUDE_LIST;
+
 msg(1, "Statistics:
 Number of packages: @{ [scalar(keys %packages)] }
 Number of excluded: $count_excl of @{ [scalar(keys %excluded)] }
@@ -179,10 +189,20 @@ while (defined($_=<LIST>)) {
 	    next;
 	}
 	next if $excluded{$_};
-	if ($included{$_}) {
+	if ($included{$_} == -1) {
 	    msg(3, "$_ has already been included.\n");
 	    next;
 	}
+
+	$included{$_} = -1;
+}
+close LIST;
+
+foreach (keys %included) {
+	next if ($included{$_} != -1);
+
+	$included{$_} = 0;
+
 	# This is because udebs tend to have bad dependencies but work
 	# nevertheless ... this may be removed once the udebs have a
 	# better depencency system
@@ -192,7 +212,6 @@ while (defined($_=<LIST>)) {
 	    add_package ($_, ! $norecommends, ! $nosuggests);
 	}
 }
-close LIST;
 
 msg(0, "  Now up to $cd_size bytes\n");
 # All requested packages have been included
