@@ -20,6 +20,8 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     packages dependencies to be included. Closes: #410418.
   * Applied patch from Nicolas François <nicolas.francois@centraliens.net>
     to allow README.html translation using po4a.
+  * Remove the 'Last Modified' date from data/lenny/README.html.in since
+    it's useless.
 
   [ Steve McIntyre ]
   * Make daily i386/amd64 lenny builds work again - don't attempt to copy

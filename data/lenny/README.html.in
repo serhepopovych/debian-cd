@@ -468,12 +468,6 @@
       (http://www.debian.org/contact)
 #endif
       for information on contacting us.</p>
-#if OUTPUTtext
-      <p align="center">
-#else
-      <p>
-#endif
-      Last Modified: Tue Sep 25 15:57:02 UTC 2007</p>
     </div>
   </div>
 </body>
