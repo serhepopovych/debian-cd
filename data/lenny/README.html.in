@@ -60,11 +60,12 @@
 
     <div id="intro">
       <div id="splash">
-        <h1
 #if OUTPUTtext
-         align="center"
+        <h1 align="center">
+#else
+        <h1>
 #endif
-	>Welcome to the exciting world of 
+	Welcome to the exciting world of 
 #if OUTPUTtext
         <br />
 #endif
@@ -456,21 +457,23 @@
 #endif
 
     <div id="fineprint">
-      <p
 #if OUTPUTtext
-       align="center"
+      <p align="center">
+#else
+      <p>
 #endif
-      >See the Debian <a href=
+      See the Debian <a href=
       "http://www.debian.org/contact">contact page</a>
 #if OUTPUTtext
       (http://www.debian.org/contact)
 #endif
       for information on contacting us.</p>
-      <p
 #if OUTPUTtext
-       align="center"
+      <p align="center">
+#else
+      <p>
 #endif
-      >Last Modified: Tue Sep 25 15:57:02 UTC 2007</p>
+      Last Modified: Tue Sep 25 15:57:02 UTC 2007</p>
     </div>
   </div>
 </body>
