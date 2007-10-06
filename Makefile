@@ -284,8 +284,15 @@ $(BDIR)/rawlist:
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		if [ _$(INSTALLER_CD) != _1 ]; then \
 			for ARCH in $(ARCHES_NOSRC); do \
-				debootstrap --arch $$ARCH --print-debs $(CODENAME) $(TDIR)/debootstrap.tmp file:$(MIRROR) 2>/dev/null \
-				| tr ' ' '\n' >>$(BDIR)/rawlist; \
+				debootstrap --arch $$ARCH \
+				            --print-debs \
+				            --include=`cat $$BASE_INCLUDE | tr "\n" "," | sed 's!,$$!!g'` \
+				            --exclude=`cat $$BASE_EXCLUDE | tr "\n" "," | sed 's!,$$!!g'` \
+				            $(CODENAME) \
+				            $(TDIR)/debootstrap.tmp \
+				            file:$(MIRROR) \
+			                $(DEBOOTSTRAP_SCRIPT) 2>/dev/null \
+				    | tr ' ' '\n' >>$(BDIR)/rawlist; \
 				rm -rf $(TDIR)/debootstrap.tmp; \
 			done; \
 		fi; \
