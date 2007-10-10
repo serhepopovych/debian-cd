@@ -6,7 +6,7 @@ Uploaders: Raphael Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty
 Build-Depends: debhelper (>= 4)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.6.1.0
-XS-Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
+Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
 
 Package: debian-cd
 Architecture: all
