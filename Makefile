@@ -286,8 +286,8 @@ $(BDIR)/rawlist:
 			for ARCH in $(ARCHES_NOSRC); do \
 				debootstrap --arch $$ARCH \
 				            --print-debs \
-				            --include=`[ -n "$(BASE_INCLUDE) ] && cat $(BASE_INCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
-				            --exclude=`[ -n "$(BASE_INCLUDE) ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
+				            --include=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_INCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
+				            --exclude=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
 				            $(CODENAME) \
 				            $(TDIR)/debootstrap.tmp \
 				            file:$(MIRROR) \
