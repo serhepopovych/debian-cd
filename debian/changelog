@@ -15,9 +15,6 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Exclude multipath-udeb and libaio1-udeb since they're not being use
     yet.
   * Fix autorun.inf generation when win32-loader is present.
-  * Exclude packages and add all task present ones before resolve
-    dependencies, avoiding OR dependencies to take their place and removed
-    packages dependencies to be included. Closes: #410418.
   * Applied patch from Nicolas François <nicolas.francois@centraliens.net>
     to allow README.html translation using po4a.
   * Remove the 'Last Modified' date from data/lenny/README.html.in since
@@ -40,7 +37,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Include dmraid deb. Closes: #443991
 
- -- Otavio Salvador <otavio@debian.org>  Fri, 28 Sep 2007 15:40:56 -0300
+ -- Joey Hess <joeyh@debian.org>  Thu, 27 Sep 2007 13:44:56 -0400
 
 debian-cd (3.0.3) unstable; urgency=low
 
