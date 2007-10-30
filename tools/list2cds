@@ -104,16 +104,6 @@ if (not $nonfree) {
 	}
 }
 
-open (EXCLUDE_LIST, "< $exclude") || die "Can't open $exclude : $!\n";
-while (defined($_=<EXCLUDE_LIST>)) {
-	chomp;
-	next if m/^\s*$/;
-	next if $excluded{$_};
-	$excluded{$_} = 'list';
-	$count_excl++;
-}
-close EXCLUDE_LIST;
-
 msg(1, "Statistics:
 Number of packages: @{ [scalar(keys %packages)] }
 Number of excluded: $count_excl of @{ [scalar(keys %excluded)] }
@@ -189,39 +179,20 @@ while (defined($_=<LIST>)) {
 	    next;
 	}
 	next if $excluded{$_};
-	if ($included{$_} == 1) {
+	if ($included{$_}) {
 	    msg(3, "$_ has already been included.\n");
 	    next;
 	}
-
-	$included{$_} = 1;
+	# This is because udebs tend to have bad dependencies but work
+	# nevertheless ... this may be removed once the udebs have a
+	# better depencency system
+	if ($packages{$_}{"IsUdeb"}) {
+	    add_to_cd($cd, $packages{$_}{"Size"}, [$_]);
+	} else {
+	    add_package ($_, ! $norecommends, ! $nosuggests);
+	}
 }
 close LIST;
-
-# List first add the packages on the list so we give them priority
-foreach (keys %included) {
-	next if ($included{$_} != 1 && !$packages{$_}{"IsUdeb"});
-
-	$included{$_} = 1;
-
-    # This is because udebs tend to have bad dependencies but work
-    # nevertheless ... this may be removed once the udebs have a
-    # better depencency system
-    if ($packages{$_}{"IsUdeb"}) {
-        add_to_cd($cd, $packages{$_}{"Size"}, [$_]);
-    } else {
-        add_package ($_, ! $norecommends, ! $nosuggests);
-    }
-}
-
-# Now, let's add all the rest
-foreach (keys %included) {
-	next if ($included{$_} == 1);
-
-	$included{$_} = 0;
-
-	add_package ($_, ! $norecommends, ! $nosuggests);
-}
 
 msg(0, "  Now up to $cd_size bytes\n");
 # All requested packages have been included
@@ -232,15 +203,15 @@ if ($complete) {
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
     foreach my $p (sort { ($packages{lc $a}{"Section"} cmp $packages{lc $b}{"Section"})
-                              || (lc $a cmp lc $b) }
-                   grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
-        # At this point, we should *not* be adding any more udebs,
-        # as they're no use to anybody.
-        if ($packages{lc $p}{"IsUdeb"}) {
-            msg(2, "  Ignoring udeb $p ...\n");
-        } else {
-            add_package (lc $p, 0, 0);
-        }
+                       || (lc $a cmp lc $b) }
+             grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
+	# At this point, we should *not* be adding any more udebs,
+	# as they're no use to anybody.
+	if ($packages{lc $p}{"IsUdeb"}) {
+	    msg(2, "  Ignoring udeb $p ...\n");
+	} else {
+	    add_package (lc $p, 0, 0);
+	}
     }
 }
 
