@@ -202,16 +202,16 @@ close LIST;
 foreach (keys %included) {
 	next if ($included{$_} != 1 && !$packages{$_}{"IsUdeb"});
 
-	$included{$_} = 1
+	$included{$_} = 1;
 
-	# This is because udebs tend to have bad dependencies but work
-	# nevertheless ... this may be removed once the udebs have a
-	# better depencency system
-	if ($packages{$_}{"IsUdeb"}) {
-	    add_to_cd($cd, $packages{$_}{"Size"}, [$_]);
-	} else {
-	    add_package ($_, ! $norecommends, ! $nosuggests);
-	}
+    # This is because udebs tend to have bad dependencies but work
+    # nevertheless ... this may be removed once the udebs have a
+    # better depencency system
+    if ($packages{$_}{"IsUdeb"}) {
+        add_to_cd($cd, $packages{$_}{"Size"}, [$_]);
+    } else {
+        add_package ($_, ! $norecommends, ! $nosuggests);
+    }
 }
 
 # Now, let's add all the rest
@@ -232,15 +232,15 @@ if ($complete) {
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
     foreach my $p (sort { ($packages{lc $a}{"Section"} cmp $packages{lc $b}{"Section"})
-                       || (lc $a cmp lc $b) }
-             grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
-	# At this point, we should *not* be adding any more udebs,
-	# as they're no use to anybody.
-	if ($packages{lc $p}{"IsUdeb"}) {
-	    msg(2, "  Ignoring udeb $p ...\n");
-	} else {
-	    add_package (lc $p, 0, 0);
-	}
+                              || (lc $a cmp lc $b) }
+                   grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
+        # At this point, we should *not* be adding any more udebs,
+        # as they're no use to anybody.
+        if ($packages{lc $p}{"IsUdeb"}) {
+            msg(2, "  Ignoring udeb $p ...\n");
+        } else {
+            add_package (lc $p, 0, 0);
+        }
     }
 }
 
