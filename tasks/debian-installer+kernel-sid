@@ -36,6 +36,7 @@ reiserfsprogs
 libfribidi0
 localization-config
 acpid
+acpi-support-base
 ppp
 pppoeconf
 udev

@@ -36,6 +36,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * Include dmraid deb. Closes: #443991
+  * Add acpi-support-base to generate_di+k_list.
 
  -- Joey Hess <joeyh@debian.org>  Thu, 27 Sep 2007 13:44:56 -0400
 
