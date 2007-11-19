@@ -28,7 +28,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     the win32-loader files into place if they don't exist.
   * Remove Depends: on sysutils. Closes: #437497 (again)
 
-  [ Jérémy Bobbio ]
+  [ Jérémy Bobbi]
   * README.html: Integrate a new look for README.html done by Kalle Söderman.
     Huge thanks to him!
   * README: Improve the wording when building a netinst or business card by
@@ -39,7 +39,14 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Include dmraid deb. Closes: #443991
   * Add acpi-support-base to generate_di+k_list.
 
- -- Otavio Salvador <otavio@ossystems.com.br>  Sat, 03 Nov 2007 10:51:26 -0200
+  [ Steve McIntyre ]
+  * Newer versions of debootstrap have moved the scripts from /usr/lib to
+    /usr/share. Add a sym-link to cope - let's keep compatible with etch
+    as much as possible. Also, log what debootstrap told us (in
+    debootstrap-list) rather than just including the results directly in
+    rawlist.
+	
+ -- Steve McIntyre <93sam@debian.org>  Mon, 19 Nov 2007 23:40:32 +0000
 
 debian-cd (3.0.3) unstable; urgency=low
 

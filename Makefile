@@ -139,6 +139,10 @@ $(BDIR)/DATE:
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	@dpkg -x $(LATEST_DB) $(DB_DIR)
+	if [ ! -e $(DEBOOTSTRAP_DIR) ] ; then \
+		ln -sf share $(DB_DIR)/usr/lib ; \
+	fi
+
 # Make sure unstable/sid points to testing/lenny, as there is no build
 # rule for unstable/sid.
 unstable-map:
@@ -292,7 +296,8 @@ $(BDIR)/rawlist:
 				            $(TDIR)/debootstrap.tmp \
 				            file:$(MIRROR) \
 			                $(DEBOOTSTRAP_SCRIPT) 2>/dev/null \
-				    | tr ' ' '\n' >>$(BDIR)/rawlist; \
+				    | tr ' ' '\n' > $(BDIR)/debootstrap-list; \
+				cat $(BDIR)/debootstrap-list >>$(BDIR)/rawlist; \
 				rm -rf $(TDIR)/debootstrap.tmp; \
 			done; \
 		fi; \
