@@ -21,6 +21,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     it's useless.
   * Use DEBOOTSTRAP_SCRIPT, BASE_INCLUDE and BASE_EXCLUDE variables to
     calculate the base packages set
+  * Hide image creation command if not using verbosing make
 
   [ Steve McIntyre ]
   * Make daily i386/amd64 lenny builds work again - don't attempt to copy
@@ -38,7 +39,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Include dmraid deb. Closes: #443991
   * Add acpi-support-base to generate_di+k_list.
 
- -- Joey Hess <joeyh@debian.org>  Thu, 27 Sep 2007 13:44:56 -0400
+ -- Otavio Salvador <otavio@ossystems.com.br>  Sat, 03 Nov 2007 10:51:26 -0200
 
 debian-cd (3.0.3) unstable; urgency=low
 

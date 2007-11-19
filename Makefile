@@ -371,7 +371,7 @@ image-trees: ok genlist
 #    2    jigdo, cleanup_jigdo
 #
 images: ok $(OUT) $(BDIR)/md5-check
-	$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
