@@ -22,6 +22,8 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Use DEBOOTSTRAP_SCRIPT, BASE_INCLUDE and BASE_EXCLUDE variables to
     calculate the base packages set
   * Hide image creation command if not using verbosing make
+  * Change DEBOOTSTRAP_DIR to /usr/share/debootstrap since it has been
+    changed on debootstrap 1.0.7
 
   [ Steve McIntyre ]
   * Make daily i386/amd64 lenny builds work again - don't attempt to copy

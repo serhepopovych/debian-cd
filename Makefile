@@ -64,7 +64,7 @@ BDIR=$(TDIR)/$(CODENAME)
 ADIR=$(APTTMP)
 DB_DIR=$(BDIR)/debootstrap
 
-export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
+export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/share/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 
 LATEST_DB := $(shell ls -1tr $(MIRROR)/pool/main/d/debootstrap/debootstrap*all.deb | tail -1)
