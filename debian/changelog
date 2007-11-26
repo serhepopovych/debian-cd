@@ -28,7 +28,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     the win32-loader files into place if they don't exist.
   * Remove Depends: on sysutils. Closes: #437497 (again)
 
-  [ Jérémy Bobbi]
+  [ Jérémy Bobbio ]
   * README.html: Integrate a new look for README.html done by Kalle Söderman.
     Huge thanks to him!
   * README: Improve the wording when building a netinst or business card by
