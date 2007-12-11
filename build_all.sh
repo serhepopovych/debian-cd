@@ -13,8 +13,6 @@ if [ -z "$COMPLETE" ] ; then
     export COMPLETE=1
 fi
 
-. CONF.sh
-
 PATH=$BASEDIR/tools:$PATH
 export PATH
 
