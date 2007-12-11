@@ -50,8 +50,9 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * build_all.sh: don't source CONF.sh after already sourcing $CF earlier.
   * CONF.sh: add non-invasive option to avoid sourcing CONF.sh twice when
     using wrapper scripts.
+  * CONF.sh: Don't set MAXCDS by default; was probably changed by accident.
 
- -- Frans Pop <fjp@debian.org>  Tue, 11 Dec 2007 22:39:44 +0100
+ -- Frans Pop <fjp@debian.org>  Tue, 11 Dec 2007 22:50:56 +0100
 
 debian-cd (3.0.3) unstable; urgency=low
 

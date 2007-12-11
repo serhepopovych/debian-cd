@@ -290,7 +290,7 @@ done
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
 # If set, limits the number of binary CDs to produce.
-export MAXCDS=1
+#export MAXCDS=1
 
 # If set, overrides the boot picture used.
 #export SPLASHPNG="$BASEDIR/data/$CODENAME/splash-img.png"
