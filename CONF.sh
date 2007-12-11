@@ -1,6 +1,16 @@
 #
 # This file will have to be sourced where needed
-#
+
+# To prevent sourcing this file twice when using scripts to build CD images,
+# use the following code at the top of your script:
+#    CF=CONF.sh
+#    . $CF
+#    export DEBIAN_CD_CONF_SOURCED=true
+
+# Allow to prevent double sourcing of this file
+if [ "$DEBIAN_CD_CONF_SOURCED" = true ]; then
+	return 0
+fi
 
 # Unset all optional variables first to start from a clean state
 unset NONFREE           || true

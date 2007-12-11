@@ -1,6 +1,16 @@
 #
 # This file will have to be sourced where needed
-#
+
+# To prevent sourcing this file twice when using scripts to build CD images,
+# use the following code at the top of your script:
+#    CF=CONF.sh
+#    . $CF
+#    export DEBIAN_CD_CONF_SOURCED=true
+
+# Allow to prevent double sourcing of this file
+if [ "$DEBIAN_CD_CONF_SOURCED" = true ]; then
+	return 0
+fi
 
 # Unset all optional variables first to start from a clean state
 unset NONFREE           || true
@@ -266,11 +276,14 @@ done
 # File with list of packages to exclude as above.
 #export BASE_EXCLUDE="$BASEDIR"/data/$CODENAME/base_exclude
 
-# Only put the installer onto the cd (set NORECOMMENDS,... as well).
+# Only put the installer onto the cd (set NORECOMMENDS,... as well,
+# and if you're not using build.sh then also make sure you set TASK
+# appropriately here)
 # INSTALLER_CD=0: nothing special (default)
 # INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer-$CODENAME)
 # INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
 #export INSTALLER_CD=2
+#export TASK=tasks/debian-installer+kernel-$CODENAME
 
 # Parameters to pass to kernel (or d-i) when the CD boots. Not currently
 # supported for all architectures.
