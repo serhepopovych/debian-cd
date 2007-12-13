@@ -85,6 +85,7 @@ bpalogin
 
 #ifdef ARCH_i386
 initramfs-tools
+busybox
 discover
 discover1
 libdiscover1
@@ -105,6 +106,7 @@ linux-headers-2.6-686
 
 #ifdef ARCH_amd64
 initramfs-tools
+busybox
 discover
 discover1
 libdiscover1
@@ -116,6 +118,7 @@ linux-headers-2.6-amd64
 
 #ifdef ARCH_alpha
 initramfs-tools
+busybox
 aboot
 aboot-base
 discover1
@@ -126,6 +129,7 @@ linux-image-2.6-alpha-smp
 
 #ifdef ARCH_hppa
 initramfs-tools
+busybox
 discover1
 libdiscover1
 linux-image-2.6-parisc
@@ -137,6 +141,7 @@ palo
 
 #ifdef ARCH_ia64
 initramfs-tools
+busybox
 discover1
 libdiscover1
 linux-image-2.6-itanium
@@ -147,6 +152,7 @@ elilo
 #endif
 
 #ifdef ARCH_mips
+/* doesn't use a initrd to boot */
 arcboot
 sibyl
 linux-image-2.6-r4k-ip22
@@ -156,6 +162,7 @@ linux-image-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
+/* doesn't use a initrd to boot */
 sibyl
 colo
 delo
@@ -168,6 +175,7 @@ linux-image-2.6-sb1a-bcm91480b
 
 #ifdef ARCH_arm
 initramfs-tools
+busybox
 discover1
 libdiscover1
 nwutil
@@ -186,6 +194,7 @@ linux-image-2.6-s3c2410
 
 #ifdef ARCH_sparc
 initramfs-tools
+busybox
 silo
 discover1
 libdiscover1
@@ -199,6 +208,7 @@ linux-image-2.6-sparc64-smp
 
 #ifdef ARCH_powerpc
 initramfs-tools
+busybox
 discover1
 libdiscover1
 quik
