@@ -55,8 +55,8 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     that both "<a href=" and "<A HREF=" are recognized.
   * Include busybox for architectures that use initramfs-tools; base-installer
     will try to install it.
-  * tools/update_tasks: ignore comments and blank lines in tasks.list.
-  * tasks/tasks.list
+  * tools/update_tasks: ignore comments and blank lines in tasks/task.list.
+  * tasks/task.list*
     - add missing l10n tasks: gujarati-desktop, malayalam-desktop, tamil
     - comment out l10n tasks for languages not supported in D-I, for
       Icelandic, Irish, Serbian, Welsh and Xhosa

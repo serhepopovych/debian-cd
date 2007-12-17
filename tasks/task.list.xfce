@@ -1,6 +1,10 @@
+# Main tasks
 xfce-desktop
 desktop
 laptop
+
+# Language tasks
+# Commented out means the language is currently not supported in D-I
 arabic
 arabic-desktop
 basque-desktop
@@ -44,16 +48,17 @@ german
 german-desktop
 greek
 greek-desktop
+gujarati-desktop
 hebrew
 hebrew-desktop
 hindi
 hindi-desktop
 hungarian
 hungarian-desktop
-icelandic
-icelandic-desktop
-irish
-irish-desktop
+#icelandic
+#icelandic-desktop
+#irish
+#irish-desktop
 italian
 italian-desktop
 japanese
@@ -67,6 +72,7 @@ lithuanian
 lithuanian-desktop
 macedonian
 macedonian-desktop
+malayalam-desktop
 nepali-desktop
 northern-sami-desktop
 norwegian
@@ -83,8 +89,8 @@ romanian
 romanian-desktop
 russian
 russian-desktop
-serbian
-serbian-desktop
+#serbian
+#serbian-desktop
 slovak
 slovak-desktop
 slovenian
@@ -94,6 +100,7 @@ spanish-desktop
 swedish
 swedish-desktop
 tagalog
+tamil
 tamil-desktop
 thai
 thai-desktop
@@ -102,6 +109,6 @@ turkish-desktop
 ukrainian
 ukrainian-desktop
 vietnamese-desktop
-welsh
-welsh-desktop
-xhosa-desktop
+#welsh
+#welsh-desktop
+#xhosa-desktop
