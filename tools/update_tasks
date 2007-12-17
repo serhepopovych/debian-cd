@@ -17,7 +17,7 @@ update_full_list () {
 	tasklist=$2
 
 	grep '\*' $file > $file.new
-	for i in $(cat $tasklist); do
+	for i in $(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist); do
 		grep-aptavail -e -F Task "(^| )$i(,|$)" -s Package -n;
 	done >> $file.new
 	mv $file.new $file
@@ -29,7 +29,7 @@ update_essential_list () {
 	desktoptask=$3
 
 	grep '\*' $file > $file.new
-	for i in $(cat $tasklist); do
+	for i in $(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist); do
 		if ( [ "$i" != gnome-dekstop ] &&
 		     [ "$i" != kde-desktop ] &&
 		     [ "$i" != xfce-desktop ] ) ||

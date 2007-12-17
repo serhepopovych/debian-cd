@@ -55,8 +55,13 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     that both "<a href=" and "<A HREF=" are recognized.
   * Include busybox for architectures that use initramfs-tools; base-installer
     will try to install it.
+  * tools/update_tasks: ignore comments and blank lines in tasks.list.
+  * tasks/tasks.list
+    - add missing l10n tasks: gujarati-desktop, malayalam-desktop, tamil
+    - comment out l10n tasks for languages not supported in D-I, for
+      Icelandic, Irish, Serbian, Welsh and Xhosa
 
- -- Frans Pop <fjp@debian.org>  Thu, 13 Dec 2007 17:32:10 +0100
+ -- Frans Pop <fjp@debian.org>  Mon, 17 Dec 2007 20:54:57 +0100
 
 debian-cd (3.0.3) unstable; urgency=low
 
