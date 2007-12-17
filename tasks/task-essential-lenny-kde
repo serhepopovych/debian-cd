@@ -25,6 +25,9 @@ xresprobe
 alsa-utils
 alsa-base
 eject
+acpid
+hibernate
+anacron
 language-env
 language-env
 language-env
@@ -34,7 +37,6 @@ language-env
 jfbterm
 zhcon
 jfbterm
-zhcon
 locales
 console-cyrillic
 t1-cyrillic
@@ -72,9 +74,9 @@ locales
 language-env
 manpages-ru
 language-env
-language-env
 manpages-es
 locales
+language-env
 language-env
 language-env
 locales

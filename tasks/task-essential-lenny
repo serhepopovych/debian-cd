@@ -18,11 +18,14 @@ alsa-utils
 alsa-base
 eject
 apache2-mpm-prefork
+acpid
+hibernate
+anacron
 exim4
 cupsys
 cupsys-client
 cupsys-bsd
-postgresql-8.1
+postgresql
 bind9
 nfs-kernel-server
 samba
@@ -35,7 +38,6 @@ language-env
 jfbterm
 zhcon
 jfbterm
-zhcon
 locales
 console-cyrillic
 t1-cyrillic
@@ -73,9 +75,9 @@ locales
 language-env
 manpages-ru
 language-env
-language-env
 manpages-es
 locales
+language-env
 language-env
 language-env
 locales
