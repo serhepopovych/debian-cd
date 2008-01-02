@@ -46,6 +46,9 @@ jfbterm
 unifont
 hotplug
 usbutils
+console-data
+console-common
+console-tools
 console-cyrillic
 console-terminus
 pcmcia-cs

@@ -565,6 +565,12 @@ sub add_missing {
 		if (ref) {
 			my $or_ok = 0;
 			# Loop over each package in the OR
+			# We always add the first package in the OR to allow
+			# APT to figure out which is the better one to install
+			# for any combination of packages that have similar
+			# alternative dependencies, but in different order.
+			# Having the first alternative available should be good
+			# enough for all cases we care about.
 			foreach my $pkg (@{$_}) {
 				next if not accepted ($pkg);
 				# If the package is already included
@@ -579,12 +585,12 @@ sub add_missing {
 					last;
 				# Otherwise try to add it
 				} else {
-					#Instead of doing a bad choice I'm
-					#including all packages that do
-					#fit to the needs
+					# Stop after the first package that is
+					# added successfully
 					push (@{$list}, $pkg);
 					if (add_missing ($list, $packages{$pkg}{"Depends"}, $pkg)) {
 						$or_ok = 1;
+						last;
 					} else {
 						pop @{$list};
 					}
