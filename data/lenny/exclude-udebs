@@ -45,8 +45,7 @@ cdebconf-gtk-udeb
 fontconfig-udeb
 libatk1.0-udeb
 libcairo-directfb2-udeb
-libdirectfb-0.9-22-udeb
-libdirectfb-0.9-25-udeb
+libdirectfb-*-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-udeb
@@ -122,4 +121,6 @@ discover1-data-udeb
 libdiscover1-udeb
 # Eh?
 gnumach-udeb
-# Exclude apt-setup components; they will be included 
+# Exclude kbd and console-setup udebs, they're not currently used
+kbd-udeb
+console-setup-*-udeb
