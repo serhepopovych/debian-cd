@@ -248,7 +248,7 @@ fi
 # Create an empty dirs file; will be appended to later if needed
 > $BDIR/$DISKNUM.mkisofs_dirs
 
-echo "  Adding common docs on CD#$DISKNUM"
+echo "  Adding common docs on CD$DISKNUM"
 $BASEDIR/tools/add-bin-doc $DISKNUM "$ARCHES"
 
 # Common stuff for all disks in the set
