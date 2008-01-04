@@ -65,7 +65,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Instead of including all alternative dependencies in list2cds, only
     include the first one. This reduces the size of the netinst and improves
     what's included on CD1. Only loss is console-{data,common,tools} so these
-    are now added in generate_di+k_list. Closes: #410418.
+    are now added in generate_di+k_list. Reduces impact of #410418.
   * exclude-udebs: exclude any libdirectfb udeb instead of particular version.
   * exclude-udebs: exclude kbd-udeb and console-setup udebs (not yet used).
 
