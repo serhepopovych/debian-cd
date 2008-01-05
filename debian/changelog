@@ -68,8 +68,11 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     are now added in generate_di+k_list. Reduces impact of #410418.
   * exclude-udebs: exclude any libdirectfb udeb instead of particular version.
   * exclude-udebs: exclude kbd-udeb and console-setup udebs (not yet used).
+  * During installation debootstrap will complain about an invalid Release file
+    if there is no Packages file for the local section. Create an empty Packages
+    file if one is missing.
 
- -- Frans Pop <fjp@debian.org>  Mon, 17 Dec 2007 21:54:11 +0100
+ -- Frans Pop <fjp@debian.org>  Sun, 06 Jan 2008 00:44:19 +0100
 
 debian-cd (3.0.3) unstable; urgency=low
 

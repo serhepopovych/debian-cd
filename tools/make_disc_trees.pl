@@ -347,6 +347,24 @@ sub check_base_installable {
 	return $ok;
 }
 
+# If missing, create an empty local Packages file for an architecture.
+# Only create an uncompressed Packages file; the call to recompress will
+# create the compressed version.
+sub add_missing_Packages {
+	my ($filename);
+
+	$filename = $File::Find::name;
+
+	if ((-d "$_") && ($filename =~ m/\/main\/binary-[^\/]*$/)) {
+		if ((-f "$_/Packages") && (! -d "../local/$_/")) {
+			mkdir "../local/$_/" || die "Error creating directory local/$_: $!\n";
+			open(LPFILE, ">../local/$_/Packages") or die "Error creating local/$_/Packages: $!\n";
+			close LPFILE;
+			print "  Created empty Packages file for local/$_\n";
+		}
+	}
+}
+
 sub md5_file {
 	my $filename = shift;
 	my ($md5, $st);
@@ -531,6 +549,15 @@ sub finish_disc {
 	}
 
 	chdir $cddir;
+
+	# If we have a local packages directory, ensure we have a Packages file
+	# for all included architectures as otherwise the Release file will be
+	# invalid. This can happen if we do have local udebs but no local
+	# regular packages, or multiple architectures with not all of them
+	# having local packages.
+	if (-d "./dists/$codename/local") {
+		find (\&add_missing_Packages, "./dists/$codename/main/");
+	}
 
 	print "  Finishing off the Release file\n";
 	chdir "dists/$codename";
