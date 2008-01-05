@@ -45,7 +45,7 @@ my $list = "$tdir/list";
 my $list_ex = "$tdir/list.exclude";
 my $bdir = "$tdir/$codename";
 my $log = "$bdir/make_disc_tree.log";
-open(LOG, ">> $log") || die ("Can't open logfile $log for writing: $!\n");
+open(LOG, ">> $log") or die ("Can't open logfile $log for writing: $!\n");
 
 foreach my $arch (split(' ', $archlist)) {
 	push(@arches, $arch);
@@ -113,7 +113,7 @@ if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
 
 print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskblocks 2K-blocks maximum per image\n";
 
-open(INLIST, "$bdir/packages") || die "No packages file!\n";
+open(INLIST, "$bdir/packages") or die "No packages file!\n";
 while (defined (my $pkg = <INLIST>)) {
 	chomp $pkg;
 	$cddir = "$bdir/CD$disknum";
@@ -561,7 +561,7 @@ sub finish_disc {
 
 	print "  Finishing off the Release file\n";
 	chdir "dists/$codename";
-	open(RELEASE, ">>Release") || die "Failed to open Release file: $!\n";
+	open(RELEASE, ">>Release") or die "Failed to open Release file: $!\n";
 	print RELEASE "MD5Sum:\n";
 	find (\&recompress, ".");
 	find (\&md5_files_for_release, ".");
@@ -570,7 +570,7 @@ sub finish_disc {
 
 	print "  Finishing off md5sum.txt\n";
 	# Just md5 the bits we won't have seen already
-	open(MD5LIST, ">>md5sum.txt") || die "Failed to open md5sum.txt file: $!\n";
+	open(MD5LIST, ">>md5sum.txt") or die "Failed to open md5sum.txt file: $!\n";
 	find (\&md5_files_for_md5sum, ("./.disk", "./dists"));
 	close(MD5LIST);
 
