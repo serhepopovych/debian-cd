@@ -17,9 +17,6 @@
 ifndef VERBOSE_MAKE
 Q=@
 endif
-ifndef SIZELIMIT
-SIZELIMIT=2000000000000
-endif
 ifndef TASK
 TASK=$(BASEDIR)/tasks/Debian_$(CODENAME)
 endif
@@ -361,7 +358,7 @@ $(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
 image-trees: ok genlist
     # Use list2cds to do the dependency sorting
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		ARCH=$$ARCH $(list2cds) $(BDIR)/list $(SIZELIMIT); \
+		ARCH=$$ARCH $(list2cds) $(BDIR)/list; \
 	done
 	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
 		$(grab_source_list) $(BDIR) $(ADIR) $(BDIR)/list $(BDIR)/packages; \
