@@ -128,15 +128,28 @@ if [ $DISKNUM = 1 ] ; then
 	fi
 
 	echo "  Adding .disk/cd_type"
-    if [ "$COMPLETE"x = "1"x ]; then
-        if [ $DISKTYPE = DVD ]; then
-            echo "dvd" > $CDDIR/.disk/cd_type
-        else
-            echo "full_cd" > $CDDIR/.disk/cd_type
-        fi
-    else
-        echo "not_complete" > $CDDIR/.disk/cd_type
-    fi
+	if [ "$COMPLETE"x = "1"x ]; then
+            if [ $DISKTYPE = DVD ]; then
+		if [ $MAXCDS -eq 1 ]; then
+		    echo "dvd/single" > $CDDIR/.disk/cd_type
+		else
+		    echo "dvd" > $CDDIR/.disk/cd_type
+		fi
+	    else
+		if [ $MAXCDS -eq 1 ]; then
+		    echo "full_cd/single" > $CDDIR/.disk/cd_type
+		else
+		    echo "full_cd" > $CDDIR/.disk/cd_type
+		fi
+	    fi
+	else
+            echo "not_complete" > $CDDIR/.disk/cd_type
+	fi
+
+	if [ $NUM_ARCHES -gt 1 ]; then
+		echo "  Adding .disk/multi_arch"
+		touch $CDDIR/.disk/multi_arch
+	fi
 
 	echo "  Adding udeb/base includes/excludes"
 
