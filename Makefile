@@ -285,10 +285,13 @@ $(BDIR)/rawlist:
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		if [ _$(INSTALLER_CD) != _1 ]; then \
 			for ARCH in $(ARCHES_NOSRC); do \
+				BINCLUDE=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_INCLUDE) | tr "\n" "," | sed 's!,$$!!g'`; \
+				[ -z "$$BINCLUDE" ] || BINCLUDE="--include=$$BINCLUDE"; \
+				BEXCLUDE=`[ -n "$(BASE_EXCLUDE)" ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'`; \
+				[ -z "$$BEXCLUDE" ] || BEXCLUDE="--exclude=$$BEXCLUDE"; \
 				debootstrap --arch $$ARCH \
 				            --print-debs \
-				            --include=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_INCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
-				            --exclude=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'` \
+				            $$BINCLUDE $$BEXCLUDE \
 				            $(CODENAME) \
 				            $(TDIR)/debootstrap.tmp \
 				            file:$(MIRROR) \

@@ -73,11 +73,13 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     file if one is missing.
   * start_new_disc: make multi-arch CD/DVDs and CD/DVDs that are not part of a
     set (e.g. KDE/Xfce CDs) recognizable through info in .disk directory.
+  * Makefile: debootstrap no longer accepts options with empty values; change
+    the way include/exclude options are passed accordingly.
 
   [ Steve McIntyre ]
   * Significant cleanup of list2cds. Closes: #451237
 
- -- Frans Pop <fjp@debian.org>  Wed, 16 Jan 2008 17:47:37 +0100
+ -- Frans Pop <fjp@debian.org>  Sat, 19 Jan 2008 11:14:36 +0100
 
 debian-cd (3.0.3) unstable; urgency=low
 
