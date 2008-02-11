@@ -79,7 +79,11 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Significant cleanup of list2cds. Closes: #451237
 
- -- Frans Pop <fjp@debian.org>  Sat, 19 Jan 2008 11:14:36 +0100
+  [ Otavio Salvador ]
+  * Make sure we include laptop-detect on arches that are know to have
+    laptops (i386, amd64 and powerpc).
+
+ -- Otavio Salvador <otavio@ossystems.com.br>  Sat, 09 Feb 2008 02:22:17 -0200
 
 debian-cd (3.0.3) unstable; urgency=low
 

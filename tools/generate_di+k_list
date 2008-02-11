@@ -83,6 +83,11 @@ sudo
  * deb gets included on the first CD too for arches that get discover1
  */
 
+/* laptop-detect is used by tasksel when checking if the system is a
+ * laptop so we have to make sure to get it included on first CD for
+ * arches that are know to have laptops
+ */
+
 /* #231583: Make life easier for Australian ISP users */
 bpalogin
 
@@ -93,6 +98,7 @@ discover
 discover1
 libdiscover1
 grub
+laptop-detect
 lilo
 elilo
 libc6-i686
@@ -114,6 +120,7 @@ discover
 discover1
 libdiscover1
 grub
+laptop-detect
 lilo
 linux-image-2.6-amd64
 linux-headers-2.6-amd64
@@ -214,6 +221,7 @@ initramfs-tools
 busybox
 discover1
 libdiscover1
+laptop-detect
 quik
 yaboot
 powerpc-utils
