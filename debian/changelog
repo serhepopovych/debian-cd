@@ -82,8 +82,10 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Make sure we include laptop-detect on arches that are know to have
     laptops (i386, amd64 and powerpc).
+  * Make sure we include grub-pc since it's used when GPT disk label is
+    choosen.
 
- -- Otavio Salvador <otavio@ossystems.com.br>  Sat, 09 Feb 2008 02:22:17 -0200
+ -- Otavio Salvador <otavio@ossystems.com.br>  Thu, 14 Feb 2008 12:27:58 -0200
 
 debian-cd (3.0.3) unstable; urgency=low
 

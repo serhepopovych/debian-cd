@@ -88,6 +88,8 @@ sudo
  * arches that are know to have laptops
  */
 
+/* grub-pc is used when selecting GPT disk label */
+
 /* #231583: Make life easier for Australian ISP users */
 bpalogin
 
@@ -98,6 +100,7 @@ discover
 discover1
 libdiscover1
 grub
+grub-pc
 laptop-detect
 lilo
 elilo
@@ -120,6 +123,7 @@ discover
 discover1
 libdiscover1
 grub
+grub-pc
 laptop-detect
 lilo
 linux-image-2.6-amd64
