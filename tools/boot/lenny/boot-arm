@@ -40,19 +40,20 @@ fi
 
 cd $INSTALLDIR
 
-for subarch in netwinder; do
-	if [ ! "$DI_WWW_HOME" ];then
-		if [ ! "$DI_DIR" ];then
-		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
-		fi
-		DI_DIR2="$DI_DIR/$subarch/cdrom"
-	else
-		DI_DIR2="di_stuff"
-		wget -r -nd --no-parent --level=1 -P "$DI_DIR2" "$DI_WWW_HOME/$subarch/cdrom/"
-		rm -f "$DI_DIR2"/index*
-	fi
-	cp -a "$DI_DIR2" "$subarch"
-	rm -rf di_stuff
-done
+# Netwinder currently disabled - fails to boot at the moment, as it's too big. SAM 2008/03/05 
+#for subarch in netwinder; do
+#	if [ ! "$DI_WWW_HOME" ];then
+#		if [ ! "$DI_DIR" ];then
+#		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+#		fi
+#		DI_DIR2="$DI_DIR/$subarch/cdrom"
+#	else
+#		DI_DIR2="di_stuff"
+#		wget -r -nd --no-parent --level=1 -P "$DI_DIR2" "$DI_WWW_HOME/$subarch/cdrom/"
+#		rm -f "$DI_DIR2"/index*
+#	fi
+#	cp -a "$DI_DIR2" "$subarch"
+#	rm -rf di_stuff
+#done
 
 exit 0
