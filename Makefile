@@ -106,19 +106,6 @@ endif
 		fi; \
 	fi
 
-## BOOT & DOC & INSTALL ##
-
-# Basic checks
-$(MIRROR)/doc: need-complete-mirror
-$(MIRROR)/tools: need-complete-mirror
-need-complete-mirror:
-	@# Why the hell is this needed ??
-	@if [ ! -d $(MIRROR)/doc -o ! -d $(MIRROR)/tools ]; then \
-	    echo "You need a Debian mirror with the doc, tools and"; \
-	    echo "indices directories ! "; \
-	    exit 1; \
-	fi
-
 ## INITIALIZATION ##
 
 # Creation of the directories needed

@@ -45,6 +45,7 @@ unset MAXCDS            || true
 unset SPLASHPNG         || true
 unset OMIT_MANUAL	 || true
 unset OMIT_RELEASE_NOTES || true
+unset OMIT_DOC_TOOLS     || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -302,6 +303,11 @@ done
 # Set to 1 to save space by omitting the release notes
 # If so we will link to them on the web site.
 export OMIT_RELEASE_NOTES=1
+
+# Set to 1 to not include the doc/tools directories on CD1
+# Useful to save space and avoids failures if you have a mirror
+# without those directories.
+#export OMIT_DOC_TOOLS=1
 
 # Set this to override the default location
 #export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"

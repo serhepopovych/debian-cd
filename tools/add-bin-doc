@@ -23,7 +23,16 @@ if [ "$OMIT_MANUAL"x = ""x ] ; then
 fi
 
 dir=$BDIR/CD$DISK
-cp -pdf $MIRROR/README* $dir/ 
+for file in $MIRROR/README*; do
+	if [ -e $file ]; then
+		cp -pdf $file $dir/ 
+	else
+		echo "ERROR: no README* files in the mirror $MIRROR"
+		if [ "$OMIT_DOC_TOOLS" != "1" ]; then
+			exit 1
+		fi
+	fi
+done
 
 if [ -f $dir/doc/dedication-$DEBMAINVER.txt ]; then
 	mv $dir/doc/dedication-$DEBMAINVER.txt $dir/dedication.txt

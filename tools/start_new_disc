@@ -109,14 +109,16 @@ if [ $SOURCEDISK = 1 ] ; then
 fi
 
 if [ $DISKNUM = 1 ] ; then
-	if [ ! -e $MIRROR/tools ] || [ ! -e $MIRROR/doc ] ; then
-		echo "You need a Debian mirror with the doc, tools and"
-        echo "indices directories ! "
-        exit 1
+	if [ "$OMIT_DOC_TOOLS" != "1" ]; then
+		if [ ! -e $MIRROR/tools ] || [ ! -e $MIRROR/doc ]; then
+			echo "You need a Debian mirror with the doc, tools and"
+			echo "indices directories ! "
+			exit 1
+		fi
 	fi
 		
 	# Add install stuff
-	if [ "$SOURCEONLY"x != "yes"x ] ; then
+	if [ "$SOURCEONLY"x != "yes"x ] && [ "$OMIT_DOC_TOOLS" != "1" ]; then
 		echo "  Adding tools to CD1"
 		$BASEDIR/tools/add_files $CDDIR $MIRROR tools
 	fi
@@ -214,19 +216,21 @@ if [ $DISKNUM = 1 ] ; then
 		fi
 	done
 
-	echo "  Adding docs to CD1"
-    $BASEDIR/tools/add_files $CDDIR $MIRROR doc
-    find $CDDIR/doc -name "dedication-*" | grep -v "$DEBVERSION" | xargs rm -f
-    find $CDDIR/doc -name "debian-keyring.tar.gz" | xargs rm -f
+	if [ "$OMIT_DOC_TOOLS" != "1" ]; then
+		echo "  Adding docs to CD1"
+		$BASEDIR/tools/add_files $CDDIR $MIRROR doc
+		find $CDDIR/doc -name "dedication-*" | grep -v "$DEBVERSION" | xargs rm -f
+		find $CDDIR/doc -name "debian-keyring.tar.gz" | xargs rm -f
 
-	if [ ! -e $CDDIR/doc/FAQ/html ] ; then
-		echo "  Extracting FAQ on CD1"
-		mkdir $CDDIR/doc/FAQ/html
-		cd $CDDIR/doc/FAQ/html
-		if [ -e "../debian-faq.en.html.tar.gz" ] ; then
-			tar xzf ../debian-faq.en.html.tar.gz
-		else
-			tar xzf ../debian-faq.html.tar.gz
+		if [ ! -e $CDDIR/doc/FAQ/html ] ; then
+			echo "  Extracting FAQ on CD1"
+			mkdir $CDDIR/doc/FAQ/html
+			cd $CDDIR/doc/FAQ/html
+			if [ -e "../debian-faq.en.html.tar.gz" ] ; then
+				tar xzf ../debian-faq.en.html.tar.gz
+			else
+				tar xzf ../debian-faq.html.tar.gz
+			fi
 		fi
 	fi
 

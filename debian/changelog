@@ -85,7 +85,7 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Make sure we include laptop-detect on arches that are know to have
     laptops (i386, amd64 and powerpc).
   * Make sure we include grub-pc since it's used when GPT disk label is
-    choosen.
+    chosen.
 
   [ Steve McIntyre ]
   * Fix a bug in start_new_disc - cope with MAXCDS not being set.
@@ -97,6 +97,8 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
     from Debian. Closes: #468850
   * Add Vcs-Browser field.
   * If genisomage is not available, try to fallback on mkisofs.
+  * New OMIT_DOC_TOOLS option to be able to work with mirrors that do not
+    contain the doc and tools directories.
 
  -- Otavio Salvador <otavio@ossystems.com.br>  Thu, 14 Feb 2008 12:27:58 -0200
 
