@@ -21,7 +21,7 @@ ifndef TASK
 TASK=$(BASEDIR)/tasks/Debian_$(CODENAME)
 endif
 ifndef MKISOFS
-export MKISOFS=mkisofs
+export MKISOFS=genisoimage
 endif
 ifndef MKISOFS_OPTS
 #For normal users

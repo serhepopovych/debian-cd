@@ -7,10 +7,11 @@ Build-Depends: debhelper (>= 4)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.6.1.0
 Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
+Vcs-Browser: http://svn.debian.org/wsvn/debian-cd/trunk?op=log
 
 Package: debian-cd
 Architecture: all
-Depends: perl, cpp, libdigest-md5-perl, tofrodos, apt (>= 0.3.11.1), make, mkisofs | genisoimage, lynx, grep-dctrl, bc, libcompress-zlib-perl
+Depends: perl, cpp, libdigest-md5-perl, tofrodos, apt (>= 0.3.11.1), make, genisoimage, lynx, grep-dctrl, bc, libcompress-zlib-perl
 Recommends: hfsutils, netpbm, syslinux
 Description: Tools for building (Official) Debian CD set
  Debian-cd is the official tool for building Debian CD set since the potato

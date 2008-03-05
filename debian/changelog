@@ -92,6 +92,11 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
   * Temporarily disable boot support for arm CDs - the netwinder images are not
     being produced at the moment.
 
+  [ Raphael Hertzog ]
+  * Switch to genisoimage as default ISO generator as mkisofs has been dropped
+    from Debian. Closes: #468850
+  * Add Vcs-Browser field.
+
  -- Otavio Salvador <otavio@ossystems.com.br>  Thu, 14 Feb 2008 12:27:58 -0200
 
 debian-cd (3.0.3) unstable; urgency=low
