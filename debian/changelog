@@ -78,12 +78,17 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Significant cleanup of list2cds. Closes: #451237
+  * tools/imagesums: use newer features in latest mkisofs/genisoimage to grab
+    pre-calculated MD5 and SHA1 checksums directly from the jigdo file.
 
   [ Otavio Salvador ]
   * Make sure we include laptop-detect on arches that are know to have
     laptops (i386, amd64 and powerpc).
   * Make sure we include grub-pc since it's used when GPT disk label is
     choosen.
+
+  [ Steve McIntyre ]
+  * Fix a bug in start_new_disc - cope with MAXCDS not being set.
 
  -- Otavio Salvador <otavio@ossystems.com.br>  Thu, 14 Feb 2008 12:27:58 -0200
 

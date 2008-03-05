@@ -130,13 +130,13 @@ if [ $DISKNUM = 1 ] ; then
 	echo "  Adding .disk/cd_type"
 	if [ "$COMPLETE"x = "1"x ]; then
             if [ $DISKTYPE = DVD ]; then
-		if [ $MAXCDS -eq 1 ]; then
+		if [ "$MAXCDS"x = "1"x ]; then
 		    echo "dvd/single" > $CDDIR/.disk/cd_type
 		else
 		    echo "dvd" > $CDDIR/.disk/cd_type
 		fi
 	    else
-		if [ $MAXCDS -eq 1 ]; then
+		if [ "$MAXCDS"x = "1"x ]; then
 		    echo "full_cd/single" > $CDDIR/.disk/cd_type
 		else
 		    echo "full_cd" > $CDDIR/.disk/cd_type
