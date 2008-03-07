@@ -14,7 +14,7 @@ NUM_ARCHES=`echo $ARCHES | wc -w`
 
 if [ "$OMIT_MANUAL" != 1 ]; then
 	DOCDIR=doc
-    MANTDIR=$TDIR/installguide
+	MANTDIR=$TDIR/installguide
 
 	for ARCH in $ARCHES
 	do
@@ -25,8 +25,7 @@ if [ "$OMIT_MANUAL" != 1 ]; then
 				INSTALLDIR=$DIR/$DOCDIR/manual/$ARCH
 			fi
 
-	        DOCS=$MIRROR/dists/$DI_CODENAME/main/installer-$ARCH/current/$DOCDIR
-            INSTALLGUIDE=$(zcat $MIRROR/dists/etch/main/binary-$ARCH//Packages.gz | \
+            INSTALLGUIDE=$(zcat $MIRROR/dists/$CODENAME/main/binary-$ARCH//Packages.gz | \
                 sed -n "s/Filename: \(pool\/main\/i\/installation-guide\/installation-guide-$ARCH.*deb\)$/\1/p")
 
             if [ -f "$MIRROR/$INSTALLGUIDE" ]; then
