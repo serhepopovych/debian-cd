@@ -102,8 +102,9 @@ debian-cd (3.0.4) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * Ensure that the correct version of the Installation Guide is included.
+  * Lenny will be version 5.0.
 
- -- Frans Pop <fjp@debian.org>  Fri, 07 Mar 2008 10:26:22 +0100
+ -- Frans Pop <fjp@debian.org>  Sat, 08 Mar 2008 19:54:22 +0100
 
 debian-cd (3.0.3) unstable; urgency=low
 
