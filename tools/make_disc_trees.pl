@@ -8,7 +8,9 @@ use strict;
 use Digest::MD5;
 use File::stat;
 use File::Find;
+use Compress::Zlib;
 
+my %pkginfo;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds, $extranonfree);
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
@@ -27,7 +29,14 @@ $codename = shift;
 $archlist = shift;
 $mkisofs = shift;
 
-require "$basedir/tools/add_packages";
+my $security = $ENV{'SECURITY'} || $mirror;
+my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
+my $iso_blksize = 2048;
+my $log_opened = 0;
+my $old_split = $/;
+my $symlink_farm = $ENV{'SYMLINK'} || 0;
+my $link_verbose = $ENV{'VERBOSE'} || 0;
+my $link_copy = $ENV{'COPYLINK'} || 0;
 
 if (defined($ENV{'MAXCDS'})) {
 	$maxcds = $ENV{'MAXCDS'};
@@ -52,6 +61,8 @@ foreach my $arch (split(' ', $archlist)) {
 	if (! ($arch eq "source")) {
 		push(@arches_nosrc, $arch);
 	}
+    # Pre-cache all the package information that we need
+    load_packages_cache($arch);
 }
 
 my $disknum = 1;
@@ -171,7 +182,7 @@ while (defined (my $pkg = <INLIST>)) {
                         $size += $guess_size;
                         print LOG "CD $disknum: GUESS_TOTAL is $size after adding $reinclude_pkg\n";
                         $pkgs_this_cd++;
-                        $pkgs_done++;                        
+                        $pkgs_done++;
                     }
                 }
             }
@@ -252,6 +263,43 @@ close(LOG);
 #  Local helper functions
 #
 #############################################
+sub load_packages_cache {
+    my $arch = shift;
+    my @pkglist;
+    my ($p);
+
+    $ENV{'LC_ALL'} = 'C'; # Required since apt is now translated
+    $ENV{'ARCH'} = $arch;
+
+    open(INLIST, "$bdir/packages.$arch")
+        or die "No packages file $bdir/packages.$arch for $arch!\n";
+
+    while (defined (my $pkg = <INLIST>)) {
+        chomp $pkg;
+        my ($junk, $component, $pkgname) = split /:/, $pkg;
+        push @pkglist, $pkgname;
+    }
+    close INLIST;
+
+    $/ = ''; # Browse by paragraph
+    while (@pkglist) {
+
+        my (@pkg) = splice(@pkglist,0,200);
+        if ($arch eq "source") {
+            open (LIST, "$basedir/tools/apt-selection cache showsrc @pkg |")
+                || die "Can't fork : $!\n";
+        } else {
+            open (LIST, "$basedir/tools/apt-selection cache show @pkg |")
+                || die "Can't fork : $!\n";
+        }
+        while (defined($_ = <LIST>)) {
+            m/^Package: (\S+)/m and $p = $1;
+            $pkginfo{$arch}{$p} = $_;
+        }
+    }
+    $/ = $old_split; # Browse by line again
+}
+
 sub should_start_extra_nonfree {
     my $pkg = shift;
     my ($arch, $component, $pkgname) = split /:/, $pkg;
@@ -593,4 +641,431 @@ sub finish_disc {
 	print LOG "CD $disknum$not filled with $pkgs_this_cd packages, $size blocks, $bytes bytes\n";
 	print "  CD $disknum$not filled with $pkgs_this_cd packages, $size blocks, $bytes bytes\n";
 	system("date >> $log");
+}
+
+# start of add_packages
+
+sub msg_ap {
+    my $level = shift;
+    if (!$log_opened) {
+        open(AP_LOG, ">> $tdir/$codename/log.add_packages")
+            || die "Can't write in $tdir/log.add_packages!\n";
+    }
+    print AP_LOG @_;
+}
+
+sub size_in_blocks {
+    my $size_in_bytes = shift;
+    return (1 + int(($size_in_bytes + $iso_blksize - 1) / $iso_blksize));
+}
+
+# From a package name and section, work out the directory where its
+# corresponding Packages file should live
+sub Packages_dir {
+    my $dir = shift;
+    my $file = shift;
+    my $section = shift;
+
+    my ($pdir, $dist);
+
+    if ($file =~ /\/main\//) {
+        $dist = "main";
+    } elsif ($file =~ /\/contrib\//) {
+        $dist = "contrib";
+    } elsif ($file =~ /\/non-free\//) {
+        $dist = "non-free";
+    } else {
+        $dist = "local";
+    }	
+
+    $pdir = "$dir/dists/$codename/$dist";
+    if ($section eq "debian-installer") {
+        $pdir = "$dir/dists/$codename/$dist/debian-installer";
+    }
+    return $pdir;
+}
+
+# Dump the apt-cached data into a Packages file; make the parent dir
+# for the Packages file if necesssary
+sub add_Packages_entry {
+    my ($p, $file, $section, $pdir, $pkgfile, $gz);
+    my $dir = shift;
+    my $arch = shift;
+    my ($st1, $st2, $size1, $size2);
+    my $blocks_added = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    m/^Package: (\S+)/m and $p = $1;
+    m/^Section: (\S+)/m and $section = $1;
+
+    if ($arch eq "source") {
+        m/^Directory: (\S+)/mi and $file = $1;
+        $pdir = Packages_dir($dir, $file, $section) . "/source";
+        $pkgfile = "$pdir/Sources";
+    } else {
+        m/^Filename: (\S+)/mi and $file = $1;
+        $pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
+        $pkgfile = "$pdir/Packages";
+    }
+
+    msg_ap(0, "  Adding $p to $pkgfile(.gz)\n");
+    
+    if (! -d $pdir) {
+        system("mkdir -p $pdir");
+        $blocks_added++;
+    }	
+
+    if (-e $pkgfile) {
+        $st1 = stat("$pkgfile");
+        $old_blocks = size_in_blocks($st1->size);
+    }
+
+    if (-e "$pkgfile.gz") {
+        $st1 = stat("$pkgfile.gz");
+        $old_blocks += size_in_blocks($st1->size);
+    }
+
+    open(PFILE, ">>$pkgfile");
+    print PFILE $_;
+    close(PFILE);
+
+    $gz = gzopen("$pkgfile.gz", "ab9") or die "Failed to open $pkgfile.gz: $gzerrno\n";
+    $gz->gzwrite($_) or die "Failed to write $pkgfile.gz: $gzerrno\n";
+    $gz->gzclose();
+    $st1 = stat("$pkgfile");
+    $st2 = stat("$pkgfile.gz");
+    $size1 = $st1->size;
+    $size2 = $st2->size;
+
+    $new_blocks += size_in_blocks($st1->size);
+    $new_blocks += size_in_blocks($st2->size);
+    $blocks_added += ($new_blocks - $old_blocks);
+    msg_ap(0, "    now $size1 / $size2 bytes, $blocks_added blocks added\n");
+    return $blocks_added;
+}
+
+sub add_md5_entry {
+    my $dir = shift;
+    my $arch = shift;
+    my ($pdir, $file, $md5);
+    my $md5file = "$dir/md5sum.txt";
+    my ($st, $size);
+    my $p;
+    my $blocks_added = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    m/^Package: (\S+)/mi and $p = $1;
+
+    if (-e $md5file) {
+        $st = stat("$md5file");
+        $old_blocks = size_in_blocks($st->size);
+    }
+
+    open(MD5FILE, ">>$md5file");
+
+    if ($arch eq "source") {
+        m/^Directory: (\S+)/mi and $pdir = $1;
+        m/^ (\S+) (\S+) ((\S+).*dsc)/m and print MD5FILE "$1  ./$pdir/$3\n";
+        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print MD5FILE "$1  ./$pdir/$3\n";
+        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print MD5FILE "$1  ./$pdir/$3\n";
+    } else {
+        m/^Filename: (\S+)/m and $file = $1;
+        m/^MD5sum: (\S+)/m and print MD5FILE "$1  ./$file\n";
+    }
+
+    close(MD5FILE);
+    msg_ap(0, "  Adding $p to $md5file\n");
+    $st = stat("$md5file");
+    $size = $st->size;
+    $new_blocks = size_in_blocks($st->size);
+    $blocks_added = $new_blocks - $old_blocks;
+    msg_ap(0, "    now $size bytes, added $blocks_added blocks\n");
+
+    return $blocks_added;
+}
+
+# Roll back the results of add_Packages_entry()
+sub remove_Packages_entry {
+    my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz);
+    my $dir = shift;
+    my $arch = shift;
+    my ($st1, $st2, $size1, $size2);
+    my $blocks_removed = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    m/^Package: (\S+)/m and $p = $1;
+    m/^Section: (\S+)/m and $section = $1;
+
+    if ($arch eq "source") {
+        m/^Directory: (\S+)/mi and $file = $1;
+        $pdir = Packages_dir($dir, $file, $section) . "/source";
+        $pkgfile = "$pdir/Sources";
+    } else {
+        m/^Filename: (\S+)/mi and $file = $1;
+        $pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
+        $pkgfile = "$pdir/Packages";
+    }
+
+    if (-e $pkgfile) {
+        $st1 = stat("$pkgfile");
+        $old_blocks += size_in_blocks($st1->size);
+    }
+
+    if (-e "$pkgfile.gz") {
+        $st2 = stat("$pkgfile.gz");
+        $old_blocks += size_in_blocks($st2->size);
+    }
+
+    $tmp_pkgfile = "$pkgfile" . ".rollback";
+
+    msg_ap(0, "  Removing $p from $pkgfile(.gz)\n");
+
+    open(IFILE, "<$pkgfile");
+    open(OFILE, ">>$tmp_pkgfile");
+
+    $gz = gzopen("$pkgfile.gz", "wb9");
+
+    while (defined($match = <IFILE>)) {
+        if (! ($match =~ /^Package: \Q$p\E$/m)) {
+            print OFILE $match;
+            $gz->gzwrite($match) or die "Failed to write $pkgfile.gz: $gzerrno\n";
+        }
+    }
+
+    $gz->gzclose();
+    close(IFILE);
+    close(OFILE);
+
+    rename $tmp_pkgfile, $pkgfile;
+    $st1 = stat("$pkgfile");
+    $st2 = stat("$pkgfile.gz");
+    $size1 = $st1->size;
+    $size2 = $st2->size;
+    $new_blocks += size_in_blocks($st1->size);
+    $new_blocks += size_in_blocks($st2->size);
+    $blocks_removed += ($old_blocks - $new_blocks);
+    msg_ap(0, "    now $size1 / $size2 bytes, $blocks_removed blocks removed\n");
+    return $blocks_removed;
+}
+
+sub remove_md5_entry {
+    my $dir = shift;
+    my $arch = shift;
+    my ($pdir, $file, $md5, $match, $present);
+    my $md5file = "$dir/md5sum.txt";
+    my $tmp_md5file = "$dir/md5sum.txt.tmp";
+    my @fileslist;
+    my ($st, $size, $p);
+    my $blocks_removed = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    $/ = $old_split; # Browse by line again
+
+    m/^Package: (\S+)/mi and $p = $1;
+    if ($arch eq "source") {
+        m/^Directory: (\S+)/mi and $pdir = $1;
+        m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@fileslist, "$1  ./$pdir/$3");
+        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and push(@fileslist, "$1  ./$pdir/$3");
+        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and push(@fileslist, "$1  ./$pdir/$3");
+    } else {
+        m/^Filename: (\S+)/m and $file = $1;
+        m/^MD5Sum: (\S+)/mi and push(@fileslist, "$1  ./$file");
+    }
+
+    if (-e $md5file) {
+        $st = stat("$md5file");
+        $old_blocks = size_in_blocks($st->size);
+    }
+
+    open(IFILE, "<$md5file");
+    open(OFILE, ">>$tmp_md5file");
+    while (defined($match = <IFILE>)) {
+        $present = 0;
+        foreach my $entry (@fileslist) {
+            if (($match =~ /\Q$entry\E$/m)) {
+                $present++;
+            }
+        }
+        if (!$present) {
+            print OFILE $match;
+        }
+    }
+    close(IFILE);
+    close(OFILE);
+
+    $/ = ''; # Browse by paragraph again
+    rename $tmp_md5file, $md5file;
+    msg_ap(0, "  Removing $p from md5sum.txt\n");
+    $st = stat("$dir/md5sum.txt");
+    $size = $st->size;
+    $new_blocks = size_in_blocks($st->size);
+    $blocks_removed = $old_blocks - $new_blocks;
+    msg_ap(0, "    now $size bytes, $blocks_removed blocks removed\n");
+    return $blocks_removed;
+}
+
+sub get_file_blocks {
+    my $realfile = shift;
+    my $st;
+    $st = stat($realfile) or die "unable to stat file $realfile: $!\n";
+    return size_in_blocks($st->size);
+}
+
+sub add_packages {
+    my ($p, @files, $d, $realfile, $source, $section, $name, $pkgfile, $pdir);
+    my $dir;
+
+    my $total_blocks = 0;
+    my $rollback = 0;
+    my $option = shift;	
+    if ($option =~ /--rollback/) {
+        $rollback = 1;
+        $dir = shift;
+    } else {	
+        $dir = $option;
+    }
+
+    if (! -d $dir) { 
+        die "add_packages: $dir is not a directory ..."; 
+    }
+
+    my $pkg = shift;
+	my ($arch, $component, $pkgname) = split /:/, $pkg;
+
+    msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
+
+    $_ = $pkginfo{$arch}{$pkgname};
+    undef @files;
+
+    $source = $mirror;
+    if ($arch eq "source") {
+        m/^Directory: (\S+)/m and $pdir = $1;
+        $source=$security if $pdir=~m:updates/:;
+        m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@files, "$pdir/$3");
+        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and push(@files, "$pdir/$3");
+        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and push(@files, "$pdir/$3");
+    } else {
+        m/^Filename: (\S+)/mi and push(@files, $1);
+        $source=$security if $1=~m:updates/:;
+    }
+    
+    if ($rollback) {
+        # Remove the Packages entry/entries for the specified package
+        $total_blocks -= remove_Packages_entry($dir, $arch, $_);
+        $total_blocks -= remove_md5_entry($dir, $arch, $_);
+        
+        foreach my $file (@files) {
+            my $missing = 0;
+            # Count how big the file is we're removing, for checking if the disc is full
+            if (! -e "$source/$file") {
+                msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                if (-e "$localdebs/$file") {
+                    $source = $localdebs;
+                } else {
+                    die "$file not found under either $source or $localdebs\n";
+                }                        
+            }
+            $realfile = real_file ("$source/$file");
+            $total_blocks -= get_file_blocks($realfile);
+
+            # Remove the link
+            unlink ("$dir/$file") || msg_ap(0, "Couldn't delete file $dir/$file\n");
+            msg_ap(0, "  Rollback: removed $dir/$file\n");
+        }
+    } else {
+        $total_blocks += add_Packages_entry($dir, $arch, $_);
+        $total_blocks += add_md5_entry($dir, $arch, $_);
+
+        foreach my $file (@files) {
+
+            # And put the file in the CD tree (with a (hard) link)
+            if (! -e "$source/$file") {
+                msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                if (-e "$localdebs/$file") {
+                    $source = $localdebs;
+                } else {
+                    die "$file not found under either $source or $localdebs\n";
+                }                        
+            }
+            $realfile = real_file ("$source/$file");
+
+            if (! -e "$dir/$file") {
+                # Count how big the file is, for checking if the disc
+                # is full. ONLY do this if the file is not already
+                # linked in - consider binary-all packages on a
+                # multi-arch disc
+                $total_blocks += get_file_blocks($realfile);
+                $total_blocks += good_link ($realfile, "$dir/$file");
+                msg_ap(0, "  Linked $dir/$file\n");
+            } else {
+                msg_ap(0, "  $dir/$file already linked in\n");
+            }
+        }
+    }
+#    close LIST or die "Something went wrong with apt-cache : $@ ($!)\n";
+    msg_ap(0, "  size $total_blocks\n");
+    $/ = $old_split; # Return to line-orientation
+    return $total_blocks;
+}
+
+sub good_link ($$) {
+	my ($src, $dest) = @_;
+	my $dir_added = 0;
+
+	if (! -e $dest) {
+
+		# Check if the destination directory does exist
+		my $ddir = $dest;
+		$ddir =~ s#/?[^/]+$##g;
+		if ($ddir eq "") 
+		{
+			$ddir = ".";
+		}
+		if (! -d $ddir) # Create it if not
+		{
+			system("mkdir -p $ddir");
+			$dir_added++;
+		}
+		# Link the files
+		if ($symlink_farm) {
+			print "Symlink: $dest => $src\n" if ($link_verbose >= 3);
+			if (not symlink ($src, $dest)) {
+				print STDERR "Symlink from $src to $dest failed: $!\n";
+			}
+		} elsif ($link_copy) {
+			print "Copy: $dest => $src\n" if ($link_verbose >= 3);
+			if (system("cp -ap $src $dest")) {
+				my $err_num = $? >> 8;
+				my $sig_num = $? & 127;
+				print STDERR "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
+			}
+		} else {
+			print "Hardlink: $dest => $src\n" if ($link_verbose >= 3);
+			if (not link ($src, $dest)) {
+				print STDERR "Link from $src to $dest failed: $!\n";
+			}
+		}
+	}
+	return $dir_added;
+}
+
+sub real_file ($) {
+	my $link = shift;
+	my ($dir, $to);
+	
+	while (-l $link) {
+		$dir = $link;
+		$dir =~ s#[^/]+/?$##;
+		if ($to = readlink($link)) {
+			$link = $dir . $to;
+		} else {
+			print STDERR "Can't readlink $link: $!\n";
+		}
+	}
+
+	return $link;
 }

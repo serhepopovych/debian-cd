@@ -1,5 +1,10 @@
 debian-cd (3.0.5) UNRELEASED; urgency=low
 
+  * Pre-cache apt's package information in large lumps rather than walk
+    through it one package at a time. It's much faster. Closes: #470838
+    Needs a small re-arrangement: code from tools/add_packages and
+    tools/link.pl now moves into tools/make_disc_trees.pl
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 17 Mar 2008 23:25:12 +0000
 
 debian-cd (3.0.4) unstable; urgency=low

@@ -355,6 +355,9 @@ image-trees: ok genlist
 	else \
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi
+	$(Q)if [ "$(INC_SOURCE)"x = "yes"x ] ; then \
+		$(Q)grep ^source $(BDIR)/packages > $(BDIR)/packages.source; \
+	fi
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
 # DOJIGDO actions   (for both binaries and source)
