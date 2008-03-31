@@ -33,6 +33,10 @@ cd $CDDIR/..
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
 
+# Arm is currently not bootable in lenny, so bail out here
+echo "Arm booting disabled, check with Sledge/fjp/tbm"
+exit 0
+
 # Only disk 1* bootable
 if [ $N != 1 ] && [ $N != 1_NONUS ]; then
 	exit 0

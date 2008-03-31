@@ -15,7 +15,8 @@ CDDIR=$2
 INSTALLDIR=$CDDIR/install
 
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/images-m68k/daily/"
+# Temporarily disabled to stop cron jobs complaining
+#   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/images-m68k/daily/"
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""                     
