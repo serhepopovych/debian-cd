@@ -5,6 +5,9 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
     through it one package at a time. It's much faster. Closes: #470838
     Needs a small re-arrangement: code from tools/add_packages now
     moves into tools/make_disc_trees.pl
+  * Update lenny's isolinux.bin to the one from syslinux 3.63+dfsg-1.
+    Should help a user with an old Adaptec SCSI card who has been reporting
+    problems.
 
   [ Frans Pop ]
   * Remove wireless-tools-udeb from the lenny udeb_include files as it is not
