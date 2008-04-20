@@ -830,6 +830,7 @@ sub remove_Packages_entry {
 
     $gz = gzopen("$pkgfile.gz", "wb9");
 
+    $/ = ''; # Browse by paragraph
     while (defined($match = <IFILE>)) {
         if (! ($match =~ /^Package: \Q$p\E$/m)) {
             print OFILE $match;
