@@ -3,26 +3,42 @@
 cd $1
 
 :> MD5SUMS
+:> SHA1SUMS
 
 case $DOJIGDO in
 	0)
 		for file in `find * -name \*.iso`
 		do
 			md5sum $file >> MD5SUMS
+			sha1sum $file >> SHA1SUMS
 		done
 		;;
 	1|2)
-		for file in `find * -name \*.template`
+		for file in `find * -name \*.jigdo`
 		do
-			if [ "`tail --bytes=33 "$file" | head --bytes=1 | od -tx1 -An | sed -e 's/ //g'`" != 05 ]; then
-				echo "Possibly invalid template $file"
-				exit 
-			fi
-			grep -q " ${file%%.template}.iso"'$$' MD5SUMS \
-				 || echo "`tail --bytes=26 "$file" | \
-					head --bytes=16 | \
-					od -tx1 -An | \
-					sed -e 's/ //g'`  ${file%%.template}.iso" >> MD5SUMS
+            iso=${file%%.jigdo}.iso
+
+			grep -q $iso MD5SUMS
+            if [ $? -ne 0 ] ; then
+			    MD5=`zcat -f $file | awk '/Image Hex MD5Sum/ {print $5}'`
+                if [ "$MD5"x != ""x ] ; then
+                    echo "$MD5  $iso" >> MD5SUMS
+                else
+                    echo "Jigdo file does not contain the Image MD5, calculating by hand"
+                    md5sum $iso >> MD5SUMS
+                fi
+            fi
+
+			grep -q $iso SHA1SUMS
+            if [ $? -ne 0 ] ; then
+			    SHA1=`zcat -f $file | awk '/Image Hex SHA1Sum/ {print $5}'`
+                if [ "$SHA1"x != ""x ] ; then
+                    echo "$SHA1  $iso" >> SHA1SUMS
+                else
+                    echo "Jigdo file does not contain the Image SHA1, calculating by hand"
+                    sha1sum $iso >> SHA1SUMS
+                fi
+            fi
 		done
 		;;
 	*)
@@ -30,8 +46,3 @@ case $DOJIGDO in
 		exit 1
 		;;
 esac
-
-# Likewise, the file size can be extracted from the .template with:
-# tail --bytes=32 $$file | head --bytes=6 | od -tx1 -An \
-#  | tr ' abcdef' '\nABCDEF' | tac | tr '\n' ' ' \
-#  | sed -e 's/ //g; s/^.*$/ibase=16 & /' | tr ' ' '\n' | bc
