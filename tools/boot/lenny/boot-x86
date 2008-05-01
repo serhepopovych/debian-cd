@@ -180,17 +180,33 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		extra_image gtk/initrd.gz
 		mv boot$N/$ISOLINUXDIR/f3.txt.withgtk boot$N/$ISOLINUXDIR/f3.txt
 		mv boot$N/$ISOLINUXDIR/f4.txt.withgtk boot$N/$ISOLINUXDIR/f4.txt
-		mv boot$N/$ISOLINUXDIR/isolinux.cfg.withgtk boot$N/$ISOLINUXDIR/isolinux.cfg
+		if [ -e boot$N/$ISOLINUXDIR/isolinux.cfg.withgtk ]; then
+			mv boot$N/$ISOLINUXDIR/isolinux.cfg.withgtk boot$N/$ISOLINUXDIR/isolinux.cfg
+		fi
+	else
+		# Remove gtk isolinux config files.
+		rm -f boot$N/$ISOLINUXDIR/gtk.cfg
+		rm -f boot$N/$ISOLINUXDIR/amdgtk.cfg
 	fi
 	rm -f boot$N/$ISOLINUXDIR/isolinux.cfg.with* 2>/dev/null || true
 
-	sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/isolinux.cfg
+	for f in isolinux.cfg text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
+		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
+			sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/$f
+		fi
+	done
+	for f in amd.cfg amdgtk.cfg adamd.cfg adamdgtk.cfg; do
+		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
+			sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/$ISOLINUXDIR/$f
+		fi
+	done
 
 	if [ -e boot$N/win32-loader.ini ] ; then
 	    sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
 	fi
 
 	cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/$ISOLINUXDIR/
+	cp -f $BASEDIR/data/$DI_CODENAME/vesamenu.c32 boot$N/$ISOLINUXDIR/
 
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config
@@ -213,11 +229,20 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv $file.tmp $file
 		done
 
-		cat boot$N/isolinux-amd64/isolinux.cfg | awk '
-			/^[Ll][Aa][Bb][Ee][Ll]/ { printf("label amd64-%s\n", $2) }
-			/^[Dd][Ee][Ff][Aa][Uu][Ll][Tt]/ { printf("default64 amd64-%s\n", $2) }
-			/[Kk][Ee][Rr][Nn][Ee][Ll]/ { print $0 }
-			/[Aa][Pp][Pp][Ee][Nn][Dd]/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
+		if [ -e boot$N/isolinux/amd.cfg ]; then
+			# Split isolinux configs exist, so the amd.cfg will
+			# be loaded and set things up for amd64. No munging
+			# needed.
+			:
+		else 
+			# This is compatability code for old versions of d-i that
+			# do not use split isolinux configs.
+			cat boot$N/isolinux-amd64/isolinux.cfg | awk '
+				/^[Ll][Aa][Bb][Ee][Ll]/ { printf("label amd64-%s\n", $2) }
+				/^[Dd][Ee][Ff][Aa][Uu][Ll][Tt]/ { printf("default64 amd64-%s\n", $2) }
+				/[Kk][Ee][Rr][Nn][Ee][Ll]/ { print $0 }
+				/[Aa][Pp][Pp][Ee][Nn][Dd]/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
+		fi
 
 		sed -i -e "/^arch=/d ; /^i386\//p; s/^i386\//amd64\//; s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
 			boot$N/win32-loader.ini
@@ -227,8 +252,18 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		        mkdir -p boot$N/isolinux
 			mv -f boot$N/isolinux-amd64/* boot$N/isolinux
 		fi
-		rm -rf boot$N/isolinux-amd64
+
+		if [ -e boot$N/isolinux/amd.cfg ]; then
+			# Split isolinux configs exist. Remove the amd.cfg
+			# to avoid it being loaded on a disc that does not
+			# have both amd64 and i386 dirs.
+			rm -f boot$N/isolinux/amd.cfg
+			rm -f boot$N/isolinux/amdgtk.cfg
+			rm -f boot$N/isolinux/adamd.cfg
+			rm -f boot$N/isolinux/adamdgtk.cfg
+		fi
 	fi
+	rm -rf boot$N/isolinux-amd64
 	
 	if [ "$SPLASHPNG" ] ; then
 		# Insert our own splash screen.  Color index 0 is
