@@ -48,7 +48,7 @@ do
                                         DIR = ""
 								}' | sort | uniq >> $OUT
 			;;
-		alpha|amd64|arm|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
+		alpha|amd64|arm|armel|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
 			FILES=`find $LOCATIONS -name Packages.gz | grep binary-$ARCH`
 			echo -e "Using MD5 sums from Packages files:\n$FILES"
 			zcat -f $FILES | awk -v MIRROR=$MIRROR '

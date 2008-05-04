@@ -206,6 +206,20 @@ linux-image-2.6-rpc
 linux-image-2.6-s3c2410
 #endif
 
+#ifdef ARCH_armel
+initramfs-tools
+busybox
+discover1
+libdiscover1
+slugimage
+flash-kernel
+nslu2-utils
+apex-nslu2
+linux-image-2.6-iop32x
+linux-image-2.6-ixp4xx
+linux-image-2.6-versatile
+#endif
+
 #ifdef ARCH_sparc
 initramfs-tools
 busybox

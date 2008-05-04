@@ -6,7 +6,7 @@ die "Missing \$MIRROR variable" unless $ENV{MIRROR};
 die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
 die "Missing \$BASEDIR variable" unless $ENV{BASEDIR};
 
-my @ARCHES=qw{alpha arm hppa hurd-i386 i386 ia64 mips mipsel
+my @ARCHES=qw{alpha arm armel hppa hurd-i386 i386 ia64 mips mipsel
               powerpc s390 sparc amd64};
 my $DATE=`date`;
 chomp $DATE;
