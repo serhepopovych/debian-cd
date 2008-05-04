@@ -6,7 +6,6 @@
 
 /* Packages that should really be on CD1 */
 #include <debian-installer+kernel-etch>
-#include <base-etch>
 #include <forcd1-etch>
 #include <task-essential-etch>
 
