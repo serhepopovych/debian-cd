@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Debian CD Group <debian-cd@lists.debian.org>
 Uploaders: Raphael Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty@debian.org>, Steve McIntyre <93sam@debian.org>
-Build-Depends: debhelper (>= 4)
+Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.6.1.0
 Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
