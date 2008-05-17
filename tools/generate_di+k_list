@@ -19,7 +19,7 @@ if [ "$DI_CODENAME"x = ""x ] ; then
 fi
 
 DATE=`date`
-cat > debian-installer+kernel-$DI_CODENAME << EOF
+cat > debian-installer+kernel-$CODENAME << EOF
 /* These packages + the ones needed by debootstrap are the ones needed for
  * debian-installer to be able to install a base Debian system.
  *
