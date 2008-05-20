@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-# Script to build one arch
+# Script to build images for one or more architectures and/or source
 
 if [ -z "$CF" ] ; then
     CF=CONF.sh
@@ -13,8 +13,11 @@ if [ -z "$COMPLETE" ] ; then
     export COMPLETE=1
 fi
 
-if [ -n "$@" ] ; then
-    export ARCHES="$@"
+if [ $# -gt 1 ] ; then
+    echo "ERROR: too many arguments." >&2
+    exit 1
+elif [ -n "$1" ] ; then
+    export ARCHES="$1"
 fi
 
 PATH=$BASEDIR/tools:$PATH
