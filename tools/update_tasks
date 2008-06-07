@@ -3,8 +3,8 @@ set -e
 
 CODENAME="$1"
 if [ -z "$CODENAME" ]; then
-	echo "usage: update_tasks CODENAME" >&2
-	exit 1
+    echo "usage: update_tasks CODENAME" >&2
+    exit 1
 fi
 
 if [ "$MIRROR"x == ""x ] ; then
@@ -13,8 +13,8 @@ if [ "$MIRROR"x == ""x ] ; then
 fi
 
 update_full_list () {
-	file=$1
-	tasklist=$2
+    file=$1
+    tasklist=$2
     pkgfile=$3
 
     grep '\*' $file > $file.new
@@ -47,26 +47,26 @@ update_full_list () {
         }
         next
     }' | sort -u >> $file.new    
-	mv $file.new $file
+    mv $file.new $file
 }
 
 update_essential_list () {
-	file=$1
-	tasklist=$2
-	desktoptask=$3
+    file=$1
+    tasklist=$2
+    desktoptask=$3
     tasksel=$4
 
-	grep '\*' $file > $file.new
-	for i in $(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist); do
-		if ( [ "$i" != gnome-dekstop ] &&
-		     [ "$i" != kde-desktop ] &&
-		     [ "$i" != xfce-desktop ] ) ||
-		   [ "$i" = "$desktoptask" ]; then
-			grep-dctrl -F Task -e "^$i$" $tasksel/usr/share/tasksel/debian-tasks.desc |
-			grep-dctrl -s Key -n -e '.*';
-		fi
-	done | sed -e 's? *??' | grep -v ^$ >> $file.new
-	mv $file.new $file
+    grep '\*' $file > $file.new
+    for i in $(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist); do
+        if ( [ "$i" != gnome-dekstop ] &&
+             [ "$i" != kde-desktop ] &&
+             [ "$i" != xfce-desktop ] ) ||
+           [ "$i" = "$desktoptask" ]; then
+            grep-dctrl -F Task -e "^$i$" $tasksel/usr/share/tasksel/debian-tasks.desc |
+            grep-dctrl -s Key -n -e '.*';
+        fi
+    done | sed -e 's? *??' | grep -v ^$ >> $file.new
+    mv $file.new $file
 }
 
 # We need to gunzip a copy of the appropriate Packages.gz file
