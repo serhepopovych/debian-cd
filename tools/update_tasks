@@ -18,15 +18,14 @@ update_full_list () {
     pkgfile=$3
 
     grep '\*' $file > $file.new
-    (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ; echo DONE ; cat $pkgfile) | awk '
+    (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ; echo DONE ; cat $pkgfile) | mawk '
     /DONE/ {
         in_packages = 1
         next
     }
     /.*/ {
         if (!in_packages) {
-            name=sprintf("(^| )%s(,|$)", $1)
-            tasklist[name] = num_tasks
+            tasklist[$1] = num_tasks
             num_tasks++
         }
     }
@@ -38,10 +37,15 @@ update_full_list () {
     }
     /^Task: / {
         if (in_packages) {
+            gsub("Task: ", "", $0)
+            gsub(",", "", $0)
+            split($0, these)
             for (taskname in tasklist) {
-                if (match($0, taskname)) {
-                    printf("%d:%s\n", tasklist[taskname], pkgname)
-                    next
+                for (task in these) {
+                    if (these[task] == taskname) {
+                        printf("%d:%s\n", tasklist[taskname], pkgname)
+                        next
+                    }
                 }
             }
         }
@@ -59,7 +63,7 @@ update_essential_list () {
     grep '\*' $file > $file.new
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
 		echo DONE ;
-		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | awk -v DT=$3 '
+		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk -v DT=$3 '
 
     /DONE/ {
         in_tasks = 1
@@ -112,7 +116,7 @@ TMP_PKG=$BDIR/Packages
 zcat $MIRROR/dists/$CODENAME/main/binary-i386/Packages.gz > $TMP_PKG
 
 # Now grab the appropriate tasksel package
-TASKSEL_DEB=$MIRROR/`awk '
+TASKSEL_DEB=$MIRROR/`mawk '
     /^Package: tasksel-data$/ { found=1 }
     /^Filename:/              { if (found==1) { print $2; exit } }' $TMP_PKG`
 
