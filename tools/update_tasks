@@ -57,15 +57,52 @@ update_essential_list () {
     tasksel=$4
 
     grep '\*' $file > $file.new
-    for i in $(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist); do
-        if ( [ "$i" != gnome-dekstop ] &&
-             [ "$i" != kde-desktop ] &&
-             [ "$i" != xfce-desktop ] ) ||
-           [ "$i" = "$desktoptask" ]; then
-            grep-dctrl -F Task -e "^$i$" $tasksel/usr/share/tasksel/debian-tasks.desc |
-            grep-dctrl -s Key -n -e '.*';
-        fi
-    done | sed -e 's? *??' | grep -v ^$ >> $file.new
+    (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
+		echo DONE ;
+		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | awk -v DT=$3 '
+
+    /DONE/ {
+        in_tasks = 1
+        next
+    }
+    /^ / {
+        if (in_key) {
+            printf("%d:%s\n", tasklist[cur_task], $1)
+            next
+        }
+    }
+    /.*/ {
+        if (!in_tasks) {
+            tasklist[$1] = num_tasks
+            num_tasks++
+        }
+        if (in_key) {
+            in_key = 0
+        }
+    }
+    /^Task: / {
+        if (in_tasks) {
+            cur_task = $2
+            next
+        }
+    }
+    /^Key: / {
+        if (in_tasks) {
+            for (taskname in tasklist) {
+                if (taskname == cur_task) {
+                    if ((cur_task != "gnome-desktop") &&
+                        (cur_task != "kde-desktop") &&
+                        (cur_task != "xfce-desktop")) {
+                        in_key = 1
+                    }
+                    if (cur_task == DT) {
+                        in_key = 1
+                    }
+                }
+            }
+        }
+        next
+    }' | sort -s -n -k1 | cut -d: -f2 >> $file.new
     mv $file.new $file
 }
 
