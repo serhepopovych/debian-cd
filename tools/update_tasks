@@ -26,7 +26,7 @@ update_full_list () {
     /.*/ {
         if (!in_packages) {
             name=sprintf("(^| )%s(,|$)", $1)
-            tasklist[name] = 1
+            tasklist[name] = num_tasks
             num_tasks++
         }
     }
@@ -40,13 +40,13 @@ update_full_list () {
         if (in_packages) {
             for (taskname in tasklist) {
                 if (match($0, taskname)) {
-                    print pkgname
+                    printf("%d:%s\n", tasklist[taskname], pkgname)
                     next
                 }
             }
         }
         next
-    }' | sort -u >> $file.new    
+    }' | sort -n | cut -d: -f2 >> $file.new    
     mv $file.new $file
 }
 
