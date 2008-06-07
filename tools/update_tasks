@@ -37,11 +37,14 @@ update_full_list () {
     }
     /^Task: / {
         if (in_packages) {
+            # Parse the Tasks: line, splitting into array "these"
             gsub("Task: ", "", $0)
             gsub(",", "", $0)
             split($0, these)
-            for (taskname in tasklist) {
-                for (task in these) {
+
+            # And see if we have any matches
+            for (task in these) {
+                for (taskname in tasklist) {
                     if (these[task] == taskname) {
                         printf("%d:%s\n", tasklist[taskname], pkgname)
                         next
