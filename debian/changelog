@@ -43,6 +43,11 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   [ Frans Pop ]
   * Update tasksel tasks for Lenny Beta2.
 
+  [ Steve McIntyre ]
+  * tools/update_tasks: Significant streamlining to make a huge difference in
+    runtime. Now feasible to run this automatically per-build rather than
+    cronning it.
+	
  -- Frans Pop <fjp@debian.org>  Fri, 06 Jun 2008 22:32:06 +0200
 
 debian-cd (3.0.4) unstable; urgency=low
