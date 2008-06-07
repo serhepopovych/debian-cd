@@ -1,5 +1,5 @@
 #!/bin/sh
-# set -e
+set -e
 
 CODENAME="$1"
 if [ -z "$CODENAME" ]; then
