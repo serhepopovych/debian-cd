@@ -272,7 +272,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config
 		# file(s)
-        sed -i "/[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" boot$N/$ISOLINUXDIR/*.cfg
+        sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" boot$N/$ISOLINUXDIR/*.cfg
 	fi
 
 else
