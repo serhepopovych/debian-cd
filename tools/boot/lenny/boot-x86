@@ -208,12 +208,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/$ISOLINUXDIR/
 	cp -f $BASEDIR/data/$DI_CODENAME/vesamenu.c32 boot$N/$ISOLINUXDIR/
 
-	if [ -n "$KERNEL_PARAMS" ]; then
-		# Substitute custom kernel params into the isolinux config
-		# file.
-		sed -i "s|append |append $KERNEL_PARAMS |" boot$N/$ISOLINUXDIR/isolinux.cfg
-	fi
-
 	if [ -n "$ISOLINUX_DEFAULT" ]; then
 		sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" boot$N/$ISOLINUXDIR/isolinux.cfg
 	fi
@@ -274,6 +268,13 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	fi
 
 	sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
+
+	if [ -n "$KERNEL_PARAMS" ]; then
+		# Substitute custom kernel params into the isolinux config
+		# file(s)
+        sed -i "/[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" boot$N/$ISOLINUXDIR/*.cfg
+	fi
+
 else
 	if [ -n "$THISTYPE" ]; then
 		echo "Using $THISTYPE boot-disks image on CD$N"
