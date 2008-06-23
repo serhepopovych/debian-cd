@@ -27,4 +27,6 @@ done
 
 cd $TMPDIR/firmware
 tar czf ../firmware.tar.gz .
-zip -9r ../firmware.zip .
+zip -9rq ../firmware.zip .
+cd ..
+ls -l $PWD/firmware.tar.gz $PWD/firmware.zip
