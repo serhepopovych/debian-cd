@@ -5,21 +5,54 @@ set -e
 MIRROR=$1
 SUITE=$2
 TMPDIR=$3
+BASEDIR=$4
 export LC_ALL=C
 
-if [ "$MIRROR"x = ""x ] || [ "$SUITE"x = ""x ] || [ "$TMPDIR"x = ""x ] ; then
+if [ "$MIRROR"x = ""x ] || \
+	[ "$SUITE"x = ""x ] || \
+	[ "$TMPDIR"x = ""x ] || \
+	[ "$BASEDIR"x = ""x ] ; then
 	echo "$0: Need parameters"
 	exit 1
 fi
 
+TASKFILE=$BASEDIR/tasks/firmware
+
 rm -rf $TMPDIR/firmware
 mkdir -p $TMPDIR/firmware
 
-FILES=`zcat $MIRROR/dists/$SUITE/non-free/binary-*/Packages.gz | \
+FILES=`( cpp $TASKFILE | grep -v -e "^#" -e "^$" ; \
+	echo DONE ; 
+	zcat $MIRROR/dists/$SUITE/non-free/binary-*/Packages.gz ) | \
 	awk '
-		/^Filename:.*firmware/  {print $2}
-		/^Filename:.*microcode/ {print $2}
-' | sort -u`
+    /DONE/ {
+        in_packages = 1
+        matched = 0
+        next
+    }
+    /.*/ {
+        if (!in_packages) {
+            firmware[$1] = num_fw
+            num_fw++
+            next
+        }
+    }
+    /^Package: / {
+        matched = 0
+        if (in_packages) {
+            for (fw in firmware) {
+                if (fw == $2) {
+                    matched = 1
+                }
+            }
+            next
+        }
+    }
+    /^Filename: / {
+        if (matched) {
+            print $2
+        }
+    }' | sort -u`
 
 for file in $FILES; do
 	cp $MIRROR/$file $TMPDIR/firmware/
