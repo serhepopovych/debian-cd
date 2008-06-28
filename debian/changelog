@@ -55,6 +55,8 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * tools/make-firmware-image: Simple script to create .tar.gz and
     .zip files containing non-free firmware and microcode packages.
+  * Add support for dual-layer DVD, Blu-Ray and dual-layer Blu-Ray
+    discs. Nothing special, just extra sizes recognised.
   
  -- Frans Pop <fjp@debian.org>  Fri, 06 Jun 2008 22:32:06 +0200
 

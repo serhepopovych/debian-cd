@@ -492,7 +492,18 @@ sub get_disc_size {
         $diskdesc = "700MiB CD";
     } elsif ($disktype eq "DVD") {
         $maxdiskblocks = int(4700 * $MB / $blocksize) - $reserved;
-        $diskdesc = "4.7GB CD";
+        $diskdesc = "4.7GB DVD";
+    } elsif ($disktype eq "DLDVD") {
+        $maxdiskblocks = int(8500 * $MB / $blocksize) - $reserved;
+        $diskdesc = "8.5GB DVD";
+    } elsif ($disktype eq "BD") {
+		# Useable capacity, found by checking some disks
+        $maxdiskblocks = 11826000 - $reserved;
+        $diskdesc = "25GB BD";
+    } elsif ($disktype eq "DLBD") {
+		# Useable capacity, found by checking some disks
+        $maxdiskblocks = 23652352 - $reserved;
+        $diskdesc = "50GB DLBD";
     } elsif ($disktype eq "CUSTOM") {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'}  - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";

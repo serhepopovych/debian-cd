@@ -168,6 +168,9 @@ ATTEMPT_FALLBACK=yes
 # CD:                standard 74-min CD (650 MiB)
 # CD700:             (semi-)standard 80-min CD (700 MiB)
 # DVD:               standard 4.7 GB DVD
+# DLDVD:             standard 8.5 GB dual-layer DVD
+# BD:                standard 25 GB blu-ray
+# DLBD:              standard 50 GB dual-layer blu-ray
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
 export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
