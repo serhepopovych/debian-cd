@@ -16,61 +16,61 @@ OUT=$5
 
 for ARCH in $ARCHES
 do
-	LOCATIONS="$MIRROR/dists/$CODENAME/ $MIRROR/dists/$DI_CODENAME/"
-	echo "Looking in $LOCATIONS"
+    LOCATIONS="$MIRROR/dists/$CODENAME/ $MIRROR/dists/$DI_CODENAME/"
+    echo "Looking in $LOCATIONS"
 
-	case $ARCH in
-		source)
-			FILES=`find $LOCATIONS -name Sources.gz`
-			echo "Using MD5 sums from Sources files:"
+    case $ARCH in
+        source)
+            FILES=`find $LOCATIONS -name Sources.gz`
+            echo "Using MD5 sums from Sources files:"
             echo $FILES
-			zcat -f $FILES | awk -v MIRROR=$MIRROR '
-				/^Directory:/      {
-									DIR = $2
-									next
-								}
-				/^Files:/       {
-									in_files = 1
-									next
-								}
-				/^ /            {
-									if (in_files) { 
-										gsub("^ ", "", $0)
-										MD5 = $1
-																		   SIZE = $2
-										FILE = $3
-										printf("%s  %12s  %s/%s/%s\n", MD5, SIZE, MIRROR, DIR, FILE);
-										next
-									}
-								}
-				/^[^ ]/            {
-										in_files = 0
+            zcat -f $FILES | awk -v MIRROR=$MIRROR '
+                /^Directory:/      {
+                                    DIR = $2
+                                    next
+                                }
+                /^Files:/       {
+                                    in_files = 1
+                                    next
+                                }
+                /^ /            {
+                                    if (in_files) { 
+                                        gsub("^ ", "", $0)
+                                        MD5 = $1
+                                                                           SIZE = $2
+                                        FILE = $3
+                                        printf("%s  %12s  %s/%s/%s\n", MD5, SIZE, MIRROR, DIR, FILE);
+                                        next
+                                    }
+                                }
+                /^[^ ]/            {
+                                        in_files = 0
                                         FILE = ""
                                         DIR = ""
-								}' | sort | uniq >> $OUT
-			;;
-		alpha|amd64|arm|armel|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
-			FILES=`find $LOCATIONS -name Packages.gz | grep binary-$ARCH`
-			echo "Using MD5 sums from Packages files:"
+                                }' | sort | uniq >> $OUT
+            ;;
+        alpha|amd64|arm|armel|hppa|i386|ia64|m68k|mips|mipsel|powerpc|s390|sparc)
+            FILES=`find $LOCATIONS -name Packages.gz | grep binary-$ARCH`
+            echo "Using MD5 sums from Packages files:"
             echo $FILES
-			zcat -f $FILES | awk -v MIRROR=$MIRROR '
-				/^Filename:/    {
-									FILE = $2
-								}
-				/^Size:/        {
-									SIZE = $2
-								}
-				/^MD5sum:/      {
-									MD5 = $2
-									printf("%s  %12d  %s/%s\n", MD5, SIZE, MIRROR, FILE)
-								}' | sort | uniq >> $OUT
+            zcat -f $FILES | awk -v MIRROR=$MIRROR '
+                /^Filename:/    {
+                                    FILE = $2
+                                }
+                /^Size:/        {
+                                    SIZE = $2
+                                }
+                /^MD5sum:/      {
+                                    MD5 = $2
+                                    printf("%s  %12d  %s/%s\n", MD5, SIZE, MIRROR, FILE)
+                                }' | sort | uniq >> $OUT
             # Use the new D-I images. Do NOT use the "current"
             # link; it causes problems with overlaid files...
             for VER in $MIRROR/dists/$DI_CODENAME/main/installer-$ARCH/*
             do
                 if [ -d $VER ] && [ ! -L $VER ] ; then
                     FILE=$VER/images/MD5SUMS
-					echo "Using MD5 sums from d-i: $FILE"
+                    echo "Using MD5 sums from d-i: $FILE"
                     LOC=dists/$DI_CODENAME/main/installer-$ARCH/`basename $VER`/images
                     for ENTRY in `cat $FILE | sed 's/  /:/g'`
                     do
@@ -81,12 +81,12 @@ do
                     done | sort | uniq >> $OUT
                  fi
             done
-			;;             
-		*)
-			echo "Unknown arch/source $ARCH!"
-			exit 1
-			;;
-	esac
+            ;;             
+        *)
+            echo "Unknown arch/source $ARCH!"
+            exit 1
+            ;;
+    esac
 done
 
 exit 0
