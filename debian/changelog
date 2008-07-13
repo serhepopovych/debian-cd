@@ -62,7 +62,7 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   * Add sanity check for data passed to add_packages.
   * Workaround to avoid errors when building images for Etch+1/2 (using
     packages from stable but D-I/udebs from testing): don't include source
-    for udebs in images.
+    for udebs in images. See also #490652.
 
   [ Frans Pop ]
   * Support including packages from proposed-updates.
