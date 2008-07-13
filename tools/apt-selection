@@ -61,6 +61,11 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 	echo "$ADEB file:$MIRROR $CODENAME $sections" \
 	> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 
+	if [ -n "$PROPOSED_UPDATES" ]; then
+		echo "$ADEB file:$MIRROR $PROPOSED_UPDATES $sections" \
+			>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+	fi
+
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then
 		echo "$ADEB file:${LOCALDEBS:-$MIRROR} $CODENAME local" \

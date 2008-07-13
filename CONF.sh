@@ -19,6 +19,7 @@ unset EXTRANONFREE      || true
 unset LOCAL             || true
 unset LOCALDEBS         || true
 unset SECURITY          || true
+unset PROPOSED_UPDATES  || true
 unset BOOTDIR           || true
 unset SYMLINK           || true
 unset COPYLINK          || true
@@ -134,6 +135,12 @@ export CONTRIB=1
 # Where to find the security patches.  This directory should be the
 # top directory of a security.debian.org mirror.
 #export SECURITY="$TOPDIR"/debian/debian-security
+
+# Include proposed updates
+# Note that on the CDs it will not be visible where packages came from:
+# from the released archive or from proposed updates archive.
+# NOTE: intended to be used for pre-release testing, not for publication!
+#export PROPOSED_UPDATES=$CODENAME-proposed-updates
 
 # Sparc only : bootdir (location of cd.b and second.b)
 # export BOOTDIR=/boot
