@@ -950,6 +950,10 @@ sub add_packages {
     my $pkg = shift;
 	my ($arch, $component, $pkgname) = split /:/, $pkg;
 
+    if ("$arch" eq "" or "$pkgname" eq "" or "$pkgname" eq "") {
+        die "inconsistent data passed to add_packages: $pkg\n";
+    }
+
     msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
 
     $_ = $pkginfo{$arch}{$pkgname};
