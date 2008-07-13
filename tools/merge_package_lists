@@ -87,34 +87,42 @@ if [ $source = "yes" ] ; then
 	# Now start placing source packages, depending on the order of the binary packages
 	/.*/        {
 				  if (parsed) {
-				    split($0,fields,":")
+				  	split($0,fields,":")
 					arch=fields[1]
 					component=fields[2]
 					pkg=fields[3]
 					source=bin2src[pkg]
-					if (!included[source]) {
-					  printf("# Adding source %s at %d because of %s:%s\n",
-					      source, FNR, arch, pkg)
-					  included[source] = pkg
-					  incarch[source] = arch
-					  indexnr[source] = FNR
-					  sourcecomp[source] = component
+					if ("main-installer" == component) {
+						printf("# Ignoring source for udeb %s\n", pkg)
 					} else {
-					  if (FNR < indexnr[source]) {
-					    printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
-						source, indexnr[source],
-						incarch[source], included[source],
-						FNR, arch, pkg);
-					    included[source] = pkg
-					    incarch[source] = arch
-					    indexnr[source] = FNR
-					  } else {
-					    printf("# Not adding pkg %s source (%d:%s:%s), already added due to %d:%s:%s\n", pkg, FNR, arch, source, indexnr[source], incarch[source], included[source])
+					    if (!included[source]) {
+						printf("# Adding source %s at %d because of %s:%s\n",
+						  source, FNR, arch, pkg)
+						  included[source] = pkg
+						  incarch[source] = arch
+						  indexnr[source] = FNR
+						  sourcecomp[source] = component
+					    } else {
+						if (FNR < indexnr[source]) {
+							printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
+							  source, indexnr[source],
+							  incarch[source], included[source],
+							  FNR, arch, pkg)
+							included[source] = pkg
+							incarch[source] = arch
+							indexnr[source] = FNR
+						} else {
+							printf("# Not adding pkg %s source (%d:%s:%s), already added due to %d:%s:%s\n",
+							  pkg, FNR, arch, source,
+							  indexnr[source], incarch[source],
+							  included[source])
+						}
 					    }
 					}
 					printf("%d:%s\n", FNR, $0)
 				  }
 				}
+
 	END {
 	    for (source in included) {
 		printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s\n", indexnr[source], sourcecomp[source], source)
@@ -136,6 +144,7 @@ grep -v ^# $BDIR/list.mid | awk -F : '
             pkgname[number_packages++] = $4
         }
 		gsub("aaaaaaaaaaaaaaaaaa", "source", $2) # Undo the source sorting hack
+		gsub("main-installer", "main", $3)
         add[$4] = add[$4] $2 ":" $3 ":" $4 " "
     }
 END {

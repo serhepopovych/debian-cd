@@ -83,6 +83,8 @@ while (defined($_=<AVAIL>)) {
 		$packages{$p}{"Component"} = "contrib";
 	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
 		$packages{$p}{"Component"} = "non-free";
+	} elsif ($packages{$p}{"IsUdeb"}) {
+		$packages{$p}{"Component"} = "main-installer";
 	} else {
 		$packages{$p}{"Component"} = "main";
 	}
