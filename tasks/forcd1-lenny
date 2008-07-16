@@ -17,7 +17,6 @@ libnet-telnet-perl
 libtimedate-perl
 libmailtools-perl
 pump
-xviddetect
 twm
 menu
 wmaker
@@ -28,7 +27,6 @@ dialog
 doc-base
 grub
 util-linux-locales
-gnome-tasksel
 discover
 read-edid
 mdetect
@@ -42,4 +40,3 @@ unifont
 console-cyrillic
 console-terminus
 iso-codes
-initrd-tools
