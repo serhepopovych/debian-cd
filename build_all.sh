@@ -19,7 +19,7 @@ export PATH
 if [ "$TASK"x = ""x ] ; then
 	case "$INSTALLER_CD"x in
 		"1"x)
-			TASK=tasks/debian-installer-$CODENAME
+			TASK=tasks/debian-installer-$DI_CODENAME
 			unset COMPLETE
 			;;
 		"2"x)
