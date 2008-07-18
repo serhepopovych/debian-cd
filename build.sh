@@ -30,7 +30,7 @@ if [ "$TASK"x = ""x ] ; then
 			unset COMPLETE
 			;;
 		"2"x)
-			TASK=tasks/debian-installer+kernel-$DI_CODENAME
+			TASK=tasks/debian-installer+kernel-$CODENAME
 			unset COMPLETE
 			;;
 		*)
