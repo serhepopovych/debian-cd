@@ -65,7 +65,8 @@ export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 export BDIR
 
-LATEST_DB := $(shell ls -1tr $(MIRROR)/pool/main/d/debootstrap/debootstrap*all.deb | tail -1)
+LATEST_DB := $(shell zcat $(MIRROR)/dists/$(CODENAME)/main/binary-i386/Packages.gz | awk '/\/debootstrap_.*deb/ {print $$2}')
+LATEST_DB := $(MIRROR)/$(LATEST_DB)
 
 ## DEBUG STUFF ##
 
