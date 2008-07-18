@@ -12,7 +12,7 @@
  * Last update: Fri Jul 18 12:01:48 CEST 2008
  */
 
-#include <debian-installer-sid>
+#include <debian-installer-lenny>
 eject
 locales
 libdevmapper1.02
