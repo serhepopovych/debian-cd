@@ -1,6 +1,6 @@
 /* This file lists non-free firmware packages used by d-i (for all arches) */
 ixp4xx-microcode
-/* atmel-firmware disabled due to #492205 */
+atmel-firmware
 firmware-bnx2
 firmware-ipw3945
 firmware-iwlwifi
