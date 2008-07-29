@@ -103,7 +103,7 @@ fi
 export MIRROR=/mirror/debian
 
 # Path of the temporary directory
-export TDIR=/mirror/tmp/test
+export TDIR=/mirror/tmp
 
 # Path where the images will be written
 export OUT=/mirror/debian-cd-test
@@ -157,7 +157,6 @@ export CONTRIB=1
 # export MKISOFS=mkisofs
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
-export MKISOFS=/home/steve/mkisofs
 
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
@@ -204,7 +203,7 @@ export NORECOMMENDS=1
 # 0/unset = Don't do jigdo at all, produce only the full iso image.
 # 1 = Produce both the iso image and jigdo stuff.
 # 2 = Produce only the jigdo stuff
-export DOJIGDO=2
+export DOJIGDO=1
 
 # HTTP/FTP URL for directory where you intend to make the templates
 # available. You should not need to change this; the default value ""
