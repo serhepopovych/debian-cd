@@ -103,7 +103,7 @@ fi
 export MIRROR=/mirror/debian
 
 # Path of the temporary directory
-export TDIR=/mirror/tmp
+export TDIR=/mirror/tmp/test
 
 # Path where the images will be written
 export OUT=/mirror/debian-cd-test
@@ -157,6 +157,7 @@ export CONTRIB=1
 # export MKISOFS=mkisofs
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
+export MKISOFS=/home/steve/mkisofs
 
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
@@ -203,7 +204,7 @@ export NORECOMMENDS=1
 # 0/unset = Don't do jigdo at all, produce only the full iso image.
 # 1 = Produce both the iso image and jigdo stuff.
 # 2 = Produce only the jigdo stuff
-export DOJIGDO=1
+export DOJIGDO=2
 
 # HTTP/FTP URL for directory where you intend to make the templates
 # available. You should not need to change this; the default value ""
@@ -299,6 +300,9 @@ done
 # Parameters to pass to kernel (or d-i) when the CD boots. Not currently
 # supported for all architectures.
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
+
+# Default desktop (currently only used by win32-loader)
+#export DESKTOP=kde
 
 # If set, limits the number of binary CDs to produce.
 #export MAXCDS=1

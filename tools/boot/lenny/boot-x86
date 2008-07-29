@@ -203,6 +203,9 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	if [ -e boot$N/win32-loader.ini ] ; then
 	    sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
+        if [ "${DESKTOP}" ] ; then
+            sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
+        fi
 	fi
 
 	cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/$ISOLINUXDIR/

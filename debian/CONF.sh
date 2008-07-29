@@ -293,6 +293,9 @@ done
 # supported for all architectures.
 #export KERNEL_PARAMS="DEBCONF_PRIORITY=critical"
 
+# Default desktop (currently only used by win32-loader)
+#export DESKTOP=kde
+
 # If set, limits the number of binary CDs to produce.
 #export MAXCDS=1
 
