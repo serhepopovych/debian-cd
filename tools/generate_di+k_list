@@ -68,6 +68,7 @@ udev
 installation-report
 openssh-server
 cryptsetup
+loop-aes-utils
 brltty
 dmraid
 
@@ -114,6 +115,8 @@ linux-image-2.6-486
 linux-headers-2.6-486
 linux-image-2.6-686
 linux-headers-2.6-686
+loop-aes-modules-2.6-486
+loop-aes-modules-2.6-686
 #endif
 
 #ifdef ARCH_amd64
@@ -128,6 +131,7 @@ laptop-detect
 lilo
 linux-image-2.6-amd64
 linux-headers-2.6-amd64
+loop-aes-modules-2.6-amd64
 #endif
 
 #ifdef ARCH_alpha
@@ -139,6 +143,8 @@ discover1
 libdiscover1
 linux-image-2.6-alpha-generic
 linux-image-2.6-alpha-smp
+loop-aes-modules-2.6-alpha-generic
+loop-aes-modules-2.6-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
@@ -150,6 +156,10 @@ linux-image-2.6-parisc
 linux-image-2.6-parisc-smp
 linux-image-2.6-parisc64
 linux-image-2.6-parisc64-smp
+loop-aes-modules-2.6-parisc
+loop-aes-modules-2.6-parisc-smp
+loop-aes-modules-2.6-parisc64
+loop-aes-modules-2.6-parisc64-smp
 palo
 #endif
 
@@ -162,6 +172,10 @@ linux-image-2.6-itanium
 linux-image-2.6-itanium-smp
 linux-image-2.6-mckinley
 linux-image-2.6-mckinley-smp
+loop-aes-modules-2.6-itanium
+loop-aes-modules-2.6-itanium-smp
+loop-aes-modules-2.6-mckinley
+loop-aes-modules-2.6-mckinley-smp
 elilo
 #endif
 
@@ -173,6 +187,10 @@ linux-image-2.6-r4k-ip22
 linux-image-2.6-r5k-ip32
 linux-image-2.6-sb1-bcm91250a
 linux-image-2.6-sb1a-bcm91480b
+loop-aes-modules-2.6-r4k-ip22
+loop-aes-modules-2.6-r5k-ip32
+loop-aes-modules-2.6-sb1-bcm91250a
+loop-aes-modules-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
@@ -185,6 +203,11 @@ linux-image-2.6-r4k-kn04
 linux-image-2.6-r5k-cobalt
 linux-image-2.6-sb1-bcm91250a
 linux-image-2.6-sb1a-bcm91480b
+loop-aes-modules-2.6-r3k-kn02
+loop-aes-modules-2.6-r4k-kn04
+loop-aes-modules-2.6-r5k-cobalt
+loop-aes-modules-2.6-sb1-bcm91250a
+loop-aes-modules-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_arm
@@ -204,6 +227,12 @@ linux-image-2.6-ixp4xx
 linux-image-2.6-nslu2
 linux-image-2.6-rpc
 linux-image-2.6-s3c2410
+loop-aes-modules-2.6-footbridge
+loop-aes-modules-2.6-iop32x
+loop-aes-modules-2.6-ixp4xx
+loop-aes-modules-2.6-nslu2
+loop-aes-modules-2.6-rpc
+loop-aes-modules-2.6-s3c2410
 #endif
 
 #ifdef ARCH_armel
@@ -218,6 +247,9 @@ apex-nslu2
 linux-image-2.6-iop32x
 linux-image-2.6-ixp4xx
 linux-image-2.6-versatile
+loop-aes-modules-2.6-iop32x
+loop-aes-modules-2.6-ixp4xx
+loop-aes-modules-2.6-versatile
 #endif
 
 #ifdef ARCH_sparc
@@ -232,6 +264,10 @@ linux-image-2.6-sparc32
 linux-image-2.6-sparc32-smp
 linux-image-2.6-sparc64
 linux-image-2.6-sparc64-smp
+loop-aes-modules-2.6-sparc32
+loop-aes-modules-2.6-sparc32-smp
+loop-aes-modules-2.6-sparc64
+loop-aes-modules-2.6-sparc64-smp
 #endif
 
 #ifdef ARCH_powerpc
@@ -250,6 +286,10 @@ linux-image-2.6-powerpc
 linux-image-2.6-powerpc-smp
 linux-image-2.6-powerpc64
 linux-image-2.6-prep
+loop-aes-modules-2.6-powerpc
+loop-aes-modules-2.6-powerpc-smp
+loop-aes-modules-2.6-powerpc64
+loop-aes-modules-2.6-prep
 #endif
 
 EOF

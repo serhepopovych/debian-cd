@@ -81,7 +81,11 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   * Applied patch from Robert Millan <rmh@aybabtu.com> to allow choice of
     desktop when building for win32-loader. Closes: #491300.
 
- -- Frans Pop <fjp@debian.org>  Fri, 18 Jul 2008 17:30:42 +0200
+  [ Frans Pop ]
+  * Include packages needed for systems using loop-aes encryption on
+    installation CDs.
+
+ -- Frans Pop <fjp@debian.org>  Mon, 04 Aug 2008 18:59:31 +0200
 
 debian-cd (3.0.4) unstable; urgency=low
 
