@@ -117,6 +117,10 @@ linux-image-2.6-686
 linux-headers-2.6-686
 loop-aes-modules-2.6-486
 loop-aes-modules-2.6-686
+atl2-modules-2.6-486
+atl2-modules-2.6-686
+speakup-modules-2.6-486
+speakup-modules-2.6-686
 #endif
 
 #ifdef ARCH_amd64
@@ -132,6 +136,8 @@ lilo
 linux-image-2.6-amd64
 linux-headers-2.6-amd64
 loop-aes-modules-2.6-amd64
+atl2-modules-2.6-amd64
+speakup-modules-2.6-amd64
 #endif
 
 #ifdef ARCH_alpha
@@ -145,6 +151,8 @@ linux-image-2.6-alpha-generic
 linux-image-2.6-alpha-smp
 loop-aes-modules-2.6-alpha-generic
 loop-aes-modules-2.6-alpha-smp
+atl2-modules-2.6-alpha-generic
+atl2-modules-2.6-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
@@ -160,6 +168,10 @@ loop-aes-modules-2.6-parisc
 loop-aes-modules-2.6-parisc-smp
 loop-aes-modules-2.6-parisc64
 loop-aes-modules-2.6-parisc64-smp
+atl2-modules-2.6-parisc
+atl2-modules-2.6-parisc-smp
+atl2-modules-2.6-parisc64
+atl2-modules-2.6-parisc64-smp
 palo
 #endif
 
@@ -176,6 +188,10 @@ loop-aes-modules-2.6-itanium
 loop-aes-modules-2.6-itanium-smp
 loop-aes-modules-2.6-mckinley
 loop-aes-modules-2.6-mckinley-smp
+atl2-modules-2.6-itanium
+atl2-modules-2.6-itanium-smp
+atl2-modules-2.6-mckinley
+atl2-modules-2.6-mckinley-smp
 elilo
 #endif
 
@@ -191,6 +207,10 @@ loop-aes-modules-2.6-r4k-ip22
 loop-aes-modules-2.6-r5k-ip32
 loop-aes-modules-2.6-sb1-bcm91250a
 loop-aes-modules-2.6-sb1a-bcm91480b
+atl2-modules-2.6-r4k-ip22
+atl2-modules-2.6-r5k-ip32
+atl2-modules-2.6-sb1-bcm91250a
+atl2-modules-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
@@ -208,6 +228,11 @@ loop-aes-modules-2.6-r4k-kn04
 loop-aes-modules-2.6-r5k-cobalt
 loop-aes-modules-2.6-sb1-bcm91250a
 loop-aes-modules-2.6-sb1a-bcm91480b
+atl2-modules-2.6-r3k-kn02
+atl2-modules-2.6-r4k-kn04
+atl2-modules-2.6-r5k-cobalt
+atl2-modules-2.6-sb1-bcm91250a
+atl2-modules-2.6-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_arm
@@ -233,6 +258,12 @@ loop-aes-modules-2.6-ixp4xx
 loop-aes-modules-2.6-nslu2
 loop-aes-modules-2.6-rpc
 loop-aes-modules-2.6-s3c2410
+atl2-modules-2.6-footbridge
+atl2-modules-2.6-iop32x
+atl2-modules-2.6-ixp4xx
+atl2-modules-2.6-nslu2
+atl2-modules-2.6-rpc
+atl2-modules-2.6-s3c2410
 #endif
 
 #ifdef ARCH_armel
@@ -250,6 +281,9 @@ linux-image-2.6-versatile
 loop-aes-modules-2.6-iop32x
 loop-aes-modules-2.6-ixp4xx
 loop-aes-modules-2.6-versatile
+atl2-modules-2.6-iop32x
+atl2-modules-2.6-ixp4xx
+atl2-modules-2.6-versatile
 #endif
 
 #ifdef ARCH_sparc
@@ -268,6 +302,10 @@ loop-aes-modules-2.6-sparc32
 loop-aes-modules-2.6-sparc32-smp
 loop-aes-modules-2.6-sparc64
 loop-aes-modules-2.6-sparc64-smp
+atl2-modules-2.6-sparc32
+atl2-modules-2.6-sparc32-smp
+atl2-modules-2.6-sparc64
+atl2-modules-2.6-sparc64-smp
 #endif
 
 #ifdef ARCH_powerpc
@@ -290,6 +328,10 @@ loop-aes-modules-2.6-powerpc
 loop-aes-modules-2.6-powerpc-smp
 loop-aes-modules-2.6-powerpc64
 loop-aes-modules-2.6-prep
+atl2-modules-2.6-powerpc
+atl2-modules-2.6-powerpc-smp
+atl2-modules-2.6-powerpc64
+atl2-modules-2.6-prep
 #endif
 
 EOF
