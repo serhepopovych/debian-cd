@@ -34,7 +34,7 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 
 cd $CDROOT/..
 
-add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J"
+add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J -joliet-long"
 
 # Mipsel is currently not bootable in lenny, so bail out here
 echo "Mipsel booting disabled, check with Sledge or fjp"

@@ -35,7 +35,7 @@ cd $CDDIR/..
 # MAXDISKBLOCKS is measured in 2K blocks
 newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--netatalk"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-hfs"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-probe"

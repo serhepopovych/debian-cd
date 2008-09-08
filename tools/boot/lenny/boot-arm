@@ -31,7 +31,7 @@ fi
 
 cd $CDDIR/..
 
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
 # Arm is currently not bootable in lenny, so bail out here
 echo "Arm booting disabled, check with Sledge/fjp/tbm"

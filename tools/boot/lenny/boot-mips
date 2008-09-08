@@ -24,7 +24,7 @@ if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
 fi
 
-add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J"
+add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J -joliet-long"
 
 # Only disk 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then

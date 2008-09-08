@@ -25,7 +25,7 @@ CDDIR=$2
 cd $CDDIR/..
 
 if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
-    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	exit 0
 fi
 

@@ -86,7 +86,7 @@ if [ $NN = 1 ]; then
 
     mkdir -p boot$N/milo
 
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-alpha-boot boot/bootlx"
@@ -94,7 +94,7 @@ if [ $NN = 1 ]; then
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
 else
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
 fi
