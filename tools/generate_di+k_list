@@ -94,6 +94,11 @@ sudo
 /* #231583: Make life easier for Australian ISP users */
 bpalogin
 
+/* multipath-tools-boot is used for multipath support and installed
+ * during installation process if multipath is used
+ */
+multipath-tools-boot
+
 #ifdef ARCH_i386
 initramfs-tools
 busybox
