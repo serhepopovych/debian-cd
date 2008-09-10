@@ -5,44 +5,56 @@ cd $1
 :> MD5SUMS
 :> SHA1SUMS
 
-case $DOJIGDO in
-	0)
-		for file in `find * -name \*.iso`
-		do
-			md5sum $file >> MD5SUMS
-			sha1sum $file >> SHA1SUMS
-		done
-		;;
-	1|2)
-		for file in `find * -name \*.jigdo`
-		do
+# 2 calls to find here to get the ordering right - we *really* want to
+# get the jigdo files first
+for file in `find * -name \*.jigdo` `find * -name \*.iso`; do
+    case $file in
+        *.jigdo)
             iso=${file%%.jigdo}.iso
+            JIGDO=1
+            ;;
+        *.iso)
+            iso=$file
+            JIGDO=0
+            ;;
+        *)
+            echo "Found unexpected file $file!"
+            exit 1
+            ;;
+    esac
 
-			grep -q $iso MD5SUMS
-            if [ $? -ne 0 ] ; then
-			    MD5=`zcat -f $file | awk '/Image Hex MD5Sum/ {print $5}'`
-                if [ "$MD5"x != ""x ] ; then
-                    echo "$MD5  $iso" >> MD5SUMS
-                else
-                    echo "Jigdo file does not contain the Image MD5, calculating by hand"
-                    md5sum $iso >> MD5SUMS
-                fi
-            fi
+    grep -q $iso MD5SUMS
+    if [ $? -ne 0 ] ; then
+        MD5=""
+        if [ "$JIGDO" == 1 ] ; then
+            MD5=`zcat -f $file | awk '/Image Hex MD5Sum/ {print $5}'`
+        fi
+        if [ "$MD5"x != ""x ] ; then
+            echo "$MD5  $iso" >> MD5SUMS
+            echo "Jigdo says:"
+            echo "$MD5  $iso"
+        else
+            echo "No Jigdo help for md5, doing it the long way"
+            md5sum $iso >> MD5SUMS
+            grep $iso MD5SUMS
+        fi
+    fi
 
-			grep -q $iso SHA1SUMS
-            if [ $? -ne 0 ] ; then
-			    SHA1=`zcat -f $file | awk '/Image Hex SHA1Sum/ {print $5}'`
-                if [ "$SHA1"x != ""x ] ; then
-                    echo "$SHA1  $iso" >> SHA1SUMS
-                else
-                    echo "Jigdo file does not contain the Image SHA1, calculating by hand"
-                    sha1sum $iso >> SHA1SUMS
-                fi
-            fi
-		done
-		;;
-	*)
-		echo "DOJIGDO not defined!"
-		exit 1
-		;;
-esac
+    grep -q $iso SHA1SUMS
+    if [ $? -ne 0 ] ; then
+        SHA1=""
+        if [ "$JIGDO" == 1 ] ; then
+            SHA1=`zcat -f $file | awk '/Image Hex SHA1Sum/ {print $5}'`
+        fi
+        if [ "$SHA1"x != ""x ] ; then
+            echo "$SHA1  $iso" >> SHA1SUMS
+            echo "Jigdo says:"
+            echo "$SHA1  $iso"
+        else
+            echo "No Jigdo help for sha1, doing it the long way"
+            sha1sum $iso >> SHA1SUMS
+            grep $iso SHA1SUMS
+        fi
+    fi
+
+done

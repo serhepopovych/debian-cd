@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 # Script to build images for one or more architectures and/or source
 
@@ -55,6 +55,17 @@ if [ -z "$IMAGETARGET" ] ; then
     IMAGETARGET="official_images"
 fi
 echo " ... building the images; using target(s) \"$IMAGETARGET\""
+
+NUMISOS="up to $MAXISOS"
+if [ "$MAXISOS"x = "all"x ] || [ "$MAXISOS"x = "ALL"x ] ; then
+    NUMISOS="all available"
+fi
+NUMJIGDOS="up to $MAXJIGDOS"
+if [ "$MAXJIGDOS"x = "all"x ] || [ "$MAXJIGDOS"x = "ALL"x ] ; then
+    NUMJIGDOS="all available"
+fi
+echo "Building $NUMJIGDOS jigdos and $NUMISOS isos for $ARCH $DISKTYPE"
+
 make $IMAGETARGET
 
 make imagesums

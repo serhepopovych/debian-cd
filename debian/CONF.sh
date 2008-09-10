@@ -29,7 +29,6 @@ unset ISOLINUX          || true
 unset EXCLUDE           || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
-unset DOJIGDO           || true
 unset JIGDOTEMPLATEURL  || true
 unset JIGDOFALLBACKURLS || true
 unset JIGDOINCLUDEURLS  || true
@@ -199,11 +198,15 @@ export NORECOMMENDS=1
 # package on the CD.  The default is 'true'.
 #export NOSUGGESTS=1
 
-# Produce jigdo files:
-# 0/unset = Don't do jigdo at all, produce only the full iso image.
-# 1 = Produce both the iso image and jigdo stuff.
-# 2 = Produce only the jigdo stuff
-export DOJIGDO=1
+# Produce iso/jigdo files: specify how many iso/jigdo files should be
+# produced in your set, or "ALL". Replaces the old "DOJIGDO" setting
+# with something much more flexible
+if [ "$MAXISOS"x = ""x ] ; then
+    export MAXISOS="ALL"
+fi
+if [ "$MAXJIGDOS"x = ""x ] ; then
+    export MAXJIGDOS="ALL"
+fi
 
 # HTTP/FTP URL for directory where you intend to make the templates
 # available. You should not need to change this; the default value ""

@@ -32,9 +32,6 @@ endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
-ifndef DOJIGDO
-export DOJIGDO=0
-endif
 
 export BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
 export ARCHES_NOSRC=$(shell echo $(ARCHES) | sed 's/source//')
@@ -362,13 +359,8 @@ image-trees: ok genlist
 	fi
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
-# DOJIGDO actions   (for both binaries and source)
-#    0    isofile
-#    1    isofile + jigdo, cleanup_jigdo
-#    2    jigdo, cleanup_jigdo
-#
 images: ok $(OUT) $(BDIR)/md5-check
-	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DOJIGDO)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)

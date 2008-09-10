@@ -11,7 +11,8 @@ use File::Find;
 use Compress::Zlib;
 
 my %pkginfo;
-my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds, $extranonfree);
+my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
+    $maxisos, $maxjigdos, $extranonfree);
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
@@ -40,10 +41,47 @@ my $link_copy = $ENV{'COPYLINK'} || 0;
 
 require "$basedir/tools/link.pl";
 
+$maxcds = 9999;
+
+# MAXCDS is the hard limit on the MAXIMUM number of images to
+# make. MAXJIGDOS and MAXISOS can only make this number smaller; we
+# will use the higher of those 2 numbers as the last image to go to,
+# if they're set
+
 if (defined($ENV{'MAXCDS'})) {
 	$maxcds = $ENV{'MAXCDS'};
 } else {
-	$maxcds = 0;
+	$maxcds = 9999;
+}
+
+if (defined($ENV{'MAXISOS'})) {
+	$maxisos = $ENV{'MAXISOS'};
+    if ($maxisos =~ 'ALL' || $maxisos =~ 'all') {
+        $maxisos = 9999;
+    }
+} else {
+	$maxisos = 9999;
+}
+
+if (defined($ENV{'MAXJIGDOS'})) {
+	$maxjigdos = $ENV{'MAXJIGDOS'};
+    if ($maxjigdos =~ 'ALL' || $maxjigdos =~ 'all') {
+        $maxjigdos = 9999;
+    }
+} else {
+	$maxjigdos = 9999;
+}
+
+if ($maxisos > $maxjigdos) {
+    $maxjigdos = $maxisos;
+}
+
+if ($maxjigdos > $maxisos) {
+    $maxisos = $maxjigdos;
+}
+
+if ($maxisos < $maxcds) {
+    $maxcds = $maxisos;
 }
 
 if (defined($ENV{'EXTRANONFREE'})) {
@@ -132,7 +170,7 @@ while (defined (my $pkg = <INLIST>)) {
 	$cddir = "$bdir/CD$disknum";
 	my $opt;
 	if (! -d $cddir) {
-		if (($maxcds > 0 ) && ($disknum > $maxcds)) {
+		if ($disknum > $maxcds) {
 			print LOG "Disk $disknum is beyond the configured MAXCDS of $maxcds; exiting now...\n";
 			$max_done = 1;
 			last;
