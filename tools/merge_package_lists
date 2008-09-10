@@ -92,8 +92,12 @@ if [ $source = "yes" ] ; then
 					component=fields[2]
 					pkg=fields[3]
 					source=bin2src[pkg]
-					if ("main-installer" == component) {
-						printf("# Ignoring source for udeb %s\n", pkg)
+                    if ("" == source) {
+      		            if ("main-installer" == component) {
+	                        printf("# Ignoring source for udeb %s\n", pkg)
+                        } else {
+                            printf("# Source for pkg %s is UNKNOWN!\n", pkg)
+                        }
 					} else {
 					    if (!included[source]) {
 						printf("# Adding source %s at %d because of %s:%s\n",
