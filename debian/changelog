@@ -101,6 +101,13 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
     images for less-popular architectures but still produce all the jigdo
     files, saving a lot of disk space.
   * Recommend syslinux-common instead of syslinux. Closes: #497966
+  * Major licensing problem cleanup: (Closes: #497270)
+    + Remove binary blobs from the package; pull those files from the
+      .debs in the archive as needed (sbm.bin.gz, isolinux.bin,
+      vesamenu.c32)
+    + Pull out the code to find the right deb and put it in a new helper
+      shell script (tools/which_deb), called from Makefile and boot-* as
+      needed.
 
  -- Frans Pop <fjp@debian.org>  Mon, 04 Aug 2008 18:59:31 +0200
 

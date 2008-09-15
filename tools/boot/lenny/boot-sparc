@@ -38,8 +38,7 @@ cd $CDDIR/..
 # Setup directories
 mkdir -p $inst/boot
 
-silo_deb=$MIRROR/`zcat $MIRROR/dists/$DI_CODENAME/main/binary-sparc/Packages.gz | \
-	awk '/^Filename: .*\/silo/ {print $2}'`
+silo_deb=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME silo`
 # put the relevant parts of SILO boot loader
 (ar p $silo_deb data.tar.gz | \
 	tar zxf - -C $inst/ ./boot/{isofs,second}.b)

@@ -55,9 +55,8 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-hfs-volid Debian/PowerPC_${CODENAME}
 cd $INSTALLDIR
 # Extract yaboot from the archive
 if [ -z "$YABOOT_DEBUG" ]; then
-    YADEB="$($BASEDIR/tools/apt-selection cache show yaboot | \
-	   grep ^Filename | awk '{print $2}')"
-    (ar p "${MIRROR}/${YADEB}" data.tar.gz | \
+    YADEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME yaboot`
+    (ar p "${YADEB}" data.tar.gz | \
 	tar zxf - -C . ./usr/lib/yaboot/yaboot)
     mv usr/lib/yaboot/yaboot .
     rm -rf usr

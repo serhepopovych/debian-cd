@@ -53,6 +53,7 @@ merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
 update_tasks=$(BASEDIR)/tools/update_tasks
 grab_source_list=$(BASEDIR)/tools/grab_source_list
+which_deb=$(BASEDIR)/tools/which_deb
 
 BDIR=$(TDIR)/$(CODENAME)
 ADIR=$(APTTMP)
@@ -62,8 +63,7 @@ export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 export BDIR
 
-LATEST_DB := $(shell zcat $(MIRROR)/dists/$(CODENAME)/main/binary-i386/Packages.gz | awk '/\/debootstrap_.*deb/ {print $$2}')
-LATEST_DB := $(MIRROR)/$(LATEST_DB)
+LATEST_DB := $(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
 
 ## DEBUG STUFF ##
 
