@@ -8,38 +8,38 @@
 MIRROR=$1
 CODENAME=$2
 PKG=$3
-PATH=$MIRROR/dists/$CODENAME/main
+PTH=$MIRROR/dists/$CODENAME/main
 
 case $PKG in
 
     debootstrap)
-        DEB="$MIRROR/"`zcat $PATH/binary-i386/Packages.gz | \
+        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
             awk '/\/debootstrap_.*deb/ {print $2}'`
         ;;
 
     sbm)
-        DEB="$MIRROR/"`zcat $PATH/binary-i386/Packages.gz | \
+        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
             awk '/\/sbm.*deb/ {print $2}'`
         ;;
 
     silo)
-        DEB="$MIRROR/"`zcat $PATH/binary-sparc/Packages.gz | \
+        DEB="$MIRROR/"`zcat $PTH/binary-sparc/Packages.gz | \
         	awk '/\/silo.*deb/ {print $2}'`
         ;;
 
     syslinux)
         # More complex - look for syslinux-common, then fall back to
         # syslinux if we don't find that
-        DEB="$MIRROR/"`zcat $PATH/binary-i386/Packages.gz | \
+        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
             awk '/\/syslinux-common.*deb/ {print $2}'`
         if [ "$DEB"x = "$MIRROR/"x ] ; then
-            DEB="$MIRROR/"`zcat $PATH/binary-i386/Packages.gz | \
+            DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
                 awk '/\/syslinux.*deb/ {print $2}'`
         fi
         ;;
 
     yaboot)
-        DEB="$MIRROR/"`zcat $PATH/binary-powerpc/Packages.gz | \
+        DEB="$MIRROR/"`zcat $PTH/binary-powerpc/Packages.gz | \
             awk '/\/yaboot.*deb/ {print $2}'`
         ;;
 
