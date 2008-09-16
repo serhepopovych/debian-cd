@@ -118,19 +118,6 @@ if [ "$NN" = "1" ]; then
 			cp -lf $disk $CDDIR/$INSTALLDIR/$dir
 		fi
 	done
-
-	# Include Smart Boot Manager image for people where isolinux fails
-
-    # TODO: Work out how to do this properly; for now it's disabled
-    # (SAM 2008-09-15)
-
-    #SBMDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME sbm`
-    #(ar p "${SBMDEB}" data.tar.gz | \
-    #    tar zxf - -C $CDDIR/../sbm ./boot)
-    #cp -f $CDDIR/../sbm/boot/sbm.img $CDDIR/install/sbm.bin
-
-    # And add our own README
-    #cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install/
 fi
 
 extra_image () {

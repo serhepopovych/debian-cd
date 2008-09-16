@@ -103,8 +103,8 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   * Recommend syslinux-common instead of syslinux. Closes: #497966
   * Major licensing problem cleanup: (Closes: #497270)
     + Remove binary blobs from the package; pull those files from the
-      .debs in the archive as needed (sbm.bin.gz, isolinux.bin,
-      vesamenu.c32)
+      .debs in the archive as needed (isolinux.bin, vesamenu.c32)
+    + sbm.bin no longer needed, so dropped it
     + Pull out the code to find the right deb and put it in a new helper
       shell script (tools/which_deb), called from Makefile and boot-* as
       needed.

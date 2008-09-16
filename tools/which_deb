@@ -17,11 +17,6 @@ case $PKG in
             awk '/\/debootstrap_.*deb/ {print $2}'`
         ;;
 
-    sbm)
-        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
-            awk '/\/sbm.*deb/ {print $2}'`
-        ;;
-
     silo)
         DEB="$MIRROR/"`zcat $PTH/binary-sparc/Packages.gz | \
         	awk '/\/silo.*deb/ {print $2}'`
