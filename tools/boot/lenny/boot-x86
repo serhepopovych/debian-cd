@@ -143,9 +143,10 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 	cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
 
-    SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
-    (ar p "${SYSLINUXDEB}" data.tar.gz | \
-	tar zxf - -C $CDDIR/../syslinux ./usr/lib)
+	mkdir -p $CDDIR/../syslinux
+	SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
+	(ar p "${SYSLINUXDEB}" data.tar.gz | \
+		tar zxf - -C $CDDIR/../syslinux ./usr/lib)
 
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
@@ -200,14 +201,14 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	done
 
 	if [ -e boot$N/win32-loader.ini ] ; then
-	    sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
-        if [ "${DESKTOP}" ] ; then
-            sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
-        fi
+		sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
+		if [ "${DESKTOP}" ] ; then
+			sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
+		fi
 	fi
 
-    cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/$ISOLINUXDIR/
-    cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/$ISOLINUXDIR/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/$ISOLINUXDIR/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/$ISOLINUXDIR/
 
 	if [ -n "$ISOLINUX_DEFAULT" ]; then
 		sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" boot$N/$ISOLINUXDIR/isolinux.cfg
