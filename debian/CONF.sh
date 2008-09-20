@@ -29,6 +29,7 @@ unset ISOLINUX          || true
 unset EXCLUDE           || true
 unset NORECOMMENDS      || true
 unset NOSUGGESTS        || true
+unset IMAGESUMS         || true
 unset JIGDOTEMPLATEURL  || true
 unset JIGDOFALLBACKURLS || true
 unset JIGDOINCLUDEURLS  || true
@@ -198,14 +199,17 @@ export NORECOMMENDS=1
 # package on the CD.  The default is 'true'.
 #export NOSUGGESTS=1
 
+# Set to 1 to generate MD5 and SHA1 sums for generated images
+export IMAGESUMS=1
+
 # Produce iso/jigdo files: specify how many iso/jigdo files should be
 # produced in your set, or "ALL". Replaces the old "DOJIGDO" setting
 # with something much more flexible
 if [ "$MAXISOS"x = ""x ] ; then
-    export MAXISOS="ALL"
+	export MAXISOS="ALL"
 fi
 if [ "$MAXJIGDOS"x = ""x ] ; then
-    export MAXJIGDOS="ALL"
+	export MAXJIGDOS="ALL"
 fi
 
 # HTTP/FTP URL for directory where you intend to make the templates

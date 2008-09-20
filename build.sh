@@ -68,4 +68,6 @@ echo "Building $NUMJIGDOS jigdos and $NUMISOS isos for $ARCH $DISKTYPE"
 
 make $IMAGETARGET
 
-make imagesums
+if [ "$IMAGESUMS"x = 1x ]; then
+	make imagesums
+fi

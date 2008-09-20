@@ -62,7 +62,9 @@ do
 	echo " ... building the images; using target(s) \"$IMAGETARGET\""
 	make $IMAGETARGET
 
-	make imagesums
+	if [ "$IMAGESUMS"x = 1x ]; then
+		make imagesums
+	fi
 
 	echo "--------------- `date` ---------------"
 done
