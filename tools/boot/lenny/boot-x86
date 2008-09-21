@@ -184,8 +184,12 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		fi
 	else
 		# Remove gtk isolinux config files.
+		# FJP: AFAICT this is redundant: if f3.txt.withgtk is not
+		# included then the *gtk* files will not be either.
 		rm -f boot$N/$ISOLINUXDIR/gtk.cfg
 		rm -f boot$N/$ISOLINUXDIR/amdgtk.cfg
+		rm -f boot$N/$ISOLINUXDIR/adgtk.cfg
+		rm -f boot$N/$ISOLINUXDIR/adamdgtk.cfg
 	fi
 	rm -f boot$N/$ISOLINUXDIR/isolinux.cfg.with* 2>/dev/null || true
 
