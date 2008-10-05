@@ -40,3 +40,5 @@ unifont
 console-cyrillic
 console-terminus
 iso-codes
+alsa-base
+alsa-utils
