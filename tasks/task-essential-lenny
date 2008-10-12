@@ -5,16 +5,13 @@
  *
  * Last updated: $Date$
  */
-gnome-desktop-environment
+gnome
 xorg
 xserver-xorg-video-all
 xserver-xorg-input-all
 desktop-base
 menu
 iceweasel
-alsa-utils
-alsa-base
-eject
 apache2-mpm-prefork
 acpid
 hibernate
@@ -37,7 +34,6 @@ jfbterm
 zhcon
 jfbterm
 locales
-console-cyrillic
 t1-cyrillic
 language-env
 language-env
@@ -48,19 +44,17 @@ language-env
 language-env
 gsfonts-x11
 ttf-dejavu
+ttf-liberation
 ttf-freefont
 xfonts-base
 language-env
 manpages-it
-jfbterm
-unifont
 manpages-ja
 lv
 language-env
 language-env
 ttf-malayalam-fonts
 scim-tables-additional
-scim-gtk2-immodule
 locales
 language-env
 language-env
