@@ -12,14 +12,25 @@ if [ "$MIRROR"x = ""x ] ; then
     exit 1
 fi
 
+# Determine temp dir to use
 if [ "$BDIR"x = ""x ] ; then
-    if [ "$TMPDIR"x = ""x ] ; then
-        TMPDIR=/tmp
-        export TMPDIR
+    if [ "$TMPDIR"x != ""x ] ; then
+        BDIR=$TMPDIR
+    else
+        BDIR=/tmp
     fi
-    echo "update_tasks not given a temp dir, using $TMPDIR" >&2
-    BDIR=$TMPDIR
+    echo "update_tasks not given a temp dir, using $BDIR" >&2
 fi
+if [ ! -d "$BDIR" ] ; then
+    echo "update_tasks: temp dir '$BDIR' does not exist" >&2
+    exit 1
+fi
+
+# Create temp dir and ensure cleanup
+TDIR=$BDIR/update_tasks.$$
+mkdir -p $TDIR
+trap 'rm -rf $TDIR' EXIT HUP INT QUIT TERM
+
 
 update_full_list () {
     file=$1
@@ -124,7 +135,7 @@ update_essential_list () {
 
 # We need to gunzip a copy of the appropriate Packages.gz file
 # Assume i386, use the $CODENAME main Packages file
-TMP_PKG=$BDIR/Packages
+TMP_PKG=$TDIR/Packages
 zcat $MIRROR/dists/$CODENAME/main/binary-i386/Packages.gz > $TMP_PKG
 
 # Now grab the appropriate tasksel package
@@ -132,20 +143,19 @@ TASKSEL_DEB=$MIRROR/`mawk '
     /^Package: tasksel-data$/ { found=1 }
     /^Filename:/              { if (found==1) { print $2; exit } }' $TMP_PKG`
 
-rm -rf $BDIR/tasksel
-dpkg -x $TASKSEL_DEB $BDIR/tasksel
+dpkg -x $TASKSEL_DEB $TDIR/tasksel
 
 update_essential_list tasks/task-essential-$CODENAME \
     tasks/task.list gnome-desktop \
-    $BDIR/tasksel
+    $TDIR/tasksel
 
 update_essential_list tasks/task-essential-$CODENAME-kde \
     tasks/task.list.kde kde-desktop \
-    $BDIR/tasksel
+    $TDIR/tasksel
 
 update_essential_list tasks/task-essential-$CODENAME-xfce \
     tasks/task.list.xfce xfce-desktop \
-    $BDIR/tasksel
+    $TDIR/tasksel
 
 update_full_list tasks/task-full-$CODENAME \
     tasks/task.list $TMP_PKG
@@ -155,7 +165,3 @@ update_full_list tasks/task-full-$CODENAME-kde \
 
 update_full_list tasks/task-full-$CODENAME-xfce \
     tasks/task.list.xfce $TMP_PKG
-
-rm -f $TMP_PKG
-rm -rf $BDIR/tasksel
-
