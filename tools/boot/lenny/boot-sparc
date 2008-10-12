@@ -45,6 +45,9 @@ silo_deb=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME silo`
 
 # Some custom etc files
 cp -f -p $BASEDIR/data/lenny/sparc/silo.conf $inst/boot/
+if [ -n "$KERNEL_PARAMS" ]; then
+    sed -i "/^[[:space:]]\+append=\"/ s|append=\"|append=\"$KERNEL_PARAMS |" $inst/boot/silo.conf
+fi
 cat $BASEDIR/data/lenny/sparc/debian.txt \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \

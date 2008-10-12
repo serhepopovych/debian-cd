@@ -74,6 +74,9 @@ cat $BASEDIR/data/$DI_CODENAME/yaboot/boot.msg \
  > boot.msg
 cat $BASEDIR/data/$DI_CODENAME/yaboot/yaboot.conf \
  | sed "s/CODENAME/${CODENAME}/g" > yaboot.conf
+if [ -n "$KERNEL_PARAMS" ]; then
+    sed -i "/^[[:space:]]\+append=\"/ s|append=\"|append=\"$KERNEL_PARAMS |" yaboot.conf
+fi
 cp $BASEDIR/data/$DI_CODENAME/yaboot/ofboot.b ofboot.b
 
 for subarch in powerpc powerpc64 prep

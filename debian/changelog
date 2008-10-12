@@ -108,6 +108,8 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
     + Pull out the code to find the right deb and put it in a new helper
       shell script (tools/which_deb), called from Makefile and boot-* as
       needed.
+  * Support KERNEL_PARAMS for powerpc, alpha and sparc (Closes: #416230)
+    Thanks to Vagrant Cascadian for the patch.
 
   [ Frans Pop ]
   * Allow to skip generating MD5 and SHA1 sums files.

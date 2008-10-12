@@ -78,7 +78,7 @@ if [ $NN = 1 ]; then
     mkdir -p boot$N/etc
 
     RSIZE=$(expr $(zcat boot$N/boot/initrd.gz | wc --bytes) / 1024)
-    OPTS="ramdisk_size=$RSIZE initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall"
+    OPTS="ramdisk_size=$RSIZE initrd=/boot/initrd.gz root=/dev/ram devfs=mount,dall $KERNEL_PARAMS"
 
     echo "0:boot/vmlinuz $OPTS"               >  boot$N/etc/aboot.conf
     echo "1:boot/vmlinuz $OPTS console=ttyS0" >> boot$N/etc/aboot.conf
