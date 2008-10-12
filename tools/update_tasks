@@ -7,9 +7,18 @@ if [ -z "$CODENAME" ]; then
     exit 1
 fi
 
-if [ "$MIRROR"x == ""x ] ; then
+if [ "$MIRROR"x = ""x ] ; then
     echo "update_tasks needs to know where the mirror is" >&2
     exit 1
+fi
+
+if [ "$BDIR"x = ""x ] ; then
+    if [ "$TMPDIR"x = ""x ] ; then
+        TMPDIR=/tmp
+        export TMPDIR
+    fi
+    echo "update_tasks not given a temp dir, using $TMPDIR" >&2
+    BDIR=$TMPDIR
 fi
 
 update_full_list () {
@@ -145,3 +154,6 @@ update_full_list tasks/task-full-$CODENAME-kde \
 
 update_full_list tasks/task-full-$CODENAME-xfce \
     tasks/task.list.xfce $TMP_PKG
+
+rm -f $TMP_PKG
+
