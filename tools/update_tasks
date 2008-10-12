@@ -132,6 +132,7 @@ TASKSEL_DEB=$MIRROR/`mawk '
     /^Package: tasksel-data$/ { found=1 }
     /^Filename:/              { if (found==1) { print $2; exit } }' $TMP_PKG`
 
+rm -rf $BDIR/tasksel
 dpkg -x $TASKSEL_DEB $BDIR/tasksel
 
 update_essential_list tasks/task-essential-$CODENAME \
@@ -156,4 +157,5 @@ update_full_list tasks/task-full-$CODENAME-xfce \
     tasks/task.list.xfce $TMP_PKG
 
 rm -f $TMP_PKG
+rm -rf $BDIR/tasksel
 
