@@ -254,6 +254,20 @@ packagelists: ok apt-update genlist
 
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
+# Dirty workaround for saving space, we add some hints to break ties.
+# This is just a temporal solution, list2cds should be a little bit less
+# silly so that this is not needed. For more info have a look at
+# http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
+	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
+		if [ "$(INSTALLER_CD)"x = "1"x ] ; then \
+			: ; \
+		elif [ "$(INSTALLER_CD)"x = "2"x ] ; then \
+			echo -e "mawk" >>$(BDIR)/rawlist; \
+		else \
+			echo -e "mawk\nexim4-daemon-light" >>$(BDIR)/rawlist; \
+		fi; \
+	fi
+
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		if [ _$(INSTALLER_CD) != _1 ]; then \
 			for ARCH in $(ARCHES_NOSRC); do \

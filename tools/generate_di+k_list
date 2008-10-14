@@ -62,6 +62,7 @@ acpid
 acpi-support-base
 ppp
 pppoeconf
+pptp-linux
 udev
 installation-report
 openssh-server
