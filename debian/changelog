@@ -115,8 +115,9 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
   * Allow to skip generating MD5 and SHA1 sums files.
   * Add alsa-base and alsa-utils to forcd1 for Lenny as they are no longer
     key packages in the desktop task, but we do want them on the first CD.
+  * Drop support for building Sarge CDs.
 
- -- Frans Pop <fjp@debian.org>  Sun, 05 Oct 2008 18:13:40 +0200
+ -- Frans Pop <fjp@debian.org>  Tue, 14 Oct 2008 10:01:20 +0200
 
 debian-cd (3.0.4) unstable; urgency=low
 
