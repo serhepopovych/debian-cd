@@ -1,6 +1,10 @@
-
 # This file provides some common code that is intented to be called
 # by the various boot-<arch> scripts.
+
+
+# Expand %ARCH% variable in envvars for location of D-I images
+DI_WWW_HOME="$(echo "$DI_WWW_HOME" | sed -e 's|%ARCH%|$ARCH|g')"
+DI_DIR="$(echo "$DI_DIR" | sed -e 's|%ARCH%|$ARCH|g')"
 
 
 # install_languages decompacts the language packs, you should give the path
