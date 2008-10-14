@@ -90,8 +90,8 @@ MAX_CDS=1
 MAX_DVDS=1
 
 # Only create the ISO files; don't create jigdo files
-#MAXISOS=0
-MAXJIGDOS=0
+#export MAXISOS=0
+export MAXJIGDOS=0
 
 
 ## Options that include CODENAME should be set here if needed, not in CONF.sh
