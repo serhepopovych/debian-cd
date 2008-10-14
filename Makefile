@@ -121,8 +121,8 @@ $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
-	@dpkg -x $(LATEST_DB) $(DB_DIR)
-	if [ ! -e $(DEBOOTSTRAP_DIR) ] ; then \
+	$(Q)dpkg -x $(LATEST_DB) $(DB_DIR)
+	$(Q)if [ ! -e $(DEBOOTSTRAP_DIR) ] ; then \
 		ln -sf share $(DB_DIR)/usr/lib ; \
 	fi
 
