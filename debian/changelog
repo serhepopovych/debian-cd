@@ -122,6 +122,7 @@ debian-cd (3.0.5) UNRELEASED; urgency=low
     of a lot of the gotchas that can make debian-cd hard to use.
   * CONF.sh: change default CODENAME to lenny; change example paths to mirror
     to /srv/mirror.
+  * Exclude 686-bigmem kernel udebs as they are only used for Xen netboot.
 
  -- Frans Pop <fjp@debian.org>  Tue, 14 Oct 2008 10:01:20 +0200
 
