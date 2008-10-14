@@ -70,12 +70,12 @@ do
 	date
 
     # Work out whether we want ISO, jigdo or both
-    if [ "$MAXISOS" = "all" ] || [ "$MAXISOS" = "ALL" ] || [ "$n" -le "$MAXISOS" ] ; then
+    if [ "$MAXISOS"x = ""x ] || [ "$MAXISOS" = "all" ] || [ "$MAXISOS" = "ALL" ] || [ "$n" -le "$MAXISOS" ] ; then
         ISO_WANTED=1
     else
         ISO_WANTED=0
     fi
-    if [ "$MAXJIGDOS" = "all" ] || [ "$MAXJIGDOS" = "ALL" ] || [ "$n" -le "$MAXJIGDOS" ] ; then
+    if [ "$MAXJIGDOS"x = ""x ] || [ "$MAXJIGDOS" = "all" ] || [ "$MAXJIGDOS" = "ALL" ] || [ "$n" -le "$MAXJIGDOS" ] ; then
         JIGDO_WANTED=1
     else
         JIGDO_WANTED=0
