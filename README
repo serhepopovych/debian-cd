@@ -39,8 +39,8 @@ Other:
 		-------------------------------
 
 
-For the people that don't have time, here's the quick explanation:
-==================================================================
+For the people that don't have time, here's the quick explanation
+=================================================================
 
 Edit the CONF.sh and change the PATHs for the mirror and so on.
 $ sensible-editor CONF.sh
@@ -52,6 +52,11 @@ $ make official_images
 However, you really should consider reading further for more information.
 You can also take a look at build.sh and build_all.sh for an automatized
 way of building CD images. 
+
+The script easy-build.sh offers the easiest way to build a specific image
+or set of images, but is still very flexible and powerful. It is the
+recommended tool for building test images and for people new to debian-cd.
+See the file README.easy-build for further info.
 
 How to build a CD set - step by step
 ====================================
