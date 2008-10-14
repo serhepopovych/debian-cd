@@ -42,8 +42,6 @@ lvm-common
 lvm2
 mdadm
 aptitude
-jfbterm
-unifont
 hotplug
 usbutils
 console-data
