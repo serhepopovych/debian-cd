@@ -125,6 +125,11 @@ if [ "$LOCAL" ] && [ "$UPDATE_LOCAL" ]; then
 fi
 
 if [ -d tasks ]; then
+	if [ $DISKTYPE = CD ] || [ $DISKTYPE = DVD ]; then
+		echo "Updating task files derived from tasksel..."
+		make update-tasks
+	fi
+
 	echo "Updating debian-installer task files..."
 	(
 		cd tasks
@@ -145,5 +150,7 @@ if [ -d .svn ]; then
 	echo
 	echo "Cleanup: reverting generated changes in tasks..."
 	svn revert tasks/debian-installer-* \
-		   tasks/debian-installer+kernel-*
+		   tasks/debian-installer+kernel-* \
+		   tasks/task-essential-* \
+		   tasks/task-full-*
 fi
