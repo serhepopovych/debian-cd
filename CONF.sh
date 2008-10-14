@@ -54,8 +54,8 @@ unset OMIT_DOC_TOOLS     || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building etch cd set ...
-export CODENAME=etch
+# Building lenny cd set ...
+export CODENAME=lenny
 
 # By default use Debian installer packages from $CODENAME
 if [ -z "$DI_CODENAME" ]; then
@@ -102,17 +102,17 @@ fi
 #	      images, however. Also, if you are using an NFS partition for
 #	      some part of this, you must use this option.
 # Paths to the mirrors
-export MIRROR=/mirror/debian
+export MIRROR=/srv/mirror/debian
 
 # Path of the temporary directory
-export TDIR=/mirror/tmp
+export TDIR=/srv/mirror/tmp
 
 # Path where the images will be written
-export OUT=/mirror/debian-cd-test
+export OUT=/srv/mirror/debian-cd-test
 
 # Where we keep the temporary apt stuff.
 # This cannot reside on an NFS mount.
-export APTTMP=/mirror/tmp/apt
+export APTTMP=/srv/mirror/tmp/apt
 
 # Do I want to have NONFREE merged in the CD set
 # export NONFREE=1
