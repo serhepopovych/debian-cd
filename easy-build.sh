@@ -6,7 +6,7 @@ set -e
 ## See also CONF.sh for the meaning of variables used here.
 
 show_usage() {
-	echo "Usage: $(basename $0) BC|NETINST|CD|DVD [<ARCH> ...]"
+	echo "Usage: $(basename $0) [-d kde|xfce] BC|NETINST|CD|DVD [<ARCH> ...]"
 }
 
 
@@ -22,6 +22,24 @@ unset UPDATE_LOCAL
 if [ $# -eq 0 ]; then
 	show_usage
 	exit 1
+fi
+
+desktop=
+if [ "$1" = "-d" ]; then
+	case $2 in
+	    gnome)
+		# Ignore (gnome is default)
+		shift 2
+		;;
+	    kde|xfce)
+		desktop=$2
+		shift 2
+		;;
+	    *)
+		show_usage
+		exit 1
+		;;
+	esac
 fi
 
 export DISKTYPE="$1"
@@ -115,6 +133,17 @@ case $DISKTYPE in
 	;;
 esac
 
+# By default a GNOME CD/DVD is built, but KDE and Xfce are supported too
+if [ "$desktop" ] && ([ $DISKTYPE = CD ] || [ $DISKTYPE = DVD ]); then
+	TASK=tasks/Debian_${CODENAME}-${desktop}
+	if [ $CODENAME = etch ]; then
+		KERNEL_PARAMS="tasks=\"${desktop}-desktop, standard\""
+	else
+		KERNEL_PARAMS="desktop=$desktop"
+	fi
+	DESKTOP=$desktop
+	export TASK KERNEL_PARAMS DESKTOP
+fi
 
 if [ "$LOCAL" ] && [ "$UPDATE_LOCAL" ]; then
 	echo "Updating Packages files for local repository..."
