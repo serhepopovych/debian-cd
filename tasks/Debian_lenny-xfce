@@ -7,7 +7,7 @@
 
 /* Packages that should really be on CD1 */\
 #include <debian-installer+kernel-lenny>
-#include <forcd1>
+#include <forcd1-lenny>
 #include <task-essential-lenny-xfce>
 
 /* Other interesting packages */
