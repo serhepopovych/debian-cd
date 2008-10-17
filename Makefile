@@ -63,8 +63,6 @@ export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 export BDIR
 
-LATEST_DB := $(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
-
 ## DEBUG STUFF ##
 
 default:
@@ -119,12 +117,16 @@ $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
+
+ifdef MIRROR
+LATEST_DB := $(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	$(Q)dpkg -x $(LATEST_DB) $(DB_DIR)
 	$(Q)if [ ! -e $(DEBOOTSTRAP_DIR) ] ; then \
 		ln -sf share $(DB_DIR)/usr/lib ; \
 	fi
+endif
 
 # Make sure unstable/sid points to testing/lenny, as there is no build
 # rule for unstable/sid.
