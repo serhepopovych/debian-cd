@@ -40,7 +40,6 @@ eject
 foo2zjs
 foomatic-filters-ppds
 gimp
-hotkey-setup
 hpijs
 hplip
 hp-ppd
@@ -57,7 +56,6 @@ openoffice.org-thesaurus-en-us
 printconf
 swfdec-mozilla
 twm
-uswsusp
 vbetool
 xdg-utils
 xorg
@@ -245,7 +243,6 @@ myspell-fr-gut
 openoffice.org-help-fr
 openoffice.org-l10n-fr
 xfonts-intl-european
-kde-i18n-cy
 kde-i18n-fr
 aspell-gl-minimos
 openoffice.org-help-gl
@@ -310,6 +307,7 @@ ttf-georgewilliams
 ttf-isabella
 ttf-junicode
 ttf-liberation
+ttf-okolaks
 ttf-opensymbol
 ttf-sil-andika
 ttf-sil-charis
@@ -362,7 +360,7 @@ nabi
 openoffice.org-help-ko
 openoffice.org-l10n-ko
 ttf-baekmuk
-ttf-unfonts
+ttf-unfonts-core
 xfonts-baekmuk
 kde-i18n-ko
 openoffice.org-l10n-lv
