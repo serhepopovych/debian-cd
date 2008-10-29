@@ -68,7 +68,6 @@ installation-report
 openssh-server
 cryptsetup
 loop-aes-utils
-brltty
 dmraid
 
 /* In etch, libsysfs2-udeb provides libsysfs2 so use this to 
