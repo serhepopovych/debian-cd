@@ -91,7 +91,6 @@ if (defined($ENV{'EXTRANONFREE'})) {
 }
 	
 my $list = "$tdir/list";
-my $list_ex = "$tdir/list.exclude";
 my $bdir = "$tdir/$codename";
 my $log = "$bdir/make_disc_tree.log";
 open(LOG, ">> $log") or die ("Can't open logfile $log for writing: $!\n");
