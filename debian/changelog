@@ -5,8 +5,9 @@ debian-cd (3.0.6) UNRELEASED; urgency=low
     This should not affect users as netinst installs should normally use a
     mirror and thus the package will be installed from there if needed.
     brltty will still get included on full CDs and DVDs through forcd1.
+  * Remove no longer used references to rawlist.exclude and list.exclude files.
 
- -- Frans Pop <fjp@debian.org>  Wed, 29 Oct 2008 14:58:02 +0100
+ -- Frans Pop <fjp@debian.org>  Sun, 02 Nov 2008 00:03:00 +0100
 
 debian-cd (3.0.5) unstable; urgency=low
 

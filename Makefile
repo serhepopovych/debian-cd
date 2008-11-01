@@ -248,9 +248,7 @@ apt-update: status
 # Deleting the list only
 deletelist: ok
 	$(Q)-rm $(BDIR)/rawlist
-	$(Q)-rm $(BDIR)/rawlist-exclude
 	$(Q)-rm $(BDIR)/list
-	$(Q)-rm $(BDIR)/list.exclude
 
 packagelists: ok apt-update genlist
 
@@ -311,38 +309,15 @@ $(BDIR)/rawlist:
 	fi
 #	ls -al $(BDIR)/rawlist
 
-# Build the raw list (cpp output) with doubles and spaces for excluded packages
-$(BDIR)/rawlist-exclude:
-	$(Q)if [ -n "$(EXCLUDE)" ]; then \
-		for ARCH in $(ARCHES); do \
-			ARCHDEFS="$$ARCHDEFS -D ARCH_$(subst -,_,$$ARCH)"; \
-			ARCHUNDEFS="$$ARCHUNDEFS -U $$ARCH"; \
-		done; \
-	 	perl -npe 's/\@ARCH\@/$(ARCH)/g' $(EXCLUDE) | \
-			cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS \
-			$$ARCHUNDEFS -U i386 -U linux -U unix \
-			-DFORCENONUSONCD1=0 \
-			-I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist-exclude; \
-	else \
-		echo > $(BDIR)/rawlist-exclude; \
-	fi
-
 # Generate the complete listing of packages from the task
 # Build a nice list without doubles and without spaces
-genlist: ok $(BDIR)/list $(BDIR)/list.exclude
+genlist: ok $(BDIR)/list
 $(BDIR)/list: $(BDIR)/rawlist
 	@echo "Generating the complete list of packages to be included in $(BDIR)/list..."
 	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
 	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
 		  $(BDIR)/rawlist \
 		  > $(BDIR)/list
-
-$(BDIR)/list.exclude: $(BDIR)/rawlist-exclude
-	@echo "Generating the complete list of packages to be removed ..."
-	$(Q)perl -ne 'chomp; next if /^\s*$$/; \
-	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
-		  $(BDIR)/rawlist-exclude \
-		  > $(BDIR)/list.exclude
 
 ## IMAGE BUILDING ##
 

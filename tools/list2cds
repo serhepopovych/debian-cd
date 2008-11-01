@@ -17,7 +17,6 @@ my $nonfree = $ENV{'NONFREE'} || 0;
 my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
-my $exclude = "$list.exclude";
 my $norecommends = $ENV{'NORECOMMENDS'} || 0;
 my $nosuggests = $ENV{'NOSUGGESTS'} || 1;
 
@@ -51,7 +50,6 @@ msg(1, "======================================================================
 Here are the settings you've chosen for making the list:
 Architecture: $arch
 List of prefered packages: $list
-Exclude file: $exclude
 Output file: $dir/packages.$arch
 ");
 msg(1, "Complete selected packages with all the rest: ");
