@@ -44,7 +44,7 @@ endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
-list2cds=$(BASEDIR)/tools/list2cds
+sort_deps=$(BASEDIR)/tools/sort_deps
 md5sum=md5sum
 jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
 grab_md5=$(BASEDIR)/tools/grab_md5
@@ -255,7 +255,7 @@ packagelists: ok apt-update genlist
 # Build the raw list (cpp output) with doubles and spaces
 $(BDIR)/rawlist:
 # Dirty workaround for saving space, we add some hints to break ties.
-# This is just a temporal solution, list2cds should be a little bit less
+# This is just a temporal solution, sort_deps should be a little bit less
 # silly so that this is not needed. For more info have a look at
 # http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
@@ -322,9 +322,9 @@ $(BDIR)/list: $(BDIR)/rawlist
 ## IMAGE BUILDING ##
 
 image-trees: ok genlist
-    # Use list2cds to do the dependency sorting
+    # Use sort_deps to do the dependency sorting
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		ARCH=$$ARCH $(list2cds) $(BDIR)/list; \
+		ARCH=$$ARCH $(sort_deps) $(BDIR)/list; \
 	done
 	$(Q)if [ "$(SOURCEONLY)"x = "yes"x ] ; then \
 		$(grab_source_list) $(BDIR) $(ADIR) $(BDIR)/list $(BDIR)/packages; \
