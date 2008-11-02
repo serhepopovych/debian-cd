@@ -97,8 +97,6 @@ export FIRSTVER VERSPACE CAPCODE
 
 if [ "$ARCHLIST"x = ""x ] ; then
     ARCHLIST="alpha amd64 arm hppa i386 ia64 mips mipsel powerpc s390 sparc source" # amd64 # all dealt with specially
-else
-    ARCHLIST=$@
 fi
 
 export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
