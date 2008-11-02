@@ -149,7 +149,7 @@ copy_file () {
     ROOTDIR=$1
 	shift
 	FILE=$1
-    DIR=`echo $FILE | sed 's?/[-_\.A-Za-z0-9\+]*$??'`
+    DIR=`dirname $FILE`
     if [ ! -d $ROOTDIR/$DIR ] ; then
         mkdir -p $ROOTDIR/$DIR
     fi
