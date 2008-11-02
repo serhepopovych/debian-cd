@@ -11,6 +11,8 @@ debian-cd (3.0.6) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Rename list2cds to sort_deps
   * Fix how directory trees are created in update-cd. Closes: #503911
+  * Update update_popcon to cope better with errors; now uses curl instead
+    of wget
 
  -- Frans Pop <fjp@debian.org>  Sun, 02 Nov 2008 00:03:00 +0100
 
