@@ -115,7 +115,10 @@ rm -f boot$N/isolinux-amd64/isolinux.cfg.with* 2>/dev/null || true
 
 sed -i "s|/install/|/install.amd/|" boot$N/isolinux-amd64/isolinux.cfg
 
-cp -f $BASEDIR/data/$DI_CODENAME/isolinux.bin boot$N/isolinux/
+mkdir -p $CDDIR/../syslinux
+SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
+ar p "${SYSLINUXDEB}" data.tar.gz | tar zxf - -C $CDDIR/../syslinux ./usr/lib
+cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
 
 if [ -n "$KERNEL_PARAMS" ]; then
     # Substitute custom kernel params into the isolinux config

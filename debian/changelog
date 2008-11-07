@@ -16,6 +16,8 @@ debian-cd (3.0.6) UNRELEASED; urgency=low
 
   [ Raphael Hertzog ]
   * Don't try to copy sbm on etch CD images as it got removed.
+  * Also extract isolinux.bin from the syslinux package in the case of etch
+    CD images (since it's no more provided by debian-cd itself). 
 
  -- Frans Pop <fjp@debian.org>  Sun, 02 Nov 2008 00:03:00 +0100
 
