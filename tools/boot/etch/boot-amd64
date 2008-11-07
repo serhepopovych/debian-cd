@@ -105,12 +105,6 @@ extra_image () {
 
 }
 
-# Include Smart Boot Manager image for people where isolinux fails
-gzip -dc $BASEDIR/data/$DI_CODENAME/sbm.bin.gz > $CDDIR/install/sbm.bin
-# Keep the original file timestamp
-touch -r $BASEDIR/data/$DI_CODENAME/sbm.bin.gz $CDDIR/install/sbm.bin
-cp -p $BASEDIR/data/$DI_CODENAME/README.sbm $CDDIR/install
-
 # Isolinux setup including config and help files comes from d-i.
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux-amd64/; tar zx)
 if [ -e boot$N/isolinux-amd64/f3.txt.withgtk ]; then
