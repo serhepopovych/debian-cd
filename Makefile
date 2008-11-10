@@ -365,7 +365,7 @@ mirrorcheck: ok
 update-popcon:
 	$(update_popcon) tasks/popularity-contest-$(CODENAME)
 
-update-tasks:
+update-tasks: $(BDIR)
 	$(update_tasks) $(CODENAME)
 
 # Little trick to simplify things
