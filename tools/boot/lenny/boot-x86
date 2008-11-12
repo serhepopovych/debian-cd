@@ -229,7 +229,10 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv $file.tmp $file
 		done
 
-		sed -i -e "/^arch=/d ; /^i386\//p; s/^i386\//amd64\//; s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
+		sed -i -e "/^arch=/d
+			   /^i386\//p
+			   s/^i386\//amd64\//
+			   s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
 			boot$N/win32-loader.ini
 
 	else
