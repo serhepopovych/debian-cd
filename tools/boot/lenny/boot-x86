@@ -229,21 +229,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv $file.tmp $file
 		done
 
-		if [ -e boot$N/isolinux/amdtext.cfg ]; then
-			# Split isolinux configs exist, so the *amd*.cfg files
-			# will be loaded and set things up for amd64. No munging
-			# needed.
-			:
-		else 
-			# This is compatability code for old versions of d-i that
-			# do not use split isolinux configs.
-			cat boot$N/isolinux-amd64/isolinux.cfg | awk '
-				/^[Ll][Aa][Bb][Ee][Ll]/ { printf("label amd64-%s\n", $2) }
-				/^[Dd][Ee][Ff][Aa][Uu][Ll][Tt]/ { printf("default64 amd64-%s\n", $2) }
-				/[Kk][Ee][Rr][Nn][Ee][Ll]/ { print $0 }
-				/[Aa][Pp][Pp][Ee][Nn][Dd]/ { print $0 }' >> boot$N/isolinux/isolinux.cfg
-		fi
-
 		sed -i -e "/^arch=/d ; /^i386\//p; s/^i386\//amd64\//; s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
 			boot$N/win32-loader.ini
 
