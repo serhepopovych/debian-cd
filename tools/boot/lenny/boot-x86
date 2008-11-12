@@ -198,8 +198,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/$f
 		fi
 	done
-	# amd.cfg and adamd.cfg only for backwards compatibility with D-I Lenny beta2
-	for f in amd.cfg amdtext.cfg amdgtk.cfg adamd.cfg adamdtext.cfg adamdgtk.cfg; do
+	for f in amdtext.cfg amdgtk.cfg adamdtext.cfg adamdgtk.cfg; do
 		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
 			sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/$ISOLINUXDIR/$f
 		fi
@@ -230,8 +229,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv $file.tmp $file
 		done
 
-		# amd.cfg only for backwards compatibility with D-I Lenny beta2
-		if [ -e boot$N/isolinux/amdtext.cfg ] || [ -e boot$N/isolinux/amd.cfg ]; then
+		if [ -e boot$N/isolinux/amdtext.cfg ]; then
 			# Split isolinux configs exist, so the *amd*.cfg files
 			# will be loaded and set things up for amd64. No munging
 			# needed.
@@ -255,15 +253,12 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv -f boot$N/isolinux-amd64/* boot$N/isolinux
 		fi
 
-		# amd.cfg and adamd.cfg only for backwards compatibility with D-I Lenny beta2
-		if [ -e boot$N/isolinux/amdtext.cfg ] || [ -e boot$N/isolinux/amd.cfg ]; then
+		if [ -e boot$N/isolinux/amdtext.cfg ]; then
 			# Split isolinux configs exist. Remove the *amd*.cfg
 			# files to avoid it being loaded on a disc that does
 			# not have both amd64 and i386 dirs.
-			rm -f boot$N/isolinux/amd.cfg
 			rm -f boot$N/isolinux/amdtext.cfg
 			rm -f boot$N/isolinux/amdgtk.cfg
-			rm -f boot$N/isolinux/adamd.cfg
 			rm -f boot$N/isolinux/adamdtext.cfg
 			rm -f boot$N/isolinux/adamdgtk.cfg
 		fi
