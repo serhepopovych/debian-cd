@@ -220,13 +220,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	# Handle merging amd64 and i386 isolinux dirs if both are present.
 	if [ -e boot$N/isolinux-amd64/isolinux.cfg ] && [ -e boot$N/isolinux/isolinux.cfg ]; then
-		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*
-		do
-			cat $file | awk '
-				NR==3 { next }
-				NR==5 { printf " (i386 is default; prepend 'amd64-' to use an amd64 kernel instead)\n" }
-				/.*/  { print $0 }' > $file.tmp
-			mv $file.tmp $file
+		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
+			sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
 		done
 
 		sed -i -e "/^arch=/d
