@@ -99,8 +99,6 @@ export MAXJIGDOS=0
 # Include proposed-updates
 #export PROPOSED_UPDATES=$CODENAME-proposed-updates
 
-#export EXCLUDE1="$BASEDIR"/tasks/exclude-$CODENAME
-#export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
 #export UDEB_INCLUDE="$BASEDIR"/data/$CODENAME/udeb_include
 #export UDEB_EXCLUDE="$BASEDIR"/data/$CODENAME/udeb_exclude
 #export BASE_INCLUDE="$BASEDIR"/data/$CODENAME/base_include
@@ -135,9 +133,9 @@ esac
 
 # By default a GNOME CD/DVD is built, but KDE and Xfce are supported too
 if [ "$desktop" ] && ([ $DISKTYPE = CD ] || [ $DISKTYPE = DVD ]); then
-	TASK=tasks/Debian_${CODENAME}-${desktop}
-	if [ $CODENAME = etch ]; then
-		KERNEL_PARAMS="tasks=\"${desktop}-desktop, standard\""
+	TASK=Debian-$desktop
+	if [ "$CODENAME" = etch ]; then
+		KERNEL_PARAMS="tasks=\"$desktop-desktop, standard\""
 	else
 		KERNEL_PARAMS="desktop=$desktop"
 	fi
@@ -151,35 +149,8 @@ if [ "$LOCAL" ] && [ "$UPDATE_LOCAL" ]; then
 		./tools/Packages-gen.sh $CODENAME $arch
 		./tools/Packages-gen.sh -i $DI_CODENAME $arch
 	done
+	echo
 fi
 
-if [ -d tasks ]; then
-	if [ $DISKTYPE = CD ] || [ $DISKTYPE = DVD ]; then
-		echo "Updating task files derived from tasksel..."
-		make update-tasks
-	fi
-
-	echo "Updating debian-installer task files..."
-	(
-		cd tasks
-		../tools/generate_di_list
-		../tools/generate_di+k_list
-	)
-else
-	echo "Error: cannot find tasks directory"
-	exit 1
-fi
-
-echo
 echo "Starting the actual debian-cd build..."
 ./build.sh "$ARCHES"
-
-# Avoid conflicts when the repository is updated later
-if [ -d .svn ]; then
-	echo
-	echo "Cleanup: reverting generated changes in tasks..."
-	svn revert tasks/debian-installer-* \
-		   tasks/debian-installer+kernel-* \
-		   tasks/task-essential-* \
-		   tasks/task-full-*
-fi

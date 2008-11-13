@@ -6,13 +6,13 @@
  */
 
 /* Packages that should really be on CD1 */\
-#include <debian-installer+kernel-lenny>
-#include <forcd1-lenny>
-#include <task-essential-lenny-xfce>
+#include <debian-installer+kernel>
+#include <forcd1>
+#include <task-essential-xfce>
 
 /* Other interesting packages */
-#include <task-full-lenny-xfce>
+#include <task-full-xfce>
 #include <interesting-fromcd23>
 
 /* The rest ordered by popularity */
-#include <popularity-contest-lenny>
+#include <popularity-contest>

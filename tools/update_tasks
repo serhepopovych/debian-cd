@@ -1,35 +1,22 @@
 #!/bin/sh
 set -e
 
-CODENAME="$1"
 if [ -z "$CODENAME" ]; then
-    echo "usage: update_tasks CODENAME" >&2
+    echo "update_tasks: codename not specified" >&2
     exit 1
 fi
 
 if [ "$MIRROR"x = ""x ] ; then
-    echo "update_tasks needs to know where the mirror is" >&2
+    echo "update_tasks: mirror dir not specified" >&2
     exit 1
 fi
 
-# Determine temp dir to use
 if [ "$BDIR"x = ""x ] ; then
-    if [ "$TMPDIR"x != ""x ] ; then
-        BDIR=$TMPDIR
-    else
-        BDIR=/tmp
-    fi
-    echo "update_tasks not given a temp dir, using $BDIR" >&2
-fi
-if [ ! -d "$BDIR" ] ; then
-    echo "update_tasks: temp dir '$BDIR' does not exist" >&2
+    echo "update_tasks: temp dir not specified" >&2
     exit 1
 fi
-
-# Create temp dir and ensure cleanup
-TDIR=$BDIR/update_tasks.$$
+TDIR=$BDIR/update_tasks
 mkdir -p $TDIR
-trap 'rm -rf $TDIR' EXIT HUP INT QUIT TERM
 
 
 update_full_list () {
@@ -37,7 +24,6 @@ update_full_list () {
     tasklist=$2
     pkgfile=$3
 
-    grep '\*' $file > $file.new
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ; echo DONE ; cat $pkgfile) | mawk '
     /DONE/ {
         in_packages = 1
@@ -73,8 +59,7 @@ update_full_list () {
             }
         }
         next
-    }' | sort -n | cut -d: -f2 >> $file.new    
-    mv $file.new $file
+    }' | sort -n | cut -d: -f2 > $file
 }
 
 update_essential_list () {
@@ -83,7 +68,6 @@ update_essential_list () {
     desktoptask=$3
     tasksel=$4
 
-    grep '\*' $file > $file.new
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
 		echo DONE ;
 		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk -v DT=$3 '
@@ -129,8 +113,7 @@ update_essential_list () {
             }
         }
         next
-    }' | sort -s -n -k1 | cut -d: -f2 >> $file.new
-    mv $file.new $file
+    }' | sort -s -n -k1 | cut -d: -f2 > $file
 }
 
 # We need to gunzip a copy of the appropriate Packages.gz file
@@ -145,23 +128,19 @@ TASKSEL_DEB=$MIRROR/`mawk '
 
 dpkg -x $TASKSEL_DEB $TDIR/tasksel
 
-update_essential_list tasks/task-essential-$CODENAME \
-    tasks/task.list gnome-desktop \
+update_essential_list task-essential task.list gnome-desktop \
     $TDIR/tasksel
 
-update_essential_list tasks/task-essential-$CODENAME-kde \
-    tasks/task.list.kde kde-desktop \
+update_essential_list task-essential-kde task.list.kde kde-desktop \
     $TDIR/tasksel
 
-update_essential_list tasks/task-essential-$CODENAME-xfce \
-    tasks/task.list.xfce xfce-desktop \
+update_essential_list task-essential-xfce task.list.xfce xfce-desktop \
     $TDIR/tasksel
 
-update_full_list tasks/task-full-$CODENAME \
-    tasks/task.list $TMP_PKG
+update_full_list task-full task.list $TMP_PKG
 
-update_full_list tasks/task-full-$CODENAME-kde \
-    tasks/task.list.kde $TMP_PKG
+update_full_list task-full-kde task.list.kde $TMP_PKG
 
-update_full_list tasks/task-full-$CODENAME-xfce \
-    tasks/task.list.xfce $TMP_PKG
+update_full_list task-full-xfce task.list.xfce $TMP_PKG
+
+rm -rf $TDIR

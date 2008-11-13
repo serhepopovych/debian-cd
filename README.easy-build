@@ -61,8 +61,8 @@ images are filled up to capacity with packages in the following order:
 - other packages sorted by popularity (popcon score)
 
 The basic order in which packages are included on full CDs and DVDs is
-defined in 'tasks/Debian-<codename>'. The order in which tasksel tasks are
-included is defined in 'tasks/task.list*'.
+defined in 'tasks/<CODENAME>/Debian'. The order in which tasksel tasks are
+included is defined in 'tasks/<CODENAME>/task.list*'.
 
 Current GNOME and KDE desktop environments are so large that only the
 packages needed to install one of them can be included on the first full CD.

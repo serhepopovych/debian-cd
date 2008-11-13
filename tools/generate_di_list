@@ -10,7 +10,7 @@ my @ARCHES=qw{alpha arm armel hppa hurd-i386 i386 ia64 mips mipsel
               powerpc s390 sparc amd64};
 my $DATE=`date`;
 chomp $DATE;
-open(OUT, ">debian-installer-$ENV{DI_CODENAME}") || die "write: $!";
+open(OUT, ">debian-installer") || die "write: $!";
 print OUT << "EOF";
 /* List of udebs to be included so that debian-installer works fine 
  *

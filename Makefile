@@ -18,7 +18,7 @@ ifndef VERBOSE_MAKE
 Q=@
 endif
 ifndef TASK
-TASK=$(BASEDIR)/tasks/Debian_$(CODENAME)
+TASK=Debian
 endif
 ifndef MKISOFS
 export MKISOFS=$(shell which genisoimage mkisofs | head -1)
@@ -56,12 +56,14 @@ grab_source_list=$(BASEDIR)/tools/grab_source_list
 which_deb=$(BASEDIR)/tools/which_deb
 
 BDIR=$(TDIR)/$(CODENAME)
+TASKDIR=$(BDIR)/tasks
 ADIR=$(APTTMP)
 DB_DIR=$(BDIR)/debootstrap
 
 export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 export BDIR
+export TASKDIR
 
 ## DEBUG STUFF ##
 
@@ -106,7 +108,7 @@ endif
 ## INITIALIZATION ##
 
 # Creation of the directories needed
-init: ok $(OUT) $(TDIR) $(BDIR) $(ADIR) $(BDIR)/DATE $(DB_DIR) unstable-map
+init: ok $(OUT) $(TDIR) $(BDIR) $(ADIR) $(TASKDIR) $(BDIR)/DATE $(DB_DIR) unstable-map
 $(OUT):
 	$(Q)mkdir -p $(OUT)
 $(TDIR):
@@ -115,6 +117,13 @@ $(BDIR):
 	$(Q)mkdir -p $(BDIR)
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
+$(TASKDIR):
+	$(Q)mkdir -p $(TASKDIR)
+	$(Q)cp -r $(BASEDIR)/tasks/$(CODENAME)/* $(TASKDIR)
+	$(Q)set -e; cd $(TASKDIR); \
+		$(BASEDIR)/tools/update_tasks; \
+		$(BASEDIR)/tools/generate_di_list; \
+		$(BASEDIR)/tools/generate_di+k_list
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 
@@ -146,6 +155,7 @@ unstable-map:
 clean: ok dir-clean
 dir-clean:
 	$(Q)rm -rf $(BDIR)/CD[1234567890]*
+	$(Q)rm -rf $(TASKDIR)
 	$(Q)rm -f $(BDIR)/*.filelist*
 	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/upgrade-stamp $(BDIR)/md5-check
 
@@ -294,11 +304,11 @@ $(BDIR)/rawlist:
 		ARCHUNDEFS="$$ARCHUNDEFS -U $$ARCH"; \
 	done; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
-		cat $(TASK) | \
+		cat $(TASKDIR)/$(TASK) | \
 		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS \
 	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
 		    -DFORCENONUSONCD1=0 \
-		    -I $(BASEDIR)/tasks -I $(BDIR) - - >> $(BDIR)/rawlist; \
+		    -I $(TASKDIR) - - >> $(BDIR)/rawlist; \
 	fi
 
     # If we're *only* doing source, then we need to build a list of all the
@@ -363,10 +373,7 @@ mirrorcheck: ok
 	done
 
 update-popcon:
-	$(update_popcon) tasks/popularity-contest-$(CODENAME)
-
-update-tasks: $(BDIR)
-	$(update_tasks) $(CODENAME)
+	$(update_popcon) tasks/$(CODENAME)/popularity-contest
 
 # Little trick to simplify things
 official_images: ok init packagelists image-trees images

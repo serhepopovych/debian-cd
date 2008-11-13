@@ -186,10 +186,10 @@ export DISKTYPE=CD
 #export CUSTOMSIZE=XXXX
 
 # We don't want certain packages to take up space on CD1...
-#export EXCLUDE1="$BASEDIR"/tasks/exclude-$CODENAME
+#export EXCLUDE1=exclude
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included
 # on CD x if not already covered)
-#export UNEXCLUDE2="$BASEDIR"/tasks/unexclude-CD2-$CODENAME
+#export UNEXCLUDE2=unexclude-CD2
 # Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
 # excluded completely.
 
@@ -298,10 +298,10 @@ done
 # and if you're not using build.sh then also make sure you set TASK
 # appropriately here)
 # INSTALLER_CD=0: nothing special (default)
-# INSTALLER_CD=1: just add debian-installer (use TASK=tasks/debian-installer-$CODENAME)
-# INSTALLER_CD=2: add d-i and base (use TASK=tasks/debian-installer+kernel-$CODENAME)
+# INSTALLER_CD=1: just add debian-installer (use TASK=debian-installer)
+# INSTALLER_CD=2: add d-i and base (use TASK=debian-installer+kernel)
 #export INSTALLER_CD=2
-#export TASK=tasks/debian-installer+kernel-$CODENAME
+#export TASK=debian-installer+kernel
 
 # Parameters to pass to kernel (or d-i) when the CD boots. Not currently
 # supported for all architectures.

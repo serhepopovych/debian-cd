@@ -106,15 +106,24 @@ The process of building a CD is composed of the following steps:
 
 - now you can decide what you want on your CDs
 
-    $ make packagelists TASK=tasks/debian-2.2 COMPLETE=1
+  Note that task files are always taken from the subdirectory in ./tasks/
+  that matches the CODENAME environment variable. At the beginning of a
+  build these "static" task files are copied to the working directory.
+  During the build some additional task files - that are referenced from
+  the static task files - are generated automatically using scripts from
+  the ./tools directory.
+
+  Examples:
+
+    $ make packagelists TASK=Debian COMPLETE=1
 
   or
 
-    $ make packagelists TASK=tasks/gnome COMPLETE=0
+    $ make packagelists TASK=gnome COMPLETE=0
 
   or
 
-    $ export NONFREE=1; make packagelists TASK=tasks/your-task-here COMPLETE=1
+    $ export NONFREE=1; make packagelists TASK=your-task-here COMPLETE=1
 
   or for something like an official image for the USA (without non-US &
   non-free) :

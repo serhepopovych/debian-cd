@@ -1,18 +1,18 @@
 /*
  *
  * This file will be used to build official complete sets of Etch CDs
- * with KDE.
+ * with Xfce.
  *
  */
 
 /* Packages that should really be on CD1 */\
-#include <debian-installer+kernel-etch>
-#include <forcd1-etch>
-#include <task-essential-etch-kde>
+#include <debian-installer+kernel>
+#include <forcd1>
+#include <task-essential-xfce>
 
 /* Other interesting packages */
-#include <task-full-etch-kde>
+#include <task-full-xfce>
 #include <interesting-fromcd23>
 
 /* The rest ordered by popularity */
-#include <popularity-contest-etch>
+#include <popularity-contest>

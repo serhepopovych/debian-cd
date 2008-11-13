@@ -1,4 +1,4 @@
-debian-cd (3.0.6) UNRELEASED; urgency=low
+debian-cd (3.1.0) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * Don't include brltty on netinst images as it pulls in libicu which causes
@@ -10,17 +10,33 @@ debian-cd (3.0.6) UNRELEASED; urgency=low
   * Clean up no longer needed compatibility code in lenny x86 boot script.
 
   [ Steve McIntyre ]
-  * Rename list2cds to sort_deps
-  * Fix how directory trees are created in update-cd. Closes: #503911
+  * Rename list2cds to sort_deps.
+  * Fix how directory trees are created in update-cd. Closes: #503911.
   * Update update_popcon to cope better with errors; now uses curl instead
-    of wget
+    of wget.
 
   [ Raphael Hertzog ]
   * Don't try to copy sbm on etch CD images as it got removed.
   * Also extract isolinux.bin from the syslinux package in the case of etch
     CD images (since it's no more provided by debian-cd itself). 
 
- -- Frans Pop <fjp@debian.org>  Sun, 02 Nov 2008 00:03:00 +0100
+  [ Frans Pop ]
+  * Rework the way tasks are handled:
+    - all tasks files are moved to ./tasks/<codename> subdirectories so they
+      can be more easily kept up-to-date with specific distro releases
+    - always generate the debian-installer and tasksel tasks dynamically:
+      . all task files for the desired suite are copied to the working
+        directory at the beginning of each build, and are used from there
+      . the debian-installer and tasksel tasks are no longer included in
+        releases but are always created automatically at build time; this
+        means users no longer need to run the generate_di_* scripts or the
+        update_tasksel script
+      . the popcon task file will remain included as a static file, but plan
+        is to add an option to update it automatically for each build; reason
+        is that updating it requires network access
+    - bump version to 3.1
+
+ -- Frans Pop <fjp@debian.org>  Thu, 13 Nov 2008 22:17:21 +0100
 
 debian-cd (3.0.5) unstable; urgency=low
 

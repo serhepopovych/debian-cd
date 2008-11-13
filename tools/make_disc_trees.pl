@@ -578,7 +578,7 @@ sub start_disc {
     undef @unexclude_packages;
 
     if (defined ($ENV{"EXCLUDE"})) {
-        my $excl_file = $ENV{"EXCLUDE"};
+        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"EXCLUDE"};
         print LOG "Adding excludes from $excl_file\n";
         open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
         while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
@@ -588,7 +588,7 @@ sub start_disc {
         close (EXCLUDE_FILE);
     }
     if (defined ($ENV{"EXCLUDE$disknum"})) {
-        my $excl_file = $ENV{"EXCLUDE$disknum"};
+        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"EXCLUDE$disknum"};
         print LOG "Adding excludes from $excl_file\n";
         open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
         while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
@@ -598,7 +598,7 @@ sub start_disc {
         close (EXCLUDE_FILE);
     }
     if (defined ($ENV{"UNEXCLUDE$disknum"})) {
-        my $excl_file = $ENV{"UNEXCLUDE$disknum"};
+        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"UNEXCLUDE$disknum"};
         print LOG "Adding unexcludes from $excl_file\n";
         open (EXCLUDE_FILE, "< $excl_file") || die "Can't open unexclude file $excl_file: $!\n";
         while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
