@@ -190,8 +190,8 @@ export DISKTYPE=CD
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included
 # on CD x if not already covered)
 #export UNEXCLUDE2=unexclude-CD2
-# Any packages listed in EXCLUDE but not in any UNEXCLUDE will be
-# excluded completely.
+# Any packages listed in EXCLUDEx but not in any UNEXCLUDE will be
+# excluded completely. The same goes for packages listed in EXCLUDE.
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'false'.
