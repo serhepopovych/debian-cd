@@ -5,7 +5,7 @@
  *
  * Last updated: $Date$
  */
-gnome
+gnome-desktop-environment
 xorg
 xserver-xorg-video-all
 xserver-xorg-input-all
@@ -32,7 +32,6 @@ manpages-pt
 language-env
 jfbterm
 zhcon
-jfbterm
 locales
 t1-cyrillic
 language-env
