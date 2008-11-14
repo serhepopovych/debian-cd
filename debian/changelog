@@ -37,6 +37,7 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     - bump version to 3.1
   * Update the contrib/testingcds script based on its current version on
     farbror.
+  * Clean up and update interesting-fromcd23 and exclude task files for lenny.
 
  -- Frans Pop <fjp@debian.org>  Thu, 13 Nov 2008 22:17:21 +0100
 
