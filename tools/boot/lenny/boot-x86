@@ -156,85 +156,73 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
-	
-	if [ "$ARCH" = i386 ]; then
-		ISOLINUXDIR=isolinux
-		
-		# If the isolinux dir already exists, rename it aside for now
-		if [ -e boot$N/isolinux/isolinux.cfg ] ; then
-			mv boot$N/isolinux boot$N/isolinux-amd64
-		fi
-	else
-		ISOLINUXDIR=isolinux-"$ARCH"
+
+
+	# In case of a multi-arch CD the script will be called two times.
+	# The first time the isolinux dir gets set up for single arch; if
+	# it is called a second time the isolinux dir already exists and we
+	# know it will be multi-arch. We then throw away the first version
+	# and just configure things from scratch for multi-arch.
+
+	MULTIARCH=
+	if [ -e boot$N/isolinux/isolinux.cfg ]; then
+		MULTIARCH=1
+		rm -r boot$N/isolinux
 	fi
-	mkdir -p boot$N/$ISOLINUXDIR
+
+	mkdir -p boot$N/isolinux
 	# Isolinux setup including config and help files comes from d-i.
-	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/$ISOLINUXDIR/; tar zx)
+	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
+
 	# Not everything in the tarball is isolinux stuff
-	if [ -e boot$N/$ISOLINUXDIR/win32-loader.ini ] ; then
-	    mv boot$N/$ISOLINUXDIR/g2ldr* boot$N/$ISOLINUXDIR/setup.exe \
-		boot$N/$ISOLINUXDIR/win32-loader.ini boot$N/
+	if [ -e boot$N/isolinux/win32-loader.ini ] ; then
+		mv boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe \
+			boot$N/isolinux/win32-loader.ini boot$N/
 	fi
-	if [ -e boot$N/$ISOLINUXDIR/f3.txt.withgtk ]; then
+
+	if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
 		extra_image gtk/initrd.gz
-		mv boot$N/$ISOLINUXDIR/f3.txt.withgtk boot$N/$ISOLINUXDIR/f3.txt
-		mv boot$N/$ISOLINUXDIR/f4.txt.withgtk boot$N/$ISOLINUXDIR/f4.txt
-		if [ -e boot$N/$ISOLINUXDIR/isolinux.cfg.withgtk ]; then
-			mv boot$N/$ISOLINUXDIR/isolinux.cfg.withgtk boot$N/$ISOLINUXDIR/isolinux.cfg
+		mv boot$N/isolinux/f3.txt.withgtk boot$N/isolinux/f3.txt
+		mv boot$N/isolinux/f4.txt.withgtk boot$N/isolinux/f4.txt
+		if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
+			mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
 		fi
 	else
 		# Remove gtk isolinux config files.
 		# FJP: AFAICT this is redundant: if f3.txt.withgtk is not
 		# included then the *gtk* files will not be either.
-		rm -f boot$N/$ISOLINUXDIR/gtk.cfg
-		rm -f boot$N/$ISOLINUXDIR/amdgtk.cfg
-		rm -f boot$N/$ISOLINUXDIR/adgtk.cfg
-		rm -f boot$N/$ISOLINUXDIR/adamdgtk.cfg
+		rm -f boot$N/isolinux/gtk.cfg
+		rm -f boot$N/isolinux/amdgtk.cfg
+		rm -f boot$N/isolinux/adgtk.cfg
+		rm -f boot$N/isolinux/adamdgtk.cfg
 	fi
-	rm -f boot$N/$ISOLINUXDIR/isolinux.cfg.with* 2>/dev/null || true
+	rm -f boot$N/isolinux/isolinux.cfg.with*
 
-	for f in text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
-		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
-			sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/$f
-		fi
-	done
-	for f in amdtext.cfg amdgtk.cfg adamdtext.cfg adamdgtk.cfg; do
-		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
-			sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/$ISOLINUXDIR/$f
-		fi
-	done
-
-	if [ -e boot$N/win32-loader.ini ] ; then
+	# Modify win32-loader.ini for the "current" arch
+	if [ -e boot$N/win32-loader.ini ]; then
 		sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
 		if [ "${DESKTOP}" ] ; then
 			sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
 		fi
 	fi
 
-	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/$ISOLINUXDIR/
-	cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/$ISOLINUXDIR/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
 
+	# FIXME - this is broken for the current setup which no longer
+	# has a 'default' statement in isolinux.cfg
 	if [ -n "$ISOLINUX_DEFAULT" ]; then
-		sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" boot$N/$ISOLINUXDIR/isolinux.cfg
+		sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" \
+			boot$N/isolinux/isolinux.cfg
 	fi
 
-	# Handle merging amd64 and i386 isolinux dirs if both are present.
-	if [ -e boot$N/isolinux-amd64/isolinux.cfg ] && [ -e boot$N/isolinux/isolinux.cfg ]; then
-		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
-			sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
+	if [ -z "$MULTIARCH" ]; then
+		# Set up isolinux dir for only the current arch
+		for f in text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
+			if [ -e boot$N/isolinux/$f ]; then
+				sed -i "s|/install/|/$INSTALLDIR/|" boot$N/isolinux/$f
+			fi
 		done
-
-		sed -i -e "/^arch=/d
-			   /^i386\//p
-			   s/^i386\//amd64\//
-			   s/=$INSTALLDIR_i386\//=$INSTALLDIR_amd64\//g" \
-			boot$N/win32-loader.ini
-
-	else
-		if [ "$ARCH" = amd64 ]; then
-		        mkdir -p boot$N/isolinux
-			mv -f boot$N/isolinux-amd64/* boot$N/isolinux
-		fi
 
 		# Remove the *amd*.cfg files to avoid them being loaded on a
 		# disc that does not have both amd64 and i386 dirs.
@@ -242,9 +230,35 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		rm -f boot$N/isolinux/amdgtk.cfg
 		rm -f boot$N/isolinux/adamdtext.cfg
 		rm -f boot$N/isolinux/adamdgtk.cfg
+	else
+		# Set up isolinux dir for multi-arch
+		for f in text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
+			if [ -e boot$N/isolinux/$f ]; then
+				sed -i "s|/install/|/$INSTALLDIR_i386/|" boot$N/isolinux/$f
+			fi
+		done
+		for f in amdtext.cfg amdgtk.cfg adamdtext.cfg adamdgtk.cfg; do
+			if [ -e boot$N/isolinux/$f ]; then
+				sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/isolinux/$f
+			fi
+		done
+
+		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
+			sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
+		done
+
+		# Modify win32-loader.ini to also cover the "other" arch
+		if [ "$ARCH" = i386 ]; then
+			sed -i -e "/^arch=/d
+				   /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
+				boot$N/win32-loader.ini
+		else
+			sed -i -e "/^arch=/d
+				   /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
+				boot$N/win32-loader.ini
+		fi
 	fi
-	rm -rf boot$N/isolinux-amd64
-	
+
 	if [ "$SPLASHPNG" ] ; then
 		# Insert our own splash screen.  Color index 0 is
 		# background, and index 7 is foreground.  Set to black and
@@ -261,7 +275,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
 			boot$N/isolinux/*.cfg
 	fi
-
 else
 	if [ -n "$THISTYPE" ]; then
 		echo "Using $THISTYPE boot-disks image on CD$N"
