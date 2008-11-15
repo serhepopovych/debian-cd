@@ -193,7 +193,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	fi
 	rm -f boot$N/$ISOLINUXDIR/isolinux.cfg.with* 2>/dev/null || true
 
-	for f in isolinux.cfg text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
+	for f in text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
 		if [ -e boot$N/$ISOLINUXDIR/$f ]; then
 			sed -i "s|/install/|/$INSTALLDIR/|" boot$N/$ISOLINUXDIR/$f
 		fi
@@ -236,15 +236,12 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			mv -f boot$N/isolinux-amd64/* boot$N/isolinux
 		fi
 
-		if [ -e boot$N/isolinux/amdtext.cfg ]; then
-			# Split isolinux configs exist. Remove the *amd*.cfg
-			# files to avoid it being loaded on a disc that does
-			# not have both amd64 and i386 dirs.
-			rm -f boot$N/isolinux/amdtext.cfg
-			rm -f boot$N/isolinux/amdgtk.cfg
-			rm -f boot$N/isolinux/adamdtext.cfg
-			rm -f boot$N/isolinux/adamdgtk.cfg
-		fi
+		# Remove the *amd*.cfg files to avoid them being loaded on a
+		# disc that does not have both amd64 and i386 dirs.
+		rm -f boot$N/isolinux/amdtext.cfg
+		rm -f boot$N/isolinux/amdgtk.cfg
+		rm -f boot$N/isolinux/adamdtext.cfg
+		rm -f boot$N/isolinux/adamdgtk.cfg
 	fi
 	rm -rf boot$N/isolinux-amd64
 	
