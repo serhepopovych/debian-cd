@@ -383,7 +383,6 @@ Installing
  <A href="http://www.debian.org/releases/etch/installmanual">the Debian web site</a>.
 #endif
  <P>
-#endif
 
 #if ARCHi386 || ARCHamd64 || ARCHia64 || ARCHalpha || ARCHpowerpc || ARCHsparc
   <P>
