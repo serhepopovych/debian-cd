@@ -241,12 +241,6 @@
     <a href="http://www.debian.org/releases/lenny/installmanual">the Debian web site</a>.
     </p>
 # endif
-    <p>Programs and other files that are needed for the installation can be
-    found on this disc under
-    <tt><a href=%%""tools/%%"">/tools/</a></tt>
-# if ARCHi386
-    and <tt><a href=%%""install/floppy/%%"">/install/floppy/</a></tt>
-# endif
     </p>
 
 # if ARCHi386 || ARCHamd64 || ARCHia64 || ARCHalpha || ARCHpowerpc || ARCHsparc

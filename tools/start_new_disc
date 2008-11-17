@@ -110,19 +110,13 @@ fi
 
 if [ $DISKNUM = 1 ] ; then
 	if [ "$OMIT_DOC_TOOLS" != "1" ]; then
-		if [ ! -e $MIRROR/tools ] || [ ! -e $MIRROR/doc ]; then
-			echo "You need a Debian mirror with the doc, tools and"
+		if [ ! -e $MIRROR/doc ]; then
+			echo "You need a Debian mirror with the doc and"
 			echo "indices directories ! "
 			exit 1
 		fi
 	fi
 		
-	# Add install stuff
-	if [ "$SOURCEONLY"x != "yes"x ] && [ "$OMIT_DOC_TOOLS" != "1" ]; then
-		echo "  Adding tools to CD1"
-		$BASEDIR/tools/add_files $CDDIR $MIRROR tools
-	fi
-
 	echo "  Adding .disk/base_components"
 	echo "main" > $CDDIR/.disk/base_components
 	if [ -n "$LOCAL" ] ; then
