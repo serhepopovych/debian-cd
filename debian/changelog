@@ -42,10 +42,13 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
   * Fix i386/amd64 multi-arch support in the lenny x86 boot script so that the
     isolinux config gets modified correctly independent of the order in which
     the arches are specified.
+  * Workaround #505243 by modifying the syslinux configuration for amd64/i386
+    multi-arch images and using ifcpu64.c32 to autodetect 32/64-bit systems
+    when a user hits enter from the isolinux help screens. Based on research
+    done by Franklin Piat.
 
   [ Steve McIntyre ]
-  * Stop copying the /tools/ directory on from the mirror; it's going
-    away.
+  * Stop copying the /tools/ directory on from the mirror; it's going away.
 
  -- Frans Pop <fjp@debian.org>  Thu, 13 Nov 2008 22:17:21 +0100
 
