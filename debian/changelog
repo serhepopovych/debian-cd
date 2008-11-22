@@ -49,6 +49,7 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Stop copying the /tools/ directory on from the mirror; it's going away.
+  * Add support for multiple desktop tasks on a single disk
 
  -- Frans Pop <fjp@debian.org>  Thu, 13 Nov 2008 22:17:21 +0100
 

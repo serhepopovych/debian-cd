@@ -65,12 +65,16 @@ update_full_list () {
 update_essential_list () {
     file=$1
     tasklist=$2
-    desktoptask=$3
+    desktoptasks=$3
     tasksel=$4
 
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
 		echo DONE ;
-		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk -v DT=$3 '
+		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk -v DT=$desktoptasks '
+
+    BEGIN {
+        split(DT, d_tasks, ",")
+    }
 
     /DONE/ {
         in_tasks = 1
@@ -106,8 +110,10 @@ update_essential_list () {
                         (cur_task != "xfce-desktop")) {
                         in_key = 1
                     }
-                    if (cur_task == DT) {
-                        in_key = 1
+                    for (dt_num in d_tasks) {
+                        if (cur_task == d_tasks[dt_num]) {
+                            in_key = 1
+                        }
                     }
                 }
             }
