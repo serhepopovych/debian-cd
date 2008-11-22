@@ -337,6 +337,7 @@ sub load_packages_cache {
         }
     }
     $/ = $old_split; # Browse by line again
+    close LIST;
 }
 
 sub should_start_extra_nonfree {
