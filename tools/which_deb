@@ -1,54 +1,116 @@
-#!/bin/sh
+#!/usr/bin/perl -w
 #
 # which_deb
 #
 # Simple helper tool to find the appropriate version of a package in
 # the archive to meet a requirement in the debian-cd build
 
-MIRROR=$1
-CODENAME=$2
-PKG=$3
-PTH=$MIRROR/dists/$CODENAME/main
+use strict;
 
-case $PKG in
+my ($mirror, $codename, $pkg, $pth, $output);
 
-    debootstrap)
-        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
-            awk '/\/debootstrap_.*deb/ {print $2}'`
-        ;;
+$mirror = shift;
+$codename = shift;
+$pkg = shift;
+$output = shift;
+$pth = "$mirror/dists/$codename/main";
 
-    silo)
-        DEB="$MIRROR/"`zcat $PTH/binary-sparc/Packages.gz | \
-        	awk '/\/silo.*deb/ {print $2}'`
-        ;;
+if (!defined ($output)) {
+    $output = "binary";
+}
 
-    syslinux)
-        # More complex - look for syslinux-common, then fall back to
-        # syslinux if we don't find that
-        DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
-            awk '/\/syslinux-common.*deb/ {print $2}'`
-        if [ "$DEB"x = "$MIRROR/"x ] ; then
-            DEB="$MIRROR/"`zcat $PTH/binary-i386/Packages.gz | \
-                awk '/\/syslinux.*deb/ {print $2}'`
-        fi
-        ;;
+sub grab_bin_info {
+    my $pth = shift;
+    my $arch = shift;
+    my $pkgname = shift;
+    my $old_split = $/;
+    my $match;
+    my $result = "";
+    
+    my $pgz = "$pth/binary-$arch/Packages.gz";
 
-    yaboot)
-        DEB="$MIRROR/"`zcat $PTH/binary-powerpc/Packages.gz | \
-            awk '/\/yaboot.*deb/ {print $2}'`
-        ;;
+    $/ = ''; # Browse by paragraph    
 
-    *)
-        # No idea what we should be doing here...
-        DEB="$MIRROR/"
-        ;;
+    if (-e $pgz) {
+        open(PFILE, "zcat $pgz |") or
+            die "Failed to read Packages file $pgz";
 
-esac
+        while (defined($match = <PFILE>)) {
+            if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+                $result = $match;
+                close PFILE;
+                return $result;
+            }
+        }
+        # Fell through
+        close PFILE;
+    }
+    return "";
+}
 
-if [ "$DEB"x = "$MIRROR/"x ] ; then
-    echo "$0: Failed to find a deb for package $PKG in $MIRROR/"
-    exit 1
-fi
+sub grab_src_info {
+    my $pth = shift;
+    my $pkgname = shift;
+    my $old_split = $/;
+    my $match;
+    my $result = "";
+    
+    my $pgz = "$pth/source/Sources.gz";
 
-echo $DEB
+    $/ = ''; # Browse by paragraph    
 
+    if (-e $pgz) {
+        open(PFILE, "zcat $pgz |") or
+            die "Failed to read Sources file $pgz";
+
+        while (defined($match = <PFILE>)) {
+            if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+                $result = $match;
+                close PFILE;
+                return $result;
+            }
+        }
+        # Fell through
+        close PFILE;
+    }
+    return "";
+}
+
+my $bin_deb = "";
+my $pkgdata = "";
+my $srcname = "";
+
+if ($pkg eq "debootstrap") {
+    $pkgdata = grab_bin_info($pth, "i386", $pkg);
+
+} elsif ($pkg eq "silo") {
+    $pkgdata = grab_bin_info($pth, "sparc", $pkg);
+
+} elsif ($pkg eq "syslinux") {
+    $pkgdata = grab_bin_info($pth, "i386", "syslinux-common");
+    if (length($pkgdata) < 3) {        
+        $pkgdata = grab_bin_info($pth, "i386", "syslinux");
+    }
+} elsif ($pkg eq "yaboot") {
+    $pkgdata = grab_bin_info($pth, "powerpc", $pkg);
+}
+
+if (length($pkgdata) > 2) {
+    if ($output eq "binary") {
+        $pkgdata =~ m/^Filename: (\S+)/m and $bin_deb = $1;
+        print "$mirror/$bin_deb\n";
+    }
+    elsif ($output eq "source") {
+        $srcname = $pkg;
+        $pkgdata =~ m/^Source: (\S+)/m and $srcname = $1;
+        $pkgdata = grab_src_info($pth, $srcname);
+        if (length($pkgdata) > 2) {
+            my $dir;
+            $pkgdata =~ m/^Directory: (\S+)/m and $dir = $1;
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*dsc)/m and print "$mirror/$dir/$3\n";
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print "$mirror/$dir/$3\n";
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print "$mirror/$dir/$3\n";
+        }
+    }
+}
+    
