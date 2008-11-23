@@ -386,7 +386,27 @@ do
 	fi
 done
 
-if [ "$DISC_PKG_HOOK"x != ""x ] ; then
+# If we've had to extract any files from packages to put them onto the
+# CD (e.g. bootloader files), then we will have listed them in
+# $BDIR/$DISKNUM.pkgs_extracted. If that file exists, add a README.source
+# to the root of the CD
+if [ -e $BDIR/$DISKNUM.pkgs_extracted ] && \
+   [ ""x != "$ARCHIVE_EXTRACTED_SOURCES"x ] ; then
+    echo "  Adding README.source"
+    cat > $CDDIR/README.source <<EOF
+Creation of this disk image included extracting files from some Debian
+packages. In case you do not have those packages already, both the
+binary and source packages are archived at
+
+EOF
+    echo "$ARCHIVE_EXTRACTED_SOURCES" >> $CDDIR/README.source
+    echo "" >> $CDDIR/README.source
+    echo "The following binary/source packages were used:" >> $CDDIR/README.source
+    sort $BDIR/$DISKNUM.pkgs_extracted | uniq | \
+        xargs -n1 basename >> $CDDIR/README.source
+fi
+
+if [ "$disc_pkg_HOOK"x != ""x ] ; then
     echo "  Calling pkg hook: $DISC_PKG_HOOK"
     $DISC_PKG_HOOK $TDIR $MIRROR $DISKNUM $CDDIR "$ARCHES"
 fi

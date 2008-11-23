@@ -56,10 +56,14 @@ cd $INSTALLDIR
 # Extract yaboot from the archive
 if [ -z "$YABOOT_DEBUG" ]; then
     YADEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME yaboot`
-    (ar p "${YADEB}" data.tar.gz | \
+    (ar p "$MIRROR/${YADEB}" data.tar.gz | \
 	tar zxf - -C . ./usr/lib/yaboot/yaboot)
     mv usr/lib/yaboot/yaboot .
     rm -rf usr
+
+    echo $YADEB >> $CDDIR/../$N.pkgs_extracted
+    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME yaboot source >> $CDDIR/../$N.pkgs_extracted
+
 else
  cp -f $YABOOT_DEBUG yaboot
 fi

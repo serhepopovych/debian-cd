@@ -98,7 +98,7 @@ if ($pkg eq "debootstrap") {
 if (length($pkgdata) > 2) {
     if ($output eq "binary") {
         $pkgdata =~ m/^Filename: (\S+)/m and $bin_deb = $1;
-        print "$mirror/$bin_deb\n";
+        print "$bin_deb\n";
     }
     elsif ($output eq "source") {
         $srcname = $pkg;
@@ -107,9 +107,9 @@ if (length($pkgdata) > 2) {
         if (length($pkgdata) > 2) {
             my $dir;
             $pkgdata =~ m/^Directory: (\S+)/m and $dir = $1;
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*dsc)/m and print "$mirror/$dir/$3\n";
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print "$mirror/$dir/$3\n";
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print "$mirror/$dir/$3\n";
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*dsc)/m and print "$dir/$3\n";
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print "$dir/$3\n";
+            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print "$dir/$3\n";
         }
     }
 }

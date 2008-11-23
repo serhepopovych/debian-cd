@@ -145,8 +145,11 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	mkdir -p $CDDIR/../syslinux
 	SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
-	(ar p "${SYSLINUXDEB}" data.tar.gz | \
+	(ar p "$MIRROR/${SYSLINUXDEB}" data.tar.gz | \
 		tar zxf - -C $CDDIR/../syslinux ./usr/lib)
+
+    echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"

@@ -50,6 +50,13 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Stop copying the /tools/ directory on from the mirror; it's going away.
   * Add support for multiple desktop tasks on a single disk
+  * Add support for tracking which packages we've extracted binaries from,
+    so that we can archive them (both binaries and sources). If we need
+    anything, we will list it in CD$N.pkgs_extracted so that external
+    scripts can pick it up and do whatever's needed.
+  * Minor changes to the interface of tools/which_deb to accommodate that:
+    now just lists the files *within* the mirror; it's up to callers to
+    prepend ${MIRROR} as needed.
 
  -- Frans Pop <fjp@debian.org>  Thu, 13 Nov 2008 22:17:21 +0100
 

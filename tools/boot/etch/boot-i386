@@ -215,8 +215,11 @@ if [ "$NN" = "1" ]; then
 
 	mkdir -p $CDDIR/../syslinux
 	SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
-	ar p "${SYSLINUXDEB}" data.tar.gz | tar zxf - -C $CDDIR/../syslinux ./usr/lib
+	ar p "$MIRROR/${SYSLINUXDEB}" data.tar.gz | tar zxf - -C $CDDIR/../syslinux ./usr/lib
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
+
+    echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config

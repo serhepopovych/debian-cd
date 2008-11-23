@@ -204,6 +204,12 @@ export NORECOMMENDS=1
 # Set to 1 to generate MD5 and SHA1 sums for generated images
 export IMAGESUMS=1
 
+# We may have to extract files from packages to put them onto the CD
+# (e.g. bootloader files). If you make those packages (and their
+# sources) available somewhere, list it here so that README.source
+# can point to it
+export ARCHIVE_EXTRACTED_SOURCES="http://cdimage.debian.org/cdimage/cd-sources/"
+
 # Produce iso/jigdo files: specify how many iso/jigdo files should be
 # produced in your set. If not set or when the value is "ALL" they will
 # be created for all images. One of the variables can be set to zero if

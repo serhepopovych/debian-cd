@@ -128,7 +128,7 @@ $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 
 ifdef MIRROR
-LATEST_DB := $(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
+LATEST_DB := $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	$(Q)dpkg -x $(LATEST_DB) $(DB_DIR)
