@@ -2,37 +2,13 @@
 #
 # testingcds (c) 2005 Santiago Garcia Mantinan <manty@manty.net>
 #
+# Updates since then by:
+# Joey Hess <joey@kitenet.net>
+# Steve McIntyre <steve@einval.com>
+#
 # GPL v2
 #
-# This file is included here just as an example, it was used when building the
-# official testing cds at some point, it was written for a very specific setup
-# and then went over a lot of changes during its life, so now this code is
-# horrible, hoever some fellows feel it should be included in debian-cd,
-# well, I (manty) will leave that on their hands.
-#
-# The setup we have uses normal debian-cd for daily builds, while it uses a jte
-# patched debian-cd for weekly builds, this is done just for speed, the script
-# should work with normal debian-cd for all kind of builds just removing -jte
-# down there. We are currently just building isos for dailies and jigdos for
-# weeklies, no snapshots being generated on the build machine, so I cannot
-# waranty that all the code down here works, again, I must stress that you
-# should take this just as an example, because part of it is untested and
-# the rest is written for a very very specific setup, so... no waranties at all
-#
-# This is how this script is called for the daily images:
-# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 TASK=debian-installer MAXISOS=ALL MAXJIGDOS=ALL DI=lenny DI_DIST=lenny ./testingcds "$arch"
-# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL DI=lenny DI_DIST=lenny ./testingcds "$arch"
-# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 TASK=debian-installer MAXISOS=ALL MAXJIGDOS=ALL DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" ./testingcds "$arch"
-# OMIT_MANUAL=1 NORECOMMENDS=1 NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" ./testingcds "$arch"
-# This is respectively for lenny_d-i businesscards, lenny_d-i netinsts,
-# sid_d-i businesscards, and sid_d-i netinsts.
-# Where $ARCH_DI_DIR is set to the path for the local mirror of the d-i daily
-# built images, this parameter can be omited if no mirror of the images is used
-
-# For the weekly images it is run for normal cds like this:
-# DI_DIST=lenny ./testingcds "$arch"
-# and for the dvds like this:
-# PUBDIRJIG=/path_to_the/dvd INSTALLER_CD=3 DEFBINSIZE=4440 DEFSRCSIZE=4432 DI_DIST=lenny ./testingcds "$arch"
+# See cronjob.weekly and cronjob.daily for examples of how to call this script
 
 #set -x
 

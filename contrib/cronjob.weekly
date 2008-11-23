@@ -1,0 +1,161 @@
+#!/bin/sh
+
+export TOPDIR=$(dirname $0)
+
+. $TOPDIR/settings.sh
+
+export PUBDIRJIG=$PUBDIR/weekly-builds
+export PUBDIRISO=$PUBDIR/weekly-builds
+export DATE_BUILD="$DATE-$BUILDNUM"
+
+export RSYNC_TARGET=/export/ftp/cdimage/weekly-builds
+
+. images4testing_d-i
+
+export DI_DIST
+export DI_CODENAME
+
+if [ "$ARCHES"x = ""x ] ; then
+    ARCHES="i386 source amd64 multi powerpc alpha arm armel hppa ia64 mips mipsel s390 sparc"
+fi
+
+if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
+    echo "svn update debian-cd"
+    cd debian-cd && svn cleanup; svn up ; cd ..
+
+    cd debian-cd && ./tools/update_popcon lenny ; cd ..
+
+    cd $TOPDIR
+    mkdir -p $PUBDIRJIG/trace
+
+    mkdir -p $RSYNC_TARGET
+
+    for arch in $ARCHES; do
+        if [ "$arch" != multi ] ; then
+            rm -rf $PUBDIRJIG/$arch
+            mkdir -p $PUBDIRJIG/$arch
+            date
+
+            #export DI_DIR="$ARCH_DI_DIR"
+
+            # Full DVD set
+            if [ "$NODVD"x = ""x ] ; then
+                case $arch in
+                    i386|amd64|source)
+                        export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
+                    *)
+                        export MAXISOS=1; export MAXJIGDOS=ALL ;;
+                esac
+                DVDSTART=`date -u +%H:%M:%S`
+                INSTALLER_CD=3 \
+                    ./testingcds "$arch"
+                error=$?
+                DVDEND=`date -u +%H:%M:%S`
+                echo "$arch DVDs started at $DVDSTART, ended at $DVDEND, error $error"
+            fi
+
+            # Full CD set
+            if [ "$NOCD"x = ""x ] ; then
+                export DESKTOP=gnome
+                case $arch in
+                    i386|amd64|source)
+                        export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
+                    powerpc)
+                        export MAXISOS=8; export MAXJIGDOS=ALL ;;
+                    *)
+                        export MAXISOS=3; export MAXJIGDOS=ALL ;;
+                esac
+                CDSTART=`date -u +%H:%M:%S`
+                ./testingcds "$arch"
+                error=$?
+                CDEND=`date -u +%H:%M:%S`
+                echo "$arch CDs started at $CDSTART, ended at $CDEND, error $error"
+            fi
+
+            # Full BD set
+            if [ "$NOBD"x = ""x ] ; then
+                case $arch in
+                    i386|amd64|source)
+                        export MAXISOS=0
+                        export MAXJIGDOS=ALL
+                        BDSTART=`date -u +%H:%M:%S`
+                        INSTALLER_CD=9 \
+                            ./testingcds "$arch"
+                        error=$?
+                        BDEND=`date -u +%H:%M:%S`
+                        echo "$arch BDs started at $BDSTART, ended at $BDEND, error $error"
+                        ;;
+                    *)
+                        echo "Not running BD build for $arch"
+                        ;;
+                esac
+            fi
+
+            # kde and xfce cds
+            if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
+                CDSTART=`date -u +%H:%M:%S`
+                export DESKTOP=kde
+                export MAXISOS=1; export MAXJIGDOS=1
+                INSTALLER_CD=4 TASK=Debian-kde \
+                    KERNEL_PARAMS='desktop=kde' \
+                    MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+                    ./testingcds "$arch"
+                error=$?
+                CDEND=`date -u +%H:%M:%S`
+                echo "$arch KDE CD started at $CDSTART, ended at $CDEND, error $error"
+
+                CDSTART=`date -u +%H:%M:%S`
+                export DESKTOP=xfce
+                export MAXISOS=1; export MAXJIGDOS=1
+                INSTALLER_CD=5 TASK=Debian-xfce \
+                    KERNEL_PARAMS='desktop=xfce' \
+                    MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+                    ./testingcds "$arch"
+                error=$?
+                CDEND=`date -u +%H:%M:%S`
+                echo "$arch Xfce CD started at $CDSTART, ended at $CDEND, error $error"
+            fi
+
+            if [ "$NOSYNC"x = ""x ] ; then
+                echo "Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
+                ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &
+            fi
+        else # multi
+            rm -rf $PUBDIRJIG/multi-arch
+            for i in iso-dvd jigdo-dvd; do
+                mkdir -p $PUBDIRJIG/multi-arch/$i
+            done
+
+            if [ "$NODVD"x = ""x ] ; then
+                DVDSTART=`date -u +%H:%M:%S`
+                MAXISOS=ALL MAXJIGDOS=ALL INSTALLER_CD=6 MAXCDS=1 \
+                    ./testingcds "i386 amd64 powerpc source"
+                error=$?
+                DVDEND=`date -u +%H:%M:%S`
+                echo "Multi-arch DVD started at $DVDSTART, ended at $DVDEND, error $error"
+
+                mv $PUBDIRJIG/multi/jigdo-dvd/debian* $PUBDIRJIG/multi-arch/jigdo-dvd
+                cat $PUBDIRJIG/multi/jigdo-dvd/MD5SUMS >> $PUBDIRJIG/multi-arch/jigdo-dvd/MD5SUMS
+                mv $PUBDIRJIG/multi/iso-dvd/debian* $PUBDIRJIG/multi-arch/iso-dvd
+                cat $PUBDIRJIG/multi/iso-dvd/MD5SUMS >> $PUBDIRJIG/multi-arch/iso-dvd/MD5SUMS
+                rm -rf $PUBDIRJIG/multi
+            fi
+
+            if [ "$NOSYNC"x = ""x ] ; then
+                echo "Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
+                ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
+            fi
+        fi # end of multi
+    done
+
+    ~/build/generate_firmware_images lenny
+    ~/build/generate_firmware_images sid
+    
+    if [ "$NOSNAP"x = ""x ] ; then
+        ~/bin/weekly-snapshots
+    fi
+
+    date -u > $PUBDIRJIG/trace/cdimage.debian.org
+
+    rm -f $TOPDIR/.debian-cd.lock
+fi
