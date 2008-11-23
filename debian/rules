@@ -23,7 +23,7 @@ install-stamp: build-stamp
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tmp.
-	cp -r tools tasks data Makefile README README.devel build.sh \
+	cp -r contrib tools tasks data Makefile README README.devel build.sh \
               build_all.sh update-cd easy-build.sh README.easy-build \
               debian/debian-cd/usr/share/debian-cd/
 	cp debian/CONF.sh debian/debian-cd/etc/debian-cd/conf.sh
