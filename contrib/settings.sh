@@ -11,3 +11,5 @@ if [ "$DATE"x = ""x ] ; then
     export DATE=`date -u +%Y%m%d`
 fi
 export PARALLEL=0
+
+export EXTRACTED_SOURCES=/export/ftp/cdimage/cd-sources
