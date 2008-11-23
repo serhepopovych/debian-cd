@@ -194,6 +194,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		rm -f boot$N/isolinux/gtk.cfg
 		rm -f boot$N/isolinux/amdgtk.cfg
 		rm -f boot$N/isolinux/adgtk.cfg
+		rm -f boot$N/isolinux/amdadgtk.cfg
+		# For Lenny RC1 compatibility
 		rm -f boot$N/isolinux/adamdgtk.cfg
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with*
@@ -224,12 +226,11 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			fi
 		done
 
-		# Remove the *amd*.cfg files to avoid them being loaded on a
+		# Remove the amd*.cfg files to avoid them being loaded on a
 		# disc that does not have both amd64 and i386 dirs.
-		rm -f boot$N/isolinux/amdtext.cfg
-		rm -f boot$N/isolinux/amdgtk.cfg
-		rm -f boot$N/isolinux/adamdtext.cfg
-		rm -f boot$N/isolinux/adamdgtk.cfg
+		rm -f boot$N/isolinux/amd*.cfg
+		# For Lenny RC1 compatibility
+		rm -f boot$N/isolinux/adamd*.cfg
 	else
 		# Set up isolinux dir for multi-arch
 		for f in text.cfg gtk.cfg adtext.cfg adgtk.cfg; do
@@ -237,7 +238,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 				sed -i "s|/install/|/$INSTALLDIR_i386/|" boot$N/isolinux/$f
 			fi
 		done
-		for f in amdtext.cfg amdgtk.cfg adamdtext.cfg adamdgtk.cfg; do
+		# Last two for Lenny RC1 compatibility
+		for f in amdtext.cfg amdgtk.cfg amdadtext.cfg amdadgtk.cfg adamdtext.cfg adamdgtk.cfg; do
 			if [ -e boot$N/isolinux/$f ]; then
 				sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/isolinux/$f
 			fi
