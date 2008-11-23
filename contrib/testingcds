@@ -171,6 +171,14 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	date > "$PUBDIRJIG"/$OUTARCH/"$OUT_TYPE"-trace
     fi
 
+    touch $TDIR/$CODENAME/1.pkgs_extracted # so we don't get errors below
+    for file in `cat $TDIR/$CODENAME/*.pkgs_extracted | sort | uniq`; do
+        basefile=`basename $file`
+        if [ ! -e $EXTRACTED_SOURCES/$file ] ; then
+            cp $MIRROR/$file $EXTRACTED_SOURCES
+        fi
+    done
+
     # Mail the sizes of the images
     if [ -e "../.debian-cd.mail" ] ; then
         MYEMAIL=`grep -v "^#" "../.debian-cd.mail"`
