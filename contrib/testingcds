@@ -175,7 +175,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     for file in `cat $TDIR/$CODENAME/*.pkgs_extracted | sort | uniq`; do
         basefile=`basename $file`
         if [ ! -e $EXTRACTED_SOURCES/$file ] ; then
-            cp $MIRROR/$file $EXTRACTED_SOURCES
+            cp -a  $MIRROR/$file $EXTRACTED_SOURCES
         fi
     done
 
