@@ -335,9 +335,9 @@ sub load_packages_cache {
             m/^Package: (\S+)/m and $p = $1;
             $pkginfo{$arch}{$p} = $_;
         }
+		close LIST;
     }
     $/ = $old_split; # Browse by line again
-    close LIST;
 }
 
 sub should_start_extra_nonfree {
