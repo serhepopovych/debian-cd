@@ -306,6 +306,7 @@ sub load_packages_cache {
     my $arch = shift;
     my @pkglist;
     my ($p);
+	my $num_pkgs = 0;
 
     $ENV{'LC_ALL'} = 'C'; # Required since apt is now translated
     $ENV{'ARCH'} = $arch;
@@ -320,9 +321,10 @@ sub load_packages_cache {
     }
     close INLIST;
 
+	print "Reading in package information for $arch:\n";
+
     $/ = ''; # Browse by paragraph
     while (@pkglist) {
-
         my (@pkg) = splice(@pkglist,0,200);
         if ($arch eq "source") {
             open (LIST, "$basedir/tools/apt-selection cache showsrc @pkg |")
@@ -334,10 +336,13 @@ sub load_packages_cache {
         while (defined($_ = <LIST>)) {
             m/^Package: (\S+)/m and $p = $1;
             $pkginfo{$arch}{$p} = $_;
+			$num_pkgs++;
         }
 		close LIST;
+		print LOG "load_packages_cache: Read details of $num_pkgs packages for $arch\n";
     }
     $/ = $old_split; # Browse by line again
+	print "  Done: Read details of $num_pkgs packages for $arch\n";
 }
 
 sub should_start_extra_nonfree {
