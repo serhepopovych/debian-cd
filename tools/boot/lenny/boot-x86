@@ -274,9 +274,9 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
 		# text.cfg and amdtext.cfg for Lenny RC1 compatibility.
 		sed -i "/^default install/ s/^/#/" \
-			boot$N/isolinux/txt.cfg boot$N/isolinux/text.cfg
+			boot$N/isolinux/txt.cfg boot$N/isolinux/text.cfg || true
 		sed -i "/^default64 amd64-install/ s/^/#/" \
-			boot$N/isolinux/amdtxt.cfg boot$N/isolinux/amdtext.cfg
+			boot$N/isolinux/amdtxt.cfg boot$N/isolinux/amdtext.cfg || true
 		sed -i "/^include menu.cfg/ a\include instsel.cfg" \
 			boot$N/isolinux/prompt.cfg
 		cat >boot$N/isolinux/instsel.cfg <<EOF
