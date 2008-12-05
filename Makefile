@@ -342,7 +342,7 @@ image-trees: ok genlist
 		$(merge_package_lists) $(BDIR) $(ADIR) "$(ARCHES)" $(BDIR)/packages; \
 	fi
 	$(Q)if [ "$(INC_SOURCE)"x = "yes"x ] ; then \
-		$(Q)grep ^source $(BDIR)/packages > $(BDIR)/packages.source; \
+		grep ^source $(BDIR)/packages > $(BDIR)/packages.source; \
 	fi
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
 
