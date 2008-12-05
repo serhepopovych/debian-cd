@@ -51,13 +51,14 @@ Note that <language>-desktop tasks are always sorted before any
 Files involved
 ==============
 Static task files (can be found in tasks/codename):
-- Debian or Debian-<desktop>:
+- Debian-generic or Debian-<desktop>:
   top level task file; defines order of other task files to be used,
-  including task-essential[-<desktop>] and task-full[-<desktop>]
+  including task-essential-[generic|<desktop>] and
+  task-full-[generic|<desktop>]
 - tasksel_d-i.languages:
   list of languages used to add language tasks at build time (see detailed
   explanation below)
-- task.list or task.list.<desktop>:
+- task.list.generic or task.list.<desktop>:
   tasksel tasks to be included
 
 Dynamically generated task files created at build time (can be found in
@@ -65,18 +66,19 @@ the subdirectory tasks under the working directory for the build):
 - task.languages
   copy of the actual language list to be used to add language tasks
   (see "Language list used at build time" below)
-- task.list[.<desktop>].essential:
-  contains primary tasks from task.list[.<desktop>] followed by
+- task.list.[generic|<desktop>].essential:
+  contains primary tasks from task.list.[generic|<desktop>] followed by
   corresponding language tasks
-- task.list[.<desktop>].full:
-  copy of task.list[.<desktop>].essential; followed by secondary tasks
-  from tasks from task.list[.<desktop>] and corresponding language tasks
-- task-essential[-<desktop>]:
-  list of key packages generated using task.list[.<desktop>].essential;
+- task.list.[generic|<desktop>].full:
+  copy of task.list.[generic|<desktop>].essential; followed by secondary
+  tasks from tasks from task.list.[generic|<desktop>] and corresponding
+  language tasks
+- task-essential-[generic|<desktop>]:
+  list of key packages based on task.list.[generic|<desktop>].essential;
   corresponds to 3a/3b from overview above
-- task-full[-<desktop>]:
-  list of packages generated using task.list[.<desktop>].full; corresponds
-  to 3c-3f from overview above
+- task-full-[generic|<desktop>]:
+  list of packages based on task.list.[generic|<desktop>].full;
+  corresponds to 3c-3f from overview above
 
 The generation of these files is done early in a build by the script
 tools/update_tasks.

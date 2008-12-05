@@ -115,11 +115,11 @@ The process of building a CD is composed of the following steps:
 
   Examples:
 
-    $ make packagelists TASK=Debian COMPLETE=1
+    $ make packagelists TASK=Debian-generic COMPLETE=1
 
   or
 
-    $ make packagelists TASK=gnome COMPLETE=0
+    $ make packagelists TASK=Debian-kde COMPLETE=0
 
   or
 

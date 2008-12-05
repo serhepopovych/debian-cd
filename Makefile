@@ -18,7 +18,7 @@ ifndef VERBOSE_MAKE
 Q=@
 endif
 ifndef TASK
-TASK=Debian
+TASK=Debian-generic
 endif
 ifndef MKISOFS
 export MKISOFS=$(shell which genisoimage mkisofs | head -1)

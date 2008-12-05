@@ -83,6 +83,8 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
   * Add support for a separate 'GNOME desktop environment' CD.
     This new task is mostly added for completeness. Main difference with the
     default task file is that no server tasks are included.
+  * Add a suffix "generic" to the default task files to make the overall naming
+    scheme more consistent. It also allows to make update_tasks more generic.
 
  -- Frans Pop <fjp@debian.org>  Fri, 05 Dec 2008 10:04:03 +0100
 

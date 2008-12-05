@@ -165,24 +165,22 @@ dpkg -x $TASKSEL_DEB $TDIR/tasksel
 [ -e task.languages ] || exit 1
 grep -Ev "^(#.*)?[[:space:]]*$" task.languages > $TDIR/languages
 
-for variant in "" gnome kde lxde xfce light all; do
-    if [ ! -e task.list${variant:+.$variant} ]; then
-        echo "Warning: task.list${variant:+.$variant} does not exist; skipping"
+for variant in generic gnome kde lxde xfce light all; do
+    if [ ! -e task.list.$variant ]; then
+	echo "Warning: task.list.$variant does not exist; skipping"
 	continue
     fi
 
-    expand_task_list \
-        task.list${variant:+.$variant} \
-        $TDIR/languages
+    expand_task_list task.list.$variant $TDIR/languages
 
     update_essential_list \
-        task-essential${variant:+-$variant} \
-        task.list${variant:+.$variant}.essential \
+        task-essential-$variant \
+        task.list.$variant.essential \
         $TDIR/tasksel
 
     update_full_list \
-        task-full${variant:+-$variant} \
-        task.list${variant:+.$variant}.full \
+        task-full-$variant \
+        task.list.$variant.full \
         $TMP_PKG
 done
 
