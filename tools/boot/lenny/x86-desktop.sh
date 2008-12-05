@@ -149,3 +149,85 @@ menu begin rescue
 menu end
 EOF
 }
+
+modify_for_all_desktop() {
+	make_desktop_template
+
+	# Remove desktop option in root config files (for GNOME)
+	sed -i "s:desktop=[^ ]*::" boot$N/isolinux/*.cfg
+
+	cp -r boot$N/isolinux/desktop boot$N/isolinux/kde
+	sed -i "s:%desktop%:kde:g" boot$N/isolinux/kde/*.cfg
+	sed -i "/Advanced options/ s:title:title KDE:" \
+		boot$N/isolinux/kde/menu.cfg
+
+	cp -r boot$N/isolinux/desktop boot$N/isolinux/xfce
+	sed -i "s:%desktop%:xfce:g" boot$N/isolinux/xfce/*.cfg
+	sed -i "/Advanced options/ s:title:title Xfce:" \
+		boot$N/isolinux/xfce/menu.cfg
+
+	cp -r boot$N/isolinux/desktop boot$N/isolinux/lxde
+	sed -i "s:%desktop%:lxde:g" boot$N/isolinux/lxde/*.cfg
+	sed -i "/Advanced options/ s:title:title LXDE:" \
+		boot$N/isolinux/lxde/menu.cfg
+
+	# Cleanup
+	rm -r boot$N/isolinux/desktop
+
+	# Create desktop menu file
+	cat >boot$N/isolinux/dtmenu.cfg <<EOF
+menu begin desktop
+    include stdmenu.cfg
+    menu hshift 13
+    menu width 49
+    menu label Alternative desktop environments
+    menu title Desktop environment menu
+    label mainmenu-kde
+        menu label ^Back..
+        text help
+        Higher level options install the GNOME desktop environment
+        endtext
+        menu exit
+    menu begin kde-desktop
+        include stdmenu.cfg
+        menu label ^KDE
+        menu title KDE desktop boot menu
+        text help
+   Select the 'K Desktop Environment' for the Desktop task
+        endtext
+        label mainmenu-kde
+            menu label ^Back..
+            menu exit
+        include kde/menu.cfg
+    menu end
+    menu begin lxde-desktop
+        include stdmenu.cfg
+        menu label ^LXDE
+        menu title LXDE desktop boot menu
+        text help
+       Select the 'Lightweight X11 Desktop Environment' for the Desktop task
+        endtext
+        label mainmenu-lxde
+            menu label ^Back..
+            menu exit
+        include lxde/menu.cfg
+    menu end
+    menu begin xfce-desktop
+        include stdmenu.cfg
+        menu label ^Xfce
+        menu title Xfce desktop boot menu
+        text help
+   Select the 'Xfce lightweight desktop environment' for the Desktop task
+        endtext
+        label mainmenu-xfce
+            menu label ^Back..
+            menu exit
+        include xfce/menu.cfg
+    menu end
+menu end
+EOF
+
+	# Include desktop submenu in Advanced options submenu
+	sed -i "/menu end/ i\\\tinclude dtmenu.cfg" \
+		boot$N/isolinux/menu.cfg
+}

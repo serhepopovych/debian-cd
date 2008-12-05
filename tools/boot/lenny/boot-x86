@@ -141,6 +141,10 @@ extra_image () {
 # If multiple desktops are to be supported, set the default one
 ORIG_DESKTOP=
 case "$DESKTOP" in
+    all)
+	ORIG_DESKTOP=$DESKTOP
+	DESKTOP=
+	;;
     light)
 	ORIG_DESKTOP=$DESKTOP
 	DESKTOP=xfce
@@ -322,6 +326,8 @@ EOF
 	fi
 
 	case "$ORIG_DESKTOP" in
+	    all)
+		modify_for_all_desktop ;;
 	    light)
 		modify_for_light_desktop ;;
 	esac
