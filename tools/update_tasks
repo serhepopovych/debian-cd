@@ -22,8 +22,9 @@ mkdir -p $TDIR
 # Secondary tasks are indicated by a "-" suffix in the task.list file
 # When adding language tasks, 'desktop' is sorted before '*-desktop'
 expand_task_list () {
-    tasklist=$1
-    langlist=$2
+    outbase=$1
+    tasklist=$2
+    langlist=$3
 
     # Filter out comments, empty lines and secondary tasks
     task_essential="$(grep -Ev "^(#.*)?(.*-)?[[:space:]]*$" $tasklist)"
@@ -31,33 +32,33 @@ expand_task_list () {
     task_extra="$(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist | \
         grep -E "(.*-)[[:space:]]*$" | sed "s/[[:space:]]*-.*$//")"
 
-    echo "# Main tasks" >$tasklist.essential
-    echo "$task_essential" >>$tasklist.essential
+    echo "# Main tasks" >$outbase.essential
+    echo "$task_essential" >>$outbase.essential
 
-    echo >>$tasklist.essential
-    echo "# Main language tasks" >>$tasklist.essential
+    echo >>$outbase.essential
+    echo "# Main language tasks" >>$outbase.essential
     for task in "" $(echo "$task_essential" | grep "^desktop" || true) \
                 $(echo "$task_essential" | grep -- "-desktop" || true); do
         for language in $(cat $langlist); do
             echo $language${task:+-$task}
         done
-    done >>$tasklist.essential
+    done >>$outbase.essential
 
-    cp $tasklist.essential $tasklist.full
+    cp $outbase.essential $outbase.full
 
     if [ "$task_extra" ]; then
-        echo >>$tasklist.full
-        echo "# Extra tasks" >>$tasklist.full
-        echo "$task_extra" >>$tasklist.full
+        echo >>$outbase.full
+        echo "# Extra tasks" >>$outbase.full
+        echo "$task_extra" >>$outbase.full
 
-        echo >>$tasklist.full
-        echo "# Extra language tasks" >>$tasklist.full
+        echo >>$outbase.full
+        echo "# Extra language tasks" >>$outbase.full
         for task in $(echo "$task_extra" | grep "^desktop" || true) \
                     $(echo "$task_extra" | grep -- "-desktop" || true); do
             for language in $(cat $langlist); do
                 echo $language${task:+-$task}
             done
-        done >>$tasklist.full
+        done >>$outbase.full
     fi
 }
 
@@ -165,22 +166,19 @@ dpkg -x $TASKSEL_DEB $TDIR/tasksel
 [ -e task.languages ] || exit 1
 grep -Ev "^(#.*)?[[:space:]]*$" task.languages > $TDIR/languages
 
-for variant in generic gnome kde lxde xfce light all; do
-    if [ ! -e task.list.$variant ]; then
-	echo "Warning: task.list.$variant does not exist; skipping"
-	continue
-    fi
+for tlist in task.list.*; do
+    variant=${tlist##*.}
 
-    expand_task_list task.list.$variant $TDIR/languages
+    expand_task_list task.gen.$variant $tlist $TDIR/languages
 
     update_essential_list \
         task-essential-$variant \
-        task.list.$variant.essential \
+        task.gen.$variant.essential \
         $TDIR/tasksel
 
     update_full_list \
         task-full-$variant \
-        task.list.$variant.full \
+        task.gen.$variant.full \
         $TMP_PKG
 done
 
