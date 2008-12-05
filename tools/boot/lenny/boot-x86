@@ -7,6 +7,7 @@
 # $2 is the temporary CD build dir
 
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/x86-desktop.sh
 
 set -e
 #set -x
@@ -136,6 +137,15 @@ extra_image () {
 		fi
 	fi
 }
+
+# If multiple desktops are to be supported, set the default one
+ORIG_DESKTOP=
+case "$DESKTOP" in
+    light)
+	ORIG_DESKTOP=$DESKTOP
+	DESKTOP=xfce
+	;;
+esac
 
 if [ "$THISTYPE" = "isolinux" ]; then
 	echo "Using ISOLINUX boot-disks image on CD$N"
@@ -310,6 +320,11 @@ EOF
 				$file
 		done
 	fi
+
+	case "$ORIG_DESKTOP" in
+	    light)
+		modify_for_light_desktop ;;
+	esac
 else
 	if [ -n "$THISTYPE" ]; then
 		echo "Using $THISTYPE boot-disks image on CD$N"

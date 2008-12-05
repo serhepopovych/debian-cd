@@ -6,7 +6,7 @@ set -e
 ## See also CONF.sh for the meaning of variables used here.
 
 show_usage() {
-	echo "Usage: $(basename $0) [-d kde|lxde|xfce] BC|NETINST|CD|DVD [<ARCH> ...]"
+	echo "Usage: $(basename $0) [-d kde|lxde|xfce|light] BC|NETINST|CD|DVD [<ARCH> ...]"
 }
 
 
@@ -31,7 +31,7 @@ if [ "$1" = "-d" ]; then
 		# Ignore (gnome is default)
 		shift 2
 		;;
-	    kde|lxde|xfce)
+	    kde|lxde|xfce|light)
 		desktop=$2
 		shift 2
 		;;
