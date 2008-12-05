@@ -165,7 +165,7 @@ dpkg -x $TASKSEL_DEB $TDIR/tasksel
 [ -e task.languages ] || exit 1
 grep -Ev "^(#.*)?[[:space:]]*$" task.languages > $TDIR/languages
 
-for variant in "" kde xfce; do
+for variant in "" kde lxde xfce; do
     if [ ! -e task.list${variant:+.$variant} ]; then
         echo "Warning: task.list${variant:+.$variant} does not exist; skipping"
 	continue

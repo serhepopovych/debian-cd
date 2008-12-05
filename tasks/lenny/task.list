@@ -12,3 +12,4 @@ file-server
 # Alternative desktop environments
 kde-desktop -
 xfce-desktop -
+lxde-desktop -

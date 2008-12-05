@@ -64,10 +64,12 @@ case "$INSTALLER_CD" in
         export DISKTYPE=kde-CD;;
     5)
         export DISKTYPE=xfce-CD;;
+    A)
+        export DISKTYPE=lxde-CD;;
     9)
         export OUT_TYPE=bd
         export DISKTYPE=BD;;
-    *) export DISKTYPE=CD;;
+    *)  export DISKTYPE=CD;;
 esac
 
 if [ "$OUT_TYPE"x = ""x ] ; then
@@ -91,6 +93,8 @@ elif [ "$INSTALLER_CD" = "4" ]; then
     export OFFICIAL="Official KDE CD Snapshot"
 elif [ "$INSTALLER_CD" = "5" ]; then
     export OFFICIAL="Official Xfce CD Snapshot"
+elif [ "$INSTALLER_CD" = "A" ]; then
+    export OFFICIAL="Official LXDE CD Snapshot"
 elif [ "$INSTALLER_CD" = "6" ]; then
     export OFFICIAL="Official Multi-Arch DVD"
 elif [ "$INSTALLER_CD" = "7" ]; then
