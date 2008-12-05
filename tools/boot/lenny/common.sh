@@ -6,6 +6,23 @@
 DI_WWW_HOME="$(echo "$DI_WWW_HOME" | sed -e "s|%ARCH%|$ARCH|g")"
 DI_DIR="$(echo "$DI_DIR" | sed -e "s|%ARCH%|$ARCH|g")"
 
+# Only i386 and amd64 support desktop selection with the 'light' and 'all'
+# desktops; make sure other arches get a working config
+if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
+    case $DESKTOP in
+        all)
+            DESKTOP=
+            KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
+                sed -r "s/desktop=all ?//")"
+            ;;
+        light)
+            DESKTOP=xfce
+            KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
+                sed -r "s/(desktop=)light/\1xfce/")"
+            ;;
+    esac
+fi
+
 
 # install_languages decompacts the language packs, you should give the path
 # to the CD temporary tree.
