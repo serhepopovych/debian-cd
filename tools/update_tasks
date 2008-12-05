@@ -18,6 +18,48 @@ fi
 TDIR=$BDIR/update_tasks
 mkdir -p $TDIR
 
+# Sort primary and secondary tasks and add language tasks for both
+# Secondary tasks are indicated by a "-" suffix in the task.list file
+# When adding language tasks, 'desktop' is sorted before '*-desktop'
+expand_task_list () {
+    tasklist=$1
+    langlist=$2
+
+    # Filter out comments, empty lines and secondary tasks
+    task_essential="$(grep -Ev "^(#.*)?(.*-)?[[:space:]]*$" $tasklist)"
+    # Select only secondary tasks
+    task_extra="$(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist | \
+        grep -E "(.*-)[[:space:]]*$" | sed "s/[[:space:]]*-.*$//")"
+
+    echo "# Main tasks" >$tasklist.essential
+    echo "$task_essential" >>$tasklist.essential
+
+    echo >>$tasklist.essential
+    echo "# Main language tasks" >>$tasklist.essential
+    for task in "" $(echo "$task_essential" | grep "^desktop" || true) \
+                $(echo "$task_essential" | grep -- "-desktop" || true); do
+        for language in $(cat $langlist); do
+            echo $language${task:+-$task}
+        done
+    done >>$tasklist.essential
+
+    cp $tasklist.essential $tasklist.full
+
+    if [ "$task_extra" ]; then
+        echo >>$tasklist.full
+        echo "# Extra tasks" >>$tasklist.full
+        echo "$task_extra" >>$tasklist.full
+
+        echo >>$tasklist.full
+        echo "# Extra language tasks" >>$tasklist.full
+        for task in $(echo "$task_extra" | grep "^desktop" || true) \
+                    $(echo "$task_extra" | grep -- "-desktop" || true); do
+            for language in $(cat $langlist); do
+                echo $language${task:+-$task}
+            done
+        done >>$tasklist.full
+    fi
+}
 
 update_full_list () {
     file=$1
@@ -65,16 +107,11 @@ update_full_list () {
 update_essential_list () {
     file=$1
     tasklist=$2
-    desktoptasks=$3
-    tasksel=$4
+    tasksel=$3
 
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
 		echo DONE ;
-		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk -v DT=$desktoptasks '
-
-    BEGIN {
-        split(DT, d_tasks, ",")
-    }
+		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk '
 
     /DONE/ {
         in_tasks = 1
@@ -105,16 +142,7 @@ update_essential_list () {
         if (in_tasks) {
             for (taskname in tasklist) {
                 if (taskname == cur_task) {
-                    if ((cur_task != "gnome-desktop") &&
-                        (cur_task != "kde-desktop") &&
-                        (cur_task != "xfce-desktop")) {
-                        in_key = 1
-                    }
-                    for (dt_num in d_tasks) {
-                        if (cur_task == d_tasks[dt_num]) {
-                            in_key = 1
-                        }
-                    }
+                    in_key = 1
                 }
             }
         }
@@ -134,19 +162,28 @@ TASKSEL_DEB=$MIRROR/`mawk '
 
 dpkg -x $TASKSEL_DEB $TDIR/tasksel
 
-update_essential_list task-essential task.list gnome-desktop \
-    $TDIR/tasksel
+[ -e task.languages ] || exit 1
+grep -Ev "^(#.*)?[[:space:]]*$" task.languages > $TDIR/languages
 
-update_essential_list task-essential-kde task.list.kde kde-desktop \
-    $TDIR/tasksel
+for variant in "" kde xfce; do
+    if [ ! -e task.list${variant:+.$variant} ]; then
+        echo "Warning: task.list${variant:+.$variant} does not exist; skipping"
+	continue
+    fi
 
-update_essential_list task-essential-xfce task.list.xfce xfce-desktop \
-    $TDIR/tasksel
+    expand_task_list \
+        task.list${variant:+.$variant} \
+        $TDIR/languages
 
-update_full_list task-full task.list $TMP_PKG
+    update_essential_list \
+        task-essential${variant:+-$variant} \
+        task.list${variant:+.$variant}.essential \
+        $TDIR/tasksel
 
-update_full_list task-full-kde task.list.kde $TMP_PKG
-
-update_full_list task-full-xfce task.list.xfce $TMP_PKG
+    update_full_list \
+        task-full${variant:+-$variant} \
+        task.list${variant:+.$variant}.full \
+        $TMP_PKG
+done
 
 rm -rf $TDIR

@@ -185,6 +185,10 @@ export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
 #export CUSTOMSIZE=XXXX
 
+# List of languages for which language tasks from tasksel should be
+# included. See tasks/README.tasksel for further info.
+export TASK_LANGLIST=tasksel_d-i.languages
+
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE1=exclude
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included

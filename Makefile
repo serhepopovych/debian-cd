@@ -118,12 +118,16 @@ $(BDIR):
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 $(TASKDIR):
+	$(Q)echo "Updating task files..."
 	$(Q)mkdir -p $(TASKDIR)
 	$(Q)cp -r $(BASEDIR)/tasks/$(CODENAME)/* $(TASKDIR)
 	$(Q)set -e; cd $(TASKDIR); \
 		$(BASEDIR)/tools/update_tasks; \
 		$(BASEDIR)/tools/generate_di_list; \
 		$(BASEDIR)/tools/generate_di+k_list
+	$(Q)echo "- task.languages: using 'tasks/$(DI_CODENAME)/$(TASK_LANGLIST)'"
+	$(Q)cp $(BASEDIR)/tasks/$(DI_CODENAME)/$(TASK_LANGLIST) \
+		$(TASKDIR)/task.languages
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 
