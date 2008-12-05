@@ -322,7 +322,7 @@ else
 		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.catalog"
 		add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 	else
-		mkdir boot$N
+		mkdir -p boot$N
 		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 	fi
