@@ -70,6 +70,7 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     maintaining the lists a lot less painful. Closes: #506616.
   * Indicate which tasks are "secondary" by adding a "-" suffix in task.list.*
     files instead of hardcoding it in update_tasks. Closes: #506668.
+  * Update list of languages supported by tasksel and D-I for Lenny.
 
  -- Frans Pop <fjp@debian.org>  Fri, 05 Dec 2008 10:04:03 +0100
 
