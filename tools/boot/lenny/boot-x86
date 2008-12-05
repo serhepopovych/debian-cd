@@ -282,8 +282,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		cat >boot$N/isolinux/instsel.cfg <<EOF
 default install-select
 label install-select
-	kernel ifcpu64.c32
-	append amd64-install -- install
+    kernel ifcpu64.c32
+    append amd64-install -- install
 EOF
 		# Workaround for #505243 ends here
 	fi
@@ -301,8 +301,14 @@ EOF
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config
 		# file(s)
-		sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
-			boot$N/isolinux/*.cfg
+		for file in boot$N/isolinux/*.cfg; do
+			case "$(basename $file)" in
+			    instsel.cfg)
+				continue ;;
+			esac
+			sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
+				$file
+		done
 	fi
 else
 	if [ -n "$THISTYPE" ]; then
