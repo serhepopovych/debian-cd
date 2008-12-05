@@ -30,7 +30,7 @@ expand_task_list () {
     task_essential="$(grep -Ev "^(#.*)?(.*-)?[[:space:]]*$" $tasklist)"
     # Select only secondary tasks
     task_extra="$(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist | \
-        grep -E "(.*-)[[:space:]]*$" | sed "s/[[:space:]]*-.*$//")"
+        grep -E "(.*-)[[:space:]]*$" | sed "s/[[:space:]]\+-.*$//")"
 
     echo "# Main tasks" >$outbase.essential
     echo "$task_essential" >>$outbase.essential
