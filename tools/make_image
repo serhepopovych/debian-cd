@@ -85,63 +85,39 @@ do
 	# here... :-(
     if [ $JIGDO_WANTED = 0 ] && [ $ISO_WANTED = 1 ] ; then
 
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n > CD$n/.disk/mkisofs
-        $MKISOFS $MKISOFS_OPTS -V "$volid" -o $OUT/$OUTFILE.iso $opts $dirs CD$n
+        CMD="$MKISOFS $MKISOFS_OPTS -V '$volid' \
+            -o $OUT/$OUTFILE.iso $opts $dirs CD$n"
+        echo $CMD
+        echo $CMD > CD$n/.disk/mkisofs
+        eval "$CMD"
 
     elif [ $JIGDO_WANTED = 1 ] && [ $ISO_WANTED = 1 ] ; then
 
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
+        CMD="$MKISOFS $MKISOFS_OPTS -V '$volid' \
             -o $OUT/$OUTFILE.iso \
             -jigdo-jigdo $OUT/$OUTFILE.jigdo \
             -jigdo-template $OUT/$OUTFILE.template \
             -jigdo-map Debian=$MIRROR/ \
             -jigdo-exclude boot$n \
             -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
-            -o $OUT/$OUTFILE.iso \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n > CD$n/.disk/mkisofs
-        $MKISOFS $MKISOFS_OPTS -V "$volid" \
-            -o $OUT/$OUTFILE.iso \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n
+            $JIGDO_OPTS $opts $dirs CD$n"
+        echo $CMD
+        echo $CMD > CD$n/.disk/mkisofs
+        eval "$CMD"
 
     elif [ $JIGDO_WANTED = 1 ] && [ $ISO_WANTED = 0 ] ; then
 
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
+        CMD="$MKISOFS $MKISOFS_OPTS -V '$volid' \
             -o /dev/null \
             -jigdo-jigdo $OUT/$OUTFILE.jigdo \
             -jigdo-template $OUT/$OUTFILE.template \
             -jigdo-map Debian=$MIRROR/ \
             -jigdo-exclude boot$n \
             -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n
-        echo $MKISOFS $MKISOFS_OPTS -V "$volid" \
-            -o /dev/null \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n > CD$n/.disk/mkisofs
-        $MKISOFS $MKISOFS_OPTS -V "$volid" \
-            -o /dev/null \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
-            $JIGDO_OPTS $opts $dirs CD$n
+            $JIGDO_OPTS $opts $dirs CD$n"
+        echo $CMD
+        echo $CMD > CD$n/.disk/mkisofs
+        eval "$CMD"
 
     else
         echo "Neither jigdo nor iso wanted for CD$n"
