@@ -131,16 +131,28 @@ case $DISKTYPE in
 	;;
 esac
 
-# By default a GNOME CD/DVD is built, but KDE and Xfce are supported too
-if [ "$desktop" ] && ([ $DISKTYPE = CD ] || [ $DISKTYPE = DVD ]); then
-	TASK=Debian-$desktop
+# By default a GNOME CD/DVD is built, but other desktops are supported too
+if [ "$desktop" ]; then
+	if [ ! -e tasks/$CODENAME/task.list.$desktop ]; then
+		echo "Error: desktop '$desktop' is not supported for $CODENAME"
+		exit 1
+	fi
+	if [ "$desktop" = all ] && [ $DISKTYPE = CD ]; then
+		echo
+		echo "WARNING: CD1 by itself can never support installing all desktops!"
+		echo
+	fi
+
+	if [ $DISKTYPE != BC ] && [ $DISKTYPE != NETINST ]; then
+		export TASK=Debian-$desktop
+	fi
 	if [ "$CODENAME" = etch ]; then
 		KERNEL_PARAMS="tasks=\"$desktop-desktop, standard\""
 	else
 		KERNEL_PARAMS="desktop=$desktop"
 	fi
 	DESKTOP=$desktop
-	export TASK KERNEL_PARAMS DESKTOP
+	export KERNEL_PARAMS DESKTOP
 fi
 
 if [ "$LOCAL" ] && [ "$UPDATE_LOCAL" ]; then

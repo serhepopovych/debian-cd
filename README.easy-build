@@ -11,7 +11,11 @@ easy-build.sh supports the following variations:
 - businesscard, netinst and full CD images, and DVD images
 - single-architecture and multi-architecture images
 - optionally include source packages
-- select to install GNOME (default), KDE or Xfce desktops as desktop task
+- select to install GNOME (default), KDE, LXDE or Xfce desktops as desktop
+  task
+- create a combined LXDE/Xfce "light desktop" CD
+- create a businesscard or netinst CD, or DVD set supporting all four
+  desktop environments
 - creates ISO files by default; creating jigdo files is possible
 - specify which Debian release to use
 - include custom versions of packages (debs)
