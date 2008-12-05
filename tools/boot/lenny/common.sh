@@ -10,10 +10,10 @@ DI_DIR="$(echo "$DI_DIR" | sed -e "s|%ARCH%|$ARCH|g")"
 # desktops; make sure other arches get a working config
 if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
     case $DESKTOP in
-        all)
+        all|gnome)
             DESKTOP=
             KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
-                sed -r "s/desktop=all ?//")"
+                sed -r "s/desktop=[^ ]* ?//")"
             ;;
         light)
             DESKTOP=xfce

@@ -141,6 +141,12 @@ extra_image () {
 # If multiple desktops are to be supported, set the default one
 ORIG_DESKTOP=
 case "$DESKTOP" in
+    gnome)
+	# gnome is default in tasksel 
+	DESKTOP=
+	KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
+		sed -r "s/desktop=[^ ]* ?//")"
+	;;
     all)
 	ORIG_DESKTOP=$DESKTOP
 	DESKTOP=

@@ -80,6 +80,9 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     tasksel (GNOME, KDE, LXDE and Xfce). On x86 it will also add an option in
     the isolinux menu (under Advanced options) to select which DE to install,
     but GNOME will remain default.
+  * Add support for a separate 'GNOME desktop environment' CD.
+    This new task is mostly added for completeness. Main difference with the
+    default task file is that no server tasks are included.
 
  -- Frans Pop <fjp@debian.org>  Fri, 05 Dec 2008 10:04:03 +0100
 
