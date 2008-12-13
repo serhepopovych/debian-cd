@@ -85,6 +85,11 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     default task file is that no server tasks are included.
   * Add a suffix "generic" to the default task files to make the overall naming
     scheme more consistent. It also allows to make update_tasks more generic.
+  * Update exclude list for Lenny:
+    - remove aspell* packages as they do not included on CD1 anyway and
+      excluding them also means they get excluded from DVD1;
+    - remove xen/vserver linux-image packages as they do not get included on
+      CD1 anyway.
 
  -- Frans Pop <fjp@debian.org>  Fri, 05 Dec 2008 10:04:03 +0100
 
