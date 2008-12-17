@@ -2,8 +2,12 @@
 
 cd $1
 
-:> MD5SUMS
-:> SHA1SUMS
+if [ "$2"x != ""x ] ; then
+    EXT=".$2"
+fi
+
+:> MD5SUMS$EXT
+:> SHA1SUMS$EXT
 
 # 2 calls to find here to get the ordering right - we *really* want to
 # get the jigdo files first
@@ -23,33 +27,33 @@ for file in `find * -name \*.jigdo` `find * -name \*.iso`; do
             ;;
     esac
 
-    grep -q $iso MD5SUMS
+    grep -q $iso MD5SUMS$EXT
     if [ $? -ne 0 ] ; then
         MD5=""
         if [ "$JIGDO" == 1 ] ; then
             MD5=`zcat -f $file | awk '/Image Hex MD5Sum/ {print $5}'`
         fi
         if [ "$MD5"x != ""x ] ; then
-            echo "$MD5  $iso" >> MD5SUMS
+            echo "$MD5  $iso" >> MD5SUMS$EXT
         else
             echo "No Jigdo help for md5, doing it the long way"
-            md5sum $iso >> MD5SUMS
-            grep $iso MD5SUMS
+            md5sum $iso >> MD5SUMS$EXT
+            grep $iso MD5SUMS$EXT
         fi
     fi
 
-    grep -q $iso SHA1SUMS
+    grep -q $iso SHA1SUMS$EXT
     if [ $? -ne 0 ] ; then
         SHA1=""
         if [ "$JIGDO" == 1 ] ; then
             SHA1=`zcat -f $file | awk '/Image Hex SHA1Sum/ {print $5}'`
         fi
         if [ "$SHA1"x != ""x ] ; then
-            echo "$SHA1  $iso" >> SHA1SUMS
+            echo "$SHA1  $iso" >> SHA1SUMS$EXT
         else
             echo "No Jigdo help for sha1, doing it the long way"
-            sha1sum $iso >> SHA1SUMS
-            grep $iso SHA1SUMS
+            sha1sum $iso >> SHA1SUMS$EXT
+            grep $iso SHA1SUMS$EXT
         fi
     fi
 

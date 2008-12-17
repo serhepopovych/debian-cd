@@ -361,7 +361,7 @@ image: check-number-given images
 
 # Calculate the md5sums for the images (if available), or get from templates
 imagesums:
-	$(Q)$(BASEDIR)/tools/imagesums $(OUT)
+	$(Q)$(BASEDIR)/tools/imagesums $(OUT) $(SUMS_EXTENSION)
 
 ## MISC TARGETS ##
 
