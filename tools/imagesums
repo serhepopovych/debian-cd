@@ -3,7 +3,7 @@
 cd $1
 
 if [ "$2"x != ""x ] ; then
-    EXT=".$2"
+    EXT="$2"
 fi
 
 :> MD5SUMS$EXT
