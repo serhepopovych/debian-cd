@@ -27,38 +27,36 @@ expand_task_list () {
     langlist=$3
 
     # Filter out comments, empty lines and secondary tasks
-    task_essential="$(grep -Ev "^(#.*)?(.*-)?[[:space:]]*$" $tasklist)"
+    task_primary="$(grep -Ev "^(#.*)?(.*-)?[[:space:]]*$" $tasklist)"
     # Select only secondary tasks
-    task_extra="$(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist | \
+    task_secondary="$(grep -Ev "^(#.*)?[[:space:]]*$" $tasklist | \
         grep -E "(.*-)[[:space:]]*$" | sed "s/[[:space:]]\+-.*$//")"
 
-    echo "# Main tasks" >$outbase.essential
-    echo "$task_essential" >>$outbase.essential
+    echo "# Primary main tasks" >$outbase.primary
+    echo "$task_primary" >>$outbase.primary
 
-    echo >>$outbase.essential
-    echo "# Main language tasks" >>$outbase.essential
-    for task in "" $(echo "$task_essential" | grep "^desktop" || true) \
-                $(echo "$task_essential" | grep -- "-desktop" || true); do
+    echo >>$outbase.primary
+    echo "# Primary language tasks" >>$outbase.primary
+    for task in "" $(echo "$task_primary" | grep "^desktop" || true) \
+                $(echo "$task_primary" | grep -- "-desktop" || true); do
         for language in $(cat $langlist); do
             echo $language${task:+-$task}
         done
-    done >>$outbase.essential
+    done >>$outbase.primary
 
-    cp $outbase.essential $outbase.full
+    rm -f $outbase.secondary
+    if [ "$task_secondary" ]; then
+        echo "# Secondary main tasks" >$outbase.secondary
+        echo "$task_secondary" >>$outbase.secondary
 
-    if [ "$task_extra" ]; then
-        echo >>$outbase.full
-        echo "# Extra tasks" >>$outbase.full
-        echo "$task_extra" >>$outbase.full
-
-        echo >>$outbase.full
-        echo "# Extra language tasks" >>$outbase.full
-        for task in $(echo "$task_extra" | grep "^desktop" || true) \
-                    $(echo "$task_extra" | grep -- "-desktop" || true); do
+        echo >>$outbase.secondary
+        echo "# Secondary language tasks" >>$outbase.secondary
+        for task in $(echo "$task_secondary" | grep "^desktop" || true) \
+                    $(echo "$task_secondary" | grep -- "-desktop" || true); do
             for language in $(cat $langlist); do
-                echo $language${task:+-$task}
+                echo $language-$task
             done
-        done >>$outbase.full
+        done >>$outbase.secondary
     fi
 }
 
@@ -102,7 +100,7 @@ update_full_list () {
             }
         }
         next
-    }' | sort -n | cut -d: -f2 > $file
+    }' | sort -n | cut -d: -f2 >> $file
 }
 
 update_essential_list () {
@@ -148,7 +146,7 @@ update_essential_list () {
             }
         }
         next
-    }' | sort -s -n -k1 | cut -d: -f2 > $file
+    }' | sort -s -n -k1 | cut -d: -f2 >> $file
 }
 
 # We need to gunzip a copy of the appropriate Packages.gz file
@@ -171,15 +169,32 @@ for tlist in task.list.*; do
 
     expand_task_list task.gen.$variant $tlist $TDIR/languages
 
+    # Create (empty) output files
+    : >task-essential-$variant
+    : >task-full-$variant
+
     update_essential_list \
         task-essential-$variant \
-        task.gen.$variant.essential \
+        task.gen.$variant.primary \
         $TDIR/tasksel
 
     update_full_list \
         task-full-$variant \
-        task.gen.$variant.full \
+        task.gen.$variant.primary \
         $TMP_PKG
+
+    # Now add packages for secondary tasks; start with Key packages again
+    if [ -e task.gen.$variant.secondary ]; then
+        update_essential_list \
+            task-full-$variant \
+            task.gen.$variant.secondary \
+            $TDIR/tasksel
+
+        update_full_list \
+            task-full-$variant \
+            task.gen.$variant.secondary \
+            $TMP_PKG
+    fi
 done
 
 rm -rf $TDIR

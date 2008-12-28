@@ -24,10 +24,13 @@ The general sequence in which packages are added for "complete" images is:
       only language desktop tasks that correspond to a primary task are
       included
    c) Regular packages from primary tasksel tasks
-   d) Regular packages from language tasks (as in 4)
-   e) Any packages from secondary tasksel tasks
-   f) Any packages from language tasks corresponding to secondary tasksel
+   d) Regular packages from language tasks
+   e) Key packages from secondary tasksel tasks
+   f) Key packages from language tasks corresponding to secondary tasksel
       tasks
+   g) Regular packages from secondary tasksel tasks
+   h) Regular packages from language tasks corresponding to secondary
+      tasksel tasks
 5) Other packages in the order of their popularity (popcon score)
 
 A tasksel task is defined as "secondary" by adding a '-' after its name
@@ -66,19 +69,19 @@ the subdirectory tasks under the working directory for the build):
 - task.languages
   copy of the actual language list to be used to add language tasks
   (see "Language list used at build time" below)
-- task.gen.[generic|<desktop>].essential:
+- task.gen.[generic|<desktop>].primary:
   contains primary tasks from task.list.[generic|<desktop>] followed by
   corresponding language tasks
-- task.gen.[generic|<desktop>].full:
-  copy of task.gen.[generic|<desktop>].essential; followed by secondary
-  tasks from tasks from task.list.[generic|<desktop>] and corresponding
-  language tasks
+- task.gen.[generic|<desktop>].secondary:
+  contains secondary tasks from task.list.[generic|<desktop>] and
+  corresponding language tasks
 - task-essential-[generic|<desktop>]:
-  list of key packages based on task.gen.[generic|<desktop>].essential;
+  list of key packages based on task.gen.[generic|<desktop>].primary;
   corresponds to 3a/3b from overview above
 - task-full-[generic|<desktop>]:
-  list of packages based on task.gen.[generic|<desktop>].full;
-  corresponds to 3c-3f from overview above
+  list of packages based on both task.gen.[generic|<desktop>].primary and
+  task.gen.[generic|<desktop>].secondary; corresponds to 3c-3h from overview
+  above
 
 The generation of these files is done early in a build by the script
 tools/update_tasks.

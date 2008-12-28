@@ -70,6 +70,8 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     maintaining the lists a lot less painful. Closes: #506616.
   * Indicate which tasks are "secondary" by adding a "-" suffix in task.list.*
     files instead of hardcoding it in update_tasks. Closes: #506668.
+  * Add new file tasks/README.tasksel to document the way tasksel tasks are
+    used when determining the order in which packages are added to images.
   * Update list of languages supported by tasksel and D-I for Lenny.
   * Add support for a separate 'LXDE desktop environment' CD.
   * Add support for a 'light desktop environment' CD (LXDE + Xfce).
@@ -90,8 +92,10 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
       excluding them also means they get excluded from DVD1;
     - remove xen/vserver linux-image packages as they do not get included on
       CD1 anyway.
+  * Give priority to Key packages over regular packages for secondary tasks
+    (similar to what we already did for primary tasks).
 
- -- Frans Pop <fjp@debian.org>  Fri, 05 Dec 2008 10:04:03 +0100
+ -- Frans Pop <fjp@debian.org>  Sun, 28 Dec 2008 14:09:50 +0100
 
 debian-cd (3.0.5) unstable; urgency=low
 
