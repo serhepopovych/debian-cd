@@ -165,46 +165,46 @@ print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskb
 
 open(INLIST, "$bdir/packages") or die "No packages file!\n";
 while (defined (my $pkg = <INLIST>)) {
-	chomp $pkg;
-	$cddir = "$bdir/CD$disknum";
-	my $opt;
-	if (! -d $cddir) {
-		if ($disknum > $maxcds) {
-			print LOG "Disk $disknum is beyond the configured MAXCDS of $maxcds; exiting now...\n";
-			$max_done = 1;
-			last;
-		}
-		print LOG "Starting new disc $disknum at " . `date` . "\n";
+    chomp $pkg;
+    $cddir = "$bdir/CD$disknum";
+    my $opt;
+    if (! -d $cddir) {
+        if ($disknum > $maxcds) {
+            print LOG "Disk $disknum is beyond the configured MAXCDS of $maxcds; exiting now...\n";
+            $max_done = 1;
+            last;
+        }
+        print LOG "Starting new disc $disknum at " . `date` . "\n";
 
-		start_disc();
+        start_disc();
 
-		print "  Placing packages into image $disknum\n";
-		if ( -e "$bdir/$disknum.mkisofs_opts" ) {
-			open(OPTS, "<$bdir/$disknum.mkisofs_opts");
-			while (defined($opt = <OPTS>)) {
-				chomp $opt;
-				$mkisofs_opts = "$mkisofs_opts $opt";
-			}
-			close(OPTS);
-		} else {
-			$mkisofs_opts = "";
-		}
-		if ( -e "$bdir/$disknum.mkisofs_dirs" ) {
-			open(OPTS, "<$bdir/$disknum.mkisofs_dirs");
-			while (defined($opt = <OPTS>)) {
-				chomp $opt;
-				$mkisofs_dirs = "$mkisofs_dirs $opt";
-			}
-			close(OPTS);
-		} else {
-			$mkisofs_dirs = "";
-		}
+        print "  Placing packages into image $disknum\n";
+        if ( -e "$bdir/$disknum.mkisofs_opts" ) {
+            open(OPTS, "<$bdir/$disknum.mkisofs_opts");
+            while (defined($opt = <OPTS>)) {
+                chomp $opt;
+                $mkisofs_opts = "$mkisofs_opts $opt";
+            }
+            close(OPTS);
+        } else {
+            $mkisofs_opts = "";
+        }
+        if ( -e "$bdir/$disknum.mkisofs_dirs" ) {
+            open(OPTS, "<$bdir/$disknum.mkisofs_dirs");
+            while (defined($opt = <OPTS>)) {
+                chomp $opt;
+                $mkisofs_dirs = "$mkisofs_dirs $opt";
+            }
+            close(OPTS);
+        } else {
+            $mkisofs_dirs = "";
+        }
 
-		$size_check = "$mkisofs_check $mkisofs_opts $mkisofs_dirs";
-		$size=`$size_check $cddir`;
-		chomp $size;
-		$size += $hfs_extra;
-		print LOG "CD $disknum: size is $size before starting to add packages\n";
+        $size_check = "$mkisofs_check $mkisofs_opts $mkisofs_dirs";
+        $size=`$size_check $cddir`;
+        chomp $size;
+        $size += $hfs_extra;
+        print LOG "CD $disknum: size is $size before starting to add packages\n";
 
         $pkgs_this_cd = 0;
 
@@ -226,32 +226,32 @@ while (defined (my $pkg = <INLIST>)) {
                 }
             }
         }
-		while (scalar @overflowlist) {
-		    my $overflowpkg = pop @overflowlist;
-		    print LOG "Adding a package that failed on the last disc: $overflowpkg\n";
-		    $guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
-		    $size += $guess_size;
-		    print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
-		    $pkgs_this_cd++;
-		    $pkgs_done++;
-		}
+        while (scalar @overflowlist) {
+            my $overflowpkg = pop @overflowlist;
+            print LOG "Adding a package that failed on the last disc: $overflowpkg\n";
+            $guess_size = int($hfs_mult * add_packages($cddir, $overflowpkg));
+            $size += $guess_size;
+            print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
+            $pkgs_this_cd++;
+            $pkgs_done++;
+        }
     } # end of creating new CD dir
 
     if (should_exclude_package($pkg)) {
         push(@excluded_package_list, $pkg);
-	} elsif (should_start_extra_nonfree($pkg)) {
-		print LOG "Starting on extra non-free CDs\n";
-		finish_disc($cddir, "");
-		# And reset, to start the next disc
-		$size = 0;
-		$disknum++;
-		undef(@pkgs_added);
-		# Put this package first on the next disc
-		push (@overflowlist, $pkg);
+    } elsif (should_start_extra_nonfree($pkg)) {
+        print LOG "Starting on extra non-free CDs\n";
+        finish_disc($cddir, "");
+        # And reset, to start the next disc
+        $size = 0;
+        $disknum++;
+        undef(@pkgs_added);
+        # Put this package first on the next disc
+        push (@overflowlist, $pkg);
     } else {
         $guess_size = int($hfs_mult * add_packages($cddir, $pkg));
         $size += $guess_size;
-		push (@pkgs_added, $pkg);
+        push (@pkgs_added, $pkg);
         print LOG "CD $disknum: GUESS_TOTAL is $size after adding $pkg\n";
         if (($size > $maxdiskblocks) ||
             (($size > $size_swap_check) &&
@@ -262,22 +262,22 @@ while (defined (my $pkg = <INLIST>)) {
             print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
         }
         if ($size > $maxdiskblocks) {
-			while ($size > $maxdiskblocks) {
-				$pkg = pop(@pkgs_added);
-				print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
-				$guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
-				$size=`$size_check $cddir`;
-				chomp $size;
-				print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
-				# Put this package first on the next disc
-				push (@overflowlist, $pkg);
-			}
+            while ($size > $maxdiskblocks) {
+                $pkg = pop(@pkgs_added);
+                print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
+                $guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
+                $size=`$size_check $cddir`;
+                chomp $size;
+                print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
+                # Put this package first on the next disc
+                push (@overflowlist, $pkg);
+            }
             finish_disc($cddir, "");
 
             # And reset, to start the next disc
             $size = 0;
             $disknum++;
-			undef(@pkgs_added);
+            undef(@pkgs_added);
         } else {
             $pkgs_this_cd++;
             $pkgs_done++;
