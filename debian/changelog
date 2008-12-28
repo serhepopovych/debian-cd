@@ -91,7 +91,9 @@ debian-cd (3.1.0) UNRELEASED; urgency=low
     - remove aspell* packages as they do not included on CD1 anyway and
       excluding them also means they get excluded from DVD1;
     - remove xen/vserver linux-image packages as they do not get included on
-      CD1 anyway.
+      CD1 anyway;
+    - xmail and cdebconf were added as they got pulled in through alternative
+      dependencies, which is no longer an issue.
   * Give priority to Key packages over regular packages for secondary tasks
     (similar to what we already did for primary tasks).
 
