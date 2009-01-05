@@ -2,6 +2,7 @@
 ixp4xx-microcode
 atmel-firmware
 firmware-bnx2
+firmware-ipw2x00
 firmware-ipw3945
 firmware-iwlwifi
 firmware-qlogic
