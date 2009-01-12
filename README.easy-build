@@ -281,8 +281,9 @@ Example, assuming we are building for and i386 CD for lenny:
 
 Note that debian-cd will fail if you set LOCAL but the "local" directory for
 a codename/arch/section that is referenced in a build does not exist.
-If UPDATE_LOCAL is set easy-build.sh will create the needed directories and
-(empty) Packages.gz files.
+You will need to create the 'dists/<codename>/local' directories, but if
+UPDATE_LOCAL is set, easy-build.sh will automatically create any missing
+'binary-<codename>' subdirectories and (empty) Packages.gz files.
 
 Using custom debian-installer images
 ------------------------------------
