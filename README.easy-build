@@ -1,5 +1,5 @@
-			debian-cd easy-build
-			====================
+                        debian-cd easy-build
+                        ====================
 
 INTRODUCTION
 ============
@@ -203,6 +203,103 @@ It is even possible to include source packages on a DVD, which makes it
 suitable to hand out at trade shows. For example:
 $ ./easy-build.sh DVD i386 amd64 source
 
-INCLUDING CUSTOM PACKAGES AND D-I COMPONENTS
-============================================
-# FIXME
+INCLUDING CUSTOM PACKAGES, D-I COMPONENTS and D-I IMAGES
+========================================================
+easy-build.sh makes it relatively simple to include custom packages, both
+regular packages (debs) and debian-installer components (udebs), in CD
+images. The main rule to keep in mind is that if the package also exists
+in the official archive, the version number of your custom package must
+be higher than the one of the official package.
+
+Besides custom debian-installer components (udebs), you can also use custom
+or locally built debian-installer images (kernel, initrd and related files).
+
+You should always ensure that udebs included on a CD match the udebs used
+when building the debian-installer image you include. For example kernel
+versions need to match, but also versioned dependensies between udebs
+(and note that not all dependencies between udebs are declared explicitly).
+And two udebs from the same source package should in principle have the
+same version even if one is included in the initrd and the other is loaded
+from the CD during the installation.
+
+Whether custom debs and udebs are used is determined by the environment
+variable LOCAL. Whether custom D-I images are used is determined by
+selecting the correct source from them, in most cases that will be by
+setting DI_DIR (see comments in easy-build.sh). Both variables can be set
+in easy-build.sh.
+
+Using custom packages
+---------------------
+The repository for the custom packages has the same basic structure as an
+official mirror. The main difference is the category: instead of "main"
+(or "contrib" or "non-free") this has to be "local". You should also make
+sure to use the release codename and not the suite.
+
+So you get for example:
+.../dists/lenny/local/binary-amd64/
+.../dists/lenny/local/binary-i386/
+.../dists/lenny/local/debian-installer/binary-amd64/
+.../dists/lenny/local/debian-installer/binary-i386/
+.../dists/sid/local/binary-amd64/
+.../dists/sid/local/binary-i386/
+.../dists/sid/local/debian-installer/binary-amd64/
+.../dists/sid/local/debian-installer/binary-i386/
+
+Note that debs will be taken from 'dists/$CODENAME/...' while udebs will be
+taken from 'dists/$DI_CODENAME/...'. So if CODENAME and DI_CODENAME have
+different values (e.g. when taking debs from testing but using D-I based on
+unstable), you will need to place your custom debs and udebs under different
+codenames.
+
+The local category does not need to have a Release file, but each
+'binary-<arch>' directory must have a Packages file.
+
+It is possible to have the packages themselves in a pool directory, but it
+is probably easier to just place them under the 'binary-<arch>' directories.
+You can group packages in subdirectories.
+
+By default debian-cd will look for the "local" category in the same place
+as the official mirror (as defined by the envvar MIRROR), but in most cases
+it will be simpler to specify an alternative location by setting the
+environment variable LOCALDEBS in your CONF.sh. In that case you can also
+let easy-build.sh take care of generating an updated Packages.gz file for
+each source that is used in a build by setting the envvar UPDATE_LOCAL in
+easy-build.sh (see tools/Packages-gen).
+
+Example, assuming we are building for and i386 CD for lenny:
+1) in CONF.sh, set for example:
+   export MIRROR=/srv/mirror/debian
+   export LOCALDEBS=/srv/mirror/custom
+2) create the following directories:
+   /srv/mirror/custom/dists/lenny/local/binary-i386
+   /srv/mirror/custom/dists/lenny/local/debian-installer/binary-i386
+3) copy your custom debs to the first directory
+4) copy your custom udebs to the second directory
+5) in easy-build.sh, set:
+   export LOCAL=1
+   UPDATE_LOCAL=1
+
+Note that debian-cd will fail if you set LOCAL but the "local" directory for
+a codename/arch/section that is referenced in a build does not exist.
+If UPDATE_LOCAL is set easy-build.sh will create the needed directories and
+(empty) Packages.gz files.
+
+Using custom debian-installer images
+------------------------------------
+Note that the build target used and the way images are organized under the
+build/dest directory by the debian-installer build system varies per
+architecture. The example below should work for i386 and amd64, but may need
+to be adjusted for other architectures.
+
+Example:
+1) create a directory, for example:
+   /srv/mirror/custom/images/i386/
+2) build the d-i images (in the installer/build directory) using:
+   $ make reallyclean; fakeroot make build_cdrom_isolinux
+3) copy the images using:
+   $ cp -r dest/cdrom /srv/mirror/custom/images/i386/
+4) in easy-build.sh, set:
+   export DI_DIR="/srv/mirror/custom/images/%ARCH%"
+
+'%ARCH%' will be automatically expanded to the correct architecture whe
+debian-cd is run.
