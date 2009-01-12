@@ -155,8 +155,8 @@ fi
 if [ "$LOCAL" ] && [ "$UPDATE_LOCAL" ]; then
 	echo "Updating Packages files for local repository..."
 	for arch in $ARCHES; do
-		./tools/Packages-gen.sh $CODENAME $arch
-		./tools/Packages-gen.sh -i $DI_CODENAME $arch
+		./tools/Packages-gen $CODENAME $arch
+		./tools/Packages-gen -i $DI_CODENAME $arch
 	done
 	echo
 fi
