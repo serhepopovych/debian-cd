@@ -49,7 +49,14 @@ $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME silo source >> $CDDIR/../$N.pkgs_e
 # Some custom etc files
 cp -f -p $BASEDIR/data/lenny/sparc/silo.conf $inst/boot/
 if [ -n "$KERNEL_PARAMS" ]; then
-    sed -i "/^[[:space:]]\+append=\"/ s|append=\"|append=\"$KERNEL_PARAMS |" $inst/boot/silo.conf
+	# Add KERNEL_PARAMS to any existing append line
+	sed -i "/^[[:space:]]*append=\"/ s|append=\"|append=\"$KERNEL_PARAMS |" \
+		$inst/boot/silo.conf
+	# If there is no default append= line, add it
+	if ! grep -q "^append=" $inst/boot/silo.conf; then
+		sed -i "/^default=/ a\append=\"$KERNEL_PARAMS\"" \
+			$inst/boot/silo.conf
+	fi
 fi
 cat $BASEDIR/data/lenny/sparc/debian.txt \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
