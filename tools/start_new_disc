@@ -406,7 +406,7 @@ EOF
         xargs -n1 basename >> $CDDIR/README.source
 fi
 
-if [ "$disc_pkg_HOOK"x != ""x ] ; then
+if [ "$DISC_PKG_HOOK"x != ""x ] ; then
     echo "  Calling pkg hook: $DISC_PKG_HOOK"
     $DISC_PKG_HOOK $TDIR $MIRROR $DISKNUM $CDDIR "$ARCHES"
 fi
