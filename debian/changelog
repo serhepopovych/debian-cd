@@ -1,5 +1,6 @@
 debian-cd (3.1.1) UNRELEASED; urgency=low
 
+  [ Frans Pop ]
   * sparc: remove bogus default "append=cdrom" line from silo.conf template.
   * sparc: ensure the default 'install' option also gets KERNEL_PARAMS set.
   * start_new_disc: fix a typo so that DISC_PKG_HOOK might work. Thanks to
@@ -8,6 +9,9 @@ debian-cd (3.1.1) UNRELEASED; urgency=low
     environment variable (see #512303 for discussion).
   * x86: clean up compatibility code that was needed for D-I Lenny RC1
     isolinux configuration files.
+
+  [ Otavio Salvador ]
+  * do not exclude libaio1-udeb from CDs.
 
  -- Frans Pop <fjp@debian.org>  Tue, 20 Jan 2009 01:30:11 +0100
 
