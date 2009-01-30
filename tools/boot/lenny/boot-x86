@@ -234,13 +234,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
 
-	# FIXME - this is broken for the current setup which no longer
-	# has a 'default' statement in isolinux.cfg
-	if [ -n "$ISOLINUX_DEFAULT" ]; then
-		sed -i "s/^DEFAULT .*$/DEFAULT $ISOLINUX_DEFAULT/" \
-			boot$N/isolinux/isolinux.cfg
-	fi
-
 	if [ -z "$MULTIARCH" ]; then
 		# Set up isolinux dir for only the current arch
 		# Last two for Lenny RC1 compatibility
