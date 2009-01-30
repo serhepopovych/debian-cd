@@ -218,8 +218,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		rm -f boot$N/isolinux/amdgtk.cfg
 		rm -f boot$N/isolinux/adgtk.cfg
 		rm -f boot$N/isolinux/amdadgtk.cfg
-		# For Lenny RC1 compatibility
-		rm -f boot$N/isolinux/adamdgtk.cfg
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with*
 
@@ -236,8 +234,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	if [ -z "$MULTIARCH" ]; then
 		# Set up isolinux dir for only the current arch
-		# Last two for Lenny RC1 compatibility
-		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg text.cfg adtext.cfg; do
+		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg; do
 			if [ -e boot$N/isolinux/$f ]; then
 				sed -i "s|/install/|/$INSTALLDIR/|" boot$N/isolinux/$f
 			fi
@@ -246,19 +243,14 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		# Remove the amd*.cfg files to avoid them being loaded on a
 		# disc that does not have both amd64 and i386 dirs.
 		rm -f boot$N/isolinux/amd*.cfg
-		# For Lenny RC1 compatibility
-		rm -f boot$N/isolinux/adamd*.cfg
 	else
 		# Set up isolinux dir for multi-arch
-		# Last two for Lenny RC1 compatibility
-		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg text.cfg adtext.cfg; do
+		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg; do
 			if [ -e boot$N/isolinux/$f ]; then
 				sed -i "s|/install/|/$INSTALLDIR_i386/|" boot$N/isolinux/$f
 			fi
 		done
-		# Last three for Lenny RC1 compatibility
-		for f in amdtxt.cfg amdgtk.cfg amdadtxt.cfg amdadgtk.cfg \
-			 amdtext.cfg adamdtext.cfg adamdgtk.cfg; do
+		for f in amdtxt.cfg amdgtk.cfg amdadtxt.cfg amdadgtk.cfg; do
 			if [ -e boot$N/isolinux/$f ]; then
 				sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/isolinux/$f
 			fi
@@ -285,11 +277,10 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		# Instead, add special default label to automatically select
 		# i386/amd64 if user hits enter from help screens.
 		cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
-		# text.cfg and amdtext.cfg for Lenny RC1 compatibility.
 		sed -i "/^default install/ s/^/#/" \
-			boot$N/isolinux/txt.cfg boot$N/isolinux/text.cfg || true
+			boot$N/isolinux/txt.cfg || true
 		sed -i "/^default64 amd64-install/ s/^/#/" \
-			boot$N/isolinux/amdtxt.cfg boot$N/isolinux/amdtext.cfg || true
+			boot$N/isolinux/amdtxt.cfg || true
 		sed -i "/^include menu.cfg/ a\include instsel.cfg" \
 			boot$N/isolinux/prompt.cfg
 		cat >boot$N/isolinux/instsel.cfg <<EOF

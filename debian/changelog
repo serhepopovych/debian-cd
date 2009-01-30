@@ -6,6 +6,8 @@ debian-cd (3.1.1) UNRELEASED; urgency=low
     Jonathan Hall for the patch. Closes: #513421
   * boot-x86: drop support for no longer really useful ISOLINUX_DEFAULT
     environment variable (see #512303 for discussion).
+  * x86: clean up compatibility code that was needed for D-I Lenny RC1
+    isolinux configuration files.
 
  -- Frans Pop <fjp@debian.org>  Tue, 20 Jan 2009 01:30:11 +0100
 

@@ -7,13 +7,10 @@
 # With two characters to identify the desktop environment this will leave
 # as maximum for example: amdatlx.cfg or amdtxtlx.cfg.
 
-# FIXME: Various statements include Lenny RC1 compatability code:
-# '(amd)?', 'te?xt' in regexps and anything with 'text' config files
-
 make_desktop_template() {
 	# Split rescue labels out of advanced options files
 	for file in boot$N/isolinux/*ad*.cfg; do
-		rq_file="$(echo "$file" | sed -r "s:/(amd)?ad:/\1rq:; s:text:txt:")"
+		rq_file="$(echo "$file" | sed -r "s:/(amd)?ad:/\1rq:")"
 		sed -rn "s:desktop=[^ ]*::
 			 /^label (amd64-)?rescue/,+3 p" $file >$rq_file
 		sed -ri "/^label (amd64-)?rescue/ i\include $(basename $rq_file)
@@ -29,8 +26,8 @@ make_desktop_template() {
 		s:config :config %desktop%/:" \
 		boot$N/isolinux/desktop/menu.cfg
 	cp boot$N/isolinux/desktop/menu.cfg boot$N/isolinux/desktop/prmenu.cfg
-	sed -ri "s:(include.*(te?xt|gtk))(\.cfg):\1dt\3:
-		 /include.*(te?xt|gtk)/ {s:ad(amd)?te?xt:\1at:; s:ad(amd)?gtk:\1ag:; s:text:txt:}" \
+	sed -ri "s:(include.*(txt|gtk))(\.cfg):\1dt\3:
+		 /include.*(txt|gtk)/ {s:adtxt:at:; s:adgtk:ag:}" \
 		boot$N/isolinux/desktop/menu.cfg
 	sed -i "/menu begin advanced/ s:ced:ced-%desktop%:
 		/Advanced options/ i\    menu label Advanced options
@@ -49,8 +46,7 @@ make_desktop_template() {
 		s:include menu:include %desktop%/prmenu:" \
 		boot$N/isolinux/desktop/prompt.cfg
 
-	for file in boot$N/isolinux/*txt.cfg boot$N/isolinux/*gtk.cfg \
-		    boot$N/isolinux/*text.cfg; do
+	for file in boot$N/isolinux/*txt.cfg boot$N/isolinux/*gtk.cfg; do
 		[ -e "$file" ] || continue
 		# Skip rescue include files
 		if $(echo $file | grep -Eq "/(amd)?rq"); then
@@ -63,9 +59,8 @@ make_desktop_template() {
 		dt_prfile="$(dirname "$file")/desktop/$(basename "$file")"
 		dt_file="${dt_prfile%.cfg}dt.cfg"
 		dt_file="$(echo "$dt_file" | \
-			sed -r "s:ad(amd)?te?xt:\1at:
-				s:ad(amd)?gtk:\1ag:
-				s:text:txt:")"
+			sed -r "s:adtxt:at:
+				s:adgtk:ag:")"
 		cp $file $dt_file
 		sed -ri "/^default/ s:^:#:
 			 /include (amd)?rq/ d
@@ -93,8 +88,7 @@ modify_for_light_desktop() {
 	# Cleanup
 	rm -r boot$N/isolinux/desktop
 	for file in boot$N/isolinux/*txt.cfg boot$N/isolinux/*gtk.cfg \
-		    boot$N/isolinux/prompt.cfg \
-		    boot$N/isolinux/*text.cfg; do
+		    boot$N/isolinux/prompt.cfg; do
 		[ -e "$file" ] || continue
 		# Skip rescue include files
 		if $(echo $file | grep -q "/rq"); then
