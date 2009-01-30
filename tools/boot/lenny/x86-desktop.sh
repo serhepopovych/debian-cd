@@ -2,10 +2,10 @@
 # environment for certain images.
 
 # All config file names need to be in 8.3 format!
-# For that reason files that get a desktop postfix are renamed as follows:
-# adtxt->at, adgtk->ag.
-# With two characters to identify the desktop environment this will leave
-# as maximum for example: amdatlx.cfg or amdtxtlx.cfg.
+# For that reason files that get a "desktop"  postfix are renamed as
+# follows: adtxt->at, adgtk->ag.
+# With two characters (dt) for the postfix this will leave as maximum
+# for example: amdtxtdt.cfg or amdatdt.cfg.
 
 make_desktop_template() {
 	# Split rescue labels out of advanced options files
