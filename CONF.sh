@@ -48,7 +48,7 @@ unset MAXJIGDOS         || true
 unset SPLASHPNG         || true
 unset OMIT_MANUAL	 || true
 unset OMIT_RELEASE_NOTES || true
-unset OMIT_DOC_TOOLS     || true
+unset OMIT_DOC_TOOLS     || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
