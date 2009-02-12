@@ -156,8 +156,13 @@ arch=$(which_deb $MIRROR $CODENAME coreutils binary | sed -e "s/\.deb//" -e "s/.
 # We need to gunzip a copy of the appropriate Packages.gz file(s)
 TMP_PKG=$TDIR/Packages
 zcat $MIRROR/dists/$CODENAME/main/binary-$arch/Packages.gz > $TMP_PKG
-[ -n "$LOCAL" ] && zcat \
-    $MIRROR/dists/$CODENAME/local/binary-$arch/Packages.gz >> $TMP_PKG
+if [ -n "$LOCAL" ] ; then
+    if [ -n "$LOCALDEBS" ] ; then
+        zcat $LOCALDEBS/dists/$CODENAME/local/binary-$arch/Packages.gz >> $TMP_PKG
+    else
+        zcat $MIRROR/dists/$CODENAME/local/binary-$arch/Packages.gz >> $TMP_PKG
+    fi
+fi
 
 # Now grab the appropriate tasksel package
 TASKSEL_DEB=$MIRROR/`mawk '
