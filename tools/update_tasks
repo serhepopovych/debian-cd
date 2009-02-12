@@ -149,10 +149,15 @@ update_essential_list () {
     }' | sort -s -n -k1 | cut -d: -f2 >> $file
 }
 
-# We need to gunzip a copy of the appropriate Packages.gz file
-# Assume i386, use the $CODENAME main Packages file
+# Look for the coreutils package (which should exist in all archs, and is
+# a non -all package) to determine a valid arch for the rest of this
+# script
+arch=$(which_deb $MIRROR $CODENAME coreutils binary | sed -e "s/\.deb//" -e "s/.*_//")
+# We need to gunzip a copy of the appropriate Packages.gz file(s)
 TMP_PKG=$TDIR/Packages
-zcat $MIRROR/dists/$CODENAME/main/binary-i386/Packages.gz > $TMP_PKG
+zcat $MIRROR/dists/$CODENAME/main/binary-$arch/Packages.gz > $TMP_PKG
+[ -n "$LOCAL" ] && zcat \
+    $MIRROR/dists/$CODENAME/local/binary-$arch/Packages.gz >> $TMP_PKG
 
 # Now grab the appropriate tasksel package
 TASKSEL_DEB=$MIRROR/`mawk '

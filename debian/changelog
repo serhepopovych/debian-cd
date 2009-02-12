@@ -1,4 +1,4 @@
-debian-cd (3.1.1) UNRELEASED; urgency=low
+debian-cd (3.1.1) UNRELEASED; urgency=high
 
   [ Frans Pop ]
   * sparc: remove bogus default "append=cdrom" line from silo.conf template.
@@ -13,7 +13,17 @@ debian-cd (3.1.1) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * do not exclude libaio1-udeb from CDs.
 
- -- Frans Pop <fjp@debian.org>  Tue, 20 Jan 2009 01:30:11 +0100
+  [ Steve McIntyre ]
+  * Merge patches from Jonathan Hall:
+    + Add better support for extra components, improve non-i386 mirror
+      support (Closes: 514237)
+    + tools/update_tasks no longer assumes i386 for all builds (Closes: #513497)
+    + tools/which_deb no longer assumes i386 for all builds (Closes: #513498)
+  * For source-only builds, don't do any task updates as they're not
+    useful anyway.
+  * Last high-urgency upload, ready for Lenny!
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 11 Jan 2009 11:13:24 +0000
 
 debian-cd (3.1.0) unstable; urgency=low
 

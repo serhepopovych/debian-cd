@@ -5,9 +5,19 @@
 die "Missing \$MIRROR variable" unless $ENV{MIRROR};
 die "Missing \$DI_CODENAME variable" unless $ENV{DI_CODENAME};
 die "Missing \$BASEDIR variable" unless $ENV{BASEDIR};
+die "Missing \$ARCHES variable" unless $ENV{ARCHES};
 
-my @ARCHES=qw{alpha arm armel hppa hurd-i386 i386 ia64 mips mipsel
-              powerpc s390 sparc amd64};
+# Early exit if we're building a source-only CD
+exit 0 if $ENV{ARCHES} =~ /^\s*source\s*$/;
+
+my @ARCHES;
+if ( $ENV{ARCHES} ) {
+    push @ARCHES, 'i386' if $ENV{ARCHES} =~ /i386/;
+    push @ARCHES, 'amd64' if $ENV{ARCHES} =~ /amd64/;
+    push @ARCHES, grep { !/source|i386|amd64/ } split /\s+/, $ENV{ARCHES};
+}
+@ARCHES = qw{i386 amd64} unless @ARCHES;
+
 my $DATE=`date`;
 chomp $DATE;
 open(OUT, ">debian-installer") || die "write: $!";
@@ -24,32 +34,45 @@ print OUT << "EOF";
 EOF
 
 my @common_excludes = read_exclude("exclude-udebs");
+my $mirror_path = "$ENV{MIRROR}/dists/$ENV{DI_CODENAME}";
+my @components = qw(main);
+push @components, 'contrib' if $ENV{CONTRIB};
+push @components, 'non-free' if $ENV{NONFREE};
+push @components, 'local' if $ENV{LOCAL};
 
 foreach my $arch (@ARCHES) {
-	my $packagefile="$ENV{MIRROR}/dists/$ENV{DI_CODENAME}/main/debian-installer/binary-$arch/Packages.gz";
-	unless (-f $packagefile) {
-		print "Missing package file for arch $arch.\n";
-		next;
-	}
 	(my $cpparch = $arch) =~ s/-/_/g;
-	print OUT "#ifdef ARCH_$cpparch\n";
-	my @exclude = @common_excludes;
-	push @exclude, read_exclude("exclude-udebs-$arch")
-		if -e exclude_path("exclude-udebs-$arch");
-UDEB:	foreach my $udeb (map { chomp; $_ } `zcat $packagefile | awk '/^Package:/ {print \$2}'`) {
-		foreach my $pattern (@exclude) {
-			if ($udeb =~ /^$pattern$/) {
-				next UDEB;
-			}
-		}
-		print OUT "$udeb\n";
-	}
-	print OUT "#endif /* ARCH_$cpparch */\n";
+    my $output = '';
+    for my $component ( @components ) {
+        my $packagefile="$mirror_path/$component/debian-installer/binary-$arch/Packages.gz";
+        if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
+            $packagefile="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.gz";
+        }
+        if (! -f $packagefile) {
+            print "Missing package file for $arch/$component.\n";
+            next;
+        }
+
+        my @exclude = @common_excludes;
+        push @exclude, read_exclude("exclude-udebs-$arch")
+            if -e exclude_path("exclude-udebs-$arch");
+
+        foreach my $udeb (map { chomp; $_ } `zcat $packagefile | awk '/^Package:/ {print \$2}'`) {
+            $output .= "$udeb\n" unless grep { $udeb =~ /^${_}$/ } @exclude;
+        }
+    }
+    next unless $output;
+    print OUT "#ifdef ARCH_$cpparch\n";
+    print OUT $output;
+    print OUT "#endif /* ARCH_$cpparch */\n";
 }
 
 sub read_exclude {
 	my $file=exclude_path(shift);
-	open (IN, "<$file") || warn "failed to read exclude file $file";
+    unless ( open (IN, "<$file") ) {
+       warn "failed to read exclude file $file";
+       return;
+    }
 	my @ret;
 	while (<IN>) {
 		chomp;

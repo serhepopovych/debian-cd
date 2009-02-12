@@ -735,7 +735,7 @@ sub Packages_dir {
     }	
 
     $pdir = "$dir/dists/$codename/$dist";
-    if ($section eq "debian-installer") {
+    if ($section and $section eq "debian-installer") {
         $pdir = "$dir/dists/$codename/$dist/debian-installer";
     }
     return $pdir;

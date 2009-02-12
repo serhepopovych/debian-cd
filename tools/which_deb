@@ -6,6 +6,16 @@
 # the archive to meet a requirement in the debian-cd build
 
 use strict;
+use List::Util qw{first};
+# Give prefernce to i386 and amd64, if specified, or if building a
+# source-only CD.
+my @ARCHES;
+if ( $ENV{ARCHES} ) {
+    push @ARCHES, 'i386' if $ENV{ARCHES} =~ /i386/;
+    push @ARCHES, 'amd64' if $ENV{ARCHES} =~ /amd64/;
+    push @ARCHES, grep { !/source|i386|amd64/ } split /\s+/, $ENV{ARCHES};
+}
+@ARCHES = qw{i386 amd64} unless @ARCHES;
 
 my ($mirror, $codename, $pkg, $pth, $output);
 
@@ -13,7 +23,12 @@ $mirror = shift;
 $codename = shift;
 $pkg = shift;
 $output = shift;
-$pth = "$mirror/dists/$codename/main";
+$pth = "$mirror/dists/$codename";
+
+my @components = qw(main);
+push @components, 'contrib' if $ENV{CONTRIB};
+push @components, 'non-free' if $ENV{NONFREE};
+push @components, 'local' if $ENV{LOCAL};
 
 if (!defined ($output)) {
     $output = "binary";
@@ -27,23 +42,27 @@ sub grab_bin_info {
     my $match;
     my $result = "";
     
-    my $pgz = "$pth/binary-$arch/Packages.gz";
-
     $/ = ''; # Browse by paragraph    
 
-    if (-e $pgz) {
-        open(PFILE, "zcat $pgz |") or
-            die "Failed to read Packages file $pgz";
-
-        while (defined($match = <PFILE>)) {
-            if (($match =~ /^Package: \Q$pkgname\E$/m)) {
-                $result = $match;
-                close PFILE;
-                return $result;
-            }
+    for my $component ( @components ) {
+        my $pgz = "$pth/$component/binary-$arch/Packages.gz";
+        if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
+            $pgz = "$ENV{LOCALDEBS}/dists/$codename/local/binary-$arch/Packages.gz";
         }
-        # Fell through
-        close PFILE;
+        if (-e $pgz) {
+            open(PFILE, "zcat $pgz |") or
+                die "Failed to read Packages file $pgz";
+
+            while (defined($match = <PFILE>)) {
+                if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+                    $result = $match;
+                    close PFILE;
+                    return $result;
+                }
+            }
+            # Fell through
+            close PFILE;
+        }
     }
     return "";
 }
@@ -55,23 +74,25 @@ sub grab_src_info {
     my $match;
     my $result = "";
     
-    my $pgz = "$pth/source/Sources.gz";
-
     $/ = ''; # Browse by paragraph    
 
-    if (-e $pgz) {
-        open(PFILE, "zcat $pgz |") or
-            die "Failed to read Sources file $pgz";
+    for my $component ( @components ) {
+        my $pgz = "$pth/$component/source/Sources.gz";
 
-        while (defined($match = <PFILE>)) {
-            if (($match =~ /^Package: \Q$pkgname\E$/m)) {
-                $result = $match;
-                close PFILE;
-                return $result;
+        if (-e $pgz) {
+            open(PFILE, "zcat $pgz |") or
+                die "Failed to read Sources file $pgz";
+
+            while (defined($match = <PFILE>)) {
+                if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+                    $result = $match;
+                    close PFILE;
+                    return $result;
+                }
             }
+            # Fell through
+            close PFILE;
         }
-        # Fell through
-        close PFILE;
     }
     return "";
 }
@@ -80,19 +101,18 @@ my $bin_deb = "";
 my $pkgdata = "";
 my $srcname = "";
 
-if ($pkg eq "debootstrap") {
-    $pkgdata = grab_bin_info($pth, "i386", $pkg);
-
-} elsif ($pkg eq "silo") {
+if ($pkg eq "silo") {
     $pkgdata = grab_bin_info($pth, "sparc", $pkg);
 
 } elsif ($pkg eq "syslinux") {
-    $pkgdata = grab_bin_info($pth, "i386", "syslinux-common");
-    if (length($pkgdata) < 3) {        
-        $pkgdata = grab_bin_info($pth, "i386", "syslinux");
+    first { $pkgdata = grab_bin_info($pth, $_, "syslinux-common") } @ARCHES;
+    if (length($pkgdata) < 3) {
+        first { $pkgdata = grab_bin_info($pth, $_, "syslinux") } @ARCHES;
     }
 } elsif ($pkg eq "yaboot") {
     $pkgdata = grab_bin_info($pth, "powerpc", $pkg);
+} else { # Fallthrough for all other packages
+    first { $pkgdata = grab_bin_info($pth, $_, $pkg) } @ARCHES;
 }
 
 if (length($pkgdata) > 2) {

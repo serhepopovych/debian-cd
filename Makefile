@@ -118,6 +118,7 @@ $(BDIR):
 $(ADIR):
 	$(Q)mkdir -p $(ADIR)
 $(TASKDIR):
+ifneq ($(ARCHES),source)
 	$(Q)echo "Updating task files..."
 	$(Q)mkdir -p $(TASKDIR)
 	$(Q)echo "- copying task files from 'tasks/$(DI_CODENAME)/'"
@@ -130,6 +131,7 @@ $(TASKDIR):
 		$(BASEDIR)/tools/update_tasks; \
 		$(BASEDIR)/tools/generate_di_list; \
 		$(BASEDIR)/tools/generate_di+k_list
+endif
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
 
