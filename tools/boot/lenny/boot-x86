@@ -119,6 +119,13 @@ if [ "$NN" = "1" ]; then
 			cp -lf $disk $CDDIR/$INSTALLDIR/$dir
 		fi
 	done
+
+    if [ -e "$MIRROR/tools" ] && \
+        [ ! -e $CDDIR/tools ] && \
+        [ "$OMIT_DOC_TOOLS" != "1" ] ; then
+        echo "  Adding tools to CD1"
+        $BASEDIR/tools/add_files $CDDIR $MIRROR tools
+    fi
 fi
 
 extra_image () {
@@ -158,7 +165,7 @@ case "$DESKTOP" in
 esac
 
 if [ "$THISTYPE" = "isolinux" ]; then
-	echo "Using ISOLINUX boot-disks image on CD$N"
+	echo "  Using ISOLINUX boot-disks image on CD$N"
 	mkdir -p $CDDIR/$INSTALLDIR
 	cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 	cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
