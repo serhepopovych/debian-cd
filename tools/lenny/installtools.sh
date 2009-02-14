@@ -4,7 +4,7 @@
 set -e
 
 if [ "$RELEASE_NOTES_LOCATION"x = ""x ] ; then
-	export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/etch"
+	export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/lenny"
 fi
 
 # The location of the tree for CD#1, passed in
