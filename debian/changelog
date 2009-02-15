@@ -1,3 +1,9 @@
+debian-cd (3.1.2) UNRELEASED; urgency=low
+
+  * Add support for squeeze.
+
+ -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
+
 debian-cd (3.1.1) unstable; urgency=high
 
   [ Frans Pop ]

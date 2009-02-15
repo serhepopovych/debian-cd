@@ -54,8 +54,8 @@ unset OMIT_DOC_TOOLS     || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building lenny cd set ...
-export CODENAME=lenny
+# Building squeeze cd set ...
+export CODENAME=squeeze
 
 # By default use Debian installer packages from $CODENAME
 if [ -z "$DI_CODENAME" ]; then
@@ -69,7 +69,7 @@ fi
 #export DI_WWW_HOME=default
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="5.0"
+export DEBVERSION="6.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE

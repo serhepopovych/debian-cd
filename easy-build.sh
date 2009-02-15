@@ -53,10 +53,10 @@ fi
 ## For what release to build images
 
 # The suite the installed system will be based on
-export CODENAME=lenny
+export CODENAME=squeeze
 # The suite from which the udebs for the installer will be taken (normally
 # the same as CODENAME)
-export DI_CODENAME=lenny
+export DI_CODENAME=squeeze
 
 
 ## The debian-installer images to use. This must match the suite (DI_CODENAME)
