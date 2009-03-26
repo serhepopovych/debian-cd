@@ -26,7 +26,7 @@ N=$1
 CDDIR=$2
 BOOTDIR=
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~vorlon/d-i/alpha/daily/cdrom/"
+   DI_WWW_HOME="http://people.debian.org/~luk/alpha/images/daily/cdrom/"
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""                     

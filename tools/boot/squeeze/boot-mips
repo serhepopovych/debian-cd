@@ -14,7 +14,7 @@ set -e
 N=$1
 CDROOT=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~ths/d-i/images/daily/"
+   DI_WWW_HOME="http://people.debian.org/~luks/mips/images/daily/"
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""                     

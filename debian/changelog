@@ -1,6 +1,11 @@
 debian-cd (3.1.2) UNRELEASED; urgency=low
 
+  [ Frans Pop ]
   * Add support for squeeze.
+
+  [ Colin Watson ]
+  * Luk Claes has taken over alpha, amd64, mips, and mipsel daily d-i
+    builds.
 
  -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
 
