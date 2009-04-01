@@ -10,6 +10,8 @@ debian-cd (3.1.2) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Don't call images beta if they're using OFFICIAL_VAL == 2.
     Closes: #516353
+  * Add wpasupplicant to tasks/*/forcd1 . Closes: #517298. It's a small
+    package that should fit easily.
 
  -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
 
