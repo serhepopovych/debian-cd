@@ -7,6 +7,10 @@ debian-cd (3.1.2) UNRELEASED; urgency=low
   * Luk Claes has taken over alpha, amd64, mips, and mipsel daily d-i
     builds.
 
+  [ Steve McIntyre ]
+  * Don't call images beta if they're using OFFICIAL_VAL == 2.
+    Closes: #516353
+
  -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
 
 debian-cd (3.1.1) unstable; urgency=high

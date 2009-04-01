@@ -275,17 +275,18 @@
       system. Please report any bugs you find to the person that gave you this
       disc, not Debian.</li>
 # endif
-# if (OFFICIAL_VAL == 1 || OFFICIAL_VAL == 2)
+# if (OFFICIAL_VAL == 1)
       <li>You should keep in mind that this is a beta disc of the current
       development version of the Debian system. This means that all sorts of
       bugs may be present anywhere in the system. Please report any bugs you
       find in the Debian Bug Tracking System; details at <a
       href="http://bugs.debian.org/">bugs.debian.org</a>.</li>
-
-      <li>If you're reporting bugs against this disc or the installation
-      system, please also mention the version of this disc; this can be found
-      in the file <tt><a href="/.disk/info">/.disk/info</a></tt>.</li>
-# endif
+#endif
+# if (OFFICIAL_VAL == 2)
+     <li>This is an official release of the Debian system. Please report any
+     bugs you find in the Debian Bug Tracking System; details at <A
+     HREF="http://bugs.debian.org/">bugs.debian.org</A>.
+#endif
 
     </ul>
 #endif
