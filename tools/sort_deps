@@ -509,12 +509,14 @@ sub add_recommends {
 
 sub get_missing {
 	my $p = shift;
-	my @list = ($p);
+	my @list = ();
 	
 	if (not add_missing (\@list, $packages{$p}{"Depends"}, $p)) {
 		return ();
 	}
-	
+
+	remove_entry($p, \@list);
+	push @list, $p;
 	return (@list);
 }
 
@@ -567,6 +569,8 @@ sub add_missing {
 					push (@{$list}, $pkg);
 					if (add_missing ($list, $packages{$pkg}{"Depends"}, $pkg)) {
 						$or_ok = 1;
+						remove_entry($pkg, $list);
+						push @{$list}, $pkg;
 						last;
 					} else {
 						pop @{$list};
@@ -579,6 +583,7 @@ sub add_missing {
 			}				
 		# Else it's a simple dependency
 		} else {
+            msg(1, "  Looking at adding $_ to satisfy dep\n");
 			if (not exists $packages{lc $_}) {
 				msg(1, "  $_ doesn't exist...\n");
 				msg(1, "  $pkgin failed, couldn't satisfy dep on $_\n");
@@ -594,12 +599,17 @@ sub add_missing {
 				pop @{$list};
 				$ok = 0;
 			}
+			remove_entry(lc $_, $list);
+			push @{$list}, lc $_;
 		}
 	}
 	# If a problem has come up, then restore the original list
 	if (not $ok) {
 		@{$list} = @backup;
 	}
+    if (not is_in(lc $pkgin, $list)) {
+        push @{$list}, lc $pkgin;
+    }
 	return $ok;
 }
 
@@ -611,6 +621,19 @@ sub is_in {
 		return 1 if ($key eq $value);
 	}
 	return 0;		
+}
+
+# Remove an antry from @{$array}
+sub remove_entry {
+    my $value = shift;
+    my $array = shift;
+    my $i;
+    
+    foreach $i (0 .. $#$array) {
+        if (@{$array}[$i] eq $value) {
+            splice(@{$array}, $i, 1);
+        }
+    }
 }
 
 # The size of a group of packages
