@@ -13,8 +13,8 @@ CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
    DI_WWW_HOME="http://people.debian.org/~stappers/d-i/sparc/daily/cdrom"
    if [ -n "$DI_DIR" ];then
-      DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
-      DI_WWW_HOME=""                     
+       DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+       DI_WWW_HOME=""                     
    fi
 fi
 if [ ! "$DI_DIST" ]; then
