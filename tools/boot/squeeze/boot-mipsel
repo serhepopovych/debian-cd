@@ -17,7 +17,7 @@ N=$1
 CDROOT=$2
 if [ "$DI_WWW_HOME" = "default" ];then
 # Temporarily disabled to stop cron jobs complaining
-#   DI_WWW_HOME="http://people.debian.org/~luks/mipsel/images/daily/decstation/cdrom/"
+#     DI_WWW_HOME="http://d-i.debian.org/daily-images/mipsel/daily/decstation/cdrom/"
    if [ -n "$DI_DIR" ];then
       DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
       DI_WWW_HOME=""                     

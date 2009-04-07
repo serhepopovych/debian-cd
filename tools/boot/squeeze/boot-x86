@@ -19,7 +19,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
 	if [ "$ARCH" = i386 ]; then
 		DI_WWW_HOME="http://people.debian.org/~joeyh/d-i/images/daily"
 	else
-		DI_WWW_HOME="http://people.debian.org/~luk/amd64/images/daily"
+		DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
 	fi
 	if [ -n "$DI_DIR" ];then
 		DI_DIR="$DI_DIR/~${DI_WWW_HOME#*~}"
