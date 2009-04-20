@@ -22,7 +22,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
 		DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
 	fi
 	if [ -n "$DI_DIR" ];then
-        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+		DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
 		DI_WWW_HOME=""                     
 		echo "Using images from $DI_DIR"
 	fi
@@ -175,8 +175,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	(ar p "$MIRROR/${SYSLINUXDEB}" data.tar.gz | \
 		tar zxf - -C $CDDIR/../syslinux ./usr/lib)
 
-    echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
+	echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+	$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"

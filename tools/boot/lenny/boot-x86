@@ -1,4 +1,4 @@
-#!/bin/bash
+# This script gets sourced from boot-i386 and boot-amd64.
 #
 # Do install stuff for x86, including making bootable CDs
 # Works with debian-installer
@@ -120,12 +120,12 @@ if [ "$NN" = "1" ]; then
 		fi
 	done
 
-    if [ -e "$MIRROR/tools" ] && \
-        [ ! -e $CDDIR/tools ] && \
-        [ "$OMIT_DOC_TOOLS" != "1" ] ; then
-        echo "  Adding tools to CD1"
-        $BASEDIR/tools/add_files $CDDIR $MIRROR tools
-    fi
+	if [ -e "$MIRROR/tools" ] && \
+	   [ ! -e $CDDIR/tools ] && \
+	   [ "$OMIT_DOC_TOOLS" != "1" ] ; then
+		echo "  Adding tools to CD1"
+		$BASEDIR/tools/add_files $CDDIR $MIRROR tools
+	fi
 fi
 
 extra_image () {
@@ -175,8 +175,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	(ar p "$MIRROR/${SYSLINUXDEB}" data.tar.gz | \
 		tar zxf - -C $CDDIR/../syslinux ./usr/lib)
 
-    echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
+	echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+	$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
