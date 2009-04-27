@@ -35,6 +35,10 @@ cd $CDROOT/..
 
 add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J -joliet-long"
 
+# Mipsel is currently not bootable in squeeze, so bail out here
+echo "Mipsel booting disabled, check with Sledge or fjp"
+exit 0
+
 # Only disks 1 bootable
 if [ $NN != 1 ]; then
 	exit 0
