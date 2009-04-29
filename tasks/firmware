@@ -5,6 +5,7 @@ firmware-bnx2
 firmware-ipw2x00
 firmware-ipw3945
 firmware-iwlwifi
+firmware-linux
 firmware-qlogic
 firmware-ralink
 libertas-firmware
