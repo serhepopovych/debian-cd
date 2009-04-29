@@ -9,4 +9,4 @@ firmware-linux
 firmware-qlogic
 firmware-ralink
 libertas-firmware
-/* zd1211-firmware disabled due to #492205 */
+zd1211-firmware
