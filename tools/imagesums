@@ -6,8 +6,14 @@ if [ "$2"x != ""x ] ; then
     EXT="$2"
 fi
 
-:> MD5SUMS$EXT
-:> SHA1SUMS$EXT
+CHECKSUMS="sha1 md5" # sha512 sha256 
+
+for SUM in $CHECKSUMS; do
+	UPSUM=`echo $SUM | tr 'a-z' 'A-Z'`
+	FILE=$UPSUM"SUMS"$EXT
+	echo "Clearing $FILE"
+	:> $FILE
+done
 
 # 2 calls to find here to get the ordering right - we *really* want to
 # get the jigdo files first
@@ -27,34 +33,26 @@ for file in `find * -name \*.jigdo` `find * -name \*.iso`; do
             ;;
     esac
 
-    grep -q $iso MD5SUMS$EXT
-    if [ $? -ne 0 ] ; then
-        MD5=""
-        if [ "$JIGDO" == 1 ] ; then
-            MD5=`zcat -f $file | awk '/Image Hex MD5Sum/ {print $5}'`
-        fi
-        if [ "$MD5"x != ""x ] ; then
-            echo "$MD5  $iso" >> MD5SUMS$EXT
-        else
-            echo "No Jigdo help for md5, doing it the long way"
-            md5sum $iso >> MD5SUMS$EXT
-            grep $iso MD5SUMS$EXT
-        fi
-    fi
+	for SUM in $CHECKSUMS; do
+		UPSUM=`echo $SUM | tr 'a-z' 'A-Z'`
+		FILE=$UPSUM"SUMS"$EXT
+		SEARCH="$UPSUM"Sum
+		CMD="$SUM"sum
 
-    grep -q $iso SHA1SUMS$EXT
-    if [ $? -ne 0 ] ; then
-        SHA1=""
-        if [ "$JIGDO" == 1 ] ; then
-            SHA1=`zcat -f $file | awk '/Image Hex SHA1Sum/ {print $5}'`
-        fi
-        if [ "$SHA1"x != ""x ] ; then
-            echo "$SHA1  $iso" >> SHA1SUMS$EXT
-        else
-            echo "No Jigdo help for sha1, doing it the long way"
-            sha1sum $iso >> SHA1SUMS$EXT
-            grep $iso SHA1SUMS$EXT
-        fi
-    fi
+		grep -q $iso $FILE
+		if [ $? -ne 0 ] ; then
+			CKSUM=""
+			if [ "$JIGDO" == 1 ] ; then
+				CKSUM=`zcat -f $file | awk "/Image Hex $SEARCH/ {print \\$5}"`
+			fi
+			if [ "$CKSUM"x != ""x ] ; then
+				echo "$CKSUM  $iso" >> $FILE
+			else
+				echo "No Jigdo help for $SUM, doing it the long way with $CMD"
+				$CMD $iso >> $FILE
+				grep $iso $FILE
+			fi
+		fi
 
+	done
 done
