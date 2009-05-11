@@ -6,7 +6,7 @@ if [ "$2"x != ""x ] ; then
     EXT="$2"
 fi
 
-CHECKSUMS="sha512 sha256 sha1 md5"
+CHECKSUMS="sha1 md5" # sha512 sha256 
 
 for SUM in $CHECKSUMS; do
 	UPSUM=`echo $SUM | tr 'a-z' 'A-Z'`
