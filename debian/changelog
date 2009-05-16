@@ -22,6 +22,7 @@ debian-cd (3.1.2) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * tools/imagesums: Add support for more checksum types. genisoimage
 	will shortly start generating sha256 and sha512 sums too.
+  * Recognise and ignore Breaks: lines. Closes: #523444
 
  -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
 

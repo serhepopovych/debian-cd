@@ -308,14 +308,16 @@ sub read_depends {
 	my $i = shift;     # Ref
 	my $lines = shift; # Ref
 	my $pkg = shift;   # string
-	my $types = "(?:Pre)?Depends|Suggests|Recommends|Replaces|Conflicts";
+	my $types = "(?:Pre)?Depends|Suggests|Recommends|Replaces|Conflicts|Breaks";
 	my (@dep, @rec, @sug);
 	my ($type, $or, $elt);
 
 	while ($lines->[$$i] =~ m/^\s([\s\|])($types):/) {
 		$type = $2; $or = $1;
 		# Get rid of replaces and conflicts ...
-		if (($type eq "Replaces") or ($type eq "Conflicts")) {
+		if (($type eq "Replaces") or
+			($type eq "Conflicts") or
+			($type eq "Breaks")) {
 			$$i++;
 			while ($lines->[$$i] =~ m/^\s{4}/) {
 				$$i++;
