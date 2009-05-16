@@ -25,6 +25,9 @@ debian-cd (3.1.2) UNRELEASED; urgency=low
   * Recognise and ignore Breaks: lines. Closes: #523444
   * Re-add code to generate install.bat on x86 machines. Thanks to Samuel
     Thibault for the patch. Closes: #518807
+  * Modify README.html: only attempt to link to the release notes and
+    installation manual on release-ready builds, otherwise suggest the
+    alioth version of the installation manual. Closes: #330398
 
  -- Frans Pop <fjp@debian.org>  Sun, 15 Feb 2009 23:41:25 +0100
 
