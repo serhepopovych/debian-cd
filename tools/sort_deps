@@ -629,11 +629,14 @@ sub is_in {
 sub remove_entry {
     my $value = shift;
     my $array = shift;
+    my $entries = scalar(@{$array});
     my $i;
-    
-    foreach $i (0 .. $#$array) {
+
+    for ($i=0; $i < $entries; $i++) {
         if (@{$array}[$i] eq $value) {
             splice(@{$array}, $i, 1);
+            $i--;
+            $entries--;
         }
     }
 }
