@@ -5,6 +5,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     is a backport of what was already implemented in debian-cd before the
     release of Lenny and allows a significant simplification.
     There are no significant changes in generated CD/DVD images.
+  * Split out code for workaround for #505243 to x86-desktop function library.
 
  -- Frans Pop <fjp@debian.org>  Mon, 01 Jun 2009 00:15:59 +0200
 

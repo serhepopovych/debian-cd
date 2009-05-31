@@ -1,6 +1,28 @@
 # Functions to convert isolinux config to allow selection of desktop
 # environment for certain images.
 
+# Workaround for #505243
+# Syslinux does not correctly handle a default64 option in combination
+# with vesamenu. Instead, add special default label to automatically
+# select i386/amd64 if user hits enter from help screens.
+multiarch_workaround() {
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
+	sed -i "/^default install/ s/^/#/" \
+		boot$N/isolinux/txt.cfg || true
+	sed -i "/^default64 amd64-install/ s/^/#/" \
+		boot$N/isolinux/amdtxt.cfg || true
+	sed -i "/^include menu.cfg/ a\include instsel.cfg" \
+		boot$N/isolinux/prompt.cfg
+	sed -i "/^default install/ a\include instsel.cfg" \
+		boot$N/isolinux/desktop/prompt.cfg
+	cat >boot$N/isolinux/instsel.cfg <<EOF
+default install-select
+label install-select
+    kernel ifcpu64.c32
+    append amd64-install -- install
+EOF
+}
+
 create_desktop_dir() {
 	local desktop=$1 title
 
