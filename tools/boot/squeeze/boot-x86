@@ -208,6 +208,11 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	# Isolinux setup including config and help files comes from d-i.
 	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 
+	if [ "$(di_config_version)" = "1.0" ]; then
+		echo "Error: syslinux config version 1.0 is no longer supported"
+		exit 1
+	fi
+
 	# Not everything in the tarball is isolinux stuff
 	if [ -e boot$N/isolinux/win32-loader.ini ] ; then
 		mv boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe \

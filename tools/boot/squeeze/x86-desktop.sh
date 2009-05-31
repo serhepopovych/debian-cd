@@ -1,6 +1,15 @@
 # Functions to convert isolinux config to allow selection of desktop
 # environment for certain images.
 
+di_config_version() {
+	local version
+	version=$(sed -nr "s/^# D-I config version ([0-9.])/\1/p" \
+		boot$N/isolinux/isolinux.cfg)
+
+	[ -n "Sversion" ] || return 1
+	echo "$version"
+}
+
 # Workaround for #505243
 # Syslinux does not correctly handle a default64 option in combination
 # with vesamenu. Instead, add special default label to automatically
