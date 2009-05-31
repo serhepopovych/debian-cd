@@ -154,8 +154,6 @@ case "$DESKTOP" in
     gnome)
 	# gnome is default in tasksel 
 	DESKTOP=
-	KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
-		sed -r "s/desktop=[^ ]* ?//")"
 	;;
     all)
 	ORIG_DESKTOP=$DESKTOP
@@ -166,6 +164,8 @@ case "$DESKTOP" in
 	DESKTOP=xfce
 	;;
 esac
+# desktop boot parameter gets set separately through DESKTOP variable
+KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | sed -r "s/desktop=[^ ]* ?//")"
 
 if [ "$THISTYPE" = "isolinux" ]; then
 	echo "  Using ISOLINUX boot-disks image on CD$N"
@@ -221,14 +221,6 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
 			mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
 		fi
-	else
-		# Remove gtk isolinux config files.
-		# FJP: AFAICT this is redundant: if f3.txt.withgtk is not
-		# included then the *gtk* files will not be either.
-		rm -f boot$N/isolinux/gtk.cfg
-		rm -f boot$N/isolinux/amdgtk.cfg
-		rm -f boot$N/isolinux/adgtk.cfg
-		rm -f boot$N/isolinux/amdadgtk.cfg
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with*
 
@@ -245,27 +237,17 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	if [ -z "$MULTIARCH" ]; then
 		# Set up isolinux dir for only the current arch
-		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg; do
-			if [ -e boot$N/isolinux/$f ]; then
-				sed -i "s|/install/|/$INSTALLDIR/|" boot$N/isolinux/$f
-			fi
-		done
+		sed -i "s|%install%|$INSTALLDIR|" \
+			boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
 
 		# Remove the amd*.cfg files to avoid them being loaded on a
 		# disc that does not have both amd64 and i386 dirs.
-		rm -f boot$N/isolinux/amd*.cfg
+		rm -f boot$N/isolinux/amd*.cfg boot$N/isolinux/desktop/amd*.cfg
 	else
 		# Set up isolinux dir for multi-arch
-		for f in txt.cfg gtk.cfg adtxt.cfg adgtk.cfg; do
-			if [ -e boot$N/isolinux/$f ]; then
-				sed -i "s|/install/|/$INSTALLDIR_i386/|" boot$N/isolinux/$f
-			fi
-		done
-		for f in amdtxt.cfg amdgtk.cfg amdadtxt.cfg amdadgtk.cfg; do
-			if [ -e boot$N/isolinux/$f ]; then
-				sed -i "s|/install/|/$INSTALLDIR_amd64/|" boot$N/isolinux/$f
-			fi
-		done
+		sed -i "s|%install%|$INSTALLDIR_i386|
+			s|%install-amd%|$INSTALLDIR_amd64|" \
+			boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
 
 		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
 			sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
@@ -294,6 +276,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 			boot$N/isolinux/amdtxt.cfg || true
 		sed -i "/^include menu.cfg/ a\include instsel.cfg" \
 			boot$N/isolinux/prompt.cfg
+		sed -i "/^default install/ a\include instsel.cfg" \
+			boot$N/isolinux/desktop/prompt.cfg
 		cat >boot$N/isolinux/instsel.cfg <<EOF
 default install-select
 label install-select
@@ -316,7 +300,7 @@ EOF
 	if [ -n "$KERNEL_PARAMS" ]; then
 		# Substitute custom kernel params into the isolinux config
 		# file(s)
-		for file in boot$N/isolinux/*.cfg; do
+		for file in boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg; do
 			case "$(basename $file)" in
 			    instsel.cfg)
 				continue ;;
@@ -331,6 +315,8 @@ EOF
 		modify_for_all_desktop ;;
 	    light)
 		modify_for_light_desktop ;;
+	    *)
+		modify_for_single_desktop ;;
 	esac
 else
 	if [ -n "$THISTYPE" ]; then
