@@ -1,7 +1,7 @@
 # Functions to convert isolinux config to allow selection of desktop
 # environment for certain images.
 
-di_config_version() {
+di_syslinux_version() {
 	local version
 	version=$(sed -nr "s/^# D-I config version ([0-9.])/\1/p" \
 		boot$N/isolinux/isolinux.cfg)
