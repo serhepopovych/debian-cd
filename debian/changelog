@@ -6,8 +6,9 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     release of Lenny and allows a significant simplification.
     There are no significant changes in generated CD/DVD images.
   * Split out code for workaround for #505243 to x86-desktop function library.
+  * sparc: display message for unsupported subarchitectures.
 
- -- Frans Pop <fjp@debian.org>  Mon, 01 Jun 2009 00:15:59 +0200
+ -- Frans Pop <fjp@debian.org>  Sat, 13 Jun 2009 16:48:51 +0200
 
 debian-cd (3.1.2) unstable; urgency=low
 

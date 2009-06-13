@@ -63,6 +63,7 @@ cat $BASEDIR/data/lenny/sparc/debian.txt \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
  > $inst/boot/debian.txt
+cp $BASEDIR/data/lenny/sparc/notsupported.txt $inst/boot/
 
 # Sparc64 kernel is so big, that uncompressing it corrupts SILO memory, so
 # uncompress it before hand.
