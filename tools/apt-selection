@@ -10,7 +10,7 @@
 # Get the configuration information if necessary
 if [ -z "$CODENAME" -o -z "$ARCH" -o -z "$APTTMP" ]; then
 	if [ -e CONF.sh ]; then
-		source CONF.sh
+		. CONF.sh
 	else
 		echo "Please set the good environment variables before "
 		echo "launching this program ..."
