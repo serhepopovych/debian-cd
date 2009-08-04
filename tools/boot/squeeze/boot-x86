@@ -56,6 +56,9 @@ KTYPE[10]=""
 
 THISTYPE=${KTYPE[$NN]}
 
+# Exit if this is not a boot disk
+[ -n "$THISTYPE" ] || exit 0
+
 INSTALLDIR_i386="install.386"
 INSTALLDIR_amd64="install.amd"
 

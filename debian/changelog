@@ -7,8 +7,10 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     There are no significant changes in generated CD/DVD images.
   * Split out code for workaround for #505243 to x86-desktop function library.
   * sparc: display message for unsupported subarchitectures.
+  * Only do boot disk stuff for x86 and alpha if the image is supposed to be
+    bootable. Avoids downloading x86 D-I images for all 30+ CDs in a full set.
 
- -- Frans Pop <fjp@debian.org>  Sat, 13 Jun 2009 16:48:51 +0200
+ -- Frans Pop <fjp@debian.org>  Tue, 04 Aug 2009 21:50:26 +0200
 
 debian-cd (3.1.2) unstable; urgency=low
 
