@@ -11,7 +11,7 @@ show_usage() {
 
 
 # Set configuration file to be used for the build and source it
-export CF=CONF.sh
+export CF=./CONF.sh
 . $CF
 export DEBIAN_CD_CONF_SOURCED=true
 unset UPDATE_LOCAL

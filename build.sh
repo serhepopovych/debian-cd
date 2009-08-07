@@ -3,7 +3,7 @@
 # Script to build images for one or more architectures and/or source
 
 if [ -z "$CF" ] ; then
-    CF=CONF.sh
+    CF=./CONF.sh
 fi
 . $CF
 

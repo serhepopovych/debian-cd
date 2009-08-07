@@ -3,7 +3,7 @@
 # Script to build everything possible : sources and binaries for all archs
 
 if [ -z "$CF" ] ; then
-    CF=CONF.sh
+    CF=./CONF.sh
 fi
 . $CF
 
