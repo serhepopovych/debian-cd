@@ -83,7 +83,7 @@ if [ -n "$KERNEL_PARAMS" ]; then
 fi
 cp $BASEDIR/data/$DI_CODENAME/yaboot/ofboot.b ofboot.b
 
-for subarch in powerpc powerpc64 prep
+for subarch in powerpc powerpc64 #prep
 do
   case $subarch in
     powerpc|prep)

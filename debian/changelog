@@ -11,6 +11,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
   * Only do boot disk stuff for x86 and alpha if the image is supposed to be
     bootable. Avoids downloading x86 D-I images for all 30+ CDs in a full set.
   * Don't download floppy D-I images for i386; they're no longer available.
+  * Don't fetch D-I images for the prep subarchitecture; it is not available.
 
   [ Steve McIntyre ]
   * Remove bashism in tools/apt-selection. Closes: #530972
