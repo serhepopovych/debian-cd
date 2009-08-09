@@ -22,6 +22,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
   * Add support for "variants". A variant allows to include/exclude additional
     packages or D-I components relative to a regular image.
   * Add variant to create i386/amd64 images that support installing Xen guests.
+  * Recognise and ignore Enhances: lines.
 
  -- Frans Pop <fjp@debian.org>  Tue, 04 Aug 2009 22:32:08 +0200
 
