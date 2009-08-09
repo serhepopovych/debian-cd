@@ -18,6 +18,8 @@ if ( $ENV{ARCHES} ) {
 }
 @ARCHES = qw{i386 amd64} unless @ARCHES;
 
+@VARIANTS = split(" ", $ENV{VARIANTS});
+
 my $DATE=`date`;
 chomp $DATE;
 open(OUT, ">debian-installer") || die "write: $!";
@@ -78,9 +80,19 @@ sub read_exclude {
 		chomp;
 		s/^#.*//;
 		next unless length;
-		$_=quotemeta($_);
-		$_=~s/\\\*/.*/g;
-		push @ret, $_;
+		my ($pkg,@cond) = split(" ", $_);
+		my $skip = 0;
+		foreach my $cond ( @cond ) {
+		    if ($cond =~ /^!(.*)/) {
+			$skip = 1 if grep { $_ eq $1 } @VARIANTS;
+		    } else {
+			$skip = 1 unless grep { $_ eq $cond } @VARIANTS;
+		    }
+		}
+		next if $skip;
+		$pkg=quotemeta($pkg);
+		$pkg=~s/\\\*/.*/g;
+		push @ret, $pkg;
 	}
 	close IN;
 	return @ret;

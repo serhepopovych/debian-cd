@@ -311,9 +311,12 @@ $(BDIR)/rawlist:
 		ARCHDEFS="$$ARCHDEFS -D ARCH_$(subst -,_,$$ARCH)"; \
 		ARCHUNDEFS="$$ARCHUNDEFS -U $$ARCH"; \
 	done; \
+	for VARIANT in $(VARIANTS); do \
+		VARIANTDEFS="$$VARIANTDEFS -D VARIANT_$$VARIANT"; \
+	done; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		cat $(TASKDIR)/$(TASK) | \
-		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS \
+		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS $$VARIANTDEFS\
 	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
 		    -DFORCENONUSONCD1=0 \
 		    -I $(TASKDIR) - - >> $(BDIR)/rawlist; \

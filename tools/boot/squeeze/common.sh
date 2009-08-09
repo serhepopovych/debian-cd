@@ -48,3 +48,10 @@ add_mkisofs_opt() {
        echo -n "$NEW_OPT " >> $OPTS_FILE
    fi
 }
+
+variant_enabled() {
+    VARIANT=$1
+
+    echo "$VARIANTS" | grep -qw "$VARIANT"
+    return $?
+}

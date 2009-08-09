@@ -189,6 +189,9 @@ export DISKTYPE=CD
 # included. See tasks/README.tasksel for further info.
 export TASK_LANGLIST=tasksel_d-i.languages
 
+# Extra variants to enable. See docs/README.variants for more information.
+export VARIANTS=
+
 # We don't want certain packages to take up space on CD1...
 #export EXCLUDE1=exclude
 # ...but they are okay for other CDs (UNEXCLUDEx == may be included

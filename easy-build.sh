@@ -9,6 +9,7 @@ show_usage() {
 	echo "Usage: $(basename $0) [OPTIONS] BC|NETINST|CD|DVD [<ARCH> ...]"
 	echo "  Options:"
 	echo "     -d gnome|kde|lxde|xfce|light|all : desktop variant (task) to use"
+	echo "     -V <variant> : extra image variants to enable"
 	echo "     -h : help"
 }
 
@@ -28,7 +29,8 @@ if [ $# -eq 0 ]; then
 fi
 
 desktop=
-while getopts d:h OPT; do
+VARIANTS=
+while getopts d:hV: OPT; do
 	case $OPT in
 	    d)
 		case $OPTARG in
@@ -41,6 +43,9 @@ while getopts d:h OPT; do
 			exit 1
 			;;
 		esac ;;
+	    V)
+		VARIANTS="${VARIANTS:+$VARIANTS }$OPTARG"
+		;;
 	    h)
 		show_usage
 		exit 0
@@ -53,6 +58,7 @@ while getopts d:h OPT; do
 done
 shift $(($OPTIND - 1))
 
+export VARIANTS
 export DISKTYPE="$1"
 shift
 
