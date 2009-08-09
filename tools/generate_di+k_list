@@ -124,6 +124,14 @@ atl2-modules-2.6-486
 atl2-modules-2.6-686
 speakup-modules-2.6-486
 speakup-modules-2.6-686
+#ifdef VARIANT_xen
+linux-image-2.6-686-bigmem
+linux-headers-2.6-686-bigmem
+loop-aes-modules-2.6-686-bigmem
+atl2-modules-2.6-686-bigmem
+speakup-modules-2.6-686-bigmem
+#endif
+
 #endif
 
 #ifdef ARCH_amd64

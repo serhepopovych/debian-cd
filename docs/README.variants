@@ -12,6 +12,13 @@ option (multiple times if desired) to the easy-build.sh script.
 Available Variants
 ------------------
 
+* `xen' [i386, amd64 only]
+
+  This variant includes a kernel and installer initrd which is
+  compatible with the Xen hypervisor in `install.<arch>/xen' and
+  includes matching kernel module .udebs as well as a suitable kernel
+  .deb for installation into the final system.
+
 Implementation
 --------------
 

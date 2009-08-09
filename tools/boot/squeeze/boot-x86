@@ -238,6 +238,12 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with*
 
+	if variant_enabled "xen" ; then
+		extra_image xen/vmlinuz
+		extra_image xen/initrd.gz
+		extra_image xen/xm-debian.cfg
+	fi
+
 	# Modify win32-loader.ini for the "current" arch
 	if [ -e boot$N/win32-loader.ini ]; then
 		sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
