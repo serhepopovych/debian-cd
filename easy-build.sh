@@ -6,7 +6,10 @@ set -e
 ## See also CONF.sh for the meaning of variables used here.
 
 show_usage() {
-	echo "Usage: $(basename $0) [-d gnome|kde|lxde|xfce|light|all] BC|NETINST|CD|DVD [<ARCH> ...]"
+	echo "Usage: $(basename $0) [OPTIONS] BC|NETINST|CD|DVD [<ARCH> ...]"
+	echo "  Options:"
+	echo "     -d gnome|kde|lxde|xfce|light|all : desktop variant (task) to use"
+	echo "     -h : help"
 }
 
 
@@ -25,19 +28,30 @@ if [ $# -eq 0 ]; then
 fi
 
 desktop=
-if [ "$1" = "-d" ]; then
-	case $2 in
-	    # Note: "gnome" is the special gnome task, not the generic task
-	    gnome|kde|lxde|xfce|light|all)
-		desktop=$2
-		shift 2
+while getopts d:h OPT; do
+	case $OPT in
+	    d)
+		case $OPTARG in
+		# Note: "gnome" is the special gnome task, not the generic task
+		    gnome|kde|lxde|xfce|light|all)
+			desktop=$2
+			;;
+		    *)
+			show_usage
+			exit 1
+			;;
+		esac ;;
+	    h)
+		show_usage
+		exit 0
 		;;
-	    *)
+	    \?)
 		show_usage
 		exit 1
 		;;
 	esac
-fi
+done
+shift $(($OPTIND - 1))
 
 export DISKTYPE="$1"
 shift
