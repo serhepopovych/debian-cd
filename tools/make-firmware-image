@@ -21,7 +21,7 @@ TASKFILE=$BASEDIR/tasks/firmware
 rm -rf $TMPDIR/firmware
 mkdir -p $TMPDIR/firmware
 
-FILES=`( cpp $TASKFILE | grep -v -e "^#" -e "^$" ; \
+FILES=`( cpp -undef $TASKFILE | grep -v -e "^#" -e "^$" ; \
 	echo DONE ; 
 	zcat $MIRROR/dists/$SUITE/non-free/binary-*/Packages.gz ) | \
 	awk '
