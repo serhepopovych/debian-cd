@@ -174,12 +174,16 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
 
 	mkdir -p $CDDIR/../syslinux
-	SYSLINUXDEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux`
-	(ar p "$MIRROR/${SYSLINUXDEB}" data.tar.gz | \
-		tar zxf - -C $CDDIR/../syslinux ./usr/lib)
+	SYSLINUXDEB=$(find_pkg_file syslinux)
+	if [ -z "$SYSLINUXDEB" ]; then
+		echo "ERROR: syslinux package is required" >&2
+		exit 1
+	fi
+	(dpkg --fsys-tarfile "$MIRROR/$SYSLINUXDEB" | \
+		tar xf - -C $CDDIR/../syslinux ./usr/lib)
 
 	echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-	$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME syslinux source >> $CDDIR/../$N.pkgs_extracted
+	find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"

@@ -48,3 +48,17 @@ add_mkisofs_opt() {
        echo -n "$NEW_OPT " >> $OPTS_FILE
    fi
 }
+
+# Wrapper around which_deb which looks in all relevant distributions
+find_pkg_file() {
+    local pkgfile
+    for dist in $DI_CODENAME $CODENAME; do
+        pkgfile=$($BASEDIR/tools/which_deb $MIRROR $dist "$@")
+        [ -n "$pkgfile" ] && break
+    done
+    if [ -z "$pkgfile" ]; then
+        echo "WARNING: unable to find the $@ package in $DI_CODENAME or $CODENAME distribution of the mirror" >&2
+    fi
+    echo $pkgfile
+}
+

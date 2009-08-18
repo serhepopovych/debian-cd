@@ -24,6 +24,15 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
   * Add variant to create i386/amd64 images that support installing Xen guests.
   * Recognise and ignore Enhances: lines.
 
+  [ Raphaël Hertzog ]
+  * Fallback looking for syslinux/silo/yaboot in $CODENAME when $DI_CODENAME
+    didn't gave any result. This is useful when using partial mirrors built by
+    simple-cdd while trying to build a Debian CD using a newer d-i (in my case
+    etch CD with lenny d-i).
+  * Use dpkg --fsys-tarfile instead of ar for extracting files from deb
+    packages. The previous invocation could have failed for packages using
+    something other than gzip compression.
+
  -- Frans Pop <fjp@debian.org>  Tue, 04 Aug 2009 22:32:08 +0200
 
 debian-cd (3.1.2) unstable; urgency=low

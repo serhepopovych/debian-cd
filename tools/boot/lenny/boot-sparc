@@ -38,13 +38,17 @@ cd $CDDIR/..
 # Setup directories
 mkdir -p $inst/boot
 
-silo_deb=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME silo`
+silo_deb=$(find_pkg_file silo)
+if [ -z "$silo_deb" ]; then
+       echo "ERROR: silo package is required"
+       exit 1
+fi 
 # put the relevant parts of SILO boot loader
-(ar p $MIRROR/$silo_deb data.tar.gz | \
-	tar zxf - -C $inst/ ./boot/{isofs,second}.b)
+(dpkg --fsys-tarfile $MIRROR/$silo_deb | \
+	tar xf - -C $inst/ ./boot/{isofs,second}.b)
 
 echo $silo_deb >> $CDDIR/../$N.pkgs_extracted
-$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME silo source >> $CDDIR/../$N.pkgs_extracted
+find_pkg_file silo source >> $CDDIR/../$N.pkgs_extracted
 
 # Some custom etc files
 cp -f -p $BASEDIR/data/lenny/sparc/silo.conf $inst/boot/

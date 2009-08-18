@@ -55,14 +55,18 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-hfs-volid Debian/PowerPC_${CODENAME}
 cd $INSTALLDIR
 # Extract yaboot from the archive
 if [ -z "$YABOOT_DEBUG" ]; then
-    YADEB=`$BASEDIR/tools/which_deb $MIRROR $DI_CODENAME yaboot`
-    (ar p "$MIRROR/${YADEB}" data.tar.gz | \
-	tar zxf - -C . ./usr/lib/yaboot/yaboot)
+    YADEB=$(find_pkg_file yaboot)
+    if [ -z "$YADEB" ]; then
+        echo "ERROR: the yaboot package is required." >&2
+        exit 1
+    fi
+    (dpkg --fsys-tarfile "$MIRROR/$YADEB" | \
+	tar xf - -C . ./usr/lib/yaboot/yaboot)
     mv usr/lib/yaboot/yaboot .
     rm -rf usr
 
     echo $YADEB >> $CDDIR/../$N.pkgs_extracted
-    $BASEDIR/tools/which_deb $MIRROR $DI_CODENAME yaboot source >> $CDDIR/../$N.pkgs_extracted
+    find_pkg_file yaboot source >> $CDDIR/../$N.pkgs_extracted
 
 else
  cp -f $YABOOT_DEBUG yaboot
