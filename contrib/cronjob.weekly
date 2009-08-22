@@ -10,20 +10,39 @@ export DATE_BUILD="$DATE-$BUILDNUM"
 
 export RSYNC_TARGET=/export/ftp/cdimage/weekly-builds
 
+# If we're doing a normal set of daily/weekly builds, leave the
+# checksum filenames alone. Otherwise, make life easier for people
+# combining things later and append a suitable name as we build.
+if [ "$DEBVERSION"x != "testing"x ] ; then
+    export SUMS_EXTENSION=".large"
+fi
+
 . images4testing_d-i
+
+# Uncomment the following to use daily d-i builds for weekly images
+# rather than what's in the archive
+USE_DAILY_DI=Y
+
+if [ "$USE_DAILY_DI"x = "Y"x ] ; then
+    export DI=sid
+    export DI_WWW_HOME=default
+fi
 
 export DI_DIST
 export DI_CODENAME
 
+OMIT_RELEASE_NOTES=0
+export OMIT_RELEASE_NOTES
+
 if [ "$ARCHES"x = ""x ] ; then
-    ARCHES="i386 source amd64 multi powerpc alpha arm armel hppa ia64 mips mipsel s390 sparc"
+    ARCHES="i386 source amd64 multi powerpc alpha armel hppa ia64 mips mipsel s390 sparc"
 fi
 
 if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
     echo "svn update debian-cd"
     cd debian-cd && svn cleanup; svn up ; cd ..
 
-    cd debian-cd && ./tools/update_popcon lenny ; cd ..
+    cd debian-cd && ./tools/update_popcon tasks/squeeze/popularity-contest ; cd ..
 
     cd $TOPDIR
     mkdir -p $PUBDIRJIG/trace
@@ -38,25 +57,8 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
 
             #export DI_DIR="$ARCH_DI_DIR"
 
-            # Full DVD set
-            if [ "$NODVD"x = ""x ] ; then
-                case $arch in
-                    i386|amd64|source)
-                        export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
-                    *)
-                        export MAXISOS=1; export MAXJIGDOS=ALL ;;
-                esac
-                DVDSTART=`date -u +%H:%M:%S`
-                INSTALLER_CD=3 \
-                    ./testingcds "$arch"
-                error=$?
-                DVDEND=`date -u +%H:%M:%S`
-                echo "$arch DVDs started at $DVDSTART, ended at $DVDEND, error $error"
-            fi
-
             # Full CD set
             if [ "$NOCD"x = ""x ] ; then
-                export DESKTOP=gnome
                 case $arch in
                     i386|amd64|source)
                         export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
@@ -66,10 +68,29 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                         export MAXISOS=3; export MAXJIGDOS=ALL ;;
                 esac
                 CDSTART=`date -u +%H:%M:%S`
+		unset DESKTOP
                 ./testingcds "$arch"
                 error=$?
                 CDEND=`date -u +%H:%M:%S`
                 echo "$arch CDs started at $CDSTART, ended at $CDEND, error $error"
+            fi
+
+            # Full DVD set
+            if [ "$NODVD"x = ""x ] ; then
+                case $arch in
+                    i386|amd64|source)
+                        export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
+                    *)
+                        export MAXISOS=1; export MAXJIGDOS=ALL ;;
+                esac
+                DVDSTART=`date -u +%H:%M:%S`
+                export DESKTOP=all
+                INSTALLER_CD=3 TASK=Debian-all \
+                    KERNEL_PARAMS='desktop=all' \
+                    ./testingcds "$arch"
+                error=$?
+                DVDEND=`date -u +%H:%M:%S`
+                echo "$arch DVDs started at $DVDSTART, ended at $DVDEND, error $error"
             fi
 
             # Full BD set
@@ -79,7 +100,9 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                         export MAXISOS=0
                         export MAXJIGDOS=ALL
                         BDSTART=`date -u +%H:%M:%S`
-                        INSTALLER_CD=9 \
+                        export DESKTOP=all
+                        INSTALLER_CD=9 TASK=Debian-all \
+                            KERNEL_PARAMS='desktop=all' \
                             ./testingcds "$arch"
                         error=$?
                         BDEND=`date -u +%H:%M:%S`
@@ -91,7 +114,7 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                 esac
             fi
 
-            # kde and xfce cds
+            # kde and xfce/lxde cds
             if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
                 CDSTART=`date -u +%H:%M:%S`
                 export DESKTOP=kde
@@ -105,15 +128,15 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                 echo "$arch KDE CD started at $CDSTART, ended at $CDEND, error $error"
 
                 CDSTART=`date -u +%H:%M:%S`
-                export DESKTOP=xfce
+                export DESKTOP=light
                 export MAXISOS=1; export MAXJIGDOS=1
-                INSTALLER_CD=5 TASK=Debian-xfce \
-                    KERNEL_PARAMS='desktop=xfce' \
+                INSTALLER_CD=B TASK=Debian-light \
+                    KERNEL_PARAMS='desktop=light' \
                     MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
                     ./testingcds "$arch"
                 error=$?
                 CDEND=`date -u +%H:%M:%S`
-                echo "$arch Xfce CD started at $CDSTART, ended at $CDEND, error $error"
+                echo "$arch Xfce/LXDE CD started at $CDSTART, ended at $CDEND, error $error"
             fi
 
             if [ "$NOSYNC"x = ""x ] ; then
@@ -128,16 +151,19 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
 
             if [ "$NODVD"x = ""x ] ; then
                 DVDSTART=`date -u +%H:%M:%S`
-                MAXISOS=ALL MAXJIGDOS=ALL INSTALLER_CD=6 MAXCDS=1 \
-                    ./testingcds "i386 amd64 powerpc source"
+                export DESKTOP=all
+                INSTALLER_CD=6 TASK=Debian-all \
+                    KERNEL_PARAMS='desktop=all' \
+                    MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+                    ./testingcds "i386 amd64 source"
                 error=$?
                 DVDEND=`date -u +%H:%M:%S`
                 echo "Multi-arch DVD started at $DVDSTART, ended at $DVDEND, error $error"
 
                 mv $PUBDIRJIG/multi/jigdo-dvd/debian* $PUBDIRJIG/multi-arch/jigdo-dvd
-                cat $PUBDIRJIG/multi/jigdo-dvd/MD5SUMS >> $PUBDIRJIG/multi-arch/jigdo-dvd/MD5SUMS
+                cat $PUBDIRJIG/multi/jigdo-dvd/MD5SUMS$SUMS_EXTENSION >> $PUBDIRJIG/multi-arch/jigdo-dvd/MD5SUMS$SUMS_EXTENSION
                 mv $PUBDIRJIG/multi/iso-dvd/debian* $PUBDIRJIG/multi-arch/iso-dvd
-                cat $PUBDIRJIG/multi/iso-dvd/MD5SUMS >> $PUBDIRJIG/multi-arch/iso-dvd/MD5SUMS
+                cat $PUBDIRJIG/multi/iso-dvd/MD5SUMS$SUMS_EXTENSION >> $PUBDIRJIG/multi-arch/iso-dvd/MD5SUMS$SUMS_EXTENSION
                 rm -rf $PUBDIRJIG/multi
             fi
 
@@ -146,9 +172,12 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                 ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
             fi
         fi # end of multi
+
+        # Reset envvars for next iteration
+        unset DESKTOP
     done
 
-    ~/build/generate_firmware_images lenny
+    ~/build/generate_firmware_images squeeze
     ~/build/generate_firmware_images sid
     
     if [ "$NOSNAP"x = ""x ] ; then

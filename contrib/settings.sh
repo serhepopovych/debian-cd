@@ -1,5 +1,5 @@
 export TRACE=/org/cdbuilder.debian.org/src/ftp/debian/project/trace/farbror.acc.umu.se
-export ARCH_DI_DIR=/org/cdbuilder.debian.org/src/deb-cd/d-i/people.debian.org
+export ARCH_DI_DIR=/org/cdbuilder.debian.org/src/deb-cd/d-i
 export HOSTNAME=`hostname -f`
 
 export PUBDIR=/org/cdbuilder.debian.org/dst/deb-cd

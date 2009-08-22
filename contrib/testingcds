@@ -28,7 +28,6 @@ fi
 
 export ARCH="$1"
 NUM_ARCHES=`echo $ARCH | wc -w`
-FIRSTARCH=`echo $ARCH | awk '{print $1}'`
 
 if [ ! "$JIGDOFALLBACKURLS" ] ; then
    export JIGDOFALLBACKURLS="Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/"
@@ -129,7 +128,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ] ; then
 
         ##################################
-        # NETINST STUFF (ISO ONLY for now)
+        # NETINST STUFF
         ##################################
 
         # make the dirs we'll use to publish things
@@ -147,10 +146,6 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
             rm $OUT/$BASE.jigdo
             mv $OUT/$BASE.template $TOPDIR/jigdo-cd/$NETINSTNAME.template
         done
-        cat $OUT/MD5SUMS >> $TOPDIR/iso-cd/MD5SUMS
-        cat $OUT/MD5SUMS >> $TOPDIR/jigdo-cd/MD5SUMS
-        cat $OUT/SHA1SUMS >> $TOPDIR/iso-cd/SHA1SUMS
-        cat $OUT/SHA1SUMS >> $TOPDIR/jigdo-cd/SHA1SUMS
         rm -f "$OUT"/*
 
     else
@@ -166,17 +161,17 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         done
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
-        cat "$OUT"/MD5SUMS >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/MD5SUMS
-        cat "$OUT"/SHA1SUMS >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/SHA1SUMS
+        cat "$OUT"/MD5SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/MD5SUMS$SUMS_EXTENSION
+        cat "$OUT"/SHA1SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/SHA1SUMS$SUMS_EXTENSION
         mv "$OUT"/*.template "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
         mv "$OUT"/*.jigdo    "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
-        cat "$OUT"/MD5SUMS >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/MD5SUMS
-        cat "$OUT"/SHA1SUMS >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/SHA1SUMS
+        cat "$OUT"/MD5SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/MD5SUMS$SUMS_EXTENSION
+        cat "$OUT"/SHA1SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/SHA1SUMS$SUMS_EXTENSION
         mv "$OUT"/*.iso    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
 
-	date > "$PUBDIRJIG"/$OUTARCH/"$OUT_TYPE"-trace
+        date > "$PUBDIRJIG"/$OUTARCH/"$OUT_TYPE"-trace
     fi
 
     touch $TDIR/$CODENAME/1.pkgs_extracted # so we don't get errors below
