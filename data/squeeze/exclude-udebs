@@ -107,11 +107,11 @@ udev-udeb
 ai-choosers
 auto-install
 libslang2-udeb
+kbd-chooser
+kbd-udeb
+console-setup-*
 # Currently unused
 nbd-client-udeb
 pwgen-udeb
 # Eh?
 gnumach-udeb
-# Exclude kbd and console-setup udebs, they're not currently used
-kbd-udeb
-console-setup-*
