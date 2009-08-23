@@ -68,7 +68,7 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                         export MAXISOS=3; export MAXJIGDOS=ALL ;;
                 esac
                 CDSTART=`date -u +%H:%M:%S`
-		unset DESKTOP
+                unset DESKTOP
                 ./testingcds "$arch"
                 error=$?
                 CDEND=`date -u +%H:%M:%S`
@@ -161,9 +161,17 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                 echo "Multi-arch DVD started at $DVDSTART, ended at $DVDEND, error $error"
 
                 mv $PUBDIRJIG/multi/jigdo-dvd/debian* $PUBDIRJIG/multi-arch/jigdo-dvd
-                cat $PUBDIRJIG/multi/jigdo-dvd/MD5SUMS$SUMS_EXTENSION >> $PUBDIRJIG/multi-arch/jigdo-dvd/MD5SUMS$SUMS_EXTENSION
+                for file in $PUBDIRJIG/multi/jigdo-dvd/*SUMS$SUMS_EXTENSION; do
+                    outfile=$PUBDIRJIG/multi-arch/jigdo-dvd/`basename $file`
+                    cat $file >> $outfile
+                done
+
                 mv $PUBDIRJIG/multi/iso-dvd/debian* $PUBDIRJIG/multi-arch/iso-dvd
-                cat $PUBDIRJIG/multi/iso-dvd/MD5SUMS$SUMS_EXTENSION >> $PUBDIRJIG/multi-arch/iso-dvd/MD5SUMS$SUMS_EXTENSION
+                for file in $PUBDIRJIG/multi/iso-dvd/*SUMS$SUMS_EXTENSION; do
+                    outfile=$PUBDIRJIG/multi-arch/iso-dvd/`basename $file`
+                    cat $file >> $outfile
+                done
+
                 rm -rf $PUBDIRJIG/multi
             fi
 
