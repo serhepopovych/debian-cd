@@ -44,13 +44,13 @@ mdadm
 aptitude
 hotplug
 usbutils
-# Used for Lenny and earlier
+/* Used for Lenny and earlier */
 console-data
 console-common
 console-tools
 console-cyrillic
 console-terminus
-# Used for Squeeze and onwards
+/* Used for Squeeze and onwards */
 console-setup
 pcmcia-cs
 pcmciautils
