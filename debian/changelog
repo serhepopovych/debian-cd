@@ -14,6 +14,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
   * Don't fetch D-I images for the prep subarchitecture; it is not available.
   * Add path when sourcing CONF.sh for compatibility with dash. Spotted by
     Ian Campbell.
+  * Add console-setup to packages needed for D-I.
 
   [ Steve McIntyre ]
   * Remove bashism in tools/apt-selection. Closes: #530972
@@ -33,7 +34,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     packages. The previous invocation could have failed for packages using
     something other than gzip compression.
 
- -- Frans Pop <fjp@debian.org>  Tue, 04 Aug 2009 22:32:08 +0200
+ -- Frans Pop <fjp@debian.org>  Sun, 23 Aug 2009 08:59:25 +0200
 
 debian-cd (3.1.2) unstable; urgency=low
 
