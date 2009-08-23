@@ -24,6 +24,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     packages or D-I components relative to a regular image.
   * Add variant to create i386/amd64 images that support installing Xen guests.
   * Recognise and ignore Enhances: lines.
+  * Create apt/preferences.d in APTTMP, keeps newer apt from printing a warning.
 
   [ Raphaël Hertzog ]
   * Fallback looking for syslinux/silo/yaboot in $CODENAME when $DI_CODENAME
