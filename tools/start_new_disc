@@ -111,8 +111,7 @@ fi
 if [ $DISKNUM = 1 ] ; then
 	if [ "$OMIT_DOC_TOOLS" != "1" ]; then
 		if [ ! -e $MIRROR/doc ]; then
-			echo "You need a Debian mirror with the doc and"
-			echo "indices directories ! "
+			echo "You need a Debian mirror with the doc directory!"
 			exit 1
 		fi
 	fi

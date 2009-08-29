@@ -87,7 +87,6 @@ Make sure the following are included in your local archive:
 - ./dists/<codename>/main/debian-installer/binary-<arch>/
   contains Debian Installer components (udebs)
 - ./doc/
-- ./indices/
 - ./tools/
 and optionally:
 - ./dists/<codename>/main/installer-<arch>/

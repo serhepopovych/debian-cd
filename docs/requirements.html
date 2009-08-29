@@ -17,12 +17,12 @@ for hppa CDs).</p>
 
 <p>The other important dependency for debian-cd cannot be represented
 so easily - it needs a copy of parts of the Debian archive to be able
-to build CDs. This includes the <code>doc</code>, <code>indices</code>
-and <code>tools</code> directories from the root of the archive. Be
-aware the commonly-used <code>debmirror</code> package does
-<strong>not</strong> currently grab those directories when
-mirroring. Most debian-cd users tend to use <code>rsync</code> to
-mirror the archive.</p>
+to build CDs. This includes the <code>doc</code>, and <code>tools</code>
+directories from the root of the archive.
+Be aware that before version 2.1 the commonly-used <code>debmirror</code>
+package did not grab those directories when mirroring. An alternative to
+<code>debmirror</code> is to use <code>rsync</code> to mirror the archive.
+</p>
 
 <p>For best performance, the mirror should be on a local disk and the
 user running debian-cd should have permissions to be able to create
