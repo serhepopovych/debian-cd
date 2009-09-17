@@ -24,6 +24,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
 elif [ "$DI_WWW_HOME" = "test" ];then
 # Temporarily disabled to stop cron jobs complaining
 #   DI_WWW_HOME="http://people.debian.org/~smarenka/d-i/test/cd/"
+    :
 fi
 if [ ! "$DI_DIST" ]; then
    DI_DIST="$DI_CODENAME"
