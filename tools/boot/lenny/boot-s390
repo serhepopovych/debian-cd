@@ -87,6 +87,10 @@ done
 # - d390oco.tdf : same, using object-code-only-modules-ramdisk (example)
 cp $BASEDIR/data/$CODENAME/s390/d390* "$imagedir/"
 
+# Create the files specifying offset and size of the initrd
+perl -e "print pack('N', 0x800000)" >"$imagedir/root.off"
+perl -e "print pack('N', -s '$imagedir/root.bin')" >"$imagedir/root.siz"
+
 # Copy the README file
 cp $BASEDIR/data/$CODENAME/s390/README.boot "boot$N/"
 
