@@ -46,6 +46,11 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     from CD. Change is based on SuSE's CD boot. Many thanks to Adam Thornton,
     Mark Post and Bastian Blank for providing the pointers to the missing bits.
 
+  [ Steve McIntyre ]
+  * Add support for coping with packages that are too large to fit. If we
+    have to remove packages and their dependencies, list them in
+    README.excluded in the root of disc 1.
+
  -- Frans Pop <fjp@debian.org>  Sun, 23 Aug 2009 08:59:25 +0200
 
 debian-cd (3.1.2) unstable; urgency=low

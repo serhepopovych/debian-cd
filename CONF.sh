@@ -49,6 +49,7 @@ unset SPLASHPNG         || true
 unset OMIT_MANUAL	 || true
 unset OMIT_RELEASE_NOTES || true
 unset OMIT_DOC_TOOLS     || true
+unset MAX_PKG_SIZE       || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -165,6 +166,12 @@ export ISOLINUX=1
 
 # uncomment this to if you want to see more of what the Makefile is doing
 #export VERBOSE_MAKE=1
+
+# The maximum size allowed for an individual package, in bytes; if
+# larger than this, it will be excluded (and all dependents, of
+# course). We'll create a README.excluded in the root of CD1 listing
+# them too
+export MAX_PKG_SIZE=600000000
 
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work

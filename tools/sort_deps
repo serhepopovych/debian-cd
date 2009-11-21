@@ -28,6 +28,7 @@ my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $arch = "$ENV{'ARCH'}";
 my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}";
 my $verbose = $ENV{'VERBOSE'} || 0;
+my $max_pkg_size = $ENV{'MAX_PKG_SIZE'} || 9999999999999;
 
 my @output;
 
@@ -424,6 +425,7 @@ sub add_package {
 	my $p = shift;
 	my $add_rec = shift; # Do we look for recommends
 	my $add_sug = shift; # Do we look for suggests
+	my ($ok, $reasons);
 	
 	msg(2, "+ Trying to add $p...\n");
 	if ($included{$p}) {
@@ -439,13 +441,20 @@ sub add_package {
 		msg(2, "Can't add $p ... dependency problem.\n");
 		return;
 	}
+
+	if ($packages{$p}{"Size"} > $max_pkg_size) {
+		msg(2, "Can't add $p ... too big!\n");
+		$excluded{$p} = 'toobig';
+		return;
+	}
 	
 	msg(3, "  \@dep before checklist = @dep\n");
 	
 	# Check if all packages are allowed (fail if one cannot)
-	if (not check_list (\@dep, 1)) {
-		msg(2, "Can't add $p ... one of the package needed has " .
-		       "been refused.\n"); 
+	($ok, $reasons) = check_list (\@dep, 1);
+	if (not $ok) {
+		msg(2, "Can't add $p ... one of the packages needed has " .
+		       "been refused. Reasons: $reasons\n"); 
 		return;
 	}
 	
@@ -453,25 +462,27 @@ sub add_package {
 	
 	if ($add_rec) {
 	    #TODO: Look for recommends (not yet included !!)
-		add_recommends (\@dep);
-	    	# Check again but doesn't fail if one of the package cannot be
-	    	# installed, just ignore it (it will be removed from @dep)
-	    	if (not check_list (\@dep, 0)) {
-	    		msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-	    		return;
-	    	}
+	    add_recommends (\@dep);
+	    # Check again but doesn't fail if one of the package cannot be
+	    # installed, just ignore it (it will be removed from @dep)
+		($ok, $reasons) = check_list (\@dep, 0);
+		if (not $ok) {
+			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
+			return;
+		}
 		msg(3, "  \@dep after checklist2 = @dep\n");
 	}
-	
+
 	if ($add_sug) {
 	    #TODO: Look for suggests (not yet included !!)
 		add_suggests (\@dep);
-	    	# Check again but doesn't fail if one of the package cannot be
-	    	# installed, just ignore it (it will be removed from @dep)
-	    	if (not check_list (\@dep, 0)) {
-	    		msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-	    		return;
-	    	}
+        # Check again but doesn't fail if one of the package cannot be
+        # installed, just ignore it (it will be removed from @dep)
+        ($ok, $reasons) = check_list (\@dep, 0);
+        if (not $ok) {
+            msg(0, "UNEXPECTED: It shouldn't fail here !\n");
+            return;
+        }
 		msg(3, "  \@dep after checklist3 = @dep\n");
 	}
 	
@@ -658,31 +669,35 @@ sub check_list {
 	my $fail = shift;
 	my $ok = 1;
 	my @to_remove = ();
+	my $reasons = "";
 	foreach (@{$ref}) {
 		if (not exists $excluded{$_}) {
 		  msg(1,"  $_ has been refused because it doesn't exist ...\n");
 		  $ok = 0;
 		  push @to_remove, $_;
+		  $reasons = $reasons . " noexist";
 		  next;
 		}
 		if (not accepted($_)) {
 		  msg(1,"  $_ has been refused because of $excluded{$_} ...\n");
 		  $ok = 0;
 		  push @to_remove, $_;
+		  $reasons = $reasons . " " . $excluded{$_};
 		  next;
 		}
 		if ($included{$_}) {
 		  msg(1, 
 		      "  $_ has already been included in CD $included{$_}.\n");
 		  push @to_remove, $_;
+		  $reasons = $reasons . " alreadyinc";
 		  next;
 		}
 	}
 	foreach my $removed (@to_remove) {
-		msg(2, "  Removing $removed ...\n");
+		msg(2, "  Removing $removed ... ($reasons )\n");
 		@{$ref} = grep { $_ ne $removed } @{$ref};
 	}
-	return ($fail ? $ok : 1);
+	return ($fail ? $ok : 1, $reasons);
 }
 
 # Add packages to the output list
