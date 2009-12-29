@@ -255,10 +255,26 @@ if [ $DISKNUM = 1 ] ; then
 	done
 
     # See if we had to remove anything because it was too big. Warn the user.
+    if [ -s $BDIR/sourcetoobig ] ; then
+        echo "  Adding README.excluded (some source files were too big)"
+        echo "For size reasons, the following source packages were excluded from this disc set:" >> $CDDIR/README.excluded
+        echo >> $CDDIR/README.excluded
+        cat $BDIR/sourcetoobig >> $CDDIR/README.excluded
+        if [ -s $BDIR/sourcetoobig-deps ] ; then
+            echo "and that caused the following packages to be also excluded because" >> $CDDIR/README.excluded
+            echo "of dependencies:" >> $CDDIR/README.excluded
+            echo >> $CDDIR/README.excluded
+            cat $BDIR/sourcetoobig-deps >> $CDDIR/README.excluded
+            echo >> $CDDIR/README.excluded
+            echo "Beware that this may break dependencies in this disc set." >> $CDDIR/README.excluded
+        fi
+        echo >> $CDDIR/README.excluded
+    fi
+
     grep "refused because of toobig" $BDIR/log.sort_deps* | sort -u | awk '{print $1}' > $BDIR/toobig
     if [ -s $BDIR/toobig ] ; then
-        echo "  Adding README.excluded (some files were too big)"
-        echo "For size reasons, the following packages were excluded from this disc set:" > $CDDIR/README.excluded
+        echo "  Adding README.excluded (some package files were too big)"
+        echo "For size reasons, the following packages were excluded from this disc set:" >> $CDDIR/README.excluded
         echo >> $CDDIR/README.excluded
         cat $BDIR/toobig >> $CDDIR/README.excluded
         grep "Can't add.*toobig" $BDIR/log.sort_deps* | sort -u | awk '{print $3}' > $BDIR/toobig-deps

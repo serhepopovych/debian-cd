@@ -59,7 +59,7 @@ done
 echo "# Starting merge at "`date` >> $BDIR/list.mid
 if [ $source = "yes" ] ; then
 	echo "DONEDONE" > $BDIR/DONE
-	awk '
+	awk -v max_size=$MAX_PKG_SIZE '
 
 	# First parse the Sources files
 	/^Package:/ {
@@ -77,6 +77,17 @@ if [ $source = "yes" ] ; then
 				  }
 				}
 
+    /^Files:/   {
+                  in_files = 1
+                  next
+                }
+    /^ / {
+                  if (in_files) {
+                      size[srcname]+=$2
+                      next
+                  }
+                }
+
     # Done reading the Sources
 	/^DONEDONE/ {
 				  parsed=1
@@ -86,11 +97,13 @@ if [ $source = "yes" ] ; then
 
 	# Now start placing source packages, depending on the order of the binary packages
 	/.*/        {
+                  in_files = 0
 				  if (parsed) {
 				  	split($0,fields,":")
 					arch=fields[1]
 					component=fields[2]
 					pkg=fields[3]
+                    pkgsize=fields[4]
 					source=bin2src[pkg]
                     if ("" == source) {
       		            if ("main-installer" == component) {
@@ -123,13 +136,21 @@ if [ $source = "yes" ] ; then
 						}
 					    }
 					}
-					printf("%d:%s\n", FNR, $0)
+                    if (size[source] <= max_size) {
+                        printf("%d:%s\n", FNR, $0)
+                    } else {
+                        printf("%d:%s-DEPTOOBIG\n", FNR, $0)
+                    }
 				  }
 				}
 
 	END {
 	    for (source in included) {
-		printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s\n", indexnr[source], sourcecomp[source], source)
+            if (size[source] > max_size) {
+                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s-SRCTOOBIG\n", indexnr[source], sourcecomp[source], source, size[source])
+            } else {
+                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s\n", indexnr[source], sourcecomp[source], source, size[source])
+            }
 	    }
 	}' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $list | sort -nk 1 -t : >> $BDIR/list.mid
 else
@@ -141,7 +162,7 @@ echo "# Ending merge pass 1 at "`date` >> $BDIR/list.mid
 # prepended to allow us to shuffle them properly. Remove any comments
 # logged from the awk code above, then sort and remove the line numbers
 # again
-grep -v ^# $BDIR/list.mid | awk -F : '
+grep -v -e ^# -e TOOBIG $BDIR/list.mid | awk -F : '
     {
         if (!($4 in add))
         {
@@ -149,7 +170,7 @@ grep -v ^# $BDIR/list.mid | awk -F : '
         }
 		gsub("aaaaaaaaaaaaaaaaaa", "source", $2) # Undo the source sorting hack
 		gsub("main-installer", "main", $3)
-        add[$4] = add[$4] $2 ":" $3 ":" $4 " "
+        add[$4] = add[$4] $2 ":" $3 ":" $4 ":" $5 " "
     }
 END {
         for (i = 0; i < number_packages; i++)
@@ -160,3 +181,11 @@ END {
         }
     }' > $OUT
 echo "# Ending merge pass 2 at "`date` >> $BDIR/list.mid
+
+awk -F : '
+    /SRCTOOBIG/   { print $3 }
+' $BDIR/list.mid > $BDIR/sourcetoobig
+
+awk -F : '
+    /DEPTOOBIG/   { print $3 }
+' $BDIR/list.mid > $BDIR/sourcetoobig-deps

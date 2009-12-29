@@ -6,7 +6,7 @@ IN="$3"
 OUT="$4"
 
 echo "DONEDONE" > $BDIR/DONE
-awk '
+awk -v max_size=$MAX_PKG_SIZE '
 	/^Package:/ {
 				  srcname=$2
 				  srcs_done++
@@ -32,19 +32,39 @@ awk '
 				  next
 				}
 
+    /^Files:/ {
+                  in_files = 1
+                  next
+                }
+    /^ / {
+                  if (in_files) {
+                      size[srcname]+=$2
+                      next
+                  }
+                }
+
 	/.*/        {
+                    in_files = 0
 				    if (parsed) {
-						printf("source:%s:%s\n", component[$0], $0)
+                        if (size[$0] > max_size) {
+				           printf("source:%s:%s-SRCTOOBIG\n", component[$0], $0)
+                        } else {
+				           printf("source:%s:%s\n", component[$0], $0)
+                        }
 					}
 				}
 ' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $IN > $BDIR/list.mid
 
 if [ "$NONFREE"x = "1"x ] ; then
-	cat $BDIR/list.mid > $OUT
+    grep -v SRCTOOBIG $BDIR/list.mid > $OUT
 else
-	grep -v :non-free: $BDIR/list.mid > $OUT
+    grep -v -e :non-free: -e SRCTOOBIG $BDIR/list.mid > $OUT
 fi
 
 if [ "$EXTRANONFREE"x = "1"x ] ; then 
-	grep :non-free: $BDIR/list.mid >> $OUT
+	grep :non-free: $BDIR/list.mid | grep -v SRCTOOBIG >> $OUT
 fi
+
+awk -F : '
+    /SRCTOOBIG/   { print $3 }
+' $BDIR/list.mid > $BDIR/sourcetoobig

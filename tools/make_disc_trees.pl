@@ -213,7 +213,7 @@ while (defined (my $pkg = <INLIST>)) {
         # lists intersect and we should re-include some packages
         if (scalar @unexclude_packages && scalar @excluded_package_list) {
             foreach my $reinclude_pkg (@excluded_package_list) {
-                my ($arch, $component, $pkgname) = split /:/, $reinclude_pkg;
+                my ($arch, $component, $pkgname, $pkgsize) = split /:/, $reinclude_pkg;
                 foreach my $entry (@unexclude_packages) {
                     if (($pkgname =~ /^\Q$entry\E$/m)) {
                         print LOG "Re-including $reinclude_pkg due to match on \"\^$entry\$\"\n";
@@ -316,7 +316,7 @@ sub load_packages_cache {
 
     while (defined (my $pkg = <INLIST>)) {
         chomp $pkg;
-        my ($junk, $component, $pkgname) = split /:/, $pkg;
+        my ($junk, $component, $pkgname, $pkgsize) = split /:/, $pkg;
         push @pkglist, $pkgname;
     }
     close INLIST;
@@ -347,7 +347,7 @@ sub load_packages_cache {
 
 sub should_start_extra_nonfree {
     my $pkg = shift;
-    my ($arch, $component, $pkgname) = split /:/, $pkg;
+    my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
 
 	if ( ($component eq "non-free") && $extranonfree) {
 		$extranonfree = 0; # Flag that we don't need to start new next time!
@@ -359,7 +359,7 @@ sub should_start_extra_nonfree {
 
 sub should_exclude_package {
     my $pkg = shift;
-    my ($arch, $component, $pkgname) = split /:/, $pkg;
+    my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
     my $should_exclude = 0;
 
     foreach my $entry (@exclude_packages) {
@@ -991,7 +991,7 @@ sub add_packages {
     }
 
     my $pkg = shift;
-	my ($arch, $component, $pkgname) = split /:/, $pkg;
+	my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
 
     if ("$arch" eq "" or "$pkgname" eq "" or "$pkgname" eq "") {
         die "inconsistent data passed to add_packages: $pkg\n";

@@ -294,7 +294,8 @@ open(CDLIST, "> $dir/packages.$arch")
     || die "Can't write in $dir/$_.packages.$arch: $!\n";
 foreach (@output) {
     my $component = $packages{$_}{"Component"};
-    print CDLIST "$arch:$component:$_\n";
+    my $size = $packages{$_}{"Size"};
+    print CDLIST "$arch:$component:$_:$size\n";
     $count++;
 }
 close CDLIST;
