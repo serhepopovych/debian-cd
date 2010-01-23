@@ -7,7 +7,10 @@ firmware-ipw2x00
 firmware-ipw3945
 firmware-iwlwifi
 firmware-linux
+firmware-linux-nonfree
 firmware-qlogic
 firmware-ralink
 libertas-firmware
 zd1211-firmware
+/* This firmware is free, but it is convenient to include it here. */
+firmware-linux-free

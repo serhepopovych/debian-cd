@@ -51,6 +51,14 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     large to fit. If we have to remove packages and their dependencies,
     list them in README.excluded in the root of disc 1.
 
+  [ Joey Hess ]
+  * Add firmware-linux-nonfree to firmware list. Left firmware-linux for now
+    though it is now only a dependency package.
+  * Add firmware-linux-free to firmware list, as a convenient way to make
+    it available along with the other firmware files. (It could, instead,
+    be included directly in d-i images, if there were a udeb.)
+    Closes: 566561
+
  -- Frans Pop <fjp@debian.org>  Sun, 23 Aug 2009 08:59:25 +0200
 
 debian-cd (3.1.2) unstable; urgency=low
