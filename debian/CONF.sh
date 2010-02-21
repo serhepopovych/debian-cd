@@ -55,6 +55,9 @@ unset MAX_PKG_SIZE       || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
+# Name of the distribution for the image filename (Defaults to 'debian')
+# export CDNAME=debian
+
 # Building squeeze cd set ...
 export CODENAME=squeeze
 
