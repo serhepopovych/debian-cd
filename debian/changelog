@@ -59,6 +59,9 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
     be included directly in d-i images, if there were a udeb.)
     Closes: 566561
 
+  [ Karl Goetz ]
+  * Improve the description for MAXCDS in the conf file.
+
  -- Frans Pop <fjp@debian.org>  Sun, 23 Aug 2009 08:59:25 +0200
 
 debian-cd (3.1.2) unstable; urgency=low
