@@ -392,6 +392,8 @@ sub check_base_installable {
 	my (%on_disc, %exclude);
 	my $packages_file = "$cddir/dists/$codename/main/binary-$arch/Packages";
 	my $p;
+	my $db_error = 0;
+	my $error_string = "";
 
 	open (PLIST, $packages_file)
 		|| die "Can't open Packages file $packages_file : $!\n";
@@ -423,19 +425,30 @@ sub check_base_installable {
 	open (DLIST, "debootstrap --arch $arch --print-debs $codename $tdir/debootstrap_tmp file:$mirror $debootstrap_script 2>/dev/null | tr ' ' '\n' |")
 		 || die "Can't fork debootstrap : $!\n";
 	while (defined($p = <DLIST>)) {
+        if ($p =~ m/^E:/) {
+            $db_error = 1;
+        }
 		chomp $p;
-		if (length $p > 1) {
-			if (!defined($on_disc{$p})) {
-				if (defined($exclude{$p})) {
-					print LOG "Missing debootstrap-required $p but included in $ENV{'BASE_EXCLUDE'}\n";
-				} else {
-					$ok++;
-					print LOG "Missing debootstrap-required $p\n";
-				}
-			}
-		}
-	}
-	close DLIST;
+        if ($db_error) {
+            $error_string = "$error_string $p";
+        } else {
+            if (length $p > 1) {
+                if (!defined($on_disc{$p})) {
+                    if (defined($exclude{$p})) {
+                        print LOG "Missing debootstrap-required $p but included in $ENV{'BASE_EXCLUDE'}\n";
+                    } else {
+                        $ok++;
+                        print LOG "Missing debootstrap-required $p\n";
+                    }
+                }
+            }
+        }
+    }
+    close DLIST;
+    if ($db_error) {
+        print LOG "Debootstrap reported error: $error_string\n";
+        die "Debootstrap reported error: $error_string\n";
+    }
 	system("rm -rf $tdir/debootstrap_tmp");
 	return $ok;
 }
