@@ -1,4 +1,4 @@
-debian-cd (3.1.3) UNRELEASED; urgency=low
+debian-cd (3.1.3) unstable; urgency=low
 
   [ Frans Pop ]
   * Adjust x86 boot scripts for new version (2.0) of framework in D-I for
@@ -67,7 +67,7 @@ debian-cd (3.1.3) UNRELEASED; urgency=low
   * Cope with errors reported from debootstrap better; don't just treat
     the text output as package names. Closes: #570474
 
- -- Frans Pop <fjp@debian.org>  Sun, 23 Aug 2009 08:59:25 +0200
+ -- Steve McIntyre <93sam@debian.org>  Sun, 21 Feb 2010 22:47:38 +0100
 
 debian-cd (3.1.2) unstable; urgency=low
 
