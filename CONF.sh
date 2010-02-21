@@ -227,7 +227,7 @@ export ARCHIVE_EXTRACTED_SOURCES="http://cdimage.debian.org/cdimage/cd-sources/"
 # Produce iso/jigdo files: specify how many iso/jigdo files should be
 # produced in your set. If not set or when the value is "ALL" they will
 # be created for all images. One of the variables can be set to zero if
-# either iso or jigdo files are not wanted, but not both.
+# either iso or jigdo files are not wanted.
 # Replaces the old "DOJIGDO" setting with something much more flexible.
 #export MAXISOS=0
 #export MAXJIGDOS=0
@@ -330,7 +330,8 @@ done
 # Default desktop (currently only used by win32-loader)
 #export DESKTOP=kde
 
-# If set, limits the number of binary CDs to produce.
+# If set, limits the number of images to produce. The maximum
+# value of MAXISOS and MAXJIGDOS are limited to this setting.
 #export MAXCDS=1
 
 # If set, overrides the boot picture used.
