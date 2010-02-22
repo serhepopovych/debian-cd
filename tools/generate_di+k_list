@@ -73,11 +73,6 @@ cryptsetup
 loop-aes-utils
 dmraid
 
-/* In etch, libsysfs2-udeb provides libsysfs2 so use this to 
- * make sure the deb gets included on the first CD too
- */
-libsysfs2
-
 /* Needed for rootless installs. */
 sudo
 
