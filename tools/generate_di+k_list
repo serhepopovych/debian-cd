@@ -52,7 +52,6 @@ console-cyrillic
 console-terminus
 /* Used for Squeeze and onwards */
 console-setup
-pcmcia-cs
 pcmciautils
 wireless-tools
 xfsprogs
@@ -81,7 +80,7 @@ sudo
  * arches that are know to have laptops
  */
 
-/* grub-pc is used when selecting GPT disk label */
+/* On x86 users have a choice between grub-legacy and grub-pc */
 
 /* #231583: Make life easier for Australian ISP users */
 bpalogin
@@ -94,7 +93,7 @@ multipath-tools-boot
 #ifdef ARCH_i386
 initramfs-tools
 busybox
-grub
+grub-legacy
 grub-pc
 laptop-detect
 lilo
@@ -128,7 +127,7 @@ speakup-modules-2.6-686-bigmem
 #ifdef ARCH_amd64
 initramfs-tools
 busybox
-grub
+grub-legacy
 grub-pc
 laptop-detect
 lilo

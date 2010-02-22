@@ -2,7 +2,9 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
 
   * Cleanup of packages included for bootable CDs (generate_d-i+k_list):
     - libsysfs2 workaround is no longer needed;
-    - discover is no longer used anywhere.
+    - discover is no longer used anywhere;
+    - include grub-legacy instead of grub;
+    - pcmcia-cs has been fully replaced with pcmciautils.
 
  -- Frans Pop <fjp@debian.org>  Mon, 22 Feb 2010 01:03:33 +0100
 
