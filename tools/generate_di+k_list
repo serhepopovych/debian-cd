@@ -76,10 +76,6 @@ dmraid
 /* Needed for rootless installs. */
 sudo
 
-/* libdiscover1-udeb provides libdiscover1 so we have to make sure the
- * deb gets included on the first CD too for arches that get discover1
- */
-
 /* laptop-detect is used by tasksel when checking if the system is a
  * laptop so we have to make sure to get it included on first CD for
  * arches that are know to have laptops
@@ -98,9 +94,6 @@ multipath-tools-boot
 #ifdef ARCH_i386
 initramfs-tools
 busybox
-discover
-discover1
-libdiscover1
 grub
 grub-pc
 laptop-detect
@@ -135,9 +128,6 @@ speakup-modules-2.6-686-bigmem
 #ifdef ARCH_amd64
 initramfs-tools
 busybox
-discover
-discover1
-libdiscover1
 grub
 grub-pc
 laptop-detect
@@ -154,8 +144,6 @@ initramfs-tools
 busybox
 aboot
 aboot-base
-discover1
-libdiscover1
 linux-image-2.6-alpha-generic
 linux-image-2.6-alpha-smp
 loop-aes-modules-2.6-alpha-generic
@@ -165,8 +153,6 @@ loop-aes-modules-2.6-alpha-smp
 #ifdef ARCH_hppa
 initramfs-tools
 busybox
-discover1
-libdiscover1
 linux-image-2.6-parisc
 linux-image-2.6-parisc-smp
 linux-image-2.6-parisc64
@@ -181,8 +167,6 @@ palo
 #ifdef ARCH_ia64
 initramfs-tools
 busybox
-discover1
-libdiscover1
 linux-image-2.6-itanium
 linux-image-2.6-itanium-smp
 linux-image-2.6-mckinley
@@ -228,8 +212,6 @@ loop-aes-modules-2.6-sb1a-bcm91480b
 #ifdef ARCH_arm
 initramfs-tools
 busybox
-discover1
-libdiscover1
 nwutil
 slugimage
 glantank
@@ -253,8 +235,6 @@ loop-aes-modules-2.6-s3c2410
 #ifdef ARCH_armel
 initramfs-tools
 busybox
-discover1
-libdiscover1
 slugimage
 flash-kernel
 nslu2-utils
@@ -271,8 +251,6 @@ loop-aes-modules-2.6-versatile
 initramfs-tools
 busybox
 silo
-discover1
-libdiscover1
 libc6-sparcv9b
 libc6-sparcv9
 linux-image-2.6-sparc32
@@ -288,8 +266,6 @@ loop-aes-modules-2.6-sparc64-smp
 #ifdef ARCH_powerpc
 initramfs-tools
 busybox
-discover1
-libdiscover1
 laptop-detect
 quik
 yaboot
