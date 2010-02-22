@@ -271,7 +271,6 @@ yaboot
 powerpc-utils
 hfsutils
 mkvmlinuz
-module-init-tools
 linux-image-2.6-powerpc
 linux-image-2.6-powerpc-smp
 linux-image-2.6-powerpc64
