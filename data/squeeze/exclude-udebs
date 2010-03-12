@@ -40,21 +40,18 @@ libfribidi0-udeb
 libdebconfclient0-udeb
 libdebian-installer4-udeb
 libdebian-installer-extra4-udeb
-# These udebs are only useful in building the boot floppy image.
+# These udebs are only useful in building the boot floppy image
 busybox-floppy-udeb
 rootskel-bootfloppy
-# gtk stuff included in initrd if needed
+# Graphical installer: common udebs included in initrd
 rootskel-gtk
 cdebconf-gtk-udeb
 fontconfig-udeb
 gtk2-engines-udeb
 libatk1.0-udeb
-libcairo-directfb2-udeb
-libdirectfb-*-udeb
 libexpat1-udeb
 libfreetype6-udeb
 libglib2.0-udeb
-libgtk-directfb-2.0-0-udeb
 libgtk2-engines-udeb
 libpango1.0-udeb
 libpcre3-udeb
@@ -64,27 +61,55 @@ libsdl1.2debian-udeb
 mouse-modules-*
 ttf-*
 fbset-udeb
-# terminal for gtk frontend is also included in initrd
+# Graphical installer: udebs for directfb
+libdirectfb-*-udeb
+libcairo-directfb2-udeb
+libgtk-directfb-2.0-0-udeb
+# Graphical installer: udebs for X.Org
+xserver-xorg-core-udeb
+xserver-xorg-input-evdev-udeb
+xserver-xorg-video-fbdev-udeb
+x11-xkb-utils-udeb
+xkb-data-udeb
+libcairo2-udeb
+libdrm2-udeb
+libfontenc1-udeb
+libgtk-x11-udeb
+libpciaccess0-udeb
+libx11-6-udeb
+libxau6-udeb
+libxcb1-udeb
+libxcursor1-udeb
+libxdmcp6-udeb
+libxext6-udeb
+libxfixes3-udeb
+libxfont1-udeb
+libxft2-udeb
+libxi6-udeb
+libxinerama1-udeb
+libxkbfile1-udeb
+libxrender1-udeb
+# Graphical installer: terminal support is included in initrd
 cdebconf-gtk-terminal
 libvte9-udeb
 # Not currently used
 cdebootstrap-udeb
 hdparm-udeb
 dhcp-client-udeb
-# This package is only useful in the d-i-demo.
+# This package is only useful in the d-i-demo
 di-utils-exit-installer
 # No need for these loaders.
 download-installer
 load-floppy
-# Only useful in the hd-media initrd.
+# Only useful in the hd-media initrd
 iso-scan
 load-iso
-# Nothing currently depends on this, and it seems not useful on its own.
+# Nothing currently depends on this, and it seems not useful on its own
 reiserfsprogs-udeb
-# reiser4 is not in the Debian kernel.
+# reiser4 is not in the Debian kernel
 mkreiser4-udeb
 reiser4progs-udeb
-# These are not really needed, the regular netcfg subsumes them.
+# These are not really needed, the regular netcfg subsumes them
 netcfg-static
 # skolelinux stuff, not for the stock CDs
 debian-edu-install-udeb
@@ -95,7 +120,7 @@ autopartkit
 # live CD stuff
 live-installer
 simple-cdd-profiles
-# If needed, will be on the initrd already.
+# If needed, will be on the initrd already
 module-init-tools-udeb
 env-preseed
 rescue-check
@@ -104,6 +129,7 @@ brltty-udeb
 klibc-utils-udeb
 libklibc-udeb
 udev-udeb
+udev-gtk-udeb
 ai-choosers
 auto-install
 libslang2-udeb
