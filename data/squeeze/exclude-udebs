@@ -106,9 +106,6 @@ iso-scan
 load-iso
 # Nothing currently depends on this, and it seems not useful on its own
 reiserfsprogs-udeb
-# reiser4 is not in the Debian kernel
-mkreiser4-udeb
-reiser4progs-udeb
 # These are not really needed, the regular netcfg subsumes them
 netcfg-static
 # skolelinux stuff, not for the stock CDs
