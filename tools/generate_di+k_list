@@ -43,6 +43,7 @@ lvm2
 mdadm
 aptitude
 hotplug
+pciutils
 usbutils
 /* Used for Lenny and earlier */
 console-data

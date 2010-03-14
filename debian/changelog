@@ -7,6 +7,7 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
     - pcmcia-cs has been fully replaced with pcmciautils.
   * Exclude udebs for X.Org-based version of the Graphical Installer.
   * Excluding reiserfs4 udebs is not needed for Squeeze.
+  * Include pciutils on installation CDs.
 
  -- Frans Pop <fjp@debian.org>  Mon, 22 Feb 2010 01:03:33 +0100
 
