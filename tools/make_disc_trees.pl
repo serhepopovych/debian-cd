@@ -717,8 +717,8 @@ sub finish_disc {
 sub msg_ap {
     my $level = shift;
     if (!$log_opened) {
-        open(AP_LOG, ">> $tdir/$codename/log.add_packages")
-            || die "Can't write in $tdir/log.add_packages!\n";
+        open(AP_LOG, ">> $tdir/$codename/add_packages.log")
+            || die "Can't write in $tdir/add_packages.log!\n";
     }
     print AP_LOG @_;
 }

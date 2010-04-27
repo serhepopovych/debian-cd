@@ -14,6 +14,9 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   * Rename log.sort_deps* to sort_deps*.log for better consistency.
     Closes: #571591
 
+  [ Steve McIntyre ]
+  * Rename log.add_packages to add_packages.log
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 
 debian-cd (3.1.3) unstable; urgency=low
