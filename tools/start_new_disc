@@ -271,13 +271,13 @@ if [ $DISKNUM = 1 ] ; then
         echo >> $CDDIR/README.excluded
     fi
 
-    grep "refused because of toobig" $BDIR/log.sort_deps* | sort -u | awk '{print $1}' > $BDIR/toobig
+    grep "refused because of toobig" $BDIR/sort_deps*.log | sort -u | awk '{print $1}' > $BDIR/toobig
     if [ -s $BDIR/toobig ] ; then
         echo "  Adding README.excluded (some package files were too big)"
         echo "For size reasons, the following packages were excluded from this disc set:" >> $CDDIR/README.excluded
         echo >> $CDDIR/README.excluded
         cat $BDIR/toobig >> $CDDIR/README.excluded
-        grep "Can't add.*toobig" $BDIR/log.sort_deps* | sort -u | awk '{print $3}' > $BDIR/toobig-deps
+        grep "Can't add.*toobig" $BDIR/sort_deps*.log | sort -u | awk '{print $3}' > $BDIR/toobig-deps
         if [ -s $BDIR/toobig-deps ] ; then
             echo >> $CDDIR/README.excluded
             echo "and that caused the following packages to be also excluded because" >> $CDDIR/README.excluded

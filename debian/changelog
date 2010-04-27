@@ -1,5 +1,6 @@
 debian-cd (3.1.4) UNRELEASED; urgency=low
 
+  [ Frans Pop ]
   * Cleanup of packages included for bootable CDs (generate_d-i+k_list):
     - libsysfs2 workaround is no longer needed;
     - discover is no longer used anywhere;
@@ -9,7 +10,11 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   * Excluding reiserfs4 udebs is not needed for Squeeze.
   * Include pciutils on installation CDs.
 
- -- Frans Pop <fjp@debian.org>  Mon, 22 Feb 2010 01:03:33 +0100
+  [ Karl Goetz ]
+  * Rename log.sort_deps* to sort_deps*.log for better consistency.
+    Closes: #571591
+
+ -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 
 debian-cd (3.1.3) unstable; urgency=low
 

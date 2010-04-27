@@ -34,8 +34,8 @@ my @output;
 
 $| = 1; # Autoflush for debugging
 
-open(LOG, ">$dir/log.sort_deps.$arch")
-       || die "Can't write in $dir/log.sort_deps.$arch !\n";
+open(LOG, ">$dir/sort_deps.$arch.log")
+       || die "Can't write in $dir/sort_deps.$arch.log !\n";
 
 sub msg {
 	my $level = shift;
