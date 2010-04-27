@@ -16,6 +16,7 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
   * Rename log.add_packages to add_packages.log
+  * Add dependency on dpkg-dev for dpkg-architecture. Closes: #574879
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 
