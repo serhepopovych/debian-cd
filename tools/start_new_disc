@@ -157,7 +157,7 @@ if [ $DISKNUM = 1 ] ; then
 				case "$INSTALLER_CD"x in
 					"1"x)
 						UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_businesscard_udeb_include;;
-					"2"x)
+					"2"x|"C"x)
 						UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_netinst_udeb_include;;
 					*)
 						UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_udeb_include;;
@@ -168,7 +168,7 @@ if [ $DISKNUM = 1 ] ; then
 				case "$INSTALLER_CD"x in
 					"1"x)
 						UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_businesscard_udeb_exclude;;
-					"2"x)
+					"2"x|"C"x)
 						UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_netinst_udeb_exclude;;
 					*)
 						UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_udeb_exclude;;

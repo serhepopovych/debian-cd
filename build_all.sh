@@ -22,7 +22,7 @@ if [ "$TASK"x = ""x ] ; then
 			TASK=debian-installer
 			unset COMPLETE
 			;;
-		"2"x)
+		"2"x|"C"x)
 			TASK=debian-installer+kernel
 			unset COMPLETE
 			;;
