@@ -128,6 +128,11 @@ export CONTRIB=1
 # WARNING: Don't use NONFREE and EXTRANONFREE at the same time !
 # export EXTRANONFREE=1
 
+# Do I want to force (potentially non-free) firmware packages to be
+# placed on disc 1? Will make installation much easier if systems
+# contain hardware that depends on this firmware
+export FORCE_FIRMWARE=1
+
 # If you have a $MIRROR/dists/$CODENAME/local/binary-$ARCH dir with 
 # local packages that you want to put on the CD set then
 # uncomment the following line 
@@ -218,8 +223,12 @@ export NORECOMMENDS=1
 # package on the CD.  The default is 'true'.
 #export NOSUGGESTS=1
 
-# Set to 1 to generate MD5 and SHA1 sums for generated images
+# Set to 1 to generate MD5/SHA1/SHA256/SHA512 sums for generated images
 export IMAGESUMS=1
+
+# And define the set of checksum algorithms you want here. Default is
+# all of: md5 sha1 sha512 sha256
+# export CHECKSUMS="md5 sha1 sha512 sha256"
 
 # We may have to extract files from packages to put them onto the CD
 # (e.g. bootloader files). If you make those packages (and their

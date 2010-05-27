@@ -91,6 +91,11 @@ bpalogin
  */
 multipath-tools-boot
 
+/* add the list of firmware packages here too if required */
+#ifdef FORCE_FIRMWARE
+#    include <firmware>
+#endif
+
 #ifdef ARCH_i386
 initramfs-tools
 busybox

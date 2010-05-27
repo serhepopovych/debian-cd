@@ -123,6 +123,8 @@ ifneq ($(ARCHES),source)
 	$(Q)mkdir -p $(TASKDIR)
 	$(Q)echo "- copying task files from 'tasks/$(DI_CODENAME)/'"
 	$(Q)cp -r $(BASEDIR)/tasks/$(CODENAME)/* $(TASKDIR)
+	$(Q)echo "- copying firwmare task file from 'tasks/firmware'"
+	$(Q)cp -r $(BASEDIR)/tasks/firmware $(TASKDIR)
 	$(Q)echo "- task.languages: using 'tasks/$(DI_CODENAME)/$(TASK_LANGLIST)'"
 	$(Q)cp $(BASEDIR)/tasks/$(DI_CODENAME)/$(TASK_LANGLIST) \
 		$(TASKDIR)/task.languages
@@ -314,6 +316,9 @@ $(BDIR)/rawlist:
 	for VARIANT in $(VARIANTS); do \
 		VARIANTDEFS="$$VARIANTDEFS -D VARIANT_$$VARIANT"; \
 	done; \
+	if [ "$(FORCE_FIRMWARE)"x != "0"x ] ; then \
+		ARCHDEFS="$$ARCHDEFS -DFORCE_FIRMWARE"; \
+	fi; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		cat $(TASKDIR)/$(TASK) | \
 		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS $$VARIANTDEFS\

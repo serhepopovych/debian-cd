@@ -46,6 +46,7 @@ rm -f $dir/README $dir/README.1ST \
 rm -f $dir/README.html
 cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
     -D DISKTYPE$DISKTYPE \
+    -D FORCE_FIRMWARE="$FORCE_FIRMWARE" \
     -D COMPLETE="$COMPLETE" \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
@@ -59,6 +60,7 @@ lynx -dump -force_html $dir/README.html | todos \
 
 cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
     -D DISKTYPE$DISKTYPE \
+    -D FORCE_FIRMWARE="$FORCE_FIRMWARE" \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
     -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \

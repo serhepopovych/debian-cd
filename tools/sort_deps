@@ -18,6 +18,7 @@ my $list = shift;
 
 my $nonfree = $ENV{'NONFREE'} || 0;
 my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
+my $force_firmware = $ENV{'FORCE_FIRMWARE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
 my $norecommends = $ENV{'NORECOMMENDS'} || 0;
@@ -60,6 +61,8 @@ msg(1, "Complete selected packages with all the rest: ");
 msg(1, yesno($complete)."\n");
 msg(1, "Include non-free packages: ");
 msg(1, yesno($nonfree)."\n");
+msg(1, "Force inclusion of firmware packages: ");
+msg(1, yesno($force_firmware)."\n");
 msg(1, "======================================================================
 ");
 
@@ -81,6 +84,7 @@ while (defined($_=<AVAIL>)) {
 	$packages{$p}{"Suggests"} = [];
 	$packages{$p}{"Recommends"} = [];
 	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
+	$packages{$p}{"IsFirmware"} = ($packages{$p}{"Filename"} =~ /(firmware|microcode)/) ? 1 : 0;
 	if ($packages{$p}{"Section"} =~ /contrib\//) {
 		$packages{$p}{"Component"} = "contrib";
 	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
@@ -103,8 +107,12 @@ my $count_excl = 0;
 if (not $nonfree) {
 	foreach (grep { $packages{$_}{"Section"} =~ /non-free/ }
 	              (keys %packages)) {
-		$excluded{$_} = 'nonfree';
-		$count_excl++;
+        if ($force_firmware and $packages{$_}{"IsFirmware"}) {
+            msg(1, "force_firmware: keeping non-free package $_\n");
+        } else {
+            $excluded{$_} = 'nonfree';
+            $count_excl++;
+        }
 	}
 }
 
@@ -292,13 +300,19 @@ foreach (glob("$dir/*.packages*")) {
 my $count = 0;
 open(CDLIST, "> $dir/packages.$arch") 
     || die "Can't write in $dir/$_.packages.$arch: $!\n";
+open(FWLIST, ">> $dir/firmware-packages")
+    || die "Can't write in $dir/firmware-packages: $!\n";
 foreach (@output) {
     my $component = $packages{$_}{"Component"};
     my $size = $packages{$_}{"Size"};
     print CDLIST "$arch:$component:$_:$size\n";
+    if ($packages{$_}{"IsFirmware"}) {
+        print FWLIST "$_\n";
+    }
     $count++;
 }
 close CDLIST;
+close FWLIST;
 msg(0, "Done: processed/sorted $count packages, total size $output_size bytes.\n");
 
 close LOG;

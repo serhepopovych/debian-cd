@@ -17,6 +17,15 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Rename log.add_packages to add_packages.log
   * Add dependency on dpkg-dev for dpkg-architecture. Closes: #574879
+  * Add support for forcing firmware packages onto CD#1:
+    + Add "FORCE_FIRMWARE=1" to CONF.sh to turn this on
+    + Will pick up on packages in the "firmware" task and install them
+    + Will also add sym-links to them in CD1/firmware so that new d-i code
+      can find them easily.
+    + Will add a short sentence into README.html/README.txt
+  * Add top-level control of which checksums are desired for output images
+    see the CHECKSUMS setting in CONF.sh
+  * Fix some bashisms in tools/apt-selection.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 

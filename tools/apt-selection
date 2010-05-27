@@ -8,11 +8,11 @@
 # set -e
 
 # Get the configuration information if necessary
-if [ -z "$CODENAME" -o -z "$ARCH" -o -z "$APTTMP" ]; then
+if [ -z "$CODENAME" ] || [ -z "$ARCH" ] || [ -z "$APTTMP" ]; then
 	if [ -e CONF.sh ]; then
 		. CONF.sh
 	else
-		echo "Please set the good environment variables before "
+		echo "Please set up environment variables before "
 		echo "launching this program ..."
 		echo "Current values are :"
 		echo "CODENAME=$CODENAME"
@@ -35,7 +35,7 @@ options=" -q -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
 		  -o APT::Architecture=$ARCH "
 
 sections=main
-if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ]; then
+if [ "${NONFREE:-0}" != "0" ] || [ "${EXTRANONFREE:-0}" != "0" ] || [ "${FORCE_FIRMWARE:-0}" != "0" ]; then
 	sections="$sections non-free"
 fi
 if [ "${CONTRIB:-0}" != "0" ]; then
@@ -84,7 +84,7 @@ if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
 			echo "$ADEB file:$MIRROR $DI_CODENAME main/debian-installer" \
 				>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 		fi
-		if [ -n "$LOCAL" -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
+		if [ -n "$LOCAL" ] && [ -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 			echo "$ADEB file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
 				>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
 		fi
@@ -94,7 +94,7 @@ fi
 temp=$APTTMP/$CODENAME-$ARCH/temp.apt-selection
 
 # Launch the command
-if [ "$1" = "update" -o "$1" = "check" ]; then
+if [ "$1" = "update" ] || [ "$1" = "check" ]; then
 	apt-get $options $@
 	exit $?
 elif [ "$1" = "cache" ]; then

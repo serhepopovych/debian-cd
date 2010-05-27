@@ -8,6 +8,7 @@ use strict;
 use Digest::MD5;
 use File::stat;
 use File::Find;
+use File::Basename;
 use Compress::Zlib;
 
 my %pkginfo;
@@ -17,6 +18,7 @@ my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
 my (@exclude_packages, @unexclude_packages, @excluded_package_list);
+my %firmware_package;
 
 undef @pkgs_added;
 undef @exclude_packages;
@@ -162,6 +164,15 @@ if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
 }
 
 print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskblocks 2K-blocks maximum per image\n";
+
+if (-e "$bdir/firmware-packages") {
+    open(FWLIST, "$bdir/firmware-packages") or die "Unable to read firmware-packages file!\n";
+    while (defined (my $pkg = <FWLIST>)) {
+        chomp $pkg;
+        $firmware_package{$pkg} = 1;
+    }
+    close(FWLIST);
+}
 
 open(INLIST, "$bdir/packages") or die "No packages file!\n";
 while (defined (my $pkg = <INLIST>)) {
@@ -1075,6 +1086,14 @@ sub add_packages {
                 $total_blocks += get_file_blocks($realfile);
                 $total_blocks += good_link ($realfile, "$dir/$file");
                 msg_ap(0, "  Linked $dir/$file\n");
+                if ($firmware_package{$pkgname}) {
+                    msg_ap(0, "Symlink fw package $pkgname into /firmware\n");
+                    if (! -d "$dir/firmware") {
+                        mkdir "$dir/firmware" or die "symlink failed $!\n";
+                    }
+                    symlink("../$file", "$dir/firmware/" . basename($file));
+                    msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
+                }
             } else {
                 msg_ap(0, "  $dir/$file already linked in\n");
             }
