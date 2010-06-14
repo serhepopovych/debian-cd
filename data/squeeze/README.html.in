@@ -210,9 +210,14 @@
 # endif
 # if FORCE_FIRMWARE == 1
 #  if DISKNUM == 1
-    <p>This disc includes non-free firmware files to make installation easier on some
-       systems. See <a href="http://wiki.debian.org/Firmware">http://wiki.debian.org/Firmware</a>
+
+    <p>This disc includes non-free firmware to make installation
+       easier on some systems requiring proprietary but
+       redistributable firmware. See
+       <a href="http://wiki.debian.org/Firmware">http://wiki.debian.org/Firmware</a>
        for more details.</p>
+
+
 #  endif
 # endif
 #else
