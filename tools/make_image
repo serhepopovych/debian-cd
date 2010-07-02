@@ -70,13 +70,13 @@ do
 
     # Work out whether we want ISO, jigdo or both
     if [ "$MAXISOS"x = ""x ] || [ "$MAXISOS" = "all" ] || \
-       [ "$MAXISOS" = "ALL" ] || [ "$n" -le "$MAXISOS" ] ; then
+        [ "$MAXISOS" = "ALL" ] || [ "$n" -le "$MAXISOS" ] ; then
         ISO_WANTED=1
     else
         ISO_WANTED=0
     fi
     if [ "$MAXJIGDOS"x = ""x ] || [ "$MAXJIGDOS" = "all" ] || \
-       [ "$MAXJIGDOS" = "ALL" ] || [ "$n" -le "$MAXJIGDOS" ] ; then
+        [ "$MAXJIGDOS" = "ALL" ] || [ "$n" -le "$MAXJIGDOS" ] ; then
         JIGDO_WANTED=1
     else
         JIGDO_WANTED=0
@@ -123,10 +123,10 @@ do
 
     # If we've made jigdo files, tweak them with extra info now
     if [ "$JIGDO_WANTED" = 1 ] ; then
-	$JIGDO_CLEANUP $OUT/$OUTFILE.jigdo \
-	    $OUTFILE.iso $DIR/CD$n \
-	    "`echo "$JIGDOTEMPLATEURL" | sed -e 's|%ARCH%|$ARCH|g'`$OUTFILE.template" \
-	    "$DISKINFO" \
-	    $JIGDOFALLBACKURLS
+        $JIGDO_CLEANUP $OUT/$OUTFILE.jigdo \
+            $OUTFILE.iso $DIR/CD$n \
+            "`echo "$JIGDOTEMPLATEURL" | sed -e 's|%ARCH%|$ARCH|g'`$OUTFILE.template" \
+            "$DISKINFO" \
+            $JIGDOFALLBACKURLS
     fi
 done
