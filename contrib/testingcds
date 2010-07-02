@@ -15,6 +15,10 @@
 CONF=~/build/CONF.sh
 export CF=$CONF
 
+now () {
+    date -u +%F:%H:%M:%S
+}
+
 # Set up and cleaning
 if [ $# -lt 1 ] ; then
     echo $0 \$ARCH
@@ -36,7 +40,7 @@ fi
 # $DI is used to set DI_CODENAME and also to specify the directory for images
 if [ "$DI" ] ; then
     export DI_CODENAME="$DI"
-    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ] ; then
+    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" -o "$INSTALLER_CD" = "C" ] ; then
         PUBDIRJIG="$PUBDIRJIG"/"$DI"_d-i
         PUBDIRISO="$PUBDIRISO"/"$DI"_d-i
     fi
@@ -54,7 +58,7 @@ export LOGFILE="$LOG/$RUN"
 case "$INSTALLER_CD" in
     1)
         export DISKTYPE=BC;;
-    2|7|8)
+    2|7|8|C)
         export DISKTYPE=NETINST;;
     3|6)
         export OUT_TYPE=dvd
@@ -75,6 +79,12 @@ esac
 
 if [ "$OUT_TYPE"x = ""x ] ; then
     OUT_TYPE=cd
+fi
+
+if [ "$BUILDNAME"x = ""x ] ; then
+    TRACEFILE="$OUT_TYPE-trace"
+else
+    TRACEFILE="$BUILDNAME-trace"
 fi
 
 export IMAGETARGET=official_images
@@ -104,6 +114,8 @@ elif [ "$INSTALLER_CD" = "7" ]; then
     export OFFICIAL="Official Multi-Arch Netinst"
 elif [ "$INSTALLER_CD" = "8" ]; then
     export OFFICIAL="Official Multi-Arch Netinst"
+elif [ "$INSTALLER_CD" = "C" ]; then
+    export OFFICIAL="Unofficial Netinst including firmware"
 fi
 
 rm -rf "$OUT"
@@ -125,7 +137,7 @@ overview () {
 if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     # if it went ok get things ready for publishing
     # we treat the daily netinst images in a different way
-    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ] ; then
+    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" -o "$INSTALLER_CD" = "C" ] ; then
 
         ##################################
         # NETINST STUFF
@@ -139,12 +151,14 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         for i in "$OUT"/*-1.iso; do
             BASE=`basename $i .iso`
             NETINSTNAME=`echo $BASE | sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g'`
-            mv $OUT/$BASE.iso $TOPDIR/iso-cd/$NETINSTNAME.iso
+            mv -v $OUT/$BASE.iso $TOPDIR/iso-cd/$NETINSTNAME.iso
             cat $OUT/$BASE.jigdo | \
                 sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' | \
                 gzip --best --no-name > $TOPDIR/jigdo-cd/$NETINSTNAME.jigdo
             rm $OUT/$BASE.jigdo
-            mv $OUT/$BASE.template $TOPDIR/jigdo-cd/$NETINSTNAME.template
+            mv -v $OUT/$BASE.template $TOPDIR/jigdo-cd/$NETINSTNAME.template
+            # Make sure that the ISO is as new/newer than the jigdo file; #587774
+            touch $TOPDIR/iso-cd/$NETINSTNAME.iso
         done
         rm -f "$OUT"/*
 
@@ -160,18 +174,26 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
             mv $i ${i%.gz}
         done
 
+        # Make sure that the ISOs are as new/newer than the jigdo files; #587774
+        touch "$OUT"/*.iso
+
         mkdir -p "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
-        cat "$OUT"/MD5SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/MD5SUMS$SUMS_EXTENSION
-        cat "$OUT"/SHA1SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/SHA1SUMS$SUMS_EXTENSION
+	for file in "$OUT"/*SUMS${SUMS_EXTENSION}; do
+	    outfile="$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/`basename $file`
+	    cat $file >> $outfile
+	done
         mv "$OUT"/*.template "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
         mv "$OUT"/*.jigdo    "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
-        cat "$OUT"/MD5SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/MD5SUMS$SUMS_EXTENSION
-        cat "$OUT"/SHA1SUMS$SUMS_EXTENSION >> "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/SHA1SUMS$SUMS_EXTENSION
+	for file in "$OUT"/*SUMS${SUMS_EXTENSION}; do
+	    outfile="$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/`basename $file`
+	    cat $file >> $outfile
+	done
         mv "$OUT"/*.iso    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
 
-        date > "$PUBDIRJIG"/$OUTARCH/"$OUT_TYPE"-trace
+        DATE=`now`
+        echo -e "end=$DATE\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     fi
 
     touch $TDIR/$CODENAME/1.pkgs_extracted # so we don't get errors below
@@ -208,4 +230,8 @@ else
             mail -s "testingcds $RUN has failed; log included" "$i"
     done
     overview "$RUN" failed
+    DATE=`now`
+    mkdir -p "$PUBDIRJIG"/$OUTARCH
+    echo -e "end=$DATE\nerror=1\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+    exit 1
 fi
