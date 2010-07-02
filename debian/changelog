@@ -26,6 +26,9 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   * Add top-level control of which checksums are desired for output images
     see the CHECKSUMS setting in CONF.sh
   * Fix some bashisms in tools/apt-selection.
+  * When generating both iso and jigdo files, make sure that the iso files
+    are at least as new as the jigdo files, as this helps people mirroring.
+    Closes: #587774
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 

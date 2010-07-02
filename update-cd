@@ -202,6 +202,8 @@ make_cd () {
 			$OUT debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.template \
 			"Debian GNU/Linux $VERSPACE - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
 		echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo
+        # Make sure that the ISO is as new/newer than the jigdo file; #587774
+        touch $OUT/$THISARCH/iso-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.iso
 	else
 		${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
 		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$TYPEUP-$THISNUM.iso \

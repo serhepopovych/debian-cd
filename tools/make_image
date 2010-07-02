@@ -128,5 +128,9 @@ do
             "`echo "$JIGDOTEMPLATEURL" | sed -e 's|%ARCH%|$ARCH|g'`$OUTFILE.template" \
             "$DISKINFO" \
             $JIGDOFALLBACKURLS
+        if [ "$ISO_WANTED" = 1 ] ; then
+            # Make sure that the ISO is as new/newer than the jigdo file; #587774
+            touch $OUT/$OUTFILE.iso
+        fi
     fi
 done
