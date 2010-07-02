@@ -204,7 +204,7 @@ make_cd () {
 		echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo
 	else
 		${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
-		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$TYPEUP-$THISNUM.raw \
+		$OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$TYPEUP-$THISNUM.iso \
 		$UPD/CD$CDNUM 2>&1 | grep "extents written"
 	fi
 }
