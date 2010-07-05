@@ -1,5 +1,12 @@
 #!/bin/bash
 
+VERBOSE=0
+
+if [ "$1" = "-v" ] ; then
+    VERBOSE=1
+    shift
+fi
+
 cd $1
 
 if [ "$2"x != ""x ] ; then
@@ -13,7 +20,9 @@ fi
 for SUM in $CHECKSUMS; do
 	UPSUM=`echo $SUM | tr 'a-z' 'A-Z'`
 	FILE=$UPSUM"SUMS"$EXT
-	echo "Clearing $FILE"
+	if [ $VERBOSE -eq 1 ] ; then
+	    echo "Clearing $FILE"
+	fi
 	:> $FILE
 done
 
