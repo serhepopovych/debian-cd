@@ -133,6 +133,7 @@ fi
 
 extra_image () {
 	image=$1
+	doppelgangers="$2"
 	dir=$(dirname "$image")
 
 	mkdir -p $CDDIR/$INSTALLDIR/$dir
@@ -146,6 +147,14 @@ extra_image () {
 			wget "$DI_WWW_HOME/cdrom/$image" -O $CDDIR/$INSTALLDIR/"$image"
 		fi
 	fi
+	for doppelganger in $doppelgangers ; do
+		if [ -f "$CDDIR/$INSTALLDIR/$dir/$doppelganger" ] &&
+			cmp -s $CDDIR/$INSTALLDIR/"$image" $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" ; then
+			echo "  $image identical to $doppelganger. Linking"
+			ln -nf "$doppelganger" $CDDIR/$INSTALLDIR/"$image"
+			break
+		fi
+	done
 }
 
 # If multiple desktops are to be supported, set the default one
@@ -231,7 +240,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	fi
 
 	if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
-		extra_image gtk/initrd.gz
+		extra_image gtk/vmlinuz         "../vmlinuz"
+		extra_image gtk/initrd.gz       "../initrd.gz"
 		mv boot$N/isolinux/f3.txt.withgtk boot$N/isolinux/f3.txt
 		mv boot$N/isolinux/f4.txt.withgtk boot$N/isolinux/f4.txt
 		if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
@@ -243,8 +253,8 @@ if [ "$THISTYPE" = "isolinux" ]; then
 	rm -f boot$N/isolinux/isolinux.cfg.with*
 
 	if variant_enabled "xen" ; then
-		extra_image xen/vmlinuz
-		extra_image xen/initrd.gz
+		extra_image xen/vmlinuz         "../vmlinuz   ../gtk/vmlinuz"
+		extra_image xen/initrd.gz       "../initrd.gz ../gtk/initrd.gz"
 		extra_image xen/xm-debian.cfg
 	fi
 

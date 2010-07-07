@@ -30,6 +30,10 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
     are at least as new as the jigdo files, as this helps people mirroring.
     Closes: #587774
 
+  [ Ian Campbell ]
+  * boot-x86: detect duplicates in the extra images used for installation
+    and replace with hard links.
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 
 debian-cd (3.1.3) unstable; urgency=low
