@@ -22,6 +22,10 @@ if [ "$OMIT_MANUAL"x = ""x ] ; then
 	OMIT_MANUAL=0
 fi
 
+if [ "$FORCE_FIRMWARE"x = ""x ] ; then
+	FORCE_FIRMWARE=0
+fi
+
 dir=$BDIR/CD$DISK
 for file in $MIRROR/README*; do
 	if [ -e $file ]; then
