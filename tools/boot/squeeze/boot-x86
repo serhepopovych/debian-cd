@@ -151,7 +151,7 @@ extra_image () {
 		if [ -f "$CDDIR/$INSTALLDIR/$dir/$doppelganger" ] &&
 			cmp -s $CDDIR/$INSTALLDIR/"$image" $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" ; then
 			echo "  $image identical to $doppelganger. Linking"
-			ln -nf "$doppelganger" $CDDIR/$INSTALLDIR/"$image"
+			ln -nf $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" $CDDIR/$INSTALLDIR/"$image"
 			break
 		fi
 	done
