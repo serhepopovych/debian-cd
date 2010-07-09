@@ -33,6 +33,7 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   [ Ian Campbell ]
   * boot-x86: detect duplicates in the extra images used for installation
     and replace with hard links.
+  * CONF.sh: Don't reset the value of $VARIANTS by default.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 
