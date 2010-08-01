@@ -66,9 +66,6 @@ fi
 
 if [ ! -d $CDDIR/dists/$CODENAME ] ; then
     mkdir -p $CDDIR/dists/$CODENAME
-    for name in stable unstable frozen testing; do
-	ln -sf $CODENAME $CDDIR/dists/$name
-    done
 fi
 
 # Commodity link for tools which want local in dists/local/local ...
@@ -335,6 +332,12 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ] ; then
 	    RDATE=`awk '/^Date:/ { print $2,$3,$4,$5}' dists/$CODENAME/Release`
 	    sed -i -e "s/^Suite: .*$/Suite: stable/" dists/$CODENAME/Release
 	    sed -i -e "s/^Description: .*$/Description: Debian $DEBVERSION Released $RDATE/" dists/$CODENAME/Release
+	fi
+
+	# Create the suite symlink
+	SUITE=$(sed -n "/^Suite:/ s/.*: //p" dists/$CODENAME/Release)
+	if [ -n "$SUITE" ] && [ x"$SUITE" != x"$CODENAME" ]; then
+		ln -sf $CODENAME dists/$SUITE
 	fi
 else
 	echo "ERROR: Release file ($MIRROR/dists/$CODENAME/Release) is missing !"

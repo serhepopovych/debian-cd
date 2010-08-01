@@ -9,6 +9,8 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   * Exclude udebs for X.Org-based version of the Graphical Installer.
   * Excluding reiserfs4 udebs is not needed for Squeeze.
   * Include pciutils on installation CDs.
+  * Only include a symlink for the suite actually specified in the
+    Release file. Closes: #590993
 
   [ Karl Goetz ]
   * Rename log.sort_deps* to sort_deps*.log for better consistency.
