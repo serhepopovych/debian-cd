@@ -17,6 +17,7 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
     Closes: #571591
   * Minor tweaks to Debian packaging to make lintian happy.
     Closes: #592932
+  * Minor whitespace/wording fixes for the README file. Closes: #592933
 
   [ Steve McIntyre ]
   * Rename log.add_packages to add_packages.log

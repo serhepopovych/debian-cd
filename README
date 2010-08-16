@@ -2,7 +2,7 @@ debian-cd
 =========
 
 Copyright 1999-2001 Raphaël Hertzog <hertzog@debian.org> and others,
-2004-2006 Steve McIntyre <steve@einval.com>
+2004-2010 Steve McIntyre <steve@einval.com>
 This set of tools is licensed under the General Public License version
 2 or any later version. You can find it in
 /usr/share/common-licenses/GPL on a Debian GNU system.
@@ -16,7 +16,6 @@ What is needed?
 ===============
 Software:
 - the apt-get (>= 0.3.11.1) tool
-- apt-utils (for apt-ftparchive)
 - perl (>= 5.004)
 - bash (or another POSIX shell)
 - make
@@ -28,6 +27,7 @@ Software:
   to convert docs to DOS format (although you can rip that out, too)
 - if you want to generate jigdo files: jigdo-file (see below)
 Other:
+- apt-utils (for apt-ftparchive)
 - lots of free space on your disks
 - a Debian mirror, on a partition where you can write.
   If you can't write on it then you may try to use a symlink farm,
@@ -50,7 +50,7 @@ $ make status
 $ make official_images
 
 However, you really should consider reading further for more information.
-You can also take a look at build.sh and build_all.sh for an automatized
+You can also take a look at build.sh and build_all.sh for an automated
 way of building CD images. 
 
 The script easy-build.sh offers the easiest way to build a specific image
@@ -78,9 +78,9 @@ The process of building a CD is composed of the following steps:
   have to build them one after the other (you may use a shell
   script for this).
 
-  Note that the temporary dir must be on the same device than the
+  Note that the temporary dir must be on the same device as the
   mirror because debian-cd uses hardlinks for generating an image 
-  tree. If you can't do this, you'll have to use the symlink farm.
+  tree. If you can't do this, you'll have to use a symlink farm.
   The symlink farm is explained at the end of this README.
 
   Keep in mind that the environment variables will stay in the
@@ -88,7 +88,7 @@ The process of building a CD is composed of the following steps:
   other program using the same variables (e.g. kernel-package).
   So if you want to be 100% safe, run debian-cd in a
   separate shell that you can leave after you're done.
-  
+
 - then we clean everything that may still be there from previous runs:
 
     $ make distclean
@@ -125,20 +125,19 @@ The process of building a CD is composed of the following steps:
 
     $ export NONFREE=1; make packagelists TASK=your-task-here COMPLETE=1
 
-  or for something like an official image for the USA (without non-US &
-  non-free) :
+  or for something like an official image for the USA (without non-free):
 
     $ make packagelists COMPLETE=1
 
   .... take a look at the file tasks/* to see the options you can have :)
-  
+
   You can change the behaviour of this command with the following
   variables:
   - if NONFREE is set, then packages from non-free will be allowed
     (NONFREE must be exported to all sub-shells)
   - if EXTRANONFREE is set, then non-free packages will be included
     on an extra CD (the last CD in fact). Don't use NONFREE and
-    EXTRANONFREE at the same time !
+    EXTRANONFREE at the same time!
     (EXTRANONFREE must be exported to all sub-shells)
   - if COMPLETE is set, all packages that are not listed in the
     selected task file will be included at the end
