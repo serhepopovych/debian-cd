@@ -15,6 +15,8 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   [ Karl Goetz ]
   * Rename log.sort_deps* to sort_deps*.log for better consistency.
     Closes: #571591
+  * Minor tweaks to Debian packaging to make lintian happy.
+    Closes: #592932
 
   [ Steve McIntyre ]
   * Rename log.add_packages to add_packages.log

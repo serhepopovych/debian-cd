@@ -32,7 +32,8 @@ install-stamp: build-stamp
 	find debian/debian-cd -name '.svn' | xargs -r rm -rf
 	find debian/debian-cd/usr/share/debian-cd/tools/boot \
 	  \( -name 'boot-*' -o -name 'post-boot-*' \) -a \! -name '*.txt' \
-	  -a \! -name '*.calc' |  xargs chmod 0755
+	  -a \! -name '*.calc' -a \! -name boot-x86 | xargs chmod 0755
+    chmod +755 contrib/testingcds
 
 	touch install-stamp
 
