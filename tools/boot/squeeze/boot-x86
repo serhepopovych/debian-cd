@@ -235,8 +235,11 @@ if [ "$THISTYPE" = "isolinux" ]; then
 
 	# Not everything in the tarball is isolinux stuff
 	if [ -e boot$N/isolinux/win32-loader.ini ] ; then
-		mv boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe \
-			boot$N/isolinux/win32-loader.ini boot$N/
+		for file in boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe boot$N/isolinux/win32-loader.ini; do
+			if [ -e $file ] ; then
+				mv -v $file boot$N/
+			fi
+		done
 	fi
 
 	if [ -e boot$N/isolinux/f3.txt.withgtk ]; then

@@ -16,12 +16,16 @@ N=$1
 CDDIR=$2
 BOOTDIR=
 if [ "$DI_WWW_HOME" = "default" ];then
-       DI_WWW_HOME="http://d-i.debian.org/daily-images/$ARCH/daily"
-       if [ -n "$DI_DIR" ];then
-               DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-               DI_WWW_HOME=""
-               echo "Using images from $DI_DIR"
-       fi
+    if [ "$ARCH" = kfreebsd-i386 ]; then
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/kfreebsd-i386/daily"
+    else
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/kfreebsd-amd64/daily"
+    fi
+    if [ -n "$DI_DIR" ];then
+        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+        DI_WWW_HOME=""
+        echo "Using images from $DI_DIR"
+    fi
 fi
 if [ ! "$DI_DIST" ]; then
        DI_DIST="$DI_CODENAME"
