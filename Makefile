@@ -310,7 +310,7 @@ $(BDIR)/rawlist:
 	fi
 
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
-		ARCHDEFS="$$ARCHDEFS -D ARCH_$(subst -,_,$$ARCH)"; \
+		ARCHDEFS="$$ARCHDEFS -D ARCH_`echo $$ARCH | sed 's/-/_/'`"; \
 		ARCHUNDEFS="$$ARCHUNDEFS -U $$ARCH"; \
 	done; \
 	for VARIANT in $(VARIANTS); do \

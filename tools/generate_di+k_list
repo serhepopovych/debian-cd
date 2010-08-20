@@ -287,4 +287,17 @@ loop-aes-modules-2.6-powerpc64
 loop-aes-modules-2.6-prep
 #endif
 
+#ifdef ARCH_kfreebsd_amd64
+kfreebsd-image-8-amd64
+grub-pc
+#endif
+
+#ifdef ARCH_kfreebsd_i386
+kfreebsd-image-8-486
+kfreebsd-image-8-686
+kfreebsd-image-8-686-smp
+grub-pc
+libc0.1-i686
+#endif
+
 EOF
