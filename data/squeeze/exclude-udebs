@@ -134,6 +134,8 @@ kbd-chooser
 kbd-udeb
 console-setup-*
 # Currently unused
+debian-ports-archive-keyring-udeb
+emdebian-archive-keyring-udeb
 nbd-client-udeb
 pwgen-udeb
 # Eh?
