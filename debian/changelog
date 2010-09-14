@@ -36,6 +36,8 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   * When generating both iso and jigdo files, make sure that the iso files
     are at least as new as the jigdo files, as this helps people mirroring.
     Closes: #587774
+  * On release builds, use the full version number including all the dots
+    (e.g. 6.0.0 for the squeeze release instead of 600).
 
   [ Ian Campbell ]
   * boot-x86: detect duplicates in the extra images used for installation
