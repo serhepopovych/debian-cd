@@ -250,7 +250,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
 			mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
 		fi
-		echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz video=vesa:ywrap,mtrr vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
+		echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
 
 	fi
 	rm -f boot$N/isolinux/isolinux.cfg.with*
