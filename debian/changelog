@@ -38,6 +38,8 @@ debian-cd (3.1.4) unstable; urgency=low
     (e.g. 6.0.0 for the squeeze release instead of 600).
   * Update loadlin kernel parameters to match d-i values. Thanks to Samuel
     Thibault for the patch. Closes: #594267
+  * Fix support for alternative boot splash images. Thanks to Tony Awtrey
+    for the patch. Closes: #537368
 
   [ Ian Campbell ]
   * boot-x86: detect duplicates in the extra images used for installation

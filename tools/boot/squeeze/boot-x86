@@ -296,6 +296,7 @@ if [ "$THISTYPE" = "isolinux" ]; then
 		# white respecively
 		pngtopnm < $SPLASHPNG | ppmquant 16 | \
 			ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
+		pngtopnm < $SPLASHPNG | ppmquant 16 | pnmtopng  > boot$N/isolinux/splash.png
 	fi
 
 	sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
