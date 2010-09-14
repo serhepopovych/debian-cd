@@ -104,8 +104,6 @@ load-floppy
 # Only useful in the hd-media initrd
 iso-scan
 load-iso
-# Nothing currently depends on this, and it seems not useful on its own
-reiserfsprogs-udeb
 # These are not really needed, the regular netcfg subsumes them
 netcfg-static
 # skolelinux stuff, not for the stock CDs
