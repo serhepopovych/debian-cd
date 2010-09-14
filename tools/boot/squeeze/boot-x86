@@ -41,23 +41,8 @@ cd $CDDIR/..
 # NN will be 1...N so it can be used as an index
 NN=`echo $N | sed -e 's/_NONUS//'`
 
-# List of boot image types for each CD
-KTYPE[1]="isolinux"
-#KTYPE[2]="cdrom"
-KTYPE[2]=""
-KTYPE[3]=""
-KTYPE[4]=""
-KTYPE[5]=""
-KTYPE[6]=""
-KTYPE[7]=""
-KTYPE[8]=""
-KTYPE[9]=""
-KTYPE[10]=""
-
-THISTYPE=${KTYPE[$NN]}
-
 # Exit if this is not a boot disk
-[ -n "$THISTYPE" ] || exit 0
+if [ $NN != 1 ] ; then exit 0; fi
 
 INSTALLDIR_i386="install.386"
 INSTALLDIR_amd64="install.amd"
