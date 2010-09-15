@@ -40,6 +40,7 @@ debian-cd (3.1.4) unstable; urgency=low
     Thibault for the patch. Closes: #594267
   * Fix support for alternative boot splash images. Thanks to Tony Awtrey
     for the patch. Closes: #537368
+  * Include the acpi package for all x86 media types. Closes: #475243
 
   [ Ian Campbell ]
   * boot-x86: detect duplicates in the extra images used for installation

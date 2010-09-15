@@ -61,6 +61,7 @@ dosfsutils
 reiserfsprogs
 libfribidi0
 localization-config
+acpi
 acpid
 acpi-support-base
 ppp
