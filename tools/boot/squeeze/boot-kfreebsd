@@ -63,7 +63,8 @@ cp "cdrom/kfreebsd.gz" "$CDDIR/boot/kernel/kfreebsd.gz"
 cp "cdrom/initrd.gz" "$CDDIR/boot/mfsroot.gz"
 
 # Install bootloader
-tar -C $CDDIR -zxf cdrom/debian-cd_info.tar.gz
+mkdir -p boot$N
+tar -C boot$N -zxf cdrom/debian-cd_info.tar.gz
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b boot/grub/grub_eltorito"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.cat"
@@ -71,6 +72,7 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
 # Add autorun
 if [ -f $CDDIR/README.html ]; then
