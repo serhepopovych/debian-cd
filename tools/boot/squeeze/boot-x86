@@ -33,9 +33,9 @@ fi
 
 cd $CDDIR/..
 
-# This script is called with $1 (now $N) as the CD to 
-# make bootable.  N may be in the form "n" or "n_NONUS"
-# There may be more than 4 disks...support extras.
+# This script is called with $1 (now $N) as the CD to make bootable.
+# N may be in the form "n" or "n_NONUS" There may be more than 4
+# disks...support extras.
 
 # Strip NONUS part of disk number
 # NN will be 1...N so it can be used as an index
@@ -161,184 +161,163 @@ esac
 # desktop boot parameter gets set separately through DESKTOP variable
 KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | sed -r "s/desktop=[^ ]* ?//")"
 
-if [ "$THISTYPE" = "isolinux" ]; then
-	echo "  Using ISOLINUX boot-disks image on CD$N"
-	mkdir -p $CDDIR/$INSTALLDIR
-	cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
-	cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
-	echo "\\tools\\loadlin.exe vmlinuz initrd=initrd.gz" | todos > $CDDIR/$INSTALLDIR/install.bat
+echo "  Using ISOLINUX boot-disks image on CD$N"
+mkdir -p $CDDIR/$INSTALLDIR
+cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
+cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
+echo "\\tools\\loadlin.exe vmlinuz initrd=initrd.gz" | todos > $CDDIR/$INSTALLDIR/install.bat
 
-	mkdir -p $CDDIR/../syslinux
-	SYSLINUXDEB=$(find_pkg_file syslinux)
-	if [ -z "$SYSLINUXDEB" ]; then
-		echo "ERROR: syslinux package is required" >&2
-		exit 1
-	fi
-	(dpkg --fsys-tarfile "$MIRROR/$SYSLINUXDEB" | \
-		tar xf - -C $CDDIR/../syslinux ./usr/lib)
+mkdir -p $CDDIR/../syslinux
+SYSLINUXDEB=$(find_pkg_file syslinux)
+if [ -z "$SYSLINUXDEB" ]; then
+	echo "ERROR: syslinux package is required" >&2
+	exit 1
+fi
+(dpkg --fsys-tarfile "$MIRROR/$SYSLINUXDEB" | \
+	tar xf - -C $CDDIR/../syslinux ./usr/lib)
 
-	echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-	find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
+echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
+add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
+# In case of a multi-arch CD the script will be called two times. The
+# first time the isolinux dir gets set up for single arch; if it is
+# called a second time the isolinux dir already exists and we know it
+# will be multi-arch. We then throw away the first version and just
+# configure things from scratch for multi-arch.
 
-	# In case of a multi-arch CD the script will be called two times.
-	# The first time the isolinux dir gets set up for single arch; if
-	# it is called a second time the isolinux dir already exists and we
-	# know it will be multi-arch. We then throw away the first version
-	# and just configure things from scratch for multi-arch.
+MULTIARCH=
+if [ -e boot$N/isolinux/isolinux.cfg ]; then
+	MULTIARCH=1
+	rm -r boot$N/isolinux
+fi
 
-	MULTIARCH=
-	if [ -e boot$N/isolinux/isolinux.cfg ]; then
-		MULTIARCH=1
-		rm -r boot$N/isolinux
-	fi
+mkdir -p boot$N/isolinux
+# Isolinux setup including config and help files comes from d-i.
+cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 
-	mkdir -p boot$N/isolinux
-	# Isolinux setup including config and help files comes from d-i.
-	cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
-
-	di_syslinux_ver="$(di_syslinux_version)"
-	case "$di_syslinux_ver" in
-	    2.0)
+di_syslinux_ver="$(di_syslinux_version)"
+case "$di_syslinux_ver" in
+	2.0)
 		: ;;
-	    1.*)
+	1.*)
 		echo "Error: syslinux config versions before 2.0 are not supported"
 		exit 1 ;;
-	    *)
+	*)
 		echo "Error: unrecognized syslinux config version '$di_syslinux_ver'"
 		exit 1 ;;
-	esac
+esac
 
-	# Not everything in the tarball is isolinux stuff
-	if [ -e boot$N/isolinux/win32-loader.ini ] ; then
-		for file in boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe boot$N/isolinux/win32-loader.ini; do
-			if [ -e $file ] ; then
-				mv -v $file boot$N/
-			fi
-		done
-	fi
-
-	if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
-		extra_image gtk/vmlinuz         "../vmlinuz"
-		extra_image gtk/initrd.gz       "../initrd.gz"
-		mv boot$N/isolinux/f3.txt.withgtk boot$N/isolinux/f3.txt
-		mv boot$N/isolinux/f4.txt.withgtk boot$N/isolinux/f4.txt
-		if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
-			mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
+# Not everything in the tarball is isolinux stuff
+if [ -e boot$N/isolinux/win32-loader.ini ] ; then
+	for file in boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe boot$N/isolinux/win32-loader.ini; do
+		if [ -e $file ] ; then
+			mv -v $file boot$N/
 		fi
-		echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
+	done
+fi
 
+if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
+	extra_image gtk/vmlinuz         "../vmlinuz"
+	extra_image gtk/initrd.gz       "../initrd.gz"
+	mv boot$N/isolinux/f3.txt.withgtk boot$N/isolinux/f3.txt
+	mv boot$N/isolinux/f4.txt.withgtk boot$N/isolinux/f4.txt
+	if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
+		mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
 	fi
-	rm -f boot$N/isolinux/isolinux.cfg.with*
+	echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
 
-	if variant_enabled "xen" ; then
-		extra_image xen/vmlinuz         "../vmlinuz   ../gtk/vmlinuz"
-		extra_image xen/initrd.gz       "../initrd.gz ../gtk/initrd.gz"
-		extra_image xen/xm-debian.cfg
-	fi
+fi
+rm -f boot$N/isolinux/isolinux.cfg.with*
 
-	# Modify win32-loader.ini for the "current" arch
-	if [ -e boot$N/win32-loader.ini ]; then
-		sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
-		if [ "${DESKTOP}" ] ; then
-			sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
-		fi
-	fi
+if variant_enabled "xen" ; then
+	extra_image xen/vmlinuz         "../vmlinuz   ../gtk/vmlinuz"
+	extra_image xen/initrd.gz       "../initrd.gz ../gtk/initrd.gz"
+	extra_image xen/xm-debian.cfg
+fi
 
-	cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
-	cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
-
-	if [ -z "$MULTIARCH" ]; then
-		# Set up isolinux dir for only the current arch
-		sed -i "s|%install%|$INSTALLDIR|" \
-			boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
-
-		# Remove the amd*.cfg files to avoid them being loaded on a
-		# disc that does not have both amd64 and i386 dirs.
-		rm -f boot$N/isolinux/amd*.cfg boot$N/isolinux/desktop/amd*.cfg
-	else
-		# Set up isolinux dir for multi-arch
-		sed -i "s|%install%|$INSTALLDIR_i386|
-			s|%install-amd%|$INSTALLDIR_amd64|" \
-			boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
-
-		for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
-			sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
-		done
-
-		# Modify win32-loader.ini to also cover the "other" arch
-		if [ "$ARCH" = i386 ]; then
-			sed -i -e "/^arch=/d
-				   /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
-				boot$N/win32-loader.ini
-		else
-			sed -i -e "/^arch=/d
-				   /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
-				boot$N/win32-loader.ini
-		fi
-
-		# Apply workaround for #505243
-		multiarch_workaround
-	fi
-
-	if [ "$SPLASHPNG" ] ; then
-		# Insert our own splash screen.  Color index 0 is
-		# background, and index 7 is foreground.  Set to black and
-		# white respecively
-		pngtopnm < $SPLASHPNG | ppmquant 16 | \
-			ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
-		pngtopnm < $SPLASHPNG | ppmquant 16 | pnmtopng  > boot$N/isolinux/splash.png
-	fi
-
-	sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
-
-	if [ -n "$KERNEL_PARAMS" ]; then
-		# Substitute custom kernel params into the isolinux config
-		# file(s)
-		for file in boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg; do
-			case "$(basename $file)" in
-			    instsel.cfg)
-				continue ;;
-			esac
-			sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
-				$file
-		done
-	fi
-
-	case "$ORIG_DESKTOP" in
-	    all)
-		modify_for_all_desktop ;;
-	    light)
-		modify_for_light_desktop ;;
-	    *)
-		modify_for_single_desktop ;;
-	esac
-else
-	if [ -n "$THISTYPE" ]; then
-		echo "Using $THISTYPE boot-disks image on CD$N"
-		mkdir -p boot$N/boot
-		cp $THISTYPE/boot.img boot$N/boot/
-
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b boot/boot.img"
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.catalog"
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
-	else
-		mkdir -p boot$N
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-		add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+# Modify win32-loader.ini for the "current" arch
+if [ -e boot$N/win32-loader.ini ]; then
+	sed -i "s|install/|$INSTALLDIR/|" boot$N/win32-loader.ini
+	if [ "${DESKTOP}" ] ; then
+		sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" boot$N/win32-loader.ini
 	fi
 fi
+
+cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
+cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
+
+if [ -z "$MULTIARCH" ]; then
+	# Set up isolinux dir for only the current arch
+	sed -i "s|%install%|$INSTALLDIR|" \
+		boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
+    
+	# Remove the amd*.cfg files to avoid them being loaded on a
+	# disc that does not have both amd64 and i386 dirs.
+	rm -f boot$N/isolinux/amd*.cfg boot$N/isolinux/desktop/amd*.cfg
+else
+	# Set up isolinux dir for multi-arch
+	sed -i "s|%install%|$INSTALLDIR_i386|
+			s|%install-amd%|$INSTALLDIR_amd64|" \
+			    boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
+
+	for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
+		sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
+	done
+
+	# Modify win32-loader.ini to also cover the "other" arch
+	if [ "$ARCH" = i386 ]; then
+		sed -i -e "/^arch=/d
+				   /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
+				       boot$N/win32-loader.ini
+	else
+		sed -i -e "/^arch=/d
+				   /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
+				       boot$N/win32-loader.ini
+	fi
+
+	# Apply workaround for #505243
+	multiarch_workaround
+fi
+
+if [ "$SPLASHPNG" ] ; then
+	# Insert our own splash screen.  Color index 0 is background, and
+	# index 7 is foreground.  Set to black and white respecively
+	pngtopnm < $SPLASHPNG | ppmquant 16 | \
+		ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
+	pngtopnm < $SPLASHPNG | ppmquant 16 | pnmtopng  > boot$N/isolinux/splash.png
+fi
+
+sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
+
+if [ -n "$KERNEL_PARAMS" ]; then
+	# Substitute custom kernel params into the isolinux config file(s)
+	for file in boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg; do
+		case "$(basename $file)" in
+			instsel.cfg)
+				continue ;;
+		esac
+		sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
+			$file
+	done
+fi
+
+case "$ORIG_DESKTOP" in
+	all)
+		modify_for_all_desktop ;;
+	light)
+		modify_for_light_desktop ;;
+	*)
+		modify_for_single_desktop ;;
+esac
 
 # Add autorun
 if [ -f boot$N/setup.exe ]; then
