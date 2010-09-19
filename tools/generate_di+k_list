@@ -92,6 +92,9 @@ bpalogin
  */
 multipath-tools-boot
 
+/* #593914: netinsts are being used on wireless too these days. */
+wpasupplicant
+
 /* add the list of firmware packages here too if required */
 #ifdef FORCE_FIRMWARE
 #    include <firmware>
