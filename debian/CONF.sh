@@ -181,8 +181,8 @@ export ISOLINUX=1
 # them too
 export MAX_PKG_SIZE=600000000
 
-# uncoment this to make build_all.sh try to build a simple CD image if
-# the proper official CD run does not work
+# Should build_all.sh try to build a simple CD image if the proper official
+# CD run does not work?
 ATTEMPT_FALLBACK=yes
 
 # Set your disk type here. Known types are:
@@ -216,12 +216,12 @@ export VARIANTS=
 # excluded completely. The same goes for packages listed in EXCLUDE.
 
 # Set this if the recommended packages should be skipped when adding 
-# package on the CD.  The default is 'false'.
-export NORECOMMENDS=1
+# package on the CD.  The default is 'true'.
+# export NORECOMMENDS=1
 
 # Set this if the suggested packages should be skipped when adding 
 # package on the CD.  The default is 'true'.
-#export NOSUGGESTS=1
+# export NOSUGGESTS=1
 
 # Set to 1 to generate MD5/SHA1/SHA256/SHA512 sums for generated images
 export IMAGESUMS=1
@@ -357,13 +357,13 @@ done
 # If so we will link to them on the web site.
 export OMIT_RELEASE_NOTES=1
 
+# Set this to override the default location
+#export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
+
 # Set to 1 to not include the doc/tools directories on CD1
 # Useful to save space and avoids failures if you have a mirror
 # without those directories.
 #export OMIT_DOC_TOOLS=1
-
-# Set this to override the default location
-#export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
 
 case "$OFFICIAL" in
     "Official")

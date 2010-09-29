@@ -18,6 +18,9 @@ debian-cd (3.1.4) unstable; urgency=low
   * Minor tweaks to Debian packaging to make lintian happy.
     Closes: #592932
   * Minor whitespace/wording fixes for the README file. Closes: #592933
+  * Change the default for NORECOMMENDS to 1 for consistency with
+    NOSUGGESTS. Closes: #598196
+  * Documentation patches
 
   [ Steve McIntyre ]
   * Rename log.add_packages to add_packages.log

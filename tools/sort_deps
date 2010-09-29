@@ -21,7 +21,7 @@ my $extranonfree = $ENV{'EXTRANONFREE'} || 0;
 my $force_firmware = $ENV{'FORCE_FIRMWARE'} || 0;
 my $local = $ENV{'LOCAL'} || 0;
 my $complete = $ENV{'COMPLETE'} || 0;
-my $norecommends = $ENV{'NORECOMMENDS'} || 0;
+my $norecommends = $ENV{'NORECOMMENDS'} || 1;
 my $nosuggests = $ENV{'NOSUGGESTS'} || 1;
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
