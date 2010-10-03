@@ -45,13 +45,8 @@ aptitude
 hotplug
 pciutils
 usbutils
-/* Used for Lenny and earlier */
-console-data
-console-common
-console-tools
-console-cyrillic
-console-terminus
 /* Used for Squeeze and onwards */
+kbd
 console-setup
 pcmciautils
 wireless-tools
