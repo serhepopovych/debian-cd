@@ -26,22 +26,31 @@ CAPCODENAME=`perl -e "print ucfirst("$CODENAME")"`
 
 NUM_ARCHES=`echo $ARCHES | wc -w`
 
+if [ "$VOLID_BASE"x = ""x ] ; then
+    VOLID_BASE="Debian $DEBVERSION"
+fi
+
 if [ $NUM_ARCHES = 1 ] ; then
 	case $ARCHES in
 		source)
 			SOURCEDISK=1
 			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
-			export VOLID="Debian $DEBVERSION Src-$DISKNUM"
+			export VOLID="$VOLID_BASE Src-$DISKNUM"
 			export SOURCEONLY=yes
 			;;
 		*)
 			BINARYDISK=1
 			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
-			if [ $ARCHES = powerpc ] ; then
-				export VOLID="Debian $DEBVERSION ppc Bin-$DISKNUM"
-			else
-				export VOLID="Debian $DEBVERSION $ARCHES Bin-$DISKNUM"
-			fi
+			case "$ARCHES" in
+			    powerpc)
+				export VOLID="$VOLID_BASE ppc Bin-$DISKNUM" ;;
+			    kfreebsd-i386)
+				export VOLID="$VOLID_BASE f-i386 Bin-$DISKNUM" ;;
+			    kfreebsd-amd64)
+				export VOLID="$VOLID_BASE f-amd64 Bin-$DISKNUM" ;;
+			    *)
+				export VOLID="$VOLID_BASE $ARCHES Bin-$DISKNUM" ;;
+			esac
 			;;
 	esac
     export ARCHDEF=$ARCHES
@@ -52,7 +61,7 @@ else
 	esac
 	export ARCHDEF=`echo $ARCHES | sed 's? ?/?g'`
 	export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
-	export VOLID="Debian $DEBVERSION M-A $DISKNUM"
+	export VOLID="$VOLID_BASE M-A $DISKNUM"
 fi
 
 echo "Starting new $ARCHDEF $DISKTYPE $DISKNUM at $CDDIR"
