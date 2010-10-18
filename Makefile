@@ -319,6 +319,9 @@ $(BDIR)/rawlist:
 	if [ "$(FORCE_FIRMWARE)"x != "0"x ] ; then \
 		ARCHDEFS="$$ARCHDEFS -DFORCE_FIRMWARE"; \
 	fi; \
+	if [ "$(EXCLUDE_486_KERNEL)"x = "1"x ] ; then \
+		ARCHDEFS="$$ARCHDEFS -DARCH_i386_EXCLUDE_486_KERNEL"; \
+	fi; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		cat $(TASKDIR)/$(TASK) | \
 		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS $$VARIANTDEFS\
