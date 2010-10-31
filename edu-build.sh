@@ -10,19 +10,20 @@
 
 set -e
 
+# FIXME: ~holger is not the best path...
 EDU_REPO=~holger/edu-build
 DEBIAN_CD=~debian-cd/build/debian-cd
 
-suite=squeeze-test-amd64-i386-netins
+# FIXME: we also want to build the DVD, but later
+suite=squeeze-test-amd64-i386-netinst
 
 # update pkglists from debian-edu svn repo
 cd $EDU_REPO && svn up
 
+# actually build the image
 cd $DEBIAN_CD
-
 grep -v '^#' $EDU_REPO/CD-administrator/wantedpkglist-$suite.txt > debian-cd/tasks/squeeze/debian-edu
 grep -v '^#' $EDU_REPO/CD-administrator/unwantedpkglist-$suite.txt > debian-cd/tasks/squeeze/debian-edu-exclude
-
 # todo:
 
 # call easy-build.sh correctly
