@@ -1,4 +1,4 @@
-debian-cd (3.1.4) unstable; urgency=low
+debian-cd (3.1.4) UNRELEASED;; urgency=low
 
   [ Frans Pop ]
   * Cleanup of packages included for bootable CDs (generate_d-i+k_list):
@@ -62,6 +62,9 @@ debian-cd (3.1.4) unstable; urgency=low
 
   [ Petter Reinholdtsen ]
   * Support replacing the g-i image with ones own image. Closes: #601189
+
+  [ Holger Levsen ]
+  * Start work on Debian Edu images.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
 

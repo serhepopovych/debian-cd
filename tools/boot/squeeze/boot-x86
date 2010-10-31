@@ -296,26 +296,26 @@ if [ "$SPLASHPNG" ] ; then
 	pngtopnm < $SPLASHPNG | ppmquant 16 | pnmtopng  > boot$N/isolinux/splash.png
 fi
 
-       #added by Debian Edu patch
-       if [ "$LOGOPNG" ] ; then
-               # Add custom logo to the initrd.gz file, replacing old image
-               GTKINITRD=$CDDIR/$INSTALLDIR/gtk/initrd
-               GTKINITRDGZ=$GTKINITRD.gz
-               echo "info: Adding $LOGOPNG to $GTKINITRD"
-               INITRDDIR=$TDIR/initrd-$$
-               # Repack initrd with new image
-               mkdir -p $INITRDDIR
-               (
-                       cd $INITRDDIR
-                       gunzip $GTKINITRDGZ
-                       mkdir -p $INITRDDIR/usr/share/graphics
-                       cp $LOGOPNG $INITRDDIR/usr/share/graphics/logo_debian.png
-                       echo usr/share/graphics/logo_debian.png | \
-                       cpio -oA -H newc -F $GTKINITRD
-                       gzip -9 $GTKINITRD
-               )
-               rm -rf $INITRDDIR
-       fi
+# used by Debian Edu
+if [ "$LOGOPNG" ] ; then
+	# Add custom logo to the initrd.gz file, replacing old image
+	GTKINITRD=$CDDIR/$INSTALLDIR/gtk/initrd
+	GTKINITRDGZ=$GTKINITRD.gz
+	echo "info: Adding $LOGOPNG to $GTKINITRD"
+	INITRDDIR=$TDIR/initrd-$$
+	# Repack initrd with new image
+	mkdir -p $INITRDDIR
+	(
+		cd $INITRDDIR
+		gunzip $GTKINITRDGZ
+		mkdir -p $INITRDDIR/usr/share/graphics
+		cp $LOGOPNG $INITRDDIR/usr/share/graphics/logo_debian.png
+		echo usr/share/graphics/logo_debian.png | \
+		cpio -oA -H newc -F $GTKINITRD
+		gzip -9 $GTKINITRD
+	)
+	rm -rf $INITRDDIR
+fi
 
 sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 
