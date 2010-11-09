@@ -27,7 +27,6 @@ speakup-modules-*
 usb-modules-*
 usb-serial-modules-*
 usb-storage-modules-*
-zlib-modules-*
 # Not used on amd64
 console-keymaps-acorn
 console-keymaps-amiga

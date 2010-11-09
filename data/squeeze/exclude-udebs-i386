@@ -27,7 +27,6 @@ speakup-modules-*
 usb-modules-*
 usb-serial-modules-*
 usb-storage-modules-*
-zlib-modules-*
 # 686-bigmem kernel udebs are only used for the Xen netboot image
 *-686-bigmem-di !xen
 # Not used on i386
