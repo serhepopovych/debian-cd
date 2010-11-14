@@ -10,6 +10,5 @@ export MKISOFS=~/build/mkisofs/usr/bin/mkisofs
 if [ "$DATE"x = ""x ] ; then
     export DATE=`date -u +%Y%m%d`
 fi
-export PARALLEL=1
 
 export EXTRACTED_SOURCES=/mnt/nfs-cdimage/cd-sources
