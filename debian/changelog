@@ -46,6 +46,7 @@ debian-cd (3.1.4) unstable; urgency=low
   * Include the acpi package for all x86 media types. Closes: #475243
   * Include the wpasupplicant package on netinsts and larger. Closes: #593914
   * Include kbd on first CD rather than console-tools. Closes: #514654
+  * Added dedication to Frans Pop.
 
   [ Ian Campbell ]
   * boot-x86: detect duplicates in the extra images used for installation

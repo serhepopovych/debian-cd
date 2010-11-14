@@ -45,7 +45,7 @@ binary-arch: build install
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installdocs README*
+	dh_installdocs README* DEDICATION.txt
 	dh_installexamples
 	dh_installmenu
 	dh_installcron
