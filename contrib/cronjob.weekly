@@ -5,14 +5,11 @@ export TOPDIR=$(dirname $0)
 . $TOPDIR/settings.sh
 
 export PUBDIRJIG=$PUBDIR/weekly-builds
-export PUBDIRISO=$PUBDIR/weekly-builds
 export DATE_BUILD="$DATE-$BUILDNUM"
 
-export RSYNC_TARGET=/mnt/nfs-cdimage/weekly-builds
+. $TOPDIR/common.sh
 
-if [ "$PARALLEL"x = ""x ] ; then
-    PARALLEL=0
-fi
+export RSYNC_TARGET=/mnt/nfs-cdimage/weekly-builds
 
 # If we're doing a normal set of daily/weekly builds, leave the
 # checksum filenames alone. Otherwise, make life easier for people
@@ -40,46 +37,8 @@ export OMIT_RELEASE_NOTES
 
 BUILDS_RUNNING=""
 
-now () {
-    date -u +%F:%H:%M:%S
-}
-
-calc_time () {
-    echo $1 $2 | awk '
-    {
-        split($1, start, ":")
-        start_time = (3600*start[2]) + (60*start[3]) + start[4]
-        split($2, end, ":")
-        end_time = (3600*end[2]) + (60*end[3]) + end[4]
-        # Cope with going to a new day; do not worry about more than 1 day!
-        if (start[1] != end[1]) { end_time += 86400 }
-        time_taken = end_time - start_time
-        hours = int(time_taken / 3600)
-        time_taken -= (hours * 3600)
-        minutes = int(time_taken / 60)
-        time_taken -= (minutes * 60)
-        seconds = time_taken
-        printf("%dh%2.2dm%2.2ds\n", hours, minutes, seconds)
-    }'
-}
-
-build_finished () {
-    ARCH="$1"
-    BUILDNAME="$2"
-    BUILDNAMESTART="${BUILDNAME}START"
-    start=${!BUILDNAMESTART}
-
-    . $PUBDIRJIG/$ARCH/$BUILDNAME-trace
-
-    time_spent=`calc_time $start $end`
-    echo "$ARCH $BUILDNAME build started at $start, ended at $end (took $time_spent), error $error"
-    if [ $error -ne 0 ] ; then
-        arch_error="$arch_error "$BUILDNAME"FAIL/$error/$end"
-    fi    
-}
-
 if [ "$ARCHES"x = ""x ] ; then
-    ARCHES="i386 source amd64 multi powerpc armel hppa ia64 mips mipsel s390 sparc"
+    ARCHES="i386 source amd64 multi powerpc armel hppa ia64 mips mipsel s390 sparc kfreebsd-amd64 kfreebsd-i386"
 fi
 
 if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
@@ -114,16 +73,9 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                     *)
                         export MAXISOS=3; export MAXJIGDOS=ALL ;;
                 esac
-                CDSTART=`now`
                 unset DESKTOP
-                export BUILDNAME="CD"
-                BUILDS_RUNNING="$BUILDS_RUNNING $BUILDNAME"
-                if [ $PARALLEL = 1 ] ; then
-                    ./testingcds "$arch" &
-                else
-                    ./testingcds "$arch"
-                    build_finished $arch $BUILDNAME
-                fi
+		build_started CD
+                ./testingcds "$arch" &
             fi
 
             # Full DVD set
@@ -133,22 +85,13 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                     i386|amd64|source)
                         export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
                     *)
-                        export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
+                        export MAXISOS=1; export MAXJIGDOS=ALL ;;
                 esac
-                DVDSTART=`now`
                 export DESKTOP=all
-                export BUILDNAME="DVD"
-                BUILDS_RUNNING="$BUILDS_RUNNING $BUILDNAME"
-                if [ $PARALLEL = 1 ] ; then
-                    INSTALLER_CD=3 TASK=Debian-all \
-                        KERNEL_PARAMS='desktop=all' \
-                        ./testingcds "$arch" &
-                else
-                    INSTALLER_CD=3 TASK=Debian-all \
-                        KERNEL_PARAMS='desktop=all' \
-                        ./testingcds "$arch"
-                    build_finished $arch $BUILDNAME
-                fi
+		build_started DVD
+                INSTALLER_CD=3 TASK=Debian-all \
+                    KERNEL_PARAMS='desktop=all' \
+                    ./testingcds "$arch" &
             fi
 
             # Full BD set
@@ -158,94 +101,44 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
                     i386|amd64|source)
                         export MAXISOS=0
                         export MAXJIGDOS=ALL
-                        BDSTART=`now`
                         export DESKTOP=all
-                        export BUILDNAME="BD"
-                        BUILDS_RUNNING="$BUILDS_RUNNING $BUILDNAME"
-                        if [ $PARALLEL = 1 ] ; then
-                            INSTALLER_CD=9 TASK=Debian-all \
-                                KERNEL_PARAMS='desktop=all' \
-                                ./testingcds "$arch" &
-                        else
-                            INSTALLER_CD=9 TASK=Debian-all \
-                                KERNEL_PARAMS='desktop=all' \
-                                ./testingcds "$arch"
-                            build_finished $arch $BUILDNAME
-                        fi
+			build_started BD
+                        INSTALLER_CD=9 TASK=Debian-all \
+                            KERNEL_PARAMS='desktop=all' \
+                            ./testingcds "$arch" &
                         ;;
                     *)
-                        echo "Not running BD build for $arch"
+                        echo "  Not running BD build for $arch"
                         ;;
                 esac
             fi
 
             # kde and xfce/lxde cds
             if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
-                KDECDSTART=`now`
                 export MAX_PKG_SIZE=300000000
                 export DESKTOP=kde
                 export MAXISOS=1; export MAXJIGDOS=1
-                export BUILDNAME="KDECD"
-                BUILDS_RUNNING="$BUILDS_RUNNING $BUILDNAME"
-                if [ $PARALLEL = 1 ] ; then
+		build_started KDECD
                     INSTALLER_CD=4 TASK=Debian-kde \
                         KERNEL_PARAMS='desktop=kde' \
                         MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
                         ./testingcds "$arch" &
-                else
-                    INSTALLER_CD=4 TASK=Debian-kde \
-                        KERNEL_PARAMS='desktop=kde' \
-                        MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
-                        ./testingcds "$arch"
-                    build_finished $arch $BUILDNAME
-                fi
 
-                LIGHTCDSTART=`now`
                 export MAX_PKG_SIZE=300000000
                 export DESKTOP=light
                 export MAXISOS=1; export MAXJIGDOS=1
-                export BUILDNAME="LIGHTCD"
-                BUILDS_RUNNING="$BUILDS_RUNNING $BUILDNAME"
-                if [ $PARALLEL = 1 ] ; then
-                    INSTALLER_CD=B TASK=Debian-light \
-                        KERNEL_PARAMS='desktop=light' \
-                        MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
-                        ./testingcds "$arch" &
-                else
-                    INSTALLER_CD=B TASK=Debian-light \
-                        KERNEL_PARAMS='desktop=light' \
-                        MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
-                        ./testingcds "$arch" 
-                    build_finished $arch $BUILDNAME
-                fi
+		build_started LIGHTCD
+                INSTALLER_CD=B TASK=Debian-light \
+                    KERNEL_PARAMS='desktop=light' \
+                    MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+                    ./testingcds "$arch" &
             fi
 
-            # Catch parallel builds here
-            while [ "$BUILDS_RUNNING"x != ""x  ] ; do
-                BUILDS_STILL_RUNNING=""
-                for BUILDNAME in $BUILDS_RUNNING; do
-                    if [ -e $PUBDIRJIG/$arch/$BUILDNAME-trace ] ; then
-                        build_finished $arch $BUILDNAME
-                    else
-                        BUILDS_STILL_RUNNING="$BUILDS_STILL_RUNNING $BUILDNAME"
-                    fi
-                done
-                BUILDS_RUNNING=$BUILDS_STILL_RUNNING
-                if [ "$BUILDS_RUNNING"x != ""x  ] ; then
-                    sleep 1
-                fi
-            done
-            arch_end=`now`
-
-            if [ "$arch_error"x = ""x ] ; then
-                arch_error="none"
-            fi
-            arch_time=`calc_time $arch_start $arch_end`
-            echo "$ARCH build started at $arch_start, ended at $arch_end (took $arch_time), error(s) $arch_error"
+	    catch_parallel_builds
 
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] ; then
-                    echo "Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
+                    echo "  Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
                     ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &
                 else
                     ~/build/report_build_error $RSYNC_TARGET $arch "$arch_error"
@@ -259,12 +152,12 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
 
             if [ "$NODVD"x = ""x ] ; then
                 export MAX_PKG_SIZE=999999999999
-                DVDSTART=`now`
                 export DESKTOP=all
-                export BUILDNAME="DVD"
+		build_started DVD
                 INSTALLER_CD=6 TASK=Debian-all \
                     KERNEL_PARAMS='desktop=all' \
                     MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+		    VARIANTS=xen \
                     ./testingcds "i386 amd64 source"
                 # We don't do multi in parallel, only one build type
                 # to do!
@@ -287,7 +180,7 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
 
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] || [ "$arch_error"x = ""x ] ; then
-                    echo "Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
+                    echo "  Running ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
                     ~/build/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
                 else
                     ~/build/report_build_error $RSYNC_TARGET multi-arch "$arch_error"

@@ -12,7 +12,9 @@
 
 #set -x
 
-CONF=~/build/CONF.sh
+if [ "$CONF"x = ""x ] ; then
+    CONF=~/build/CONF.sh
+fi
 export CF=$CONF
 
 now () {
@@ -40,17 +42,13 @@ fi
 # $DI is used to set DI_CODENAME and also to specify the directory for images
 if [ "$DI" ] ; then
     export DI_CODENAME="$DI"
-    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" -o "$INSTALLER_CD" = "C" ] ; then
-        PUBDIRJIG="$PUBDIRJIG"/"$DI"_d-i
-        PUBDIRISO="$PUBDIRISO"/"$DI"_d-i
-    fi
 fi
 
 export LOG="`pwd`/log/"
 if [ "$NUM_ARCHES"x = "1"x ] ; then
     export OUTARCH=$ARCH
 else
-    export OUTARCH="multiarch"
+    export OUTARCH="multi-arch"
 fi
 export RUN="$INSTALLER_CD$DI$OUTARCH$LOGAPPEND"
 export LOGFILE="$LOG/$RUN"
@@ -81,19 +79,20 @@ if [ "$OUT_TYPE"x = ""x ] ; then
     OUT_TYPE=cd
 fi
 
-if [ "$BUILDNAME"x = ""x ] ; then
-    TRACEFILE="$OUT_TYPE-trace"
-else
-    TRACEFILE="$BUILDNAME-trace"
-fi
-
 export IMAGETARGET=official_images
 cd debian-cd && . $CONF
-echo Making $ARCH "$DISKTYPE" in $OUT
 
 if [ "$OUT"x = ""x ] ; then
     echo Config error
     exit 1
+fi
+
+if [ "$BUILDNAME"x = ""x ] ; then
+    TRACEFILE="$OUT_TYPE-trace"
+    echo "  Making $ARCH ${DISKTYPE} in $OUT"
+else
+    TRACEFILE="$BUILDNAME-trace"
+    echo "  Making $ARCH ${DISKTYPE} (${BUILDNAME}) in $OUT"
 fi
 
 if [ "$INSTALLER_CD" = "1" ] ; then
@@ -120,6 +119,7 @@ fi
 
 rm -rf "$OUT"
 mkdir -p "$OUT"
+rm -f "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
 #mkdir -p "$LOG"
 
 overview_log="$LOG/overview"
@@ -134,34 +134,61 @@ overview () {
 > $LOGFILE
 
 # Do the actual building
+START=`now`
 if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     # if it went ok get things ready for publishing
     # we treat the daily netinst images in a different way
-    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" -o "$INSTALLER_CD" = "C" ] ; then
+    if [ "$INSTALLER_CD" = "1" -o "$INSTALLER_CD" = "2" ] ; then
 
         ##################################
         # NETINST STUFF
         ##################################
 
-        # make the dirs we'll use to publish things
-        TOPDIR="$PUBDIRISO"/$DATE_BUILD/$OUTARCH
-        mkdir -p $TOPDIR/iso-cd $TOPDIR/jigdo-cd
+        ARCHDIR="$PUBDIRJIG"/${DI}_d-i/$DATE_BUILD/$OUTARCH
 
         # put the isos and jigdos in their place
         for i in "$OUT"/*-1.iso; do
             BASE=`basename $i .iso`
             NETINSTNAME=`echo $BASE | sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g'`
-            mv -v $OUT/$BASE.iso $TOPDIR/iso-cd/$NETINSTNAME.iso
+            mv $OUT/$BASE.iso $ARCHDIR/iso-cd/$NETINSTNAME.iso
             cat $OUT/$BASE.jigdo | \
                 sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' | \
-                gzip --best --no-name > $TOPDIR/jigdo-cd/$NETINSTNAME.jigdo
+                gzip --best --no-name > $ARCHDIR/jigdo-cd/$NETINSTNAME.jigdo
             rm $OUT/$BASE.jigdo
-            mv -v $OUT/$BASE.template $TOPDIR/jigdo-cd/$NETINSTNAME.template
+            mv $OUT/$BASE.template $ARCHDIR/jigdo-cd/$NETINSTNAME.template
             # Make sure that the ISO is as new/newer than the jigdo file; #587774
-            touch $TOPDIR/iso-cd/$NETINSTNAME.iso
+            touch $ARCHDIR/iso-cd/$NETINSTNAME.iso
         done
         rm -f "$OUT"/*
+        END=`now`
+        mkdir -p "$PUBDIRJIG"/$OUTARCH
+        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
 
+    elif [ "$INSTALLER_CD" = "C" ] ; then
+
+        ##################################
+        # FIRMWARE NETINST STUFF
+        ##################################
+
+        ARCHDIR="$PUBDIRJIG"-firmware/${DI}_d-i/$DATE_BUILD/$OUTARCH
+
+        # put the isos and jigdos in their place
+        for i in "$OUT"/*-1.iso; do
+            BASE=`basename $i .iso`
+            NETINSTNAME=`echo $BASE | sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g'`
+            mv $OUT/$BASE.iso $ARCHDIR/iso-cd/$NETINSTNAME.iso
+            cat $OUT/$BASE.jigdo | \
+                sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' | \
+                gzip --best --no-name > $ARCHDIR/jigdo-cd/$NETINSTNAME.jigdo
+            rm $OUT/$BASE.jigdo
+            mv $OUT/$BASE.template $ARCHDIR/jigdo-cd/$NETINSTNAME.template
+            # Make sure that the ISO is as new/newer than the jigdo file; #587774
+            touch $ARCHDIR/iso-cd/$NETINSTNAME.iso
+        done
+        rm -f "$OUT"/*
+        END=`now`
+        mkdir -p "$PUBDIRJIG"/$OUTARCH
+        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     else
 
         #######################################
@@ -175,7 +202,11 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         done
 
         # Make sure that the ISOs are as new/newer than the jigdo files; #587774
-        touch "$OUT"/*.iso
+	for file in "$OUT"/*.iso; do
+	    if [ -e $file ] ; then 
+		touch $file
+	    fi
+        done
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
 	for file in "$OUT"/*SUMS${SUMS_EXTENSION}; do
@@ -192,8 +223,8 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	done
         mv "$OUT"/*.iso    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
 
-        DATE=`now`
-        echo -e "end=$DATE\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+        END=`now`
+        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     fi
 
     touch $TDIR/$CODENAME/1.pkgs_extracted # so we don't get errors below
@@ -230,8 +261,8 @@ else
             mail -s "testingcds $RUN has failed; log included" "$i"
     done
     overview "$RUN" failed
-    DATE=`now`
+    END=`now`
     mkdir -p "$PUBDIRJIG"/$OUTARCH
-    echo -e "end=$DATE\nerror=1\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+    echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     exit 1
 fi
