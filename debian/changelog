@@ -1,4 +1,4 @@
-debian-cd (3.1.4) UNRELEASED; urgency=low
+debian-cd (3.1.4) unstable; urgency=low
 
   [ Frans Pop ]
   * Cleanup of packages included for bootable CDs (generate_d-i+k_list):
@@ -69,7 +69,7 @@ debian-cd (3.1.4) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * squeeze: include zlib-modules for i386 images
 
- -- Steve McIntyre <93sam@debian.org>  Tue, 27 Feb 2010 12:24:29 +0100
+ -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
 
 debian-cd (3.1.3) unstable; urgency=low
 
