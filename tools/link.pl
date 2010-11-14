@@ -1,7 +1,3 @@
-#!/usr/bin/perl -w
-
-use strict;
-
 my $symlink_farm = $ENV{'SYMLINK'} || 0;
 my $link_verbose = $ENV{'VERBOSE'} || 0;
 my $link_copy = $ENV{'COPYLINK'} || 0;
