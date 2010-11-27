@@ -363,7 +363,7 @@ image-trees: ok genlist
 	$(Q)if [ "$(INC_SOURCE)"x = "yes"x ] ; then \
 		grep ^source $(BDIR)/packages > $(BDIR)/packages.source; \
 	fi
-	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" $(MKISOFS)
+	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" "$(MKISOFS)" "$(MKISOFS_OPTS)"
 
 images: ok $(OUT) $(BDIR)/md5-check
 	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"

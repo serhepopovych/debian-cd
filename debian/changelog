@@ -1,3 +1,10 @@
+debian-cd (3.1.5) UNRELEASED; urgency=low
+
+  [ Steve McIntyre ]
+  * Pass the base mkisofs options into make_disc_trees too.
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
+
 debian-cd (3.1.4) unstable; urgency=low
 
   [ Frans Pop ]

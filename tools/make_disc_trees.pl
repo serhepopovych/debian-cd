@@ -14,6 +14,7 @@ use Compress::Zlib;
 my %pkginfo;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
     $maxisos, $maxjigdos, $extranonfree);
+my $mkisofs_base_opts = "";
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
@@ -31,6 +32,7 @@ $tdir = shift;
 $codename = shift;
 $archlist = shift;
 $mkisofs = shift;
+$mkisofs_base_opts = shift;
 
 my $security = $ENV{'SECURITY'} || $mirror;
 my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
@@ -133,7 +135,7 @@ my $pkgs_done = 0;
 my $size = 0;
 my $guess_size = 0;
 my @overflowpkg;
-my $mkisofs_check = "$mkisofs -r -print-size -quiet";
+my $mkisofs_check = "$mkisofs $mkisofs_base_opts -r -print-size -quiet";
 my $debootstrap_script = "";
 if (defined ($ENV{'DEBOOTSTRAP_SCRIPT'})) {
 	$debootstrap_script = $ENV{'DEBOOTSTRAP_SCRIPT'};
@@ -268,6 +270,7 @@ while (defined (my $pkg = <INLIST>)) {
             (($size > $size_swap_check) &&
              ($count_since_last_check > $size_check_period))) {
             $count_since_last_check = 0;
+            print LOG "Running $size_check $cddir\n";
             $size = `$size_check $cddir`;
             chomp $size;
             print LOG "CD $disknum: Real current size is $size blocks after adding $pkg\n";
