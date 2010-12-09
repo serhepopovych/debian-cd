@@ -169,6 +169,13 @@ TASKSEL_DEB=$MIRROR/`mawk '
     /^Package: tasksel-data$/ { found=1 }
     /^Filename:/              { if (found==1) { print $2; exit } }' $TMP_PKG`
 
+# For testing purposes - set up FORCE_SID_TASKSEL to force us to use
+# sid's tasksel data even if we're using stable/testing.
+if [ "$FORCE_SID_TASKSEL"x = "1"x ] ; then
+    echo "update_tasks: forcing use of the sid tasksel-data tasks"
+    TASKSEL_DEB=$MIRROR/$(which_deb $MIRROR sid tasksel-data binary)
+fi
+
 dpkg -x $TASKSEL_DEB $TDIR/tasksel
 
 [ -e task.languages ] || exit 1
