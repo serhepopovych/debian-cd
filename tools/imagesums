@@ -21,7 +21,7 @@ for SUM in $CHECKSUMS; do
 	UPSUM=`echo $SUM | tr 'a-z' 'A-Z'`
 	FILE=$UPSUM"SUMS"$EXT
 	if [ $VERBOSE -eq 1 ] ; then
-	    echo "Clearing $FILE"
+	    echo "Clearing $PWD/$FILE"
 	fi
 	:> $FILE
 done
@@ -58,6 +58,7 @@ for file in `find * -name \*.jigdo` `find * -name \*.iso`; do
 			fi
 			if [ "$CKSUM"x != ""x ] ; then
 				echo "$CKSUM  $iso" >> $FILE
+				grep $iso $FILE
 			else
 				echo "No Jigdo help for $SUM, doing it the long way with $CMD"
 				$CMD $iso >> $FILE
