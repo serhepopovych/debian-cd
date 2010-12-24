@@ -5,6 +5,14 @@ debian-cd (3.1.5) UNRELEASED; urgency=low
   * Switch to --iso-level 4 for powerpc images to make them work better
     with POWER machines. Thanks to Milan Kupcevic for the patch.
     Closes: #603536
+  * Add code to make isohybrid images for i386/amd64:
+    + Makefile: Add support for overriding the MKISOFS and MKISOFS_OPTS
+      variables on a per-arch basis
+    + CONF.sh: add working examples for this
+    + tools/boot/squeeze/boot-x86: if configured to use xorriso, add the
+      extra command line options to add the isohybrid MBR. Also work
+      around a difference in ISO directory naming between genisoimage and
+      xorriso.
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
 

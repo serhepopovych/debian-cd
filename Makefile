@@ -42,6 +42,18 @@ ifeq ($(shell echo $(ARCHES) | sed 's/.*source.*/1/'),1)
 	export INC_SOURCE=yes
 endif
 
+export NUM_ARCHES=$(shell echo $(ARCHES) | wc -w)
+ifeq ($(NUM_ARCHES),1)
+    ARCH_MKISOFS = ${${ARCHES}_MKISOFS}
+    ARCH_MKISOFS_OPTS = ${${ARCHES}_MKISOFS_OPTS}
+    ifneq (${ARCH_MKISOFS},)
+        MKISOFS = ${ARCH_MKISOFS}
+    endif
+    ifneq (${ARCH_MKISOFS_OPTS},)
+        MKISOFS_OPTS = ${ARCH_MKISOFS_OPTS}
+    endif
+endif
+
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
 sort_deps=$(BASEDIR)/tools/sort_deps

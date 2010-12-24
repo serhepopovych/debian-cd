@@ -44,8 +44,21 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 # Exit if this is not a boot disk
 if [ $NN != 1 ] ; then exit 0; fi
 
-INSTALLDIR_i386="install.386"
-INSTALLDIR_amd64="install.amd"
+case "$MKISOFS" in
+    *xorriso*)
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
+        INSTALLDIR_i386="install_386"
+        INSTALLDIR_amd64="install_amd"
+# uncoment to add a small FAT partition on the media
+#        /sbin/mkfs.msdos -n Bla -C test.fat 8192
+#      add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 test.fat"
+       ;;
+    *)
+        INSTALLDIR_i386="install.386"
+        INSTALLDIR_amd64="install.amd"
+        ;;
+esac
 
 if [ "$ARCH" = i386 ]; then
 	INSTALLDIR="$INSTALLDIR_i386"
