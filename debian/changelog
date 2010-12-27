@@ -15,6 +15,7 @@ debian-cd (3.1.5) UNRELEASED; urgency=low
       extra command line options to add the isohybrid MBR. Also work
       around a difference in ISO directory naming between genisoimage and
       xorriso.
+    + Closes: #551951
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
 
