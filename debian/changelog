@@ -9,6 +9,8 @@ debian-cd (3.1.5) UNRELEASED; urgency=low
     + Makefile: Add support for overriding the MKISOFS and MKISOFS_OPTS
       variables on a per-arch basis
     + CONF.sh: add working examples for this
+    + CONF.sh: fix up the -jigdo-min-file-size option to use 1024 instead
+      of 0; genisoimage used to fix this up, but xorriso doesn't.
     + tools/boot/squeeze/boot-x86: if configured to use xorriso, add the
       extra command line options to add the isohybrid MBR. Also work
       around a difference in ISO directory naming between genisoimage and

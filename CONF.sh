@@ -306,7 +306,7 @@ export JIGDO_INCLUDE="/pool/"
 
 # Specify the minimum file size to consider for jigdo processing. Any files
 # smaller than this will simply be placed straight into the template file.
-export JIGDO_OPTS="-jigdo-min-file-size 0"
+export JIGDO_OPTS="-jigdo-min-file-size 1024"
 
 for EXCL in $JIGDO_EXCLUDE; do
 	JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
