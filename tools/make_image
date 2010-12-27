@@ -119,6 +119,9 @@ do
         echo $CMD
         echo $CMD > CD$n/.disk/mkisofs
         eval "$CMD"
+	if [ $ISO_WANTED = 1 ] ; then
+	    chmod +r $OUT/$OUTFILE.iso
+	fi
     fi
 
     # If we've made jigdo files, tweak them with extra info now
