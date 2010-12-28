@@ -202,6 +202,12 @@ while (defined (my $pkg = <INLIST>)) {
         } else {
             $mkisofs_opts = "";
         }
+        if ($disknum <= $maxjigdos) {
+            $mkisofs_opts = "$mkisofs_opts -jigdo-jigdo /dev/null";
+            $mkisofs_opts = "$mkisofs_opts -jigdo-template /dev/null";
+            $mkisofs_opts = "$mkisofs_opts -md5-list /dev/null";
+            $mkisofs_opts = "$mkisofs_opts -o /dev/null";
+        }
         if ( -e "$bdir/$disknum.mkisofs_dirs" ) {
             open(OPTS, "<$bdir/$disknum.mkisofs_dirs");
             while (defined($opt = <OPTS>)) {
