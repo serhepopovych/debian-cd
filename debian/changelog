@@ -16,6 +16,9 @@ debian-cd (3.1.5) UNRELEASED; urgency=low
       around a difference in ISO directory naming between genisoimage and
       xorriso.
     + Closes: #551951
+  * Drop the recommended size for BD-ROMs slightly, on the recommendation
+    of Thomas Schmitt. This will make it more likely that we'll fit on
+    all media.
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
 

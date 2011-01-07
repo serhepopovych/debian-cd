@@ -574,7 +574,7 @@ sub get_disc_size {
         $diskdesc = "8.5GB DVD";
     } elsif ($disktype eq "BD") {
 		# Useable capacity, found by checking some disks
-        $maxdiskblocks = 11826000 - $reserved;
+        $maxdiskblocks = 11230000 - $reserved;
         $diskdesc = "25GB BD";
     } elsif ($disktype eq "DLBD") {
 		# Useable capacity, found by checking some disks
