@@ -35,7 +35,7 @@ if [ $NUM_ARCHES = 1 ] ; then
 		source)
 			SOURCEDISK=1
 			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
-			export VOLID="$VOLID_BASE Src-$DISKNUM"
+			export VOLID="$VOLID_BASE Source $DISKNUM"
 			export SOURCEONLY=yes
 			;;
 		*)
@@ -43,13 +43,13 @@ if [ $NUM_ARCHES = 1 ] ; then
 			export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
 			case "$ARCHES" in
 			    powerpc)
-				export VOLID="$VOLID_BASE ppc Bin-$DISKNUM" ;;
+				export VOLID="$VOLID_BASE ppc $DISKNUM" ;;
 			    kfreebsd-i386)
-				export VOLID="$VOLID_BASE f-i386 Bin-$DISKNUM" ;;
+				export VOLID="$VOLID_BASE f-i386 $DISKNUM" ;;
 			    kfreebsd-amd64)
-				export VOLID="$VOLID_BASE f-amd64 Bin-$DISKNUM" ;;
+				export VOLID="$VOLID_BASE f-amd64 $DISKNUM" ;;
 			    *)
-				export VOLID="$VOLID_BASE $ARCHES Bin-$DISKNUM" ;;
+				export VOLID="$VOLID_BASE $ARCHES $DISKNUM" ;;
 			esac
 			;;
 	esac
