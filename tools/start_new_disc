@@ -130,11 +130,17 @@ if [ $DISKNUM = 1 ] ; then
 
 	echo "  Adding .disk/cd_type"
 	if [ "$COMPLETE"x = "1"x ]; then
-            if [ $DISKTYPE = DVD ]; then
+            if [ $DISKTYPE = DVD ] || [ $DISKTYPE = DLDVD ]; then
 		if [ "$MAXCDS"x = "1"x ]; then
 		    echo "dvd/single" > $CDDIR/.disk/cd_type
 		else
 		    echo "dvd" > $CDDIR/.disk/cd_type
+		fi
+            elif [ $DISKTYPE = BD ] || [ $DISKTYPE = DLBD ]; then
+		if [ "$MAXCDS"x = "1"x ]; then
+		    echo "bluray/single" > $CDDIR/.disk/cd_type
+		else
+		    echo "bluray" > $CDDIR/.disk/cd_type
 		fi
 	    else
 		if [ "$MAXCDS"x = "1"x ]; then
