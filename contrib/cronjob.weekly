@@ -63,7 +63,7 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
             #export DI_DIR="$ARCH_DI_DIR"
 
             # Full CD set
-            if [ "$NOCD"x = ""x ] ; then
+            if [ "$NOCD"x = ""x ] && [ "$NOFULLCD"x = ""x ] ; then
                 export MAX_PKG_SIZE=500000000
                 case $arch in
                     i386|amd64|source)
@@ -115,23 +115,27 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
 
             # kde and xfce/lxde cds
             if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
-                export MAX_PKG_SIZE=300000000
-                export DESKTOP=kde
-                export MAXISOS=1; export MAXJIGDOS=1
-		build_started KDECD
+		if [ "$NOKDECD"x = ""x ] ; then
+                    export MAX_PKG_SIZE=300000000
+                    export DESKTOP=kde
+                    export MAXISOS=1; export MAXJIGDOS=1
+		    build_started KDECD
                     INSTALLER_CD=4 TASK=Debian-kde \
                         KERNEL_PARAMS='desktop=kde' \
                         MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
                         ./testingcds "$arch" &
+		fi
 
-                export MAX_PKG_SIZE=300000000
-                export DESKTOP=light
-                export MAXISOS=1; export MAXJIGDOS=1
-		build_started LIGHTCD
-                INSTALLER_CD=B TASK=Debian-light \
-                    KERNEL_PARAMS='desktop=light' \
-                    MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
-                    ./testingcds "$arch" &
+		if [ "$NOLIGHTCD"x = ""x ] ; then
+                    export MAX_PKG_SIZE=300000000
+                    export DESKTOP=light
+                    export MAXISOS=1; export MAXJIGDOS=1
+		    build_started LIGHTCD
+                    INSTALLER_CD=B TASK=Debian-light \
+			KERNEL_PARAMS='desktop=light' \
+			MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+			./testingcds "$arch" &
+		fi
             fi
 
 	    catch_parallel_builds
@@ -192,8 +196,10 @@ if lockfile -r0 $TOPDIR/.debian-cd.lock ; then
         unset DESKTOP
     done
 
-    ~/build/generate_firmware_images squeeze
-    ~/build/generate_firmware_images sid
+    if [ "$NOFW"x = ""x ] ; then
+	~/build/generate_firmware_images squeeze
+	~/build/generate_firmware_images sid
+    fi
     
     if [ "$NOSNAP"x = ""x ] ; then
         ~/bin/weekly-snapshots

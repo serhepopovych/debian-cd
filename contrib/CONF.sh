@@ -151,6 +151,18 @@ export MKISOFS_OPTS="-jigdo-template-compress bzip2 -r " #-checksum_algorithm_is
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
 
+# Override for i386,amd64,multi to use xorriso.
+# BE AWARE: for multi-arch the order of the arches here will have to
+# match the order they're declared in the build
+export i386_MKISOFS="/home/93sam/xorriso"
+export i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+export amd64_MKISOFS="/home/93sam/xorriso"
+export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+export amd64_i386_MKISOFS="/home/93sam/xorriso"
+export amd64_i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+export i386_amd64_source_MKISOFS="/home/93sam/xorriso"
+export i386_amd64_source_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
 
@@ -165,12 +177,6 @@ export VERBOSE_MAKE=1
 # uncoment this to make build_all.sh try to build a simple CD image if
 # the proper official CD run does not work
 #ATTEMPT_FALLBACK=yes
-
-# Set your disk size here in MB. Used in calculating package and
-# source file layouts in build.sh and build_all.sh. Defaults are for
-# CD-R, try ~4600 for DVD-R.
-if [ ! "$DEFBINSIZE" ] ; then export DEFBINSIZE=642 ; fi
-if [ ! "$DEFSRCSIZE" ] ; then export DEFSRCSIZE=642 ; fi
 
 if [ "$DISKTYPE"x = ""x ] ; then
     DISKTYPE=CD
@@ -248,7 +254,7 @@ export JIGDO_EXCLUDE="'README*' /doc/ /md5sum.txt /.disk/ /pics/ 'Release*' 'Pac
 
 # Specify the minimum file size to consider for jigdo processing. Any files
 # smaller than this will simply be placed straight into the template file.
-export JIGDO_OPTS="-jigdo-min-file-size 0"
+export JIGDO_OPTS="-jigdo-min-file-size 1024"
 
 for EXCL in $JIGDO_EXCLUDE
 do

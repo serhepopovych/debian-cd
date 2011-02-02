@@ -80,7 +80,9 @@ copy_files() {
 copy_files $PUBDIRJIG $RSYNC_TARGET $ARCH
 
 echo "$START: Starting $ARCH sync from $PUBDIRJIG to $RSYNC_TARGET" >> $LOG
-mv $RSYNC_TARGET/$ARCH $RSYNC_TARGET/$ARCH.old
+if [ -e $RSYNC_TARGET/$ARCH ] ; then
+    mv -f $RSYNC_TARGET/$ARCH $RSYNC_TARGET/$ARCH.old
+fi
 mv $RSYNC_TARGET/$ARCH.tmp $RSYNC_TARGET/$ARCH
 rm -rf $RSYNC_TARGET/$ARCH.old &
 
