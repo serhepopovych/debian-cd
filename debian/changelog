@@ -21,7 +21,7 @@ debian-cd (3.1.5) unstable; urgency=high
     of Thomas Schmitt. This will make it more likely that we'll fit on
     all media.
 
- -- Steve McIntyre <93sam@debian.org>  Wed, 02 Feb 2010 23:37:54 +0000
+ -- Steve McIntyre <93sam@debian.org>  Wed, 02 Feb 2011 23:37:54 +0000
 
 debian-cd (3.1.4) unstable; urgency=low
 
