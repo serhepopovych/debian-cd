@@ -1,6 +1,7 @@
-debian-cd (3.1.5) UNRELEASED; urgency=low
+debian-cd (3.1.5) unstable; urgency=high
 
   [ Steve McIntyre ]
+  * Final upload for squeeze.
   * Pass the base mkisofs options into make_disc_trees too.
   * Switch to --iso-level 4 for powerpc images to make them work better
     with POWER machines. Thanks to Milan Kupcevic for the patch.
@@ -20,7 +21,7 @@ debian-cd (3.1.5) UNRELEASED; urgency=low
     of Thomas Schmitt. This will make it more likely that we'll fit on
     all media.
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 14 Nov 2010 15:37:24 +0000
+ -- Steve McIntyre <93sam@debian.org>  Wed, 02 Feb 2010 23:37:54 +0000
 
 debian-cd (3.1.4) unstable; urgency=low
 
