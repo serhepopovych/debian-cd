@@ -1,3 +1,10 @@
+debian-cd (3.1.6) UNRELEASED; urgency=low
+
+  * Add the missing accent in my family name in Uploaders.
+  * Drop Frans Pop from Uploaders, RIP.
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Fri, 04 Feb 2011 09:59:21 +0100
+
 debian-cd (3.1.5) unstable; urgency=high
 
   [ Steve McIntyre ]
