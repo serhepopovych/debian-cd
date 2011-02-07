@@ -1,7 +1,12 @@
 debian-cd (3.1.6) UNRELEASED; urgency=low
 
+  [ Raphaël Hertzog ]
   * Add the missing accent in my family name in Uploaders.
   * Drop Frans Pop from Uploaders, RIP.
+
+  [ Steve McIntyre ]
+  * Start wheezy development, doing "svn cp squeeze wheezy" and
+    "s/squeeze/wheezy/" in various places.
 
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 04 Feb 2011 09:59:21 +0100
 

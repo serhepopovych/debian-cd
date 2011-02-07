@@ -73,10 +73,10 @@ fi
 ## For what release to build images
 
 # The suite the installed system will be based on
-export CODENAME=squeeze
+export CODENAME=wheezy
 # The suite from which the udebs for the installer will be taken (normally
 # the same as CODENAME)
-export DI_CODENAME=squeeze
+export DI_CODENAME=wheezy
 
 
 ## The debian-installer images to use. This must match the suite (DI_CODENAME)

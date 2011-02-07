@@ -15,7 +15,7 @@ EDU_REPO=~holger/edu-build
 DEBIAN_CD=~debian-cd/build/debian-cd
 
 # FIXME: we also want to build the DVD, but later
-suite=squeeze-test-amd64-i386-netinst
+suite=wheezy-test-amd64-i386-netinst
 
 # update pkglists from debian-edu svn repo
 # FIXME:
@@ -24,11 +24,11 @@ cd $EDU_REPO && svn up
 
 # actually build the image
 cd $DEBIAN_CD
-grep -v '^#' $EDU_REPO/CD-administrator/wantedpkglist-$suite.txt > debian-cd/tasks/squeeze/debian-edu
-grep -v '^#' $EDU_REPO/CD-administrator/unwantedpkglist-$suite.txt > debian-cd/tasks/squeeze/debian-edu-exclude
+grep -v '^#' $EDU_REPO/CD-administrator/wantedpkglist-$suite.txt > debian-cd/tasks/wheezy/debian-edu
+grep -v '^#' $EDU_REPO/CD-administrator/unwantedpkglist-$suite.txt > debian-cd/tasks/wheezy/debian-edu-exclude
 # todo:
 # call easy-build.sh correctly
-# using tasks/squeeze/Debian-edu-netinst
+# using tasks/wheezy/Debian-edu-netinst
 # use sort_deps_edu instead of sort_deps (actually, merge those two, there is a bug in the bts about this)
 # probably/maybe just put our udebs on the normal netinst-cd and be done?
 
