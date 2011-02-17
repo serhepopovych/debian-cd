@@ -8,6 +8,9 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Start wheezy development, doing "svn cp squeeze wheezy" and
     "s/squeeze/wheezy/" in various places.
 
+  [ Otavio Salvador ]
+  * Add btrfs-tools on required packages by installer. Closes: #612007.
+
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 04 Feb 2011 09:59:21 +0100
 
 debian-cd (3.1.5) unstable; urgency=high

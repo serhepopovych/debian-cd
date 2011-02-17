@@ -54,6 +54,7 @@ xfsprogs
 jfsutils
 dosfsutils
 reiserfsprogs
+btrfs-tools
 libfribidi0
 localization-config
 acpi
