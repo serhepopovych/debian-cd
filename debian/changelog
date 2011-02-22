@@ -11,6 +11,10 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.
 
+  [ Didier Raboud ]
+  * Remove win32-loader standalone flavours from the tools/ directory on
+    x86. Closes: #612224
+
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 04 Feb 2011 09:59:21 +0100
 
 debian-cd (3.1.5) unstable; urgency=high
