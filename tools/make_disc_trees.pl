@@ -541,6 +541,7 @@ sub get_disc_size {
     my $hook;
     my $error = 0;
     my $reserved = 0;
+    my $chosen_disk = $disktype;
 
     if (defined($ENV{'RESERVED_BLOCKS_HOOK'})) {
         $hook = $ENV{'RESERVED_BLOCKS_HOOK'};
@@ -553,34 +554,40 @@ sub get_disc_size {
         print "  Reserving $reserved blocks on CD $disknum\n";
     }
 
+    my $disk_size_hack = $ENV{'FORCE_CD_SIZE'} || "";
+    if ($disk_size_hack) {
+       print LOG "HACK HACK HACK: Forcing use of a $disk_size_hack disk instead of $disktype\n";
+       $chosen_disk = $disk_size_hack;
+    }
+
     # Calculate the maximum number of 2K blocks in the output images
-    if ($disktype eq "BC") {
+    if ($chosen_disk eq "BC") {
         $maxdiskblocks = int(680 * $MB / $blocksize) - $reserved;
         $diskdesc = "businesscard";
-    } elsif ($disktype eq "NETINST") {
+    } elsif ($chosen_disk eq "NETINST") {
         $maxdiskblocks = int(680 * $MB / $blocksize) - $reserved;
         $diskdesc = "netinst";
-    } elsif ($disktype =~ /CD$/) {
+    } elsif ($chosen_disk =~ /CD$/) {
         $maxdiskblocks = int(680 * $MB / $blocksize) - $reserved;
         $diskdesc = "650MiB CD";
-    } elsif ($disktype eq "CD700") {
+    } elsif ($chosen_disk eq "CD700") {
         $maxdiskblocks = int(737 * $MB / $blocksize) - $reserved;
         $diskdesc = "700MiB CD";
-    } elsif ($disktype eq "DVD") {
+    } elsif ($chosen_disk eq "DVD") {
         $maxdiskblocks = int(4700 * $MB / $blocksize) - $reserved;
         $diskdesc = "4.7GB DVD";
-    } elsif ($disktype eq "DLDVD") {
+    } elsif ($chosen_disk eq "DLDVD") {
         $maxdiskblocks = int(8500 * $MB / $blocksize) - $reserved;
         $diskdesc = "8.5GB DVD";
-    } elsif ($disktype eq "BD") {
+    } elsif ($chosen_disk eq "BD") {
 		# Useable capacity, found by checking some disks
         $maxdiskblocks = 11230000 - $reserved;
         $diskdesc = "25GB BD";
-    } elsif ($disktype eq "DLBD") {
+    } elsif ($chosen_disk eq "DLBD") {
 		# Useable capacity, found by checking some disks
         $maxdiskblocks = 23652352 - $reserved;
         $diskdesc = "50GB DLBD";
-    } elsif ($disktype eq "CUSTOM") {
+    } elsif ($chosen_disk eq "CUSTOM") {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'}  - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";
         $diskdesc = "User-supplied size";
