@@ -7,7 +7,8 @@ if [ -z "$CF" ] ; then
 fi
 . $CF
 
-echo "Using CONF from $CF"
+START=`date -u`
+echo "$START: Using CONF from $CF."
 
 if [ -z "$COMPLETE" ] ; then
     export COMPLETE=1
@@ -84,3 +85,6 @@ make $IMAGETARGET
 if [ "$IMAGESUMS"x = 1x ]; then
 	make imagesums
 fi
+
+END=`date -u`
+echo "$END: Finished."
