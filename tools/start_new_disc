@@ -64,8 +64,6 @@ else
     export VOLID="$VOLID_BASE M-A $DISKNUM"
 fi
 
-echo "Starting new $ARCHDEF $DISKTYPE $DISKNUM at $CDDIR"
-
 mkdir -p $CDDIR
 echo "  Adding the required directories"
 

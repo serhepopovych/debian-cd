@@ -193,7 +193,6 @@ while (defined (my $pkg = <INLIST>)) {
 
         start_disc();
 
-        print "  Specified size for this image: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
         print "  Placing packages into image $disknum\n";
         if ( -e "$bdir/$disknum.mkisofs_opts" ) {
             open(OPTS, "<$bdir/$disknum.mkisofs_opts");
@@ -637,6 +636,8 @@ sub start_disc {
 
 	get_disc_size();
 
+    print "Starting new \"$archlist\" $disktype $disknum at $basedir/$codename/CD$DISKNUM\n";
+    print "  Specified size for this image: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
 	# Grab all the early stuff, apart from dirs that will change later
 	print "  Starting the md5sum.txt file\n";
 	chdir $cddir;
