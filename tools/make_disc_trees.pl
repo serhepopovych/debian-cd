@@ -189,10 +189,8 @@ while (defined (my $pkg = <INLIST>)) {
             last;
         }
         print LOG "Starting new disc $disknum at " . `date` . "\n";
-        print LOG "  Specified size: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
-
         start_disc();
-
+        print LOG "  Specified size: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
         print "  Placing packages into image $disknum\n";
         if ( -e "$bdir/$disknum.mkisofs_opts" ) {
             open(OPTS, "<$bdir/$disknum.mkisofs_opts");
