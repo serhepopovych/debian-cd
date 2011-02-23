@@ -9,6 +9,9 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     "s/squeeze/wheezy/" in various places.
   * Add support for over-riding disc size on demand, used for some of the
     squeeze release builds.
+  * Add disk size definitions for 1/2/4/8 GB USB sticks.
+  * Extend the size-override code to allow to override an individual disc
+    in the set (e.g. to make the first DVD fit on a 4GB USB stick).
 
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.

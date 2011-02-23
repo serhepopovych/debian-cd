@@ -204,10 +204,18 @@ ATTEMPT_FALLBACK=yes
 # DLDVD:             standard 8.5 GB dual-layer DVD
 # BD:                standard 25 GB blu-ray
 # DLBD:              standard 50 GB dual-layer blu-ray
+# STICK1GB:          1GB USB stick or similar
+# STICK2GB:          2GB USB stick or similar
+# STICK4GB:          4GB USB stick or similar
+# STICK8GB:          8GB USB stick or similar
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
 export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
 #export CUSTOMSIZE=XXXX
+# If you want to over-ride this choice (e.g. to make a larger version of a given disk),
+# you can do the following:
+# export FORCE_CD_SIZE=<type> to change all the sizes in a given run
+# export FORCE_CD_SIZE1=<type> to change the size of disk 1 (only)
 
 # List of languages for which language tasks from tasksel should be
 # included. See tasks/README.tasksel for further info.

@@ -115,6 +115,7 @@ my $size_check = "";
 # Constants used for space calculations
 my $MiB = 1048576;
 my $MB = 1000000;
+my $GB = 1000000000;
 my $blocksize = 2048;
 my ($maxdiskblocks, $diskdesc);
 my $cddir;
@@ -542,6 +543,7 @@ sub get_disc_size {
     my $error = 0;
     my $reserved = 0;
     my $chosen_disk = $disktype;
+    my $disk_size_hack = "";
 
     if (defined($ENV{'RESERVED_BLOCKS_HOOK'})) {
         $hook = $ENV{'RESERVED_BLOCKS_HOOK'};
@@ -554,9 +556,19 @@ sub get_disc_size {
         print "  Reserving $reserved blocks on CD $disknum\n";
     }
 
-    my $disk_size_hack = $ENV{'FORCE_CD_SIZE'} || "";
+    # See if we've been asked to switch sizes for the whole set
+    $disk_size_hack = $ENV{'FORCE_CD_SIZE'} || "";
     if ($disk_size_hack) {
-       print LOG "HACK HACK HACK: Forcing use of a $disk_size_hack disk instead of $disktype\n";
+       print LOG "HACK HACK HACK: FORCE_CD_SIZE found:\n";
+       print LOG "  forcing use of a $disk_size_hack disk instead of $chosen_disk\n";
+       $chosen_disk = $disk_size_hack;
+    }
+
+    # If we're asked to do a specific size for *this* disknum, over-ride again
+    $disk_size_hack = $ENV{"FORCE_CD_SIZE$disknum"} || "";
+    if ($disk_size_hack) {
+       print LOG "HACK HACK HACK: FORCE_CD_SIZE$disknum found:\n";
+       print LOG "  forcing use of a $disk_size_hack disk instead of $chosen_disk\n";
        $chosen_disk = $disk_size_hack;
     }
 
@@ -587,6 +599,18 @@ sub get_disc_size {
 		# Useable capacity, found by checking some disks
         $maxdiskblocks = 23652352 - $reserved;
         $diskdesc = "50GB DLBD";
+    } elsif ($chosen_disk eq "STICK1GB") {
+        $maxdiskblocks = int(1 * $GB / $blocksize) - $reserved;
+        $diskdesc = "1GB STICK";
+    } elsif ($chosen_disk eq "STICK2GB") {
+        $maxdiskblocks = int(2 * $GB / $blocksize) - $reserved;
+        $diskdesc = "2GB STICK";
+    } elsif ($chosen_disk eq "STICK4GB") {
+        $maxdiskblocks = int(4 * $GB / $blocksize) - $reserved;
+        $diskdesc = "4GB STICK";
+    } elsif ($chosen_disk eq "STICK8GB") {
+        $maxdiskblocks = int(8 * $GB / $blocksize) - $reserved;
+        $diskdesc = "8GB STICK";
     } elsif ($chosen_disk eq "CUSTOM") {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'}  - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";
