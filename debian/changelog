@@ -11,7 +11,11 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     squeeze release builds.
   * Add disk size definitions for 1/2/4/8 GB USB sticks.
   * Extend the size-override code to allow to override an individual disc
-    in the set (e.g. to make the first DVD fit on a 4GB USB stick).
+    in the set (e.g. to make the first DVD fit on a 4GB USB
+    stick). Closes: #612074
+  * Special-case builds of source-only discs: if we think we've
+    overflowed the disc size, try to carry on for a few more packages
+    to get closer to actually filling the disc. Closes: #613751.
 
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.

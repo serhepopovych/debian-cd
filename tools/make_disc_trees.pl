@@ -292,12 +292,20 @@ while (defined (my $pkg = <INLIST>)) {
                 # Put this package first on the next disc
                 push (@overflowlist, $pkg);
             }
-            finish_disc($cddir, "");
-
-            # And reset, to start the next disc
-            $size = 0;
-            $disknum++;
-            undef(@pkgs_added);
+            # Special-case for source-only discs where we don't care
+            # about the ordering. If we're doing a source-only build
+            # and we've overflowed, allow us to carry on down the list
+            # for a while to fill more space. Stop when we've skipped
+            # 5 packages (arbitrary choice of number!) #613751
+            if (!($archlist eq "source") or (scalar @overflowlist >= 5)) {
+                finish_disc($cddir, "");
+                # And reset, to start the next disc
+                $size = 0;
+                $disknum++;
+                undef(@pkgs_added);
+            } else {
+                print LOG "SOURCE DISC: continuing on to see if anything else will fit, " . scalar @overflowlist . " packages on the overflow list at this point\n";
+            }
         } else {
             $pkgs_this_cd++;
             $pkgs_done++;
