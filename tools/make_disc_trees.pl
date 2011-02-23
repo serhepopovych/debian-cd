@@ -166,7 +166,7 @@ if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
     print LOG "arches require HFS hybrid, multiplying sizes by $hfs_mult and marking $hfs_extra blocks for HFS use\n";
 }
 
-print "Starting to lay out packages into $disktype ($diskdesc) images: $maxdiskblocks 2K-blocks maximum per image\n";
+print "Starting to lay out packages into images:\n";
 
 if (-e "$bdir/firmware-packages") {
     open(FWLIST, "$bdir/firmware-packages") or die "Unable to read firmware-packages file!\n";
@@ -189,6 +189,7 @@ while (defined (my $pkg = <INLIST>)) {
             last;
         }
         print LOG "Starting new disc $disknum at " . `date` . "\n";
+        print LOG "  Specified size: $disktype ($diskdesc), $maxdiskblocks 2K-blocks maximum\n";
 
         start_disc();
 
