@@ -636,7 +636,7 @@ sub start_disc {
 
 	get_disc_size();
 
-    print "Starting new \"$archlist\" $disktype $disknum at $basedir/$codename/CD$DISKNUM\n";
+    print "Starting new \"$archlist\" $disktype $disknum at $basedir/$codename/CD$disknum\n";
     print "  Specified size for this image: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
 	# Grab all the early stuff, apart from dirs that will change later
 	print "  Starting the md5sum.txt file\n";
