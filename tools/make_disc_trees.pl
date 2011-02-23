@@ -189,7 +189,9 @@ while (defined (my $pkg = <INLIST>)) {
             last;
         }
         print LOG "Starting new disc $disknum at " . `date` . "\n";
-        print LOG "  Specified size: $disktype ($diskdesc), $maxdiskblocks 2K-blocks maximum\n";
+        print LOG "  Specified size: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
+        print "Starting new disc $disknum at " . `date` . "\n";
+        print "  Specified size: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
 
         start_disc();
 
