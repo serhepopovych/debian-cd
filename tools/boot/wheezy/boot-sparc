@@ -11,7 +11,7 @@ set -e
 N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://people.debian.org/~stappers/d-i/sparc/daily/cdrom"
+   DI_WWW_HOME="http://d-i.debian.org/daily-images/sparc/daily/"
    if [ -n "$DI_DIR" ];then
        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
        DI_WWW_HOME=""                     

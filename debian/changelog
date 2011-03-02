@@ -16,6 +16,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Special-case builds of source-only discs: if we think we've
     overflowed the disc size, try to carry on for a few more packages
     to get closer to actually filling the disc. Closes: #613751.
+  * Path to sparc daily builds has changed.
 
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.
