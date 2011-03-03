@@ -17,6 +17,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     overflowed the disc size, try to carry on for a few more packages
     to get closer to actually filling the disc. Closes: #613751.
   * Path to sparc daily builds has changed.
+  * armel hasn't booted off CD in ages for us; comment out the DI_WWW_HOME
+    definition to stop the mirror script complaining.
 
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.
