@@ -32,7 +32,7 @@ debian-cd (3.1.6) unstable; urgency=low
   * Remove win32-loader standalone flavours from the tools/ directory on
     x86. Closes: #612224
 
- -- Steve McIntyre <93sam@debian.org>  Fri, 04 Mar 2011 14:56:5 +0000
+ -- Steve McIntyre <93sam@debian.org>  Fri, 04 Mar 2011 14:56:50 +0000
 
 debian-cd (3.1.5) unstable; urgency=high
 
