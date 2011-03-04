@@ -6,6 +6,7 @@
 
 use strict;
 use Digest::MD5;
+use Digest::SHA;
 use File::stat;
 use File::Find;
 use File::Basename;
@@ -20,6 +21,7 @@ my $mkisofs_dirs = "";
 my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
 my (@exclude_packages, @unexclude_packages, @excluded_package_list);
 my %firmware_package;
+my $current_checksum_type = "";
 
 undef @pkgs_added;
 undef @exclude_packages;
@@ -499,16 +501,23 @@ sub add_missing_Packages {
 	}
 }
 
-sub md5_file {
+sub checksum_file {
 	my $filename = shift;
-	my ($md5, $st);
+	my $alg = shift;
+	my ($checksum, $st);
 
-	open(MD5FILE, $filename) or die "Can't open '$filename': $!\n";
-	binmode(MD5FILE);
-	$md5 = Digest::MD5->new->addfile(*MD5FILE)->hexdigest;
-	close(MD5FILE);
+	open(CHECKFILE, $filename) or die "Can't open '$filename': $!\n";
+	binmode(CHECKFILE);
+	if ($alg eq "md5") {
+	    $checksum = Digest::MD5->new->addfile(*CHECKFILE)->hexdigest;
+	} elsif ($alg =~ /^sha\d+$/) {
+	    $checksum = Digest::SHA->new($alg)->addfile(*CHECKFILE)->hexdigest;
+	} else {
+	    die "checksum_file: unknown alorithm $alg!\n";
+	}
+	close(CHECKFILE);
 	$st = stat($filename) || die "Stat error on '$filename': $!\n";
-	return ($md5, $st->size);
+	return ($checksum, $st->size);
 }
 
 sub recompress {
@@ -523,24 +532,42 @@ sub recompress {
 	}
 }	
 
-sub md5_files_for_release {
-	my ($md5, $size, $filename);
+sub checksum_files_for_release {
+	my ($checksum, $size, $filename);
 
 	$filename = $File::Find::name;
 
 	if ($filename =~ m/\/.*\/(Packages|Sources|Release)/o) {
 		$filename =~ s/^\.\///g;
-		($md5, $size) = md5_file($_);
-		printf RELEASE " %s %8d %s\n", $md5, $size, $filename;
+		($checksum, $size) = checksum_file($_, $current_checksum_type);
+		printf RELEASE " %s %8d %s\n", $checksum, $size, $filename;
 	}
 }	
+
+sub checksum_files_for_release {
+    # ICK: no way to pass arguments to the
+    # checksum_files_for_release() function that I can see, so using a
+    # global here...
+	print RELEASE "MD5Sum:\n";
+	current_checksum_type = "md5";
+	find (\&checksum_files_for_release, ".");
+	print RELEASE "SHA1:\n";
+	current_checksum_type = "sha1";
+	find (\&checksum_files_for_release, ".");
+	print RELEASE "SHA256:\n";
+	current_checksum_type = "sha256";
+	find (\&checksum_files_for_release, ".");
+	print RELEASE "SHA512:\n";
+	current_checksum_type = "sha512";
+	find (\&checksum_files_for_release, ".");
+}    
 
 sub md5_files_for_md5sum {
 	my ($md5, $size, $filename);
 
 	$filename = $File::Find::name;
 	if (-f $_) {
-		($md5, $size) = md5_file($_);
+		($md5, $size) = checksum_file($_, "md5");
 		printf MD5LIST "%s  %s\n", $md5, $filename;
 	}
 }
@@ -739,9 +766,8 @@ sub finish_disc {
 	print "  Finishing off the Release file\n";
 	chdir "dists/$codename";
 	open(RELEASE, ">>Release") or die "Failed to open Release file: $!\n";
-	print RELEASE "MD5Sum:\n";
 	find (\&recompress, ".");
-	find (\&md5_files_for_release, ".");
+	checksum_files_for_release();
 	close(RELEASE);
 	chdir("../..");
 

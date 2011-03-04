@@ -19,6 +19,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Path to sparc daily builds has changed.
   * armel hasn't booted off CD in ages for us; comment out the DI_WWW_HOME
     definition to stop the mirror script complaining.
+  * Add more checksum types to generated Release files; go from md5 only
+    to md5, sha1, sha256 and sha512.
 
   [ Otavio Salvador ]
   * Add btrfs-tools on required packages by installer. Closes: #612007.
