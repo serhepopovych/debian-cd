@@ -190,14 +190,14 @@ if [ $DISKNUM = 1 ] ; then
                 if [ -r "$UDEB_INCLUDE" ] ; then
                     cat "$UDEB_INCLUDE" >> "$CDDIR/.disk/udeb_include"
                 else
-                    echo "ERROR: Unable to read UDEB_INCLUDE file $UDEB_INCLUDE"
+                    echo "WARNING: Unable to read UDEB_INCLUDE file $UDEB_INCLUDE"
                 fi
             fi
             if [ -n "$UDEB_EXCLUDE" ] ; then
                 if [ -r "$UDEB_EXCLUDE" ] ; then
                     cat "$UDEB_EXCLUDE" >> "$CDDIR/.disk/udeb_exclude"
                 else
-                    echo "ERROR: Unable to read UDEB_EXCLUDE file $UDEB_EXCLUDE"
+                    echo "WARNING: Unable to read UDEB_EXCLUDE file $UDEB_EXCLUDE"
                 fi
             fi
 
@@ -206,14 +206,14 @@ if [ $DISKNUM = 1 ] ; then
                 if [ -r "$BASE_INCLUDE" ] ; then
                     cat "$BASE_INCLUDE" >> "$CDDIR/.disk/base_include"
                 else
-                    echo "ERROR: Unable to read BASE_INCLUDE file $BASE_INCLUDE"
+                    echo "WARNING: Unable to read BASE_INCLUDE file $BASE_INCLUDE"
                 fi
             fi
             if [ -n "$BASE_EXCLUDE" ] ; then
                 if [ -r "$BASE_EXCLUDE" ] ; then
                     cat "$BASE_EXCLUDE" >> "$CDDIR/.disk/base_exclude"
                 else
-                    echo "ERROR: Unable to read BASE_EXCLUDE file $BASE_EXCLUDE"
+                    echo "WARNING: Unable to read BASE_EXCLUDE file $BASE_EXCLUDE"
                 fi
             fi
         fi
