@@ -549,16 +549,16 @@ sub checksum_files_for_release {
     # find_and_checksum_files_for_release() function that I can see,
     # so using a global here...
 	print RELEASE "MD5Sum:\n";
-	current_checksum_type = "md5";
+	$current_checksum_type = "md5";
 	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA1:\n";
-	current_checksum_type = "sha1";
+	$current_checksum_type = "sha1";
 	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA256:\n";
-	current_checksum_type = "sha256";
+	$current_checksum_type = "sha256";
 	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA512:\n";
-	current_checksum_type = "sha512";
+	$current_checksum_type = "sha512";
 	find (\&find_and_checksum_files_for_release, ".");
 }    
 
