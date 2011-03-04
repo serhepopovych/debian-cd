@@ -1,4 +1,4 @@
-debian-cd (3.1.6) UNRELEASED; urgency=low
+debian-cd (3.1.6) unstable; urgency=low
 
   [ Raphaël Hertzog ]
   * Add the missing accent in my family name in Uploaders.
@@ -32,7 +32,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Remove win32-loader standalone flavours from the tools/ directory on
     x86. Closes: #612224
 
- -- Raphaël Hertzog <hertzog@debian.org>  Fri, 04 Feb 2011 09:59:21 +0100
+ -- Steve McIntyre <93sam@debian.org>  Fri, 04 Mar 2011 14:56:5 +0000
 
 debian-cd (3.1.5) unstable; urgency=high
 
