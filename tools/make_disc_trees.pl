@@ -532,7 +532,7 @@ sub recompress {
 	}
 }	
 
-sub checksum_files_for_release {
+sub find_and_checksum_files_for_release {
 	my ($checksum, $size, $filename);
 
 	$filename = $File::Find::name;
@@ -546,20 +546,20 @@ sub checksum_files_for_release {
 
 sub checksum_files_for_release {
     # ICK: no way to pass arguments to the
-    # checksum_files_for_release() function that I can see, so using a
-    # global here...
+    # find_and_checksum_files_for_release() function that I can see,
+    # so using a global here...
 	print RELEASE "MD5Sum:\n";
 	current_checksum_type = "md5";
-	find (\&checksum_files_for_release, ".");
+	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA1:\n";
 	current_checksum_type = "sha1";
-	find (\&checksum_files_for_release, ".");
+	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA256:\n";
 	current_checksum_type = "sha256";
-	find (\&checksum_files_for_release, ".");
+	find (\&find_and_checksum_files_for_release, ".");
 	print RELEASE "SHA512:\n";
 	current_checksum_type = "sha512";
-	find (\&checksum_files_for_release, ".");
+	find (\&find_and_checksum_files_for_release, ".");
 }    
 
 sub md5_files_for_md5sum {
