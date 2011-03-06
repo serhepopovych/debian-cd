@@ -1,3 +1,11 @@
+debian-cd (3.1.6) UNRELEASED; urgency=low
+
+  [ Ben Hutchings ]
+  * In the boot prompt for powerpc, make install64 more prominent.
+    Closes: #614583
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 06 Mar 2011 19:16:00 +0000
+
 debian-cd (3.1.6) unstable; urgency=low
 
   [ Raphaël Hertzog ]
