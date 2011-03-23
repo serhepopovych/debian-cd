@@ -922,9 +922,8 @@ sub add_md5_entry {
 
     if ($arch eq "source") {
         m/^Directory: (\S+)/mi and $pdir = $1;
-        m/^ (\S+) (\S+) ((\S+).*dsc)/m and print MD5FILE "$1  ./$pdir/$3\n";
-        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print MD5FILE "$1  ./$pdir/$3\n";
-        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print MD5FILE "$1  ./$pdir/$3\n";
+	# Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
+	while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) { print MD5FILE "$1  ./$pdir/$3\n"; }
     } else {
         m/^Filename: (\S+)/m and $file = $1;
         m/^MD5sum: (\S+)/m and print MD5FILE "$1  ./$file\n";
@@ -1023,10 +1022,9 @@ sub remove_md5_entry {
 
     m/^Package: (\S+)/mi and $p = $1;
     if ($arch eq "source") {
-        m/^Directory: (\S+)/mi and $pdir = $1;
-        m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@fileslist, "$1  ./$pdir/$3");
-        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and push(@fileslist, "$1  ./$pdir/$3");
-        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and push(@fileslist, "$1  ./$pdir/$3");
+        m/^Directory: (\S+)/mi and $pdir = $1;       
+	# Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
+	while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) { push(@fileslist, "$1  ./$pdir/$3"); }
     } else {
         m/^Filename: (\S+)/m and $file = $1;
         m/^MD5Sum: (\S+)/mi and push(@fileslist, "$1  ./$file");
@@ -1090,7 +1088,7 @@ sub add_packages {
     }
 
     my $pkg = shift;
-	my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
+    my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
 
     if ("$arch" eq "" or "$pkgname" eq "" or "$pkgname" eq "") {
         die "inconsistent data passed to add_packages: $pkg\n";
@@ -1105,9 +1103,8 @@ sub add_packages {
     if ($arch eq "source") {
         m/^Directory: (\S+)/m and $pdir = $1;
         $source=$security if $pdir=~m:updates/:;
-        m/^ (\S+) (\S+) ((\S+).*dsc)/m and push(@files, "$pdir/$3");
-        m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and push(@files, "$pdir/$3");
-        m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and push(@files, "$pdir/$3");
+	# Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
+	while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) { push(@files, "$pdir/$3"); }
     } else {
         m/^Filename: (\S+)/mi and push(@files, $1);
         $source=$security if $1=~m:updates/:;

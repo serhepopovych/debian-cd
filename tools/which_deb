@@ -127,9 +127,8 @@ if (length($pkgdata) > 2) {
         if (length($pkgdata) > 2) {
             my $dir;
             $pkgdata =~ m/^Directory: (\S+)/m and $dir = $1;
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*dsc)/m and print "$dir/$3\n";
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*diff.gz)/m and print "$dir/$3\n";
-            $pkgdata =~ m/^ (\S+) (\S+) ((\S+).*tar.gz)/m and print "$dir/$3\n";
+	    # Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
+	    while ($pkgdata =~ m/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) { print "$dir/$3\n"; }
         }
     }
 }
