@@ -17,14 +17,11 @@ set -e
 MIRROR_NORM=/org/cdbuilder.debian.org/src/ftp/debian
 MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
 
-# If you have a non-US mirror, where is it? Leave blank if you don't have one.
-# NONUS=${NONUS:-/mirror/debian-non-US}
-
 # Do you want non-free? 1 for yes, 0 for no
 NONFREE=0
 
 # What release version is this?
-VER=6.0.1
+VER=6.0.1a
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -72,14 +69,13 @@ esac
 DIFF=/home/debian-cd/lists/squeeze/r0-r1.diff
 
 if [ "$TYPE" = "cd" ] ; then
-    CDSIZE=640 # megabytes, leaving space for metadata
+    CDSIZE=644 # megabytes, leaving space for metadata
 else
     CDSIZE=4300 # megabytes, leaving space for metadata
 fi
 
 REL=Debian"$VER"
 CLOG=dists/$CODENAME/ChangeLog
-NUCLOG=dists/$CODENAME/non-US/ChangeLog
 UPD=$TDIR/$CODENAME-update
 DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
@@ -94,52 +90,16 @@ CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
 export FIRSTVER CAPCODE
 
 if [ "$ARCHLIST"x = ""x ] ; then
-    ARCHLIST="amd64 i386 ia64 mips mipsel powerpc s390 sparc source kfreebsd-amd64 kfreebsd-i386" # amd64 # all dealt with specially
+    ARCHLIST="armel amd64 i386 ia64 mips mipsel powerpc s390 sparc source kfreebsd-amd64 kfreebsd-i386" # amd64 # all dealt with specially
 fi
 
-export TDIR NONFREE NONUS VER MIRROR CODENAME OUT BASEDIR
+export TDIR NONFREE VER MIRROR CODENAME OUT BASEDIR
 
 CDSIZE=$(($CDSIZE * 1024))
 
-scanpackages=$BASEDIR/tools/scanpackages.old
-scansources=$BASEDIR/tools/scansources.old
+create_control=$BASEDIR/tools/create_control
 set_mkisofs_opts=$BASEDIR/tools/set_mkisofs_opts
 addfiles=$BASEDIR/tools/add_files
-
-create_control_files () {
-    CDDIR=$1
-    shift
-    ARCHES=$*
-    echo "  Creating control files for \"$ARCHES\" on $CDDIR"
-    for ARCH in $ARCHES
-    do
-        case "$ARCH" in
-            source)
-                echo "    source"
-                for SECT in $SECTS
-                do
-                    mkdir -p $CDDIR/dists/$CODENAME/$SECT/source
-                    mkdir -p $CDDIR/dists/$CODENAME/non-US/$SECT/source
-                done
-                cd $UPD
-                $scansources $CDDIR >/dev/null 2>&1
-                ;;
-            all)
-                ;;
-            *)
-                echo "    $ARCH"
-                for SECT in $SECTS
-                do
-                    mkdir -p $CDDIR/dists/$CODENAME/$SECT/binary-$ARCH
-                    mkdir -p $CDDIR/dists/$CODENAME/non-US/$SECT/binary-$ARCH
-                done
-                ARCH=$ARCH $scanpackages scan $CDDIR >/dev/null 2>&1
-                ARCH=$ARCH $scanpackages -noPackages.cd install $CDDIR >/dev/null 2>&1
-                rm -f $CDDIR/*.Packages* >/dev/null 2>&1
-                ;;
-        esac
-    done
-}
 
 copy_file () {
     ROOTDIR=$1
@@ -151,8 +111,6 @@ copy_file () {
     fi
     if [ -e $MIRROR/$FILE ] ; then
 	cp -l $MIRROR/$FILE $ROOTDIR/$FILE
-    elif [ -e $NONUS/$FILE ] ; then
-	cp -l $NONUS/$FILE $ROOTDIR/$FILE
     else
 	echo
 	echo "File $FILE not found!"
@@ -175,7 +133,7 @@ make_cd () {
     echo
     echo "  Creating Packages and Sources files for CD$CDNUM"
     cd $UPD
-    create_control_files CD$CDNUM $THISARCH
+    $create_control CD$CDNUM $THISARCH
     echo "  Creating image for CD$CDNUM ($SRCFILES source files, $ARCHFILES $ARCH debs, $ALLFILES all debs)"
     echo -n "    "
     if [ ! -d $OUT/$THISARCH/iso-$TYPE ] ; then
@@ -190,7 +148,6 @@ make_cd () {
 	    -jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo \
 	    -jigdo-template $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.template \
 	    -jigdo-map Debian=$MIRROR/ \
-	    -jigdo-map Non-US=$NONUS/ \
 	    -jigdo-force-md5 /pool/ \
 	    -md5-list $UPD/md5-check \
 	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
@@ -218,7 +175,7 @@ make_cd () {
 	    echo "$SHA  debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.iso" >> $OUT/$THISARCH/iso-$TYPE/SHA${SHA_SIZE}SUMS.update
 	done
 	gzip -9 $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo
-	mv -v $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo.gz \
+	mv $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo.gz \
 	    $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo
     else
 	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
@@ -233,7 +190,7 @@ add_file () {
     case "$THISARCH" in
 	source)
 	    case "$file" in
-		*.gz|*.dsc)
+		*.gz|*.bz2|*.dsc)
 		    copy_file $UPD/CD$CDNUM $file
 		    SRCFILES=$(($SRCFILES + 1))
 		    ;;
@@ -269,11 +226,6 @@ if [ ! -e $DIFF ] ; then
 fi
 
 cp $DIFF $UPD/list
-if [ "$NONUS"x == ""x ] ; then
-    echo "Removing non-US files from the list"
-    grep -v non-US $UPD/list > $UPD/list1
-    mv -f $UPD/list1 $UPD/list
-fi
 if [ "$NONFREE"x != "1"x ] ; then
     echo "Removing non-free files from the list"
     grep -v non-free $UPD/list > $UPD/list1
@@ -281,9 +233,6 @@ if [ "$NONFREE"x != "1"x ] ; then
 fi
 
 $GRAB_MD5 $MIRROR_NORM "$ARCHLIST" $CODENAME $CODENAME $UPD/md5-check
-if [ "$NONUS"x != ""x ] ; then
-    $GRAB_MD5 $NONUS "$ARCHLIST" $CODENAME $CODENAME $UPD/md5-check
-fi
 
 for THISARCH in $ARCHLIST
 do
@@ -324,9 +273,10 @@ do
 	SIZE_USED=`du -sk $UPD/CD$CDNUM | awk '{print $1}'`
 	if [ $SIZE_USED -gt $CDSIZE ] ; then
 	    # Back out the last file added
-	    echo 
-	    echo "  Overfull: back out $file"
+	    size=`stat -c %s $UPD/CD$CDNUM/$file`
 	    rm -f $UPD/CD$CDNUM/$file
+	    echo 
+	    echo "  Overfull: back out $file ($size bytes)"
 	    DIR=`dirname $file`
 	    rmdir $DIR > /dev/null 2>&1 || true
 	    BACKOUT_FILE=$file

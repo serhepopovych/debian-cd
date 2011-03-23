@@ -3,6 +3,11 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   [ Ben Hutchings ]
   * In the boot prompt for powerpc, make install64 more prominent.
     Closes: #614583
+  * Merge update-cd changes back from the squeeze branch:
+    + Remove the old non-US stuff from it, it's not been needed in years.
+    + Cope with .bz2 source files too.
+    + Merged and simplified the old functionality from scansources.old
+      and scanpackages.old into the new script create_control.
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 06 Mar 2011 19:16:00 +0000
 
