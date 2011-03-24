@@ -143,6 +143,10 @@ make_cd () {
 	if [ ! -d $OUT/$THISARCH/jigdo-$TYPE ] ; then
 	    mkdir -p $OUT/$THISARCH/jigdo-$TYPE
 	fi
+    if [ ! -d $OUT/$THISARCH/list-$TYPE ] ; then
+       mkdir -p $OUT/$THISARCH/list-$TYPE
+    fi
+
 	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
 	    $OUT/$THISARCH/iso-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.iso \
 	    -jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.jigdo \
@@ -182,7 +186,7 @@ make_cd () {
 	    $OUT/iso-$TYPE/$CODENAME-update-$THISARCH-$TYPEUP-$THISNUM.iso \
 	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
     fi
-    
+    find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > $OUT/$THISARCH/list-$TYPE/debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM.list.gz
 }
 
 add_file () {
