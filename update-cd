@@ -53,14 +53,14 @@ else
 fi
 case $TYPE in
     cd|CD)
-	TYPE=cd
-	TYPEUP=CD;;
+        TYPE=cd
+        TYPEUP=CD;;
     dvd|DVD)
-	TYPE=dvd
-	TYPEUP=DVD;;
+        TYPE=dvd
+        TYPEUP=DVD;;
     *)
-	echo "Specify a disk type..."
-	exit 1;;
+        echo "Specify a disk type..."
+        exit 1;;
 esac
 
 # Location of the diff file to use to determine the changes. If you leave
@@ -110,11 +110,11 @@ copy_file () {
         mkdir -p $ROOTDIR/$DIR
     fi
     if [ -e $MIRROR/$FILE ] ; then
-	cp -l $MIRROR/$FILE $ROOTDIR/$FILE
+        cp -l $MIRROR/$FILE $ROOTDIR/$FILE
     else
-	echo
-	echo "File $FILE not found!"
-	exit 1
+        echo
+        echo "File $FILE not found!"
+        exit 1
     fi
 }
 
@@ -143,52 +143,53 @@ make_cd () {
     LISTDIR=$OUT/$THISARCH/list-$TYPE
 
     if [ ! -d ${ISODIR} ] ; then
-	    mkdir -p ${ISODIR}
+        mkdir -p ${ISODIR}
     fi
     if [ $JTE = 1 ] && [ ! -d ${JIGDODIR} ] ; then
-	    mkdir -p ${JIGDODIR}
-	fi
+        mkdir -p ${JIGDODIR}
+    fi
     if [ ! -d ${LISTDIR} ] ; then
-       mkdir -p ${LISTDIR}
+        mkdir -p ${LISTDIR}
     fi
 
-	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
-	    ${ISODIR}/${BASENAME}.iso \
-	    -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
-	    -jigdo-template ${JIGDODIR}/${BASENAME}.template \
-	    -jigdo-map Debian=$MIRROR/ \
-	    -jigdo-force-md5 /pool/ \
-	    -md5-list $UPD/md5-check \
-	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
-	$BASEDIR/tools/jigdo_cleanup \
-	    ${JIGDODIR}/${BASENAME}.jigdo \
-	    ${BASENAME}.iso \
-	    $OUT ${BASENAME}.template \
-	    "Debian GNU/Linux $VER - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
-	echo $SNAPSHOT >> ${JIGDODIR}/${BASENAME}.jigdo
-	    # Make sure that the ISO is as new/newer than the jigdo file; #587774
+    if [ $JTE = 1 ]
+        ${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
+            ${ISODIR}/${BASENAME}.iso \
+            -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
+            -jigdo-template ${JIGDODIR}/${BASENAME}.template \
+            -jigdo-map Debian=$MIRROR/ \
+            -jigdo-force-md5 /pool/ \
+            -md5-list $UPD/md5-check \
+            $UPD/CD$CDNUM 2>&1 | grep "extents written"
+        $BASEDIR/tools/jigdo_cleanup \
+            ${JIGDODIR}/${BASENAME}.jigdo \
+            ${BASENAME}.iso \
+            $OUT ${BASENAME}.template \
+            "Debian GNU/Linux $VER - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
+        echo $SNAPSHOT >> ${JIGDODIR}/${BASENAME}.jigdo
+        # Make sure that the ISO is as new/newer than the jigdo file; #587774
         touch ${ISODIR}/${BASENAME}.iso
 
         MD5=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
-	    awk '/Image Hex MD5Sum/ {print $5}'`
+            awk '/Image Hex MD5Sum/ {print $5}'`
         echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
         echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
-	for SHA_SIZE in 1 256 512; do
-	    SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
-		awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
-	    if [ "$SHA"x = ""x ] ; then
-		echo "SHA fail"
-		exit 1
-	    fi
-	    echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
-	    echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
-	done
-	gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
-	mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
+        for SHA_SIZE in 1 256 512; do
+            SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
+                awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
+            if [ "$SHA"x = ""x ] ; then
+                echo "SHA fail"
+                exit 1
+            fi
+            echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
+            echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
+        done
+        gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
+        mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
     else
-	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
-	    $OUT/iso-$TYPE/${BASENAME}.iso \
-	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
+        ${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
+            $OUT/iso-$TYPE/${BASENAME}.iso \
+            $UPD/CD$CDNUM 2>&1 | grep "extents written"
     fi
     find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > ${LISTDIR}/${BASENAME}.list.gz
 }
@@ -196,28 +197,28 @@ make_cd () {
 add_file () {
     file=$1
     case "$THISARCH" in
-	source)
-	    case "$file" in
-		*.gz|*.bz2|*.dsc)
-		    copy_file $UPD/CD$CDNUM $file
-		    SRCFILES=$(($SRCFILES + 1))
-		    ;;
-	    esac
-	    echo -en "\r$SRCFILES copied"
-	    ;;
-	*)
-	    case "$file" in
-		*_$THISARCH.deb)
+        source)
+            case "$file" in
+                *.gz|*.bz2|*.dsc)
                     copy_file $UPD/CD$CDNUM $file
-		    ARCHFILES=$(($ARCHFILES + 1))
-		    ;;
+                    SRCFILES=$(($SRCFILES + 1))
+                    ;;
+            esac
+            echo -en "\r$SRCFILES copied"
+            ;;
+        *)
+            case "$file" in
+                *_$THISARCH.deb)
+                    copy_file $UPD/CD$CDNUM $file
+                    ARCHFILES=$(($ARCHFILES + 1))
+                    ;;
                 *_all.deb)
-	            copy_file $UPD/CD$CDNUM $file
-		    ALLFILES=$(($ALLFILES + 1))
-		    ;;
-	    esac
-	    echo -en "\r$THISARCH:$ARCHFILES all:$ALLFILES copied"
-	    ;;
+                    copy_file $UPD/CD$CDNUM $file
+                    ALLFILES=$(($ALLFILES + 1))
+                    ;;
+            esac
+            echo -en "\r$THISARCH:$ARCHFILES all:$ALLFILES copied"
+            ;;
     esac
 }
 
@@ -252,46 +253,46 @@ do
 
     for file in `cat $UPD/list`
     do
-	if [ ! -d $UPD/CD$CDNUM ] ; then
-	    echo
-	    cd $MIRROR
-	    THISNUM=$((THISNUM + 1))
-	    if [ $THISARCH = "source" ] ; then
-		echo "Creating $TYPEUP$CDNUM for source (part $THISNUM)"
-	    else
-		echo "Creating $TYPEUP$CDNUM for binary-$THISARCH (part $THISNUM)"
-	    fi
-	    mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
-	    INFO="Debian GNU/Linux $VER Update $TYPEUP $DATE: $THISARCH $TYPEUP $THISNUM"
-	    echo $INFO > $UPD/CD$CDNUM/.disk/info
-	    SIZE_USED=0
-	    SRCFILES=0
-	    ARCHFILES=0
-	    ALLFILES=0
-	fi	
+        if [ ! -d $UPD/CD$CDNUM ] ; then
+            echo
+            cd $MIRROR
+            THISNUM=$((THISNUM + 1))
+            if [ $THISARCH = "source" ] ; then
+                echo "Creating $TYPEUP$CDNUM for source (part $THISNUM)"
+            else
+                echo "Creating $TYPEUP$CDNUM for binary-$THISARCH (part $THISNUM)"
+            fi
+            mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
+            INFO="Debian GNU/Linux $VER Update $TYPEUP $DATE: $THISARCH $TYPEUP $THISNUM"
+            echo $INFO > $UPD/CD$CDNUM/.disk/info
+            SIZE_USED=0
+            SRCFILES=0
+            ARCHFILES=0
+            ALLFILES=0
+        fi  
 
-	if [ "$BACKOUT_FILE"x != ""x ] ; then
-	    echo "Starting with backed-out file $BACKOUT_FILE"
-	    add_file $BACKOUT_FILE
-	    BACKOUT_FILE=""
-	fi
+        if [ "$BACKOUT_FILE"x != ""x ] ; then
+            echo "Starting with backed-out file $BACKOUT_FILE"
+            add_file $BACKOUT_FILE
+            BACKOUT_FILE=""
+        fi
 
-	add_file $file
+        add_file $file
 
-	SIZE_USED=`du -sk $UPD/CD$CDNUM | awk '{print $1}'`
-	if [ $SIZE_USED -gt $CDSIZE ] ; then
-	    # Back out the last file added
-	    size=`stat -c %s $UPD/CD$CDNUM/$file`
-	    rm -f $UPD/CD$CDNUM/$file
-	    echo 
-	    echo "  Overfull: back out $file ($size bytes)"
-	    DIR=`dirname $file`
-	    rmdir $DIR > /dev/null 2>&1 || true
-	    BACKOUT_FILE=$file
-	    make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
-	    CDNUM=$(($CDNUM + 1))
-	    continue
-	fi
+        SIZE_USED=`du -sk $UPD/CD$CDNUM | awk '{print $1}'`
+        if [ $SIZE_USED -gt $CDSIZE ] ; then
+        # Back out the last file added
+            size=`stat -c %s $UPD/CD$CDNUM/$file`
+            rm -f $UPD/CD$CDNUM/$file
+            echo 
+            echo "  Overfull: back out $file ($size bytes)"
+            DIR=`dirname $file`
+            rmdir $DIR > /dev/null 2>&1 || true
+            BACKOUT_FILE=$file
+            make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
+            CDNUM=$(($CDNUM + 1))
+            continue
+        fi
     done
 
     make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
