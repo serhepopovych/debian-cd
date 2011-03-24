@@ -10,6 +10,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
       and scanpackages.old into the new script create_control.
   * Update make_disc_trees.pl and which_deb to cope with different
     types of source file, and clean up the code in that area.
+  * tools/make_image: generate list files while we have the CD trees
+    availables
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 06 Mar 2011 19:16:00 +0000
 
