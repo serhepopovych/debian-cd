@@ -152,7 +152,7 @@ make_cd () {
         mkdir -p ${LISTDIR}
     fi
 
-    if [ $JTE = 1 ]
+    if [ $JTE = 1 ] ; then
         ${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
             ${ISODIR}/${BASENAME}.iso \
             -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
