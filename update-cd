@@ -136,59 +136,61 @@ make_cd () {
     $create_control CD$CDNUM $THISARCH
     echo "  Creating image for CD$CDNUM ($SRCFILES source files, $ARCHFILES $ARCH debs, $ALLFILES all debs)"
     echo -n "    "
-    if [ ! -d $OUT/$THISARCH/iso-$TYPE ] ; then
-	mkdir -p $OUT/$THISARCH/iso-$TYPE
-    fi
-    if [ $JTE = 1 ] ; then
-	if [ ! -d $OUT/$THISARCH/jigdo-$TYPE ] ; then
-	    mkdir -p $OUT/$THISARCH/jigdo-$TYPE
-	fi
-    if [ ! -d $OUT/$THISARCH/list-$TYPE ] ; then
-       mkdir -p $OUT/$THISARCH/list-$TYPE
-    fi
 
     BASENAME="debian-update-$VER-$THISARCH-$TYPEUP-$THISNUM"
+    ISODIR=$OUT/$THISARCH/iso-$TYPE
+    JIGDODIR=$OUT/$THISARCH/jigdo-$TYPE
+    LISTDIR=$OUT/$THISARCH/list-$TYPE
+
+    if [ ! -d ${ISODIR} ] ; then
+	    mkdir -p ${ISODIR}
+    fi
+    if [ $JTE = 1 ] && [ ! -d ${JIGDODIR} ] ; then
+	    mkdir -p ${JIGDODIR}
+	fi
+    if [ ! -d ${LISTDIR} ] ; then
+       mkdir -p ${LISTDIR}
+    fi
 
 	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
-	    $OUT/$THISARCH/iso-$TYPE/${BASENAME}.iso \
-	    -jigdo-jigdo $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo \
-	    -jigdo-template $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.template \
+	    ${ISODIR}/${BASENAME}.iso \
+	    -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
+	    -jigdo-template ${JIGDODIR}/${BASENAME}.template \
 	    -jigdo-map Debian=$MIRROR/ \
 	    -jigdo-force-md5 /pool/ \
 	    -md5-list $UPD/md5-check \
 	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
 	$BASEDIR/tools/jigdo_cleanup \
-	    $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo \
+	    ${JIGDODIR}/${BASENAME}.jigdo \
 	    ${BASENAME}.iso \
 	    $OUT ${BASENAME}.template \
 	    "Debian GNU/Linux $VER - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
-	echo $SNAPSHOT >> $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo
+	echo $SNAPSHOT >> ${JIGDODIR}/${BASENAME}.jigdo
 	    # Make sure that the ISO is as new/newer than the jigdo file; #587774
-        touch $OUT/$THISARCH/iso-$TYPE/${BASENAME}.iso
+        touch ${ISODIR}/${BASENAME}.iso
 
-        MD5=`cat $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo | \
+        MD5=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
 	    awk '/Image Hex MD5Sum/ {print $5}'`
-        echo "$MD5  ${BASENAME}.iso" >> $OUT/$THISARCH/jigdo-$TYPE/MD5SUMS.update
-        echo "$MD5  ${BASENAME}.iso" >> $OUT/$THISARCH/iso-$TYPE/MD5SUMS.update
+        echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
+        echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
 	for SHA_SIZE in 1 256 512; do
-	    SHA=`cat $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo | \
+	    SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
 		awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
 	    if [ "$SHA"x = ""x ] ; then
 		echo "SHA fail"
 		exit 1
 	    fi
-	    echo "$SHA  ${BASENAME}.iso" >> $OUT/$THISARCH/jigdo-$TYPE/SHA${SHA_SIZE}SUMS.update
-	    echo "$SHA  ${BASENAME}.iso" >> $OUT/$THISARCH/iso-$TYPE/SHA${SHA_SIZE}SUMS.update
+	    echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
+	    echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
 	done
-	gzip -9 $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo
-	mv $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo.gz \
-	    $OUT/$THISARCH/jigdo-$TYPE/${BASENAME}.jigdo
+	gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
+	mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
     else
 	${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
 	    $OUT/iso-$TYPE/${BASENAME}.iso \
 	    $UPD/CD$CDNUM 2>&1 | grep "extents written"
     fi
-    find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > $OUT/$THISARCH/list-$TYPE/${BASENAME}.list.gz
+    find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > ${LISTDIR}/${BASENAME}.list.gz
 }
 
 add_file () {
@@ -246,7 +248,7 @@ do
 
     MIRROR=$MIRROR_NORM
 
-    rm -rf $OUT/$THISARCH/iso-$TYPE $OUT/$THISARCH/jigdo-$TYPE
+    rm -rf $OUT/$THISARCH/*-$TYPE
 
     for file in `cat $UPD/list`
     do
