@@ -243,6 +243,7 @@ while (defined (my $pkg = <INLIST>)) {
                         print LOG "CD $disknum: GUESS_TOTAL is $size after adding $reinclude_pkg\n";
                         $pkgs_this_cd++;
                         $pkgs_done++;
+                        push (@pkgs_added, $overflowpkg);
                     }
                 }
             }
@@ -255,6 +256,7 @@ while (defined (my $pkg = <INLIST>)) {
             print LOG "CD $disknum: GUESS_TOTAL is $size after adding $overflowpkg\n";
             $pkgs_this_cd++;
             $pkgs_done++;
+            push (@pkgs_added, $overflowpkg);
         }
     } # end of creating new CD dir
 
