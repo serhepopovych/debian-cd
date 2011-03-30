@@ -101,6 +101,11 @@ my $bdir = "$tdir/$codename";
 my $log = "$bdir/make_disc_tree.log";
 open(LOG, ">> $log") or die ("Can't open logfile $log for writing: $!\n");
 
+# Print out the details of genisoimage/xorriso etc.
+my $mkisofs_version = `$mkisofs -version`;
+print "$mkisofs -version says:\n$mkisofs_version\n";
+print LOG "$mkisofs -version says:\n$mkisofs_version\n";
+
 foreach my $arch (split(' ', $archlist)) {
 	push(@arches, $arch);
 	if (! ($arch eq "source")) {
