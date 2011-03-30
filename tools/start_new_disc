@@ -48,6 +48,8 @@ if [ $NUM_ARCHES = 1 ] ; then
                     export VOLID="$VOLID_BASE f-i386 $DISKNUM" ;;
                 kfreebsd-amd64)
                     export VOLID="$VOLID_BASE f-amd64 $DISKNUM" ;;
+                hurd-i386)
+                    export VOLID="$VOLID_BASE h-i386 $DISKNUM" ;;
                 *)
                     export VOLID="$VOLID_BASE $ARCHES $DISKNUM" ;;
             esac

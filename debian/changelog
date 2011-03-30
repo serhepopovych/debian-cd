@@ -3,6 +3,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   [ Ben Hutchings ]
   * In the boot prompt for powerpc, make install64 more prominent.
     Closes: #614583
+
+  [ Steve McIntyre ]
   * Merge update-cd changes back from the squeeze branch:
     + Remove the old non-US stuff from it, it's not been needed in years.
     + Cope with .bz2 source files too.
@@ -11,7 +13,10 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Update make_disc_trees.pl and which_deb to cope with different
     types of source file, and clean up the code in that area.
   * tools/make_image: generate list files while we have the CD trees
-    availables
+    available
+
+  [ Aurelien Jarno ]
+  * Add support for hurd-i386. Closes: #619211
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 06 Mar 2011 19:16:00 +0000
 

@@ -302,4 +302,14 @@ grub-pc
 libc0.1-i686
 #endif
 
+#ifdef ARCH_hurd_i386
+gnumach-image-1-486
+grub-pc
+libc0.3-i686
+#ifdef VARIANT_xen
+gnumach-image-1-xen-486
+libc0.3-xen
+#endif
+#endif
+
 EOF
