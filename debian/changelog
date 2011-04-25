@@ -14,6 +14,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     types of source file, and clean up the code in that area.
   * tools/make_image: generate list files while we have the CD trees
     available
+  * update the URL for downloading s390 d-i dailies.
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
