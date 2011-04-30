@@ -15,6 +15,9 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * tools/make_image: generate list files while we have the CD trees
     available
   * update the URL for downloading s390 d-i dailies.
+  * Add linux-image-2.6-686-bigmem to tasks/<release>/interesting-fromcd23
+    to try and put that on i386 image sets before linux-image-amd64.
+    Closes: #622622
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
