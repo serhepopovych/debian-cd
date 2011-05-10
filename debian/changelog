@@ -19,6 +19,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     to try and put that on i386 image sets before linux-image-amd64.
     Closes: #622622
   * update the URL for downloading i386 d-i dailies.
+  * update the URL for downloading armel d-i dailies.
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
