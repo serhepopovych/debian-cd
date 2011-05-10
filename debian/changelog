@@ -18,6 +18,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Add linux-image-2.6-686-bigmem to tasks/<release>/interesting-fromcd23
     to try and put that on i386 image sets before linux-image-amd64.
     Closes: #622622
+  * update the URL for downloading i386 d-i dailies.
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
