@@ -20,9 +20,13 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     Closes: #622622
   * update the URL for downloading i386 d-i dailies.
   * update the URL for downloading armel d-i dailies.
-  * tools/grab_md5: Improve Packages and Sources file parsing; cope with
-    differently-formed files that are still valid (don't assume field
-    ordering). Switch from awk to perl makes things much faster too!
+  * tools/grab_md5:
+    + Improve Packages and Sources file parsing;
+    + Cope with differently-formed files that are still valid (don't assume field
+      ordering).
+    + Switch from awk to perl makes things much faster too!
+    + Make arch handling more generic - instead of having to list all
+      arches, allow a wildcard and then check for lack of Packages.gz files
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
