@@ -16,7 +16,7 @@ if [ "$MIRROR"x = ""x ] || \
 	exit 1
 fi
 
-TASKFILE=$BASEDIR/tasks/firmware
+TASKFILE=$BASEDIR/tasks/$SUITE/firmware
 
 rm -rf $TMPDIR/firmware
 mkdir -p $TMPDIR/firmware
