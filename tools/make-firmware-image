@@ -26,7 +26,7 @@ rm -rf $TMPDIR/firmware
 mkdir -p $TMPDIR/firmware
 
 FILES=`zcat ${MIRROR}/dists/${SUITE}/*/binary-*/Packages.gz | \
-    grep-dctrl -Pe '.*(firmware|microcode).*' -s Filename | sort -u | awk '{print $2}'`
+    grep-dctrl -Pe '.*(firmware|microcode).*' -s Filename -n | sort -u`
 
 for FILE in $FILES; do
     # Don't use "grep -q" here, it causes errors from tar
