@@ -29,6 +29,10 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
       arches, allow a wildcard and then check for lack of Packages.gz files
   * Move the "firmware" task into per-release task dirs like it should
     have been to start with.
+  * tools/make-firmware-image: Rather than use the firmware task which
+    gets out of date, look for firmware/microcode files directly in the
+    Packages file. Check for things installing in /lib/firmware, and add
+    those packages.
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
