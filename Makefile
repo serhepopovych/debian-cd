@@ -328,7 +328,7 @@ $(BDIR)/rawlist:
 	for VARIANT in $(VARIANTS); do \
 		VARIANTDEFS="$$VARIANTDEFS -D VARIANT_$$VARIANT"; \
 	done; \
-	if [ "$(FORCE_FIRMWARE)"x != "0"x ] ; then \
+	if [ "$(FORCE_FIRMWARE)"x = "1"x ] ; then \
 		ARCHDEFS="$$ARCHDEFS -DFORCE_FIRMWARE"; \
 	fi; \
 	if [ "$(EXCLUDE_486_KERNEL)"x = "1"x ] ; then \
