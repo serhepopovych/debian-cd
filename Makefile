@@ -141,6 +141,9 @@ ifneq ($(ARCHES),source)
 		$(BASEDIR)/tools/update_tasks; \
 		$(BASEDIR)/tools/generate_di_list; \
 		$(BASEDIR)/tools/generate_di+k_list
+ifeq($(FORCE_FIRMWARE),1)
+	# Generate firmware task file using the contents of the archive
+	$(Q)$(BASEDIR)/tools/generate_firmware_task $(ARCHES) $(TASKDIR)/firmware
 endif
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
