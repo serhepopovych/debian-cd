@@ -22,8 +22,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * update the URL for downloading armel d-i dailies.
   * tools/grab_md5:
     + Improve Packages and Sources file parsing;
-    + Cope with differently-formed files that are still valid (don't assume field
-      ordering).
+    + Cope with differently-formed files that are still valid
+      (don't assume field ordering).
     + Switch from awk to perl makes things much faster too!
     + Make arch handling more generic - instead of having to list all
       arches, allow a wildcard and then check for lack of Packages.gz files
@@ -34,6 +34,8 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   * Remove the checked-in firmware task altogether, as it's not
     useful. Generate it when needed using the new script
     tools/generate_firmware_task.
+  * Add apt-offline to tasks/wheezy/forcd1 to bring it onto CD#1.
+    Closes: #630805
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
