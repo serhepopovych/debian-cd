@@ -129,13 +129,15 @@ do
 
     # If we've made jigdo files, tweak them with extra info now
     if [ "$JIGDO_WANTED" = 1 ] ; then
-        SNAPSSHOT_DATE=`cat $DIR/DATE-zulu`
-        SNAPSHOTURL="http://snapshot.debian.org/archive/debian/$SNAPSHOT_DATE/"
+        SNAPSHOT_DATE=`cat $DIR/DATE-zulu`
+        if [ "$SNAPURL"x != ""x ] ; then
+            SNAPSHOTURL=`echo "$SNAPURL" | sed "s/SNAPDATETIME/$SNAPSHOT_DATE/g"`
+        fi
         $JIGDO_CLEANUP $OUT/$OUTFILE.jigdo \
             $OUTFILE.iso $DIR/CD$n \
             "`echo "$JIGDOTEMPLATEURL" | sed -e 's|%ARCH%|$ARCH|g'`$OUTFILE.template" \
             "$DISKINFO" \
-            $SNAPSHOTURL \
+            "$SNAPSHOTURL" \
             $JIGDOFALLBACKURLS
         if [ "$ISO_WANTED" = 1 ] ; then
             # Make sure that the ISO is as new/newer than the jigdo file; #587774

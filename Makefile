@@ -147,8 +147,8 @@ ifeq ($(FORCE_FIRMWARE),1)
 endif
 endif
 $(BDIR)/DATE:
-	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
-	$(Q)date '+%Y%m%dT%H%M%SZ' > $(BDIR)/DATE-zulu
+	$(Q)date -u '+%Y%m%d' > $(BDIR)/DATE
+	$(Q)date -u '+%Y%m%dT%H%M%SZ' > $(BDIR)/DATE-zulu
 
 ifdef MIRROR
 LATEST_DB := $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
