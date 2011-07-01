@@ -327,7 +327,7 @@ done
 # Base link for snapshot.debian.org or similar
 # "SNAPDATETIME" will be replaced at runtime with the correct data
 # Leave this unset to not add this entry
-export SNAPURL=http://snapshot.debian.org/archive/debian/SNAPDATETIME/
+export SNAPURL=Debian=http://snapshot.debian.org/archive/debian/SNAPDATETIME/
 
 # File with list of packages to include when fetching modules for the
 # first stage installer (debian-installer). One package per line.
