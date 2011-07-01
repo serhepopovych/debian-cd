@@ -15,6 +15,7 @@ iso="$2"      # The name to give to the .iso
 dirpath="$3"  # The disc build tree
 template="$4" # URL for .template file, can be relative URL
 discinfo="$5" # e.g. "Debian GNU/Linux 3.0 r1 "Woody" - Unofficial i386 Binary-1"
+snapurl="$6"  # URL for snapshot.d.o. e.g. http://snapshot.debian.org/archive/debian/20110630T000000Z/
 # any further parameters are fallback URLs
 info="Generated on "`date -R`
 
@@ -38,6 +39,11 @@ cat $jigdo | awk -v ISO="$iso" -v TEMPLATE="$template" -v DISCINFO="$discinfo" -
     /.*/                {   print $0 }
 ' > $jigdo.1
 mv -f $jigdo.1 $jigdo
+
+# Snapshot URL
+if [ "$snapurl"x != ""x ] ; then
+    echo "$snapurl" >> $jigdo
+fi
 
 # If some fallbacks were specified, output a servers section with the
 # URLs. The entries of the variable are expected to be already of the

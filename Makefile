@@ -148,6 +148,7 @@ endif
 endif
 $(BDIR)/DATE:
 	$(Q)date '+%Y%m%d' > $(BDIR)/DATE
+	$(Q)date '+%Y%m%dT%H%M%SZ' > $(BDIR)/DATE-zulu
 
 ifdef MIRROR
 LATEST_DB := $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
