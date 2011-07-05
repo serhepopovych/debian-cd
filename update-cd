@@ -21,7 +21,7 @@ MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
 NONFREE=0
 
 # What release version is this?
-VER=6.0.1a
+VER=6.0.2.1
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -66,7 +66,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/debian-cd/lists/squeeze/r0-r1.diff
+DIFF=/home/debian-cd/lists/squeeze/r0-r2.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=644 # megabytes, leaving space for metadata
@@ -153,6 +153,7 @@ make_cd () {
     fi
 
     if [ $JTE = 1 ] ; then
+	set +e
         ${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
             ${ISODIR}/${BASENAME}.iso \
             -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
@@ -161,6 +162,11 @@ make_cd () {
             -jigdo-force-md5 /pool/ \
             -md5-list $UPD/md5-check \
             $UPD/CD$CDNUM 2>&1 | grep "extents written"
+	if [ $? -ne 0 ] ; then
+	    echo "${MKISOFS} failed, error $?"
+	    exit 1
+	fi
+	set -e
         $BASEDIR/tools/jigdo_cleanup \
             ${JIGDODIR}/${BASENAME}.jigdo \
             ${BASENAME}.iso \
@@ -187,9 +193,15 @@ make_cd () {
         gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
     else
+	set +e
         ${MKISOFS} -J -r -V "Debian $VER update $TYPEUP" -o \
             $OUT/iso-$TYPE/${BASENAME}.iso \
             $UPD/CD$CDNUM 2>&1 | grep "extents written"
+	if [ $? -ne 0 ] ; then
+	    echo "${MKISOFS} failed, error $?"
+	    exit 1
+	fi
+	set -e
     fi
     find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > ${LISTDIR}/${BASENAME}.list.gz
 }
@@ -220,6 +232,24 @@ add_file () {
             echo -en "\r$THISARCH:$ARCHFILES all:$ALLFILES copied"
             ;;
     esac
+}
+
+start_new_disc () {
+    echo
+    cd $MIRROR
+    THISNUM=$((THISNUM + 1))
+    if [ $THISARCH = "source" ] ; then
+        echo "Creating $TYPEUP$CDNUM for source (part $THISNUM)"
+    else
+        echo "Creating $TYPEUP$CDNUM for binary-$THISARCH (part $THISNUM)"
+    fi
+    mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
+    INFO="Debian GNU/Linux $VER Update $TYPEUP $DATE: $THISARCH $TYPEUP $THISNUM"
+    echo $INFO > $UPD/CD$CDNUM/.disk/info
+    SIZE_USED=0
+    SRCFILES=0
+    ARCHFILES=0
+    ALLFILES=0
 }
 
 echo Cleaning up
@@ -254,21 +284,7 @@ do
     for file in `cat $UPD/list`
     do
         if [ ! -d $UPD/CD$CDNUM ] ; then
-            echo
-            cd $MIRROR
-            THISNUM=$((THISNUM + 1))
-            if [ $THISARCH = "source" ] ; then
-                echo "Creating $TYPEUP$CDNUM for source (part $THISNUM)"
-            else
-                echo "Creating $TYPEUP$CDNUM for binary-$THISARCH (part $THISNUM)"
-            fi
-            mkdir $UPD/CD$CDNUM $UPD/CD$CDNUM/.disk
-            INFO="Debian GNU/Linux $VER Update $TYPEUP $DATE: $THISARCH $TYPEUP $THISNUM"
-            echo $INFO > $UPD/CD$CDNUM/.disk/info
-            SIZE_USED=0
-            SRCFILES=0
-            ARCHFILES=0
-            ALLFILES=0
+	    start_new_disc
         fi  
 
         if [ "$BACKOUT_FILE"x != ""x ] ; then
@@ -294,6 +310,19 @@ do
             continue
         fi
     done
+
+    echo
+    echo "Making last disc in set for $THISARCH: size $SIZE_USED, BACKOUT_FILE \"$BACKOUT_FILE\""
+    # Catch the case where we still have a backout file at the very
+    # end of the set
+    if [ "$BACKOUT_FILE"x != ""x ] ; then
+	if [ ! -d $UPD/CD$CDNUM ] ; then
+	    start_new_disc
+	fi
+        echo "Starting last disc with backed-out file $BACKOUT_FILE"
+        add_file $BACKOUT_FILE
+        BACKOUT_FILE=""
+    fi
 
     make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
     CDNUM=$(($CDNUM + 1))
