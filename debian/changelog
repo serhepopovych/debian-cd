@@ -1,4 +1,4 @@
-debian-cd (3.1.6) UNRELEASED; urgency=low
+debian-cd (3.1.7) unstable; urgency=low
 
   [ Ben Hutchings ]
   * In the boot prompt for powerpc, make install64 more prominent.
@@ -47,7 +47,7 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 06 Mar 2011 19:16:00 +0000
+ -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:00 +0100
 
 debian-cd (3.1.6) unstable; urgency=low
 
