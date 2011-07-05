@@ -10,6 +10,12 @@ debian-cd (3.1.6) UNRELEASED; urgency=low
     + Cope with .bz2 source files too.
     + Merged and simplified the old functionality from scansources.old
       and scanpackages.old into the new script create_control.
+    + Run the mkisofs step *outside* of "set -e" so that we can actually
+      report errors instead of silently failing.
+    + Split out the code for starting a new disc into a function.
+    + Pick up on a potential bug: if we finish the last (expected) disc with
+      a backed-out file, make sure we create another image to include that
+      file too.
   * Update make_disc_trees.pl and which_deb to cope with different
     types of source file, and clean up the code in that area.
   * tools/make_image: generate list files while we have the CD trees
