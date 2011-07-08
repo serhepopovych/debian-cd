@@ -110,24 +110,17 @@ libc6-i686
  * Kernel headers are included as third party modules are commonly
  * used on this architecture.
  */
-linux-image-2.6-686
-linux-headers-2.6-686
-loop-aes-modules-2.6-686
-atl2-modules-2.6-686
-speakup-modules-2.6-686
+linux-image-2.6-686-pae
+linux-headers-2.6-686-pae
+loop-aes-modules-2.6-686-pae
+atl2-modules-2.6-686-pae
+speakup-modules-2.6-686-pae
 #ifndef ARCH_i386_EXCLUDE_486_KERNEL
 linux-image-2.6-486
 linux-headers-2.6-486
 loop-aes-modules-2.6-486
 atl2-modules-2.6-486
 speakup-modules-2.6-486
-#endif
-#ifdef VARIANT_xen
-linux-image-2.6-686-bigmem
-linux-headers-2.6-686-bigmem
-loop-aes-modules-2.6-686-bigmem
-atl2-modules-2.6-686-bigmem
-speakup-modules-2.6-686-bigmem
 #endif
 
 #endif
