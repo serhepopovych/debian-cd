@@ -152,7 +152,7 @@ update_essential_list () {
 # Look for the coreutils package (which should exist in all archs, and is
 # a non -all package) to determine a valid arch for the rest of this
 # script
-arch=$(which_deb $MIRROR $CODENAME coreutils binary | sed -e "s/\.deb//" -e "s/.*_//")
+arch=$($BASEDIR/tools/which_deb $MIRROR $CODENAME coreutils binary | sed -e "s/\.deb//" -e "s/.*_//")
 # We need to gunzip a copy of the appropriate Packages.gz file(s)
 TMP_PKG=$TDIR/Packages
 zcat $MIRROR/dists/$CODENAME/main/binary-$arch/Packages.gz > $TMP_PKG
@@ -173,7 +173,7 @@ TASKSEL_DEB=$MIRROR/`mawk '
 # sid's tasksel data even if we're using stable/testing.
 if [ "$FORCE_SID_TASKSEL"x = "1"x ] ; then
     echo "update_tasks: forcing use of the sid tasksel-data tasks"
-    TASKSEL_DEB=$MIRROR/$(which_deb $MIRROR sid tasksel-data binary)
+    TASKSEL_DEB=$MIRROR/$($BASEDIR/tools/which_deb $MIRROR sid tasksel-data binary)
 fi
 
 dpkg -x $TASKSEL_DEB $TDIR/tasksel
