@@ -3,9 +3,9 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Switch i386 kernel flavours again on advice from Ben:
     + Removed all mention of 686-bigmem as it's now gone
-    + Moved 686 to interesting-fromcd23
     + Added 686-pae onto CD#1 in place of 686
     + Leave the 486 kernel on CD#1 still, for people who can't use 686-pae
+    + Add zfsutils into the generate_d-i+k_list for kfreebsd users.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
 
