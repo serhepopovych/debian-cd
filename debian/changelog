@@ -7,6 +7,9 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + Leave the 486 kernel on CD#1 still, for people who can't use 686-pae
     + Add zfsutils into the generate_d-i+k_list for kfreebsd users.
 
+  [ Joey Hess ]
+  * Read tasksel's debian-tasks.desc from its new location.
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
 
 debian-cd (3.1.7) unstable; urgency=low

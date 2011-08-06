@@ -108,9 +108,14 @@ update_essential_list () {
     tasklist=$2
     tasksel=$3
 
+    file=$tasksel/usr/share/tasksel/descs/debian-tasks.desc
+    if [ ! -e $file ]; then
+	    file=$tasksel/usr/share/tasksel/debian-tasks.desc
+    fi
+
     (grep -Ev "^(#.*)?[[:space:]]*$" $tasklist ;
 		echo DONE ;
-		cat $tasksel/usr/share/tasksel/debian-tasks.desc) | mawk '
+		cat $file) | mawk '
 
     /DONE/ {
         in_tasks = 1
