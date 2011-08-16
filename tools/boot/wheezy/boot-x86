@@ -257,7 +257,7 @@ rm -f boot$N/isolinux/isolinux.cfg.with*
 if variant_enabled "xen" ; then
 	extra_image xen/vmlinuz         "../vmlinuz   ../gtk/vmlinuz"
 	extra_image xen/initrd.gz       "../initrd.gz ../gtk/initrd.gz"
-	extra_image xen/xm-debian.cfg
+	extra_image xen/debian.cfg
 fi
 
 # Modify win32-loader.ini for the "current" arch

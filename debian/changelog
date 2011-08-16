@@ -12,6 +12,9 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
 
+  [ Ian Campbell ]
+  Rename "xm-debian.cfg" to just "debian.cfg" for Xen config.
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
 
 debian-cd (3.1.7) unstable; urgency=low
