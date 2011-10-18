@@ -148,19 +148,26 @@ for my $bug (keys %{$status}) {
 }
 
 $time_text = get_time();
+my $num_files = 0;
 
 if (defined ($daily_out)) {
     @dailies = sort sort_bug @dailies;
     $text = print_bugs(@dailies);
     update_file($daily_out, $text, $time_text);
-} elsif (defined ($weekly_out)) {
+    $num_files++;
+}
+if (defined ($weekly_out)) {
     @weeklies = sort sort_bug @weeklies;
     $text = print_bugs(@weeklies);
     update_file($weekly_out, $text, $time_text);
-} elsif (defined ($release_out)) {
+    $num_files++;
+}
+if (defined ($release_out)) {
     @releases = sort sort_bug @releases;
     $text = print_bugs(@releases);
     update_file($release_out, $text, $time_text);
-} else {
+    $num_files++;
+}
+if (!$num_files) {
     die "No output files defined\n";
 }
