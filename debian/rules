@@ -4,7 +4,7 @@
 # Sample debian/rules that uses debhelper. GNU copyright 1997 by Joey Hess.
 # Some lines taken from debmake, by Christoph Lameter.
 
-build: build-stamp
+build-arch build-indep: build-stamp
 build-stamp:
 	dh_testdir
 	touch build-stamp
@@ -32,7 +32,8 @@ install-stamp: build-stamp
 	find debian/debian-cd -name '.svn' | xargs -r rm -rf
 	find debian/debian-cd/usr/share/debian-cd/tools/boot \
 	  \( -name 'boot-*' -o -name 'post-boot-*' \) -a \! -name '*.txt' \
-	  -a \! -name '*.calc' -a \! -name boot-x86 -a \! -name boot-kfreebsd | xargs chmod 0755
+	  -a \! -name '*.calc' -a \! -name boot-x86 -a \! -name boot-kfreebsd \
+	  -a \! -name boot-hurd | xargs chmod 0755
 	cd debian/debian-cd/usr/share/debian-cd/contrib && chmod 755 cronjob.* ftp.cron \
 		generate_firmware_images iso_run jigdo-watcher \
 		merge-sums mkjigsnap mklist mktorrent \
@@ -65,4 +66,5 @@ binary-indep: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary
+build: build-arch build-indep
+.PHONY: build-arch build-indep  build clean binary-indep binary-arch binary

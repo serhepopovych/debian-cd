@@ -5,7 +5,7 @@ Maintainer: Debian CD Group <debian-cd@lists.debian.org>
 Uploaders: Raphaël Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty@debian.org>, Steve McIntyre <93sam@debian.org>
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: tofrodos
-Standards-Version: 3.9.1
+Standards-Version: 3.9.2
 Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
 Vcs-Browser: http://svn.debian.org/wsvn/debian-cd/trunk?op=log
 

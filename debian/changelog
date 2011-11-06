@@ -15,6 +15,16 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
   [ Ian Campbell ]
   Rename "xm-debian.cfg" to just "debian.cfg" for Xen config.
 
+  [ Raphaël Hertzog ]
+  * Changes triggered by various lintian warnings:
+    + Switch to “3.0 (native)” source format to get rid of .svn
+      directories in the source package (when built from the svn checkout
+      directly)
+    + Support build-arch/build-indep targets in debian/rules.
+    + Drop executable rights from tools/boot/wheezy/boot-hurd
+      (and fix debian/rules to not re-add it).
+    + Bump Standards-Version to 3.9.2 (no change required).
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
 
 debian-cd (3.1.7) unstable; urgency=low
