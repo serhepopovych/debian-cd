@@ -11,6 +11,8 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + Other minor cleanups in tools/make_disc_trees.pl
   * Fix "expert" mode in yaboot for powerpc. Closes: #636265. Thanks to
     Milan Kupcevic for the patch.
+  * Update list of Linux kernel packages. Closes: #648690. Thanks to BEn
+    Hutchings for the patch.
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.

@@ -111,17 +111,11 @@ libc6-i686
  * Kernel headers are included as third party modules are commonly
  * used on this architecture.
  */
-linux-image-2.6-686-pae
-linux-headers-2.6-686-pae
-loop-aes-modules-2.6-686-pae
-atl2-modules-2.6-686-pae
-speakup-modules-2.6-686-pae
+linux-image-686-pae
+linux-headers-686-pae
 #ifndef ARCH_i386_EXCLUDE_486_KERNEL
-linux-image-2.6-486
-linux-headers-2.6-486
-loop-aes-modules-2.6-486
-atl2-modules-2.6-486
-speakup-modules-2.6-486
+linux-image-486
+linux-headers-486
 #endif
 
 #endif
@@ -133,11 +127,8 @@ grub-legacy
 grub-pc
 laptop-detect
 lilo
-linux-image-2.6-amd64
-linux-headers-2.6-amd64
-loop-aes-modules-2.6-amd64
-atl2-modules-2.6-amd64
-speakup-modules-2.6-amd64
+linux-image-amd64
+linux-headers-amd64
 #endif
 
 #ifdef ARCH_alpha
@@ -145,37 +136,27 @@ initramfs-tools
 busybox
 aboot
 aboot-base
-linux-image-2.6-alpha-generic
-linux-image-2.6-alpha-smp
-loop-aes-modules-2.6-alpha-generic
-loop-aes-modules-2.6-alpha-smp
+linux-image-alpha-generic
+linux-image-alpha-smp
 #endif
 
 #ifdef ARCH_hppa
 initramfs-tools
 busybox
-linux-image-2.6-parisc
-linux-image-2.6-parisc-smp
-linux-image-2.6-parisc64
-linux-image-2.6-parisc64-smp
-loop-aes-modules-2.6-parisc
-loop-aes-modules-2.6-parisc-smp
-loop-aes-modules-2.6-parisc64
-loop-aes-modules-2.6-parisc64-smp
+linux-image-parisc
+linux-image-parisc-smp
+linux-image-parisc64
+linux-image-parisc64-smp
 palo
 #endif
 
 #ifdef ARCH_ia64
 initramfs-tools
 busybox
-linux-image-2.6-itanium
-linux-image-2.6-itanium-smp
-linux-image-2.6-mckinley
-linux-image-2.6-mckinley-smp
-loop-aes-modules-2.6-itanium
-loop-aes-modules-2.6-itanium-smp
-loop-aes-modules-2.6-mckinley
-loop-aes-modules-2.6-mckinley-smp
+linux-image-itanium
+linux-image-itanium-smp
+linux-image-mckinley
+linux-image-mckinley-smp
 elilo
 #endif
 
@@ -183,14 +164,10 @@ elilo
 /* doesn't use a initrd to boot */
 arcboot
 sibyl
-linux-image-2.6-r4k-ip22
-linux-image-2.6-r5k-ip32
-linux-image-2.6-sb1-bcm91250a
-linux-image-2.6-sb1a-bcm91480b
-loop-aes-modules-2.6-r4k-ip22
-loop-aes-modules-2.6-r5k-ip32
-loop-aes-modules-2.6-sb1-bcm91250a
-loop-aes-modules-2.6-sb1a-bcm91480b
+linux-image-r4k-ip22
+linux-image-r5k-ip32
+linux-image-sb1-bcm91250a
+linux-image-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
@@ -198,16 +175,11 @@ loop-aes-modules-2.6-sb1a-bcm91480b
 sibyl
 colo
 delo
-linux-image-2.6-r3k-kn02
-linux-image-2.6-r4k-kn04
-linux-image-2.6-r5k-cobalt
-linux-image-2.6-sb1-bcm91250a
-linux-image-2.6-sb1a-bcm91480b
-loop-aes-modules-2.6-r3k-kn02
-loop-aes-modules-2.6-r4k-kn04
-loop-aes-modules-2.6-r5k-cobalt
-loop-aes-modules-2.6-sb1-bcm91250a
-loop-aes-modules-2.6-sb1a-bcm91480b
+linux-image-r3k-kn02
+linux-image-r4k-kn04
+linux-image-r5k-cobalt
+linux-image-sb1-bcm91250a
+linux-image-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_arm
@@ -219,18 +191,12 @@ glantank
 flash-kernel
 nslu2-utils
 apex-nslu2
-linux-image-2.6-footbridge
-linux-image-2.6-iop32x
-linux-image-2.6-ixp4xx
-linux-image-2.6-nslu2
-linux-image-2.6-rpc
-linux-image-2.6-s3c2410
-loop-aes-modules-2.6-footbridge
-loop-aes-modules-2.6-iop32x
-loop-aes-modules-2.6-ixp4xx
-loop-aes-modules-2.6-nslu2
-loop-aes-modules-2.6-rpc
-loop-aes-modules-2.6-s3c2410
+linux-image-footbridge
+linux-image-iop32x
+linux-image-ixp4xx
+linux-image-nslu2
+linux-image-rpc
+linux-image-s3c2410
 #endif
 
 #ifdef ARCH_armel
@@ -240,12 +206,9 @@ slugimage
 flash-kernel
 nslu2-utils
 apex-nslu2
-linux-image-2.6-iop32x
-linux-image-2.6-ixp4xx
-linux-image-2.6-versatile
-loop-aes-modules-2.6-iop32x
-loop-aes-modules-2.6-ixp4xx
-loop-aes-modules-2.6-versatile
+linux-image-iop32x
+linux-image-ixp4xx
+linux-image-versatile
 #endif
 
 #ifdef ARCH_sparc
@@ -254,14 +217,10 @@ busybox
 silo
 libc6-sparcv9b
 libc6-sparcv9
-linux-image-2.6-sparc32
-linux-image-2.6-sparc32-smp
-linux-image-2.6-sparc64
-linux-image-2.6-sparc64-smp
-loop-aes-modules-2.6-sparc32
-loop-aes-modules-2.6-sparc32-smp
-loop-aes-modules-2.6-sparc64
-loop-aes-modules-2.6-sparc64-smp
+linux-image-sparc32
+linux-image-sparc32-smp
+linux-image-sparc64
+linux-image-sparc64-smp
 #endif
 
 #ifdef ARCH_powerpc
@@ -273,14 +232,10 @@ yaboot
 powerpc-utils
 hfsutils
 mkvmlinuz
-linux-image-2.6-powerpc
-linux-image-2.6-powerpc-smp
-linux-image-2.6-powerpc64
-linux-image-2.6-prep
-loop-aes-modules-2.6-powerpc
-loop-aes-modules-2.6-powerpc-smp
-loop-aes-modules-2.6-powerpc64
-loop-aes-modules-2.6-prep
+linux-image-powerpc
+linux-image-powerpc-smp
+linux-image-powerpc64
+linux-image-prep
 #endif
 
 #ifdef ARCH_kfreebsd_amd64
