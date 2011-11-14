@@ -6,6 +6,9 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + Added 686-pae onto CD#1 in place of 686
     + Leave the 486 kernel on CD#1 still, for people who can't use 686-pae
     + Add zfsutils into the generate_d-i+k_list for kfreebsd users.
+  * Add support for translated package description files. Closes: #495102
+    + Add needed dependency on bzip2
+    + Other minor cleanups in tools/make_disc_trees.pl
   * Fix "expert" mode in yaboot for powerpc. Closes: #636265. Thanks to
     Milan Kupcevic for the patch.
 

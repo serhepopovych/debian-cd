@@ -14,7 +14,7 @@ use Compress::Zlib;
 
 my %pkginfo;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
-    $maxisos, $maxjigdos, $extranonfree);
+    $maxisos, $maxjigdos, $extranonfree, $nonfree, $contrib, $use_local);
 my $mkisofs_base_opts = "";
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
@@ -22,6 +22,7 @@ my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
 my (@exclude_packages, @unexclude_packages, @excluded_package_list);
 my %firmware_package;
 my $current_checksum_type = "";
+my %descriptions;
 
 undef @pkgs_added;
 undef @exclude_packages;
@@ -95,6 +96,21 @@ if (defined($ENV{'EXTRANONFREE'})) {
 } else {
 	$extranonfree = 0;
 }
+if (defined($ENV{'NONFREE'})) {
+	$nonfree = $ENV{'NONFREE'};
+} else {
+	$nonfree = 0;
+}
+if (defined($ENV{'CONTRIB'})) {
+	$contrib = $ENV{'CONTRIB'};
+} else {
+	$contrib = 0;
+}
+if (defined($ENV{'LOCAL'})) {
+	$use_local = $ENV{'LOCAL'};
+} else {
+	$use_local = 0;
+}
 	
 my $list = "$tdir/list";
 my $bdir = "$tdir/$codename";
@@ -113,6 +129,17 @@ foreach my $arch (split(' ', $archlist)) {
 	}
     # Pre-cache all the package information that we need
     load_packages_cache($arch);
+}
+
+load_descriptions("main");
+if ($contrib) {
+    load_descriptions("contrib");
+}
+if ($nonfree || $extranonfree) {
+    load_descriptions("non-free");
+}
+if ($use_local) {
+    load_descriptions("local");
 }
 
 my $disknum = 1;
@@ -285,6 +312,8 @@ while (defined (my $pkg = <INLIST>)) {
             (($size > $size_swap_check) &&
              ($count_since_last_check > $size_check_period))) {
             $count_since_last_check = 0;
+            # Recompress files as needed before the size check
+            find (\&recompress, "$cddir/dists");
             print LOG "Running $size_check $cddir\n";
             $size = `$size_check $cddir`;
             chomp $size;
@@ -295,6 +324,8 @@ while (defined (my $pkg = <INLIST>)) {
                 $pkg = pop(@pkgs_added);
                 print LOG "CD $disknum over-full ($size > $maxdiskblocks). Rollback!\n";
                 $guess_size = int($hfs_mult * add_packages("--rollback", $cddir, $pkg));
+                # Recompress files as needed before the size check
+                find (\&recompress, "$cddir/dists");
                 $size=`$size_check $cddir`;
                 chomp $size;
                 print LOG "CD $disknum: Real current size is $size blocks after rolling back $pkg\n";
@@ -339,6 +370,7 @@ close(LOG);
 #  Local helper functions
 #
 #############################################
+# Load up information about all the packages
 sub load_packages_cache {
     my $arch = shift;
     my @pkglist;
@@ -359,6 +391,7 @@ sub load_packages_cache {
     close INLIST;
 
     print "Reading in package information for $arch:\n";
+    print LOG "Reading in package information for $arch:\n";
 
     $/ = ''; # Browse by paragraph
     while (@pkglist) {
@@ -380,6 +413,53 @@ sub load_packages_cache {
     }
     $/ = $old_split; # Browse by line again
     print "  Done: Read details of $num_pkgs packages for $arch\n";
+}
+
+# Load all the translated descriptions we can find
+sub load_descriptions {
+    my $suite = shift;
+    my $lang;
+	my $dh;
+    my ($p);
+    my $num_total = 0;
+    my $num_files = 0;
+    my $dir = "$mirror/dists/$codename/$suite/i18n";
+    if ($suite =~ /local/) {
+        $dir = "$localdebs/dists/$codename/$suite/i18n";
+    }
+    my @files;
+
+    if (-d $dir) {
+        print "Reading in translated package descriptions for $suite:\n";
+        print LOG "Reading in translated package descriptions for $suite:\n";
+        opendir($dh, $dir) || die "can't opendir $dir: $!\n";
+        @files = readdir($dh);
+        $/ = ''; # Browse by paragraph
+        foreach my $file (@files) {
+            if ($file =~ /Translation-(.*).bz2/) {
+                my $num_descs = 0;
+                $lang = $1;
+                open(BZ, "bzip2 -cd $dir/$file |") ||
+                    die "can't open description file $dir/$file for reading: $!\n";
+                $num_files++;
+                print LOG "  Parsing $file\n";
+                while (defined($_ = <BZ>)) {
+                    m/^Package: (\S+)/m and $p = $1;
+                    $descriptions{"$lang"}{$p}{"data"} = $_;
+                    $descriptions{"$lang"}{$p}{"used"} = 0;
+                    $num_descs++;
+                    $num_total++;
+                }
+                close(BZ);
+                print LOG "    $num_descs descriptions\n";
+            }
+        }
+        $/ = $old_split; # Browse by line again
+        print "  Done: read $num_total entries for $num_files languages\n";
+        print LOG "  Done: read $num_total entries for $num_files languages\n";
+    } else {
+        print "WARNING: no translated descriptions found for $codename/$suite\n";
+    }
 }
 
 sub should_start_extra_nonfree {
@@ -528,14 +608,19 @@ sub checksum_file {
 }
 
 sub recompress {
-	# Recompress the Packages and Sources files; workaround for bug
-	# #402482
+	# Recompress various files
 	my ($filename);
 
 	$filename = $File::Find::name;
 
-	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
+    # Packages and Sources files; workaround for bug #402482
+    if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
 		system("gzip -9c < $_ >$_.gz");
+	}
+    # Translation files need to be compressed in .bz2 format
+	if ($filename =~ m/\/.*\/i18n\/(Translation.*)$/o &&
+        ! ($filename =~ m/\/.*\/i18n\/(Translation.*bz2)$/o)) {
+		system("bzip2 -9 $_");
 	}
 }	
 
@@ -850,10 +935,9 @@ sub Packages_dir {
 # Dump the apt-cached data into a Packages file; make the parent dir
 # for the Packages file if necesssary
 sub add_Packages_entry {
-    my ($p, $file, $section, $pdir, $pkgfile, $gz);
     my $dir = shift;
     my $arch = shift;
-    my ($st1, $st2, $size1, $size2);
+    my ($p, $file, $section, $pdir, $pkgfile, $gz, $st1, $st2, $size1, $size2);
     my $blocks_added = 0;
     my $old_blocks = 0;
     my $new_blocks = 0;
@@ -907,13 +991,77 @@ sub add_Packages_entry {
     return $blocks_added;
 }
 
+# Write out translated description(s) for a package
+sub add_trans_desc_entry {
+    my $dir = shift;
+    my $arch = shift;
+    my ($p, $file, $section, $idir, $pkgfile, $gz, $st);
+    my $size = 0;
+    my $blocks_added = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    m/^Package: (\S+)/m and $p = $1;
+    m/^Section: (\S+)/m and $section = $1;
+
+    m/^Filename: (\S+)/mi and $file = $1;
+    $idir = Packages_dir($dir, $file, $section) . "/i18n";
+
+    if (! -d $idir) {
+        system("mkdir -p $idir");
+        $blocks_added++;
+    }	
+
+    foreach my $lang (keys %descriptions) {
+        # Do we have a translation for this language?
+        if (defined $descriptions{$lang}{$p}{"data"}) {
+            my $trans_file = "$idir/Translation-$lang";
+
+            msg_ap(0, "  Adding $p to $trans_file(.bz2)\n");
+
+            if ($descriptions{$lang}{$p}{"used"}) {
+                msg_ap(0, "    - not, already included\n");
+            } else {
+                # Keeping files in .bz2 format is far too expensive in
+                # terms of de-compressing and re-compressing all the
+                # time. Store uncompressed and only compress when we're
+                # finished. Analysis of typical text suggests that bzip2
+                # will give roughly a factor of 3 compresssion here, so
+                # use that estimate. For accuracy, we may end up
+                # compressing *anyway* just before doing a size check; if
+                # so, we'll need to uncompress again on entry here.
+
+                if (-f "$trans_file.bz2") {
+                    system("bunzip2 $trans_file.bz2");
+                }
+
+                if (-f $trans_file) {
+                    $st = stat("$trans_file") || die "unable to stat $trans_file\n";
+                    $old_blocks += size_in_blocks($st->size / 3);
+                }
+
+                # Add the new description
+                open(IFILE, ">> $trans_file");
+                print IFILE $descriptions{$lang}{$p}{"data"};
+                $descriptions{$lang}{$p}{"used"} = 1;
+                close(IFILE);
+
+                $st = stat("$trans_file") || die "unable to stat $trans_file\n";
+                $size += int($st->size / 3);
+                $new_blocks += size_in_blocks($st->size / 3);
+            }
+        }
+    }
+    $blocks_added += ($new_blocks - $old_blocks);
+    msg_ap(0, "    now $size bytes, $blocks_added blocks added\n");
+    return $blocks_added;
+}
+
 sub add_md5_entry {
     my $dir = shift;
     my $arch = shift;
-    my ($pdir, $file, $md5);
+    my ($pdir, $file, $md5, $st, $size, $p);
     my $md5file = "$dir/md5sum.txt";
-    my ($st, $size);
-    my $p;
     my $blocks_added = 0;
     my $old_blocks = 0;
     my $new_blocks = 0;
@@ -949,10 +1097,10 @@ sub add_md5_entry {
 
 # Roll back the results of add_Packages_entry()
 sub remove_Packages_entry {
-    my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz);
     my $dir = shift;
     my $arch = shift;
-    my ($st1, $st2, $size1, $size2);
+    my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz,
+        $st1, $st2, $size1, $size2);
     my $blocks_removed = 0;
     my $old_blocks = 0;
     my $new_blocks = 0;
@@ -996,6 +1144,7 @@ sub remove_Packages_entry {
             $gz->gzwrite($match) or die "Failed to write $pkgfile.gz: $gzerrno\n";
         }
     }
+    $/ = $old_split; # Browse by line again
 
     $gz->gzclose();
     close(IFILE);
@@ -1013,14 +1162,82 @@ sub remove_Packages_entry {
     return $blocks_removed;
 }
 
+# Roll back the result of add_trans_desc_entry()
+sub remove_trans_desc_entry {
+    my $dir = shift;
+    my $arch = shift;
+    my ($p, $file, $section, $idir, $gz, $match, $st);
+    my $size = 0;
+    my $blocks_added = 0;
+    my $old_blocks = 0;
+    my $new_blocks = 0;
+
+    m/^Package: (\S+)/m and $p = $1;
+    m/^Section: (\S+)/m and $section = $1;
+
+    m/^Filename: (\S+)/mi and $file = $1;
+    $idir = Packages_dir($dir, $file, $section) . "/i18n";
+
+    $/ = ''; # Browse by paragraph
+    foreach my $lang (keys %descriptions) {
+        # Do we have a translation for this language?
+        if (defined $descriptions{$lang}{$p}{"data"}) {
+            my $trans_file = "$idir/Translation-$lang";
+            my $tmp_tfile = "$trans_file" . ".rollback";
+            my $entries_remaining = 0;
+
+            msg_ap(0, "  Removing $p from $trans_file(.bz2)\n");
+
+            # Keeping files in .bz2 format is expensive - see comment
+            # in add_trans_desc_entry() above.
+            if (-f "$trans_file.bz2") {
+                system("bunzip2 $trans_file.bz2");
+            }
+            $st = stat("$trans_file") || die "unable to stat $trans_file\n";
+            $old_blocks += size_in_blocks($st->size / 3);
+
+            # Remove the description
+            open(IFILE, "< $trans_file") || die "unable to open $trans_file\n";
+            open(OFILE, ">> $tmp_tfile");
+
+            while (defined($match = <IFILE>)) {
+                if (! ($match =~ /^Package: \Q$p\E$/m)) {
+                    print OFILE $match;
+                    $entries_remaining++;
+                }
+            }
+
+            close(IFILE);
+            close(OFILE);
+            
+            $descriptions{$lang}{$p}{"used"} = 0;
+
+            # If we still have any entries in the new file,
+            # keep it. Otherwise, just delete it
+            if ($entries_remaining) {
+                rename $tmp_tfile, $trans_file;
+                $st = stat("$trans_file") || die "unable to stat $trans_file\n";
+                $size += int($st->size / 3);
+                $new_blocks += size_in_blocks($st->size / 3);
+            } else {
+                unlink($tmp_tfile);
+                unlink($trans_file);
+            }
+        }
+    }
+    $/ = $old_split; # Browse by line again
+    $blocks_added += ($new_blocks - $old_blocks);
+    msg_ap(0, "    now $size bytes, $blocks_added blocks added\n");
+    return $blocks_added;
+}
+
 sub remove_md5_entry {
     my $dir = shift;
     my $arch = shift;
-    my ($pdir, $file, $md5, $match, $present);
     my $md5file = "$dir/md5sum.txt";
     my $tmp_md5file = "$dir/md5sum.txt.tmp";
     my @fileslist;
-    my ($st, $size, $p);
+    my ($pdir, $file, $md5, $match, $present, $st, $size, $p);
     my $blocks_removed = 0;
     my $old_blocks = 0;
     my $new_blocks = 0;
@@ -1066,6 +1283,7 @@ sub remove_md5_entry {
     $new_blocks = size_in_blocks($st->size);
     $blocks_removed = $old_blocks - $new_blocks;
     msg_ap(0, "    now $size bytes, $blocks_removed blocks removed\n");
+    $/ = $old_split; # Browse by line again
     return $blocks_removed;
 }
 
@@ -1120,6 +1338,7 @@ sub add_packages {
     if ($rollback) {
         # Remove the Packages entry/entries for the specified package
         $total_blocks -= remove_Packages_entry($dir, $arch, $_);
+        $total_blocks += remove_trans_desc_entry($dir, $arch, $_);
         $total_blocks -= remove_md5_entry($dir, $arch, $_);
         
         foreach my $file (@files) {
@@ -1142,6 +1361,7 @@ sub add_packages {
         }
     } else {
         $total_blocks += add_Packages_entry($dir, $arch, $_);
+        $total_blocks += add_trans_desc_entry($dir, $arch, $_);
         $total_blocks += add_md5_entry($dir, $arch, $_);
 
         foreach my $file (@files) {
