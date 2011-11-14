@@ -131,25 +131,6 @@ linux-image-amd64
 linux-headers-amd64
 #endif
 
-#ifdef ARCH_alpha
-initramfs-tools
-busybox
-aboot
-aboot-base
-linux-image-alpha-generic
-linux-image-alpha-smp
-#endif
-
-#ifdef ARCH_hppa
-initramfs-tools
-busybox
-linux-image-parisc
-linux-image-parisc-smp
-linux-image-parisc64
-linux-image-parisc64-smp
-palo
-#endif
-
 #ifdef ARCH_ia64
 initramfs-tools
 busybox
@@ -180,23 +161,6 @@ linux-image-r4k-kn04
 linux-image-r5k-cobalt
 linux-image-sb1-bcm91250a
 linux-image-sb1a-bcm91480b
-#endif
-
-#ifdef ARCH_arm
-initramfs-tools
-busybox
-nwutil
-slugimage
-glantank
-flash-kernel
-nslu2-utils
-apex-nslu2
-linux-image-footbridge
-linux-image-iop32x
-linux-image-ixp4xx
-linux-image-nslu2
-linux-image-rpc
-linux-image-s3c2410
 #endif
 
 #ifdef ARCH_armel

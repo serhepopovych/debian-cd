@@ -13,6 +13,11 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     Milan Kupcevic for the patch.
   * Update list of Linux kernel packages. Closes: #648690. Thanks to BEn
     Hutchings for the patch.
+  * Remove lots of old stuff neither needed nor supported any more:
+    + removed architectures: alpha arm hppa
+    + removed releases: etch lenny
+    + removed unversioned data/sparc and data/yaboot, versioned
+      equivalents are in place already.
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
