@@ -617,10 +617,10 @@ sub recompress {
     if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
 		system("gzip -9c < $_ >$_.gz");
 	}
-    # Translation files need to be compressed in .bz2 format
+    # Translation files need to be compressed in .gz format on CD?
 	if ($filename =~ m/\/.*\/i18n\/(Translation.*)$/o &&
-        ! ($filename =~ m/\/.*\/i18n\/(Translation.*bz2)$/o)) {
-		system("bzip2 -9 $_");
+        ! ($filename =~ m/\/.*\/i18n\/(Translation.*gz)$/o)) {
+		system("gzip -9 $_");
 	}
 }	
 
@@ -1017,27 +1017,27 @@ sub add_trans_desc_entry {
         if (defined $descriptions{$lang}{$p}{"data"}) {
             my $trans_file = "$idir/Translation-$lang";
 
-            msg_ap(0, "  Adding $p to $trans_file(.bz2)\n");
+            msg_ap(0, "  Adding $p to $trans_file(.gz)\n");
 
             if ($descriptions{$lang}{$p}{"used"}) {
                 msg_ap(0, "    - not, already included\n");
             } else {
-                # Keeping files in .bz2 format is far too expensive in
+                # Keeping files in .gz format is far too expensive in
                 # terms of de-compressing and re-compressing all the
                 # time. Store uncompressed and only compress when we're
-                # finished. Analysis of typical text suggests that bzip2
-                # will give roughly a factor of 3 compresssion here, so
+                # finished. Analysis of typical text suggests that gzip
+                # will give roughly a factor of 2 compresssion here, so
                 # use that estimate. For accuracy, we may end up
                 # compressing *anyway* just before doing a size check; if
                 # so, we'll need to uncompress again on entry here.
 
-                if (-f "$trans_file.bz2") {
-                    system("bunzip2 $trans_file.bz2");
+                if (-f "$trans_file.gz") {
+                    system("gunzip $trans_file.gz");
                 }
 
                 if (-f $trans_file) {
                     $st = stat("$trans_file") || die "unable to stat $trans_file\n";
-                    $old_blocks += size_in_blocks($st->size / 3);
+                    $old_blocks += size_in_blocks($st->size / 2);
                 }
 
                 # Add the new description
@@ -1047,8 +1047,8 @@ sub add_trans_desc_entry {
                 close(IFILE);
 
                 $st = stat("$trans_file") || die "unable to stat $trans_file\n";
-                $size += int($st->size / 3);
-                $new_blocks += size_in_blocks($st->size / 3);
+                $size += int($st->size / 2);
+                $new_blocks += size_in_blocks($st->size / 2);
             }
         }
     }
@@ -1186,15 +1186,15 @@ sub remove_trans_desc_entry {
             my $tmp_tfile = "$trans_file" . ".rollback";
             my $entries_remaining = 0;
 
-            msg_ap(0, "  Removing $p from $trans_file(.bz2)\n");
+            msg_ap(0, "  Removing $p from $trans_file(.gz)\n");
 
-            # Keeping files in .bz2 format is expensive - see comment
+            # Keeping files in .gz format is expensive - see comment
             # in add_trans_desc_entry() above.
-            if (-f "$trans_file.bz2") {
-                system("bunzip2 $trans_file.bz2");
+            if (-f "$trans_file.gz") {
+                system("gunzip $trans_file.gz");
             }
             $st = stat("$trans_file") || die "unable to stat $trans_file\n";
-            $old_blocks += size_in_blocks($st->size / 3);
+            $old_blocks += size_in_blocks($st->size / 2);
 
             # Remove the description
             open(IFILE, "< $trans_file") || die "unable to open $trans_file\n";
