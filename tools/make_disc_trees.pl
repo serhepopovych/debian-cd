@@ -949,10 +949,16 @@ sub add_Packages_entry {
 
     if ($arch eq "source") {
         m/^Directory: (\S+)/mi and $file = $1;
+        if (!defined($file)) {
+            die "Can't parse source file information out of $_\n";
+        }
         $pdir = Packages_dir($dir, $file, $section) . "/source";
         $pkgfile = "$pdir/Sources";
     } else {
         m/^Filename: (\S+)/mi and $file = $1;
+        if (!defined($file)) {
+            die "Can't parse binary file information out of $_\n";
+        }
         $pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
         $pkgfile = "$pdir/Packages";
     }
