@@ -131,15 +131,17 @@ foreach my $arch (split(' ', $archlist)) {
     load_packages_cache($arch);
 }
 
-load_descriptions("main");
-if ($contrib) {
-    load_descriptions("contrib");
-}
-if ($nonfree || $extranonfree) {
-    load_descriptions("non-free");
-}
-if ($use_local) {
-    load_descriptions("local");
+if (! ($archlist eq "source")) {
+    load_descriptions("main");
+    if ($contrib) {
+        load_descriptions("contrib");
+    }
+    if ($nonfree || $extranonfree) {
+        load_descriptions("non-free");
+    }
+    if ($use_local) {
+        load_descriptions("local");
+    }
 }
 
 my $disknum = 1;
@@ -1338,8 +1340,10 @@ sub add_packages {
     if ($rollback) {
         # Remove the Packages entry/entries for the specified package
         $total_blocks -= remove_Packages_entry($dir, $arch, $_);
-        $total_blocks += remove_trans_desc_entry($dir, $arch, $_);
         $total_blocks -= remove_md5_entry($dir, $arch, $_);
+        if (!($arch eq "source")) {
+            $total_blocks -= remove_trans_desc_entry($dir, $arch, $_);
+        }
         
         foreach my $file (@files) {
             my $missing = 0;
@@ -1361,8 +1365,10 @@ sub add_packages {
         }
     } else {
         $total_blocks += add_Packages_entry($dir, $arch, $_);
-        $total_blocks += add_trans_desc_entry($dir, $arch, $_);
         $total_blocks += add_md5_entry($dir, $arch, $_);
+        if (!($arch eq "source")) {
+            $total_blocks += add_trans_desc_entry($dir, $arch, $_);
+        }
 
         foreach my $file (@files) {
 
