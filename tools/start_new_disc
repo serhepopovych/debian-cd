@@ -283,6 +283,9 @@ if [ $DISKNUM = 1 ] ; then
         echo >> $CDDIR/README.excluded
     fi
 
+    # Stop the greps below from complaining
+    touch $BDIR/sort_deps_dummy.log
+
     grep "refused because of toobig" $BDIR/sort_deps*.log | sort -u | awk '{print $1}' > $BDIR/toobig
     if [ -s $BDIR/toobig ] ; then
         echo "  Adding README.excluded (some package files were too big)"
