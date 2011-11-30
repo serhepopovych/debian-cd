@@ -86,6 +86,7 @@ done
 # - d390.tdf    : for booting from emulated tape
 # - d390oco.tdf : same, using object-code-only-modules-ramdisk (example)
 cp $BASEDIR/data/$CODENAME/s390/d390* "$imagedir/"
+sed -e 's,^[^*],boot/&,g' < $BASEDIR/data/$CODENAME/s390/d390.ins > "boot$N/d390.ins"
 
 # Create the files specifying offset and size of the initrd
 perl -e "print pack('N', 0x800000)" >"$imagedir/root.off"
