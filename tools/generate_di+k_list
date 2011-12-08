@@ -204,6 +204,7 @@ linux-image-prep
 
 #ifdef ARCH_kfreebsd_amd64
 kfreebsd-image-8-amd64
+kfreebsd-image-9-amd64
 grub-pc
 #endif
 
@@ -211,6 +212,9 @@ grub-pc
 kfreebsd-image-8-486
 kfreebsd-image-8-686
 kfreebsd-image-8-686-smp
+kfreebsd-image-9-486
+kfreebsd-image-9-686
+kfreebsd-image-9-686-smp
 grub-pc
 libc0.1-i686
 #endif
