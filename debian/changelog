@@ -43,6 +43,7 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
   [ Robert Millan ]
   * Add kfreebsd 9. Closes: #650926
   * Add graphical installer image for kfreebsd-amd64. Closes: #651530
+  * generate_d-i+k_list: Add ufutils. Closes: #662234
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
 
