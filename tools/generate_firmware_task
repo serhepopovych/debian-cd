@@ -34,7 +34,13 @@ if (!defined($codename) || !defined($mirror) ||
 }
 
 foreach my $arch (split(' ', $archlist)) {
-    $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
+    $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
+}
+
+if defined($localdebs) {
+    foreach my $arch (split(' ', $archlist)) {
+        $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
+    }
 }
 
 open (OUT, "> $outfile") or die "Can't open outfile for writing: $!\n";
