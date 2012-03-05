@@ -37,7 +37,7 @@ foreach $arch (split(' ', $archlist)) {
     $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
 }
 
-if defined($localdebs) {
+if (defined($localdebs)) {
     foreach $arch (split(' ', $archlist)) {
         $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
     }
