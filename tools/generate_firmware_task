@@ -16,10 +16,10 @@
 
 use strict;
 
-my ($mirror, $codename, $archlist, $outfile);
+my ($mirror, $codename, $archlist, $outfile, $localdebs);
 my $date;
 my $pkgfiles = "";
-my ($pkg, $filename);
+my ($pkg, $filename, $arch);
 my %seen;
 
 $codename = $ENV{'CODENAME'};
@@ -33,12 +33,12 @@ if (!defined($codename) || !defined($mirror) ||
     die "Error in arguments\n";
 }
 
-foreach my $arch (split(' ', $archlist)) {
+foreach $arch (split(' ', $archlist)) {
     $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
 }
 
 if defined($localdebs) {
-    foreach my $arch (split(' ', $archlist)) {
+    foreach $arch (split(' ', $archlist)) {
         $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
     }
 }
