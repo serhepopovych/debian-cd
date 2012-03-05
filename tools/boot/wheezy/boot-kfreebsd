@@ -43,7 +43,7 @@ fi
 BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/kfreebsd.gz cdrom/kfreebsd-9.gz cdrom/initrd.gz"
 
 if [ "$ARCH" = kfreebsd-amd64 ]; then
-	BOOT_IMAGES="$BOOT_IMAGES cdrom/gtk/initrd.gz"
+	BOOT_IMAGES="$BOOT_IMAGES cdrom/gtk/initrd.gz" || true
 fi
 
 for image in $BOOT_IMAGES; do
