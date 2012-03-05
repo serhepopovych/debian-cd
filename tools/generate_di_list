@@ -18,7 +18,10 @@ if ( $ENV{ARCHES} ) {
 }
 @ARCHES = qw{i386 amd64} unless @ARCHES;
 
-@VARIANTS = split(" ", $ENV{VARIANTS});
+my @VARIANTS;
+if ( $ENV{VARIANTS} ) {
+    @VARIANTS = split(" ", $ENV{VARIANTS});
+}
 
 my $DATE=`date`;
 chomp $DATE;
