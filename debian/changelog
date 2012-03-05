@@ -18,6 +18,7 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + removed releases: etch lenny
     + removed unversioned data/sparc and data/yaboot, versioned
       equivalents are in place already.
+  * tools/generate_firmware_task: Add LOCALDEBS support
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
