@@ -85,6 +85,9 @@ default:
 
 # Basic checks in order to avoid problems
 ok:
+ifdef FORCE_FAIL
+	@echo Debug variable FORCE_FAIL defined -- abort now; false
+endif
 ifndef TDIR
 	@echo TDIR undefined -- set up CONF.sh; false
 endif
