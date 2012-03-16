@@ -22,6 +22,7 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
   * Add more armel kernel flavours
   * Add armhf as a known architecture, merging common armel/armhf boot
     setup scripts.
+  * Remove hppa boot script, unsupported now.
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
