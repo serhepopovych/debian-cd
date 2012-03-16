@@ -179,6 +179,14 @@ linux-image-orion5x
 linux-image-versatile
 #endif
 
+#ifdef ARCH_armhf
+initramfs-tools
+busybox
+flash-kernel
+linux-image-mx5
+linux-image-omap
+#endif
+
 #ifdef ARCH_sparc
 initramfs-tools
 busybox

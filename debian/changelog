@@ -20,6 +20,8 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
       equivalents are in place already.
   * tools/generate_firmware_task: Add LOCALDEBS support
   * Add more armel kernel flavours
+  * Add armhf as a known architecture, merging common armel/armhf boot
+    setup scripts.
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
