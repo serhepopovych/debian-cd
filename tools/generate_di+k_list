@@ -173,6 +173,9 @@ nslu2-utils
 apex-nslu2
 linux-image-iop32x
 linux-image-ixp4xx
+linux-image-kirkwood
+linux-image-mv78xx0
+linux-image-orion5x
 linux-image-versatile
 #endif
 

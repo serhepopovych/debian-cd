@@ -11,7 +11,7 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + Other minor cleanups in tools/make_disc_trees.pl
   * Fix "expert" mode in yaboot for powerpc. Closes: #636265. Thanks to
     Milan Kupcevic for the patch.
-  * Update list of Linux kernel packages. Closes: #648690. Thanks to BEn
+  * Update list of Linux kernel packages. Closes: #648690. Thanks to Ben
     Hutchings for the patch.
   * Remove lots of old stuff neither needed nor supported any more:
     + removed architectures: alpha arm hppa
@@ -19,6 +19,7 @@ debian-cd (3.1.8) UNRELEASED; urgency=low
     + removed unversioned data/sparc and data/yaboot, versioned
       equivalents are in place already.
   * tools/generate_firmware_task: Add LOCALDEBS support
+  * Add more armel kernel flavours
 
   [ Joey Hess ]
   * Read tasksel's debian-tasks.desc from its new location.
