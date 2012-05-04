@@ -1,4 +1,4 @@
-debian-cd (3.1.8) UNRELEASED; urgency=low
+debian-cd (3.1.8) unstable; urgency=low
 
   [ Steve McIntyre ]
   * Switch i386 kernel flavours again on advice from Ben:
