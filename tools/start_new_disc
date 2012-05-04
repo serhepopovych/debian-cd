@@ -311,7 +311,7 @@ $BASEDIR/tools/add-bin-doc $DISKNUM "$ARCHES"
 
 # Common stuff for all disks in the set
 if [ "$SOURCEONLY"x = "yes"x ] ; then
-    echo -n "-J " >> $BDIR/$DISKNUM.mkisofs_opts
+    echo -n "-J -joliet-long" >> $BDIR/$DISKNUM.mkisofs_opts
 fi
 
 echo "  Adding Release files"
