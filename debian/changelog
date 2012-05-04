@@ -29,7 +29,7 @@ debian-cd (3.1.8) unstable; urgency=low
   * Read tasksel's debian-tasks.desc from its new location.
 
   [ Ian Campbell ]
-  Rename "xm-debian.cfg" to just "debian.cfg" for Xen config.
+  * Rename "xm-debian.cfg" to just "debian.cfg" for Xen config.
 
   [ Raphaël Hertzog ]
   * Changes triggered by various lintian warnings:
