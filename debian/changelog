@@ -51,7 +51,7 @@ debian-cd (3.1.8) unstable; urgency=low
   * Add graphical installer image for kfreebsd-amd64. Closes: #651530
   * generate_d-i+k_list: Add ufutils. Closes: #662234
 
- -- Steve McIntyre <93sam@debian.org>  Tue, 07 Jun 2011 23:03:42 +0100
+ -- Steve McIntyre <93sam@debian.org>  Fri, 04 May 2012 16:13:42 +0100
 
 debian-cd (3.1.7) unstable; urgency=low
 
