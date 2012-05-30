@@ -117,16 +117,14 @@
 #endif
     </h2>
 
-    <p>An operating system is the set of basic programs and
-    utilities that make your computer run. At the core of an
-    operating system is the kernel. The kernel is the most
-    fundamental program on the computer, which does all the basic
-    housekeeping and lets you start other programs. Debian is
-    kernel independent. It currently uses the <a href=
-    "http://www.linux.org/">Linux</a> kernel but work is in
-    progress to provide Debian for other kernels, using <a href=
-    "http://www.gnu.org/software/hurd/hurd.html">the Hurd</a>. Most
-    of the basic operating system tools come from the <a href=
+    <p>An operating system is the set of basic programs and utilities
+    that make your computer run. At the core of an operating system is
+    the kernel. The kernel is the most fundamental program on the
+    computer, which does all the basic housekeeping and lets you start
+    other programs. Debian is kernel independent. It currently uses
+    either the <a href= "http://www.linux.org/">Linux</a>
+    or <a href="http://www.freebsd.org/">FreeBSD</a> kernel. Most of
+    the basic operating system tools come from the <a href=
     "http://www.gnu.org/">GNU project</a>; hence the name
     DEBIAN_KERNEL.</p>
 
