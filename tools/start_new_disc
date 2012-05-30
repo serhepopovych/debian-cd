@@ -25,6 +25,12 @@ DI_DATA_DIR=$BASEDIR/data/$DI_CODENAME
 CAPCODENAME=`perl -e "print ucfirst("$CODENAME")"`
 
 NUM_ARCHES=`echo $ARCHES | wc -w`
+case "$ARCHES" in
+    *kfreebsd*) DEBIAN_KERNEL="GNU/kFreeBSD";;
+    *hurd*)     DEBIAN_KERNEL="GNU/Hurd";;
+    *)          DEBIAN_KERNEL="GNU/Linux";;
+esac
+export DEBIAN_KERNEL
 
 if [ "$VOLID_BASE"x = ""x ] ; then
     VOLID_BASE="Debian $DEBVERSION"
@@ -34,13 +40,13 @@ if [ $NUM_ARCHES = 1 ] ; then
     case $ARCHES in
         source)
             SOURCEDISK=1
-            export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
+            export DISKINFO="Debian $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
             export VOLID="$VOLID_BASE Source $DISKNUM"
             export SOURCEONLY=yes
             ;;
         *)
             BINARYDISK=1
-            export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
+            export DISKINFO="Debian ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
             case "$ARCHES" in
                 powerpc)
                     export VOLID="$VOLID_BASE ppc $DISKNUM" ;;
@@ -62,7 +68,7 @@ else
         *source*) SOURCEDISK=1;;
     esac
     export ARCHDEF=`echo $ARCHES | sed 's? ?/?g'`
-    export DISKINFO="Debian GNU/Linux $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
+    export DISKINFO="Debian ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
     export VOLID="$VOLID_BASE M-A $DISKNUM"
 fi
 

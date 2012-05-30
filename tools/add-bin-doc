@@ -55,6 +55,7 @@ cpp -traditional -undef -P -C -Wall -nostdinc -I$dir \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
     -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \
+    -D DEBIAN_KERNEL="$DEBIAN_KERNEL" \
     -D OUTPUTtext $BASEDIR/data/$CODENAME/README.html.in \
 	| sed -e 's/%%.//g' > $dir/README.html
 
@@ -68,6 +69,7 @@ cpp -traditional -undef -P -C -Wall -nostdinc -I $dir/ \
     -D OMIT_MANUAL="$OMIT_MANUAL" \
     -D OFFICIAL_VAL=$OFFICIAL_VAL \
     -D OMIT_RELEASE_NOTES="$OMIT_RELEASE_NOTES" \
+    -D DEBIAN_KERNEL="$DEBIAN_KERNEL" \
     -D OUTPUThtml $BASEDIR/data/$CODENAME/README.html.in \
 	| sed -e 's/%%.//g' > $dir/README.html
 

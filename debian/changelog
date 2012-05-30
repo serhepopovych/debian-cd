@@ -4,6 +4,8 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
   * Add s390x as a known architecture, merging common s390/s390x boot
     setup scripts.
   * Add dependency on xorriso. Closes: #673656
+  * Describe discs appropriately depending on the kernel used.
+    Closes: #673975
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
 
