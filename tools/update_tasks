@@ -108,8 +108,9 @@ close TASKS;
 #print "server: @server_tasks\n";
 #print "special: @special_tasks\n";
 
-# Reduce special-casing and duplicate code. Add "generic-desktop" and
-# "all-desktop" tasks that we can use here.
+# Reduce special-casing and duplicate code. Add "light-desktop",
+# "generic-desktop" and "all-desktop" tasks that we can use here.
+push (@desktop_tasks, "light-desktop");
 push (@desktop_tasks, "generic-desktop");
 push (@desktop_tasks, "all-desktop");
 
@@ -130,6 +131,9 @@ foreach my $desktop (@desktop_tasks) {
         }
     } elsif ($desktop_name eq "generic") {
         print DESKOUT "task-gnome-desktop\n";
+    } elsif ($desktop_name eq "light") {
+        print DESKOUT "task-lxde-desktop\n";
+        print DESKOUT "task-xfce-desktop\n";
     } else {
         print DESKOUT "task-$desktop\n";
     }
@@ -157,6 +161,9 @@ foreach my $desktop (@desktop_tasks) {
         }
     } elsif ($desktop_name eq "generic") {
         print DESKOUT "task-gnome-desktop\n";
+    } elsif ($desktop_name eq "light") {
+        print DESKOUT "task-lxde-desktop\n";
+        print DESKOUT "task-xfce-desktop\n";
     } else {
         print DESKOUT "task-$desktop\n";
     }
@@ -238,6 +245,13 @@ foreach my $desktop (@desktop_tasks) {
                 }
             }
         }
+    } elsif ($desktop_name eq "light") {
+        # task-$LANGUAGE-$DESKTOP-desktop
+        foreach my $taskname (@l10n_tasks) {
+            if ($taskname =~ m/lxde/ or $taskname =~ m/xfce/) {
+                print DESKOUT "task-$taskname\n";
+            }
+        }        
     } else {
         # a specific desktop, just add the desktop l10n tasks for this
         # desktop
