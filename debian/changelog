@@ -7,6 +7,7 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
   * Describe discs appropriately depending on the kernel used.
     Closes: #673975
   * Clean up handling of environment variable handling in perl tools.
+  * Switch over to working with new task-* metapackages. Closes: #672941
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
 

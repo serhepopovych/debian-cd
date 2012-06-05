@@ -136,9 +136,6 @@ ifneq ($(ARCHES),source)
 	$(Q)mkdir -p $(TASKDIR)
 	$(Q)echo "- copying task files from 'tasks/$(DI_CODENAME)/'"
 	$(Q)cp -r $(BASEDIR)/tasks/$(CODENAME)/* $(TASKDIR)
-	$(Q)echo "- task.languages: using 'tasks/$(DI_CODENAME)/$(TASK_LANGLIST)'"
-	$(Q)cp $(BASEDIR)/tasks/$(DI_CODENAME)/$(TASK_LANGLIST) \
-		$(TASKDIR)/task.languages
 	$(Q)echo "- generating dynamic task files"
 	$(Q)set -e; cd $(TASKDIR); \
 		$(BASEDIR)/tools/update_tasks; \
