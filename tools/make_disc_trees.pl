@@ -37,6 +37,8 @@ $archlist = shift;
 $mkisofs = shift;
 $mkisofs_base_opts = shift;
 
+require "$basedir/tools/link.pl";
+
 my $iso_blksize = 2048;
 my $log_opened = 0;
 my $old_split = $/;
@@ -45,8 +47,6 @@ my $localdebs = read_env('LOCALDEBS', $mirror);
 my $symlink_farm = read_env('SYMLINK', 0);
 my $link_verbose = read_env('VERBOSE', 0);
 my $link_copy = read_env('COPYLINK', 0);
-
-require "$basedir/tools/link.pl";
 
 # MAXCDS is the hard limit on the MAXIMUM number of images to
 # make. MAXJIGDOS and MAXISOS can only make this number smaller; we
