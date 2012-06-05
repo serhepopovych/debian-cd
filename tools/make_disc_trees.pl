@@ -37,46 +37,31 @@ $archlist = shift;
 $mkisofs = shift;
 $mkisofs_base_opts = shift;
 
-my $security = $ENV{'SECURITY'} || $mirror;
-my $localdebs = $ENV{'LOCALDEBS'} || $mirror;
 my $iso_blksize = 2048;
 my $log_opened = 0;
 my $old_split = $/;
-my $symlink_farm = $ENV{'SYMLINK'} || 0;
-my $link_verbose = $ENV{'VERBOSE'} || 0;
-my $link_copy = $ENV{'COPYLINK'} || 0;
+my $security = read_env('SECURITY', $mirror);
+my $localdebs = read_env('LOCALDEBS', $mirror);
+my $symlink_farm = read_env('SYMLINK', 0);
+my $link_verbose = read_env('VERBOSE', 0);
+my $link_copy = read_env('COPYLINK', 0);
 
 require "$basedir/tools/link.pl";
-
-$maxcds = 9999;
 
 # MAXCDS is the hard limit on the MAXIMUM number of images to
 # make. MAXJIGDOS and MAXISOS can only make this number smaller; we
 # will use the higher of those 2 numbers as the last image to go to,
 # if they're set
+$maxcds = read_env('MAXCDS', 9999);
 
-if (defined($ENV{'MAXCDS'})) {
-	$maxcds = $ENV{'MAXCDS'};
-} else {
-	$maxcds = 9999;
+$maxisos = read_env('MAXISOS', 9999);
+if ($maxisos =~ 'ALL' || $maxisos =~ 'all') {
+    $maxisos = 9999;
 }
 
-if (defined($ENV{'MAXISOS'})) {
-	$maxisos = $ENV{'MAXISOS'};
-    if ($maxisos =~ 'ALL' || $maxisos =~ 'all') {
-        $maxisos = 9999;
-    }
-} else {
-	$maxisos = 9999;
-}
-
-if (defined($ENV{'MAXJIGDOS'})) {
-	$maxjigdos = $ENV{'MAXJIGDOS'};
-    if ($maxjigdos =~ 'ALL' || $maxjigdos =~ 'all') {
-        $maxjigdos = 9999;
-    }
-} else {
-	$maxjigdos = 9999;
+$maxjigdos = read_env('MAXJIGDOS', 9999);
+if ($maxjigdos =~ 'ALL' || $maxjigdos =~ 'all') {
+    $maxjigdos = 9999;
 }
 
 if ($maxisos > $maxjigdos) {
@@ -91,26 +76,10 @@ if ($maxisos < $maxcds) {
     $maxcds = $maxisos;
 }
 
-if (defined($ENV{'EXTRANONFREE'})) {
-	$extranonfree = $ENV{'EXTRANONFREE'};
-} else {
-	$extranonfree = 0;
-}
-if (defined($ENV{'NONFREE'})) {
-	$nonfree = $ENV{'NONFREE'};
-} else {
-	$nonfree = 0;
-}
-if (defined($ENV{'CONTRIB'})) {
-	$contrib = $ENV{'CONTRIB'};
-} else {
-	$contrib = 0;
-}
-if (defined($ENV{'LOCAL'})) {
-	$use_local = $ENV{'LOCAL'};
-} else {
-	$use_local = 0;
-}
+$extranonfree = read_env('EXTRANONFREE', 0);
+$nonfree = read_env('NONFREE', 0);
+$contrib = read_env('CONTRIB', 0);
+$use_local = read_env('LOCAL', 0);
 	
 my $list = "$tdir/list";
 my $bdir = "$tdir/$codename";
@@ -173,10 +142,7 @@ my $size = 0;
 my $guess_size = 0;
 my @overflowpkg;
 my $mkisofs_check = "$mkisofs $mkisofs_base_opts -r -print-size -quiet";
-my $debootstrap_script = "";
-if (defined ($ENV{'DEBOOTSTRAP_SCRIPT'})) {
-	$debootstrap_script = $ENV{'DEBOOTSTRAP_SCRIPT'};
-}
+my $debootstrap_script = read_env('DEBOOTSTRAP_SCRIPT', "");
 
 chdir $bdir;
 
@@ -685,7 +651,7 @@ sub get_disc_size {
     }
 
     # See if we've been asked to switch sizes for the whole set
-    $disk_size_hack = $ENV{'FORCE_CD_SIZE'} || "";
+    $disk_size_hack = read_env('FORCE_CD_SIZE', "");
     if ($disk_size_hack) {
        print LOG "HACK HACK HACK: FORCE_CD_SIZE found:\n";
        print LOG "  forcing use of a $disk_size_hack disk instead of $chosen_disk\n";
@@ -693,7 +659,7 @@ sub get_disc_size {
     }
 
     # If we're asked to do a specific size for *this* disknum, over-ride again
-    $disk_size_hack = $ENV{"FORCE_CD_SIZE$disknum"} || "";
+    $disk_size_hack = read_env("FORCE_CD_SIZE$disknum", "");
     if ($disk_size_hack) {
        print LOG "HACK HACK HACK: FORCE_CD_SIZE$disknum found:\n";
        print LOG "  forcing use of a $disk_size_hack disk instead of $chosen_disk\n";
@@ -740,7 +706,7 @@ sub get_disc_size {
         $maxdiskblocks = int(8 * $GB / $blocksize) - $reserved;
         $diskdesc = "8GB STICK";
     } elsif ($chosen_disk eq "CUSTOM") {
-        $maxdiskblocks = $ENV{'CUSTOMSIZE'}  - $reserved || 
+        $maxdiskblocks = $ENV{'CUSTOMSIZE'} - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";
         $diskdesc = "User-supplied size";
     }
