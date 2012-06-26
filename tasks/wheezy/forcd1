@@ -32,6 +32,7 @@ read-edid
 mdetect
 aptitude
 brltty
+espeakup
 popularity-contest
 ntpdate
 hdparm

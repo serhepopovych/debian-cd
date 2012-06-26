@@ -8,6 +8,8 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
     Closes: #673975
   * Clean up handling of environment variable handling in perl tools.
   * Switch over to working with new task-* metapackages. Closes: #672941
+  * Add espeakup to forcd1, so we get speech synthesis for a11y early on full
+    CD/DVD sets. Closes: #678064
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
 
