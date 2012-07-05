@@ -12,6 +12,8 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
     CD/DVD sets. Closes: #678064
   * Fix installer priority handling on pegasos. Closes: #679798.
     Thanks to Milan Kupcevic for the patch.
+  * Add gtk initrd to hurd-i386 images. Closes: #635260
+    Thanks to Samuel Thibault for the patch.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
 

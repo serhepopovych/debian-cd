@@ -36,7 +36,7 @@ if [ $N != 1 ]; then
 fi
 
 # Download boot images.
-BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/gnumach.gz cdrom/initrd.gz cdrom/ext2fs.static cdrom/ld.so.1"
+BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/gnumach.gz cdrom/initrd.gz cdrom/gtk/initrd.gz cdrom/ext2fs.static cdrom/ld.so.1"
 
 for image in $BOOT_IMAGES; do
        if [ ! -e "$image" ]; then
@@ -55,8 +55,10 @@ done
 
 # Install kernel and initrd
 mkdir -p $CDDIR/boot/kernel/
+mkdir -p $CDDIR/boot/gtk/
 cp "cdrom/gnumach.gz" "$CDDIR/boot/kernel/gnumach.gz"
 cp "cdrom/initrd.gz" "$CDDIR/boot/initrd.gz"
+cp "cdrom/gtk/initrd.gz" "$CDDIR/boot/gtk/initrd.gz"
 cp "cdrom/ext2fs.static" "$CDDIR/boot/kernel/ext2fs.static"
 cp "cdrom/ld.so.1" "$CDDIR/boot/kernel/ld.so.1"
 
