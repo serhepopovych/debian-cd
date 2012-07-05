@@ -10,6 +10,8 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
   * Switch over to working with new task-* metapackages. Closes: #672941
   * Add espeakup to forcd1, so we get speech synthesis for a11y early on full
     CD/DVD sets. Closes: #678064
+  * Fix installer priority handling on pegasos. Closes: #679798.
+    Thanks to Milan Kupcevic for the patch.
 
  -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
 
