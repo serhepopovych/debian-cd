@@ -101,6 +101,7 @@ if [ -f "$TRACE" ] ; then
                     $TOPDIR/cronjob.weekly
                 fi
             fi
+	    cd $HOME && ./bin/cdbuilder_log_analyser > build/log/analysis.html
             exit 0
         fi
     fi

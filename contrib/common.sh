@@ -1,8 +1,42 @@
 # Common handy shell script functions
 
+l=/var/run/reboot-lock
+
+reboot_lock () {
+    exec 3<$l
+    if ! flock --shared -w 0 3; then
+	echo 2>&1 "Cannot acquire reboot lock."
+	#exit 1
+    fi
+}
+
+reboot_unlock () {
+    flock --shared -u 3
+}
+
 now () {
     date -u +%F:%H:%M:%S
 }
+
+build_description () {
+    case $1 in
+        CD)
+	    DESC="Full CD";;
+        DVD)
+            DESC="Full DVD";;
+        BD)
+            DESC="Blu-ray";;
+        DLBD)
+            DESC="Dual-layer Blu-ray";;
+        KDE)
+	    DESC="KDE CD";;
+        LIGHTCD)
+	    DESC="XFCE/lxde CD";;
+	*)
+	    DESC="UNKNOWN";;
+    esac
+    echo "$DESC"
+}    
 
 calc_time () {
     echo $1 $2 | awk '
@@ -40,7 +74,7 @@ build_finished () {
     time_spent=`calc_time $start $end`
     echo "  $ARCH $BUILDNAME build started at $start, ended at $end (took $time_spent), error $error"
     if [ $error -ne 0 ] ; then
-        arch_error="$arch_error "$BUILDNAME"FAIL/$error/$end"
+        arch_error="$arch_error "$BUILDNAME"FAIL/$error/$end/$logfile"
     fi    
 }
 

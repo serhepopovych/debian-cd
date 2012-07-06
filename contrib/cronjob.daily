@@ -6,12 +6,15 @@ TOPDIR=$(dirname $0)
 
 export PUBDIRJIG=$PUBDIR/daily-builds
 export DATE_BUILD="$DATE-$BUILDNUM"
-export TESTING_SUITE=squeeze
+export TESTING_SUITE=wheezy
 BUILDS_RUNNING=""
 
 export SID_WANTED=1
 
 . $TOPDIR/common.sh
+
+# Make sure the machine isn't rebooted while we're busy
+reboot_lock
 
 # If we're doing a normal set of daily/weekly builds, leave the
 # checksum filenames alone. Otherwise, make life easier for people
@@ -54,15 +57,16 @@ finalise_arch_dir () {
 	cd ..
 	~/build/mktorrent iso-cd/*iso
 	~/build/mklist iso-cd/*iso
+	cp iso-cd/*SUMS* bt-cd
 	cd $TOPDIR
     fi
 }
 
 export RSYNC_TARGET_FREE=/mnt/nfs-cdimage/daily-builds
-export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware
+export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/daily-builds
 
 if [ "$ARCHES"x = ""x ] ; then
-    ARCHES="amd64 armel hppa i386 ia64 mips mipsel powerpc sparc multi-arch kfreebsd-amd64 kfreebsd-i386"
+    ARCHES="amd64 armel armhf i386 ia64 mips mipsel powerpc sparc multi-arch kfreebsd-amd64 kfreebsd-i386"
 #    ARCHES="amd64"
 fi
 

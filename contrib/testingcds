@@ -16,6 +16,10 @@ if [ "$CONF"x = ""x ] ; then
     CONF=~/build/CONF.sh
 fi
 export CF=$CONF
+if [ "$DCD_DIR"x = ""x ] ; then
+    DCD_DIR=~/build/debian-cd
+fi
+export CF=$CONF
 
 now () {
     date -u +%F:%H:%M:%S
@@ -72,6 +76,9 @@ case "$INSTALLER_CD" in
     9)
         export OUT_TYPE=bd
         export DISKTYPE=BD;;
+    D)
+        export OUT_TYPE=dlbd
+        export DISKTYPE=DLBD;;
     *)  export DISKTYPE=CD;;
 esac
 
@@ -80,7 +87,7 @@ if [ "$OUT_TYPE"x = ""x ] ; then
 fi
 
 export IMAGETARGET=official_images
-cd debian-cd && . $CONF
+cd $DCD_DIR && . $CONF
 
 if [ "$OUT"x = ""x ] ; then
     echo Config error
@@ -145,6 +152,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         ##################################
 
         ARCHDIR="$PUBDIRJIG"/${DI}_d-i/$DATE_BUILD/$OUTARCH
+	mkdir -p $ARCHDIR/list-cd
 
         # put the isos and jigdos in their place
         for i in "$OUT"/*-1.iso; do
@@ -158,11 +166,12 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
             mv $OUT/$BASE.template $ARCHDIR/jigdo-cd/$NETINSTNAME.template
             # Make sure that the ISO is as new/newer than the jigdo file; #587774
             touch $ARCHDIR/iso-cd/$NETINSTNAME.iso
+	    mv $OUT/$BASE.list.gz $ARCHDIR/list-cd/$NETINSTNAME.list.gz
         done
         rm -f "$OUT"/*
         END=`now`
         mkdir -p "$PUBDIRJIG"/$OUTARCH
-        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+        echo -e "start=$START\nend=$END\nerror=0\nlogfile=$RUN\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
 
     elif [ "$INSTALLER_CD" = "C" ] ; then
 
@@ -188,7 +197,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         rm -f "$OUT"/*
         END=`now`
         mkdir -p "$PUBDIRJIG"/$OUTARCH
-        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+        echo -e "start=$START\nend=$END\nerror=0\nlogfile=$RUN\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     else
 
         #######################################
@@ -223,8 +232,11 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	done
         mv "$OUT"/*.iso    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
 
+        mkdir -p "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}
+	mv "$OUT"/*list*gz "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}
+
         END=`now`
-        echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+        echo -e "start=$START\nend=$END\nerror=0\nlogfile=$RUN\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     fi
 
     touch $TDIR/$CODENAME/1.pkgs_extracted # so we don't get errors below
@@ -244,7 +256,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 
     for i in $MYEMAIL
     do
-        grep -e "extents written" -e "Written to media" "$LOGFILE"|mail -s "testingcds $RUN went ok" "$i"
+        grep -e "extents written" -e "Written to medi." "$LOGFILE"|mail -s "testingcds $RUN went ok" "$i"
     done
     overview "$RUN" success
 
@@ -263,6 +275,6 @@ else
     overview "$RUN" failed
     END=`now`
     mkdir -p "$PUBDIRJIG"/$OUTARCH
-    echo -e "start=$START\nend=$END\nerror=0\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
+    echo -e "start=$START\nend=$END\nerror=1\nlogfile=$RUN\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE
     exit 1
 fi
