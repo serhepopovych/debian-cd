@@ -1,4 +1,4 @@
-debian-cd (3.1.9) UNRELEASED; urgency=low
+debian-cd (3.1.9) unstable; urgency=low
 
   [ Steve McIntyre ]
   * Add s390x as a known architecture, merging common s390/s390x boot
@@ -16,7 +16,7 @@ debian-cd (3.1.9) UNRELEASED; urgency=low
     Thanks to Samuel Thibault for the patch.
   * Updated all the latest in-use scripts and config in the contrib dir.
 
- -- Steve McIntyre <93sam@debian.org>  Tue, 29 May 2012 06:20:20 +0800
+ -- Steve McIntyre <93sam@debian.org>  Thu, 05 Jul 2012 18:32:04 -0600
 
 debian-cd (3.1.8) unstable; urgency=low
 
