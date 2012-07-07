@@ -37,31 +37,26 @@ cat > debian-installer+kernel << EOF
 #include <debian-installer>
 eject
 locales
-libdevmapper1.02
-lvm-common
 lvm2
 mdadm
-aptitude
-hotplug
 pciutils
 usbutils
-/* Used for Squeeze and onwards */
-kbd
+keyboard-configuration
 console-setup
 pcmciautils
 wireless-tools
 xfsprogs
 jfsutils
-dosfsutils
+dosfstools
 reiserfsprogs
 btrfs-tools
 ufsutils
 zfsutils
 libfribidi0
-localization-config
 acpi
 acpid
 acpi-support-base
+pbbuttonsd
 ppp
 pppoeconf
 pptp-linux
@@ -71,6 +66,13 @@ openssh-server
 cryptsetup
 loop-aes-utils
 dmraid
+discover
+mouseemu
+popularity-contest
+os-prober
+open-iscsi
+e2fsprogs
+mouseemu
 
 /* Needed for rootless installs. */
 sudo
@@ -103,6 +105,7 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
+dmsetup
 laptop-detect
 lilo
 elilo
@@ -126,6 +129,7 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
+dmsetup
 laptop-detect
 lilo
 linux-image-amd64
@@ -212,6 +216,10 @@ linux-image-powerpc
 linux-image-powerpc-smp
 linux-image-powerpc64
 linux-image-prep
+#endif
+
+#ifdef ARCH_alpha
+aboot
 #endif
 
 #ifdef ARCH_kfreebsd_amd64

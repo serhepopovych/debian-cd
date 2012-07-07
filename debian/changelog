@@ -1,3 +1,18 @@
+debian-cd (3.1.10) UNRELEASED; urgency=low
+
+  * Clean up forcd1, removing twm, wmaker, wmakerconf, pump,
+    menu (pulled in by desktop tasks),
+    aptitude (pulled in by debootstap, and may be demoted to optional),
+    alsa-utils, alsa-base (pulled in by task-desktop),
+    mdetect, read-edid (no longer used by xorg),
+    grub (handed by generate_di+k_list),
+    deborphan, debfoster, localepurge (expert user stuff),
+    chdrvfont (no such package any more)
+  * Updated generate_di+k_list to match more closely the current
+    packages d-i apt-installs.
+
+ -- Joey Hess <joeyh@debian.org>  Sat, 07 Jul 2012 15:44:03 -0600
+
 debian-cd (3.1.9) unstable; urgency=low
 
   [ Steve McIntyre ]

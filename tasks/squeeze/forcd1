@@ -7,8 +7,6 @@ module-assistant
 deborphan
 debfoster
 debsums
-localepurge
-chdrvfont
 fbset
 fdutils
 ftp
@@ -32,7 +30,6 @@ read-edid
 mdetect
 aptitude
 brltty
-popularity-contest
 ntpdate
 hdparm
 jfbterm
