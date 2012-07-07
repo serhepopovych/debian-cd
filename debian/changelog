@@ -13,7 +13,10 @@ debian-cd (3.1.10) UNRELEASED; urgency=low
     mdetect, read-edid (no longer used by xorg),
     grub (handed by generate_di+k_list),
     deborphan, debfoster, localepurge (expert user stuff),
-    chdrvfont (no such package any more)
+    chdrvfont (no such package any more),
+    discover, popularity-contest, wpasupplicant, openssh-server
+    (in generate_di+k_list),
+    gnupg (pulled in by debootstrap)
   * Updated generate_di+k_list to match more closely the current
     packages d-i apt-installs.
 

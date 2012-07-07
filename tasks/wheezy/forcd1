@@ -1,12 +1,9 @@
 openssh-client
-openssh-server
-gnupg
 build-essential
 kernel-package
 module-assistant
 debsums
 localepurge
-chdrvfont
 fbset
 fdutils
 g++
@@ -18,10 +15,8 @@ whiptail
 dialog
 doc-base
 util-linux-locales
-discover
 brltty
 espeakup
-popularity-contest
 ntpdate
 hdparm
 jfbterm
@@ -29,5 +24,4 @@ unifont
 console-cyrillic
 console-terminus
 iso-codes
-wpasupplicant
 apt-offline
