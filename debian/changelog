@@ -19,6 +19,8 @@ debian-cd (3.1.10) UNRELEASED; urgency=low
     gnupg (pulled in by debootstrap)
   * Updated generate_di+k_list to match more closely the current
     packages d-i apt-installs.
+  * Further trim forcd1, removing lots of historical cruft, and adding
+    comments explaining the rationalle for the remaining packages.
 
  -- Joey Hess <joeyh@debian.org>  Sat, 07 Jul 2012 15:44:03 -0600
 

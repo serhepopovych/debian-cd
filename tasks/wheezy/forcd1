@@ -1,27 +1,10 @@
+/* hysterical raisons, but too small to remove */
 openssh-client
-build-essential
-kernel-package
-module-assistant
-debsums
-localepurge
-fbset
-fdutils
-g++
-libnet-telnet-perl
-libtimedate-perl
-libmailtools-perl
+/* could be used by debconf in certian configurations */
 libterm-readline-gnu-perl
-whiptail
-dialog
-doc-base
-util-linux-locales
+/* Accessibility stuff that is installed by base-installer
+ * in certian situations, but too large for the netinst. */
 brltty
-espeakup
-ntpdate
-hdparm
-jfbterm
-unifont
-console-cyrillic
-console-terminus
-iso-codes
+speakup
+/* See rationalle in #630805 */
 apt-offline
