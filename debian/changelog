@@ -1,5 +1,10 @@
 debian-cd (3.1.10) UNRELEASED; urgency=low
 
+  [ Steve McIntyre ]
+  * Don't exclude all the udebs for s390. Some users really do need them
+    (loading from a CD/DVD used over the network). Bug #673576
+
+  [ Joey Hess ]
   * Clean up forcd1, removing twm, wmaker, wmakerconf, pump,
     menu (pulled in by desktop tasks),
     aptitude (pulled in by debootstap, and may be demoted to optional),
