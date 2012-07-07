@@ -249,4 +249,8 @@ libc0.3-xen
 #endif
 #endif
 
+#if defined(ARCH_s390) || defined(ARCH_s390x)
+s390-tools
+sysconfig-hardware
+#endif
 EOF
