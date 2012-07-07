@@ -1,6 +1,6 @@
 /*
  *
- * This file will be used to build an official installation CD for Squeeze
+ * This file will be used to build an official installation CD for Wheezy
  * that can be used to install the GNOME desktop environment and that does
  * not include server tasks on CD1.
  *
