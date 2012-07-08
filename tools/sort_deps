@@ -99,6 +99,7 @@ close AVAIL or die "apt-cache failed : $@ ($!)\n";
 
 # Read in the extra (new/unstable) tasks packages
 if ($force_unstable_tasks) {
+    my $num = 0;
     if ($tasks_packages =~ /\.gz$/) {
         open(AVAIL, "zcat $tasks_packages |") || die "Can't zcat $tasks_packages : $!\n";
     } else {
@@ -108,9 +109,11 @@ if ($force_unstable_tasks) {
         next if not m/^Package: (\S+)\s*$/m;
         if ($1 =~ /^task-/) {
             parse_package($_);
+            $num++;
         }
     }
     close AVAIL or die "reading unstable tasks failed : $@ ($!)\n";
+    msg(0, "  Read $num tasks packages fro $tasks_packages\n");
 }
     
 $/ = $oldrs;
