@@ -217,10 +217,6 @@ export DISKTYPE=CD
 # export FORCE_CD_SIZE=<type> to change all the sizes in a given run
 # export FORCE_CD_SIZE1=<type> to change the size of disk 1 (only)
 
-# List of languages for which language tasks from tasksel should be
-# included. See tasks/README.tasksel for further info.
-export TASK_LANGLIST=tasksel_d-i.languages
-
 # Extra variants to enable. See docs/README.variants for more information.
 export VARIANTS=
 
