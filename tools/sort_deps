@@ -31,11 +31,9 @@ my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $arch = "$ENV{'ARCH'}";
 my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}";
 
-my $force_unstable_tasks = 0;
-if (defined($ENV{'FORCE_SID_TASKSEL'}) and $ENV{'FORCE_SID_TASKSEL'} eq '1') {
-    $force_unstable_tasks = 1;
-}
-
+my $force_unstable_tasks = read_env('FORCE_SID_TASKSEL', 0);
+my $tasks_packages = read_env('TASKS_PACKAGES',
+                              "$ENV{'MIRROR'}/dists/sid/main/binary-$ENV{'ARCH'}/Packages.gz)");
 my @output;
 
 $| = 1; # Autoflush for debugging
@@ -93,9 +91,28 @@ open(AVAIL, "$apt cache dumpavail |") || die "Can't fork : $!\n";
 my ($p, $re);
 while (defined($_=<AVAIL>)) {
 	next if not m/^Package: (\S+)\s*$/m;
-    parse_package($_);
+    if (!$force_unstable_tasks || $1 !~ /^task-/) {
+        parse_package($_);
+    }
 }
 close AVAIL or die "apt-cache failed : $@ ($!)\n";
+
+# Read in the extra (new/unstable) tasks packages
+if ($force_unstable_tasks) {
+    if ($tasks_packages =~ /\.gz$/) {
+        open(AVAIL, "zcat $tasks_packages |") || die "Can't zcat $tasks_packages : $!\n";
+    } else {
+        open(AVAIL, "< $tasks_packages") || die "Can't open $tasks_packages for reading: $!\n";
+    }
+    while (defined($_=<AVAIL>)) {
+        next if not m/^Package: (\S+)\s*$/m;
+        if ($1 =~ /^task-/) {
+            parse_package($_);
+        }
+    }
+    close AVAIL or die "reading unstable tasks failed : $@ ($!)\n";
+}
+    
 $/ = $oldrs;
 
 # Get the list of excluded packages
