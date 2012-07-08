@@ -113,7 +113,7 @@ if ($force_unstable_tasks) {
         }
     }
     close AVAIL or die "reading unstable tasks failed : $@ ($!)\n";
-    msg(0, "  Read $num tasks packages fro $tasks_packages\n");
+    msg(0, "  Read $num tasks packages from $tasks_packages\n");
 }
     
 $/ = $oldrs;
