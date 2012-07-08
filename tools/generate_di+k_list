@@ -73,6 +73,7 @@ os-prober
 open-iscsi
 e2fsprogs
 mouseemu
+dmsetup
 
 /* Needed for rootless installs. */
 sudo
@@ -105,7 +106,6 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
-dmsetup
 laptop-detect
 lilo
 elilo
@@ -129,7 +129,6 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
-dmsetup
 laptop-detect
 lilo
 linux-image-amd64
