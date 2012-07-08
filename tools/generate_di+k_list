@@ -77,8 +77,6 @@ wireless-tools
 ppp
 pppoeconf
 pptp-linux
-/* #231583: Make life easier for Australian ISP users */
-bpalogin
 /* #593914: netinsts are being used on wireless too these days. */
 wpasupplicant
 
