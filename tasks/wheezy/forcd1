@@ -1,3 +1,8 @@
+/* Packages that belong on the first CD (but not the netinst or
+ * businesscard), despite not being directly installed by debootstrap,
+ * or d-i, or tasksel.
+ */
+
 /* hysterical raisons, but too small to remove */
 openssh-client
 /* could be used by debconf in certian configurations */
