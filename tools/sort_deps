@@ -33,7 +33,7 @@ my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}";
 
 my $force_unstable_tasks = read_env('FORCE_SID_TASKSEL', 0);
 my $tasks_packages = read_env('TASKS_PACKAGES',
-                              "$ENV{'MIRROR'}/dists/sid/main/binary-$ENV{'ARCH'}/Packages.gz)");
+                              "$ENV{'MIRROR'}/dists/sid/main/binary-$ENV{'ARCH'}/Packages.gz");
 my @output;
 
 $| = 1; # Autoflush for debugging
