@@ -320,7 +320,7 @@ close LOG;
 ## BEGINNING OF SUBS
 
 sub parse_package {
-    my $p;
+	my $p;
 	m/^Package: (\S+)\s*$/m and $p = $1;
 	$included{$p} = 0;
 	$packages{$p}{"Package"} = $p;
@@ -342,7 +342,7 @@ sub parse_package {
 	} else {
 		$packages{$p}{"Component"} = "main";
 	}
-
+}
 
 sub read_depends {
 	my $i = shift;     # Ref
