@@ -35,16 +35,27 @@ cat > debian-installer+kernel << EOF
  */
 
 #include <debian-installer>
+
+/* Hardware config */
 eject
-locales
-lvm2
-mdadm
 pciutils
 usbutils
 keyboard-configuration
 console-setup
 pcmciautils
-wireless-tools
+acpi
+acpid
+acpi-support-base
+pbbuttonsd
+mouseemu
+udev
+discover
+
+/* Storage and filesystem tools */
+e2fsprogs
+dmsetup
+lvm2
+mdadm
 xfsprogs
 jfsutils
 dosfstools
@@ -52,28 +63,35 @@ reiserfsprogs
 btrfs-tools
 ufsutils
 zfsutils
-libfribidi0
-acpi
-acpid
-acpi-support-base
-pbbuttonsd
-ppp
-pppoeconf
-pptp-linux
-udev
-installation-report
-openssh-server
 cryptsetup
 loop-aes-utils
 dmraid
-discover
-mouseemu
+open-iscsi
+/* multipath-tools-boot is used for multipath support and installed
+ * during installation process if multipath is used
+ */
+multipath-tools-boot
+
+/* Networking */
+wireless-tools
+ppp
+pppoeconf
+pptp-linux
+/* #231583: Make life easier for Australian ISP users */
+bpalogin
+/* #593914: netinsts are being used on wireless too these days. */
+wpasupplicant
+
+/* Misc d-i */
+installation-report
+openssh-server
 popularity-contest
 os-prober
-open-iscsi
-e2fsprogs
 mouseemu
-dmsetup
+locales
+
+/* Needed for some languages with bi-directional support */
+libfribidi0
 
 /* Needed for rootless installs. */
 sudo
@@ -82,19 +100,6 @@ sudo
  * laptop so we have to make sure to get it included on first CD for
  * arches that are know to have laptops
  */
-
-/* On x86 users have a choice between grub-legacy and grub-pc */
-
-/* #231583: Make life easier for Australian ISP users */
-bpalogin
-
-/* multipath-tools-boot is used for multipath support and installed
- * during installation process if multipath is used
- */
-multipath-tools-boot
-
-/* #593914: netinsts are being used on wireless too these days. */
-wpasupplicant
 
 /* add the list of firmware packages here too if required */
 #ifdef FORCE_FIRMWARE
