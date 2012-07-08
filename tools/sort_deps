@@ -31,6 +31,11 @@ my $adir = "$ENV{'APTTMP'}/$ENV{'CODENAME'}-$ENV{'ARCH'}";
 my $arch = "$ENV{'ARCH'}";
 my $dir = "$ENV{'TDIR'}/$ENV{'CODENAME'}";
 
+my $force_unstable_tasks = 0;
+if (defined($ENV{'FORCE_SID_TASKSEL'}) and $ENV{'FORCE_SID_TASKSEL'} eq '1') {
+    $force_unstable_tasks = 1;
+}
+
 my @output;
 
 $| = 1; # Autoflush for debugging
@@ -88,28 +93,7 @@ open(AVAIL, "$apt cache dumpavail |") || die "Can't fork : $!\n";
 my ($p, $re);
 while (defined($_=<AVAIL>)) {
 	next if not m/^Package: (\S+)\s*$/m;
-	$p = $1;
-	$included{$p} = 0;
-	$packages{$p}{"Package"} = $p;
-	foreach $re (qw(Version Priority Section Filename Size MD5sum)) {
-		(m/^$re: (\S+)\s*$/m and $packages{$p}{$re} = $1)
-		|| msg(1, "Header field '$re' missing for package '$p'.\n");
-	}
-	$packages{$p}{"Depends"} = [];
-	$packages{$p}{"Suggests"} = [];
-	$packages{$p}{"Recommends"} = [];
-	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
-	$packages{$p}{"IsFirmware"} = ($packages{$p}{"Filename"} =~ /(firmware|microcode)/) ? 1 : 0;
-	if ($packages{$p}{"Section"} =~ /contrib\//) {
-		$packages{$p}{"Component"} = "contrib";
-	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
-		$packages{$p}{"Component"} = "non-free";
-	} elsif ($packages{$p}{"IsUdeb"}) {
-		$packages{$p}{"Component"} = "main-installer";
-	} else {
-		$packages{$p}{"Component"} = "main";
-	}
-
+    parse_package($_);
 }
 close AVAIL or die "apt-cache failed : $@ ($!)\n";
 $/ = $oldrs;
@@ -334,6 +318,31 @@ close LOG;
 
 ## END OF MAIN
 ## BEGINNING OF SUBS
+
+sub parse_package {
+    my $p;
+	m/^Package: (\S+)\s*$/m and $p = $1;
+	$included{$p} = 0;
+	$packages{$p}{"Package"} = $p;
+	foreach $re (qw(Version Priority Section Filename Size MD5sum)) {
+		(m/^$re: (\S+)\s*$/m and $packages{$p}{$re} = $1)
+		|| msg(1, "Header field '$re' missing for package '$p'.\n");
+	}
+	$packages{$p}{"Depends"} = [];
+	$packages{$p}{"Suggests"} = [];
+	$packages{$p}{"Recommends"} = [];
+	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
+	$packages{$p}{"IsFirmware"} = ($packages{$p}{"Filename"} =~ /(firmware|microcode)/) ? 1 : 0;
+	if ($packages{$p}{"Section"} =~ /contrib\//) {
+		$packages{$p}{"Component"} = "contrib";
+	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
+		$packages{$p}{"Component"} = "non-free";
+	} elsif ($packages{$p}{"IsUdeb"}) {
+		$packages{$p}{"Component"} = "main-installer";
+	} else {
+		$packages{$p}{"Component"} = "main";
+	}
+
 
 sub read_depends {
 	my $i = shift;     # Ref
