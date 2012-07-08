@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
+# Copyright 1999 RaphaÃ«l Hertzog <hertzog@debian.org>
 # See the README file for the license
 #
 # This script takes 1 argument on input :
@@ -157,7 +157,7 @@ while (@list) {
 	$ENV{'LC_ALL'} = 'C'; # Required since apt is now translated
 	open (APT, "$apt cache depends @pkg |") || die "Can't fork : $!\n";
 	my (@res) = (<APT>);
-	close APT or die "« apt-cache depends » failed ... \n" . 
+	close APT or die "'apt-cache depends failed ... \n" . 
 	                 "you must have apt >= 0.3.11.1 !\n";
 	# Getting rid of conflicts/replaces/provides
 	my $i = 0;
