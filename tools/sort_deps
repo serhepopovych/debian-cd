@@ -521,7 +521,7 @@ sub add_package {
 	
 	if ($add_rec) {
 	    #TODO: Look for recommends (not yet included !!)
-	    add_recommends (\@dep);
+	    add_recommends (\@dep, $p);
 	    # Check again but doesn't fail if one of the package cannot be
 	    # installed, just ignore it (it will be removed from @dep)
 		($ok, $reasons) = check_list (\@dep, 0);
@@ -534,7 +534,7 @@ sub add_package {
 
 	if ($add_sug) {
 	    #TODO: Look for suggests (not yet included !!)
-		add_suggests (\@dep);
+		add_suggests (\@dep, $p);
         # Check again but doesn't fail if one of the package cannot be
         # installed, just ignore it (it will be removed from @dep)
         ($ok, $reasons) = check_list (\@dep, 0);
@@ -560,22 +560,26 @@ sub accepted {
 
 sub add_suggests {
 	my $list = shift;
+	my $pkg = shift;
+	my @parents = ($pkg);
 	my $p; # = shift;
 	my @copy = @{$list}; # A copy is needed since I'll modify the array
 	
 	foreach $p (@copy) {
-		add_missing($list, $packages{$p}{"Suggests"}, $p);
+		add_missing($list, $packages{$p}{"Suggests"}, $p, 1, \@parents);
 	}
 		
 }
 
 sub add_recommends {
 	my $list = shift;
+	my $pkg = shift;
+	my @parents = ($pkg);
 	my $p; # = shift;
 	my @copy = @{$list}; # A copy is needed since I'll modify the array
 	
 	foreach $p (@copy) {
-		add_missing($list, $packages{$p}{"Recommends"}, $p);
+		add_missing($list, $packages{$p}{"Recommends"}, $p, 1, \@parents);
 	}
 		
 }
@@ -583,8 +587,9 @@ sub add_recommends {
 sub get_missing {
 	my $p = shift;
 	my @list = ();
+	my @parents = ();
 	
-	if (not add_missing (\@list, $packages{$p}{"Depends"}, $p)) {
+	if (not add_missing (\@list, $packages{$p}{"Depends"}, $p, 0, \@parents)) {
 		return ();
 	}
 
@@ -600,7 +605,11 @@ sub add_missing {
 	my $pkgin = shift;
 	my @backup = @{$list};
 	my $ok = 1;
-	
+	my $soft_depend = shift;
+	my $parents = shift;
+
+	push(@{$parents}, $pkgin);
+	#msg(3, "   add_missing: parents atm @{$parents}\n");
 	# Check all dependencies 
 	foreach (@{$new}) {
 		if (ref) {
@@ -608,9 +617,9 @@ sub add_missing {
 			foreach my $orpkg (@{$_}) {
 				$textout .= "$orpkg ";
 			}
-			msg(3, "    $pkgin Dep: ( OR $textout)\n");
+			msg(3, "    $pkgin Dep: ( OR $textout) soft_depend $soft_depend\n");
 		} else {
-			msg(3, "    $pkgin Dep: $_\n");
+			msg(3, "    $pkgin Dep: $_ soft_depend $soft_depend\n");
 		}
 		next if dep_satisfied ($_);
 		# If it's an OR
@@ -623,54 +632,89 @@ sub add_missing {
 			# alternative dependencies, but in different order.
 			# Having the first alternative available should be good
 			# enough for all cases we care about.
+
+			# Minor tweak: check all the OR packages
+			# up-front with no recursion. If *any* one of
+			# them is already installed, it will do.
 			foreach my $pkg (@{$_}) {
-				next if not accepted ($pkg);
-				# If the package is already included
-				# then don't worry
-				if ($included{$pkg}) {
+				if ($included{$pkg} or is_in ($pkg, $parents)) {
+					msg(3, "    OR relationship already satisfied by $pkg\n");
 					$or_ok = 1;
 					last;
-				}
-				# Check we don't already have the package
-				if (is_in ($pkg, $list)) {
-					$or_ok = 1;
-					last;
-				# Otherwise try to add it
 				} else {
-					# Stop after the first package that is
-					# added successfully
-					push (@{$list}, $pkg);
-					if (add_missing ($list, $packages{$pkg}{"Depends"}, $pkg)) {
+					msg(3, "       $pkg not already installed\n");
+				}
+			}
+
+			# If we don't have any of the OR packages,
+			# then start again and try them in order
+			if (not $or_ok) {
+				msg(3, "    OR relationship not already satisfied, looking at alternatives in order\n");
+				foreach my $pkg (@{$_}) {
+					next if not accepted ($pkg);
+					# If the package is already included
+					# then don't worry
+					if ($included{$pkg}) {
 						$or_ok = 1;
-						remove_entry($pkg, $list);
-						push @{$list}, $pkg;
 						last;
+					}
+					# Check we don't already have the package
+					if (is_in ($pkg, $list)) {
+						$or_ok = 1;
+						last;
+						# Otherwise try to add it
 					} else {
-						pop @{$list};
+						# Stop after the first
+						# package that is
+						# added successfully
+						push (@{$list}, $pkg);
+						if (add_missing ($list, $packages{$pkg}{"Depends"}, $pkg, $soft_depend, $parents)) {
+							$or_ok = 1;
+							remove_entry($pkg, $list);
+							push @{$list}, $pkg;
+							last;
+						} else {
+							pop @{$list};
+						}
 					}
 				}
 			}
 			$ok &&= $or_ok;
 			if (not $ok) {
-				msg(1, "  $pkgin failed, couldn's satisfy OR dep\n");
+				if ($soft_depend) {
+					msg(1, "  $pkgin failed, couldn't satisfy OR dep (but it's a soft dep, so ignoring...)\n");
+					$ok = 1;
+				} else {
+					msg(1, "  $pkgin failed, couldn't satisfy OR dep\n");
+				}
 			}				
 		# Else it's a simple dependency
 		} else {
-            msg(1, "  Looking at adding $_ to satisfy dep\n");
+			msg(1, "  Looking at adding $_ to satisfy dep\n");
 			if (not exists $packages{lc $_}) {
 				msg(1, "  $_ doesn't exist...\n");
-				msg(1, "  $pkgin failed, couldn't satisfy dep on $_\n");
-				$ok = 0;
-				last;
+				if ($soft_depend) {
+					msg(1, "  soft dep: $pkgin ok, despite missing dep on $_\n");
+					$ok = 1;
+				} else {
+					msg(1, "  $pkgin failed, couldn't satisfy dep on $_\n");
+					$ok = 0;
+					last;
+				}
 			}
 			next if $included{lc $_}; # Already included, don't worry
 			next if is_in (lc $_, $list);
 			push @{$list}, lc $_;
-			if (not add_missing ($list, $packages{lc $_}{"Depends"}, lc $_)) {
+			if (not add_missing ($list, $packages{lc $_}{"Depends"}, lc $_, $soft_depend, $parents)) {
 				msg(1, "couldn't add $_ ...\n");
-				msg(1, "$pkgin failed, couldn't satisfy dep on $_\n");
-				pop @{$list};
-				$ok = 0;
+				if ($soft_depend) {
+					msg(1, "soft dep: $pkgin ok, despite missing dep on $_\n");
+					$ok = 1;
+				} else {
+					msg(1, "$pkgin failed, couldn't satisfy dep on $_\n");
+					pop @{$list};
+					$ok = 0;
+				}
 			}
 			remove_entry(lc $_, $list);
 			push @{$list}, lc $_;

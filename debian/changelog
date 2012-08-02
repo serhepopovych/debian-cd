@@ -4,6 +4,16 @@ debian-cd (3.1.10) UNRELEASED; urgency=low
   * Don't exclude all the udebs for s390. Some users really do need them
     (loading from a CD/DVD used over the network). Closes: Bug #673576
   * Explicitly add s390-tools and sysconfig-hardware for s390.
+  * Tweak sort_deps:
+    + Track whether a dependency chain is caused by a hard dependency
+      (Depends) or soft (Recommends/Suggests). If we fail to add a package
+      down the chain on a *soft* dependency, don't invalidate the entire
+      chain.
+    + When checking OR dependencies, *first* check to see if any of the
+      options are already installed *before* trying to install the first
+      option. Helps a lot with circular deps such as task-lxde-desktop ->
+      task-desktop -> (task-gnome-desktop | task-lxde-desktop | etc.); in
+      this case, of course task-lxde-desktop should satisfy the OR dep.
 
   [ Joey Hess ]
   * Clean up forcd1, removing twm, wmaker, wmakerconf, pump,
