@@ -8,7 +8,14 @@ GNU/Linux PPC bootloader
 <BOOT-SCRIPT>
 " screen" output
 load-base release-load-area
-boot cd:,\install\yaboot
+" /cpus/@0" find-package if
+ " 64-bit" rot get-package-property 0= if
+  2drop
+  " boot cd:,\install\yaboot conf=cd:,\install\yaboot.conf" eval
+ else
+  " boot cd:,\install\yaboot conf=cd:,\install\mac32.conf" eval
+ then
+then
 </BOOT-SCRIPT>
 <OS-BADGE-ICONS>
 1010
