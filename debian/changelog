@@ -16,6 +16,8 @@ debian-cd (3.1.10) UNRELEASED; urgency=low
       this case, of course task-lxde-desktop should satisfy the OR dep.
   * Tweak powerpc boot options, using 32/64 bit detection in yaboot at
     boot time. Thanks to Milan Kupcevic for the patch. Closes: #678066
+  * Tweak boot-load-size for ia64 to make CDs boot again. Closes: #678883.
+    Thanks to Stephan Schreiber for the patch.
 
   [ Joey Hess ]
   * Clean up forcd1, removing twm, wmaker, wmakerconf, pump,
