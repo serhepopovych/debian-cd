@@ -195,17 +195,6 @@ fi
 echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
 find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
-
-bls=$(calc_boot_size "boot$N/isolinux/isolinux.bin")
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size $bls"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
-add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
-
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
 # called a second time the isolinux dir already exists and we know it
@@ -378,5 +367,16 @@ EOF
 fi
 
 rm -rf cdrom floppy
+
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
+
+bls=$(calc_boot_size "boot$N/isolinux/isolinux.bin")
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size $bls"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
+add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
 # th,th, thats all
