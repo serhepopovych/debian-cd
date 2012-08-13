@@ -69,3 +69,10 @@ find_pkg_file() {
     echo $pkgfile
 }
 
+# Work out the right boot load size for a specified file
+calc_boot_size() {
+    FILE=$1
+
+    size=$[($(stat -c%s "$FILE")+2047)/2048]
+    echo $size
+}

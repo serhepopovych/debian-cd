@@ -17,7 +17,8 @@ debian-cd (3.1.10) UNRELEASED; urgency=low
   * Tweak powerpc boot options, using 32/64 bit detection in yaboot at
     boot time. Thanks to Milan Kupcevic for the patch. Closes: #678066
   * Tweak boot-load-size for ia64 to make CDs boot again. Closes: #678883.
-    Thanks to Stephan Schreiber for the patch.
+    Thanks to Stephan Schreiber for the patch. Tweak all the other
+    ElTorito-booting arches in a similar fashion.
 
   [ Joey Hess ]
   * Clean up forcd1, removing twm, wmaker, wmakerconf, pump,

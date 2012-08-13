@@ -200,7 +200,9 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size 4"
+
+bls=$(calc_boot_size "boot$N/isolinux/isolinux.bin")
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size $bls"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
 add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
