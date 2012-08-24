@@ -1,4 +1,4 @@
-debian-cd (3.1.10) UNRELEASED; urgency=low
+debian-cd (3.1.10) unstable; urgency=low
 
   [ Steve McIntyre ]
   * Don't exclude all the udebs for s390. Some users really do need them
