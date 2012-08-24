@@ -37,7 +37,7 @@ debian-cd (3.1.10) unstable; urgency=low
   * Further trim forcd1, removing lots of historical cruft, and adding
     comments explaining the rationalle for the remaining packages.
 
- -- Joey Hess <joeyh@debian.org>  Sat, 07 Jul 2012 15:44:03 -0600
+ -- Steve McIntyre <93sam@debian.org>  Fri, 24 Aug 2012 14:50:13 +0100
 
 debian-cd (3.1.9) unstable; urgency=low
 
