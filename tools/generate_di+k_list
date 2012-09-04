@@ -85,7 +85,6 @@ installation-report
 openssh-server
 popularity-contest
 os-prober
-mouseemu
 locales
 
 /* Needed for some languages with bi-directional support */
