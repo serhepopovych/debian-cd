@@ -295,9 +295,10 @@ $(BDIR)/rawlist:
 		if [ "$(INSTALLER_CD)"x = "1"x ] ; then \
 			: ; \
 		elif [ "$(INSTALLER_CD)"x = "2"x -o "$(INSTALLER_CD)"x = "C"x ] ; then \
-			echo -e "mawk" >>$(BDIR)/rawlist; \
+			echo "mawk" >>$(BDIR)/rawlist; \
 		else \
-			echo -e "mawk\nexim4-daemon-light" >>$(BDIR)/rawlist; \
+			echo "mawk" >>$(BDIR)/rawlist; \
+			echo "exim4-daemon-light" >>$(BDIR)/rawlist; \
 		fi; \
 	fi
 
