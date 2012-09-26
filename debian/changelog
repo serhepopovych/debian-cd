@@ -10,6 +10,18 @@ debian-cd (3.1.11) UNRELEASED; urgency=low
       - generate boot entries for grub on the fly; temporary code for now,
 	will switch to parsing the isolinux entries shortly instead.
       - depending more and more on xorriso rather than genisoimage...
+  * Add version-tracking into dependency sorting. Closes: #687949)
+    + Use/parse output from a newer version of apt so that "apt-cache
+      depends" will include version information on dependencies.
+    + All tracking of packages now include versions, so we pass around
+      hashes of {package name, comparison op, version} everywhere instead
+      of simply passing package names as strings.
+    + Add the APT::Cache::ShowVersion=1 option to apt-cache calls to
+      turn on version reporting. Needs a locally-patched version of apt
+      *for now*, but expecting that to be fixed for the Wheezy
+      release. The new code degrades gracefully if version info is not
+      available.
+    + Add a dependency on libdpkg-perl for version comparison code.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
