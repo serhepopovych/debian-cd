@@ -51,16 +51,6 @@ if [ $NN != 1 ] ; then exit 0; fi
 INSTALLDIR_i386="install.386"
 INSTALLDIR_amd64="install.amd"
 
-case "$MKISOFS" in
-    *xorriso*)
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
-# uncoment to add a small FAT partition on the media
-#        /sbin/mkfs.msdos -n Bla -C test.fat 8192
-#      add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 test.fat"
-       ;;
-esac
-
 if [ "$ARCH" = i386 ]; then
 	INSTALLDIR="$INSTALLDIR_i386"
 else
@@ -194,6 +184,15 @@ fi
 
 echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
 find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
+
+# If we're using xorriso, use its isohybrid code to make an image
+# BIOS-bootable for a USB stick as well as via ElTorito for a CD/DVD
+case "$MKISOFS" in
+    *xorriso*)
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
+       ;;
+esac
 
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
@@ -368,15 +367,115 @@ fi
 
 rm -rf cdrom floppy
 
+# Common mkisofs options when creating CDs
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+
+# Add the normal options to make an ElTorito bootable CD/DVD
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
-
 bls=4 # Specify 4 for BIOS boot, don't calculate it
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size $bls"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"	
+
+# We explicitly put the boot bits in boot$N (as opposed to CD$N) and
+# list it first on the eventual mkisofs command line. That means
+# they'll be placed nearer the front of the eventual image; some older
+# BIOSes apparently have a limitation on what they'll boot here.
 add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
+# Temporary hack - helper function to generate grub.cfg entries
+add_grub_entry () {
+    FILE=$1
+    DESC=$2
+    OPTS=$3
+    GFX=$4
+    PAD="                                   "
+
+    echo "menuentry \"${PAD}${DESC}\" {" >> $FILE
+    echo "        set gfxpayload=keep" >> $FILE
+    echo "        linux   /$INSTALLDIR/vmlinuz ${OPTS} --" >> $FILE
+    if [ $GFX = 1 ] ; then
+        echo "        initrd  /$INSTALLDIR/gtk/initrd.gz" >> $FILE
+    else
+        echo "        initrd  /$INSTALLDIR/initrd.gz" >> $FILE
+    fi
+    echo "}" >> $FILE
+}
+
+if [ -d boot$N/isolinux/grub ] ; then
+    echo "  Adding EFI boot code for $ARCH on CD$N"
+
+    # Move GRUB files to the right place.
+    mkdir -p $CDDIR/efi/boot
+    mcopy -i boot$N/isolinux/grub/efi.img ::efi/boot/bootx64.efi $CDDIR/efi/boot/bootx64.efi
+    mkdir -p $CDDIR/boot/grub
+    mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
+    rmdir boot$N/isolinux/grub
+
+    # TODO: grab pre-made grub entries from the d-i build
+    if [ $ARCH = amd64 ] ; then
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 graphical installer (64-bit, EFI)" \
+            "pci=nocrs verbose" 1
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 text-mode installer (64-bit, EFI)" \
+            "pci=nocrs verbose" 0
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 text-mode rescue (64-bit, EFI)" \
+            "pci=nocrs verbose rescue/enable=true" 0
+    else
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 graphical installer (32-bit, EFI)" \
+            "pci=nocrs verbose" 1
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 text-mode installer (32-bit, EFI)" \
+            "pci=nocrs verbose" 0
+        add_grub_entry $CDDIR/boot/grub/grub.cfg \
+            "Debian 7.0 text-mode rescue (32-bit, EFI)" \
+            "pci=nocrs verbose rescue/enable=true" 0
+    fi
+
+    # Stuff the EFI boot files into a FAT filesystem, making it as
+    # small as possible.  24KiB headroom seems to be enough;
+    # (x+31)/32*32 rounds up to multiple of 32.
+    # This is the same as in efi-image, but we need to redo it here in
+    # the case of a multi-arch amd64/i386 image
+
+    size=0
+    for file in $CDDIR/efi/boot/boot*.efi; do
+        size=$(($size + $(stat -c %s "$file")))
+    done
+
+    blocks=$((($size / 1024 + 55) / 32 * 32 ))
+
+    rm -f $CDDIR/boot/grub/efi.img
+    mkfs.msdos -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+    mmd -i "$CDDIR/boot/grub/efi.img" ::efi
+    mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
+    mcopy -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
+        "::efi/boot"
+    
+    case "$MKISOFS" in
+        *xorriso*)
+            # Tell xorriso to create a secondary ElTorito boot record
+            # for the EFI bootloader
+            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot --efi-boot boot/grub/efi.img"
+
+            # Add the efi image as a FAT partition too, so our CD
+            # image will also boot on a USB key (like isohybrid, just
+            # implemented differently)
+            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
+            ;;
+
+        *)
+            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--eltorito-alt-boot --efi-boot boot/grub/efi.img"
+            ;;
+    esac
+else
+    echo "  No EFI boot code for $ARCH on CD$N"
+fi
+
 # th,th, thats all
+

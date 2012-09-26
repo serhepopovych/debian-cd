@@ -108,6 +108,9 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
+grub-efi
+grub-efi-ia32
+grub-efi-ia32-bin
 laptop-detect
 lilo
 elilo
@@ -131,6 +134,9 @@ initramfs-tools
 busybox
 grub-legacy
 grub-pc
+grub-efi
+grub-efi-amd64
+grub-efi-amd64-bin
 laptop-detect
 lilo
 linux-image-amd64
