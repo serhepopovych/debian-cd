@@ -1,6 +1,10 @@
 # This file provides some common code that is intented to be called
 # by the various boot-<arch> scripts.
 
+# Make sure that sbin directories are on the PATH too - filesystem
+# creation tools are often hidden there
+PATH=/sbin:/usr/sbin:$PATH
+export PATH
 
 # Expand %ARCH% variable in envvars for location of D-I images
 DI_WWW_HOME="$(echo "$DI_WWW_HOME" | sed -e "s|%ARCH%|$ARCH|g")"
