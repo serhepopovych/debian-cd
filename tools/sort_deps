@@ -426,13 +426,13 @@ sub read_depends {
 		if ($or eq '|') {
 			my $elt = read_ordepends ($i, $lines);
 			foreach my $t (@$elt) {
-				msg(1, "    " . dump_depend($t) . " (OR)\n");
+				msg(1, "    $out_type: " . dump_depend($t) . " (OR)\n");
 			}
 			push @{$packages{$pkg}{$out_type}}, $elt;
 		} elsif ($lines->[$$i] =~ m/^\s\s$type: <([^>]+)>/) {
 			my $elt = read_virtualdepends ($i, $lines);
 			foreach my $t (@$elt) {
-				msg(1, "    " . dump_depend($t) . " <virt>\n");
+				msg(1, "    $out_type: " . dump_depend($t) . " <virt>\n");
 			}
 			push @{$packages{$pkg}{$out_type}}, $elt;
 		} elsif ($lines->[$$i] =~ m/^\s\s$type: (\S+)( \((\S+) (\S+)\))*/) {
@@ -445,7 +445,7 @@ sub read_depends {
 				$elt{"CmpOp"} = "";
 				$elt{"Version"} = "";
 			}
-			msg(1, "    " . dump_depend(\%elt) . "\n");
+			msg(1, "    $out_type: " . dump_depend(\%elt) . "\n");
 			push @{$packages{$pkg}{$out_type}}, \%elt;
 			$$i++;
 
@@ -462,7 +462,7 @@ sub read_depends {
 						$elt1{"CmpOp"} = "";
 						$elt1{"Version"} = "";
 					}
-					msg(1, "    " . dump_depend(\%elt1) . "\n");
+					msg(1, "    $out_type: " . dump_depend(\%elt1) . "\n");
 					push @{$packages{$pkg}{$out_type}}, \%elt1;
 					$$i++;
 				}
