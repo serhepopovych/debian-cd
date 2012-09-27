@@ -396,6 +396,22 @@ sub dump_depend {
     return $ret;
 }
 
+sub dump_or_list {
+	my $out_type = shift;
+	my $elt = shift;
+	my @or = @$elt;
+
+	if (scalar @or == 1) {
+		msg(1, "    $out_type: " . dump_depend($or[0]) . "\n");
+	} else {
+		msg(1, "    $out_type: OR (");
+		foreach my $t (@or) {
+			msg(1, dump_depend($t) . " ");
+		}
+		msg(1, ")\n");
+	}
+}
+
 sub read_depends {
 	my $i = shift;     # Ref
 	my $lines = shift; # Ref
@@ -425,9 +441,7 @@ sub read_depends {
 		# Check the kind of depends : or, virtual, normal
 		if ($or eq '|') {
 			my $elt = read_ordepends ($i, $lines);
-			foreach my $t (@$elt) {
-				msg(1, "    $out_type: " . dump_depend($t) . " (OR)\n");
-			}
+			dump_or_list($out_type, \@$elt);
 			push @{$packages{$pkg}{$out_type}}, $elt;
 		} elsif ($lines->[$$i] =~ m/^\s\s$type: <([^>]+)>/) {
 			my $elt = read_virtualdepends ($i, $lines);
@@ -436,6 +450,7 @@ sub read_depends {
 			}
 			push @{$packages{$pkg}{$out_type}}, $elt;
 		} elsif ($lines->[$$i] =~ m/^\s\s$type: (\S+)( \((\S+) (\S+)\))*/) {
+			my @or;
 			my %elt;
 			$elt{"Package"} = $1;
 			if (defined $2) {
@@ -445,8 +460,7 @@ sub read_depends {
 				$elt{"CmpOp"} = "";
 				$elt{"Version"} = "";
 			}
-			msg(1, "    $out_type: " . dump_depend(\%elt) . "\n");
-			push @{$packages{$pkg}{$out_type}}, \%elt;
+			push @or, \%elt;
 			$$i++;
 
 			# Special case for packages providing not
@@ -462,11 +476,12 @@ sub read_depends {
 						$elt1{"CmpOp"} = "";
 						$elt1{"Version"} = "";
 					}
-					msg(1, "    $out_type: " . dump_depend(\%elt1) . "\n");
-					push @{$packages{$pkg}{$out_type}}, \%elt1;
+					push @or, \%elt1;
 					$$i++;
 				}
 			}
+			dump_or_list($out_type, \@or);
+			push @{$packages{$pkg}{$out_type}}, \@or;
 		} else {
 			msg(0, "ERROR: Unknown depends line : $lines->[$$i]\n");
 			foreach ($$i - 3 .. $$i + 3) {
@@ -816,11 +831,15 @@ sub add_missing {
 
 		# Print out status
 		if ("ARRAY" eq ref($thisdep)) {
-			$textout = "(OR ";
+			if (scalar(@{$thisdep} > 1)) {
+				$textout = "(OR ";
+			}
 			foreach my $orpkg (@{$thisdep}) {
 				$textout .= dump_depend($orpkg) . " ";
 			}
-			$textout .= ")";
+			if (scalar(@{$thisdep} > 1)) {
+				$textout .= ")";
+			}
 		} elsif ("HASH" eq ref($thisdep)) {
 			$textout = dump_depend($thisdep);
 		} else {
