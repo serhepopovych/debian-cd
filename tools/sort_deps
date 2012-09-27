@@ -453,16 +453,17 @@ sub read_depends {
 			# truly virtual packages
 			if ($lines->[$$i] =~ m/^\s{4}/) {
 				while ($lines->[$$i] =~ m/\s{4}(\S+)( \((\S+) (\S+)\))*/) {
-					$elt{"Package"} = $1;
+					my %elt1;
+					$elt1{"Package"} = $1;
 					if (defined $2) {
-						$elt{"CmpOp"} = $3;
-						$elt{"Version"} = $4;
+						$elt1{"CmpOp"} = $3;
+						$elt1{"Version"} = $4;
 					} else {
-						$elt{"CmpOp"} = "";
-						$elt{"Version"} = "";
+						$elt1{"CmpOp"} = "";
+						$elt1{"Version"} = "";
 					}
-					msg(1, "    " . dump_depend(\%elt) . "\n");
-					push @{$packages{$pkg}{$out_type}}, \%elt;
+					msg(1, "    " . dump_depend(\%elt1) . "\n");
+					push @{$packages{$pkg}{$out_type}}, \%elt1;
 					$$i++;
 				}
 			}
@@ -597,15 +598,17 @@ sub read_ordepends {
 			# Hack for packages providing not a truly
 			# virtual package
 			while ($lines->[$$i] =~ m/^\s{4}(\S+)( \((\S+) (\S+)\))*/) {
-				$elt{"Package"} = $1;
+				my %elt1;
+				$elt1{"Package"} = $1;
 				if (defined $2) {
-					$elt{"CmpOp"} = $3;
-					$elt{"Version"} = $4;
+					$elt1{"CmpOp"} = $3;
+					$elt1{"Version"} = $4;
 				} else {
-					$elt{"CmpOp"} = "";
-					$elt{"Version"} = "";
+					$elt1{"CmpOp"} = "";
+					$elt1{"Version"} = "";
 				}
-				push @or, \%elt;
+				msg(1, "    " . dump_depend(\%elt1) . "\n");
+				push @or, \%elt1;
 				$$i++;
 			}
 		}
