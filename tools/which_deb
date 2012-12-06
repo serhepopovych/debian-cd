@@ -8,7 +8,7 @@
 use strict;
 use List::Util qw{first};
 
-my ($mirror, $codename, $pkg, $pth, $output, $result);
+my ($mirror, $codename, $pkg, $pth, $output, $text_out);
 
 $mirror = shift;
 $codename = shift;
