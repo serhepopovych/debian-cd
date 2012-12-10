@@ -394,7 +394,7 @@ add_grub_entry () {
     PAD="                                   "
 
     echo "menuentry \"${PAD}${DESC}\" {" >> $FILE
-    echo "        set gfxpayload=keep" >> $FILE
+    echo "        set background_color=black" >> $FILE
     echo "        linux   /$INSTALLDIR/vmlinuz ${OPTS} --" >> $FILE
     if [ $GFX = 1 ] ; then
         echo "        initrd  /$INSTALLDIR/gtk/initrd.gz" >> $FILE
@@ -414,28 +414,11 @@ if [ -d boot$N/isolinux/grub ] ; then
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
 
-    # TODO: grab pre-made grub entries from the d-i build
-    if [ $ARCH = amd64 ] ; then
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 graphical installer (64-bit, EFI)" \
-            "pci=nocrs verbose" 1
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 text-mode installer (64-bit, EFI)" \
-            "pci=nocrs verbose" 0
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 text-mode rescue (64-bit, EFI)" \
-            "pci=nocrs verbose rescue/enable=true" 0
-    else
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 graphical installer (32-bit, EFI)" \
-            "pci=nocrs verbose" 1
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 text-mode installer (32-bit, EFI)" \
-            "pci=nocrs verbose" 0
-        add_grub_entry $CDDIR/boot/grub/grub.cfg \
-            "Debian 7.0 text-mode rescue (32-bit, EFI)" \
-            "pci=nocrs verbose rescue/enable=true" 0
-    fi
+    # Create grub menu entries to match the isolinux ones
+    sed -i '/^menuentry/Q' $CDDIR/boot/grub/grub.cfg;
+    $BASEDIR/tools/boot/$DI_CODENAME/parse_isolinux \
+        boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "Debian GNU/Linux $DEBVERSION" \
+        >> $CDDIR/boot/grub/grub.cfg
 
     # Stuff the EFI boot files into a FAT filesystem, making it as
     # small as possible.  24KiB headroom seems to be enough;

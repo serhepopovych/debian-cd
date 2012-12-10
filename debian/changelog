@@ -7,8 +7,9 @@ debian-cd (3.1.11) UNRELEASED; urgency=low
       - pull grub EFI pieces out of the latest debian-cd_info.tar.gz
 	blobs in d-i, if they're there. If so, use them to make x86 images
 	bootable via EFI (both via CD and USB)
-      - generate boot entries for grub on the fly; temporary code for now,
-	will switch to parsing the isolinux entries shortly instead.
+      - parse the isolinux menus already provided in the d-i build and
+	generate equivalent grub menus, complete with themes for a
+	reasonable layout with graphics and titles.
       - depending more and more on xorriso rather than genisoimage...
   * Add version-tracking into dependency sorting. Closes: #687949)
     + Use/parse output from a newer version of apt so that "apt-cache
