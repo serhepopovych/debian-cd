@@ -191,4 +191,7 @@ foreach my $line(@lines) {
 	#print "$line\n";
     }
 }
-
+if ($in_kernel) {
+    print_kernel(\%kernel);
+    undef %kernel;
+}
