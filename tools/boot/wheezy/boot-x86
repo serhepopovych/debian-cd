@@ -191,7 +191,11 @@ case "$MKISOFS" in
     *xorriso*)
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
-       ;;
+        ;;
+    *)
+	echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."
+	exit 1;
+	;;
 esac
 
 # In case of a multi-arch CD the script will be called two times. The
@@ -440,22 +444,14 @@ if [ -d boot$N/isolinux/grub ] ; then
     mcopy -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
         "::efi/boot"
     
-    case "$MKISOFS" in
-        *xorriso*)
-            # Tell xorriso to create a secondary ElTorito boot record
-            # for the EFI bootloader
-            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot --efi-boot boot/grub/efi.img"
+    # Tell xorriso to create a secondary ElTorito boot record for the
+    # EFI bootloader
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot --efi-boot boot/grub/efi.img"
 
-            # Add the efi image as a FAT partition too, so our CD
-            # image will also boot on a USB key (like isohybrid, just
-            # implemented differently)
-            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
-            ;;
-
-        *)
-            add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--eltorito-alt-boot --efi-boot boot/grub/efi.img"
-            ;;
-    esac
+    # Add the efi image as a FAT partition too, so our CD image will
+    # also boot on a USB key (like isohybrid, just implemented
+    # differently)
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
 else
     echo "  No EFI boot code for $ARCH on CD$N"
 fi
