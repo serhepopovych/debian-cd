@@ -28,6 +28,9 @@ debian-cd (3.1.11) UNRELEASED; urgency=low
       specifically told which to use (e.g. on source builds)
     + If we fail to find packages/sources for the specified package, say
       so and bail out properly.
+  * Switch boot-x86 to depend on xorriso totally rather than genisoimage
+    now; working UEFI support needs it. We also need very recent (1.2.6)
+    xorriso for various bugfixes.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
