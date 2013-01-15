@@ -201,7 +201,6 @@ echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
 find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
 
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
@@ -218,6 +217,12 @@ fi
 mkdir -p boot$N/isolinux
 # Isolinux setup including config and help files comes from d-i.
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
+
+# If we don't have grub stuff from d-i, tell xorriso to add a
+# partition offset for the isohybrid code
+if [ ! -d boot$N/isolinux/grub ] ; then
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
+fi
 
 di_syslinux_ver="$(di_syslinux_version)"
 case "$di_syslinux_ver" in
