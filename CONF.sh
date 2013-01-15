@@ -41,7 +41,7 @@ unset UDEB_INCLUDE      || true
 unset UDEB_EXCLUDE      || true
 unset BASE_INCLUDE      || true
 unset BASE_EXCLUDE      || true
-unset INSTALLER_CD      || true
+#unset INSTALLER_CD      || true
 unset MAXCDS            || true
 unset MAXISOS           || true
 unset MAXJIGDOS         || true
@@ -70,7 +70,8 @@ fi
 # This may be an url, or "default", which will make it use the default url
 # for the daily d-i builds. If not set, uses the official d-i images from
 # the Debian mirror.
-#export DI_WWW_HOME=default
+export DI_WWW_HOME=default
+export DI_DIR=/home/steve/debian/debian-cd/
 
 # Version number, "2.2 r0", "2.2 r1" etc.
 export DEBVERSION="7.0"
@@ -136,12 +137,12 @@ export CONTRIB=1
 # If you have a $MIRROR/dists/$CODENAME/local/binary-$ARCH dir with 
 # local packages that you want to put on the CD set then
 # uncomment the following line 
-# export LOCAL=1
+export LOCAL=1
 
 # If your local packages are not under $MIRROR, but somewhere else, 
 # you can uncomment this line and edit to to point to a directory
 # containing dists/$CODENAME/local/binary-$ARCH
-# export LOCALDEBS=/home/joey/debian/va/debian
+export LOCALDEBS=/mirror/debian-local
 
 # Where to find the security patches.  This directory should be the
 # top directory of a security.debian.org mirror.
@@ -168,6 +169,8 @@ export CONTRIB=1
 # export MKISOFS=mkisofs
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
+export MKISOFS="/home/steve/bin/xorriso"
+export MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
 
 # Override for i386 and amd64 to use xorriso instead of
 # mkisofs/genisoimage. Allows creation of isohybrid images: ISO images
@@ -209,7 +212,7 @@ ATTEMPT_FALLBACK=yes
 # STICK4GB:          4GB USB stick or similar
 # STICK8GB:          8GB USB stick or similar
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
-export DISKTYPE=CD
+#export DISKTYPE=NETINST
 #export DISKTYPE=CUSTOM
 #export CUSTOMSIZE=XXXX
 # If you want to over-ride this choice (e.g. to make a larger version of a given disk),
@@ -230,7 +233,7 @@ export VARIANTS=
 
 # Set this if the recommended packages should be skipped when adding 
 # package on the CD.  The default is 'true'.
-# export NORECOMMENDS=1
+export NORECOMMENDS=0
 
 # Set this if the suggested packages should be skipped when adding 
 # package on the CD.  The default is 'true'.
