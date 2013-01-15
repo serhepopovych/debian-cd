@@ -35,6 +35,16 @@ if [ ! "$DI_DIST" ]; then
 	DI_DIST="$DI_CODENAME"
 fi
 
+case "$MKISOFS" in
+    *xorriso*)
+	# OK
+        ;;
+    *)
+	echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."
+	exit 1;
+	;;
+esac
+
 cd $CDDIR/..
 
 # This script is called with $1 (now $N) as the CD to make bootable.
@@ -185,18 +195,8 @@ fi
 echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
 find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 
-# If we're using xorriso, use its isohybrid code to make an image
-# BIOS-bootable for a USB stick as well as via ElTorito for a CD/DVD
-case "$MKISOFS" in
-    *xorriso*)
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
-        ;;
-    *)
-	echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."
-	exit 1;
-	;;
-esac
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
 
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
