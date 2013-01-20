@@ -32,6 +32,10 @@ build_description () {
 	    DESC="KDE CD";;
         LIGHTCD)
 	    DESC="XFCE/lxde CD";;
+        XFCECD)
+	    DESC="XFCE CD";;
+        LXDECD)
+	    DESC="lxde CD";;
 	*)
 	    DESC="UNKNOWN";;
     esac

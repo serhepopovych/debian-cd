@@ -265,7 +265,7 @@ do
     JIGDO_OPTS="$JIGDO_OPTS -jigdo-exclude $EXCL"
 done
 
-export IGNORE_MISSING_BOOT_SCRIPT=1
+export IGNORE_MISSING_BOOT_SCRIPT=0
 
 # Where to find the boot disks
 #export BOOTDISKS=$TOPDIR/ftp/skolelinux/boot-floppies

@@ -7,7 +7,7 @@ TOPDIR=`pwd`
 . $TOPDIR/.ftp.buildnum
 
 MYCOPY=$TOPDIR/.ftp.cron
-BUILDLOCK=$TOPDIR/.debian-cd.lock
+BUILDLOCK=$HOME/.debian-cd.lock
 MAILLIST=$TOPDIR/.debian-cd.mail
 
 # Change these to abort daily/weekly builds as appropriate

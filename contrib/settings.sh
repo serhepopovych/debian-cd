@@ -5,8 +5,8 @@ export HOSTNAME=`hostname -f`
 export PUBDIR=/org/cdbuilder.debian.org/dst/deb-cd
 
 export MIRROR=/org/cdbuilder.debian.org/src/ftp/debian
-export BASEDIR=~/build/debian-cd
-export MKISOFS=~/build/mkisofs/usr/bin/mkisofs
+export BASEDIR=~/build.wheezy/debian-cd
+export MKISOFS=~/build.wheezy/mkisofs/usr/bin/mkisofs
 if [ "$DATE"x = ""x ] ; then
     export DATE=`date -u +%Y%m%d`
 fi
