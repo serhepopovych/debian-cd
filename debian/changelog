@@ -1,4 +1,4 @@
-debian-cd (3.1.11) UNRELEASED; urgency=low
+debian-cd (3.1.11) unstable; urgency=low
 
   [ Steve McIntyre ]
   * Merge x86 EFI support from the EFI_support branch (Closes: #658352)
@@ -30,7 +30,7 @@ debian-cd (3.1.11) UNRELEASED; urgency=low
       so and bail out properly.
   * Switch boot-x86 to depend on xorriso totally rather than genisoimage
     now; working UEFI support needs it. We also need very recent (1.2.6)
-    xorriso for various bugfixes.
+    xorriso for various bugfixes, ideally.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
