@@ -1312,7 +1312,7 @@ sub add_packages {
                 $source = $security;
             }
             # Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
-            while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) {
+            while ($package_info =~ /^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) {
                 push(@files, "$pdir/$3");
             }
         } else {
