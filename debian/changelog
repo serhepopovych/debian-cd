@@ -1,3 +1,10 @@
+debian-cd (3.1.12) UNRELEASED; urgency=low
+
+  [ Steve McIntyre ]
+  * 
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
+
 debian-cd (3.1.11) unstable; urgency=low
 
   [ Steve McIntyre ]
