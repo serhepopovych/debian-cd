@@ -1,7 +1,12 @@
 debian-cd (3.1.12) UNRELEASED; urgency=low
 
   [ Steve McIntyre ]
-  * 
+  * When building source-only discs, cope with having multiple different
+    versions of a source package:
+    + make_disc_trees.pl now tracks arrays of packages when parsing
+      apt-cache output
+    + We'll now pull in all the extra packages included in Sources.gz
+      because of Built-Using.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 

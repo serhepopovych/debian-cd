@@ -373,7 +373,7 @@ sub load_packages_cache {
         }
         while (defined($_ = <LIST>)) {
             m/^Package: (\S+)/m and $p = $1;
-            $pkginfo{$arch}{$p} = $_;
+            push @{$pkginfo{$arch}{$p}}, $_;
             $num_pkgs++;
         }
         close LIST;
@@ -905,6 +905,7 @@ sub Packages_dir {
 sub add_Packages_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $gz, $st1, $st2, $size1, $size2);
     my $blocks_added = 0;
     my $old_blocks = 0;
@@ -969,6 +970,7 @@ sub add_Packages_entry {
 sub add_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my ($p, $file, $section, $idir, $pkgfile, $gz, $st);
     my $size = 0;
     my $blocks_added = 0;
@@ -1034,6 +1036,7 @@ sub add_trans_desc_entry {
 sub add_md5_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my ($pdir, $file, $md5, $st, $size, $p);
     my $md5file = "$dir/md5sum.txt";
     my $blocks_added = 0;
@@ -1073,6 +1076,7 @@ sub add_md5_entry {
 sub remove_Packages_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz,
         $st1, $st2, $size1, $size2);
     my $blocks_removed = 0;
@@ -1140,6 +1144,7 @@ sub remove_Packages_entry {
 sub remove_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my ($p, $file, $section, $idir, $gz, $match, $st);
     my $size = 0;
     my $blocks_added = 0;
@@ -1208,6 +1213,7 @@ sub remove_trans_desc_entry {
 sub remove_md5_entry {
     my $dir = shift;
     my $arch = shift;
+    my $_ = shift;
     my $md5file = "$dir/md5sum.txt";
     my $tmp_md5file = "$dir/md5sum.txt.tmp";
     my @fileslist;
@@ -1295,84 +1301,94 @@ sub add_packages {
 
     msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
 
-    $_ = $pkginfo{$arch}{$pkgname};
-    undef @files;
-
-    $source = $mirror;
-    if ($arch eq "source") {
-        m/^Directory: (\S+)/m and $pdir = $1;
-        $source=$security if $pdir=~m:updates/:;
-	# Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
-	while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) { push(@files, "$pdir/$3"); }
-    } else {
-        m/^Filename: (\S+)/mi and push(@files, $1);
-        $source=$security if $1=~m:updates/:;
-    }
-    
-    if ($rollback) {
-        # Remove the Packages entry/entries for the specified package
-        $total_blocks -= remove_Packages_entry($dir, $arch, $_);
-        $total_blocks -= remove_md5_entry($dir, $arch, $_);
-        if (!($arch eq "source")) {
-            $total_blocks -= remove_trans_desc_entry($dir, $arch, $_);
+    foreach my $package_info (@{$pkginfo{$arch}{$pkgname}}) {
+        undef @files;
+        $source = $mirror;
+        if ($arch eq "source") {
+            if ($package_info =~ m/^Directory: (\S+)/m) {
+                $pdir = $1;
+            }
+            if ($pdir =~ m:updates/:) {
+                $source = $security;
+            }
+            # Explicitly use the md5 lines in the Sources stanza, hence the xdigit(32) here
+            while (/^ ([[:xdigit:]]{32}) (\d+) (\S+)/msg) {
+                push(@files, "$pdir/$3");
+            }
+        } else {
+            if ($package_info =~ m/^Filename: (\S+)/mi) {
+                push(@files, $1);
+            }
+            if ($1 =~ m:updates/:) {
+                $source = $security;
+            }
         }
+
+        if ($rollback) {
+            # Remove the Packages entry/entries for the specified package
+            $total_blocks -= remove_Packages_entry($dir, $arch, $package_info);
+            $total_blocks -= remove_md5_entry($dir, $arch, $package_info);
+            if (!($arch eq "source")) {
+                $total_blocks -= remove_trans_desc_entry($dir, $arch, $package_info);
+            }
         
-        foreach my $file (@files) {
-            my $missing = 0;
-            # Count how big the file is we're removing, for checking if the disc is full
-            if (! -e "$source/$file") {
-                msg_ap(0, "Can't find $file in the main archive, trying local\n");
-                if (-e "$localdebs/$file") {
-                    $source = $localdebs;
-                } else {
-                    die "$file not found under either $source or $localdebs\n";
-                }                        
-            }
-            $realfile = real_file ("$source/$file");
-            $total_blocks -= get_file_blocks($realfile);
-
-            # Remove the link
-            unlink ("$dir/$file") || msg_ap(0, "Couldn't delete file $dir/$file\n");
-            msg_ap(0, "  Rollback: removed $dir/$file\n");
-        }
-    } else {
-        $total_blocks += add_Packages_entry($dir, $arch, $_);
-        $total_blocks += add_md5_entry($dir, $arch, $_);
-        if (!($arch eq "source")) {
-            $total_blocks += add_trans_desc_entry($dir, $arch, $_);
-        }
-
-        foreach my $file (@files) {
-
-            # And put the file in the CD tree (with a (hard) link)
-            if (! -e "$source/$file") {
-                msg_ap(0, "Can't find $file in the main archive, trying local\n");
-                if (-e "$localdebs/$file") {
-                    $source = $localdebs;
-                } else {
-                    die "$file not found under either $source or $localdebs\n";
-                }                        
-            }
-            $realfile = real_file ("$source/$file");
-
-            if (! -e "$dir/$file") {
-                # Count how big the file is, for checking if the disc
-                # is full. ONLY do this if the file is not already
-                # linked in - consider binary-all packages on a
-                # multi-arch disc
-                $total_blocks += get_file_blocks($realfile);
-                $total_blocks += good_link ($realfile, "$dir/$file");
-                msg_ap(0, "  Linked $dir/$file\n");
-                if ($firmware_package{$pkgname}) {
-                    msg_ap(0, "Symlink fw package $pkgname into /firmware\n");
-                    if (! -d "$dir/firmware") {
-                        mkdir "$dir/firmware" or die "symlink failed $!\n";
-                    }
-                    symlink("../$file", "$dir/firmware/" . basename($file));
-                    msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
+            foreach my $file (@files) {
+                my $missing = 0;
+                # Count how big the file is we're removing, for checking if the disc is full
+                if (! -e "$source/$file") {
+                    msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                    if (-e "$localdebs/$file") {
+                        $source = $localdebs;
+                    } else {
+                        die "$file not found under either $source or $localdebs\n";
+                    }                        
                 }
-            } else {
-                msg_ap(0, "  $dir/$file already linked in\n");
+                $realfile = real_file ("$source/$file");
+                $total_blocks -= get_file_blocks($realfile);
+
+                # Remove the link
+                unlink ("$dir/$file") || msg_ap(0, "Couldn't delete file $dir/$file\n");
+                msg_ap(0, "  Rollback: removed $dir/$file\n");
+            }
+        } else {
+            $total_blocks += add_Packages_entry($dir, $arch, $package_info);
+            $total_blocks += add_md5_entry($dir, $arch, $package_info);
+            if (!($arch eq "source")) {
+                $total_blocks += add_trans_desc_entry($dir, $arch, $package_info);
+            }
+
+            foreach my $file (@files) {
+
+                # And put the file in the CD tree (with a (hard) link)
+                if (! -e "$source/$file") {
+                    msg_ap(0, "Can't find $file in the main archive, trying local\n");
+                    if (-e "$localdebs/$file") {
+                        $source = $localdebs;
+                    } else {
+                        die "$file not found under either $source or $localdebs\n";
+                    }                        
+                }
+                $realfile = real_file ("$source/$file");
+
+                if (! -e "$dir/$file") {
+                    # Count how big the file is, for checking if the
+                    # disc is full. ONLY do this if the file is not
+                    # already linked in - consider binary-all packages
+                    # on a multi-arch disc
+                    $total_blocks += get_file_blocks($realfile);
+                    $total_blocks += good_link ($realfile, "$dir/$file");
+                    msg_ap(0, "  Linked $dir/$file\n");
+                    if ($firmware_package{$pkgname}) {
+                        msg_ap(0, "Symlink fw package $pkgname into /firmware\n");
+                        if (! -d "$dir/firmware") {
+                            mkdir "$dir/firmware" or die "symlink failed $!\n";
+                        }
+                        symlink("../$file", "$dir/firmware/" . basename($file));
+                        msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
+                    }
+                } else {
+                    msg_ap(0, "  $dir/$file already linked in\n");
+                }
             }
         }
     }
