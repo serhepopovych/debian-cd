@@ -328,7 +328,8 @@ open(FWLIST, ">> $dir/firmware-packages")
 foreach (@output) {
     my $component = $packages{$_}{"Component"};
     my $size = $packages{$_}{"Size"};
-    print CDLIST "$arch:$component:$_:$size\n";
+    my $bu = $packages{$_}{"Built-Using"};
+    print CDLIST "$arch:$component:$_:$size:$bu\n";
     if ($packages{$_}{"IsFirmware"}) {
         print FWLIST "$_\n";
     }
@@ -355,6 +356,14 @@ sub parse_package {
 	$packages{$p}{"Depends"} = [];
 	$packages{$p}{"Suggests"} = [];
 	$packages{$p}{"Recommends"} = [];
+	$packages{$p}{"Built-Using"} = "";	
+	if (m/^Built-Using: (.*)$/m) {
+	    my $built = $1;
+	    $built =~ s/ \(= \S*\)//g;
+	    $built =~ s/,//g;
+	    $built =~ s/ /,/g;
+	    $packages{$p}{"Built-Using"} = $built;
+	}
 	$packages{$p}{"IsUdeb"} = ($packages{$p}{"Filename"} =~ /.udeb$/) ? 1 : 0;
 	$packages{$p}{"IsFirmware"} = ($packages{$p}{"Filename"} =~ /(firmware|microcode)/) ? 1 : 0;
 	if ($packages{$p}{"Section"} =~ /contrib\//) {

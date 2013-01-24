@@ -66,6 +66,7 @@ if [ $source = "yes" ] ; then
         srcname=$2
         srcs_done++
         }
+
     /^Binary:/ {
         bins=$0
         gsub("^Binary:","",bins)
@@ -75,15 +76,30 @@ if [ $source = "yes" ] ; then
             bin2src[binarray[i]] = srcname
             bins_done++
         }
+        in_binary = 1
+        in_files = 0
+        next
     }
 
     /^Files:/   {
         in_files = 1
+        in_binary = 0
         next
     }
+
     /^ / {
-        if (in_files) {
+        if (in_files) { # Cope with multiple lines of files for source packages
             size[srcname]+=$2
+            next
+        }
+        if (in_binary) { # Cope with multi-line Binary: fields
+            bins=$0
+            gsub(",","",bins)
+            nb=split(bins, binarray)
+            for (i=1; i <= nb; i++) {
+                bin2src[binarray[i]] = srcname
+                bins_done++
+            }
             next
         }
     }
@@ -96,43 +112,47 @@ if [ $source = "yes" ] ; then
     }
 
     # Now start placing source packages, depending on the order of the binary packages
-    /.*/ {
+    /^./ {
         in_files = 0
+        in_binary = 0
         if (parsed) {
             split($0,fields,":")
             arch=fields[1]
             component=fields[2]
             pkg=fields[3]
             pkgsize=fields[4]
-            source=bin2src[pkg]
-            if ("" == source) {
+            srcpkg=bin2src[pkg]
+            if ("" == srcpkg) {
                 if ("main-installer" == component) {
                     printf("# Ignoring source for udeb %s\n", pkg)
                 } else {
                     printf("# Source for pkg %s is UNKNOWN!\n", pkg)
                 }
-            } else {
+            }
+            built_using=fields[5]
+            if ("" != built_using) {
+                num_sources = split(built_using,sources,",")
+            }
+            num_sources++
+            sources[num_sources] = srcpkg
+            for(i = 1; i <= num_sources; i++) {
+                source = sources[i]
                 if (!included[source]) {
-                    printf("# Adding source %s at %d because of %s:%s\n",
-                        source, FNR, arch, pkg)
+                    printf("# Adding source %s at %d because of %s:%s (%s)\n",
+                        source, FNR, arch, pkg, (i == num_sources ? "dep" : "b-u"))
                         included[source] = pkg
                         incarch[source] = arch
                         indexnr[source] = FNR
                         sourcecomp[source] = component
                 } else {
                     if (FNR < indexnr[source]) {
-                        printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s\n",
+                        printf("# Updating source %s: was due to %d:%s:%s, now moved earlier because of %d:%s:%s (%s)\n",
                             source, indexnr[source],
                             incarch[source], included[source],
-                            FNR, arch, pkg)
+                            FNR, arch, pkg, (i == num_sources ? "dep" : "b-u"))
                         included[source] = pkg
                         incarch[source] = arch
                         indexnr[source] = FNR
-                    } else {
-                        printf("# Not adding pkg %s source (%d:%s:%s), already added due to %d:%s:%s\n",
-                            pkg, FNR, arch, source,
-                            indexnr[source], incarch[source],
-                            included[source])
                     }
                 }
             }
@@ -147,9 +167,9 @@ if [ $source = "yes" ] ; then
     END {
         for (source in included) {
             if (size[source] > max_size) {
-                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s-SRCTOOBIG\n", indexnr[source], sourcecomp[source], source, size[source])
+                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s-SRCTOOBIG:%d\n", indexnr[source], sourcecomp[source], source, size[source])
             } else {
-                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s\n", indexnr[source], sourcecomp[source], source, size[source])
+                 printf("%d:aaaaaaaaaaaaaaaaaa:%s:%s:%d\n", indexnr[source], sourcecomp[source], source, size[source])
             }
         }
     }' $ADIR/$CODENAME-source/apt-state/lists/*Sources $BDIR/DONE $list | sort -nk 1 -t : >> $BDIR/list.mid

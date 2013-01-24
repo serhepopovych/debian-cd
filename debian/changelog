@@ -7,6 +7,16 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
       apt-cache output
     + We'll now pull in all the extra packages included in Sources.gz
       because of Built-Using.
+  * Add support for Built-Using:
+    + tools/sort_deps: parse out Built-Using from Packages files too and
+      pass any such data on to tools/merge_package_lists
+    + tools/merge_package_lists: if we have any built-using source
+      packages listed when doing a combined binary/source set, add them in
+      the same way as existing listed sources.
+  * Other bug fixes in tools/merge_package_lists:
+    + Fix handling of multi-line Binary: fields
+    + Print out the accumulated size of source packages in output also
+      (fix to printf format string)
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
