@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.9.2
 Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
-Vcs-Browser: http://svn.debian.org/wsvn/debian-cd/trunk?op=log
+Vcs-Browser: http://anonscm.debian.org/viewvc/debian-cd/trunk/
 
 Package: debian-cd
 Architecture: all

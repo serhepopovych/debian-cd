@@ -17,6 +17,7 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
     + Fix handling of multi-line Binary: fields
     + Print out the accumulated size of source packages in output also
       (fix to printf format string)
+  * Update Vcs-Browser
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
