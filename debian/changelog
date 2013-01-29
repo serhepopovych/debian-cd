@@ -18,6 +18,9 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
     + Print out the accumulated size of source packages in output also
       (fix to printf format string)
   * Update Vcs-Browser
+  * Make sure the DEBIAN_KERNEL placeholder in README.* is replaced;
+    switch from cpp to sed for that so it works inside quoted
+    text. Closes: #699198
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
