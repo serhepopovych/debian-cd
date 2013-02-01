@@ -65,7 +65,6 @@ if [ $source = "yes" ] ; then
     /^Package:/ {
         srcname=$2
         srcs_done++
-        num_sources = 0
         }
 
     /^Binary:/ {
@@ -117,6 +116,7 @@ if [ $source = "yes" ] ; then
         in_files = 0
         in_binary = 0
         if (parsed) {
+            num_sources = 0
             split($0,fields,":")
             arch=fields[1]
             component=fields[2]
