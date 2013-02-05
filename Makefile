@@ -224,7 +224,7 @@ $(ADIR)/status:
 	# If we're doing a build using d-i from sid, we'll need sid sources too
 	if [ "$(INC_SOURCE)"x = "yes"x ] && \
 		[ "$(DI_CODENAME)"x != ""x ] && \
-		[ "$(DI_CODENAME}"x != "$(CODENAME)"x ] ; then \
+		[ "$(DI_CODENAME)"x != "$(CODENAME)"x ] ; then \
 		mkdir -p $(ADIR)/$(DI_CODENAME)-source/apt/preferences.d ; \
 		:> $(ADIR)/$(DI_CODENAME)-source/status ; \
 		export CODENAME=$(DI_CODENAME); \
