@@ -21,6 +21,9 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
   * Make sure the DEBIAN_KERNEL placeholder in README.* is replaced;
     switch from cpp to sed for that so it works inside quoted
     text. Closes: #699198
+  * Deal with syslinux version 5.x needing to install more files for
+    bootable x86 media. Thanks to Daniel Baumann for the path.
+    Closes: #699884
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 

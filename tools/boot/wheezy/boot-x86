@@ -274,6 +274,11 @@ fi
 
 cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
 cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
+if [ -e $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 ]; then
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 boot$N/isolinux/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/libcom32.c32 boot$N/isolinux/
+	cp -f $CDDIR/../syslinux/usr/lib/syslinux/libutil.c32 boot$N/isolinux/
+fi
 
 if [ -z "$MULTIARCH" ]; then
 	# Set up isolinux dir for only the current arch
