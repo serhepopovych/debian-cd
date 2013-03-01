@@ -197,12 +197,10 @@ fi
 (dpkg --fsys-tarfile "$MIRROR/$SYSLINUXDEB" | \
 	tar xf - -C $CDDIR/../syslinux ./usr/lib)
 
-echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-case $ARCHES in
-    *source*)
+if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
+	echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
 	find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
-    ;;
-esac
+fi
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
 

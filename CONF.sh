@@ -253,8 +253,9 @@ export IMAGESUMS=1
 # We may have to extract files from packages to put them onto the CD
 # (e.g. bootloader files). If you make those packages (and their
 # sources) available somewhere, list it here so that README.source
-# can point to it
-export ARCHIVE_EXTRACTED_SOURCES="http://cdimage.debian.org/cdimage/cd-sources/"
+# can point to it. Note that your mirror must have repositories of
+# source packages if you enable this option.
+# export ARCHIVE_EXTRACTED_SOURCES="http://cdimage.debian.org/cdimage/cd-sources/"
 
 # Produce iso/jigdo files: specify how many iso/jigdo files should be
 # produced in your set. If not set or when the value is "ALL" they will
