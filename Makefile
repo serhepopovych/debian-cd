@@ -56,6 +56,11 @@ endif
 ifneq (${ARCH_MKISOFS_OPTS},)
     MKISOFS_OPTS = ${ARCH_MKISOFS_OPTS}
 endif
+ifndef DEBOOTSTRAP_OPTS
+ifeq (yes,$(shell dpkg --compare-versions `dpkg-query -f'$${Version}' -W debootstrap` ge 1.0.30 && echo -n yes))
+DEBOOTSTRAP_OPTS=--no-check-gpg
+endif
+endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
@@ -325,7 +330,7 @@ $(BDIR)/rawlist:
 				[ -z "$$BINCLUDE" ] || BINCLUDE="--include=$$BINCLUDE"; \
 				BEXCLUDE=`[ -n "$(BASE_EXCLUDE)" ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'`; \
 				[ -z "$$BEXCLUDE" ] || BEXCLUDE="--exclude=$$BEXCLUDE"; \
-				debootstrap --arch $$ARCH \
+				debootstrap $(DEBOOTSTRAP_OPTS) --arch $$ARCH \
 				            --print-debs \
 				            $$BINCLUDE $$BEXCLUDE \
 				            $(CODENAME) \
