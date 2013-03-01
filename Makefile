@@ -21,7 +21,12 @@ ifndef TASK
 TASK=Debian-generic
 endif
 ifndef MKISOFS
+ifneq (,$(filter i386 amd64,$(ARCHES)))
+export MKISOFS=xorriso
+export MKISOFS_OPTS=-as mkisofs -r -checksum_algorithm_iso md5,sha1
+else
 export MKISOFS=$(shell which genisoimage mkisofs | head -1)
+endif
 endif
 ifndef MKISOFS_OPTS
 #For normal users
