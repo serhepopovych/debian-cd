@@ -198,7 +198,11 @@ fi
 	tar xf - -C $CDDIR/../syslinux ./usr/lib)
 
 echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
-find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
+case $ARCHES in
+    *source*)
+	find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
+    ;;
+esac
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
 

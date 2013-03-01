@@ -29,6 +29,8 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
   * Update Makefile to set MKISOFS to xorriso by default when building
     images for i386/amd64. Otherwise a build that doesn't set MKISOFS
     and MKISOFS_OPTS fails.
+  * Update tools/boot/wheezy/boot-x86 to not look for syslinux's source
+    package if we're not including sources.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
