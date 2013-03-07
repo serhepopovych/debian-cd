@@ -106,7 +106,7 @@ do
    > $yabootconf
 
   cat $BASEDIR/data/$DI_CODENAME/yaboot/$yabootmsg \
-   | sed "s/\${MEDIA_TYPE}/${DISKTYPE}/" \
+   | sed "s/\${MEDIA_TYPE}/CDROM/" \
    | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
    | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
    | sed "s/\${DEFAULT_DESKTOP}/${DEFAULT_DESKTOP}/g" \
