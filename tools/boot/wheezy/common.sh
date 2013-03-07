@@ -14,7 +14,13 @@ DI_DIR="$(echo "$DI_DIR" | sed -e "s|%ARCH%|$ARCH|g")"
 # (i.e. using "all" for netinst, DVD etc.) - print the name of the
 # first desktop task recommended by task-desktop
 UNSPEC_DESKTOP_DEFAULT="$($BASEDIR/tools/apt-selection cache depends task-desktop | \
-    awk '/Recommends:.*desktop/ { gsub("task-","");gsub("-desktop","");print $2; exit}')"
+    awk '
+    /Recommends:.*desktop/ {
+        gsub("task-","")
+        gsub("-desktop","")
+        print $2
+        exit
+    }')"
 
 # Only i386 and amd64 support desktop selection with the 'light' and 'all'
 # desktops; make sure other arches get a working config
