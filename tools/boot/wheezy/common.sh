@@ -10,6 +10,12 @@ export PATH
 DI_WWW_HOME="$(echo "$DI_WWW_HOME" | sed -e "s|%ARCH%|$ARCH|g")"
 DI_DIR="$(echo "$DI_DIR" | sed -e "s|%ARCH%|$ARCH|g")"
 
+# Find out what the default desktop is in tasksel if we've not set it
+# (i.e. using "all" for netinst, DVD etc.) - print the name of the
+# first desktop task recommended by task-desktop
+UNSPEC_DESKTOP_DEFAULT="$($BASEDIR/tools/apt-selection depends task-desktop | \
+    awk '/Recommends:.*desktop/ { gsub("task-","");gsub("-desktop","");print $2; exit}')"
+
 # Only i386 and amd64 support desktop selection with the 'light' and 'all'
 # desktops; make sure other arches get a working config
 if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
