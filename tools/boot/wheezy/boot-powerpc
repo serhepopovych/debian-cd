@@ -84,6 +84,7 @@ if [ "$DESKTOP"x = ""x ] || [ "$DESKTOP"x = "all"x ] ; then
     DEFAULT_DESKTOP="$UNSPEC_DESKTOP_DEFAULT"
 else
     DEFAULT_DESKTOP="$DESKTOP"
+fi
 
 for subarch in powerpc powerpc64 #prep
 do
