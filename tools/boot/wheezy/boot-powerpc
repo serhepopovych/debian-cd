@@ -80,6 +80,11 @@ fi
 
 cp $BASEDIR/data/$DI_CODENAME/yaboot/ofboot.b ofboot.b
 
+if [ "$DESKTOP"x = ""x ] || [ "$DESKTOP"x = "all"x ] ; then
+    DEFAULT_DESKTOP="$UNSPEC_DESKTOP_DEFAULT"
+else
+    DEFAULT_DESKTOP="$DESKTOP"
+
 for subarch in powerpc powerpc64 #prep
 do
   case $subarch in
@@ -100,9 +105,10 @@ do
    > $yabootconf
 
   cat $BASEDIR/data/$DI_CODENAME/yaboot/$yabootmsg \
-   | sed "s/\${MEDIA_TYPE}/CDROM/" \
+   | sed "s/\${MEDIA_TYPE}/${DISKTYPE}/" \
    | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
    | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
+   | sed "s/\${DEFAULT_DESKTOP}/${DEFAULT_DESKTOP}/g" \
    > $yabootmsg
 
   if [ -n "$KERNEL_PARAMS" ]; then

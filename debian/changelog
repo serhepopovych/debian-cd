@@ -45,6 +45,9 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
   * Update all the relevant boot-* scripts to do the right thing when
     extracting packages and sources, depending on
     $ARCHIVE_EXTRACTED_SOURCES as above
+  * Add extra text to boot messages on powerpc to tell people about how to
+    select a different desktop. Thanks to Rick Thomas for the
+    text. Tweaked slightly to list the default on the current disc too.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
