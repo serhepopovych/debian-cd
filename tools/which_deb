@@ -136,6 +136,10 @@ if ($pkg eq "silo") {
     }
 } elsif ($pkg eq "yaboot") {
     $pkgdata = grab_bin_info($pth, "powerpc", $pkg);
+} elsif ($pkg eq "delo") {
+    $pkgdata = grab_bin_info($pth, "mipsel", $pkg);
+} elsif ($pkg eq "palo") {
+    $pkgdata = grab_bin_info($pth, "hppa", $pkg);
 } else { # Fallthrough for all other packages
     first { $pkgdata = grab_bin_info($pth, $_, $pkg) } @ARCHES;
 }

@@ -65,8 +65,10 @@ if [ -z "$YABOOT_DEBUG" ]; then
     mv usr/lib/yaboot/yaboot .
     rm -rf usr
 
-    echo $YADEB >> $CDDIR/../$N.pkgs_extracted
-    find_pkg_file yaboot source >> $CDDIR/../$N.pkgs_extracted
+    if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
+        echo $YADEB >> $CDDIR/../$N.pkgs_extracted
+        find_pkg_file yaboot source >> $CDDIR/../$N.pkgs_extracted
+    fi
 
 else
  cp -f $YABOOT_DEBUG yaboot

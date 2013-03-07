@@ -39,6 +39,13 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
   * Use debootstrap --no-check-gpg by default since many local mirrors
     are not signed (such as temporary mirrors created by simple-cdd).
 
+  [ Steve McIntyre ]
+  * Update boot-mipsel and boot-hppa to use the which_deb script for
+    better safety when extracting boot loader files.
+  * Update all the relevant boot-* scripts to do the right thing when
+    extracting packages and sources, depending on
+    $ARCHIVE_EXTRACTED_SOURCES as above
+
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
 debian-cd (3.1.11) unstable; urgency=low
