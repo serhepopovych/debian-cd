@@ -16,8 +16,9 @@ If the system fails to boot with a white screen
 which doesn't go away, add 'video=ofonly'.
 
 The following desktop environments are available:
-gnome, kde, xfce and lxde.  The default is ${DEFAULT_DESKTOP}.
-If you prefer a different one, append
+gnome, kde, xfce and lxde.  The default on this ${MEDIA_TYPE}
+is ${DEFAULT_DESKTOP}.
+If you prefer a different desktop, append
     "desktop=<your choice>"
 e.g. to do an expert install with the xfce desktop
 environment, type

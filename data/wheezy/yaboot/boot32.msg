@@ -14,8 +14,9 @@ which doesn't go away, try:
 install video=ofonly 
 
 The following desktop environments are available:
-gnome, kde, xfce and lxde.  The default is ${DEFAULT_DESKTOP}.
-If you prefer a different one, append
+gnome, kde, xfce and lxde.  The default on this ${MEDIA_TYPE}
+is ${DEFAULT_DESKTOP}.
+If you prefer a different desktop, append
     "desktop=<your choice>"
 e.g. to do an expert install with the xfce desktop
 environment, type
