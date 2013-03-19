@@ -225,7 +225,17 @@ $(ADIR)/status:
 		fi; \
 	done;
 	:> $(ADIR)/status
-    # Updating the apt database
+
+	# Set up keyring so apt doesn't complain
+	@echo "Setting up debian-archive-keyring"
+	$(Q)mkdir -p $(TDIR)/debian-archive-keyring
+	$(Q)dpkg -x $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) debian-archive-keyring) $(TDIR)/debian-archive-keyring
+	$(Q)for ARCH in $(ARCHES); do \
+		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
+		ln -s $(TDIR)/debian-archive-keyring/usr/share/keyrings/* $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
+	done
+
+	# Updating the apt database
 	$(Q)for ARCH in $(ARCHES); do \
 		export ARCH=$$ARCH; \
 		$(apt) update; \

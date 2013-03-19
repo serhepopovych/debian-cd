@@ -49,6 +49,10 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
     select a different desktop. Thanks to Rick Thomas for the
     text. Tweaked slightly to list the default on the current disc too.
 
+  [ Robert Spencer ]
+  * Extract debian-archive-keyring when setting up apt to avoid error
+    messages about missing keys. Closes: #703431
+
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
 
 debian-cd (3.1.11) unstable; urgency=low
