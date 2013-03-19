@@ -369,7 +369,7 @@ $(BDIR)/rawlist:
 	fi; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		cat $(TASKDIR)/$(TASK) | \
-		cpp -nostdinc -nostdinc++ -P -undef $$ARCHDEFS $$VARIANTDEFS\
+		cpp -nostdinc -P -undef $$ARCHDEFS $$VARIANTDEFS\
 	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
 		    -DFORCENONUSONCD1=0 \
 		    -I $(TASKDIR) - - >> $(BDIR)/rawlist; \
