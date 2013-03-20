@@ -85,11 +85,11 @@ export OFFICIAL="Unofficial"
 
 # ... for arch
 if [ -z "$ARCHES" ]; then
-	CPU=`dpkg-architecture -qDEB_HOST_DPKG_CPU 2>/dev/null || true`
+	CPU=`dpkg-architecture -qDEB_HOST_ARCH_CPU 2>/dev/null || true`
 	if [ -z "$CPU" ]; then
 		CPU=`dpkg-architecture -qDEB_HOST_ARCH`
 	fi
-	KERNEL=`dpkg-architecture -qDEB_HOST_DPKG_OS 2>/dev/null || true`
+	KERNEL=`dpkg-architecture -qDEB_HOST_ARCH_OS 2>/dev/null || true`
 	if [ -z "$KERNEL" ]; then
 		KERNEL=linux
 	fi
