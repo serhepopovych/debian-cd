@@ -406,25 +406,6 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"
 # BIOSes apparently have a limitation on what they'll boot here.
 add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
-# Temporary hack - helper function to generate grub.cfg entries
-add_grub_entry () {
-    FILE=$1
-    DESC=$2
-    OPTS=$3
-    GFX=$4
-    PAD="                                   "
-
-    echo "menuentry \"${PAD}${DESC}\" {" >> $FILE
-    echo "        set background_color=black" >> $FILE
-    echo "        linux   /$INSTALLDIR/vmlinuz ${OPTS} --" >> $FILE
-    if [ $GFX = 1 ] ; then
-        echo "        initrd  /$INSTALLDIR/gtk/initrd.gz" >> $FILE
-    else
-        echo "        initrd  /$INSTALLDIR/initrd.gz" >> $FILE
-    fi
-    echo "}" >> $FILE
-}
-
 if [ -d boot$N/isolinux/grub ] ; then
     echo "  Adding EFI boot code for $ARCH on CD$N"
 
