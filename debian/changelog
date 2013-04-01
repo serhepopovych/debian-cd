@@ -1,4 +1,4 @@
-debian-cd (3.1.12) UNRELEASED; urgency=low
+debian-cd (3.1.12) unstable; urgency=low
 
   [ Steve McIntyre ]
   * When building source-only discs, cope with having multiple different
@@ -58,7 +58,7 @@ debian-cd (3.1.12) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Allow for override of DISKINFO base text; Closes: #695080
 
- -- Steve McIntyre <93sam@debian.org>  Wed, 26 Sep 2012 01:09:13 +0100
+ -- Steve McIntyre <93sam@debian.org>  Mon, 01 Apr 2013 02:32:44 +0100
 
 debian-cd (3.1.11) unstable; urgency=low
 
