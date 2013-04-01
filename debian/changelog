@@ -52,7 +52,7 @@ debian-cd (3.1.12) unstable; urgency=low
   [ Robert Spencer ]
   * Extract debian-archive-keyring when setting up apt to avoid error
     messages about missing keys. Closes: #703431
-  * Fix cpp warning in Makefile. Closes: #704342
+  * Fix cpp warning in Makefile. Closes: #703432
   * Correct usage of dpkg-architecture to fix errors. Closes: #703487
 
   [ Steve McIntyre ]
