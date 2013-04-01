@@ -36,17 +36,21 @@ if [ "$VOLID_BASE"x = ""x ] ; then
     VOLID_BASE="Debian $DEBVERSION"
 fi
 
+if [ "$DISKINFO_DISTRO"x = ""x ] ; then
+    DISKINFO_DISTRO="Debian"
+fi
+
 if [ $NUM_ARCHES = 1 ] ; then
     case $ARCHES in
         source)
             SOURCEDISK=1
-            export DISKINFO="Debian $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
+            export DISKINFO="$DISKINFO_DISTRO $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $DISKTYPE Source-$DISKNUM $BUILD_DATE"
             export VOLID="$VOLID_BASE Source $DISKNUM"
             export SOURCEONLY=yes
             ;;
         *)
             BINARYDISK=1
-            export DISKINFO="Debian ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
+            export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
             case "$ARCHES" in
                 powerpc)
                     export VOLID="$VOLID_BASE ppc $DISKNUM" ;;
@@ -68,7 +72,7 @@ else
         *source*) SOURCEDISK=1;;
     esac
     export ARCHDEF=`echo $ARCHES | sed 's? ?/?g'`
-    export DISKINFO="Debian ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
+    export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
     export VOLID="$VOLID_BASE M-A $DISKNUM"
 fi
 
