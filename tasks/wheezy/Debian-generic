@@ -7,6 +7,11 @@
 /* Packages that should really be on CD1 */
 #include <debian-installer+kernel>
 #include <forcd1>
+
+/* Do we need to force these in for CD1? */
+network-manager
+network-manager-gnome
+
 #include <task-essential-generic>
 
 /* Other interesting packages */
