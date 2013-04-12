@@ -185,6 +185,10 @@ export CONTRIB=1
 # validate the mirror.
 #export DEBOOTSTRAP_OPTS="--keyring /usr/share/keyrings/debian-archive-keyring.gpg"
 
+# Indicate the package which contains the keyrings needed so that APT
+# doesn't complain about unsigned package.
+#export ARCHIVE_KEYRING="debian-archive-keyring"
+
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
 
