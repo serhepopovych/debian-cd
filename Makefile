@@ -63,9 +63,7 @@ ifneq (${ARCH_MKISOFS_OPTS},)
     MKISOFS_OPTS = ${ARCH_MKISOFS_OPTS}
 endif
 ifndef DEBOOTSTRAP_OPTS
-ifeq (yes,$(shell dpkg --compare-versions `dpkg-query -f'$${Version}' -W debootstrap` ge 1.0.30 && echo -n yes))
 DEBOOTSTRAP_OPTS=--no-check-gpg
-endif
 endif
 
 ## Internal variables  

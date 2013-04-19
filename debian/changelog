@@ -11,6 +11,12 @@ debian-cd (3.1.13) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Tweak handling of {udeb,base}_{include,exclude} files so multi-arch
     builds should work better. Closes: #703436
+  * Remove the dpkg check for debootstrap version before passing the
+    --no-check-gpg option; we're not going to support debootstrap versions
+    so old that they don't support this flag, *and* the dpkg-query call
+    doesn't give us the right version anyway - we're using an extracted
+    copy from the archive, not the one that (might be) installed on our
+    build machine.
 
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 12 Apr 2013 10:32:56 +0200
 
