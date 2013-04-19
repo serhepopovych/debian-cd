@@ -14,7 +14,9 @@ use File::Path qw(make_path);
 my $isolinuxdir = shift or die "Need to know where the isolinux directory is!\n";
 my $outdir = shift or die "Need to know where to write output!\n";
 my $grub_theme = shift or die "Need input file location for base grub theme!\n";
-my $tl_desc = shift or die "Need a top-level description (e.g. Debian GNU/Linux 7.0)\n";
+my $tl_distro= shift or die "Need a top-level distro name (e.g. Debian)\n";
+my $tl_kernel= shift or die "Need a top-level kernel (e.g. GNU/Linux)\n";
+my $tl_version= shift or die "Need a top-level version (e.g. 7.0)\n";
 my $theme_dir = "$outdir/boot/grub/theme";
 my @cpp_and_opts = ('cpp',
 		    '-traditional',
@@ -92,7 +94,7 @@ sub create_theme_file {
     my $filename = shift;
     my @args;
     push(@args, @cpp_and_opts);
-    push(@args, "-DTITLE=\"$tl_desc\"");
+    push(@args, "-DTITLE=\"$tl_distro $tl_kernel $tl_version\"");
     for (my $i = 0; $i < $menudepth; $i++) {
 	push(@args, "-DMENU$i=\"" . $menu_title[$i] . "\"");
     }
@@ -115,7 +117,7 @@ parse_file("isolinux.cfg");
 
 $menu{"number"} = "1";
 $menu{"label"} = "top";
-$menu{"title"} = "Debian GNU/Linux Installer menu";
+$menu{"title"} = "$tl_distro $tl_kernel Installer menu";
 $menu_title[$menudepth] = $menu{"title"};
 
 my %kernel;

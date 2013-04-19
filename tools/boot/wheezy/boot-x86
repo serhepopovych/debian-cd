@@ -421,7 +421,7 @@ if [ -d boot$N/isolinux/grub ] ; then
     # Create grub menu entries to match the isolinux ones
     sed -i '/^menuentry/Q' $CDDIR/boot/grub/grub.cfg;
     $BASEDIR/tools/boot/$DI_CODENAME/parse_isolinux \
-        boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "Debian GNU/Linux $DEBVERSION" \
+        boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "$DISKINFO_DISTRO" "$DEBIAN_KERNEL" "$DEBVERSION" \
         >> $CDDIR/boot/grub/grub.cfg
 
     # Stuff the EFI boot files into a FAT filesystem, making it as

@@ -5,6 +5,8 @@ debian-cd (3.1.13) UNRELEASED; urgency=low
     not hardcode debian-archive-keyring and let derivatives use their
     own keyring.
   * Add further support for missing win32-loader.ini. Closes: #705594
+  * Allow for override of distro name etc. in grub.cfg for EFI boot too.
+    Closes: #705610
 
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 12 Apr 2013 10:32:56 +0200
 

@@ -39,6 +39,7 @@ fi
 if [ "$DISKINFO_DISTRO"x = ""x ] ; then
     DISKINFO_DISTRO="Debian"
 fi
+export DISKINFO_DISTRO
 
 if [ $NUM_ARCHES = 1 ] ; then
     case $ARCHES in
