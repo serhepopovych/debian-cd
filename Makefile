@@ -37,8 +37,11 @@ endif
 ifndef HOOK
 HOOK=$(BASEDIR)/tools/$(CODENAME).hook
 endif
-ifndef ARCHIVE_KEYRING
-ARCHIVE_KEYRING=debian-archive-keyring
+ifndef ARCHIVE_KEYRING_PACKAGE
+ARCHIVE_KEYRING_PACKAGE=debian-archive-keyring
+endif
+ifndef ARCHIVE_KEYRING_FILE
+ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
 endif
 
 export BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
@@ -232,10 +235,10 @@ $(ADIR)/status:
 	# Set up keyring so apt doesn't complain
 	@echo "Setting up archive-keyring"
 	$(Q)mkdir -p $(TDIR)/archive-keyring
-	$(Q)dpkg -x $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) $(ARCHIVE_KEYRING)) $(TDIR)/archive-keyring
+	$(Q)dpkg -x $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) $(ARCHIVE_KEYRING_PACKAGE)) $(TDIR)/archive-keyring
 	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
-		ln -s $(TDIR)/archive-keyring/usr/share/keyrings/* $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
+		ln -s $(TDIR)/archive-keyring/$(ARCHIVE_KEYRING_FILE) $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
 	done
 
 	# Updating the apt database

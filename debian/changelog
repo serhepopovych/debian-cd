@@ -1,8 +1,9 @@
 debian-cd (3.1.13) UNRELEASED; urgency=low
 
   [ Robert Spencer ]
-  * Use ARCHIVE_KEYRING parameter to not hardcode debian-archive-keyring
-    and let derivatives use their own keyring package.
+  * Use ARCHIVE_KEYRING_PACKAGE and ARCHIVE_KEYRING_FILE parameters to
+    not hardcode debian-archive-keyring and let derivatives use their
+    own keyring.
 
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 12 Apr 2013 10:32:56 +0200
 

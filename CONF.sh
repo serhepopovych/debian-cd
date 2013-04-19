@@ -51,6 +51,8 @@ unset OMIT_RELEASE_NOTES || true
 unset OMIT_DOC_TOOLS     || true
 unset MAX_PKG_SIZE       || true
 unset DEBOOTSTRAP_OPTS   || true
+unset ARCHIVE_KEYRING_PACKAGE || true
+unset ARCHIVE_KEYRING_FILE    || true
 
 # The debian-cd dir
 # Where I am (hoping I'm in the debian-cd dir)
@@ -179,15 +181,16 @@ export CONTRIB=1
 #export amd64_MKISOFS="xorriso"
 #export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
 
+# Keyring (defaults):
+#ARCHIVE_KEYRING_PACKAGE=debian-archive-keyring
+# The path to the keyring file relative to $TDIR/archive-keyring/
+#ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
+
 # By default we use debootstrap --no-check-gpg to find out the minimal set
 # of packages because there's no reason to not trust the local mirror. But
 # you can be paranoid and then you need to indicate the keyring to use to
 # validate the mirror.
-#export DEBOOTSTRAP_OPTS="--keyring /usr/share/keyrings/debian-archive-keyring.gpg"
-
-# Indicate the package which contains the keyrings needed so that APT
-# doesn't complain about unsigned package.
-#export ARCHIVE_KEYRING="debian-archive-keyring"
+#export DEBOOTSTRAP_OPTS="--keyring $TDIR/archive-keyring/$ARCHIVE_KEYRING_FILE"
 
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
