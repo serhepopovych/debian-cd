@@ -300,15 +300,17 @@ else
 		sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
 	done
 
-	# Modify win32-loader.ini to also cover the "other" arch
-	if [ "$ARCH" = i386 ]; then
-		sed -i -e "/^arch=/d
-				   /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
-				       boot$N/win32-loader.ini
-	else
-		sed -i -e "/^arch=/d
-				   /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
-				       boot$N/win32-loader.ini
+	if [ -e boot$N/win32-loader.ini ]; then
+		# Modify win32-loader.ini to also cover the "other" arch
+		if [ "$ARCH" = i386 ]; then
+			sed -i -e "/^arch=/d
+					   /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
+					       boot$N/win32-loader.ini
+		else
+			sed -i -e "/^arch=/d
+					   /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
+					       boot$N/win32-loader.ini
+		fi
 	fi
 
 	# Apply workaround for #505243
