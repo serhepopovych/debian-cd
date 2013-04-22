@@ -117,6 +117,9 @@ endif
 ifndef CODENAME
 	@echo CODENAME undefined -- set up CONF.sh; false
 endif
+ifndef DISKTYPE
+	@echo DISKTYPE undefined -- set up CONF.sh; false
+endif
 ifndef OUT
 	@echo OUT undefined -- set up CONF.sh; false
 endif
