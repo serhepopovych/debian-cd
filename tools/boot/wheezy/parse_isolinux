@@ -32,7 +32,7 @@ my $incdepth = 0;
 my @menu_number = (1,0,0,0,0);
 my @menu_title = ('', '', '', '', '');
 my $menudepth = 0;
-my $gap = "";
+my $pre = "";
 my %menu;
 
 sub parse_file {
@@ -77,7 +77,7 @@ sub print_kernel {
 	    $initrd = $1;
 	    $initrd =~ s?^.*initrd=??;
 	}
-	print_indent "menuentry '$gap" . $k{"label"} . "' {\n";
+	print_indent "menuentry '$pre" . $k{"label"} . "' {\n";
 	print_indent "    set background_color=black\n";
 	print_indent "    linux    " . $k{"kernel"} . " " . $k{"append"} . "\n";
 	print_indent "    initrd   $initrd\n";
@@ -158,6 +158,11 @@ foreach my $line(@lines) {
 	if ($menudepth) {
 	    print_indent "}\n";
 	}
+	if ($menudepth > 1) {
+	    $pre = "... ";
+	} else {
+	    $pre = "";
+	}	    
     } elsif ($line =~ /^\s*menu title (.*$)/) {
 	if ($in_kernel) {
 	    print_kernel(\%kernel);
@@ -166,10 +171,17 @@ foreach my $line(@lines) {
 	}
 	$menu{"title"} = $1;
 	if ($new_menu) {
-	    print_indent "submenu '$gap" . $menu{"title"} . "\' {\n";
+	    print_indent "submenu '$pre" . $menu{"title"} . " ...' {\n";
 	    $menu_title[$menudepth] = $menu{"title"};
 	    $menudepth++;
+	    if ($menudepth > 1) {
+		$pre = "... ";
+	    } else {
+		$pre = "";
+	    }	    
 	    debug();
+	    print_indent "set menu_color_normal=cyan/blue\n";
+	    print_indent "set menu_color_highlight=white/blue\n";
 	    print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
 	    create_theme_file($menu{"number"});
 	    $new_menu = 0;
