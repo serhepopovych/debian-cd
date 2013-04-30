@@ -1,4 +1,6 @@
-debian-cd (3.1.13) UNRELEASED; urgency=low
+debian-cd (3.1.13) unstable; urgency=medium
+
+  * The traditional "last upload before the stable release" upload...
 
   [ Robert Spencer ]
   * Use ARCHIVE_KEYRING_PACKAGE and ARCHIVE_KEYRING_FILE parameters to
@@ -18,7 +20,7 @@ debian-cd (3.1.13) UNRELEASED; urgency=low
     copy from the archive, not the one that (might be) installed on our
     build machine.
 
- -- Raphaël Hertzog <hertzog@debian.org>  Fri, 12 Apr 2013 10:32:56 +0200
+ -- Steve McIntyre <93sam@debian.org>  Tue, 30 Apr 2013 22:54:32 +0100
 
 debian-cd (3.1.12) unstable; urgency=low
 
