@@ -18,6 +18,8 @@ if lockfile -! -l 43200 -r-1 "$LOCK"; then
 fi
 trap "rm -f $LOCK > /dev/null 2>&1" exit  
 
+COPY_START=`date -u +%H:%M:%S`
+
 rm -f $LOG
 
 # Given an ISO image:
@@ -124,5 +126,5 @@ mkdir -p $RSYNC_TARGET/trace
 date -u > $RSYNC_TARGET/trace/cdimage.debian.org
 
 END=`date -u +%H:%M:%S`
-echo "$ARCH synced across; started at $START, ended at $END"
+echo "$ARCH synced across to $RSYNC_TARGET; started at $START, copying started at $COPY_START, ended at $END"
 echo "$END: Finished" >> $LOG

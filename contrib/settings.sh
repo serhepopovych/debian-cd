@@ -12,3 +12,13 @@ if [ "$DATE"x = ""x ] ; then
 fi
 
 export EXTRACTED_SOURCES=/mnt/nfs-cdimage/cd-sources
+
+if [ "$ARCHES"x = ""x ] ; then
+    ARCHES="i386 source amd64 multi-arch powerpc armel armhf ia64 mips mipsel s390 s390x sparc kfreebsd-amd64 kfreebsd-i386"
+fi
+
+if [ "$ARCHES_FIRMWARE"x = ""x ] ; then
+    ARCHES_FIRMWARE="amd64 i386 powerpc multi-arch"
+#    ARCHES_FIRMWARE="amd64"
+fi
+

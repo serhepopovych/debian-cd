@@ -20,6 +20,8 @@ now () {
 
 build_description () {
     case $1 in
+        NI)
+	    DESC="Netinst CD";;
         CD)
 	    DESC="Full CD";;
         DVD)

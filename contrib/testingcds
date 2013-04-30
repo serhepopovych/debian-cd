@@ -167,8 +167,14 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	    fi
 	fi
 
-	mkdir -p $ARCHDIR/list-cd
+	mkdir -p $ARCHDIR/list-cd $ARCHDIR/jigdo-cd $ARCHDIR/iso-cd
         # put the isos and jigdos in their place
+
+	$TOPDIR/debian-cd/tools/imagesums $OUT $SUMS_EXTENSION >> "$LOGFILE"
+        sed -i 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' $OUT/*SUMS*
+        cp $OUT/*SUMS* $ARCHDIR/iso-cd
+        cp $OUT/*SUMS* $ARCHDIR/jigdo-cd
+
         for i in "$OUT"/*-1.iso; do
             BASE=`basename $i .iso`
             NETINSTNAME=`echo $BASE | sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g'`
@@ -219,7 +225,11 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	    outfile="$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/`basename $file`
 	    cat $file >> $outfile
 	done
-        mv "$OUT"/*.iso    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
+	for file in "$OUT"/*.iso; do
+	    if [ -e $file ] ; then 
+                mv $file    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
+            fi
+        done
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}
 	mv "$OUT"/*list*gz "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}

@@ -1,6 +1,10 @@
 #!/bin/bash
 
-export TOPDIR=$(dirname $0)
+TOPDIR=$(dirname $0)
+if [ "$TOPDIR" = "." ] ; then
+    TOPDIR=`pwd`
+fi
+export TOPDIR
 
 . $TOPDIR/settings.sh
 
@@ -13,14 +17,16 @@ BUILDLOCK=$HOME/.debian-cd.lock
 # Make sure the machine isn't rebooted while we're busy
 reboot_lock
 
-# Uncomment the following to use daily d-i builds for weekly images
+# Uncomment the following to use daily d-i builds for these images
 # rather than what's in the archive
 USE_DAILY_DI=Y
 
 if [ "$RELEASE_BUILD"x = ""x ] ; then
     export RSYNC_TARGET=/mnt/nfs-cdimage/weekly-builds
+    export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/weekly-builds
 else
     export RSYNC_TARGET=/mnt/nfs-cdimage/.${RELEASE_BUILD}
+    export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/.${RELEASE_BUILD}
     export CONF=~/build.wheezy/CONF.sh.${RELEASE_BUILD}
     export RELEASE_BUILD=$RELEASE_BUILD
     # If we're doing a normal set of daily/weekly builds, leave the
@@ -35,6 +41,7 @@ fi
 if [ "$USE_DAILY_DI"x = "Y"x ] ; then
     export DI=sid
     export DI_WWW_HOME=default
+    export DI_DIR="$ARCH_DI_DIR"
 else
     unset DI_WWW_HOME
 fi
@@ -44,17 +51,15 @@ export DI_CODENAME
 
 BUILDS_RUNNING=""
 
-if [ "$ARCHES"x = ""x ] ; then
-    ARCHES="i386 source amd64 multi powerpc armel armhf ia64 mips mipsel s390 s390x sparc kfreebsd-amd64 kfreebsd-i386"
-fi
-
 if lockfile -r0 $BUILDLOCK ; then
 #    echo "NOT checking for svn updates"
     echo "svn update debian-cd"
     cd debian-cd && svn cleanup; svn up ; cd ..
 
 #    echo "NOT checking for popcon updates"
-    cd debian-cd && ./tools/update_popcon tasks/wheezy/popularity-contest ; cd ..
+    if [ "$NOPOPCON"x = ""x ] ; then
+	cd debian-cd && ./tools/update_popcon tasks/wheezy/popularity-contest ; cd ..
+    fi
 
     cd $TOPDIR
     mkdir -p $PUBDIRJIG/trace
@@ -63,10 +68,11 @@ if lockfile -r0 $BUILDLOCK ; then
     for arch in $ARCHES; do
         # Reset envvars for next iteration
         arch_error=""
-        if [ "$arch" != multi ] ; then
+        arch_start=`now`
+
+        if [ "$arch" != multi-arch ] ; then
             rm -rf $PUBDIRJIG/$arch
             mkdir -p $PUBDIRJIG/$arch
-            arch_start=`now`
 
 #            export DI_DIR="$ARCH_DI_DIR" 
 	    export VARIANTS=""
@@ -141,7 +147,7 @@ if lockfile -r0 $BUILDLOCK ; then
             fi
 
             # Full DLBD set
-            if [ "$NOBD"x = ""x ] ; then
+            if [ "$NOBD"x = ""x ] && [ "$NODLBD"x = ""x ] ; then
 		unset DESKTOP
 		unset FORCE_CD_SIZE1
                 export MAX_PKG_SIZE=999999999999
@@ -204,19 +210,59 @@ if lockfile -r0 $BUILDLOCK ; then
 		fi
             fi
 
+            # netinst CD
+            if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] && [ "$NONI"x = ""x ] ; then
+                export MAX_PKG_SIZE=300000000
+                export DESKTOP=all
+                export MAXISOS=1; export MAXJIGDOS=1
+                unset FORCE_CD_SIZE1
+                export VARIANTS=""
+                export OUT_FREE_SID=$PUBDIRJIG
+                export OUT_FREE_TST=$PUBDIRJIG
+                export OUT_FW_SID=${PUBDIRJIG}-firmware
+                export OUT_FW_TST=${PUBDIRJIG}-firmware
+
+                build_started NI
+                OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
+                    KERNEL_PARAMS="desktop=all" \
+                    DESKTOP=all VARIANTS=xen \
+                    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+                    DI=${DI} DI_DIST=${DI} \
+                    ./testingcds "$arch" &		
+
+                for arch1 in $ARCHES_FIRMWARE; do
+                    if [ "$arch" = "$arch1" ] ; then
+                        build_started NIFIRMWARE
+                        OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                            NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+                            FORCE_FIRMWARE=1 CDNAME=firmware \
+                            KERNEL_PARAMS="desktop=all" \
+                            DESKTOP=all VARIANTS=xen \
+                            TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+                            DI=${DI} DI_DIST=${DI} \
+                            ./testingcds "$arch" &
+                    fi
+                done
+            fi
+
 	    catch_parallel_builds
 
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] ; then
                     echo "  Running ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
                     ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &
+		    if [ -d $PUBDIRJIG-firmware/$arch ] ; then
+                        echo "  Running ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &"
+                        ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &
+                    fi
                 else
                     ~/build.wheezy/report_build_error $RSYNC_TARGET $arch "$arch_error"
                 fi
             fi
-        else # multi
+        else # multi-arch
             rm -rf $PUBDIRJIG/multi-arch
-            for i in iso-dvd jigdo-dvd; do
+            for i in iso-dvd jigdo-dvd iso-cd jigdo-cd; do
                 mkdir -p $PUBDIRJIG/multi-arch/$i
             done
 
@@ -231,35 +277,54 @@ if lockfile -r0 $BUILDLOCK ; then
                     KERNEL_PARAMS='desktop=all' \
                     MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
 		    VARIANTS=xen \
-                    ./testingcds "i386 amd64 source"
-                # We don't do multi in parallel, only one build type
-                # to do!
-                build_finished $arch $BUILDNAME $DVDSTART
-
-                mv $PUBDIRJIG/multi/jigdo-dvd/debian* $PUBDIRJIG/multi-arch/jigdo-dvd
-                for file in $PUBDIRJIG/multi/jigdo-dvd/*SUMS$SUMS_EXTENSION; do
-                    outfile=$PUBDIRJIG/multi-arch/jigdo-dvd/`basename $file`
-                    cat $file >> $outfile
-                done
-
-                mv $PUBDIRJIG/multi/iso-dvd/debian* $PUBDIRJIG/multi-arch/iso-dvd
-                for file in $PUBDIRJIG/multi/iso-dvd/*SUMS$SUMS_EXTENSION; do
-                    outfile=$PUBDIRJIG/multi-arch/iso-dvd/`basename $file`
-                    cat $file >> $outfile
-                done
-
-                rm -rf $PUBDIRJIG/multi
+                    ./testingcds "i386 amd64 source" &
             fi
+
+            if [ "$NOCD"x = ""x ] && [ "$NONI"x = ""x ] ; then
+                export DESKTOP=all
+		export OUT_FREE_SID=$PUBDIRJIG
+		export OUT_FREE_TST=$PUBDIRJIG
+                build_started NI
+                OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
+                    KERNEL_PARAMS="desktop=all" \
+                    DESKTOP=all VARIANTS=xen \
+                    TASK=debian-installer+kernel \
+                    MAXISOS=ALL MAXJIGDOS=ALL \
+                    DI=${DI} DI_DIST=${DI} \
+                    ./testingcds "amd64 i386" &
+
+                for arch1 in $ARCHES_FIRMWARE; do
+                    if [ "$arch" = "$arch1" ] ; then
+                        build_started NIFIRMWARE
+                        OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                            NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+                            FORCE_FIRMWARE=1 CDNAME=firmware \
+                            KERNEL_PARAMS="desktop=all" \
+                            DESKTOP=all VARIANTS=xen \
+                            TASK=debian-installer+kernel \
+                            MAXISOS=ALL MAXJIGDOS=ALL \
+                            DI=${DI} DI_DIST=${DI} \
+                            ./testingcds "amd64 i386" &
+                    fi
+                done
+            fi
+
+	    catch_parallel_builds
 
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] || [ "$arch_error"x = ""x ] ; then
                     echo "  Running ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
                     ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
+		    if [ -d $PUBDIRJIG-firmware/multi-arch ] ; then
+                        echo "  Running ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &"
+                        ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &
+                    fi
                 else
                     ~/build.wheezy/report_build_error $RSYNC_TARGET multi-arch "$arch_error"
                 fi
             fi
-        fi # end of multi
+        fi # end of multi-arch
 
     done
 
