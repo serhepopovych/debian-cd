@@ -84,7 +84,7 @@ TASKDIR=$(BDIR)/tasks
 ADIR=$(APTTMP)
 DB_DIR=$(BDIR)/debootstrap
 
-export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/lib/debootstrap
+export DEBOOTSTRAP_DIR := $(DB_DIR)/usr/share/debootstrap
 export PATH := $(DB_DIR)/usr/sbin:$(PATH)
 export BDIR
 export TASKDIR
@@ -172,8 +172,8 @@ LATEST_DB := $(MIRROR)/$(shell $(which_deb) $(MIRROR) $(CODENAME) debootstrap)
 $(DB_DIR): $(LATEST_DB)
 	@rm -rf $(DB_DIR)
 	$(Q)dpkg -x $(LATEST_DB) $(DB_DIR)
-	$(Q)if [ ! -e $(DEBOOTSTRAP_DIR) ] ; then \
-		ln -sf share $(DB_DIR)/usr/lib ; \
+	$(Q)if [ ! -e $(DEBOOTSTRAP_DIR)/scripts/$(CODENAME) ] ; then \
+		ln -sf sid $(DEBOOTSTRAP_DIR)/scripts/$(CODENAME) ; \
 	fi
 endif
 
