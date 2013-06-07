@@ -6,8 +6,8 @@ Uploaders: Raphaël Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <mant
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.9.2
-Vcs-Svn: svn://svn.debian.org/debian-cd/trunk
-Vcs-Browser: http://anonscm.debian.org/viewvc/debian-cd/trunk/
+Vcs-Git: git://anonscm.debian.org/debian-cd/debian-cd.git
+Vcs-Browser: http://anonscm.debian.org/git/debian-cd/debian-cd.git;a=summary
 
 Package: debian-cd
 Architecture: all
