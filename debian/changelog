@@ -1,8 +1,12 @@
 debian-cd (3.1.14) UNRELEASED; urgency=low
 
+  [ Steve McIntyre ]
   * Start jessie work; copy things from the wheezy config for now.
   * Remove older squeeze, lenny, etch dirs
   * Move code hosting from svn to git.
+
+  [ Robert Spencer ]
+  * Build without isolinux/desktop. Closes: #706150
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 06 May 2013 23:26:18 +0100
 

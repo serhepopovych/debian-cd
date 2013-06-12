@@ -284,17 +284,14 @@ fi
 
 if [ -z "$MULTIARCH" ]; then
 	# Set up isolinux dir for only the current arch
-	sed -i "s|%install%|$INSTALLDIR|" \
-		boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
+	grep -lr '%install%' boot$N/isolinux/* | xargs -r sed -i "s|%install%|$INSTALLDIR|"
     
 	# Remove the amd*.cfg files to avoid them being loaded on a
 	# disc that does not have both amd64 and i386 dirs.
-	rm -f boot$N/isolinux/amd*.cfg boot$N/isolinux/desktop/amd*.cfg
+	find boot$N/isolinux/ -name "amd*.cfg" -delete
 else
 	# Set up isolinux dir for multi-arch
-	sed -i "s|%install%|$INSTALLDIR_i386|
-			s|%install-amd%|$INSTALLDIR_amd64|" \
-			    boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg
+	grep -lr '%install[-amd]*%' boot$N/isolinux/* | xargs -r sed -i -e "s|%install%|$INSTALLDIR_i386|" -e "s|%install-amd%|$INSTALLDIR_amd64|"
 
 	for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
 		sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
