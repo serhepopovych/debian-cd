@@ -7,6 +7,7 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150
+  * Don't assume loadlin.exe exists. Closes: #706156
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 06 May 2013 23:26:18 +0100
 

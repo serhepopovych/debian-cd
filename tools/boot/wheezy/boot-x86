@@ -186,7 +186,9 @@ echo "  Using ISOLINUX boot-disks image on CD$N"
 mkdir -p $CDDIR/$INSTALLDIR
 cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
-echo "\\tools\\loadlin.exe vmlinuz initrd=initrd.gz" | todos > $CDDIR/$INSTALLDIR/install.bat
+if [ -e $CDDIR/tools/loadlin.exe ]; then
+	echo "\\tools\\loadlin.exe vmlinuz initrd=initrd.gz" | todos > $CDDIR/$INSTALLDIR/install.bat
+fi
 
 mkdir -p $CDDIR/../syslinux
 SYSLINUXDEB=$(find_pkg_file syslinux)
@@ -255,8 +257,9 @@ if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
 	if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
 		mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
 	fi
-	echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
-
+	if [ -e $CDDIR/tools/loadlin.exe ]; then
+		echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
+	fi
 fi
 rm -f boot$N/isolinux/isolinux.cfg.with*
 
