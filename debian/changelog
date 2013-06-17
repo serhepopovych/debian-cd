@@ -4,6 +4,9 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
   * Start jessie work; copy things from the wheezy config for now.
   * Remove older squeeze, lenny, etch dirs
   * Move code hosting from svn to git.
+  * Make sure that when we call apt, we tell it to *not* use localised
+    package descriptions; this causes issues during build. See #712435 in
+    apt.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150
