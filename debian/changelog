@@ -7,6 +7,8 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
   * Make sure that when we call apt, we tell it to *not* use localised
     package descriptions; this causes issues during build. See #712435 in
     apt.
+  * List Translation files in dists/$dist/Release too - apt looks there
+    now instead of in Index, apparently.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150

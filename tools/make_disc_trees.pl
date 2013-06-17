@@ -597,7 +597,7 @@ sub find_and_checksum_files_for_release {
 
 	$filename = $File::Find::name;
 
-	if ($filename =~ m/\/.*\/(Packages|Sources|Release)/o) {
+	if ($filename =~ m/\/.*\/(Packages|Sources|Release|Translation)/o) {
 		$filename =~ s/^\.\///g;
 		($checksum, $size) = checksum_file($_, $current_checksum_type);
 		printf RELEASE " %s %8d %s\n", $checksum, $size, $filename;
