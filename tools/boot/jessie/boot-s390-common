@@ -11,7 +11,7 @@
 # See the copyright file for license details.
 # Released as part of the debian_cd package, not much use stand alone.
 #
-# Install stuff for booting an s390 system from VM-reader, tape,
+# Install stuff for booting an s390 system from VM-reader, 
 # FTP-server, CD-ROM  or emulated tape.
 #
 # $1 is the CD number
@@ -60,7 +60,7 @@ mkdir -p $imagedir
 # - tape/kernel.debian         : kernel for tape
 # - tape/kernel.debian-nolabel : kernel for tape (nolabel)
 
-images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian tape/kernel.debian tape/kernel.debian-nolabel"
+images_S390="generic/parmfile.debian generic/initrd.debian generic/kernel.debian"
 
 for image in $images_S390; do
 	case $image in
@@ -70,10 +70,6 @@ for image in $images_S390; do
 			imagedest=root.bin ;;
 		generic/kernel.debian)
 			imagedest=linux_vm ;;
-		tape/kernel.debian)
-			imagedest=linux_tp ;;
-		tape/kernel.debian-nolabel)
-			imagedest=linux_nl ;;
 	esac
 	imagedest="$imagedir/$imagedest"
 
@@ -92,8 +88,6 @@ done
 # Copy the different boot files
 # - d390.ins    : for booting from CD-ROM or FTP-Server
 # - d390oco.ins : same, using object-code-only-modules-ramdisk (example)
-# - d390.tdf    : for booting from emulated tape
-# - d390oco.tdf : same, using object-code-only-modules-ramdisk (example)
 cp $BASEDIR/data/$CODENAME/$ARCH/d390* "$imagedir/"
 sed -e 's,^[^*],boot/&,g' < $BASEDIR/data/$CODENAME/$ARCH/d390.ins > "boot$N/d390.ins"
 
