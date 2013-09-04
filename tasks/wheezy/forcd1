@@ -16,3 +16,12 @@ apt-offline
 
 /* #231583: Make life easier for Australian ISP users */
 bpalogin
+
+/* Enough toolchain to build kernel modules. This plus the kernel
+ * headers (which are also included on CDs) is enough to be able to build
+ * out of kernel tree wifi drivers, for example. The user may need to
+ * sneakernet over the source tree; should not need to sneakernet the
+ * toolchain.
+ * (Could be omitted from smaller images if necessary. */
+make
+gcc
