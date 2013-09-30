@@ -11,6 +11,8 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
     now instead of in Index, apparently.
   * Remove mention/support of the s390(x) tape options; not created by d-i
     any more, and this is causing build failures.
+  * Remove mention/support of old kfreebsd 8 kernels - they are not
+    created any more, and this is causing build failures.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150
