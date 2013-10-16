@@ -35,10 +35,8 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # Tempting as it might be to merge these two definitions using $ARCH,
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
-	if [ "$ARCH" = s390 ]; then
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/s390/daily"
-	else
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/s390x/daily"
+	if [ "$ARCH" = s390x ]; then
+	    DI_WWW_HOME="http://d-i.debian.org/daily-images/s390x/daily"
 	fi
     if [ -n "$DI_DIR" -a -e "$DI_DIR/~${DI_WWW_HOME#*~}" ] ; then
         DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"

@@ -13,6 +13,8 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
     any more, and this is causing build failures.
   * Remove mention/support of old kfreebsd 8 kernels - they are not
     created any more, and this is causing build failures.
+  * Remove s390 from the arch lists in various scripts, as it's going
+    away. Support remains if specifically configured yet.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150
