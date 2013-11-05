@@ -75,7 +75,6 @@ grab_md5=$(BASEDIR)/tools/grab_md5
 make_image=$(BASEDIR)/tools/make_image
 merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
-update_tasks=$(BASEDIR)/tools/update_tasks
 grab_source_list=$(BASEDIR)/tools/grab_source_list
 which_deb=$(BASEDIR)/tools/which_deb
 
