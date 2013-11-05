@@ -15,6 +15,9 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
     created any more, and this is causing build failures.
   * Remove s390 from the arch lists in various scripts, as it's going
     away. Support remains if specifically configured yet.
+  * tools/update_tasks: don't hard-code the default desktop to use,
+    instead work it out directly from the dependencies of the task-desktop
+    package.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150

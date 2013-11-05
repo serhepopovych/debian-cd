@@ -40,6 +40,21 @@ if ($coreutils_deb =~ m/_([[:alnum:]]+)\.deb/) {
     die "update_tasks: Can't determine arch!\n";
 }
 
+# used in a few places to decide what happens when doing "generic"
+# discs.
+my $default_desktop; 
+
+# Find the dependency information of the task-desktop deb to see what
+# the default desktop should be
+my $task_desktop_deb = `$basedir/tools/which_deb $mirror $codename task-desktop binary`;
+open (TASKS, "dpkg --info $mirror/$task_desktop_deb |") or
+    die "update_tasks: Can't run dpkg --info $mirror/$task_desktop_deb; $!\n";
+while (<TASKS>) {
+    chomp;
+    /Recommends: task-(\S+)*-desktop/ and $default_desktop = $1;
+}
+print "update_tasks: Using \"$default_desktop\" as the default desktop, as specified by $task_desktop_deb\n";
+
 # Extract the tasksel-data deb for our suite; we need to parse the
 # data in it
 my $tasksel_deb = `$basedir/tools/which_deb $mirror $codename tasksel-data binary`;
@@ -130,7 +145,7 @@ foreach my $desktop (@desktop_tasks) {
             print DESKOUT "task-$taskname\n";
         }
     } elsif ($desktop_name eq "generic") {
-        print DESKOUT "task-gnome-desktop\n";
+        print DESKOUT "task-$default_desktop-desktop\n";
     } elsif ($desktop_name eq "light") {
         print DESKOUT "task-lxde-desktop\n";
         print DESKOUT "task-xfce-desktop\n";
@@ -160,7 +175,7 @@ foreach my $desktop (@desktop_tasks) {
             print DESKOUT "task-$taskname\n";
         }
     } elsif ($desktop_name eq "generic") {
-        print DESKOUT "task-gnome-desktop\n";
+        print DESKOUT "task-$default_desktop-desktop\n";
     } elsif ($desktop_name eq "light") {
         print DESKOUT "task-lxde-desktop\n";
         print DESKOUT "task-xfce-desktop\n";
@@ -215,27 +230,27 @@ foreach my $desktop (@desktop_tasks) {
 
     } elsif ($desktop_name eq "generic") {
         # in generic-desktop, add the desktop l10n tasks as though for
-        # Gnome *first*. Others will come later
+        # $default_desktop *first*. Others will come later
 
         # task-$LANGUAGE-$DESKTOP-desktop
         foreach my $taskname (@l10n_tasks) {
-            if ($taskname =~ m/gnome/) {
+            if ($taskname =~ m/$default_desktop/) {
                 print DESKOUT "task-$taskname\n";
             }
         }
-        # task-!gnome-desktop
+        # task-!$default_desktop-desktop
         foreach my $taskname (@desktop_tasks) {
-            if ($taskname !~ m/gnome/) {
+            if ($taskname !~ m/$default_desktop/) {
                 print DESKOUT "task-$taskname\n";
             }
         }
 
-        # task-$LANGUAGE-!gnome-desktop
+        # task-$LANGUAGE-!$default_desktop-desktop
         foreach my $taskname (@l10n_tasks) {
             if ($taskname =~ m/desktop$/) {
                 my $include = 0;
                 foreach my $dsk (@desktop_tasks) {
-                    if ($dsk !~ m/gnome/ and $taskname =~ m/$dsk/) {
+                    if ($dsk !~ m/$default_desktop/ and $taskname =~ m/$dsk/) {
                         $include = 1;
                         last;
                     }
