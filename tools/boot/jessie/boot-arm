@@ -16,6 +16,9 @@ set -e
 N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
+    # Tempting as it might be to merge these two definitions using $ARCH,
+    # do *not* do that - these defs are parsed out by other scripts that
+    # won't cope with that
     if [ "$ARCH" = armel ]; then
 	    DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
     else
