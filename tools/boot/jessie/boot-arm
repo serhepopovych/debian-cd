@@ -24,14 +24,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
     else
 	    DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
     fi
-    if [ -n "$DI_DIR" ];then
-        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-        DI_WWW_HOME=""                     
-        echo "Using images from $DI_DIR"
-    fi
-fi
-if [ ! "$DI_DIST" ]; then
-    DI_DIST="$DI_CODENAME"
+    try_di_image_cache
 fi
 
 cd $CDDIR/..

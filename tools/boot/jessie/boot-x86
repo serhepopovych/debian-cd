@@ -19,19 +19,12 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # Tempting as it might be to merge these two definitions using $ARCH,
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
-	if [ "$ARCH" = i386 ]; then
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/i386/daily"
-	else
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
-	fi
-	if [ -n "$DI_DIR" ];then
-		DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-		DI_WWW_HOME=""                     
-		echo "Using images from $DI_DIR"
-	fi
-fi
-if [ ! "$DI_DIST" ]; then
-	DI_DIST="$DI_CODENAME"
+    if [ "$ARCH" = i386 ]; then
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/i386/daily"
+    else
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
+    fi
+    try_di_image_cache
 fi
 
 case "$MKISOFS" in

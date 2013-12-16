@@ -10,6 +10,11 @@ export PATH
 DI_WWW_HOME="$(echo "$DI_WWW_HOME" | sed -e "s|%ARCH%|$ARCH|g")"
 DI_DIR="$(echo "$DI_DIR" | sed -e "s|%ARCH%|$ARCH|g")"
 
+# Make sure that DI_DIST is set to something sane
+if [ ! "$DI_DIST" ]; then
+    DI_DIST="$DI_CODENAME"
+fi
+
 # Find out what the default desktop is in tasksel if we've not set it
 # (i.e. using "all" for netinst, DVD etc.) - print the name of the
 # first desktop task recommended by task-desktop
@@ -91,4 +96,14 @@ calc_boot_size() {
 
     size=$[($(stat -c%s "$FILE")+2047)/2048]
     echo $size
+}
+
+# If we're looking for an image location to download, see if it's in a
+# local cache first.
+try_di_image_cache() {
+    if [ -n "$DI_DIR" -a -e "$DI_DIR/~${DI_WWW_HOME#*~}" ] ; then
+        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+        DI_WWW_HOME=""
+        echo "Using images from local cache: $DI_DIR"
+    fi
 }

@@ -11,14 +11,8 @@ set -e
 N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://d-i.debian.org/daily-images/sparc/daily/cdrom/"
-   if [ -n "$DI_DIR" ];then
-       DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-       DI_WWW_HOME=""                     
-   fi
-fi
-if [ ! "$DI_DIST" ]; then
-   DI_DIST="$DI_CODENAME"
+    DI_WWW_HOME="http://d-i.debian.org/daily-images/sparc/daily/cdrom/"
+    try_di_image_cache
 fi
 
 # Only disc 1* bootable

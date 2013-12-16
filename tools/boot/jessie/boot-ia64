@@ -13,14 +13,8 @@ N=$1
 CDDIR=$2
 BOOTDIR=
 if [ "$DI_WWW_HOME" = "default" ];then
-   DI_WWW_HOME="http://d-i.debian.org/daily-images/ia64/daily"
-   if [ -n "$DI_DIR" ];then
-      DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-      DI_WWW_HOME=""                     
-   fi
-fi
-if [ ! "$DI_DIST" ]; then
-   DI_DIST="$DI_CODENAME"
+    DI_WWW_HOME="http://d-i.debian.org/daily-images/ia64/daily"
+    try_di_image_cache
 fi
 
 cd $CDDIR/..

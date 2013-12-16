@@ -28,7 +28,7 @@ cd $CDDIR/..
 
 if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
     add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-	exit 0
+    exit 0
 fi
 
 if [ "$DI_WWW_HOME" = "default" ];then
@@ -38,13 +38,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
     if [ "$ARCH" = s390x ]; then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/s390x/daily"
     fi
-    if [ -n "$DI_DIR" -a -e "$DI_DIR/~${DI_WWW_HOME#*~}" ] ; then
-        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
-        DI_WWW_HOME=""
-    fi
-fi
-if [ ! "$DI_DIST" ]; then
-   DI_DIST="$DI_CODENAME"
+    try_di_image_cache
 fi
 
 imagedir="boot$N/boot"
