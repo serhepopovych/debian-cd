@@ -101,9 +101,21 @@ calc_boot_size() {
 # If we're looking for an image location to download, see if it's in a
 # local cache first.
 try_di_image_cache() {
-    if [ -n "$DI_DIR" -a -e "$DI_DIR/~${DI_WWW_HOME#*~}" ] ; then
-        DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+    DI_TMP_DIR=${DI_WWW_HOME#*http://}
+    if [ -n "$DI_DIR" ] && [ -e "${DI_DIR}/${DI_TMP_DIR}" ] ; then
+        DI_DIR="$DI_DIR/${DI_TMP_DIR}"
         DI_WWW_HOME=""
         echo "Using images from local cache: $DI_DIR"
+    else
+	# If not, we'll end up downloading. Complain if the download
+	# link looks insecure (i.e. not https). May cause builds to
+	# fail here in future...
+        case "$DI_WWW_HOME"x in
+	    "http://"*x|"ftp://"*x)
+		echo "WARNING WARNING WARNING WARNING WARNING WARNING"
+		echo "$0: insecure download for d-i build: $DI_WWW_HOME"
+		echo "WARNING WARNING WARNING WARNING WARNING WARNING"
+		;;
+	esac
     fi
 }

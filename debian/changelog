@@ -19,7 +19,8 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
     instead work it out directly from the dependencies of the task-desktop
     package.
   * tools/boot/jessie/*: Pull out some more common code into common.sh to
-    simplify the various boot-$arch scripts
+    simplify the various boot-$arch scripts. Warn about potentially
+    insecure download locations.
 
   [ Robert Spencer ]
   * Build without isolinux/desktop. Closes: #706150
