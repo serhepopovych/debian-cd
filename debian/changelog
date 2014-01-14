@@ -1,4 +1,4 @@
-debian-cd (3.1.14) UNRELEASED; urgency=low
+debian-cd (3.1.14) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Start jessie work; copy things from the wheezy config for now.
@@ -34,7 +34,7 @@ debian-cd (3.1.14) UNRELEASED; urgency=low
     since it needs build-essential which would pull in additional
     dependencies.)
 
- -- Steve McIntyre <93sam@debian.org>  Mon, 06 May 2013 23:26:18 +0100
+ -- Steve McIntyre <93sam@debian.org>  Tue, 14 Jan 2014 17:19:22 +0100
 
 debian-cd (3.1.13) unstable; urgency=medium
 
