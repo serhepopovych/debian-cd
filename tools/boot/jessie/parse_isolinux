@@ -117,7 +117,7 @@ parse_file("isolinux.cfg");
 
 $menu{"number"} = "1";
 $menu{"label"} = "top";
-$menu{"title"} = "$tl_distro $tl_kernel Installer menu";
+$menu{"title"} = "$tl_distro $tl_kernel UEFI Installer menu";
 $menu_title[$menudepth] = $menu{"title"};
 
 my %kernel;
