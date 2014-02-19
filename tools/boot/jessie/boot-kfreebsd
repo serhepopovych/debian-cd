@@ -27,6 +27,21 @@ if [ "$DI_WWW_HOME" = "default" ];then
     try_di_image_cache
 fi
 
+case "$MKISOFS" in
+    *xorriso*)
+        XORRISO_VER=$($MKISOFS --version 2>&1 | awk '
+            NR==1 {
+                 split($3, ver, ".")
+                 print ver[1]*10000+ver[2]*100+ver[3]
+            }')
+        # OK
+        ;;
+    *)
+	echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."
+	exit 1;
+	;;
+esac
+
 cd $CDDIR/..
 
 # Only disc 1 bootable
@@ -74,6 +89,7 @@ mkdir -p boot$N
 tar -C boot$N -zxf cdrom/debian-cd_info.tar.gz
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b boot/grub/grub_eltorito"
+[ -f boot$N/boot/grub/grub_embed ] && add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--embedded-boot boot$N/boot/grub/grub_embed"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.cat"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
 
