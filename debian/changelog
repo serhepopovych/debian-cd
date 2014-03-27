@@ -7,6 +7,9 @@ debian-cd (3.1.15) UNRELEASED; urgency=low
   [ Samuel Thibault ]
   * Make kfreebsd & hurd images usbkey-bootable. Closes: #739422
 
+  [ Raphaël Hertzog ]
+  * Fix code extracting the xorriso version.
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 11 Feb 2014 01:57:01 +0000
 
 debian-cd (3.1.14) unstable; urgency=medium

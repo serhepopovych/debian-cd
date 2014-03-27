@@ -30,8 +30,8 @@ fi
 case "$MKISOFS" in
     *xorriso*)
         XORRISO_VER=$($MKISOFS --version 2>&1 | awk '
-            NR==1 {
-                 split($3, ver, ".")
+            /^xorriso version/ {
+                 split($4, ver, ".")
                  print ver[1]*10000+ver[2]*100+ver[3]
             }')
         # OK
