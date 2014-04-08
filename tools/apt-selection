@@ -34,6 +34,7 @@ options=" -q -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
 		  -o APT::Cache::AllVersions=0 \
 		  -o APT::Cache::ShowVersion=1 \
 		  -o APT::Architecture=$ARCH \
+		  -o APT::Architectures::=$ARCH \ 
 		  -o Acquire::Languages=none"
 
 sections=main

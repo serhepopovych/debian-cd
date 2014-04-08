@@ -3,6 +3,8 @@ debian-cd (3.1.15) UNRELEASED; urgency=low
   [ Steve McIntyre ]
   * Add "UEFI" text to the UEFI installer menu title to make it easier for
     end users to distinguish between UEFI and BIOS boot.
+  * tools/apt-selection: pass APT::Architectures:: when calling apt;
+    otherwise if we're running on a multi-arch system apt will break
 
   [ Samuel Thibault ]
   * Make kfreebsd & hurd images usbkey-bootable. Closes: #739422
