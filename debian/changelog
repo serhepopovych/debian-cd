@@ -15,6 +15,9 @@ debian-cd (3.1.15) UNRELEASED; urgency=low
     otherwise if we're running on a multi-arch system apt will break
   * Factor out the xorriso version-checking code
 
+  [ Helge Deller ]
+  * Fixes for booting on hppa architecture. Closes: #743879
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 11 Feb 2014 01:57:01 +0000
 
 debian-cd (3.1.14) unstable; urgency=medium
