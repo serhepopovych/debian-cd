@@ -37,12 +37,7 @@ fi
 
 case "$MKISOFS" in
     *xorriso*)
-        XORRISO_VER=$($MKISOFS --version 2>&1 | awk '
-            /^xorriso version/ {
-                 split($4, ver, ".")
-                 print ver[1]*10000+ver[2]*100+ver[3]
-            }')
-        # OK
+        XORRISO_VER=$(xorriso_version)
         ;;
     *)
 	echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."

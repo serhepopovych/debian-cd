@@ -92,3 +92,13 @@ calc_boot_size() {
     size=$[($(stat -c%s "$FILE")+2047)/2048]
     echo $size
 }
+
+# Grab the xorriso version and turn it into a number we can use
+xorriso_version() {
+    $MKISOFS --version 2>&1 | awk '
+	`/^xorriso version/ {
+	    split($4, ver, ".")
+	    print ver[1]*10000+ver[2]*100+ver[3]
+	}'
+}
+
