@@ -46,7 +46,7 @@ if [ $N != 1 ]; then
 fi
 
 # Download boot images.
-BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/kfreebsd-9.gz cdrom/initrd.gz"
+BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/kfreebsd-10.gz cdrom/initrd.gz"
 
 if [ "$ARCH" = kfreebsd-amd64 ]; then
 	BOOT_IMAGES="$BOOT_IMAGES cdrom/gtk/initrd.gz"
@@ -69,8 +69,8 @@ done
 
 # Install kernel and initrd
 mkdir -p $CDDIR/boot/kernel/
-if [ -f cdrom/kfreebsd-9.gz ] ; then
-   cp "cdrom/kfreebsd-9.gz" "$CDDIR/boot/kernel/kfreebsd-9.gz"
+if [ -f cdrom/kfreebsd-10.gz ] ; then
+   cp "cdrom/kfreebsd-10.gz" "$CDDIR/boot/kernel/kfreebsd-10.gz"
 fi
 cp "cdrom/initrd.gz" "$CDDIR/boot/mfsroot.gz"
 

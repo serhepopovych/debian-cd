@@ -230,18 +230,13 @@ aboot
 #endif
 
 #ifdef ARCH_kfreebsd_amd64
-kfreebsd-image-8-amd64
-kfreebsd-image-9-amd64
+kfreebsd-image-10-amd64
 grub-pc
 #endif
 
 #ifdef ARCH_kfreebsd_i386
-kfreebsd-image-8-486
-kfreebsd-image-8-686
-kfreebsd-image-8-686-smp
-kfreebsd-image-9-486
-kfreebsd-image-9-686
-kfreebsd-image-9-686-smp
+kfreebsd-image-10-486
+kfreebsd-image-10-686
 grub-pc
 libc0.1-i686
 #endif
