@@ -21,6 +21,9 @@ debian-cd (3.1.15) UNRELEASED; urgency=low
   [ Robert Millan ]
   * Update from kfreebsd-9 to kfreebsd-10
 
+  [ Daniel Baumann ]
+  * Cope with changes from move to isolinux 6.x. Closes: #746746
+
  -- Steve McIntyre <93sam@debian.org>  Tue, 11 Feb 2014 01:57:01 +0000
 
 debian-cd (3.1.14) unstable; urgency=medium

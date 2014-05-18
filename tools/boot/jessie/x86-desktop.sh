@@ -15,7 +15,11 @@ di_syslinux_version() {
 # with vesamenu. Instead, add special default label to automatically
 # select i386/amd64 if user hits enter from help screens.
 multiarch_workaround() {
-	cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
+	if [ -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 ] ; then
+		cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 boot$N/isolinux/
+	else
+		cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
+	fi
 	sed -i "/^default install/ s/^/#/" \
 		boot$N/isolinux/txt.cfg || true
 	sed -i "/^default64 amd64-install/ s/^/#/" \

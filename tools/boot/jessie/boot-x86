@@ -191,7 +191,29 @@ if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
 	find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
 fi
 
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
+# syslinux 6.x onwards uses different packaging layout. Deal with bold
+# old and new layout for now.
+
+if [ -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin ] ; then
+    SYSLINUX_LAYOUT=OLD
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/syslinux/isohdpfx.bin"
+else
+    SYSLINUX_LAYOUT=NEW
+    ISOLINUXDEB=$(find_pkg_file isolinux)
+    if [ -z "$ISOLINUXDEB" ]; then
+	echo "ERROR: isolinux package is required" >&2
+	exit 1
+    fi
+    (dpkg --fsys-tarfile "$MIRROR/$ISOLINUXDEB" | \
+	tar xf - -C $CDDIR/../syslinux ./usr/lib)
+    
+    if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
+	echo $ISOLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+	find_pkg_file isolinux source >> $CDDIR/../$N.pkgs_extracted
+    fi
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/ISOLINUX/isohdpfx.bin"
+fi
+
 
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
@@ -264,12 +286,20 @@ if [ -e boot$N/win32-loader.ini ]; then
 	fi
 fi
 
-cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
-cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
-if [ -e $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 ]; then
+if [ $SYSLINUX_LAYOUT = OLD ] ; then
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
+    if [ -e $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 ]; then
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 boot$N/isolinux/
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/libcom32.c32 boot$N/isolinux/
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/libutil.c32 boot$N/isolinux/
+    fi
+else
+    cp -f $CDDIR/../syslinux/usr/lib/ISOLINUX/isolinux.bin boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/vesamenu.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ldlinux.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libcom32.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libutil.c32 boot$N/isolinux/
 fi
 
 if [ -z "$MULTIARCH" ]; then
