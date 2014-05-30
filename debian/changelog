@@ -16,7 +16,7 @@ debian-cd (3.1.15) UNRELEASED; urgency=low
   * Factor out the xorriso version-checking code
 
   [ Helge Deller ]
-  * Fixes for booting on hppa architecture. Closes: #743879
+  * Fixes for booting on hppa architecture. Closes: #743879, #749409
 
   [ Robert Millan ]
   * Update from kfreebsd-9 to kfreebsd-10

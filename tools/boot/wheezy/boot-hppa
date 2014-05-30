@@ -36,7 +36,6 @@ if [ -z "$PALODEB" ] ; then
 fi
 (dpkg --fsys-tarfile "$MIRROR/$PALODEB" | \
     tar xf - -C . ./usr/share/palo/iplboot)
-mv boot/delo.2nd $CDROOT/boot/delo.2nd
 mv usr/share/palo/iplboot $CDROOT/install/iplboot
 
 if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
