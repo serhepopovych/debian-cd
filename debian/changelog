@@ -1,4 +1,4 @@
-debian-cd (3.1.15) UNRELEASED; urgency=low
+debian-cd (3.1.15) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Add "UEFI" text to the UEFI installer menu title to make it easier for
