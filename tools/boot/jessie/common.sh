@@ -30,18 +30,15 @@ UNSPEC_DESKTOP_DEFAULT="$($BASEDIR/tools/apt-selection cache depends task-deskto
 # Only i386 and amd64 support desktop selection with the 'light' and 'all'
 # desktops; make sure other arches get a working config
 if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
-    case $DESKTOP in
-        all|gnome)
-            DESKTOP=
-            KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
+    if [ "$DESKTOP" = all ] || [ "$DESKTOP" = "$UNSPEC_DESKTOP_DEFAULT" ] ; then
+        DESKTOP=
+        KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
                 sed -r "s/desktop=[^ ]* ?//")"
-            ;;
-        light)
-            DESKTOP=xfce
-            KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
+    elif [ "$DESKTOP" = light ] ; then
+        DESKTOP=xfce
+        KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | \
                 sed -r "s/(desktop=)light/\1xfce/")"
-            ;;
-    esac
+    fi
 fi
 
 

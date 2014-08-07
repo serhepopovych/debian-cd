@@ -45,6 +45,7 @@ create_desktop_dir() {
 		kde)	title=KDE ;;
 		xfce)	title=Xfce ;;
 		lxde)	title=LXDE ;;
+		gnome)	title=Gnome ;;
 	esac
 
 	cp -r boot$N/isolinux/desktop boot$N/isolinux/$desktop
@@ -139,8 +140,10 @@ modify_for_all_desktop() {
 	done
 	sed -i "s/desktop=%desktop% //" boot$N/isolinux/*.cfg
 
-	for desktop in kde xfce lxde; do
-		create_desktop_dir $desktop
+	for desktop in kde xfce lxde gnome; do
+		if [ $desktop != $UNSPEC_DESKTOP_DEFAULT ] ; then
+			create_desktop_dir $desktop
+		fi
 	done
 
 	# Cleanup

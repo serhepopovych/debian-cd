@@ -2,6 +2,8 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
 
   [ Steve McIntyre ]
   * Fix changelog date for 3.1.15. Closes: #751814
+  * Fix up Gnome CD set installing xfce - logic in boot menu creation was
+    broken. Closes: #756774
 
  -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
 
