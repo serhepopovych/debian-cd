@@ -1,3 +1,10 @@
+debian-cd (3.1.16) UNRELEASED; urgency=medium
+
+  [ Steve McIntyre ]
+  * Fix changelog date for 3.1.15. Closes: #751814
+
+ -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
+
 debian-cd (3.1.15) unstable; urgency=medium
 
   [ Steve McIntyre ]
@@ -25,7 +32,7 @@ debian-cd (3.1.15) unstable; urgency=medium
   [ Daniel Baumann ]
   * Cope with changes from move to isolinux 6.x. Closes: #746746
 
- -- Steve McIntyre <93sam@debian.org>  Tue, 11 Feb 2014 01:57:01 +0000
+ -- Steve McIntyre <93sam@debian.org>  Tue, 03 Jun 2014 16:03:01 +0100
 
 debian-cd (3.1.14) unstable; urgency=medium
 
