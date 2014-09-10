@@ -4,8 +4,10 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
   * Fix changelog date for 3.1.15. Closes: #751814
   * Fix up Gnome CD set installing xfce - logic in boot menu creation was
     broken. Closes: #756774
-  * Fix word-splitting regexp in generate_di_list. Closes: #758512. Thanks
-    to Philipp Hahn for the patch.
+
+  [ Philipp Hahn ]
+  * Fix word-splitting regexp in generate_di_list. Closes: #758512.
+  * Improve correctstatus speed. Closes: #759343
 
  -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
 

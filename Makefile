@@ -292,9 +292,8 @@ correctstatus: status apt-update
 			export ARCH=$$ARCH; \
 			for i in `$(apt) selected -f install`; do \
 				echo $$ARCH:$$i; \
-				$(apt) cache dumpavail | perl -000 -ne \
-				"s/^(Package: .*)\$$/\$$1\nStatus: install ok installed/m; \
-				print if /^Package: \Q$$i\E\s*\$$/m;" \
+				$(apt) cache --no-all-versions show "$$i" | perl -000 -npe \
+				"s/^(Package: .*)\$$/\$$1\nStatus: install ok installed/m;" \
 				>> $(ADIR)/$(CODENAME)-$$ARCH/status; \
 			done; \
 		done; \
