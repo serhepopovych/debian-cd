@@ -20,9 +20,14 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
     if [ "$ARCH" = armel ]; then
-	    DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
+    elif [ "$ARCH" = armhf ]; then
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
+    elif [ "$ARCH" = arm64 ]; then
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/arm64/daily"
     else
-	    DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
+        echo "$0: unknown arch $ARCH; abort"
+	exit 1
     fi
     try_di_image_cache
 fi
@@ -32,5 +37,5 @@ cd $CDDIR/..
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
 # Arm* is currently not bootable directly from CD in jessie, so bail out here
-echo "Armel/armhf booting disabled, check with Sledge"
+echo "$ARCH booting disabled for $CODENAME, check with Sledge"
 exit 0

@@ -198,6 +198,13 @@ linux-image-mx5
 linux-image-omap
 #endif
 
+#ifdef ARCH_arm64
+initramfs-tools
+busybox
+flash-kernel
+linux-image-arm64
+#endif
+
 #ifdef ARCH_sparc
 initramfs-tools
 busybox
