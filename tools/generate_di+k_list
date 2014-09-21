@@ -194,8 +194,8 @@ linux-image-versatile
 initramfs-tools
 busybox
 flash-kernel
-linux-image-mx5
-linux-image-omap
+linux-image-armmp
+linux-image-armmp-lpae
 #endif
 
 #ifdef ARCH_arm64
