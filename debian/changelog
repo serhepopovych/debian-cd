@@ -7,6 +7,8 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
   * Update kernel flavours for armhf to just use armmp and armmp-lpae
   * Add trivial initial (non-booting) support for arm64, by copying and
     extending armhf for now.
+  * Update arch lists to match what's in Jessie: remove sparc and ia64,
+    add arm64.
 
   [ Philipp Hahn ]
   * Fix word-splitting regexp in generate_di_list. Closes: #758512.

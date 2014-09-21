@@ -90,7 +90,7 @@ CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
 export FIRSTVER CAPCODE
 
 if [ "$ARCHLIST"x = ""x ] ; then
-    ARCHLIST="armel armhf amd64 i386 ia64 mips mipsel powerpc s390x sparc source kfreebsd-amd64 kfreebsd-i386" # amd64 # all dealt with specially
+    ARCHLIST="arm64 armel armhf amd64 i386 mips mipsel powerpc s390x source kfreebsd-amd64 kfreebsd-i386" # amd64 # all dealt with specially
 fi
 
 export TDIR NONFREE VER MIRROR CODENAME OUT BASEDIR
