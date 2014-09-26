@@ -11,6 +11,8 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
     add arm64.
   * Add Debian-mate and Debian-cinnamon top-level tasks for new CD desktop
     options
+  * Extend FORCE_SID_TASKSEL usage in update_tasks to also affect desktop
+    choice algorithm
 
   [ Philipp Hahn ]
   * Fix word-splitting regexp in generate_di_list. Closes: #758512.

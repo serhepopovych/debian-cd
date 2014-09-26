@@ -30,6 +30,16 @@ if (! defined($basedir)) {
 my $tdir = "$bdir/update_tasks";
 system("mkdir -p $tdir");
 
+# Default to using tasksel and tasks data from the same release we're
+# using, but allow it to be overridden. For testing purposes - set up
+# FORCE_SID_TASKSEL to force us to use sid's tasksel data even if
+# we're using stable/testing.
+my $tasks_codename = $codename;
+if (defined($ENV{'FORCE_SID_TASKSEL'}) and $ENV{'FORCE_SID_TASKSEL'} eq '1') {
+    print "update_tasks: forcing use of sid tasksel data\n";
+    $tasks_codename = "sid";
+}
+
 # Look for the coreutils package (which should exist in all archs, and
 # is a non -all package) to determine a valid arch for the rest of
 # this script
@@ -46,7 +56,7 @@ my $default_desktop;
 
 # Find the dependency information of the task-desktop deb to see what
 # the default desktop should be
-my $task_desktop_deb = `$basedir/tools/which_deb $mirror $codename task-desktop binary`;
+my $task_desktop_deb = `$basedir/tools/which_deb $mirror $tasks_codename task-desktop binary`;
 open (TASKS, "dpkg --info $mirror/$task_desktop_deb |") or
     die "update_tasks: Can't run dpkg --info $mirror/$task_desktop_deb; $!\n";
 while (<TASKS>) {
@@ -57,15 +67,7 @@ print "update_tasks: Using \"$default_desktop\" as the default desktop, as speci
 
 # Extract the tasksel-data deb for our suite; we need to parse the
 # data in it
-my $tasksel_deb = `$basedir/tools/which_deb $mirror $codename tasksel-data binary`;
-
-# For testing purposes - set up FORCE_SID_TASKSEL to force us to use
-# sid's tasksel data even if we're using stable/testing.
-if (defined($ENV{'FORCE_SID_TASKSEL'}) and $ENV{'FORCE_SID_TASKSEL'} eq '1') {
-    print "update_tasks: forcing use of the sid tasksel-data tasks\n";
-    $tasksel_deb = `$basedir/tools/which_deb $mirror sid tasksel-data binary`;
-}
-
+my $tasksel_deb = `$basedir/tools/which_deb $mirror $tasks_codename tasksel-data binary`;
 $tasksel_deb = "$mirror/$tasksel_deb";
 chomp $tasksel_deb;
 
