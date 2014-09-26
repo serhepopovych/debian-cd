@@ -27,8 +27,8 @@ UNSPEC_DESKTOP_DEFAULT="$($BASEDIR/tools/apt-selection cache depends task-deskto
         exit
     }')"
 
-# Only i386 and amd64 support desktop selection with the 'light' and 'all'
-# desktops; make sure other arches get a working config
+# Only i386 and amd64 use DESKTOP to set the default desktop;
+# make sure other arches get a working config
 if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
     if [ "$DESKTOP" = all ] || [ "$DESKTOP" = "$UNSPEC_DESKTOP_DEFAULT" ] ; then
         DESKTOP=

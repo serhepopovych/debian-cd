@@ -14,6 +14,9 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
   * Fix word-splitting regexp in generate_di_list. Closes: #758512.
   * Improve correctstatus speed. Closes: #759343
 
+  [ Joey Hess ]
+  * adapt desktop handling for tasksel/d-i changes. Closes: #762487
+
  -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
 
 debian-cd (3.1.15) unstable; urgency=medium

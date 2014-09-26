@@ -150,19 +150,16 @@ extra_image () {
 	done
 }
 
-# If multiple desktops are to be supported, set the default one
-ORIG_DESKTOP=
 case "$DESKTOP" in
     $UNSPEC_DESKTOP_DEFAULT)
 	# default from tasksel 
 	DESKTOP=
 	;;
     all)
-	ORIG_DESKTOP=$DESKTOP
+	# default from tasksel 
 	DESKTOP=
 	;;
     light)
-	ORIG_DESKTOP=$DESKTOP
 	DESKTOP=xfce
 	;;
 esac
@@ -377,14 +374,7 @@ if [ -n "$KERNEL_PARAMS" ]; then
 	done
 fi
 
-case "$ORIG_DESKTOP" in
-	all)
-		modify_for_all_desktop ;;
-	light)
-		modify_for_light_desktop ;;
-	*)
-		modify_for_single_desktop ;;
-esac
+set_default_desktop
 
 # Add autorun
 if [ -f boot$N/setup.exe ]; then
