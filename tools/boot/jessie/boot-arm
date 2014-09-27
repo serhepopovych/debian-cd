@@ -23,8 +23,6 @@ if [ "$DI_WWW_HOME" = "default" ];then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
     elif [ "$ARCH" = armhf ]; then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
-    elif [ "$ARCH" = arm64 ]; then
-        DI_WWW_HOME="http://d-i.debian.org/daily-images/arm64/daily"
     else
         echo "$0: unknown arch $ARCH; abort"
 	exit 1

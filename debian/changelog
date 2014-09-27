@@ -5,14 +5,13 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
   * Fix up Gnome CD set installing xfce - logic in boot menu creation was
     broken. Closes: #756774
   * Update kernel flavours for armhf to just use armmp and armmp-lpae
-  * Add trivial initial (non-booting) support for arm64, by copying and
-    extending armhf for now.
   * Update arch lists to match what's in Jessie: remove sparc and ia64,
     add arm64.
   * Add Debian-mate and Debian-cinnamon top-level tasks for new CD desktop
     options
   * Extend FORCE_SID_TASKSEL usage in update_tasks to also affect desktop
     choice algorithm
+  * Add experimental support for arm64 booting via UEFI
 
   [ Philipp Hahn ]
   * Fix word-splitting regexp in generate_di_list. Closes: #758512.
