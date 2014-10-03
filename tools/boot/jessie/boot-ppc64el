@@ -11,6 +11,16 @@
 set -e
 #set -x
 
+case "$MKISOFS" in
+    *xorriso*)
+        XORRISO_VER=$(xorriso_version)
+        ;;
+    *)
+	echo "ERROR: debian-cd now depends on xorriso for making ppc64el bootable CDs."
+	exit 1;
+	;;
+esac
+
 N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
@@ -59,7 +69,7 @@ cp -lf cdrom/initrd.gz $INSTALLDIR/
 
 # Add CHRP boot header
 if [ -d CD$N/ppc/bootinfo.txt ] ; then
-    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-chrp-boot"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-chrp-boot-part"
 fi
 
 exit 0
