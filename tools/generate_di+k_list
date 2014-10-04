@@ -238,7 +238,7 @@ grub-ieee1275
 busybox
 powerpc-utils
 powerpc-ibm-utils
-linux-image-powerpc64el
+linux-image-powerpc64le
 #endif
 
 #ifdef ARCH_alpha
