@@ -68,7 +68,7 @@ cp -lf cdrom/vmlinux $INSTALLDIR/
 cp -lf cdrom/initrd.gz $INSTALLDIR/
 
 # Add CHRP boot header
-if [ -d CD$N/ppc/bootinfo.txt ] ; then
+if [ -f CD$N/ppc/bootinfo.txt ] ; then
     add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-chrp-boot-part"
 fi
 
