@@ -89,18 +89,11 @@ if [ -d boot$N/grub ] ; then
     mv boot$N/grub/* $CDDIR/boot/grub/
     rmdir boot$N/grub
 
-    # TODO: setup grub.cfg
-    # Create grub menu entries to match the isolinux ones
-    sed -i '/^menuentry/Q' $CDDIR/boot/grub/grub.cfg;
-#    $BASEDIR/tools/boot/$DI_CODENAME/parse_isolinux \
-#        boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "$DISKINFO_DISTRO" "$DEBIAN_KERNEL" "$DEBVERSION" \
-#        >> $CDDIR/boot/grub/grub.cfg
-
     # Stuff the EFI boot files into a FAT filesystem, making it as
     # small as possible.  24KiB headroom seems to be enough;
     # (x+31)/32*32 rounds up to multiple of 32.
     # This is the same as in efi-image, but we need to redo it here in
-    # the case of a multi-arch amd64/i386 image
+    # the case of a multi-arch image
 
     size=0
     for file in $CDDIR/efi/boot/boot*.efi; do

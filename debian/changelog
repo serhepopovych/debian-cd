@@ -25,6 +25,7 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
 
   [ Ian Campbell ]
   * Force MKISOFO=xorriso for arm64 too
+  * The d-i supplied grub.cfg has the correct entries in it already
 
  -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
 
