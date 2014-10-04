@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# This script gets sourced from boot-i386 and boot-amd64.
+# Based on boot-x86
 #
-# Do install stuff for x86, including making bootable CDs
+# Do install stuff for xarm64, including making bootable CDs
 # Works with debian-installer
 #
 # $1 is the CD number
