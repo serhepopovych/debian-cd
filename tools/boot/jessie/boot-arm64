@@ -2,7 +2,7 @@
 
 # Based on boot-x86
 #
-# Do install stuff for xarm64, including making bootable CDs
+# Do install stuff for arm64, including making bootable CDs
 # Works with debian-installer
 #
 # $1 is the CD number
