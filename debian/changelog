@@ -1,4 +1,4 @@
-debian-cd (3.1.16) UNRELEASED; urgency=medium
+debian-cd (3.1.16) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Fix changelog date for 3.1.15. Closes: #751814
@@ -32,7 +32,7 @@ debian-cd (3.1.16) UNRELEASED; urgency=medium
   * Force MKISOFO=xorriso for arm64 too
   * The d-i supplied grub.cfg has the correct entries in it already
 
- -- Steve McIntyre <93sam@debian.org>  Thu, 07 Aug 2014 01:45:01 +0100
+ -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 
 debian-cd (3.1.15) unstable; urgency=medium
 
