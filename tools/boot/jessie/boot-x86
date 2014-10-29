@@ -364,7 +364,7 @@ sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 
 if [ -n "$KERNEL_PARAMS" ]; then
 	# Substitute custom kernel params into the isolinux config file(s)
-	for file in boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg; do
+	for file in boot$N/isolinux/*.cfg; do
 		case "$(basename $file)" in
 			instsel.cfg)
 				continue ;;
