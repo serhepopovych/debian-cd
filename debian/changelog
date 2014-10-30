@@ -12,8 +12,6 @@ debian-cd (3.1.16) unstable; urgency=medium
   * Extend FORCE_SID_TASKSEL usage in update_tasks to also affect desktop
     choice algorithm
   * Add experimental support for arm64 booting via UEFI
-  * Use new tasksel interface to determine default desktop.
-    Closes: #762613
   * Do not look for isolinux/desktop/*cfg files for appending
     kernel params for Jessie. Closes: #767223, #766411. Thanks to Prema
     and Vagrant for (identical!) patches. :-)
