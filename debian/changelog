@@ -1,3 +1,12 @@
+debian-cd (3.1.17) UNRELEASED; urgency=medium
+
+  [ Steve McIntyre ]
+  * Provide hashes for uncompressed Translation-* files, and remove the
+    uncompressed versions from the output disc. Closes: #767253. Initial
+    patch from Michael Vogt - thanks!
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
+
 debian-cd (3.1.16) unstable; urgency=medium
 
   [ Steve McIntyre ]

@@ -575,20 +575,33 @@ sub checksum_file {
 	return ($checksum, $st->size);
 }
 
+sub remove_uncompressed {
+	my ($filename);
+
+	$filename = $File::Find::name;
+	print "remove_uncompressed: looking at $filename\n";
+
+	if ($filename =~ m/\/.*\/(Packages|Sources)$/o ||
+		$filename =~ m/\/.*\/i18n\/(Translation-[_a-zA-Z]+)$/o)
+	{
+		unlink($_) or die "Failed to remove $_: $!\n";
+	}
+}
+
 sub recompress {
 	# Recompress various files
 	my ($filename);
 
 	$filename = $File::Find::name;
 
-    # Packages and Sources files; workaround for bug #402482
-    if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
+	# Packages and Sources files; workaround for bug #402482
+	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
 		system("gzip -9c < $_ >$_.gz");
 	}
-    # Translation files need to be compressed in .gz format on CD?
+	# Translation files need to be compressed in .gz format on CD?
 	if ($filename =~ m/\/.*\/i18n\/(Translation.*)$/o &&
-        ! ($filename =~ m/\/.*\/i18n\/(Translation.*gz)$/o)) {
-		system("gzip -9 $_");
+		! ($filename =~ m/\/.*\/i18n\/(Translation.*gz)$/o)) {
+		system("gzip -9c < $_ >$_.gz");
 	}
 }	
 
@@ -829,6 +842,7 @@ sub finish_disc {
 	find (\&recompress, ".");
 	checksum_files_for_release();
 	close(RELEASE);
+	find (\&remove_uncompressed, ".");
 	chdir("../..");
 
 	print "  Finishing off md5sum.txt\n";
