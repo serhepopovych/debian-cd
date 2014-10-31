@@ -126,6 +126,10 @@ linux-headers-686-pae
 linux-image-486
 linux-headers-486
 #endif
+#ifndef ARCH_i386_EXCLUDE_586_KERNEL
+linux-image-586
+linux-headers-586
+#endif
 
 #endif
 
