@@ -5,6 +5,7 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
     uncompressed versions from the output disc. Closes: #767253. Initial
     patch from Michael Vogt - thanks!
   * Add 586 kernels to replace 486 for i386 CDs
+  * More tweaks for arm64 CD building
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 

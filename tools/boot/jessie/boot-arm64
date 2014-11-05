@@ -65,6 +65,10 @@ for image in $BOOT_IMAGES; do
     fi
 done
 
+mkdir -p $CDDIR/$INSTALLDIR
+cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
+cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
+
 # Boot setup including config and help files comes from d-i.
 mkdir -pv $PWD/boot$N
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/; tar zx)
@@ -127,6 +131,11 @@ if [ -d boot$N/grub ] ; then
     fi      
 else
     echo "  No EFI boot code for $ARCH on CD$N"
+
+    # Finally, belt and braces - fix up the %install% entries in grub
+    # in case they're still there
+    sed -i "s,\%install\%,$INSTALLDIR,g" $CDDIR/boot/grub/grub.cfg
+
 fi
 
 # th,th, thats all
