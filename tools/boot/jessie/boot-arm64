@@ -129,13 +129,13 @@ if [ -d boot$N/grub ] ; then
         echo "Using newer EFI support in xorriso $XORRISO_VER"
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot"
     fi      
-else
-    echo "  No EFI boot code for $ARCH on CD$N"
 
     # Finally, belt and braces - fix up the %install% entries in grub
     # in case they're still there
     sed -i "s,\%install\%,$INSTALLDIR,g" $CDDIR/boot/grub/grub.cfg
 
+else
+    echo "  No EFI boot code for $ARCH on CD$N"
 fi
 
 # th,th, thats all
