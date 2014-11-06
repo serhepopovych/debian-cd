@@ -369,7 +369,7 @@ if [ -n "$KERNEL_PARAMS" ]; then
 			instsel.cfg)
 				continue ;;
 		esac
-		sed -i "/^[[:space:]]\+append .*--/ s|append|append $KERNEL_PARAMS|" \
+		sed -i "/^[[:space:]]\+append .*---/ s|append|append $KERNEL_PARAMS|" \
 			$file
 	done
 fi

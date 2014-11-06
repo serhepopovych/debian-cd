@@ -37,10 +37,10 @@
 : my-boot-case ( num -- )
   ."  " cr
   case
-    1 of " cd install/powerpc/vmlinuz-chrp.initrd --" endof
-    2 of " cd install/powerpc/vmlinuz-chrp.initrd priority=low --" endof
-    3 of " cd install/powerpc/vmlinuz-chrp.initrd rescue/enable=true --" endof
-    4 of " cd install/powerpc/vmlinuz-chrp.initrd auto=true priority=critical --" endof
+    1 of " cd install/powerpc/vmlinuz-chrp.initrd ---" endof
+    2 of " cd install/powerpc/vmlinuz-chrp.initrd priority=low ---" endof
+    3 of " cd install/powerpc/vmlinuz-chrp.initrd rescue/enable=true ---" endof
+    4 of " cd install/powerpc/vmlinuz-chrp.initrd auto=true priority=critical ---" endof
     5 of " none" endof
   endcase
   $boot

@@ -6,6 +6,8 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
     patch from Michael Vogt - thanks!
   * Add 586 kernels to replace 486 for i386 CDs
   * More tweaks for arm64 CD building
+  * Change from -- to --- for kernel command line handling.
+    Closes: #764676
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 
