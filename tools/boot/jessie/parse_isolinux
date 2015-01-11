@@ -70,19 +70,16 @@ sub print_kernel {
     my %k = %{$t};
     my $initrd;
 
-    # Only print 64-bit kernels
-    if ($k{"kernel"} =~ /amd/) {
-	$k{"label"} =~ s/\^//;
-	if ($k{"append"} =~ s? (initrd=\S+)??) {
-	    $initrd = $1;
-	    $initrd =~ s?^.*initrd=??;
-	}
-	print_indent "menuentry '$pre" . $k{"label"} . "' {\n";
-	print_indent "    set background_color=black\n";
-	print_indent "    linux    " . $k{"kernel"} . " " . $k{"append"} . "\n";
-	print_indent "    initrd   $initrd\n";
-	print_indent "}\n";
-    } 
+    $k{"label"} =~ s/\^//;
+    if ($k{"append"} =~ s? (initrd=\S+)??) {
+	$initrd = $1;
+	$initrd =~ s?^.*initrd=??;
+    }
+    print_indent "menuentry '$pre" . $k{"label"} . "' {\n";
+    print_indent "    set background_color=black\n";
+    print_indent "    linux    " . $k{"kernel"} . " " . $k{"append"} . "\n";
+    print_indent "    initrd   $initrd\n";
+    print_indent "}\n";
 }
 
 sub debug {
