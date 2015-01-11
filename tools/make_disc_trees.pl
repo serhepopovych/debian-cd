@@ -579,7 +579,6 @@ sub remove_uncompressed {
 	my ($filename);
 
 	$filename = $File::Find::name;
-	print "remove_uncompressed: looking at $filename\n";
 
 	if ($filename =~ m/\/.*\/(Packages|Sources)$/o ||
 		$filename =~ m/\/.*\/i18n\/(Translation-[_a-zA-Z]+)$/o)
