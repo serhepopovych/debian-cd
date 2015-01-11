@@ -448,7 +448,7 @@ if [ -d boot$N/isolinux/grub ] ; then
     mkfs.msdos -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
-    mcopy -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
+    mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
         "::efi/boot"
 
     # Ugh - different code here depending on the version of xorriso we've got
