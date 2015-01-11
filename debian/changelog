@@ -8,6 +8,7 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
   * More tweaks for arm64 CD building
   * Change from -- to --- for kernel command line handling.
     Closes: #764676
+  * Add minor support / bug fixes for i386 EFI.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 
