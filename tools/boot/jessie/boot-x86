@@ -420,7 +420,7 @@ if [ -d boot$N/isolinux/grub ] ; then
 
     # Move GRUB files to the right place.
     mkdir -p $CDDIR/efi/boot
-    mcopy -i boot$N/isolinux/grub/efi.img ::efi/boot/bootx64.efi $CDDIR/efi/boot/bootx64.efi
+    mcopy -n -i boot$N/isolinux/grub/efi.img '::efi/boot/boot*.efi' $CDDIR/efi/boot
     mkdir -p $CDDIR/boot/grub
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
