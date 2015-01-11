@@ -25,6 +25,8 @@ if [ "$DI_WWW_HOME" = "default" ];then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
     fi
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 case "$MKISOFS" in
