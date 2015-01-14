@@ -12,6 +12,26 @@
 set -e
 #set -x
 
+# Have we been told to use just one boot method? If none listed,
+# assume all are desired. Order also matters. Possible values are
+# "BIOS", "EFI" and "BIOS EFI". We'll also accept "EFI BIOS" for
+# completeness, but we will switch the order.
+if [ "$BOOT_METHODS"x = ""x ] \
+    || [ "$BOOT_METHODS"x = "BIOS EFI"x ] \
+    || [ "$BOOT_METHODS"x = "EFI BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=2
+elif [ "$BOOT_METHODS"x = "BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=0
+elif [ "$BOOT_METHODS"x = "EFI"x ] ; then
+    BOOT_EFI=1
+    BOOT_BIOS=0
+else
+    echo "ERROR: Unrecognized boot method choice $BOOT_METHODS"
+    exit 1
+fi
+
 N=$1
 CDDIR=$2
 BOOTDIR=
