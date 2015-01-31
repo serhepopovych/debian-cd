@@ -77,12 +77,6 @@ cat cdrom/debian-cd_info.tar.gz | (cd boot$N/; tar zx)
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 
-# We explicitly put the boot bits in boot$N (as opposed to CD$N) and
-# list it first on the eventual mkisofs command line. That means
-# they'll be placed nearer the front of the eventual image; some older
-# BIOSes apparently have a limitation on what they'll boot here.
-add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
-
 if [ -d boot$N/grub ] ; then
     echo "  Adding EFI boot code for $ARCH on CD$N"
 
@@ -115,19 +109,15 @@ if [ -d boot$N/grub ] ; then
 
     # Ugh - different code here depending on the version of xorriso we've got
     if [ $XORRISO_VER -le 10202 ] ; then
-        # 1.2.2 shipping in Wheezy
-        echo "Using older EFI command line for xorriso $XORRISO_VER"
-        # Tell xorriso to create a secondary ElTorito boot record for the
-        # EFI bootloader
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot --efi-boot boot/grub/efi.img"
-        # Add the efi image as a FAT partition too, so our CD image will
-        # also boot on a USB key (like isohybrid, just implemented
-        # differently)
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
-        
+        echo "ERROR: debian-cd depends on xorriso > 1.2.2 for making arm64 bootable CDs."
+        exit 1;
     elif [ $XORRISO_VER -gt 10202 ] ; then
         echo "Using newer EFI support in xorriso $XORRISO_VER"
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot"
+	# marks the first EFI El Torito boot image as a partition in GPT
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-efi-boot-part --efi-boot-image"
+
+	# Location of the EFI boot image, and don't emulate a floppy or HD
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
     fi      
 
     # Finally, belt and braces - fix up the %install% entries in grub
