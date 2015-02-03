@@ -249,7 +249,7 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 # used later. We just don't grab all the syslinux files, then make
 # sure that we *don't* set up BIOS boot on the xorriso command line.
 if [ "$BOOT_BIOS" = 1 ] ; then
-    echo "  Using ISOLINUX boot-disks image on CD$N"
+    echo "  Adding BIOS boot code for $ARCH on CD$N"
     mkdir -p $CDDIR/../syslinux
     SYSLINUXDEB=$(find_pkg_file syslinux)
     if [ -z "$SYSLINUXDEB" ]; then
