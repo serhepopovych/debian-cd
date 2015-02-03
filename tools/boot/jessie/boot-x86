@@ -183,7 +183,6 @@ esac
 # desktop boot parameter gets set separately through DESKTOP variable
 KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | sed -r "s/desktop=[^ ]* ?//")"
 
-echo "  Using ISOLINUX boot-disks image on CD$N"
 mkdir -p $CDDIR/$INSTALLDIR
 cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
