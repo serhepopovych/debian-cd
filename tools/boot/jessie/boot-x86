@@ -474,22 +474,29 @@ if [ -d boot$N/isolinux/grub ] ; then
     mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
         "::efi/boot"
 
-    # Ugh - different code here depending on the version of xorriso we've got
-    if [ $XORRISO_VER -le 10202 ] ; then
-        # 1.2.2 shipping in Wheezy
-        echo "Using older EFI command line for xorriso $XORRISO_VER"
-        # Tell xorriso to create a secondary ElTorito boot record for the
-        # EFI bootloader
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot --efi-boot boot/grub/efi.img"
-        # Add the efi image as a FAT partition too, so our CD image will
+    if [ $BOOT_EFI = 2 ] ; then
+	# We're being added alongside (after) a BIOS boot record. Tell
+	# xorriso to create a (secondary) ElTorito boot record for the
+	# EFI bootloader. Otherwise, xorriso will create it as the
+	# primary.
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot"
+    fi
+
         # also boot on a USB key (like isohybrid, just implemented
         # differently)
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
 
     elif [ $XORRISO_VER -gt 10202 ] ; then
         echo "Using newer EFI support in xorriso $XORRISO_VER"
-        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot"
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-gpt-basdat -isohybrid-apm-hfsplus"
+    # Ugh - different code here depending on the version of xorriso we've got
+    if [ $XORRISO_VER -le 10202 ] ; then
+        # 1.2.2 shipping in Wheezy
+        echo "Using older EFI command line for xorriso $XORRISO_VER"
+
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--efi-boot boot/grub/efi.img"
+        # Add the efi image as a FAT partition too, so our CD image will
     fi	
 else
     echo "  No EFI boot code for $ARCH on CD$N"
