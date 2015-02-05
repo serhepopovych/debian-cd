@@ -9,6 +9,8 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
   * Change from -- to --- for kernel command line handling.
     Closes: #764676
   * Add minor support / bug fixes for i386 EFI.
+  * Add fine-grained control over usage of BIOS and EFI boot on x86 CDs,
+    needed for extra Mac CD builds.
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 
