@@ -187,7 +187,7 @@ make_cd () {
             awk '/Image Hex MD5Sum/ {print $5}'`
         echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
         echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
-	[ $BT = 1 ] && echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
+        [ $BT = 1 ] && echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
         for SHA_SIZE in 1 256 512; do
             SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
                 awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
