@@ -33,6 +33,9 @@ MKISOFS="$PWD/../genisoimage -jigdo-template-compress bzip2 -r -checksum_algorit
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
 
+# Set up torrents too?
+BT=1
+
 # The working directory to use. MUST be on the same partition as the mirror.
 TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-work
 
@@ -141,6 +144,7 @@ make_cd () {
     ISODIR=$OUT/$THISARCH/iso-$TYPE
     JIGDODIR=$OUT/$THISARCH/jigdo-$TYPE
     LISTDIR=$OUT/$THISARCH/list-$TYPE
+    BTDIR=$OUT/$THISARCH/bt-$TYPE
 
     if [ ! -d ${ISODIR} ] ; then
         mkdir -p ${ISODIR}
@@ -150,6 +154,9 @@ make_cd () {
     fi
     if [ ! -d ${LISTDIR} ] ; then
         mkdir -p ${LISTDIR}
+    fi
+    if [ $BT = 1 ] && [ ! -d ${BTDIR} ] ; then
+        mkdir -p ${BTDIR}
     fi
 
     if [ $JTE = 1 ] ; then
@@ -180,6 +187,7 @@ make_cd () {
             awk '/Image Hex MD5Sum/ {print $5}'`
         echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
         echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
+	[ $BT = 1 ] && echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
         for SHA_SIZE in 1 256 512; do
             SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
                 awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
@@ -189,6 +197,7 @@ make_cd () {
             fi
             echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
             echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
+            [ $BT = 1 ] && echo "$SHA  ${BASENAME}.iso" >> ${BTDIR}/SHA${SHA_SIZE}SUMS.update
         done
         gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
