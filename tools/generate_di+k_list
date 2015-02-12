@@ -158,9 +158,10 @@ elilo
 #endif
 
 #ifdef ARCH_mips
-/* doesn't use a initrd to boot */
+initramfs-tools
 arcboot
 sibyl
+linux-image-octeon
 linux-image-r4k-ip22
 linux-image-r5k-ip32
 linux-image-sb1-bcm91250a
@@ -168,10 +169,13 @@ linux-image-sb1a-bcm91480b
 #endif
 
 #ifdef ARCH_mipsel
-/* doesn't use a initrd to boot */
+initramfs-tools
 sibyl
 colo
 delo
+linux-image-loongson-2e
+linux-image-loongson-2f
+linux-image-loongson-3
 linux-image-r3k-kn02
 linux-image-r4k-kn04
 linux-image-r5k-cobalt
