@@ -370,11 +370,24 @@ if [ -f boot$N/setup.exe ]; then
 	todos > $CDDIR/autorun.inf <<EOF
 [autorun]
 open=setup.exe
+icon=setup.exe,0
+label=Install Debian GNU/Linux
+
+[Content]
+MusicFiles=false
+PictureFiles=false
+VideoFiles=false
 EOF
 elif [ -f $CDDIR/README.html ]; then
 	todos > $CDDIR/autorun.inf <<EOF
 [autorun]
 open=autorun.bat
+label=Install Debian GNU/Linux
+
+[Content]
+MusicFiles=false
+PictureFiles=false
+VideoFiles=false
 EOF
 	todos > $CDDIR/autorun.bat <<EOF
 @echo Starting "README.html"...

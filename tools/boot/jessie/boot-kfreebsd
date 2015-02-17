@@ -99,6 +99,7 @@ if [ -f $CDDIR/README.html ]; then
        todos > $CDDIR/autorun.inf <<EOF
 [autorun]
 open=autorun.bat
+label=Install Debian GNU/kFreeBSD
 EOF
        todos > $CDDIR/autorun.bat <<EOF
 @echo Starting "README.html"...
