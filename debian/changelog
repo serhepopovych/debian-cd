@@ -20,6 +20,9 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
   * generate_di+k_list: Update kernel and related package lists for mips*
     Closes: #777711
 
+  [ Helge Deller ]
+  * [alpha] fix unpacking aboot-base, copy versioned vmlinuz file correctly.
+
  -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
 
 debian-cd (3.1.16) unstable; urgency=medium
