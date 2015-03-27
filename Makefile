@@ -222,7 +222,7 @@ $(ADIR)/status:
 	@echo "Generating a fake status file for apt-get and apt-cache..."
 	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/preferences.d; \
-		if [ $$ARCH = "source" -o "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" -o "$(INSTALLER_CD)" = "C" ];then \
+		if [ $$ARCH = "source" -o "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" -o "$(INSTALLER_CD)" = "C" -o "$(INSTALLER_CD)" = "F" ];then \
 			:> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
 		else \
 			zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
