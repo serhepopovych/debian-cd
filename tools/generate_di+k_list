@@ -79,6 +79,8 @@ pppoeconf
 pptp-linux
 /* #593914: netinsts are being used on wireless too these days. */
 wpasupplicant
+/* #782299: netcfg will install rdnssd, make sure it's on our media */
+rdnssd
 
 /* Misc d-i */
 installation-report

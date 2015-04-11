@@ -15,6 +15,7 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
     checksums in bt-$type too.
   * Improve autorun.inf, make sure the disc icon displays. Closes: #772691
     Thanks to jnqnfe for initial patch, slightly tweaked.
+  * Add rdnssd on disc 1 by default. Closes: #782299
 
   [ Ben Hutchings ]
   * generate_di+k_list: Update kernel and related package lists for mips*
