@@ -113,11 +113,15 @@ if [ -d boot$N/grub ] ; then
         exit 1;
     elif [ $XORRISO_VER -gt 10202 ] ; then
         echo "Using newer EFI support in xorriso $XORRISO_VER"
-	# marks the first EFI El Torito boot image as a partition in GPT
-	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-efi-boot-part --efi-boot-image"
 
 	# Location of the EFI boot image, and don't emulate a floppy or HD
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
+
+	# Add an *extra* partition on the end for the EFI bits
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0xef $CDDIR/boot/grub/efi.img"
+
+	# And force alignment
+	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_cyl_align all"
     fi      
 
     # Finally, belt and braces - fix up the %install% entries in grub
