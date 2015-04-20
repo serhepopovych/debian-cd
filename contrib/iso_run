@@ -6,7 +6,7 @@ PUBDIRJIG=$1
 RSYNC_TARGET=$2
 ARCH=$3
 
-LOG=~/build.wheezy/log/$ARCH.iso_run
+LOG=~/build.jessie/log/$ARCH.iso_run
 HOSTNAME=`hostname -f`
 LOCK=~/iso_run.lock
 START=`date -u +%H:%M:%S`
@@ -33,7 +33,7 @@ process_iso() {
     cp -a $FILE $OUTDIR/$FILE
 
     if [ "$RELEASE_BUILD"x != ""x ] ; then
-	~/build.wheezy/mktorrent $FILE >> $LOG
+	~/build.jessie/mktorrent $FILE >> $LOG
 	BTFILE=`echo $FILE.torrent | sed 's/iso-/bt-/'`
 	echo $OUTDIR/$BTFILE >> $LOG
 	cp -a $BTFILE $OUTDIR/$BTFILE
@@ -93,7 +93,7 @@ copy_files() {
 	    # Only populate the HEADER.html file for regular weekly
 	    # builds; we don't want it for releases
             DATE=`date -u`
-            sed "s/ARCH/$ARCH/g;s/DATE/$DATE/g" ~/build.wheezy/weekly.html \
+            sed "s/ARCH/$ARCH/g;s/DATE/$DATE/g" ~/build.jessie/weekly.html \
 		> $TARGET/$ARCH.tmp/HEADER.html
 	fi
 

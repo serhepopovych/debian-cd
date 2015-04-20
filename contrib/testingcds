@@ -13,11 +13,11 @@
 #set -x
 
 if [ "$CONF"x = ""x ] ; then
-    CONF=~/build.wheezy/CONF.sh
+    CONF=~/build.jessie/CONF.sh
 fi
 export CF=$CONF
 if [ "$DCD_DIR"x = ""x ] ; then
-    DCD_DIR=~/build.wheezy/debian-cd
+    DCD_DIR=~/build.jessie/debian-cd
 fi
 export CF=$CONF
 
@@ -60,7 +60,7 @@ export LOGFILE="$LOG/$RUN"
 case "$INSTALLER_CD" in
     1)
         export DISKTYPE=BC;;
-    2|7|8|C)
+    2|7|8|C|F)
         export DISKTYPE=NETINST;;
     3|6)
         export OUT_TYPE=dvd
@@ -79,6 +79,8 @@ case "$INSTALLER_CD" in
     D)
         export OUT_TYPE=dlbd
         export DISKTYPE=DLBD;;
+    E)
+        export DISKTYPE=gnome-CD;;
     *)  export DISKTYPE=CD;;
 esac
 
@@ -122,6 +124,10 @@ elif [ "$INSTALLER_CD" = "8" ]; then
     export OFFICIAL="Official Multi-Arch Netinst"
 elif [ "$INSTALLER_CD" = "C" ]; then
     export OFFICIAL="Unofficial Netinst including firmware"
+elif [ "$INSTALLER_CD" = "E" ]; then
+    export OFFICIAL="Official Gnome CD Snapshot"
+elif [ "$INSTALLER_CD" = "F" ]; then
+    export OFFICIAL="Official Mac Netinst"
 fi
 
 rm -rf "$OUT"
@@ -140,6 +146,15 @@ overview () {
 
 > $LOGFILE
 
+# Make sure we have an extension for all builds, so we don't have
+# multiple processes tripping over each other when generating checksum
+# files
+if [ "$INSTALLER_CD" = ""x ] ; then
+    SUMS_EXTENSION=".cd"
+else
+    SUMS_EXTENSION=".${INSTALLER_CD}"
+fi
+
 # Do the actual building
 START=`now`
 if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
@@ -147,7 +162,8 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     # we treat the daily netinst images in a different way
     if [ "$INSTALLER_CD" = "1" ] || \
        [ "$INSTALLER_CD" = "2" ] || \
-       [ "$INSTALLER_CD" = "C" ] ; then
+       [ "$INSTALLER_CD" = "C" ] || \
+       [ "$INSTALLER_CD" = "F" ] ; then
 
         ##################################
         # NETINST STUFF
@@ -169,11 +185,6 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 
 	mkdir -p $ARCHDIR/list-cd $ARCHDIR/jigdo-cd $ARCHDIR/iso-cd
         # put the isos and jigdos in their place
-
-	$TOPDIR/debian-cd/tools/imagesums $OUT $SUMS_EXTENSION >> "$LOGFILE"
-        sed -i 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' $OUT/*SUMS*
-        cp $OUT/*SUMS* $ARCHDIR/iso-cd
-        cp $OUT/*SUMS* $ARCHDIR/jigdo-cd
 
         for i in "$OUT"/*-1.iso; do
             BASE=`basename $i .iso`
@@ -213,18 +224,10 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         done
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
-	for file in "$OUT"/*SUMS${SUMS_EXTENSION}; do
-	    outfile="$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}/`basename $file`
-	    cat $file >> $outfile
-	done
         mv "$OUT"/*.template "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
         mv "$OUT"/*.jigdo    "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
 
         mkdir -p "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
-	for file in "$OUT"/*SUMS${SUMS_EXTENSION}; do
-	    outfile="$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}/`basename $file`
-	    cat $file >> $outfile
-	done
 	for file in "$OUT"/*.iso; do
 	    if [ -e $file ] ; then 
                 mv $file    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
@@ -269,7 +272,7 @@ else
     for i in $MYEMAIL
     do
         (echo Error when trying to create cds for $RUN ; cat $LOGFILE) | \
-            mail -s "testingcds $RUN has failed; log included" "$i"
+            mail -s "$RELEASE_BUILD testingcds $RUN has failed; log included" "$i"
     done
     overview "$RUN" failed
     END=`now`

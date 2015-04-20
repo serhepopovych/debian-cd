@@ -9,8 +9,11 @@ export TOPDIR
 . $TOPDIR/settings.sh
 
 export PUBDIRJIG=$PUBDIR/weekly-builds
+export PUBDIROSTRACE=/mnt/nfs-cdimage/.live/trace-os
+export PUBDIRLIVETRACE=/mnt/nfs-cdimage/.live/trace-live
 export DATE_BUILD="$DATE-$BUILDNUM"
 BUILDLOCK=$HOME/.debian-cd.lock
+CD_I_F="/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware"
 
 . $TOPDIR/common.sh
 
@@ -23,16 +26,16 @@ USE_DAILY_DI=Y
 
 if [ "$RELEASE_BUILD"x = ""x ] ; then
     export RSYNC_TARGET=/mnt/nfs-cdimage/weekly-builds
-    export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/weekly-builds
+    export RSYNC_TARGET_FIRMWARE=${CD_I_F}/weekly-builds
 else
-    export RSYNC_TARGET=/mnt/nfs-cdimage/.${RELEASE_BUILD}
-    export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/.${RELEASE_BUILD}
-    export CONF=~/build.wheezy/CONF.sh.${RELEASE_BUILD}
+    export RSYNC_TARGET=/mnt/nfs-cdimage/.${RELEASE_BUILD}/debian-cd
+    export RSYNC_TARGET_FIRMWARE=${CD_I_F}/.${RELEASE_BUILD}/debian-cd
+    export CONF=~/build.jessie/CONF.sh.${RELEASE_BUILD}
     export RELEASE_BUILD=$RELEASE_BUILD
     # If we're doing a normal set of daily/weekly builds, leave the
     # checksum filenames alone. Otherwise, make life easier for people
     # combining things later and append a suitable name as we build.
-    export SUMS_EXTENSION=".large"
+    export EXTENSION=".large"
     USE_DAILY_DI=N
 fi
 
@@ -51,19 +54,32 @@ export DI_CODENAME
 
 BUILDS_RUNNING=""
 
+export NOOPENSTACK
+export NOLIVE
+rm -f $PUBDIRLIVETRACE $PUBDIROSTRACE
+~/build.jessie/cronjob.weekly-live &
+
 if lockfile -r0 $BUILDLOCK ; then
-#    echo "NOT checking for svn updates"
-    echo "svn update debian-cd"
-    cd debian-cd && svn cleanup; svn up ; cd ..
+#    echo "NOT checking for git updates"
+    echo "git update debian-cd"
+    cd debian-cd && git pull ; cd ..
+
+    # Work out the default desktop, and do *not* build a CD1 for that
+    # desktop - it'll be done in the full set anyway
+    TASKSEL_DEB=$(./debian-cd/tools/which_deb ${MIRROR} testing task-desktop binary)
+    DEFAULT_DESKTOP=$(dpkg --info ${MIRROR}/${TASKSEL_DEB} |
+	awk '/Recommends: task-.*-desktop/ {split($2,a,"-"); print toupper(a[2])}')
+    echo default desktop is $DEFAULT_DESKTOP, drop CD1 for that desktop
+    export NO${DEFAULT_DESKTOP}CD=1
 
 #    echo "NOT checking for popcon updates"
     if [ "$NOPOPCON"x = ""x ] ; then
-	cd debian-cd && ./tools/update_popcon tasks/wheezy/popularity-contest ; cd ..
+	cd debian-cd && ./tools/update_popcon tasks/jessie/popularity-contest ; cd ..
     fi
 
     cd $TOPDIR
     mkdir -p $PUBDIRJIG/trace
-    mkdir -p $RSYNC_TARGET
+    mkdir -p $RSYNC_TARGET $RSYNC_TARGET_FIRMWARE
 
     for arch in $ARCHES; do
         # Reset envvars for next iteration
@@ -71,8 +87,11 @@ if lockfile -r0 $BUILDLOCK ; then
         arch_start=`now`
 
         if [ "$arch" != multi-arch ] ; then
-            rm -rf $PUBDIRJIG/$arch
+            rm -rf $PUBDIRJIG/$arch $PUBDIRJIG-firmware/$arch
             mkdir -p $PUBDIRJIG/$arch
+	    if $(arch_has_firmware $arch) ; then
+		mkdir -p $PUBDIRJIG-firmware/$arch
+	    fi
 
 #            export DI_DIR="$ARCH_DI_DIR" 
 	    export VARIANTS=""
@@ -109,9 +128,9 @@ if lockfile -r0 $BUILDLOCK ; then
 			;;
                     source)
                         export MAXISOS=ALL; export MAXJIGDOS=ALL ;;
-                    powerpc)
-                        # Special case: make DVD1 fit on a 4GB USB
-                        # stick (#686471)
+                    powerpc|arm64)
+                        # Special cases: make DVD1 fit on a 4GB USB
+                        # stick
 			export FORCE_CD_SIZE1=STICK4GB
                         export MAXISOS=1; export MAXJIGDOS=ALL ;;
                     *)
@@ -168,8 +187,21 @@ if lockfile -r0 $BUILDLOCK ; then
                 esac
             fi
 
-            # kde, xfce and lxde cds
+            # individual desktop cds: gnome, kde, xfce. lxde
             if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
+		if [ "$NOGNOMECD"x = ""x ] ; then
+                    export MAX_PKG_SIZE=300000000
+                    export DESKTOP=gnome
+                    export MAXISOS=1; export MAXJIGDOS=1
+		    unset FORCE_CD_SIZE1
+		    export VARIANTS=""
+		    build_started GNOMECD
+                    INSTALLER_CD=E TASK=Debian-gnome \
+                        KERNEL_PARAMS='desktop=gnome' \
+                        MAXCDS=1 MAXISOS=ALL MAXJIGDOS=ALL \
+                        ./testingcds "$arch" &
+		fi
+
 		if [ "$NOKDECD"x = ""x ] ; then
                     export MAX_PKG_SIZE=300000000
                     export DESKTOP=kde
@@ -231,39 +263,69 @@ if lockfile -r0 $BUILDLOCK ; then
                     DI=${DI} DI_DIST=${DI} \
                     ./testingcds "$arch" &		
 
-                for arch1 in $ARCHES_FIRMWARE; do
-                    if [ "$arch" = "$arch1" ] ; then
-                        build_started NIFIRMWARE
-                        OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-                            NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
-                            FORCE_FIRMWARE=1 CDNAME=firmware \
-                            KERNEL_PARAMS="desktop=all" \
-                            DESKTOP=all VARIANTS=xen \
-                            TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
-                            DI=${DI} DI_DIST=${DI} \
-                            ./testingcds "$arch" &
-                    fi
-                done
+		if $(arch_has_firmware $arch) ; then
+                    build_started NIFIRMWARE
+                    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                        NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+                        FORCE_FIRMWARE=1 CDNAME=firmware \
+                        KERNEL_PARAMS="desktop=all" \
+                        DESKTOP=all VARIANTS=xen \
+                        TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+                        DI=${DI} DI_DIST=${DI} \
+                        ./testingcds "$arch" &
+                fi
+
+                if [ "$arch" = "i386" ] ; then
+                    build_started MACNI
+                    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                        NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=F \
+                        BOOT_METHODS=BIOS CDNAME="debian-mac" \
+                        KERNEL_PARAMS="desktop=all" \
+                        DESKTOP=all VARIANTS=xen \
+                        TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+                        DI=${DI} DI_DIST=${DI} \
+                        ./testingcds "$arch" &
+                fi
             fi
 
 	    catch_parallel_builds
 
+            for dir in $PUBDIRJIG/$arch/jigdo-*; do
+                generate_checksums_for_arch $arch $dir
+            done
+            if [ -d $PUBDIRJIG-firmware/$arch ] ; then
+                for dir in ${PUBDIRJIG}-firmware/$arch/jigdo-*; do
+                    generate_checksums_for_arch $arch $dir
+                done
+            fi
+
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] ; then
-                    echo "  Running ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
-                    ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &
-		    if [ -d $PUBDIRJIG-firmware/$arch ] ; then
-                        echo "  Running ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &"
-                        ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &
+                    if [ "$RELEASE_BUILD"x = ""x ] ; then
+                        echo "Signing checksums files using the automatic key"
+                        ~/build.jessie/sign-images $PUBDIRJIG $arch
+                    fi
+                    echo "  Running ~/build.jessie/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &"
+                    ~/build.jessie/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ $arch &
+                    if [ -d $PUBDIRJIG-firmware/$arch ] ; then
+                        if [ "$RELEASE_BUILD"x = ""x ] ; then
+                            echo "Signing checksums files using the automatic key"
+                            ~/build.jessie/sign-images $PUBDIRJIG-firmware $ARCH
+                        fi
+                        echo "  Running ~/build.jessie/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &"
+                        ~/build.jessie/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ $arch &
                     fi
                 else
-                    ~/build.wheezy/report_build_error $RSYNC_TARGET $arch "$arch_error"
+                    ~/build.jessie/report_build_error $RSYNC_TARGET $arch "$arch_error"
                 fi
             fi
         else # multi-arch
-            rm -rf $PUBDIRJIG/multi-arch
+            rm -rf $PUBDIRJIG/multi-arch $PUBDIRJIG-firmware/multi-arch
             for i in iso-dvd jigdo-dvd iso-cd jigdo-cd; do
                 mkdir -p $PUBDIRJIG/multi-arch/$i
+                if $(arch_has_firmware multi-arch) ; then
+		    mkdir -p $PUBDIRJIG-firmware/multi-arch/$i
+		fi
             done
 
             if [ "$NODVD"x = ""x ] ; then
@@ -294,48 +356,69 @@ if lockfile -r0 $BUILDLOCK ; then
                     DI=${DI} DI_DIST=${DI} \
                     ./testingcds "amd64 i386" &
 
-                for arch1 in $ARCHES_FIRMWARE; do
-                    if [ "$arch" = "$arch1" ] ; then
-                        build_started NIFIRMWARE
-                        OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-                            NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
-                            FORCE_FIRMWARE=1 CDNAME=firmware \
-                            KERNEL_PARAMS="desktop=all" \
-                            DESKTOP=all VARIANTS=xen \
-                            TASK=debian-installer+kernel \
-                            MAXISOS=ALL MAXJIGDOS=ALL \
-                            DI=${DI} DI_DIST=${DI} \
-                            ./testingcds "amd64 i386" &
-                    fi
-                done
+		if $(arch_has_firmware $arch) ; then
+                    build_started NIFIRMWARE
+                    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+                        NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+                        FORCE_FIRMWARE=1 CDNAME=firmware \
+                        KERNEL_PARAMS="desktop=all" \
+                        DESKTOP=all VARIANTS=xen \
+                        TASK=debian-installer+kernel \
+                        MAXISOS=ALL MAXJIGDOS=ALL \
+                        DI=${DI} DI_DIST=${DI} \
+                        ./testingcds "amd64 i386" &
+                fi
             fi
 
 	    catch_parallel_builds
 
+            for dir in $PUBDIRJIG/multi-arch/jigdo-*; do
+                generate_checksums_for_arch multi-arch $dir
+            done
+            if [ -d $PUBDIRJIG-firmware/multi-arch ] ; then
+                for dir in ${PUBDIRJIG}-firmware/multi-arch/jigdo-*; do
+                    generate_checksums_for_arch multi-arch $dir
+                done
+	    fi
+
             if [ "$NOSYNC"x = ""x ] ; then
                 if [ "$arch_error"x = "none"x ] || [ "$arch_error"x = ""x ] ; then
-                    echo "  Running ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
-                    ~/build.wheezy/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
-		    if [ -d $PUBDIRJIG-firmware/multi-arch ] ; then
-                        echo "  Running ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &"
-                        ~/build.wheezy/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &
+                    if [ "$RELEASE_BUILD"x = ""x ] ; then
+                        echo "Signing checksums files using the automatic key"
+                        ~/build.jessie/sign-images $PUBDIRJIG multi-arch
+                    fi
+                    echo "  Running ~/build.jessie/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &"
+                    ~/build.jessie/iso_run $PUBDIRJIG/ $RSYNC_TARGET/ multi-arch &
+                    if [ -d $PUBDIRJIG-firmware/multi-arch ] ; then
+                        if [ "$RELEASE_BUILD"x = ""x ] ; then
+                            echo "Signing checksums files using the automatic key"
+		            ~/build.jessie/sign-images $PUBDIRJIG-firmware multi-arch
+                        fi
+                        echo "  Running ~/build.jessie/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &"
+                        ~/build.jessie/iso_run ${PUBDIRJIG}-firmware/ $RSYNC_TARGET_FIRMWARE/ multi-arch &
                     fi
                 else
-                    ~/build.wheezy/report_build_error $RSYNC_TARGET multi-arch "$arch_error"
+                    ~/build.jessie/report_build_error $RSYNC_TARGET multi-arch "$arch_error"
                 fi
             fi
         fi # end of multi-arch
 
     done
 
+    # Generate HEADER.html files
+    ~/build.jessie/generate_headers $RSYNC_TARGET
+    ~/build.jessie/generate_headers $RSYNC_TARGET_FIRMWARE
+
     if [ "$NOFW"x = ""x ] ; then
-	~/build.wheezy/generate_firmware_images wheezy
-	~/build.wheezy/generate_firmware_images sid
+	~/build.jessie/generate_firmware_images jessie
+	~/build.jessie/generate_firmware_images sid
     fi
     
     if [ "$NOSNAP"x = ""x ] ; then
         ~/bin/weekly-snapshots
     fi
+
+    catch_live_builds
 
     date -u > $PUBDIRJIG/trace/cdimage.debian.org
 

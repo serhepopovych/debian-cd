@@ -22,6 +22,8 @@ build_description () {
     case $1 in
         NI)
 	    DESC="Netinst CD";;
+        MACNI)
+	    DESC="Mac Netinst CD";;
         CD)
 	    DESC="Full CD";;
         DVD)
@@ -30,8 +32,10 @@ build_description () {
             DESC="Blu-ray";;
         DLBD)
             DESC="Dual-layer Blu-ray";;
-        KDE)
+        KDECD)
 	    DESC="KDE CD";;
+        GNOMECD)
+	    DESC="GNOME CD";;
         LIGHTCD)
 	    DESC="XFCE/lxde CD";;
         XFCECD)
@@ -105,5 +109,41 @@ catch_parallel_builds () {
     fi
     arch_end=`now`
     arch_time=`calc_time $arch_start $arch_end`
-    echo "$ARCH build started at $arch_start, ended at $arch_end (took $arch_time), error(s) $arch_error"
+    echo "$arch build started at $arch_start, ended at $arch_end (took $arch_time), error(s) $arch_error"
+}
+
+generate_checksums_for_arch () {
+    ARCH=$1
+    JIGDO_DIR=$2
+    ISO_DIR=$(echo $JIGDO_DIR | sed 's,jigdo-,iso-,g')
+
+    echo "$ARCH: Generating checksum files for the builds in $JIGDO_DIR"
+    $TOPDIR/debian-cd/tools/imagesums $JIGDO_DIR $EXTENSION > /dev/null
+    cp $JIGDO_DIR/*SUMS*${EXTENSION} $ISO_DIR
+}
+
+catch_live_builds () {
+    # Catch parallel build types here                                                                                               
+    while [ ! -f $PUBDIRLIVETRACE ] || [ ! -f $PUBDIROSTRACE ] ; do
+	sleep 1
+    done
+
+    . $PUBDIROSTRACE
+    time_spent=`calc_time $start $end`
+    echo "openstack build started at $start, ended at $end (took $time_spent), error $error"
+
+    . $PUBDIRLIVETRACE
+    time_spent=`calc_time $start $end`
+    echo "live builds started at $start, ended at $end (took $time_spent), error $error"
+
+}
+
+arch_has_firmware () {
+    arch=$1
+    for arch1 in $ARCHES_FIRMWARE; do
+        if [ "$arch" = "$arch1" ] ; then
+	    return 0
+	fi
+    done
+    return 1
 }

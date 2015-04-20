@@ -11,8 +11,11 @@ export TOPDIR
 BUILDLOCK=$HOME/.debian-cd.lock
 export PUBDIRJIG=$PUBDIR/daily-builds
 export DATE_BUILD="$DATE-$BUILDNUM"
-export TESTING_SUITE=wheezy
+export TESTING_SUITE=jessie
 BUILDS_RUNNING=""
+
+export NI_WANTED=1
+export TESTING_WANTED=0
 
 if [ "$RELEASE_BUILD"x = ""x ] ; then
     export SID_WANTED=1
@@ -24,29 +27,22 @@ if [ "$RELEASE_BUILD"x = ""x ] ; then
     export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/daily-builds
 else
     export SID_WANTED=0
+    export TESTING_WANTED=1
     export OUT_FREE_TST=${PUBDIRJIG}-$RELEASE_BUILD
     export OUT_FW_TST=${PUBDIRJIG}-$RELEASE_BUILD-firmware
     export OUT_FREE_SID=""
     export OUT_FW_SID=""
     export RSYNC_TARGET_FREE=/mnt/nfs-cdimage/.${RELEASE_BUILD}
     export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/.${RELEASE_BUILD}
-    export CONF=~/build.wheezy/CONF.sh.${RELEASE_BUILD}
+    export CONF=~/build.jessie/CONF.sh.${RELEASE_BUILD}
     export RELEASE_BUILD=$RELEASE_BUILD
+    export EXTENSION=".small"
 fi
-export BC_WANTED=0
-export NI_WANTED=1
 
 . $TOPDIR/common.sh
 
 # Make sure the machine isn't rebooted while we're busy
 reboot_lock
-
-# If we're doing a normal set of daily/weekly builds, leave the
-# checksum filenames alone. Otherwise, make life easier for people
-# combining things later and append a suitable name as we build.
-if [ "$DEBVERSION"x != "testing"x ] ; then
-    export SUMS_EXTENSION=".small"
-fi
 
 finalise_arch_dir () {
     ARCH=$1
@@ -72,15 +68,20 @@ finalise_arch_dir () {
 		sed "s/ARCH/$ARCH/g;s/DATE/$DATESTRING/g;s/BUILDNUM/$BUILDNUM/g;s/INST_VER/$INST_VER/g" \
 		    $INFILE > $ARCH_DIR/HEADER.html
 	    fi
-	    $TOPDIR/debian-cd/tools/imagesums $ARCH_JIGDO_DIR $SUMS_EXTENSION
-	    cp $ARCH_JIGDO_DIR/*SUMS* $ARCH_ISO_DIR
+
+	    generate_checksums_for_arch $ARCH $ARCH_JIGDO_DIR
+
 	    cd $ARCH_DIR
 	    # Only make torrent files for release builds
 	    if [ "$RELEASE_BUILD"x != ""x ] ; then
-		~/build.wheezy/mktorrent iso-cd/*iso
+		~/build.jessie/mktorrent iso-cd/*iso
 		cp iso-cd/*SUMS* bt-cd
 	    fi
-	    ~/build.wheezy/mklist iso-cd/*iso
+	    if [ "$RELEASE_BUILD"x = ""x ] ; then
+		echo "Signing checksums files using the automatic key"
+		~/build.jessie/sign-images $OUT_DIR $ARCH
+	    fi
+	    ~/build.jessie/mklist iso-cd/*iso
 	    cd $TOPDIR
 	fi
     done
@@ -89,8 +90,9 @@ finalise_arch_dir () {
 cd $TOPDIR &&
 if lockfile -r0 $BUILDLOCK ; then
 
-    echo "svn update debian-cd:"
-    cd debian-cd && svn cleanup ; svn up ; cd ..
+#    echo "NOT checking for git updates"
+    echo "git update debian-cd"
+    cd debian-cd && git pull ; cd ..
 
     cd $TOPDIR
 
@@ -116,21 +118,21 @@ if lockfile -r0 $BUILDLOCK ; then
 	done
 
         if [ "$arch" = "multi-arch" ] ; then
-	    for arch1 in $ARCHES_FIRMWARE; do
-		if [ "$arch" = "$arch1" ] ; then
-		    if [ "$SID_WANTED" = "1" ] ; then
-			if [ "$NI_WANTED" = "1" ] ; then
-			    build_started SIDNIFIRMWARE
-			    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-				NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
-				FORCE_FIRMWARE=1 CDNAME=firmware \
-				TASK=debian-installer+kernel LOGAPPEND="-1" \
-				MAXISOS=ALL MAXJIGDOS=ALL \
-				DI=sid DI_DIST="$DI_DIST" VARIANTS=xen \
-				DI_WWW_HOME=default ./testingcds "amd64 i386" &
-			fi
+	    if $(arch_has_firmware $arch) ; then
+		if [ "$SID_WANTED" = "1" ] ; then
+		    if [ "$NI_WANTED" = "1" ] ; then
+			build_started SIDNIFIRMWARE
+			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+			    FORCE_FIRMWARE=1 CDNAME=firmware \
+			    TASK=debian-installer+kernel LOGAPPEND="-1" \
+			    MAXISOS=ALL MAXJIGDOS=ALL \
+			    DI=sid DI_DIST="$DI_DIST" VARIANTS=xen \
+			    DI_WWW_HOME=default ./testingcds "amd64 i386" &
 		    fi
+		fi
 
+		if [ "$TESTING_WANTED" = "1" ] ; then
 		    if [ "$NI_WANTED" = "1" ] ; then
 			build_started TESTINGNIFIRMWARE
 			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
@@ -142,7 +144,7 @@ if lockfile -r0 $BUILDLOCK ; then
 			    ./testingcds "amd64 i386" &
 		    fi
 		fi
-	    done
+	    fi
 
 	    if [ "$SID_WANTED" = "1" ] ; then
 		if [ "$NI_WANTED" = "1" ] ; then
@@ -156,14 +158,16 @@ if lockfile -r0 $BUILDLOCK ; then
 		fi
 	    fi
 
-	    if [ "$NI_WANTED" = "1" ] ; then
-		build_started TESTINGNI
-		OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-                    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
-                    TASK=debian-installer+kernel LOGAPPEND="-1" \
-                    MAXISOS=ALL MAXJIGDOS=ALL \
-                    DI=${TESTING_SUITE} DI_DIST="$DI_DIST" VARIANTS=xen \
-                    ./testingcds "amd64 i386" &
+	    if [ "$TESTING_WANTED" = "1" ] ; then
+		if [ "$NI_WANTED" = "1" ] ; then
+		    build_started TESTINGNI
+		    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
+			TASK=debian-installer+kernel LOGAPPEND="-1" \
+			MAXISOS=ALL MAXJIGDOS=ALL \
+			DI=${TESTING_SUITE} DI_DIST="$DI_DIST" VARIANTS=xen \
+			./testingcds "amd64 i386" &
+		fi
 	    fi
 
 	    catch_parallel_builds
@@ -174,20 +178,20 @@ if lockfile -r0 $BUILDLOCK ; then
 
         else # end of m-a
 
-	    for arch1 in $ARCHES_FIRMWARE; do
-		if [ "$arch" = "$arch1" ] ; then
-		    if [ "$SID_WANTED" = "1" ] ; then
-			if [ "$NI_WANTED" = "1" ] ; then
-			    build_started SIDNIFIRMWARE
-			    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-				FORCE_FIRMWARE=1 CDNAME=firmware \
-				NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
-				TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
-				DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
-				./testingcds "$arch" &
-			fi
+	    if $(arch_has_firmware $arch) ; then
+		if [ "$SID_WANTED" = "1" ] ; then
+		    if [ "$NI_WANTED" = "1" ] ; then
+			build_started SIDNIFIRMWARE
+			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			    FORCE_FIRMWARE=1 CDNAME=firmware \
+			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
+			    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+			    DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
+			    ./testingcds "$arch" &
 		    fi
+		fi
 
+		if [ "$TESTING_WANTED" = "1" ] ; then
 		    if [ "$NI_WANTED" = "1" ] ; then
 			build_started TESTINGNIFIRMWARE
 			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
@@ -198,18 +202,9 @@ if lockfile -r0 $BUILDLOCK ; then
 			    ./testingcds "$arch" &
 		    fi
 		fi
-	    done
+	    fi
 
 	    if [ "$SID_WANTED" = "1" ] ; then
-		if [ "$BC_WANTED" = "1" ] ; then
-		    build_started SIDBC
-		    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-			NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 \
-			TASK=debian-installer MAXISOS=ALL MAXJIGDOS=ALL \
-			DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
-			./testingcds "$arch" &
-		fi
-
 		if [ "$NI_WANTED" = "1" ] ; then
 		    build_started SIDNI
 		    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
@@ -220,22 +215,42 @@ if lockfile -r0 $BUILDLOCK ; then
 		fi
 	    fi
 
-	    if [ "$BC_WANTED" = "1" ] ; then
-		build_started TESTINGBC
-		OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-		    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=1 \
-		    TASK=debian-installer MAXISOS=ALL MAXJIGDOS=ALL \
-		    DI=${TESTING_SUITE} DI_DIST="$DI_DIST" \
-		    ./testingcds "$arch" &
+	    if [ "$TESTING_WANTED" = "1" ] ; then
+		if [ "$NI_WANTED" = "1" ] ; then
+		    build_started TESTINGNI
+		    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
+			TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+			DI=${TESTING_SUITE} DI_DIST="$DI_DIST" \
+			./testingcds "$arch" &
+		fi
 	    fi
 
-	    if [ "$NI_WANTED" = "1" ] ; then
-		build_started TESTINGNI
-		OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
-		    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
-		    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
-		    DI=${TESTING_SUITE} DI_DIST="$DI_DIST" \
-		    ./testingcds "$arch" &
+	    # Special Mac-only builds
+            if [ "$arch" = "i386" ] ; then
+		if [ "$SID_WANTED" = "1" ] ; then
+		    if [ "$NI_WANTED" = "1" ] ; then
+			build_started SIDMACNI
+			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=F \
+			    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+			    BOOT_METHODS=BIOS CDNAME="debian-mac" \
+			    DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
+			    ./testingcds "$arch" &
+		    fi
+		fi
+
+		if [ "$TESTING_WANTED" = "1" ] ; then
+		    if [ "$NI_WANTED" = "1" ] ; then
+			build_started TESTINGMACNI
+			OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
+			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=F \
+			    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
+			    BOOT_METHODS=BIOS CDNAME="debian-mac" \
+			    DI=${TESTING_SUITE} DI_DIST="$DI_DIST" \
+			    ./testingcds "$arch" &
+		    fi
+		fi
 	    fi
 
 	    catch_parallel_builds
