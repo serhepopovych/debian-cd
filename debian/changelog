@@ -1,4 +1,4 @@
-debian-cd (3.1.17) UNRELEASED; urgency=medium
+debian-cd (3.1.17) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Provide hashes for uncompressed Translation-* files, and remove the
@@ -25,7 +25,7 @@ debian-cd (3.1.17) UNRELEASED; urgency=medium
   [ Helge Deller ]
   * [alpha] fix unpacking aboot-base, copy versioned vmlinuz file correctly.
 
- -- Steve McIntyre <93sam@debian.org>  Wed, 29 Oct 2014 17:33:10 +0000
+ -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.16) unstable; urgency=medium
 
