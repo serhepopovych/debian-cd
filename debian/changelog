@@ -4,6 +4,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Start stretch, simply copying jessie for now
   * Remove mention of desktop choice from yaboot boot messages
     (Closes: #783569)
+  * Add YA syslinux package to Recommends.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
