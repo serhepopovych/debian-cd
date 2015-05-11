@@ -6,6 +6,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
     (Closes: #783569)
   * Add YA syslinux package to Recommends.
   * Fix handlinkg of LOGOPNG when we've got "doppelganer" initramfs files
+  * Add support for debian-edu builds
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
