@@ -405,12 +405,15 @@ if [ "$LOGOPNG" ] ; then
     mkdir -p $INITRDDIR
     (
         cd $INITRDDIR
-        gunzip $GTKINITRDGZ
+	# There may be multiple hardlinks to the initrd.gz, so
+	# explicitly break the links here
+        zcat $GTKINITRDGZ > $GTKINITRD
+	rm -f $GTKINITRDGZ
         mkdir -p $INITRDDIR/usr/share/graphics
         cp $LOGOPNG $INITRDDIR/usr/share/graphics/logo_debian.png
         echo usr/share/graphics/logo_debian.png | \
             cpio -oA -H newc -F $GTKINITRD
-        gzip -9 $GTKINITRD
+	gzip -9 $GTKINITRD
     )
     rm -rf $INITRDDIR
 fi
