@@ -39,10 +39,10 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # Tempting as it might be to merge these two definitions using $ARCH,
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
-    if [ "$ARCH" = i386 ]; then
-        DI_WWW_HOME="http://d-i.debian.org/daily-images/i386/daily"
-    else
+    if [ "$ARCH" = amd64 ]; then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
+    else
+        DI_WWW_HOME="http://d-i.debian.org/daily-images/i386/daily"
     fi
     try_di_image_cache
 else
@@ -72,13 +72,13 @@ NN=`echo $N | sed -e 's/_NONUS//'`
 # Exit if this is not a boot disk
 if [ $NN != 1 ] ; then exit 0; fi
 
-INSTALLDIR_i386="install.386"
 INSTALLDIR_amd64="install.amd"
+INSTALLDIR_i386="install.386"
 
-if [ "$ARCH" = i386 ]; then
-        INSTALLDIR="$INSTALLDIR_i386"
-else
+if [ "$ARCH" = amd64 ]; then
         INSTALLDIR="$INSTALLDIR_amd64"
+else
+        INSTALLDIR="$INSTALLDIR_i386"
 fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
@@ -356,26 +356,28 @@ if [ -z "$MULTIARCH" ]; then
     # Set up isolinux dir for only the current arch
     grep -lr '%install%' boot$N/isolinux/* | xargs -r sed -i "s|%install%|$INSTALLDIR|"
     
-    # Remove the amd*.cfg files to avoid them being loaded on a disc
+    # Remove the x86*.cfg files to avoid them being loaded on a disc
     # that does not have both amd64 and i386 dirs.
-    find boot$N/isolinux/ -name "amd*.cfg" -delete
+    find boot$N/isolinux/ -name "x86*.cfg" -delete
 else
     # Set up isolinux dir for multi-arch
-    grep -lr '%install[-amd]*%' boot$N/isolinux/* | xargs -r sed -i -e "s|%install%|$INSTALLDIR_i386|" -e "s|%install-amd%|$INSTALLDIR_amd64|"
+    grep -lr '%install[-x86]*%' boot$N/isolinux/* | \
+        xargs -r sed -i -e "s|%install%|$INSTALLDIR_amd64|" \
+                        -e "s|%install-x86%|$INSTALLDIR_i386|"
 
     for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
-        sed -i "4 s/^$/(note: i386 is default; prepend 'amd64-' to use an amd64 kernel instead)/" $file
+        sed -i "4 s/^$/(note: amd64 is default; prepend 'x86-' to use an i386 kernel instead)/" $file
     done
 
     if [ -e CD$N/win32-loader.ini ]; then
         # Modify win32-loader.ini to also cover the "other" arch
-        if [ "$ARCH" = i386 ]; then
+        if [ "$ARCH" = amd64 ]; then
             sed -i -e "/^arch=/d
-                       /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
+                       /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
                            CD$N/win32-loader.ini
         else
             sed -i -e "/^arch=/d
-                       /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
+                       /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
                            CD$N/win32-loader.ini
         fi
     fi

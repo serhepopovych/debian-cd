@@ -8,6 +8,10 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Fix handlinkg of LOGOPNG when we've got "doppelganer" initramfs files
   * Add support for debian-edu builds
 
+  [ Didier Raboud ]
+  * For stretch, swap amd64 and i386 to let the first be the norm, and the
+    latter be the special case, this copes with the similar change in d-i
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium
