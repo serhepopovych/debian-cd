@@ -9,5 +9,3 @@
 
 #include <debian-edu>
 
-/* Nothing else is included on the debian-edu netinst CD? */
-
