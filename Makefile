@@ -376,11 +376,10 @@ $(BDIR)/rawlist:
 		ARCHDEFS="$$ARCHDEFS -DARCH_i386_EXCLUDE_586_KERNEL"; \
 	fi; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
-		cat $(TASKDIR)/$(TASK) | \
 		cpp -nostdinc -P -undef $$ARCHDEFS $$VARIANTDEFS\
 	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
 		    -DFORCENONUSONCD1=0 \
-		    -I $(TASKDIR) - - >> $(BDIR)/rawlist; \
+		    -I $(TASKDIR) $(TASKDIR)/$(TASK) >> $(BDIR)/rawlist; \
 	fi
 
     # If we're *only* doing source, then we need to build a list of all the

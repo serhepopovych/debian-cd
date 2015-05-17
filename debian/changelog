@@ -7,6 +7,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Add YA syslinux package to Recommends.
   * Fix handlinkg of LOGOPNG when we've got "doppelganer" initramfs files
   * Add support for debian-edu builds
+  * Change cpp usage in the Makefile to make error handling more reliable
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
