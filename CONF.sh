@@ -62,7 +62,7 @@ export BASEDIR=`pwd`
 # export CDNAME=debian
 
 # Building wheezy cd set ...
-export CODENAME=wheezy
+export CODENAME=stretch
 
 # By default use Debian installer packages from $CODENAME
 if [ -z "$DI_CODENAME" ]; then
@@ -76,7 +76,7 @@ fi
 #export DI_WWW_HOME=default
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="7.0"
+export DEBVERSION="9.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
