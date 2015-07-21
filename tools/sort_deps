@@ -873,6 +873,11 @@ sub add_missing {
 				my %t = %$pkg;
 				my $pkgname = $t{"Package"};
 
+				if ($packages{$pkgname}{"Size"} > $max_pkg_size) {
+				    msg(2, "    $pkgname is too big, mark it as excluded\n");
+				    $excluded{$pkgname} = 'toobig';
+				}
+                               
 				# Already installed?
 				if (dep_satisfied($pkg)) {
 					msg(3, "    OR relationship already installed: " . dump_depend($pkg) . "\n");
