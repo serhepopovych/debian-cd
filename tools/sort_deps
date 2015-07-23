@@ -83,6 +83,7 @@ msg(1, "Ignore Recommends: ");
 msg(1, yesno($norecommends)."\n");
 msg(1, "Ignore Suggests: ");
 msg(1, yesno($nosuggests)."\n");
+msg(1, "Maximum allowed package size: $max_pkg_size bytes\n");
 msg(1, "======================================================================
 ");
 
@@ -871,9 +872,10 @@ sub add_missing {
 			# will do.
 			foreach my $pkg (@{$thisdep}) {
 				my %t = %$pkg;
-				my $pkgname = $t{"Package"};
+				my $pkgname = lc $t{"Package"};
 
-				if ($packages{$pkgname}{"Size"} > $max_pkg_size) {
+				if (exists $packages{$pkgname} && 
+				    ($packages{$pkgname}{"Size"} > $max_pkg_size)) {
 				    msg(2, "    $pkgname is too big, mark it as excluded\n");
 				    $excluded{$pkgname} = 'toobig';
 				}
