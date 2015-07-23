@@ -12,6 +12,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
     the code would only check sizes for packages explicitly listed but
     packages brought in due to dependency resolution would not be
     checked. Now fixed.
+  * Try to make VOLIDs shorter when given long alpha / beta release names
+    in DEBVERSION
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the

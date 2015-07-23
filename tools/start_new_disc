@@ -36,6 +36,9 @@ if [ "$VOLID_BASE"x = ""x ] ; then
     VOLID_BASE="Debian $DEBVERSION"
 fi
 
+# Shorten the VOLID if we can - maximum length is 32 characters...
+VOLID_BASE=$(echo $VOLID_BASE | sed 's/alpha/a/gi;s/beta/b/gi;')
+
 if [ "$DISKINFO_DISTRO"x = ""x ] ; then
     DISKINFO_DISTRO="Debian"
 fi
