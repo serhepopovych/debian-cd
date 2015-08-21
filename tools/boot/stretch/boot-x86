@@ -298,7 +298,11 @@ if [ "$BOOT_BIOS" = 1 ] ; then
 
     if [ ! -z "$MULTIARCH" ]; then
         # Mandatory for 64bits capability detection
-        cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 boot$N/isolinux/
+        if [ -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 ] ; then
+            cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 boot$N/isolinux/
+        else
+            cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
+        fi
     fi
 
     # If we don't have grub stuff from d-i, tell xorriso to add a
@@ -390,9 +394,16 @@ else
         fi
     fi
 
-    # Apply workaround for #505243
     if [ "$BOOT_BIOS" = 1 ] ; then
-	multiarch_workaround
+        # Add another ifcpu64.c32 launch to let the 'enter' in help menus work correctly
+        sed -i "/^include menu.cfg/ a\include instsel.cfg" \
+                boot$N/isolinux/prompt.cfg
+        cat >boot$N/isolinux/instsel.cfg <<EOF
+default install-select
+label install-select
+    kernel ifcpu64.c32
+    append installgui -- x86-installgui
+EOF
     fi
 fi
 

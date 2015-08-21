@@ -20,7 +20,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
     latter be the special case, this copes with the similar change in d-i
-  * Add management of arch detection from d-i in isolinux
+  * Add management of arch detection from d-i in isolinux, fix booting from
+    help files and isolinux.cfg overwriting
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
