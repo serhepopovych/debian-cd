@@ -66,7 +66,7 @@ shift
 if [ "$1" ]; then
 	ARCHES="$@"
 else
-	ARCHES=i386
+	ARCHES=amd64
 fi
 
 
