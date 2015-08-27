@@ -16,6 +16,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
     in DEBVERSION
   * Add firmware bundles in cpio.gz format too to help netboot users.
     Thanks to Alex Owen for the patch, slightly tweaked.
+  * Add kernels and other bits to armel/armhf images (Closes: #795844)
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
