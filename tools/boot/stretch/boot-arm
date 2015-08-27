@@ -15,14 +15,17 @@ set -e
 
 N=$1
 CDDIR=$2
+INSTALLDIR="install"
 if [ "$DI_WWW_HOME" = "default" ];then
     # Tempting as it might be to merge these two definitions using $ARCH,
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
     if [ "$ARCH" = armel ]; then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
+	CUT=3
     elif [ "$ARCH" = armhf ]; then
         DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
+	CUT=3
     else
         echo "$0: unknown arch $ARCH; abort"
 	exit 1
@@ -34,7 +37,54 @@ cd $CDDIR/..
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
-# Armel/armhf is currently not bootable directly from CD in stretch,
-# so bail out here
-echo "$ARCH booting disabled for $CODENAME, check with Sledge"
+# Strip NONUS part of disk number
+# NN will be 1...N so it can be used as an index
+NN=`echo $N | sed -e 's/_NONUS//'`
+
+# Exit if this is not CD#1/DVD#1
+if [ $NN != 1 ] ; then exit 0; fi
+
+# Armel/armhf is currently not bootable directly from CD, and there's
+# not a lot we can do about that. But add the needed files in the
+# right place so that users can find them, at least:
+#
+# kernel(s)
+# initramfs
+# DTBs
+# etc...
+#
+# The best wasy to find all the files is to parse d-i's MANIFEST file
+# and work from there.
+mkdir -p $CDDIR/$INSTALLDIR
+cd $CDDIR/$INSTALLDIR
+
+if [ ! "$DI_WWW_HOME" ];then
+    if [ ! "$DI_DIR" ];then
+        DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+    fi
+    cp "$DI_DIR/MANIFEST" MANIFEST
+else
+    wget "$DI_WWW_HOME/MANIFEST" -O MANIFEST
+fi
+
+for image in $(awk '{print $1}' MANIFEST); do
+    if [ ! -e "$image" ]; then
+        dir=$(dirname $image)
+        mkdir -p $dir
+        if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
+            cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$image"
+        elif [ ! "$DI_WWW_HOME" ];then
+            if [ ! "$DI_DIR" ];then
+                DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+            fi
+            cp -a "$DI_DIR/$image" "$image"
+        else
+            wget --no-parent -r -nH --cut-dirs=3 "$DI_WWW_HOME/$image"
+        fi
+    fi
+done
+
+# Clean up in case we had to use wget :-(
+find . -name 'index.html*' -delete
+
 exit 0
