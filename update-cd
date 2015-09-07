@@ -310,21 +310,27 @@ do
             BACKOUT_FILE=""
         fi
 
-        add_file $file
+        size=$(stat -c %s $MIRROR/$file)
+        size_kib=$(($size / 1024))
+        if [ $size_kib -gt $CDSIZE ] ; then
+            echo "Ignoring file $file - it won't fit!"
+        else
+            add_file $file
 
-        SIZE_USED=`du -sk $UPD/CD$CDNUM | awk '{print $1}'`
-        if [ $SIZE_USED -gt $CDSIZE ] ; then
-        # Back out the last file added
-            size=`stat -c %s $UPD/CD$CDNUM/$file`
-            rm -f $UPD/CD$CDNUM/$file
-            echo 
-            echo "  Overfull: back out $file ($size bytes)"
-            DIR=`dirname $file`
-            rmdir $DIR > /dev/null 2>&1 || true
-            BACKOUT_FILE=$file
-            make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
-            CDNUM=$(($CDNUM + 1))
-            continue
+            SIZE_USED=`du -sk $UPD/CD$CDNUM | awk '{print $1}'`
+            if [ $SIZE_USED -gt $CDSIZE ] ; then
+                # Back out the last file added
+                size=`stat -c %s $UPD/CD$CDNUM/$file`
+                rm -f $UPD/CD$CDNUM/$file
+                echo 
+                echo "  Overfull: back out $file ($size bytes)"
+                DIR=`dirname $file`
+                rmdir $DIR > /dev/null 2>&1 || true
+                BACKOUT_FILE=$file
+                make_cd $CDNUM $THISNUM $THISARCH $SRCFILES $ARCHFILES $ALLFILES
+                CDNUM=$(($CDNUM + 1))
+                continue
+            fi
         fi
     done
 
