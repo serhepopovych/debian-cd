@@ -220,7 +220,7 @@ add_file () {
     case "$THISARCH" in
         source)
             case "$file" in
-                *.gz|*.bz2|*.dsc)
+                *.xz|*.lzma|*.gz|*.bz2|*.dsc)
                     copy_file $UPD/CD$CDNUM $file
                     SRCFILES=$(($SRCFILES + 1))
                     ;;
