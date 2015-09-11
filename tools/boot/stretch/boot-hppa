@@ -55,8 +55,6 @@ gzip -c "$DI_DIR"/$K32 > "$CDROOT/install"/$K32
 gzip -c "$DI_DIR"/$K64 > "$CDROOT/install"/$K64
 cp "$DI_DIR"/initrd.gz "$CDROOT/install"
 
-install_languages "$CDROOT"
-
 add_mkisofs_opt $CDROOT/../$1.mkisofs_opts "-hppa-cmdline '0/vmlinux initrd=0/ramdisk${KERNEL_PARAMS:+ $KERNEL_PARAMS}'"
 add_mkisofs_opt $CDROOT/../$1.mkisofs_opts "-hppa-kernel-32 install/$K32"
 add_mkisofs_opt $CDROOT/../$1.mkisofs_opts "-hppa-kernel-64 install/$K64"

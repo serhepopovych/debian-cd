@@ -94,4 +94,3 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-alpha-boot boot/bootlx"
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
 
-#install_languages $CDDIR

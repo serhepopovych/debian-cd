@@ -75,8 +75,6 @@ cp "$DI_DIR"/initrd.gz "$CDROOT/boot/initrd.gz"
 cp "$DI_DIR"/vmlinux-*-r3k-kn02 "$CDROOT/boot/vmlinux-r3k-kn02"
 cp "$DI_DIR"/vmlinux-*-r4k-kn04 "$CDROOT/boot/vmlinux-r4k-kn04"
 
-install_languages $CDROOT
-
 add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-mipsel-boot boot/delo.2nd"
 
 exit 0

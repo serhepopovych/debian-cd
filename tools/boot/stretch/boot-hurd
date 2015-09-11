@@ -94,9 +94,6 @@ EOF
 EOF
 fi
 
-# Install languages
-install_languages $CDDIR
-
 # Cleanup
 rm -rf cdrom
 

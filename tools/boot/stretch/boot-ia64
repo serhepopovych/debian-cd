@@ -41,8 +41,6 @@ for image in boot.img; do
     fi
 done
 
-install_languages $CDDIR
-
 mkdir -p boot$N/boot
 cp -f boot.img boot$N/boot/
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"

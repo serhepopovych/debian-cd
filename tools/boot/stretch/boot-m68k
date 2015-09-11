@@ -47,8 +47,6 @@ fi
 echo "DI_WWW_HOME: $DI_WWW_HOME"
 echo "DI_DIR: $DI_DIR"
 
-install_languages $CDDIR
-
 # remove i386 stuff
 rm -rf $CDDIR/tools
 

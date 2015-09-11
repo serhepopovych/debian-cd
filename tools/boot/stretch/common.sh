@@ -42,19 +42,6 @@ if [ "$ARCH" != i386 ] && [ "$ARCH" != amd64 ]; then
 fi
 
 
-# install_languages decompacts the language packs, you should give the path
-# to the CD temporary tree.
-# This function should be called for all bootable images.
-install_languages() {
-    # Param $1 is the CD directory
-    if [ -f "$MIRROR/dists/$DI_CODENAME/main/disks-$ARCH/current/xlp.tgz" ]
-    then
-	mkdir $1/.xlp
-	(cd $1/.xlp; \
-	tar zxf $MIRROR/dists/$DI_CODENAME/main/disks-$ARCH/current/xlp.tgz )
-    fi
-}
-
 # Add an option to the mkisofs options for this CD _only_ if it's not
 # already set. $1 is the opts file location, "$2" is the new
 # option. Call this with _logical groupings_ of options
