@@ -12,37 +12,60 @@
 set -e
 
 N=$1
-CDROOT=$2
+CDDIR=$2
+INSTALLDIR="install"
 if [ "$DI_WWW_HOME" = "default" ];then
     DI_WWW_HOME="http://d-i.debian.org/daily-images/mips/daily/"
     try_di_image_cache
 fi
 
-add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
 # Only disk 1* bootable
 if [ $N != 1 -a $N != 1_NONUS ]; then
 	exit 0
 fi
 
+# Mips is currently not bootable directly from CD, and there's
+# not a lot we can do about that. But add the needed files in the
+# right place so that users can find them, at least:
+#
+# kernel(s)
+# initramfs
+# etc...
+#
+# The best wasy to find all the files is to parse d-i's MANIFEST file
+# and work from there.
+mkdir -p $CDDIR/$INSTALLDIR
+cd $CDDIR/$INSTALLDIR
+
 if [ ! "$DI_WWW_HOME" ];then
         if [ ! "$DI_DIR" ];then
            DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
         fi
+    cp "$DI_DIR/MANIFEST" MANIFEST
 else
-	DI_DIR="di_stuff"
-	wget -P "$DI_DIR/r4k-ip22" "$DI_WWW_HOME/r4k-ip22/cdrom-boot.img"
-#   r5k-ip32 has no cdrom boot image yet
-#	wget -P "$DI_DIR/r5k-ip32" "$DI_WWW_HOME/r5k-ip32/cdrom-boot.img"
+    wget "$DI_WWW_HOME/MANIFEST" -O MANIFEST
 fi
-install -m 644 -D "$DI_DIR"/r4k-ip22/cdrom-boot.img "$CDROOT"/install/r4k-ip22-boot.img
-#r5k-ip32 has no cdrom boot image yet
-#install -m 644 -D "$DI_DIR"/r5k-ip32/cdrom-boot.img "$CDROOT"/install/r5k-ip32-boot.img
 
-install_languages $CDROOT
+for image in $(awk '{print $1}' MANIFEST); do
+    if [ ! -e "$image" ]; then
+        dir=$(dirname $image)
+        mkdir -p $dir
+        if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
+            cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$image"
+        elif [ ! "$DI_WWW_HOME" ];then
+            if [ ! "$DI_DIR" ];then
+                DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+            fi
+            cp -a "$DI_DIR/$image" "$image"
+        else
+            wget --no-parent -r -nH --cut-dirs=3 "$DI_WWW_HOME/$image"
+        fi
+    fi
+done
 
-add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-mips-boot install/r4k-ip22-boot.img"
-#r5k-ip32 has no cdrom boot image yet
-#add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-mips-boot install/r5k-ip32-boot.img"
+# Clean up in case we had to use wget :-(
+find . -name 'index.html*' -delete
 
 exit 0
