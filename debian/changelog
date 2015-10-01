@@ -20,6 +20,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Do similar for mips images, now r4k-ip22 cdrom images are no longer
     built.
   * Remove old obsolete pre-d-i function install_language and all callers.
+  * parse_isolinux: Support grub menuentry shortcuts for UEFI boot menus.
+    Closes: #798908
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the

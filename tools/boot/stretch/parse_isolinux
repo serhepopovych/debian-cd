@@ -69,13 +69,17 @@ sub print_kernel {
     my $t = shift;
     my %k = %{$t};
     my $initrd;
+    my $hotkey = "";
 
-    $k{"label"} =~ s/\^//;
+    if ($k{"label"} =~ m,\^(\S),) {
+	$hotkey = lc "--hotkey=$1 ";
+	$k{"label"} =~ s/\^//;
+    }
     if ($k{"append"} =~ s? (initrd=\S+)??) {
 	$initrd = $1;
 	$initrd =~ s?^.*initrd=??;
     }
-    print_indent "menuentry '$pre" . $k{"label"} . "' {\n";
+    print_indent "menuentry $hotkey'$pre" . $k{"label"} . "' {\n";
     print_indent "    set background_color=black\n";
     print_indent "    linux    " . $k{"kernel"} . " " . $k{"append"} . "\n";
     print_indent "    initrd   $initrd\n";
