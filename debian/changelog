@@ -34,6 +34,9 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Make amd64 the default arch in the easy-build.sh script.
   * Make stretch the default suite in the easy-build.sh script.
 
+  [ Philipp Kern ]
+  * Drop the remaining s390 bits from stretch and jessie. (s390x remains.)
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium
