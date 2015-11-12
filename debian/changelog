@@ -35,6 +35,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Make stretch the default suite in the easy-build.sh script.
 
   [ Philipp Kern ]
+  * Load the s390x initrd at 0x01000000 to allow kernels larger than
+    8 MiB (and smaller than 16 MiB) to be loaded via the ins loader.
   * Drop the remaining s390 bits from stretch and jessie. (s390x remains.)
   * Drop the d390oco loader from stretch and jessie.
 

@@ -84,7 +84,7 @@ cp $BASEDIR/data/$CODENAME/$ARCH/d390* "$imagedir/"
 sed -e 's,^[^*],boot/&,g' < $BASEDIR/data/$CODENAME/$ARCH/d390.ins > "boot$N/d390.ins"
 
 # Create the files specifying offset and size of the initrd
-perl -e "print pack('N', 0x800000)" >"$imagedir/root.off"
+perl -e "print pack('N', 0x1000000)" >"$imagedir/root.off"
 perl -e "print pack('N', -s '$imagedir/root.bin')" >"$imagedir/root.siz"
 
 # Copy the README file
