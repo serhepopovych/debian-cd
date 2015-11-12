@@ -77,9 +77,8 @@ for image in $images_S390; do
 	fi
 done
 
-# Copy the different boot files
+# Copy the boot file
 # - d390.ins    : for booting from CD-ROM or FTP-Server
-# - d390oco.ins : same, using object-code-only-modules-ramdisk (example)
 cp $BASEDIR/data/$CODENAME/$ARCH/d390* "$imagedir/"
 sed -e 's,^[^*],boot/&,g' < $BASEDIR/data/$CODENAME/$ARCH/d390.ins > "boot$N/d390.ins"
 
