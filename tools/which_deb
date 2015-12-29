@@ -127,7 +127,7 @@ my $pkgdata = "";
 my $srcname = "";
 
 if ($pkg eq "silo") {
-    $pkgdata = grab_bin_info($pth, "sparc", $pkg);
+    $pkgdata = grab_bin_info($pth, "sparc64", $pkg);
 
 } elsif ($pkg eq "syslinux") {
     first { $pkgdata = grab_bin_info($pth, $_, "syslinux-common") } @ARCHES;
