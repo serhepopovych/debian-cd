@@ -16,9 +16,9 @@ set -e
 N=$1
 CDROOT=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-      DI_WWW_HOME="http://d-i.debian.org/daily-images/mipsel/daily"
+      DI_WWW_HOME="https://d-i.debian.org/daily-images/mipsel/daily"
    if [ -n "$DI_DIR" ];then
-       DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+       DI_DIR="$DI_DIR/${DI_WWW_HOME#*https://}"
        DI_WWW_HOME=""                     
    fi
 fi

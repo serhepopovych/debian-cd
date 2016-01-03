@@ -25,7 +25,7 @@ N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
 if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="http://d-i.debian.org/daily-images/ppc64el/daily"
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/ppc64el/daily"
     try_di_image_cache
 fi
 

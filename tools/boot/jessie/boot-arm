@@ -20,9 +20,9 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
     if [ "$ARCH" = armel ]; then
-        DI_WWW_HOME="http://d-i.debian.org/daily-images/armel/daily"
+        DI_WWW_HOME="https://d-i.debian.org/daily-images/armel/daily"
     elif [ "$ARCH" = armhf ]; then
-        DI_WWW_HOME="http://d-i.debian.org/daily-images/armhf/daily"
+        DI_WWW_HOME="https://d-i.debian.org/daily-images/armhf/daily"
     else
         echo "$0: unknown arch $ARCH; abort"
 	exit 1

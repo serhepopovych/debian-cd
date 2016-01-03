@@ -21,12 +21,12 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
 	if [ "$ARCH" = i386 ]; then
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/i386/daily"
+		DI_WWW_HOME="https://d-i.debian.org/daily-images/i386/daily"
 	else
-		DI_WWW_HOME="http://d-i.debian.org/daily-images/amd64/daily"
+		DI_WWW_HOME="https://d-i.debian.org/daily-images/amd64/daily"
 	fi
 	if [ -n "$DI_DIR" ];then
-		DI_DIR="$DI_DIR/${DI_WWW_HOME#*http://}"
+		DI_DIR="$DI_DIR/${DI_WWW_HOME#*https://}"
 		DI_WWW_HOME=""                     
 		echo "Using images from $DI_DIR"
 	fi

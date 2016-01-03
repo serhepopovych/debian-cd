@@ -18,7 +18,7 @@ CDDIR=$2
 BOOTDIR=
 INSTALLDIR="install.a64"
 if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="http://d-i.debian.org/daily-images/arm64/daily"
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/arm64/daily"
     try_di_image_cache
 fi
 

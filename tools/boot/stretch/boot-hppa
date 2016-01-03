@@ -14,7 +14,7 @@ set -e
 N=$1
 CDROOT=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="http://d-i.debian.org/daily-images/hppa/daily/cdrom/2.6"
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/hppa/daily/cdrom/2.6"
     try_di_image_cache
 fi
 

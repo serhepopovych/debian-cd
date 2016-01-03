@@ -11,7 +11,7 @@ set -e
 N=$1
 CDDIR=$2
 if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="http://d-i.debian.org/daily-images/sparc64/daily/cdrom/"
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/sparc64/daily/cdrom/"
     try_di_image_cache
 fi
 

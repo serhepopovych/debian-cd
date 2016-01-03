@@ -36,7 +36,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
     if [ "$ARCH" = s390x ]; then
-        DI_WWW_HOME="http://d-i.debian.org/daily-images/s390x/daily"
+        DI_WWW_HOME="https://d-i.debian.org/daily-images/s390x/daily"
     fi
     try_di_image_cache
 fi
