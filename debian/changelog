@@ -43,6 +43,9 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   [ John Paul Adrian Glaubitz ]
   * Add initial sparc64 support
 
+  [ Samuel Thibault ]
+  * include espeakup on cd1, not speakup, and alsa-utils. Closes: #809497
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium

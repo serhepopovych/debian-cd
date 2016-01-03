@@ -10,7 +10,8 @@ libterm-readline-gnu-perl
 /* Accessibility stuff that is installed by base-installer
  * in certain situations, but too large for the netinst. */
 brltty
-speakup
+espeakup
+alsa-utils
 /* See rationale in #630805 */
 apt-offline
 
