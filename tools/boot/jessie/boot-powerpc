@@ -118,8 +118,8 @@ do
 	   cp -a "$DI_DIR/$subarch/cdrom${bitness}" "$subarch"
 	fi
   else
-	if ! wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom/" && [ "$bitness" ]; then
-	   wget -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom${bitness}/"
+	if ! $WGET -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom/" && [ "$bitness" ]; then
+	   $WGET -r -nd --no-parent --level=1 -P "$subarch" -R 'index*' "$DI_WWW_HOME/$subarch/cdrom${bitness}/"
 	fi
   fi
 

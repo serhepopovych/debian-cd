@@ -410,6 +410,11 @@ case "$OFFICIAL" in
 	;;
 esac
 
+# Add options to wget to include support for the Debian CA, so
+# https://d-i.debian.org et al will work.
+export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/"
+export WGET="wget $WGET_OPTS"
+
 # Set this to force the Release file(s) to say "stable". Used in first
 # Etch builds to allow us to build before the archive updated
 #EARLY_BUILD_HACK=1

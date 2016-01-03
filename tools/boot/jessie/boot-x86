@@ -97,7 +97,7 @@ for image in $BOOT_IMAGES; do
 #                       echo "Copying images from $DI_DIR"
                         cp "$DI_DIR/$image" "$image"
                 else
-                        wget "$DI_WWW_HOME/$image" -O "$image"
+                        $WGET "$DI_WWW_HOME/$image" -O "$image"
                 fi
         fi
 done
@@ -115,7 +115,7 @@ for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
                         fi
                         cp "$DI_DIR/$image" "$image" || true
                 else
-                        wget "$DI_WWW_HOME/$image" -O "$image" || rm -f "$image"
+                        $WGET "$DI_WWW_HOME/$image" -O "$image" || rm -f "$image"
                 fi
         fi
 done
@@ -154,7 +154,7 @@ extra_image () {
                         fi
                         cp "$DI_DIR/cdrom/$image" $CDDIR/$INSTALLDIR/"$image"
                 else
-                        wget "$DI_WWW_HOME/cdrom/$image" -O $CDDIR/$INSTALLDIR/"$image"
+                        $WGET "$DI_WWW_HOME/cdrom/$image" -O $CDDIR/$INSTALLDIR/"$image"
                 fi
         fi
         for doppelganger in $doppelgangers ; do

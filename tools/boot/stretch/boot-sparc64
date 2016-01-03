@@ -73,10 +73,10 @@ if [ ! "$DI_WWW_HOME" ];then
 else
 	DI_DIR="cdrom"
 	mkdir "./$DI_DIR"
-	wget "$DI_WWW_HOME" -O ./$DI_DIR/di.dir
+	$WGET "$DI_WWW_HOME" -O ./$DI_DIR/di.dir
 	sparc64=$(sed -n 's/.*a href="\(vmlinuz-.*-sparc64\)".*/\1/ip' ./$DI_DIR/di.dir)
-	wget "$DI_WWW_HOME/$sparc64" -O ./$DI_DIR/vmlinuz-x-sparc64
-	wget "$DI_WWW_HOME/initrd.gz" -O ./$DI_DIR/initrd.gz
+	$WGET "$DI_WWW_HOME/$sparc64" -O ./$DI_DIR/vmlinuz-x-sparc64
+	$WGET "$DI_WWW_HOME/initrd.gz" -O ./$DI_DIR/initrd.gz
 fi
 
 if [ ! -e "$DI_DIR"/initrd.gz ] ; then

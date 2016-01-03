@@ -31,9 +31,9 @@ if [ ! "$DI_WWW_HOME" ];then
         fi
 else
 	DI_DIR="di_stuff"
-	wget -P "$DI_DIR/r4k-ip22" "$DI_WWW_HOME/r4k-ip22/cdrom-boot.img"
+	$WGET -P "$DI_DIR/r4k-ip22" "$DI_WWW_HOME/r4k-ip22/cdrom-boot.img"
 #   r5k-ip32 has no cdrom boot image yet
-#	wget -P "$DI_DIR/r5k-ip32" "$DI_WWW_HOME/r5k-ip32/cdrom-boot.img"
+#	$WGET -P "$DI_DIR/r5k-ip32" "$DI_WWW_HOME/r5k-ip32/cdrom-boot.img"
 fi
 install -m 644 -D "$DI_DIR"/r4k-ip22/cdrom-boot.img "$CDROOT"/install/r4k-ip22-boot.img
 #r5k-ip32 has no cdrom boot image yet

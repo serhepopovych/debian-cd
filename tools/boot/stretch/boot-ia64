@@ -35,8 +35,8 @@ for image in boot.img; do
 		cp "$DI_DIR/cdrom/$image" . || \
 		cp "$DI_DIR/$image" .
 	else
-		wget "$DI_WWW_HOME/cdrom/$image" || \
-		wget "$DI_WWW_HOME/$image"
+		$WGET "$DI_WWW_HOME/cdrom/$image" || \
+		$WGET "$DI_WWW_HOME/$image"
 	fi
     fi
 done

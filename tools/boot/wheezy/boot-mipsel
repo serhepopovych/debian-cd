@@ -70,12 +70,12 @@ if [ ! "$DI_WWW_HOME" ];then
 	fi
 else
         DI_DIR="."
-        wget "$DI_WWW_HOME" -O di.dir
+        $WGET "$DI_WWW_HOME" -O di.dir
         r3k=$(sed -n 's/.*a href="\(vmlinux-.*-r3k-kn02\)".*/\1/ip' di.dir)
         r4k=$(sed -n 's/.*a href="\(vmlinux-.*-r4k-kn04\)".*/\1/ip' di.dir)
-        wget "$DI_WWW_HOME/$r3k" -O vmlinux-x-r3k-kn02
-        wget "$DI_WWW_HOME/$r4k" -O vmlinux-x-r4k-kn04
-        wget "$DI_WWW_HOME/initrd.gz"
+        $WGET "$DI_WWW_HOME/$r3k" -O vmlinux-x-r3k-kn02
+        $WGET "$DI_WWW_HOME/$r4k" -O vmlinux-x-r4k-kn04
+        $WGET "$DI_WWW_HOME/initrd.gz"
 fi
 cp "$DI_DIR"/initrd.gz "$CDROOT/boot/initrd.gz"
 cp "$DI_DIR"/vmlinux-*-r3k-kn02 "$CDROOT/boot/vmlinux-r3k-kn02"

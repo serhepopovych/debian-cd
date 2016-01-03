@@ -44,7 +44,7 @@ if [ ! "$DI_WWW_HOME" ];then
 else
 	DI_DIR="di_stuff"
 	mkdir "$DI_DIR"
-	wget -r -nd --no-parent -P "$DI_DIR" "$DI_WWW_HOME"
+	$WGET -r -nd --no-parent -P "$DI_DIR" "$DI_WWW_HOME"
 fi
 	
 K32=$(basename "$DI_DIR"/vmlinux-*-parisc)

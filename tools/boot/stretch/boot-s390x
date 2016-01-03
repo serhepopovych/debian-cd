@@ -73,7 +73,7 @@ for image in $images_S390; do
 		fi
 		cp "$DI_DIR/$image" "$imagedest"
 	else
-		wget "$DI_WWW_HOME/$image" -O "$imagedest"
+		$WGET "$DI_WWW_HOME/$image" -O "$imagedest"
 	fi
 done
 

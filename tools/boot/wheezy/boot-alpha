@@ -75,7 +75,7 @@ for image in initrd.gz vmlinuz; do
 		fi
 		cp "$DI_DIR/$image" .
 	else
-		wget "$DI_WWW_HOME/$image"
+		$WGET "$DI_WWW_HOME/$image"
 	fi
     fi
 done

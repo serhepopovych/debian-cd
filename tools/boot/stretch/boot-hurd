@@ -51,7 +51,7 @@ for image in $BOOT_IMAGES; do
                        fi
                        cp "$DI_DIR/$image" $image
                else
-                       wget "$DI_WWW_HOME/$image" -O $image
+                       $WGET "$DI_WWW_HOME/$image" -O $image
                fi
        fi
 done

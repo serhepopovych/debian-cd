@@ -70,7 +70,7 @@ for image in initrd.gz vmlinuz; do
 		ab_file=`ls "$DI_DIR"/$image* | tail -1`
 		cp "$ab_file" .
 	else
-		wget "$DI_WWW_HOME/$image"
+		$WGET "$DI_WWW_HOME/$image"
 	fi
     fi
 done

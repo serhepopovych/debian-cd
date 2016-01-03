@@ -63,7 +63,7 @@ if [ ! "$DI_WWW_HOME" ];then
 	fi
 	cp -a $DI_DIR/* .
 else
-	wget -q -np -nH --cut-dirs=4 -r -l 3 -R '.gif,.log,stats.txt,index*' "$DI_WWW_HOME"
+	$WGET -q -np -nH --cut-dirs=4 -r -l 3 -R '.gif,.log,stats.txt,index*' "$DI_WWW_HOME"
 fi
 
 # amiga specific stuff

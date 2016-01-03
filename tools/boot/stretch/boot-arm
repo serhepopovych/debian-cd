@@ -64,7 +64,7 @@ if [ ! "$DI_WWW_HOME" ];then
     fi
     cp "$DI_DIR/MANIFEST" MANIFEST
 else
-    wget "$DI_WWW_HOME/MANIFEST" -O MANIFEST
+    $WGET "$DI_WWW_HOME/MANIFEST" -O MANIFEST
 fi
 
 for image in $(awk '{print $1}' MANIFEST); do
@@ -79,12 +79,12 @@ for image in $(awk '{print $1}' MANIFEST); do
             fi
             cp -a "$DI_DIR/$image" "$image"
         else
-            wget --no-parent -r -nH --cut-dirs=3 "$DI_WWW_HOME/$image"
+            $WGET --no-parent -r -nH --cut-dirs=3 "$DI_WWW_HOME/$image"
         fi
     fi
 done
 
-# Clean up in case we had to use wget :-(
+# Clean up in case we had to use $WGET :-(
 find . -name 'index.html*' -delete
 
 exit 0

@@ -59,7 +59,7 @@ if [ "$OMIT_RELEASE_NOTES" != 1 ]; then
 			mkdir -p $RN
 			cd $RN
 			echo "Downloading most recent release notes for $ARCH"
-			wget $RELEASE_NOTES_LOCATION/release-notes-$ARCH.tar.gz
+			$WGET $RELEASE_NOTES_LOCATION/release-notes-$ARCH.tar.gz
 			if [ -e release-notes-$ARCH.tar.gz ] ; then
 				tar xzvf release-notes-$ARCH.tar.gz
 				rm -f release-notes-$ARCH.tar.gz

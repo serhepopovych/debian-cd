@@ -24,7 +24,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
     Closes: #798908
   * Create checksums for firmware images
   * Switch references to d-i.debian.org to use https instead of http.
-    Closes: #809698
+    Closes: #809698. Also use --ca-directory /etc/ssl/ca-debian/ with wget
+    to ensure this works.
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
