@@ -49,6 +49,9 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   [ Samuel Thibault ]
   * include espeakup on cd1, not speakup, and alsa-utils. Closes: #809497
 
+  [ Ben Hutchings ]
+  * Add 686 kernels to replace 586 for i386 CDs. Closes: #808958
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium

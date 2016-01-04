@@ -375,6 +375,9 @@ $(BDIR)/rawlist:
 	if [ "$(EXCLUDE_586_KERNEL)"x = "1"x ] ; then \
 		ARCHDEFS="$$ARCHDEFS -DARCH_i386_EXCLUDE_586_KERNEL"; \
 	fi; \
+	if [ "$(EXCLUDE_686_KERNEL)"x = "1"x ] ; then \
+		ARCHDEFS="$$ARCHDEFS -DARCH_i386_EXCLUDE_686_KERNEL"; \
+	fi; \
 	if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		cpp -nostdinc -P -undef $$ARCHDEFS $$VARIANTDEFS\
 	   		$$ARCHUNDEFS -U i386 -U linux -U unix \
