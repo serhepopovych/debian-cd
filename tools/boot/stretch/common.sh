@@ -85,7 +85,7 @@ calc_boot_size() {
 # If we're looking for an image location to download, see if it's in a
 # local cache first.
 try_di_image_cache() {
-    DI_TMP_DIR=${DI_WWW_HOME#*http://}
+    DI_TMP_DIR=${DI_WWW_HOME#*https://}
     if [ -n "$DI_DIR" ] && [ -e "${DI_DIR}/${DI_TMP_DIR}" ] ; then
         DI_DIR="$DI_DIR/${DI_TMP_DIR}"
         DI_WWW_HOME=""
