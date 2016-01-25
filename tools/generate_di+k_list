@@ -231,6 +231,14 @@ linux-image-sparc64
 linux-image-sparc64-smp
 #endif
 
+#ifdef ARCH_sparc64
+initramfs-tools
+busybox
+silo
+linux-image-sparc64
+linux-image-sparc64-smp
+#endif
+
 #ifdef ARCH_powerpc
 initramfs-tools
 busybox
