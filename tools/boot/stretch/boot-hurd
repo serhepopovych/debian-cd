@@ -39,7 +39,7 @@ if [ $N != 1 ]; then
 fi
 
 # Download boot images.
-BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/gnumach.gz cdrom/initrd.gz cdrom/gtk/initrd.gz cdrom/ext2fs.static cdrom/ld.so.1"
+BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/gnumach.gz cdrom/initrd.gz cdrom/gtk/initrd.gz cdrom/ext2fs.static cdrom/exec.static"
 
 for image in $BOOT_IMAGES; do
        if [ ! -e "$image" ]; then
@@ -63,7 +63,7 @@ cp "cdrom/gnumach.gz" "$CDDIR/boot/kernel/gnumach.gz"
 cp "cdrom/initrd.gz" "$CDDIR/boot/initrd.gz"
 cp "cdrom/gtk/initrd.gz" "$CDDIR/boot/gtk/initrd.gz"
 cp "cdrom/ext2fs.static" "$CDDIR/boot/kernel/ext2fs.static"
-cp "cdrom/ld.so.1" "$CDDIR/boot/kernel/ld.so.1"
+cp "cdrom/exec.static" "$CDDIR/boot/kernel/exec.static"
 
 # Install bootloader
 mkdir -p boot$N

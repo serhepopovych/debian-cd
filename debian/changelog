@@ -48,6 +48,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
 
   [ Samuel Thibault ]
   * include espeakup on cd1, not speakup, and alsa-utils. Closes: #809497
+  * Minor tweaks to hurd boot setup. Closes: #818176
 
   [ Ben Hutchings ]
   * Add 686 kernels to replace 586 for i386 CDs. Closes: #808958
