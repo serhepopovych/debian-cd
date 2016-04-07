@@ -56,7 +56,7 @@ libgtk2-engines-udeb
 libpango1.0-udeb
 libpcre3-udeb
 libpixman-1-0-udeb
-libpng12-0-udeb
+libpng*-udeb
 libsdl1.2debian-udeb
 mouse-modules-*
 ttf-*
