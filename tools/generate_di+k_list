@@ -61,6 +61,7 @@ jfsutils
 dosfstools
 reiserfsprogs
 btrfs-tools
+btrfs-progs
 ufsutils
 zfsutils
 cryptsetup

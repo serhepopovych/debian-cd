@@ -53,6 +53,9 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   [ Ben Hutchings ]
   * Add 686 kernels to replace 586 for i386 CDs. Closes: #808958
 
+  [ Nicholas D Steeves ]
+  * Change dependency on btrfs-tools to btrfs-progs. Closes: #820479
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium
