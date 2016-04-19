@@ -28,6 +28,7 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
     to ensure this works.
   * Add Recommends: syslinux-utils in case a user wants to use SPLASHPNG
     (and hence ppmtolss16) for their own splash images. Closes: #768977
+  * Update Standards-Version to 3.9.6
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
