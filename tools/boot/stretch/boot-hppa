@@ -50,9 +50,8 @@ fi
 K32=$(basename "$DI_DIR"/vmlinux-*-parisc)
 K64=$(basename "$DI_DIR"/vmlinux-*-parisc64*)
 
-# palo >= 1.91 can load gzip-compressed Linux kernels
-gzip -c "$DI_DIR"/$K32 > "$CDROOT/install"/$K32
-gzip -c "$DI_DIR"/$K64 > "$CDROOT/install"/$K64
+cp "$DI_DIR"/$K32  "$CDROOT/install"/$K32
+cp "$DI_DIR"/$K64  "$CDROOT/install"/$K64
 cp "$DI_DIR"/initrd.gz "$CDROOT/install"
 
 add_mkisofs_opt $CDROOT/../$1.mkisofs_opts "-hppa-cmdline '0/vmlinux initrd=0/ramdisk${KERNEL_PARAMS:+ $KERNEL_PARAMS}'"

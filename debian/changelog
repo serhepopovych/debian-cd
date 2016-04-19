@@ -58,6 +58,9 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   [ Nicholas D Steeves ]
   * Change dependency on btrfs-tools to btrfs-progs. Closes: #820479
 
+  [ Helge Deller ]
+  * Update hppa support. Closes: #744155
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 20 Apr 2015 12:36:57 +0100
 
 debian-cd (3.1.17) unstable; urgency=medium
