@@ -26,6 +26,8 @@ debian-cd (3.1.18) UNRELEASED; urgency=medium
   * Switch references to d-i.debian.org to use https instead of http.
     Closes: #809698. Also use --ca-directory /etc/ssl/ca-debian/ with wget
     to ensure this works.
+  * Add Recommends: syslinux-utils in case a user wants to use SPLASHPNG
+    (and hence ppmtolss16) for their own splash images. Closes: #768977
 
   [ Didier Raboud ]
   * For stretch, swap amd64 and i386 to let the first be the norm, and the
