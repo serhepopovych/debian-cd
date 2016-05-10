@@ -127,12 +127,13 @@ if [ -d boot$N/grub ] ; then
     block_bytes=1024
     blocks=$(($tracks * $track_bytes / $block_bytes))
 
-    rm -f $CDDIR/boot/grub/efi.img
-    mkfs.msdos -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+    # Workaround for #823881:
+    export MTOOLS_SKIP_CHECK=1
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
-    mcopy -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
+    mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
         "::efi/boot"
+    unset MTOOLS_SKIP_CHECK
 
     # Ugh - different code here depending on the version of xorriso we've got
     if [ $XORRISO_VER -le 10202 ] ; then
