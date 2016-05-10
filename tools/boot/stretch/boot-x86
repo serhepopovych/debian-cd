@@ -12,6 +12,9 @@
 set -e
 #set -x
 
+# Workaround for #823881:
+export MTOOLS_SKIP_CHECK=1
+
 # Have we been told to use just one boot method? If none listed,
 # assume all are desired. Order also matters. Possible values are
 # "BIOS", "EFI" and "BIOS EFI". We'll also accept "EFI BIOS" for
@@ -516,13 +519,11 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
 
     rm -f $CDDIR/boot/grub/efi.img
     mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
-    # Workaround for #823881:
-    export MTOOLS_SKIP_CHECK=1
+
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
     mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
         "::efi/boot"
-    unset MTOOLS_SKIP_CHECK
 
     if [ $BOOT_EFI = 2 ] ; then
 	# We're being added alongside (after) a BIOS boot record. Tell
