@@ -469,11 +469,11 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
 
-	# If we're only doing EFI, copy the splash file from the BIOS boot dir
-	if [ $BOOT_EFI = 1 ] ; then
-		mkdir -p $CDDIR/isolinux
-		cp boot$N/isolinux/splash.png $CDDIR/isolinux
-	fi
+    # If we're only doing EFI, copy the splash file from the BIOS boot dir
+    if [ $BOOT_EFI = 1 ] ; then
+        mkdir -p $CDDIR/isolinux
+        cp boot$N/isolinux/splash.png $CDDIR/isolinux
+    fi
 
     # Create grub menu entries to match the isolinux ones
     sed -i '/^menuentry/Q' $CDDIR/boot/grub/grub.cfg;
