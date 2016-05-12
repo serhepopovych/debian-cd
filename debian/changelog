@@ -4,6 +4,11 @@ debian-cd (3.1.19) UNRELEASED; urgency=medium
   * Also fix size calculation for EFI image for arm64
   * Add workaround for dosfstools issue (#823881)
 
+  [ Cyril Brulebois ]
+  * Only export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/" when this
+    directory actually exists, making it easier to use debian-cd on non-
+    debian.org machines.
+
  -- Steve McIntyre <93sam@debian.org>  Fri, 06 May 2016 22:59:32 +0100
 
 debian-cd (3.1.18) unstable; urgency=medium

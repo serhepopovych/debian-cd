@@ -412,7 +412,9 @@ esac
 
 # Add options to wget to include support for the Debian CA, so
 # https://d-i.debian.org et al will work.
-export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/"
+if [ -d "/etc/ssl/ca-debian" ]; then
+	export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/"
+fi
 export WGET="wget $WGET_OPTS"
 
 # Set this to force the Release file(s) to say "stable". Used in first
