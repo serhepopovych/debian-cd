@@ -61,7 +61,7 @@ export BASEDIR=`pwd`
 # Name of the distribution for the image filename (Defaults to 'debian')
 # export CDNAME=debian
 
-# Building wheezy cd set ...
+# Building $codename cd set ...
 export CODENAME=stretch
 
 # By default use Debian installer packages from $CODENAME
