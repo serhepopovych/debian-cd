@@ -47,6 +47,11 @@ my $localdebs = read_env('LOCALDEBS', $mirror);
 my $symlink_farm = read_env('SYMLINK', 0);
 my $link_verbose = read_env('VERBOSE', 0);
 my $link_copy = read_env('COPYLINK', 0);
+my $backports_list = read_env('BACKPORTS', "");
+my $backports = 1;
+if ($backports_list =~ /^$/) {
+    $backports = 0;;
+}
 
 # MAXCDS is the hard limit on the MAXIMUM number of images to
 # make. MAXJIGDOS and MAXISOS can only make this number smaller; we
@@ -100,17 +105,9 @@ foreach my $arch (split(' ', $archlist)) {
     load_packages_cache($arch);
 }
 
-if (! ($archlist eq "source")) {
-    load_descriptions("main");
-    if ($contrib) {
-        load_descriptions("contrib");
-    }
-    if ($nonfree || $extranonfree) {
-        load_descriptions("non-free");
-    }
-    if ($use_local) {
-        load_descriptions("local");
-    }
+load_all_descriptions(0);
+if ($backports) {
+    load_all_descriptions(1);
 }
 
 my $disknum = 1;
@@ -342,6 +339,7 @@ close(LOG);
 sub load_packages_cache {
     my $arch = shift;
     my @pkglist;
+    my @tmplist;
     my ($p);
     my $num_pkgs = 0;
 
@@ -354,7 +352,7 @@ sub load_packages_cache {
     while (defined (my $pkg = <INLIST>)) {
         chomp $pkg;
         my ($junk, $component, $pkgname, $pkgsize) = split /:/, $pkg;
-        push @pkglist, $pkgname;
+        push @tmplist, $pkgname;
     }
     close INLIST;
 
@@ -362,6 +360,7 @@ sub load_packages_cache {
     print LOG "Reading in package information for $arch:\n";
 
     $/ = ''; # Browse by paragraph
+    @pkglist = (grep (!/\/$codename-backports$/, @tmplist));
     while (@pkglist) {
         my (@pkg) = splice(@pkglist,0,200);
         if ($arch eq "source") {
@@ -379,23 +378,72 @@ sub load_packages_cache {
         close LIST;
         print LOG "load_packages_cache: Read details of $num_pkgs packages for $arch\n";
     }
-    $/ = $old_split; # Browse by line again
     print "  Done: Read details of $num_pkgs packages for $arch\n";
+    if ($backports) {
+	$num_pkgs = 0;
+	@pkglist = (grep (/\/$codename-backports$/, @tmplist));
+	while (@pkglist) {
+	    my (@pkg) = splice(@pkglist,0,200);
+	    if ($arch eq "source") {
+		open (LIST, "USE_BP=1 $basedir/tools/apt-selection cache showsrc @pkg |")
+		    || die "Can't fork : $!\n";
+	    } else {
+		open (LIST, "USE_BP=1 $basedir/tools/apt-selection cache show @pkg |")
+		    || die "Can't fork : $!\n";
+	    }
+	    while (defined($_ = <LIST>)) {
+		m/^Package: (\S+)/m and $p = $1;
+		push @{$pkginfo{$arch}{"$p/$codename-backports"}}, $_;
+		$num_pkgs++;
+	    }
+	    close LIST;
+	    print LOG "load_packages_cache: Read details of $num_pkgs packages for $arch backports\n";
+	}
+	print "  Done: Read details of $num_pkgs packages for $arch backports\n";
+    }
+    $/ = $old_split; # Browse by line again
+}
+
+sub load_all_descriptions {
+    my $use_backports = shift;
+    if (! ($archlist eq "source")) {
+	load_descriptions("main", $use_backports);
+	if ($contrib) {
+	    load_descriptions("contrib", $use_backports);
+	}
+	if ($nonfree || $extranonfree) {
+	    load_descriptions("non-free", $use_backports);
+	}
+	if ($use_local) {
+	    load_descriptions("local", $use_backports);
+	}
+    }
 }
 
 # Load all the translated descriptions we can find
 sub load_descriptions {
     my $suite = shift;
+    my $use_backports = shift;
     my $lang;
 	my $dh;
     my ($p);
     my $num_total = 0;
     my $num_files = 0;
     my $dir = "$mirror/dists/$codename/$suite/i18n";
+    if ($use_backports) {
+	$dir = "$mirror/dists/$codename-backports/$suite/i18n";
+    }
     if ($suite =~ /local/) {
         $dir = "$localdebs/dists/$codename/$suite/i18n";
+	if ($use_backports) {
+	    $dir = "$localdebs/dists/$codename-backports/$suite/i18n";
+	}
     }
     my @files;
+
+    if ($use_backports) {
+	$suite = "$suite backports";
+    }
 
     if (-d $dir) {
         print "Reading in translated package descriptions for $suite:\n";
@@ -413,6 +461,9 @@ sub load_descriptions {
                 print LOG "  Parsing $file\n";
                 while (defined($_ = <BZ>)) {
                     m/^Package: (\S+)/m and $p = $1;
+		    if ($use_backports) {
+			$p = "$p/$codename-backports";
+		    }
                     $descriptions{"$lang"}{$p}{"data"} = $_;
                     $descriptions{"$lang"}{$p}{"used"} = 0;
                     $num_descs++;
@@ -837,13 +888,19 @@ sub finish_disc {
 	}
 
 	print "  Finishing off the Release file\n";
-	chdir "dists/$codename";
-	open(RELEASE, ">>Release") or die "Failed to open Release file: $!\n";
-	find (\&recompress, ".");
-	checksum_files_for_release();
-	close(RELEASE);
-	find (\&remove_uncompressed, ".");
-	chdir("../..");
+	my @codenames = ("$codename");
+	if ($backports) {
+	    push @codenames, "$codename-backports";
+	}
+	foreach my $tmpcode (@codenames) {
+	    chdir "dists/$tmpcode";
+	    open(RELEASE, ">>Release") or die "Failed to open Release file: $!\n";
+	    find (\&recompress, ".");
+	    checksum_files_for_release();
+	    close(RELEASE);
+	    find (\&remove_uncompressed, ".");
+	    chdir("../..");
+	}
 
 	print "  Finishing off md5sum.txt\n";
 	# Just md5 the bits we won't have seen already
@@ -894,6 +951,7 @@ sub Packages_dir {
     my $dir = shift;
     my $file = shift;
     my $section = shift;
+    my $in_backports = shift;
 
     my ($pdir, $dist);
 
@@ -908,8 +966,13 @@ sub Packages_dir {
     }	
 
     $pdir = "$dir/dists/$codename/$dist";
+    if ($in_backports) {
+	$pdir = "$dir/dists/$codename-backports/$dist";
+    }	
     if ($section and $section eq "debian-installer") {
         $pdir = "$dir/dists/$codename/$dist/debian-installer";
+	# Don't attempt to put d-i components into backports, as d-i
+	# won't look for them there.
     }
     return $pdir;
 }
@@ -919,6 +982,7 @@ sub Packages_dir {
 sub add_Packages_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     my $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $gz, $st1, $st2, $size1, $size2);
     my $blocks_added = 0;
@@ -933,14 +997,14 @@ sub add_Packages_entry {
         if (!defined($file)) {
             die "Can't parse source file information out of $_\n";
         }
-        $pdir = Packages_dir($dir, $file, $section) . "/source";
+        $pdir = Packages_dir($dir, $file, $section, $in_backports) . "/source";
         $pkgfile = "$pdir/Sources";
     } else {
         m/^Filename: (\S+)/mi and $file = $1;
         if (!defined($file)) {
             die "Can't parse binary file information out of $_\n";
         }
-        $pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
+        $pdir = Packages_dir($dir, $file, $section, $in_backports) . "/binary-$arch";
         $pkgfile = "$pdir/Packages";
     }
 
@@ -984,6 +1048,7 @@ sub add_Packages_entry {
 sub add_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     my $_ = shift;
     my ($p, $file, $section, $idir, $pkgfile, $gz, $st);
     my $size = 0;
@@ -995,7 +1060,7 @@ sub add_trans_desc_entry {
     m/^Section: (\S+)/m and $section = $1;
 
     m/^Filename: (\S+)/mi and $file = $1;
-    $idir = Packages_dir($dir, $file, $section) . "/i18n";
+    $idir = Packages_dir($dir, $file, $section, $in_backports) . "/i18n";
 
     if (! -d $idir) {
         system("mkdir -p $idir");
@@ -1043,13 +1108,16 @@ sub add_trans_desc_entry {
         }
     }
     $blocks_added += ($new_blocks - $old_blocks);
-    msg_ap(0, "    now $size bytes, $blocks_added blocks added\n");
+    if ($blocks_added != 0) {
+	msg_ap(0, "    now $size bytes, $blocks_added blocks added\n");
+    }
     return $blocks_added;
 }
 
 sub add_md5_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     my $_ = shift;
     my ($pdir, $file, $md5, $st, $size, $p);
     my $md5file = "$dir/md5sum.txt";
@@ -1057,7 +1125,11 @@ sub add_md5_entry {
     my $old_blocks = 0;
     my $new_blocks = 0;
 
-    m/^Package: (\S+)/mi and $p = $1;
+    if ($in_backports) {
+	m/^Package: (\S+)/mi and $p = "$1/$codename-backports";
+    } else {
+	m/^Package: (\S+)/mi and $p = $1;
+    }
 
     if (-e $md5file) {
         $st = stat("$md5file");
@@ -1090,6 +1162,7 @@ sub add_md5_entry {
 sub remove_Packages_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     my $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz,
         $st1, $st2, $size1, $size2);
@@ -1102,11 +1175,11 @@ sub remove_Packages_entry {
 
     if ($arch eq "source") {
         m/^Directory: (\S+)/mi and $file = $1;
-        $pdir = Packages_dir($dir, $file, $section) . "/source";
+        $pdir = Packages_dir($dir, $file, $section, $in_backports) . "/source";
         $pkgfile = "$pdir/Sources";
     } else {
         m/^Filename: (\S+)/mi and $file = $1;
-        $pdir = Packages_dir($dir, $file, $section) . "/binary-$arch";
+        $pdir = Packages_dir($dir, $file, $section, $in_backports) . "/binary-$arch";
         $pkgfile = "$pdir/Packages";
     }
 
@@ -1158,6 +1231,7 @@ sub remove_Packages_entry {
 sub remove_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     my $_ = shift;
     my ($p, $file, $section, $idir, $gz, $match, $st);
     my $size = 0;
@@ -1169,7 +1243,7 @@ sub remove_trans_desc_entry {
     m/^Section: (\S+)/m and $section = $1;
 
     m/^Filename: (\S+)/mi and $file = $1;
-    $idir = Packages_dir($dir, $file, $section) . "/i18n";
+    $idir = Packages_dir($dir, $file, $section, $in_backports) . "/i18n";
 
     $/ = ''; # Browse by paragraph
     foreach my $lang (keys %descriptions) {
@@ -1316,6 +1390,10 @@ sub add_packages {
     msg_ap(0, "Looking at $pkg: arch $arch, package $pkgname, rollback $rollback\n");
 
     foreach my $package_info (@{$pkginfo{$arch}{$pkgname}}) {
+	my $in_backports = 0;
+	if ($pkgname =~ /\/$codename-backports/) {
+	    $in_backports = 1;
+	}
         undef @files;
         $source = $mirror;
         if ($arch eq "source") {
@@ -1340,10 +1418,10 @@ sub add_packages {
 
         if ($rollback) {
             # Remove the Packages entry/entries for the specified package
-            $total_blocks -= remove_Packages_entry($dir, $arch, $package_info);
-            $total_blocks -= remove_md5_entry($dir, $arch, $package_info);
+            $total_blocks -= remove_Packages_entry($dir, $arch, $in_backports, $package_info);
+            $total_blocks -= remove_md5_entry($dir, $arch, $in_backports, $package_info);
             if (!($arch eq "source")) {
-                $total_blocks -= remove_trans_desc_entry($dir, $arch, $package_info);
+                $total_blocks -= remove_trans_desc_entry($dir, $arch, $in_backports, $package_info);
             }
         
             foreach my $file (@files) {
@@ -1365,10 +1443,10 @@ sub add_packages {
                 msg_ap(0, "  Rollback: removed $dir/$file\n");
             }
         } else {
-            $total_blocks += add_Packages_entry($dir, $arch, $package_info);
-            $total_blocks += add_md5_entry($dir, $arch, $package_info);
+            $total_blocks += add_Packages_entry($dir, $arch, $in_backports, $package_info);
+            $total_blocks += add_md5_entry($dir, $arch, $in_backports, $package_info);
             if (!($arch eq "source")) {
-                $total_blocks += add_trans_desc_entry($dir, $arch, $package_info);
+                $total_blocks += add_trans_desc_entry($dir, $arch, $in_backports, $package_info);
             }
 
             foreach my $file (@files) {

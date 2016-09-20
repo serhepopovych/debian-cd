@@ -3,6 +3,7 @@ debian-cd (3.1.19) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Also fix size calculation for EFI image for arm64
   * Add workaround for dosfstools issue (#823881)
+  * Add support for adding backports into a build
 
   [ Cyril Brulebois ]
   * Only export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/" when this

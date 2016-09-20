@@ -68,6 +68,7 @@ endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
+check_backports_packages=$(BASEDIR)/tools/check_backports_packages
 sort_deps=$(BASEDIR)/tools/sort_deps
 md5sum=md5sum
 jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
@@ -213,6 +214,10 @@ $(CODENAME)_status: ok init
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
 		echo "Using the provided status file for $(CODENAME)-$$ARCH ..."; \
 		cp $(BASEDIR)/data/$(CODENAME)/status.$$ARCH $(ADIR)/$(CODENAME)-$$ARCH/status 2>/dev/null || $(MAKE) status || $(MAKE) correctstatus ; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			echo "Using the provided status file for $(CODENAME)-backports-$$ARCH ..."; \
+			cp $(BASEDIR)/data/$(CODENAME)/status.$$ARCH $(ADIR)/$(CODENAME)-backports-$$ARCH/status 2>/dev/null || $(MAKE) status || $(MAKE) correctstatus ; \
+		fi; \
 	done
 
 # Regenerate the status file with only packages that
@@ -222,12 +227,23 @@ $(ADIR)/status:
 	@echo "Generating a fake status file for apt-get and apt-cache..."
 	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/preferences.d; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			mkdir -p $(ADIR)/$(CODENAME)-backports-$$ARCH/apt/preferences.d; \
+		fi; \
 		if [ $$ARCH = "source" -o "$(INSTALLER_CD)" = "1" -o "$(INSTALLER_CD)" = "2" -o "$(INSTALLER_CD)" = "C" -o "$(INSTALLER_CD)" = "F" ];then \
 			:> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
+			if [ "$$BACKPORTS"x != ""x ] ; then \
+				:> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
+			fi; \
 		else \
 			zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
 			perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
 			>> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
+			if [ "$$BACKPORTS"x != ""x ] ; then \
+				zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
+				perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
+				>> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
+			fi; \
 		fi; \
 	done;
 	:> $(ADIR)/status
@@ -239,12 +255,19 @@ $(ADIR)/status:
 	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
 		ln -s $(TDIR)/archive-keyring/$(ARCHIVE_KEYRING_FILE) $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			mkdir -p $(ADIR)/$(CODENAME)-backports-$$ARCH/apt/trusted.gpg.d; \
+			ln -s $(TDIR)/archive-keyring/$(ARCHIVE_KEYRING_FILE) $(ADIR)/$(CODENAME)-backports-$$ARCH/apt/trusted.gpg.d; \
+		fi; \
 	done
 
 	# Updating the apt database
 	$(Q)for ARCH in $(ARCHES); do \
 		export ARCH=$$ARCH; \
 		$(apt) update; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			USE_BP=1 $(apt) update; \
+		fi; \
 	done
 
 	# If we're doing a build using d-i from sid, we'll need sid sources too
@@ -256,6 +279,9 @@ $(ADIR)/status:
 		export CODENAME=$(DI_CODENAME); \
 		export ARCH=source; \
 		$(apt) update; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			USE_BP=1 $(apt) update; \
+		fi; \
 	fi
     #
     # Checking the consistency of the standard system
@@ -264,6 +290,9 @@ $(ADIR)/status:
 	$(Q)for ARCH in $(ARCHES); do \
 		export ARCH=$$ARCH; \
 		$(apt) check || $(MAKE) correctstatus; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			USE_BP=1 $(apt) check || $(MAKE) correctstatus; \
+		fi; \
 	done
 
 # Only useful if the standard system is broken
@@ -282,6 +311,13 @@ correctstatus: status apt-update
 				perl -i -000 -ne "print unless /^Package: \Q$$i\E/m" \
 				$(ADIR)/$(CODENAME)-$$ARCH/status; \
 			done; \
+			if [ "$$BACKPORTS"x != ""x ] ; then \
+				for i in `USE_BP=1 $(apt) deselected -f install`; do \
+					echo $$ARCH:$$i; \
+					perl -i -000 -ne "print unless /^Package: \Q$$i\E/m" \
+					$(ADIR)/$(CODENAME)-backports-$$ARCH/status; \
+				done; \
+			fi; \
 		done; \
     fi
     #
@@ -296,12 +332,23 @@ correctstatus: status apt-update
 				"s/^(Package: .*)\$$/\$$1\nStatus: install ok installed/m;" \
 				>> $(ADIR)/$(CODENAME)-$$ARCH/status; \
 			done; \
+			if [ "$$BACKPORTS"x != ""x ] ; then \
+				for i in `USE_BP=1 $(apt) selected -f install`; do \
+					echo $$ARCH:$$i; \
+					USE_BP=1 $(apt) cache --no-all-versions show "$$i" | perl -000 -npe \
+					"s/^(Package: .*)\$$/\$$1\nStatus: install ok installed/m;" \
+					>> $(ADIR)/$(CODENAME)-backports-$$ARCH/status; \
+				done; \
+			fi; \
 		done; \
     fi
     #
     # Showing the output of apt-get check :
 	$(Q)for ARCH in $(ARCHES_NOSRC); do \
 		ARCH=$$ARCH $(apt) check; \
+		if [ "$$BACKPORTS"x != ""x ] ; then \
+			USE_BP=1 ARCH=$$ARCH $(apt) check; \
+		fi; \
 	done
 
 apt-update: status
@@ -309,6 +356,9 @@ apt-update: status
 		for ARCH in $(ARCHES); do \
 			echo "Apt-get is updating its files ..."; \
 			ARCH=$$ARCH $(apt) update; \
+			if [ "$$BACKPORTS"x != ""x ] ; then \
+				USE_BP=1 ARCH=$$ARCH $(apt) update; \
+			fi; \
 		done; \
     fi
 
@@ -402,6 +452,10 @@ $(BDIR)/list: $(BDIR)/rawlist
 	          print "$$_\n" if not $$seen{$$_}; $$seen{$$_}++;' \
 		  $(BDIR)/rawlist \
 		  > $(BDIR)/list
+        # Now check to see if we've been told to use backports
+        # versions of any of the packages in our list.
+	$(check_backports_packages) $(BDIR)/list $(BDIR)/list.backports
+	if [ -f $(BDIR)/list.backports ]; then mv $(BDIR)/list.backports $(BDIR)/list; fi
 
 ## IMAGE BUILDING ##
 

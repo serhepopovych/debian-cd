@@ -68,6 +68,16 @@ export CODENAME=stretch
 if [ -z "$DI_CODENAME" ]; then
 	export DI_CODENAME=$CODENAME
 fi
+# If you want backported d-i (e.g. by setting
+# DI_CODENAME=jessie-backports, then you'll almost definitely also
+# want to enable BACKPORTS below as well
+
+# Should we include some packages from backports? If so, point at a
+# file containing a list of binary packages to include here. Packages
+# contained in that list will be chosen by preference from
+# ${CODENAME}-backports rather than just ${CODENAME}, along with
+# dependencies if they're needed as well
+#export BACKPORTS=backports-list
 
 # If set, controls where the d-i components are downloaded from.
 # This may be an url, or "default", which will make it use the default url

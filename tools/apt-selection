@@ -18,6 +18,7 @@ if [ -z "$CODENAME" ] || [ -z "$ARCH" ] || [ -z "$APTTMP" ]; then
 		echo "CODENAME=$CODENAME"
 		echo "ARCH=$ARCH"
 		echo "APTTMP=$APTTMP"
+		echo "USE_BP=$USE_BP"
 	fi
 fi
 
@@ -27,10 +28,16 @@ else
 	ADEB="deb"
 fi
 
-options=" -q -o Dir::State::status=$APTTMP/$CODENAME-$ARCH/status \
-		  -o Dir::State=$APTTMP/$CODENAME-$ARCH/apt-state/ \
-		  -o Dir::Cache=$APTTMP/$CODENAME-$ARCH/apt-cache/ \
-		  -o Dir::Etc=$APTTMP/$CODENAME-$ARCH/apt/ \
+if [ "$USE_BP"x = "1"x ] ; then
+    THIS_PKGSET="$CODENAME-backports-$ARCH"
+else
+    THIS_PKGSET="$CODENAME-$ARCH"
+fi
+
+options=" -q -o Dir::State::status=$APTTMP/$THIS_PKGSET/status \
+		  -o Dir::State=$APTTMP/$THIS_PKGSET/apt-state/ \
+		  -o Dir::Cache=$APTTMP/$THIS_PKGSET/apt-cache/ \
+		  -o Dir::Etc=$APTTMP/$THIS_PKGSET/apt/ \
 		  -o APT::Cache::AllVersions=0 \
 		  -o APT::Cache::ShowVersion=1 \
 		  -o APT::Architecture=$ARCH \
@@ -46,55 +53,67 @@ if [ "${CONTRIB:-0}" != "0" ]; then
 fi
 
 # Check for the necessary dirs and files ...
-if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt-state/lists/partial" ]; then
-	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt-state/lists/partial"
+if [ ! -d "$APTTMP/$THIS_PKGSET/apt-state/lists/partial" ]; then
+	mkdir -p "$APTTMP/$THIS_PKGSET/apt-state/lists/partial"
 fi
-if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt-cache/archives/partial" ]; then
-	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt-cache/archives/partial"
+if [ ! -d "$APTTMP/$THIS_PKGSET/apt-cache/archives/partial" ]; then
+	mkdir -p "$APTTMP/$THIS_PKGSET/apt-cache/archives/partial"
 fi
-if [ ! -d "$APTTMP/$CODENAME-$ARCH/apt" ]; then
-	mkdir -p "$APTTMP/$CODENAME-$ARCH/apt"
+if [ ! -d "$APTTMP/$THIS_PKGSET/apt" ]; then
+	mkdir -p "$APTTMP/$THIS_PKGSET/apt"
 fi
-if [ ! -e "$APTTMP/$CODENAME-$ARCH/status" ]; then
-    touch "$APTTMP/$CODENAME-$ARCH/status"
+if [ ! -e "$APTTMP/$THIS_PKGSET/status" ]; then
+    touch "$APTTMP/$THIS_PKGSET/status"
 fi
-if [ ! -e "$APTTMP/$CODENAME-$ARCH/apt/sources.list" ]; then
+if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 
+	# Backports
+	if [ -n "$USE_BP" ]; then
+		echo "$ADEB file:$MIRROR $CODENAME-backports $sections" \
+			>> $APTTMP/$THIS_PKGSET/apt/sources.list
+		if [ $ARCH != source ] ; then
+		    if [ -e "$MIRROR/dists/$CODENAME-backports/main/debian-installer" ]; then
+			echo "$ADEB file:$MIRROR $CODENAME-backports main/debian-installer" \
+			     >> $APTTMP/$THIS_PKGSET/apt/sources.list
+		    fi
+		fi
+	else
 	# Generating a correct sources.list file
 	echo "$ADEB file:$MIRROR $CODENAME $sections" \
-	> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+	> $APTTMP/$THIS_PKGSET/apt/sources.list
 
 	if [ -n "$PROPOSED_UPDATES" ]; then
 		echo "$ADEB file:$MIRROR $PROPOSED_UPDATES $sections" \
-			>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+			>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then
 		echo "$ADEB file:${LOCALDEBS:-$MIRROR} $CODENAME local" \
-			>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+			>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
 	# Security mirror ...
 	if [ -n "$SECURITY" ]; then
 		echo "$ADEB file:${SECURITY:-$MIRROR} $CODENAME/updates $sections" \
-		>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+		>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
 	# Debian-installer
 	if [ $ARCH != source ] ; then
 		if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
 			echo "$ADEB file:$MIRROR $DI_CODENAME main/debian-installer" \
-				>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+				>> $APTTMP/$THIS_PKGSET/apt/sources.list
 		fi
 		if [ -n "$LOCAL" ] && [ -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 			echo "$ADEB file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
-				>> $APTTMP/$CODENAME-$ARCH/apt/sources.list
+				>> $APTTMP/$THIS_PKGSET/apt/sources.list
 		fi
+	fi
 	fi
 fi
 
-temp=$APTTMP/$CODENAME-$ARCH/temp.apt-selection
+temp=$APTTMP/$THIS_PKGSET/temp.apt-selection
 
 # Launch the command
 if [ "$1" = "update" ] || [ "$1" = "check" ]; then

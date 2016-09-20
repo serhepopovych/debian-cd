@@ -111,6 +111,11 @@ fi
 if [ ! -d $CDDIR/dists/$CODENAME ] ; then
     mkdir -p $CDDIR/dists/$CODENAME
 fi
+if [ "$BACKPORTS"x != ""x ] ; then
+    if [ ! -d $CDDIR/dists/$CODENAME-backports ] ; then
+	mkdir -p $CDDIR/dists/$CODENAME-backports
+    fi
+fi
 
 # Commodity link for tools which want local in dists/local/local ...
 if [ -n "$LOCAL" ]
@@ -376,6 +381,34 @@ else
     exit 1
 fi
 
+if [ "$BACKPORTS"x != ""x ]; then
+    if [ -e "$MIRROR/dists/$CODENAME-backports/Release" ] ; then
+	# Strip the MD5Sum and SHA1 fields
+	# Update some other information as well
+	sed -e "s/^Architectures: .*$/Architectures: $ARCHES/" \
+            $MIRROR/dists/$CODENAME-backports/Release | \
+            sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
+            perl -ne 'if (/^(MD5Sum|SHA1|SHA256):/i) { $f=1; next } 
+    if ($f) { 
+        unless (/^ /) { print; $f=0 }
+    } else { print }' > dists/$CODENAME-backports/Release
+	if [ "$EARLY_BUILD_HACK"x = "1"x ] ; then
+            RDATE=`awk '/^Date:/ { print $2,$3,$4,$5}' dists/$CODENAME-backports/Release`
+            sed -i -e "s/^Suite: .*$/Suite: stable/" dists/$CODENAME-backports/Release
+            sed -i -e "s/^Description: .*$/Description: Debian $DEBVERSION Released $RDATE/" dists/$CODENAME-backports/Release
+	fi
+
+	# Create the suite symlink
+	SUITE=$(sed -n "/^Suite:/ s/.*: //p" dists/$CODENAME-backports/Release)
+	if [ -n "$SUITE" ] && [ x"$SUITE" != x"$CODENAME-backports" ]; then
+            ln -sf $CODENAME-backports dists/$SUITE
+	fi
+    else
+	echo "ERROR: Release file ($MIRROR/dists/$CODENAME-backports/Release) is missing !"
+	exit 1
+    fi
+fi
+
 # Copying individual release files
 for ARCH in $ARCHES
 do
@@ -417,6 +450,50 @@ do
         fi
     fi
 done
+
+# Copying individual release files for backports
+if [ "$BACKPORTS"x != ""x ]; then
+    for ARCH in $ARCHES
+    do
+	for SECT in $SECTIONS
+	do
+            # Install the release files
+            if [ -e "$MIRROR/dists/$CODENAME-backports/$SECT/binary-$ARCH/Release" ] ; then
+		mkdir -p dists/$CODENAME-backports/$SECT/binary-$ARCH
+		cp $MIRROR/dists/$CODENAME-backports/$SECT/binary-$ARCH/Release \
+                   dists/$CODENAME-backports/$SECT/binary-$ARCH/
+		if [ "$DEBVERSION" != "testing" ] ; then
+                    sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME-backports/$SECT/binary-$ARCH/Release
+		fi
+            fi
+            if [ -n "$NONUS" -a -e "$NONUS/dists/$CODENAME-backports/non-US/$SECT/binary-$ARCH/Release" ] ; then
+		mkdir -p dists/$CODENAME-backports/non-US/$SECT/binary-$ARCH
+		cp $NONUS/dists/$CODENAME-backports/non-US/$SECT/binary-$ARCH/Release \
+                   dists/$CODENAME-backports/non-US/$SECT/binary-$ARCH/
+		if [ "$DEBVERSION" != "testing" ] ; then
+                    sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME-backports/non-US/$SECT/binary-$ARCH/Release
+		fi
+            fi
+	done
+
+	if [ -n "$LOCALDEBS" -a -n "$LOCAL" ] ; then
+            if [ -e $LOCALDEBS/dists/$CODENAME-backports/local/binary-$ARCH/Release ] ; then
+		mkdir -p dists/$CODENAME-backports/local/binary-$ARCH
+		cp $LOCALDEBS/dists/$CODENAME-backports/local/binary-$ARCH/Release \
+                   dists/$CODENAME-backports/local/binary-$ARCH/
+            fi
+	fi
+
+	if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Release" ] ; then
+            mkdir -p dists/$CODENAME-backports/main/debian-installer/binary-$ARCH
+            cp $MIRROR/dists/$DI_CODENAME/main/debian-installer/binary-$ARCH/Release \
+               dists/$CODENAME-backports/main/debian-installer/binary-$ARCH/
+            if [ "$DEBVERSION" != "testing" ] ; then
+		sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME-backports/main/debian-installer/binary-$ARCH/Release
+            fi
+	fi
+    done
+fi
 
 # Upgrade packages / kernels
 if [ "$SOURCEONLY"x != "yes"x ] ; then
