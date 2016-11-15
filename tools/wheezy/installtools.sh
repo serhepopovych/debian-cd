@@ -25,8 +25,8 @@ if [ "$OMIT_MANUAL" != 1 ]; then
 				INSTALLDIR=$DIR/$DOCDIR/manual/$ARCH
 			fi
 
-            INSTALLGUIDE=$(zcat $MIRROR/dists/$CODENAME/main/binary-$ARCH//Packages.gz | \
-                sed -n "s/Filename: \(pool\/main\/i\/installation-guide\/installation-guide-$ARCH.*deb\)$/\1/p")
+            INSTALLGUIDE=$($BASEDIR/tools/catz $MIRROR/dists/$CODENAME/main/binary-$ARCH/Packages.*z* | \
+                sed -n "s/Filename: \(pool\/main\/i\/installation-guide\/installation-guide-$ARCH.*deb\)$/\1/p" | sort | uniq)
 
             if [ -f "$MIRROR/$INSTALLGUIDE" ]; then
                 rm -rf $MANTDIR

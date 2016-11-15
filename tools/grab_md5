@@ -1,7 +1,7 @@
 #!/bin/sh
 #
 # grab_md5
-# (c) 2004 Steve McIntyre <steve@einval.com>
+# (c) 2004-2016 Steve McIntyre <steve@einval.com>
 #
 # GPL v2
 #
@@ -33,10 +33,10 @@ do
 
     case $ARCH in
         source)
-            FILES=`find $LOCATIONS -name Sources.gz`
+            FILES=`find $LOCATIONS -name Sources.gz -o -name Sources.xz`
             echo "Using MD5 sums from Sources files:"
             echo $FILES
-            zcat -f $FILES | MIRROR=$MIRROR perl -ne '
+            $BASEDIR/tools/catz $FILES | MIRROR=$MIRROR perl -ne '
                 chomp;
                 my %files;
                 my $dir;
@@ -62,15 +62,16 @@ do
                 }' | sort | uniq >> $OUT
             ;;
         *)
-            FILES=`find $LOCATIONS -name Packages.gz | grep binary-$ARCH`
+            FILES=`find $LOCATIONS -name Packages.gz \
+                   -o -name Packages.xz | grep binary-$ARCH`
             echo "Using MD5 sums from Packages files:"
             echo $FILES
-            NUM_FILES=`echo $FILES | wc -w`
+            NUM_FILES=`echo $FILES| wc -w`
             if [ $NUM_FILES -eq 1 ] ; then
                 echo "No files found for arch $ARCH. Abort!"
                 exit 1
             fi
-            zcat -f $FILES | MIRROR=$MIRROR perl -ne '
+            catz $FILES | MIRROR=$MIRROR perl -ne '
                 chomp;
                 my $mirror = $ENV{"MIRROR"};
                 my $filename;

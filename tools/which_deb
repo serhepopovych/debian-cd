@@ -74,20 +74,27 @@ sub grab_bin_info {
         if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
             $pgz = "$ENV{LOCALDEBS}/dists/$codename/local/binary-$arch/Packages.gz";
         }
+        my $pxz = "$pth/$component/binary-$arch/Packages.xz";
+        if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
+            $pgz = "$ENV{LOCALDEBS}/dists/$codename/local/binary-$arch/Packages.xz";
+        }
         if (-e $pgz) {
             open(PFILE, "zcat $pgz |") or
                 die "Failed to read Packages file $pgz";
-
-            while (defined($match = <PFILE>)) {
-                if (($match =~ /^Package: \Q$pkgname\E$/m)) {
-                    $result = $match;
-                    close PFILE;
-                    return $result;
-                }
-            }
-            # Fell through
-            close PFILE;
-        }
+	} elsif (-e $pxz) {
+            open(PFILE, "xzcat $pxz |") or
+                die "Failed to read Packages file $pxz";
+	} else {
+	    die "Can't find a working Packages file, tried $pgz and $pxz\n";
+	}
+	while (defined($match = <PFILE>)) {
+	    if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+		$result = $match;
+		close PFILE;
+		return $result;
+	    }
+	}
+	close PFILE;
     }
     return "";
 }
@@ -103,21 +110,25 @@ sub grab_src_info {
 
     for my $component ( @components ) {
         my $pgz = "$pth/$component/source/Sources.gz";
+        my $pxz = "$pth/$component/source/Sources.xz";
 
         if (-e $pgz) {
             open(PFILE, "zcat $pgz |") or
                 die "Failed to read Sources file $pgz";
-
-            while (defined($match = <PFILE>)) {
-                if (($match =~ /^Package: \Q$pkgname\E$/m)) {
-                    $result = $match;
-                    close PFILE;
-                    return $result;
-                }
-            }
-            # Fell through
-            close PFILE;
-        }
+        } elsif (-e $pxz) {
+            open(PFILE, "xzcat $pxz |") or
+                die "Failed to read Sources file $pxz";
+	} else {
+	    die "Can't find a working Sources file, tried $pgz and $pxz\n";
+	}
+	while (defined($match = <PFILE>)) {
+	    if (($match =~ /^Package: \Q$pkgname\E$/m)) {
+		$result = $match;
+		close PFILE;
+		return $result;
+	    }
+	}
+	close PFILE;
     }
     return "";
 }

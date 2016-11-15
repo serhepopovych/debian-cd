@@ -49,23 +49,31 @@ foreach my $arch (@ARCHES) {
 	(my $cpparch = $arch) =~ s/-/_/g;
     my $output = '';
     for my $component ( @components ) {
-        my $packagefile="$mirror_path/$component/debian-installer/binary-$arch/Packages.gz";
+        my $pgz="$mirror_path/$component/debian-installer/binary-$arch/Packages.gz";
+        my $pxz="$mirror_path/$component/debian-installer/binary-$arch/Packages.xz";
         if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
-            $packagefile="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.gz";
-        }
-        if (! -f $packagefile) {
-            print "Missing package file for $arch/$component.\n";
-            next;
+            $pgz="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.gz";
+            $pxz="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.xz";
         }
 
         my @exclude = @common_excludes;
         push @exclude, read_exclude("exclude-udebs-$arch")
             if -e exclude_path("exclude-udebs-$arch");
 
-        foreach my $udeb (map { chomp; $_ } `zcat $packagefile | awk '/^Package:/ {print \$2}'`) {
-            $output .= "$udeb\n" unless grep { $udeb =~ /^${_}$/ } @exclude;
+	if (-f $pgz) {
+	    foreach my $udeb (map { chomp; $_ } `zcat $pgz | awk '/^Package:/ {print \$2}'`) {
+		$output .= "$udeb\n" unless grep { $udeb =~ /^${_}$/ } @exclude;
+	    }
+	} elsif (-f $pxz) {
+	    foreach my $udeb (map { chomp; $_ } `xzcat $pxz | awk '/^Package:/ {print \$2}'`) {
+		$output .= "$udeb\n" unless grep { $udeb =~ /^${_}$/ } @exclude;
+	    }
+	} else {
+            print "Missing package file for $arch/$component.\n";
+            next;
         }
     }
+
     next unless $output;
     print OUT "#ifdef ARCH_$cpparch\n";
     print OUT $output;

@@ -35,11 +35,13 @@ if (!defined($codename) || !defined($mirror) ||
 
 foreach $arch (split(' ', $archlist)) {
     $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
+    $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.xz";
 }
 
 if (defined($localdebs)) {
     foreach $arch (split(' ', $archlist)) {
         $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
+        $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.xz";
     }
 }
 
@@ -56,7 +58,7 @@ print OUT " */\n";
 
 print "$0: Checking for firmware packages:\n";
 
-open (INPKG, "zcat $pkgfiles |") or die "Can't read input package files: $!\n";
+open (INPKG, "\$BASEDIR/tools/catz $pkgfiles |") or die "Can't read input package files: $!\n";
 $/ = ''; # Browse by paragraph
 
 sub contains_firmware($$) {

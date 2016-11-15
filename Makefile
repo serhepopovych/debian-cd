@@ -78,6 +78,7 @@ merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
 grab_source_list=$(BASEDIR)/tools/grab_source_list
 which_deb=$(BASEDIR)/tools/which_deb
+catz=$(BASEDIR)/tools/catz
 
 BDIR=$(TDIR)/$(CODENAME)
 TASKDIR=$(BDIR)/tasks
@@ -236,13 +237,13 @@ $(ADIR)/status:
 				:> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
 			fi; \
 		else \
-			zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
+			$(catz) $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.*z* | \
 			perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
-			>> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
+			|sort | uniq >> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
 			if [ "$$BACKPORTS"x != ""x ] ; then \
-				zcat $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.gz | \
+				$(catz) $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.*z* | \
 				perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
-				>> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
+				|sort | uniq >> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
 			fi; \
 		fi; \
 	done;

@@ -5,6 +5,8 @@ debian-cd (3.1.19) UNRELEASED; urgency=medium
   * Add workaround for dosfstools issue (#823881)
   * Add support for adding backports into a build
   * Remove obsolete dedicated_source script
+  * Add support for archives without Packages.gz and Sources.gz - try .xz
+    files too
 
   [ Cyril Brulebois ]
   * Only export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/" when this
