@@ -983,7 +983,7 @@ sub add_Packages_entry {
     my $dir = shift;
     my $arch = shift;
     my $in_backports = shift;
-    my $_ = shift;
+    local $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $gz, $st1, $st2, $size1, $size2);
     my $blocks_added = 0;
     my $old_blocks = 0;
@@ -1049,7 +1049,7 @@ sub add_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
     my $in_backports = shift;
-    my $_ = shift;
+    local $_ = shift;
     my ($p, $file, $section, $idir, $pkgfile, $gz, $st);
     my $size = 0;
     my $blocks_added = 0;
@@ -1118,7 +1118,7 @@ sub add_md5_entry {
     my $dir = shift;
     my $arch = shift;
     my $in_backports = shift;
-    my $_ = shift;
+    local $_ = shift;
     my ($pdir, $file, $md5, $st, $size, $p);
     my $md5file = "$dir/md5sum.txt";
     my $blocks_added = 0;
@@ -1163,7 +1163,7 @@ sub remove_Packages_entry {
     my $dir = shift;
     my $arch = shift;
     my $in_backports = shift;
-    my $_ = shift;
+    local $_ = shift;
     my ($p, $file, $section, $pdir, $pkgfile, $tmp_pkgfile, $match, $gz,
         $st1, $st2, $size1, $size2);
     my $blocks_removed = 0;
@@ -1232,7 +1232,7 @@ sub remove_trans_desc_entry {
     my $dir = shift;
     my $arch = shift;
     my $in_backports = shift;
-    my $_ = shift;
+    local $_ = shift;
     my ($p, $file, $section, $idir, $gz, $match, $st);
     my $size = 0;
     my $blocks_added = 0;
@@ -1301,7 +1301,7 @@ sub remove_trans_desc_entry {
 sub remove_md5_entry {
     my $dir = shift;
     my $arch = shift;
-    my $_ = shift;
+    local $_ = shift;
     my $md5file = "$dir/md5sum.txt";
     my $tmp_md5file = "$dir/md5sum.txt.tmp";
     my @fileslist;
