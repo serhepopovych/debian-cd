@@ -15,6 +15,7 @@ debian-cd (3.1.19) UNRELEASED; urgency=medium
 
   [ John Paul Adrian Glaubitz ]
   * Fix perl errors in make_disc_trees.pl - use "local $_", not "my $_"
+    Closes: #839946
 
  -- Steve McIntyre <93sam@debian.org>  Fri, 09 Dec 2016 01:13:13 +0000
 
