@@ -13,7 +13,10 @@ debian-cd (3.1.19) UNRELEASED; urgency=medium
     directory actually exists, making it easier to use debian-cd on non-
     debian.org machines.
 
- -- Steve McIntyre <93sam@debian.org>  Fri, 06 May 2016 22:59:32 +0100
+  [ John Paul Adrian Glaubitz ]
+  * Fix perl errors in make_disc_trees.pl - use "local $_", not "my $_"
+
+ -- Steve McIntyre <93sam@debian.org>  Fri, 09 Dec 2016 01:13:13 +0000
 
 debian-cd (3.1.18) unstable; urgency=medium
 
