@@ -239,11 +239,11 @@ $(ADIR)/status:
 		else \
 			$(catz) $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.*z* | \
 			perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
-			|sort | uniq >> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
+			>> $(ADIR)/$(CODENAME)-$$ARCH/status ; \
 			if [ "$$BACKPORTS"x != ""x ] ; then \
 				$(catz) $(MIRROR)/dists/$(CODENAME)/main/binary-$$ARCH/Packages.*z* | \
 				perl -000 -ne 's/^(Package: .*)$$/$$1\nStatus: install ok installed/m; print if (/^Priority: (required|important|standard)/m or /^Section: base/m);' \
-				|sort | uniq >> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
+				>> $(ADIR)/$(CODENAME)-backports-$$ARCH/status ; \
 			fi; \
 		fi; \
 	done;
