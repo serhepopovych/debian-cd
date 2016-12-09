@@ -1,4 +1,4 @@
-debian-cd (3.1.19) UNRELEASED; urgency=medium
+debian-cd (3.1.19) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Also fix size calculation for EFI image for arm64
