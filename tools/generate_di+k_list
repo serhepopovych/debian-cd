@@ -265,7 +265,11 @@ linux-image-powerpc64le
 #endif
 
 #ifdef ARCH_alpha
+initramfs-tools
+busybox
 aboot
+linux-image-alpha-generic
+linux-image-alpha-smp
 #endif
 
 #ifdef ARCH_kfreebsd_amd64
