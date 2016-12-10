@@ -272,6 +272,14 @@ linux-image-alpha-generic
 linux-image-alpha-smp
 #endif
 
+#ifdef ARCH_hppa
+initramfs-tools
+busybox
+palo
+linux-image-parisc
+linux-image-parisc64-smp
+#endif
+
 #ifdef ARCH_kfreebsd_amd64
 kfreebsd-image-10-amd64
 grub-pc
