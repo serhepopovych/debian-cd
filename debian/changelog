@@ -1,3 +1,10 @@
+debian-cd (3.1.20) UNRELEASED; urgency=medium
+
+  * Add {data,tasks,tools/boot}/{kali-dev,kali-rolling} symlinks pointing
+    to sid to make it easier to build Kali images with debian-cd.
+
+ -- Raphaël Hertzog <hertzog@debian.org>  Fri, 27 Jan 2017 13:59:40 +0100
+
 debian-cd (3.1.19) unstable; urgency=medium
 
   [ Steve McIntyre ]
