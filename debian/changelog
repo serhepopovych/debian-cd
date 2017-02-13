@@ -1,7 +1,11 @@
 debian-cd (3.1.20) UNRELEASED; urgency=medium
 
+  [ Raphaël Hertzog ]
   * Add {data,tasks,tools/boot}/{kali-dev,kali-rolling} symlinks pointing
     to sid to make it easier to build Kali images with debian-cd.
+
+  [ Steve McIntyre ]
+  Add https bits to forcd1 (#855035)
 
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 27 Jan 2017 13:59:40 +0100
 
