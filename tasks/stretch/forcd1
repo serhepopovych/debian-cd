@@ -20,3 +20,7 @@ bpalogin
 
 /* pppconfig helps various people too */
 pppconfig
+
+/* #855035: make sure we have the bits on media for https package downloads
+apt-transport-https
+ca-certificates
