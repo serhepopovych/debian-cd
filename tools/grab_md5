@@ -71,7 +71,7 @@ do
                 echo "No files found for arch $ARCH. Abort!"
                 exit 1
             fi
-            catz $FILES | MIRROR=$MIRROR perl -ne '
+            $BASEDIR/tools/catz $FILES | MIRROR=$MIRROR perl -ne '
                 chomp;
                 my $mirror = $ENV{"MIRROR"};
                 my $filename;
