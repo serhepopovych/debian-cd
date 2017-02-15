@@ -96,7 +96,7 @@ libfribidi0
 /* Needed for rootless installs. */
 sudo
 
-/* #855035: make sure we have the bits on media for https package downloads
+/* #855035: make sure we have the bits on media for https package downloads */
 apt-transport-https
 ca-certificates
 
