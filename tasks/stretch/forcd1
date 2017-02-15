@@ -1,6 +1,5 @@
-/* Packages that belong on the first CD (but not the netinst or
- * businesscard), despite not being directly installed by debootstrap,
- * or d-i, or tasksel.
+/* Packages that belong on the first CD (but not the netinst), despite
+ * not being directly installed by debootstrap, or d-i, or tasksel.
  */
 
 /* hysterical raisins, but too small to remove */
@@ -21,6 +20,3 @@ bpalogin
 /* pppconfig helps various people too */
 pppconfig
 
-/* #855035: make sure we have the bits on media for https package downloads
-apt-transport-https
-ca-certificates

@@ -96,6 +96,10 @@ libfribidi0
 /* Needed for rootless installs. */
 sudo
 
+/* #855035: make sure we have the bits on media for https package downloads
+apt-transport-https
+ca-certificates
+
 /* laptop-detect is used by tasksel when checking if the system is a
  * laptop so we have to make sure to get it included on first CD for
  * arches that are know to have laptops
