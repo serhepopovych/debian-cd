@@ -1301,6 +1301,7 @@ sub remove_trans_desc_entry {
 sub remove_md5_entry {
     my $dir = shift;
     my $arch = shift;
+    my $in_backports = shift;
     local $_ = shift;
     my $md5file = "$dir/md5sum.txt";
     my $tmp_md5file = "$dir/md5sum.txt.tmp";
