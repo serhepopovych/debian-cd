@@ -8,6 +8,9 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   * Add https bits to tools/generate_di+k_list (#855035)
   * Fix missing full path for cztz call in tools/grab_md5 (Closes: #855174)
 
+  [ Samuel Thibault ]
+  * Add support for grub submenu hotkeys.
+
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 27 Jan 2017 13:59:40 +0100
 
 debian-cd (3.1.19) unstable; urgency=medium

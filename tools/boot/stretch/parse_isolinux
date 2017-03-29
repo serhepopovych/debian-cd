@@ -199,7 +199,12 @@ foreach my $line(@lines) {
 	}
 	$menu{"title"} = $1;
 	if ($new_menu) {
-	    print_indent "submenu '$pre" . $menu{"title"} . " ...' {\n";
+	    my $hotkey = "";
+	    if ($menu{"label"} =~ m,\^(\S),) {
+		$hotkey = lc "--hotkey=$1 ";
+		$menu{"label"} =~ s/\^//;
+	    }
+	    print_indent "submenu $hotkey'$pre" . $menu{"label"} . " ...' {\n";
 	    $menu_title[$menudepth] = $menu{"title"};
 	    $menudepth++;
 	    if ($menudepth > 1) {
@@ -223,6 +228,8 @@ foreach my $line(@lines) {
 	$in_kernel = 1;
     } elsif ($line =~ /menu label (.*)$/ && $in_kernel) {
 	$kernel{"label"} = $1;
+    } elsif ($line =~ /menu label (.*)$/) {
+	$menu{"label"} = $1;
     } elsif ($line =~ /menu default/ && $in_kernel) {
 	$kernel{"default"} = 1;
     } elsif ($line =~ /kernel (.*)$/ && $in_kernel) {
