@@ -29,9 +29,9 @@ if (!defined ($output)) {
 # Give preference to i386 and amd64, if specified
 my @ARCHES;
 if ( $ENV{ARCHES} ) {
-    push @ARCHES, 'i386' if $ENV{ARCHES} =~ /i386/;
-    push @ARCHES, 'amd64' if $ENV{ARCHES} =~ /amd64/;
-    push @ARCHES, grep { !/source|i386|amd64/ } split /\s+/, $ENV{ARCHES};
+    push @ARCHES, 'i386' if $ENV{ARCHES} =~ /(^|\s)i386(\s|$)/;
+    push @ARCHES, 'amd64' if $ENV{ARCHES} =~ /(^|\s)amd64(\s|$)/;
+    push @ARCHES, grep { !/^(source|i386|amd64)$/ } split /\s+/, $ENV{ARCHES};
 }
 
 # We seem to be building a source-only CD. Check for whatever binary
