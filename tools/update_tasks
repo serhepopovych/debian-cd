@@ -44,7 +44,7 @@ if (defined($ENV{'FORCE_SID_TASKSEL'}) and $ENV{'FORCE_SID_TASKSEL'} eq '1') {
 # is a non -all package) to determine a valid arch for the rest of
 # this script
 my $coreutils_deb = `$basedir/tools/which_deb $mirror $codename coreutils binary`;
-if ($coreutils_deb =~ m/_([[:alnum:]]+)\.deb/) {
+if ($coreutils_deb =~ m/_([[:alnum:]-]+)\.deb/) {
     $arch = $1;
 } else {
     die "update_tasks: Can't determine arch!\n";
