@@ -219,7 +219,7 @@ foreach my $line(@lines) {
 	    create_theme_file($menu{"number"});
 	    $new_menu = 0;
 	}
-    } elsif ($line =~ /^label (\S*(rescue|install|auto|expert)\S*)/) {
+    } elsif ($line =~ /^[ \t]*label (\S*(rescue|install|auto|expert)\S*)/) {
 	if ($in_kernel) {
 	    print_kernel(\%kernel);
 	    undef %kernel;
