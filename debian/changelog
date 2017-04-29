@@ -11,6 +11,9 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   [ Samuel Thibault ]
   * Add support for grub submenu hotkeys.
 
+  [ Vagrant Cascadian ]
+  * Add wget to Recommends. Closes: #861436
+
  -- Raphaël Hertzog <hertzog@debian.org>  Fri, 27 Jan 2017 13:59:40 +0100
 
 debian-cd (3.1.19) unstable; urgency=medium
