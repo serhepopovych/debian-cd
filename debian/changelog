@@ -7,6 +7,7 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Add https bits to tools/generate_di+k_list (#855035)
   * Fix missing full path for cztz call in tools/grab_md5 (Closes: #855174)
+  * Add stub for mips64el boot support, so we can build images for it
 
   [ Samuel Thibault ]
   * Add support for grub submenu hotkeys.
