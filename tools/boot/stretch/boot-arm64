@@ -39,7 +39,7 @@ cd $CDDIR/..
 
 # This script is called with $1 (now $N) as the CD to make bootable.
 # Exit if this is not a boot disk
-if [ $NN != 1 ] ; then exit 0; fi
+if [ $N != 1 ] ; then exit 0; fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
 

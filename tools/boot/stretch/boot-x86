@@ -66,7 +66,7 @@ cd $CDDIR/..
 
 # This script is called with $1 (now $N) as the CD to make bootable.
 # Exit if this is not a boot disk
-if [ $NN != 1 ] ; then exit 0; fi
+if [ $N != 1 ] ; then exit 0; fi
 
 INSTALLDIR_amd64="install.amd"
 INSTALLDIR_i386="install.386"
@@ -117,7 +117,7 @@ for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
 done
 
 # Only disk one gets the extra files installed
-if [ "$NN" = "1" ]; then
+if [ "$N" = "1" ]; then
         # populate the install directory as well
         for disk in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
                 if [ -e "$disk" ]; then

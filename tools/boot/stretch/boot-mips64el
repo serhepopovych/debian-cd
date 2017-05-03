@@ -15,10 +15,16 @@ set -e
 
 N=$1
 CDROOT=$2
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != 1 ] ; then exit 0; fi
+
 if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="https://d-i.debian.org/daily-images/mipsel/daily"
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/mips64el/daily"
     try_di_image_cache
 fi
+
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
 # This arch is currently not bootable directly from CD, and there's
 # not a lot we can do about that. But add the needed files in the
