@@ -37,10 +37,6 @@ cd $CDDIR/..
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 
-# Strip NONUS part of disk number
-# NN will be 1...N so it can be used as an index
-NN=`echo $N | sed -e 's/_NONUS//'`
-
 # Exit if this is not CD#1/DVD#1
 if [ $NN != 1 ] ; then exit 0; fi
 

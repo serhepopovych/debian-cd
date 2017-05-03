@@ -20,11 +20,6 @@ if [ "$DI_WWW_HOME" = "default" ];then
     try_di_image_cache
 fi
 
-# Strip NONUS part of disk number
-# NN will be 1...N so it can be used as an index
-#
-NN=`echo $N | sed -e 's/_NONUS//'`
-
 cd $CDROOT/..
 
 add_mkisofs_opt $CDROOT/../$N.mkisofs_opts "-J -joliet-long"

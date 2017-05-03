@@ -65,13 +65,6 @@ esac
 cd $CDDIR/..
 
 # This script is called with $1 (now $N) as the CD to make bootable.
-# N may be in the form "n" or "n_NONUS" There may be more than 4
-# disks...support extras.
-
-# Strip NONUS part of disk number
-# NN will be 1...N so it can be used as an index
-NN=`echo $N | sed -e 's/_NONUS//'`
-
 # Exit if this is not a boot disk
 if [ $NN != 1 ] ; then exit 0; fi
 
