@@ -20,3 +20,6 @@ bpalogin
 /* pppconfig helps various people too */
 pppconfig
 
+/* #861288 - make it easier for users to report installation problems */
+reportbug
+
