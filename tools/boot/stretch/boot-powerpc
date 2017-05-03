@@ -14,9 +14,17 @@ set -e
 N=$1
 CDDIR=$2
 INSTALLDIR=$CDDIR/install
-if [ "$DI_WWW_HOME" = "default" ];then
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    exit 0
+fi
+
+if [ "$DI_WWW_HOME" = "default" ]; then
     DI_WWW_HOME="https://d-i.debian.org/daily-images/powerpc/daily"
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 cd $CDDIR/..
@@ -31,11 +39,6 @@ add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-map $BASEDIR/data/hfs.map"
 # MAXDISKBLOCKS is measured in 2K blocks
 newsize=`echo "$MAXDISKBLOCKS * 2048 / 256" | bc`
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-hfs-parms MAX_XTCSIZE=$newsize"
-
-# Only disk 1* bootable
-if [ $N != 1 ] ; then
-	exit 0
-fi
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--chrp-boot"
 # For newworld Mac booting  - Note, no spaces in volid!

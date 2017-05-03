@@ -14,17 +14,33 @@ set -e
 
 N=$1
 CDDIR=$2
-BOOTDIR=
-if [ "$DI_WWW_HOME" = "default" ];then
+INSTALLDIR="install"
+
+# Common options for all disks
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    exit 0
+fi
+
+if [ "$DI_WWW_HOME" = "default" ]; then
     # Tempting as it might be to merge these two definitions using $ARCH,
     # do *not* do that - these defs are parsed out by other scripts that
     # won't cope with that
     if [ "$ARCH" = kfreebsd-i386 ]; then
         DI_WWW_HOME="https://d-i.debian.org/daily-images/kfreebsd-i386/daily/"
-    else
+    elif [ "$ARCH" = kfreebsd-amd64 ]; then
         DI_WWW_HOME="https://d-i.debian.org/daily-images/kfreebsd-amd64/daily/"
+    else
+        echo "$0: unknown arch $ARCH; abort"
+	exit 1
     fi
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 case "$MKISOFS" in
@@ -38,12 +54,6 @@ case "$MKISOFS" in
 esac
 
 cd $CDDIR/..
-
-# Only disc 1 bootable
-if [ $N != 1 ]; then
-       add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-       exit 0
-fi
 
 # Download boot images.
 BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/kfreebsd-10.gz cdrom/initrd.gz"
@@ -82,7 +92,6 @@ fi
 # Install bootloader
 mkdir -p boot$N
 tar -C boot$N -zxf cdrom/debian-cd_info.tar.gz
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b boot/grub/grub_eltorito"
 [ -f boot$N/boot/grub/grub_embed ] && add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--embedded-boot boot$N/boot/grub/grub_embed"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c boot/boot.cat"

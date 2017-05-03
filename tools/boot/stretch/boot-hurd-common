@@ -14,10 +14,23 @@ set -e
 
 N=$1
 CDDIR=$2
-BOOTDIR=
-if [ "$DI_WWW_HOME" = "default" ];then
+INSTALLDIR="install"
+
+# Common options for all disks
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    exit 0
+fi
+
+if [ "$DI_WWW_HOME" = "default" ]; then
     DI_WWW_HOME="https://d-i.debian.org/daily-images/hurd-i386/daily/"
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 case "$MKISOFS" in
@@ -31,12 +44,6 @@ case "$MKISOFS" in
 esac
 
 cd $CDDIR/..
-
-# Only disc 1 bootable
-if [ $N != 1 ]; then
-       add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-       exit 0
-fi
 
 # Download boot images.
 BOOT_IMAGES="cdrom/debian-cd_info.tar.gz cdrom/gnumach.gz cdrom/initrd.gz cdrom/gtk/initrd.gz cdrom/ext2fs.static cdrom/exec.static"

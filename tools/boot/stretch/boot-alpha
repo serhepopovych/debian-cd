@@ -24,10 +24,23 @@ set -e
 
 N=$1
 CDDIR=$2
-BOOTDIR=
-if [ "$DI_WWW_HOME" = "default" ];then
+INSTALLDIR="install"
+
+# Common options for all disks
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    exit 0
+fi
+
+if [ "$DI_WWW_HOME" = "default" ]; then
     DI_WWW_HOME="https://d-i.debian.org/daily-images/alpha/daily/cdrom/"
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 cd $CDDIR/..
@@ -36,19 +49,19 @@ cd $CDDIR/..
 # This script is called with $1 (now $N) as the CD to 
 # make bootable.
 
-# Common options for all disks
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
-
 # Only disk 1* bootable
 if [ $N != 1 ]; then
 	exit 0
 fi
 
+ABOOTDEB=$(find_pkg_file aboot-base)
+if [ -z "$ABOOTDEB" ] ; then 
+    echo "ERROR:  the aboot-base package is required." >&2
+    exit 1
+fi
+
 mkdir boot$N
-ab_deb=`ls $MIRROR/pool/main/a/aboot/aboot-base_*.deb | tail -1`
-(dpkg --fsys-tarfile "$ab_deb" | tar xf - -C boot$N/ ./boot/bootlx)
+(dpkg --fsys-tarfile "$MIRROR/$ABOOTDEB" | tar xf - -C boot$N/ ./boot/bootlx)
 
 # Download boot images
 # XXX: Driver floppies?  Any alpha that /has/ a CDROM should be able to

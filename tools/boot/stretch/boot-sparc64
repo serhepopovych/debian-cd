@@ -10,14 +10,20 @@ set -e
 
 N=$1
 CDDIR=$2
-if [ "$DI_WWW_HOME" = "default" ];then
-    DI_WWW_HOME="https://d-i.debian.org/daily-images/sparc64/daily/cdrom/"
-    try_di_image_cache
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+    exit 0
 fi
 
-# Only disc 1* bootable
-if [ $N != 1 ]; then 
-	exit 0; 
+if [ "$DI_WWW_HOME" = "default" ]; then
+    DI_WWW_HOME="https://d-i.debian.org/daily-images/sparc64/daily/cdrom/"
+    try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-G boot1/boot/isofs.b -B ..."

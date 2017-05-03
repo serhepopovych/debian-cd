@@ -23,23 +23,32 @@ set -e
 
 N=$1
 CDDIR=$2
+INSTALLDIR="install"
 
-cd $CDDIR/..
-
-if [ $N != "1" ] ; then
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
     add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
     exit 0
 fi
 
-if [ "$DI_WWW_HOME" = "default" ];then
-    # Tempting as it might be to merge these two definitions using $ARCH,
-    # do *not* do that - these defs are parsed out by other scripts that
-    # won't cope with that
+if [ "$DI_WWW_HOME" = "default" ]; then
+    # Tempting as it might be to merge these definitions using $ARCH,
+    # do *not* do that - these defs are parsed out by other scripts
+    # that won't cope with that
     if [ "$ARCH" = s390x ]; then
         DI_WWW_HOME="https://d-i.debian.org/daily-images/s390x/daily"
+    else
+        echo "$0: unknown arch $ARCH; abort"
+	exit 1
     fi
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
+
+cd $CDDIR/..
 
 imagedir="boot$N/boot"
 mkdir -p $imagedir

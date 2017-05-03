@@ -18,11 +18,23 @@ export MTOOLS_SKIP_CHECK=1
 
 N=$1
 CDDIR=$2
-BOOTDIR=
 INSTALLDIR="install.a64"
-if [ "$DI_WWW_HOME" = "default" ];then
+
+# Common options for all disks
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-l"
+
+# Exit if this is not CD#1/DVD#1
+if [ $N != "1" ]; then
+    exit 0
+fi
+
+if [ "$DI_WWW_HOME" = "default" ]; then
     DI_WWW_HOME="https://d-i.debian.org/daily-images/arm64/daily"
     try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
 fi
 
 case "$MKISOFS" in
@@ -36,10 +48,6 @@ case "$MKISOFS" in
 esac
 
 cd $CDDIR/..
-
-# This script is called with $1 (now $N) as the CD to make bootable.
-# Exit if this is not a boot disk
-if [ $N != 1 ] ; then exit 0; fi
 
 BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/debian-cd_info.tar.gz"
 
@@ -68,10 +76,6 @@ cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
 # Boot setup including config and help files comes from d-i.
 mkdir -pv $PWD/boot$N
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/; tar zx)
-
-# Common mkisofs options when creating CDs
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
 
 if [ -d boot$N/grub ] ; then
     echo "  Adding EFI boot code for $ARCH on CD$N"
