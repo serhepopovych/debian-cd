@@ -10,6 +10,7 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   * Add stub for mips64el boot support, so we can build images for it
   * Add reportbug to tasks/forcd1 - make it easier for users to report
     installation problems. Closes: #861288
+  * Ensure that arm64 images include grub-efi packages
 
   [ Samuel Thibault ]
   * Add support for grub submenu hotkeys.
