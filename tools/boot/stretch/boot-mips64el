@@ -20,6 +20,7 @@ if [ "$DI_WWW_HOME" = "default" ];then
     try_di_image_cache
 fi
 
-# Mips64el is currently not bootable in stretch, so bail out here
-echo "Mips64el booting disabled, check Sledge"
-exit 0
+# This arch is currently not bootable directly from CD, and there's
+# not a lot we can do about that. But add the needed files in the
+# right place so that users can find them, at least
+copy_arch_images
