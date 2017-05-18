@@ -54,18 +54,25 @@ if [ $NUM_ARCHES = 1 ] ; then
             ;;
         *)
             BINARYDISK=1
+	    DISKNUMSTRING="$DISKNUM"
             export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
+	    if [ $DISKTYPE = netinst ]; then
+		# Use "n" as a "disknum" here, #858031
+		DISKNUMSTRING="n"
+		# Don't need a disknum here - only one netinst
+		export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE $BUILD_DATE"
+	    fi
             case "$ARCHES" in
                 powerpc)
-                    export VOLID="$VOLID_BASE ppc $DISKNUM" ;;
+                    export VOLID="$VOLID_BASE ppc $DISKNUMSTRING" ;;
                 kfreebsd-i386)
-                    export VOLID="$VOLID_BASE f-i386 $DISKNUM" ;;
+                    export VOLID="$VOLID_BASE f-i386 $DISKNUMSTRING" ;;
                 kfreebsd-amd64)
-                    export VOLID="$VOLID_BASE f-amd64 $DISKNUM" ;;
+                    export VOLID="$VOLID_BASE f-amd64 $DISKNUMSTRING" ;;
                 hurd-i386)
-                    export VOLID="$VOLID_BASE h-i386 $DISKNUM" ;;
+                    export VOLID="$VOLID_BASE h-i386 $DISKNUMSTRING" ;;
                 *)
-                    export VOLID="$VOLID_BASE $ARCHES $DISKNUM" ;;
+                    export VOLID="$VOLID_BASE $ARCHES $DISKNUMSTRING" ;;
             esac
             ;;
     esac
