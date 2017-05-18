@@ -206,10 +206,10 @@ if [ $DISKNUM = 1 ] ; then
             # Netinst/businesscard CD have different
             # udeb_include and udeb_exclude files
             if [ -z "$UDEB_INCLUDE" ] ; then
-                case "$INSTALLER_CD"x in
-                    "1"x)
+                case "$DISKTYPE"x in
+                    "BC"x)
                         UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_businesscard_udeb_include;;
-                    "2"x|"7"x|"8"x|"C"x|"F"x|"G"x)
+                    "NETINST"x)
                         UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_netinst_udeb_include;;
                     *)
                         UDEB_INCLUDE=$DI_DATA_DIR/"$ARCH"_udeb_include;;
@@ -217,10 +217,10 @@ if [ $DISKNUM = 1 ] ; then
             fi
 
             if [ -z "$UDEB_EXCLUDE" ] ; then
-                case "$INSTALLER_CD"x in
-                    "1"x)
+                case "$DISKTYPE"x in
+                    "BC"x)
                         UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_businesscard_udeb_exclude;;
-                    "2"x|"7"x|"8"x|"C"x|"F"x|"G"x)
+                    "NETINST"x)
                         UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_netinst_udeb_exclude;;
                     *)
                         UDEB_EXCLUDE=$DI_DATA_DIR/"$ARCH"_udeb_exclude;;
