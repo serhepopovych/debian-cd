@@ -56,7 +56,7 @@ if [ $NUM_ARCHES = 1 ] ; then
             BINARYDISK=1
 	    DISKNUMSTRING="$DISKNUM"
             export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
-	    if [ $DISKTYPE = netinst ]; then
+	    if [ $DISKTYPE = NETINST ]; then
 		# Use "n" as a "disknum" here, #858031
 		DISKNUMSTRING="n"
 		# Don't need a disknum here - only one netinst
