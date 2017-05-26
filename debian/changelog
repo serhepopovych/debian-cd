@@ -13,6 +13,7 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   * Ensure that arm64 images include grub-efi packages
   * Tweak the Volume ID and disk info output slightly for netinst media.
     Closes: #858031
+  * Tweak the Volume ID for mips64el media
 
   [ Samuel Thibault ]
   * Add support for grub submenu hotkeys.

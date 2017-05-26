@@ -65,6 +65,8 @@ if [ $NUM_ARCHES = 1 ] ; then
             case "$ARCHES" in
                 powerpc)
                     export VOLID="$VOLID_BASE ppc $DISKNUMSTRING" ;;
+                mips64el)
+                    export VOLID="$VOLID_BASE m64el $DISKNUMSTRING" ;;
                 kfreebsd-i386)
                     export VOLID="$VOLID_BASE f-i386 $DISKNUMSTRING" ;;
                 kfreebsd-amd64)
