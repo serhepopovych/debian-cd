@@ -1,4 +1,4 @@
-debian-cd (3.1.20) UNRELEASED; urgency=medium
+debian-cd (3.1.20) unstable; urgency=medium
 
   [ Raphaël Hertzog ]
   * Add {data,tasks,tools/boot}/{kali-dev,kali-rolling} symlinks pointing
@@ -21,7 +21,7 @@ debian-cd (3.1.20) UNRELEASED; urgency=medium
   [ Vagrant Cascadian ]
   * Add wget to Recommends. Closes: #861436
 
- -- Raphaël Hertzog <hertzog@debian.org>  Fri, 27 Jan 2017 13:59:40 +0100
+ -- Steve McIntyre <93sam@debian.org>  Tue, 06 Jun 2017 13:12:21 +0100
 
 debian-cd (3.1.19) unstable; urgency=medium
 
