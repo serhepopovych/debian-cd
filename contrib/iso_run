@@ -6,7 +6,7 @@ PUBDIRJIG=$1
 RSYNC_TARGET=$2
 ARCH=$3
 
-LOG=~/build.jessie/log/$ARCH.iso_run
+LOG=~/build.stretch/log/$ARCH.iso_run
 HOSTNAME=`hostname -f`
 LOCK=~/iso_run.lock
 START=`date -u +%H:%M:%S`
@@ -33,7 +33,7 @@ process_iso() {
     cp -a $FILE $OUTDIR/$FILE
 
     if [ "$RELEASE_BUILD"x != ""x ] ; then
-	~/build.jessie/mktorrent $FILE >> $LOG
+	~/build.stretch/mktorrent $FILE >> $LOG
 	BTFILE=`echo $FILE.torrent | sed 's/iso-/bt-/'`
 	echo $OUTDIR/$BTFILE >> $LOG
 	cp -a $BTFILE $OUTDIR/$BTFILE
@@ -92,11 +92,15 @@ copy_files() {
 	if [ "$RELEASE_BUILD"x = ""x ] ; then
 	    # Only populate the HEADER.html file for regular weekly
 	    # builds; we don't want it for releases
-            DATE=`date -u`
-            sed "s/ARCH/$ARCH/g;s/DATE/$DATE/g" ~/build.jessie/weekly.html \
+            HUM_DATE=`date -u`
+            sed "s/ARCH/$ARCH/g;s/DATE/$HUM_DATE/g" ~/build.stretch/weekly.html \
 		> $TARGET/$ARCH.tmp/HEADER.html
 	fi
 
+	mkdir -p $TARGET/$ARCH.tmp/log/$DATE
+	cp *.log $TARGET/$ARCH.tmp/log/$DATE
+	ln -sf $DATE $TARGET/$ARCH.tmp/log/success
+	
 	# Now clean up any directories without any real content
 	# (i.e. empty dir, or just containing checksum files)
 	for dir in $TARGET/$ARCH.tmp/*-* ; do

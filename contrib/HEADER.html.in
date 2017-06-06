@@ -31,14 +31,17 @@ cpp.
 #    ifdef ARCHmulti
 
        The files in this directory are designed to work on both 32-bit
-       and 64-bit PCs (i386 and amd64).
+       and 64-bit PCs (<code>i386</code> and <code>amd64</code>).
 
 #    else
 
        The files in this directory are specifically for
-       the <code>ARCH</code> architecture.</p>
+       the <code>ARCH</code> architecture.
 
 #    endif
+
+</p>
+
 #  endif
 
    <h2>How do I use these files?</h2>
@@ -130,17 +133,6 @@ cpp.
 #  endif
 
 #  if defined(TYPEcd) && !defined(ARCHsource) && !defined(STYLElist)
-#    if !defined(ONEonly)
-
-       <p>There are different versions of CD #1 here to allow for a
-       choice of default desktop on installation,
-       e.g. <code>debian-<i>something</i>-kde-CD-1</code> contains the
-       core pieces of the KDE desktop and will default to installing
-       that desktop when used. The <strong>default</strong> desktop
-       installed using
-       <code>debian-<i>something</i>-CD-1</code> is Gnome.</p>
-
-#    endif
 
      <p>The <code>netinst</code> CD here is a small CD image that
      contains just the core Debian installer code and a small core set
@@ -148,8 +140,28 @@ cpp.
      a desktop or other common software, you'll also need either an
      Internet connection or some other Debian CD/DVD images.</p>
 
-#  endif
+#    if defined(ARCHi386)
 
+       <p>The <code>mac netinst</code> CD here is a special version of
+       the netinst CD image that is targeted specifically at 32-bit
+       Intel Macintosh machines. It will likely work on most other
+       i386 machines too, but it does not contain UEFI boot files that
+       some people need.</p>
+
+#    endif
+
+#    if defined(ARCHamd64)
+
+       <p>The <code>mac netinst</code> CD here is a special version of
+       the netinst CD image that is targeted specifically at older 64-bit
+       Intel Macintosh machines. It will likely work on most other
+       amd64 machines too, but it does not contain UEFI boot files that
+       some people need.</p>
+
+#    endif
+
+#  endif
+      
 #  ifdef UPDATES
 
      <p>The <code>update</code> files here are extra convenience files
@@ -178,7 +190,37 @@ cpp.
 
 #endif
 
+#ifdef FIRMWARE
+
+  <h2>Non-free Firmware</h2>
+
+  <p>For convenience for some users, this <strong>unofficial</strong>
+  alternative build
+  includes <a href="https://wiki.debian.org/Firmware">non-free
+  firmware</a> for extra support for some awkward hardware.</p>
+
+#endif
+
+#ifdef ARCH_HAS_FIRMWARE
+
+  <h2>Non-free Firmware</h2>
+
+  <p>This is an <strong>official</strong> Debian image build and so
+  only includes Free Software.</p>
+
+  <p>For convenience for some users, there is an
+  alternative <strong>unofficial</strong> netinst CD build which
+  includes <a href="https://wiki.debian.org/Firmware">non-free
+  firmware</a> for extra support for some awkward hardware. Look under
+  <a href="/cdimage/unofficial/non-free/cd-including-firmware/">/cdimage/unofficial/non-free/cd-including-firmware/</a>
+  if you need that CD image instead.</p>
+#endif
+
 <h2>Other questions?</h2>
 
 <p>See the Debian CD <a href="https://www.debian.org/CD/faq/">FAQ</a>
 for lots more information about Debian CDs and installation.</p>
+
+<p>The images here were put together by
+the <a href="https://wiki.debian.org/Teams/DebianCd">Debian CD team</a>
+, using debian-cd and other software.</p>

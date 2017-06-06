@@ -14,14 +14,19 @@ if [ "$SUITE"x = ""x ] ; then
 fi
 
 # Do stuff here!
-export TDIR=/org/cdbuilder.debian.org/dst/deb-cd/tmp/firmware
+export TDIR=/srv/cdbuilder.debian.org/dst/deb-cd/tmp/firmware
 export BASEDIR=$TOPDIR/debian-cd
 mkdir -p $TDIR
 fakeroot $BASEDIR/tools/make-firmware-image $MIRROR $SUITE $TDIR
 
 DATE=`date +%Y%m%d`
 mkdir -p $OUT/$SUITE/$DATE
-mv $TDIR/firmware*.* $OUT/$SUITE/$DATE/
+mv $TDIR/firmware*.* $TDIR/*SUMS $OUT/$SUITE/$DATE/
+
+if [ "$RELEASE_BUILD"x = ""x ] ; then
+    echo "Signing firmware checksums files using the automatic key"
+    ~/build.stretch/sign-images $OUT/$SUITE/$DATE ""
+fi
 
 # Update the current link, and delete the old surplus builds. Keep up
 # to 3

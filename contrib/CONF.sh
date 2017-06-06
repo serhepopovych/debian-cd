@@ -47,8 +47,8 @@ unset BASE_EXCLUDE      || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building jessie cd set ...
-export CODENAME=jessie
+# Building stretch cd set ...
+export CODENAME=stretch
 
 if [ ! "$DI_CODENAME" ]
 then
@@ -80,7 +80,7 @@ fi
 #	      some part of this, you must use this option.
 # Paths to the mirrors
 if [ "$MIRROR"x = ""x ] ; then
-    export MIRROR=/org/cdbuilder.debian.org/src/ftp/debian
+    export MIRROR=/srv/cdbuilder.debian.org/src/ftp/debian
 fi
 
 NUM_ARCHES=`echo $ARCH | wc -w`
@@ -91,11 +91,11 @@ else
 fi
 
 # Path of the temporary directory
-export TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/"$INSTALLER_CD""$DI""$OUTARCH"
+export TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/"$INSTALLER_CD""$DI""$OUTARCH"
 
 # Path where the images will be written
 if [ "$OUT"x = ""x ] ; then
-    export OUT=/org/cdbuilder.debian.org/dst/deb-cd/out/"$INSTALLER_CD""$DI""$OUTARCH"
+    export OUT=/srv/cdbuilder.debian.org/dst/deb-cd/out/"$INSTALLER_CD""$DI""$OUTARCH"
 fi
 
 # Where we keep the temporary apt stuff.
@@ -318,3 +318,12 @@ esac
 # "SNAPDATETIME" will be replaced at runtime with the correct data
 # Leave this unset to not add this entry
 export SNAPURL=Debian=http://snapshot.debian.org/archive/debian/SNAPDATETIME/
+
+# Add options to wget to include support for the Debian CA, so
+# https://d-i.debian.org et al will work.
+# Add options to wget to include support for the Debian CA, so
+# https://d-i.debian.org et al will work.
+if [ -d "/etc/ssl/ca-debian" ]; then
+    export WGET_OPTS="--ca-directory /etc/ssl/ca-debian/"
+fi
+export WGET="wget $WGET_OPTS"

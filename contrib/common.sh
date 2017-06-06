@@ -85,7 +85,15 @@ build_finished () {
     echo "  $ARCH $BUILDNAME build started at $start, ended at $end (took $time_spent), error $error"
     if [ $error -ne 0 ] ; then
         arch_error="$arch_error "$BUILDNAME"FAIL/$error/$end/$logfile"
-    fi    
+    fi
+    case $BUILDNAME in
+	*FIRMWARE*)
+	    cp log/$logfile $PUBDIRJIG-firmware/$ARCH/$BUILDNAME.log
+	    ;;
+	*)
+	    cp log/$logfile $PUBDIRJIG/$ARCH/$BUILDNAME.log
+	    ;;
+    esac
 }
 
 catch_parallel_builds () {
@@ -123,7 +131,12 @@ generate_checksums_for_arch () {
 }
 
 catch_live_builds () {
-    # Catch parallel build types here                                                                                               
+    # Catch parallel build types here
+
+    if [ "$NOLIVE"x = ""x ] && [ "$NOOPENSTACK"x = ""x ] ; then
+	return
+    fi
+    
     while [ ! -f $PUBDIRLIVETRACE ] || [ ! -f $PUBDIROSTRACE ] ; do
 	sleep 1
     done
@@ -146,4 +159,13 @@ arch_has_firmware () {
 	fi
     done
     return 1
+}
+
+get_archive_serial () {
+    trace_file="$MIRROR/project/trace/ftp-master.debian.org"
+    if [ -f "$trace_file" ]; then
+        awk '/^Archive serial: / {print $3}' "$trace_file"
+    else
+        echo 'unknown'
+    fi
 }

@@ -13,11 +13,11 @@
 #set -x
 
 if [ "$CONF"x = ""x ] ; then
-    CONF=~/build.jessie/CONF.sh
+    CONF=~/build.stretch/CONF.sh
 fi
 export CF=$CONF
 if [ "$DCD_DIR"x = ""x ] ; then
-    DCD_DIR=~/build.jessie/debian-cd
+    DCD_DIR=~/build.stretch/debian-cd
 fi
 export CF=$CONF
 
@@ -60,9 +60,9 @@ export LOGFILE="$LOG/$RUN"
 case "$INSTALLER_CD" in
     1)
         export DISKTYPE=BC;;
-    2|7|8|C|F)
+    2|7|8|C|F|G)
         export DISKTYPE=NETINST;;
-    3|6)
+    3|6|I|J)
         export OUT_TYPE=dvd
         export DISKTYPE=DVD;;
     4)
@@ -81,8 +81,17 @@ case "$INSTALLER_CD" in
         export DISKTYPE=DLBD;;
     E)
         export DISKTYPE=gnome-CD;;
+    H)
+        export OUT_TYPE=bd
+        export DISKTYPE=BD;;
     *)  export DISKTYPE=CD;;
 esac
+
+if [ "$DEBIAN_EDU"x = "1"x ] ; then
+    # Different logo for the debian-edu images
+    export LOGOPNG="$DCD_DIR/data/$DI_CODENAME/debian-edu-installer-logo.png"
+    export SPLASHPNG="$DCD_DIR/data/$DI_CODENAME/splash-skolelinux.png"
+fi
 
 if [ "$OUT_TYPE"x = ""x ] ; then
     OUT_TYPE=cd
@@ -128,6 +137,14 @@ elif [ "$INSTALLER_CD" = "E" ]; then
     export OFFICIAL="Official Gnome CD Snapshot"
 elif [ "$INSTALLER_CD" = "F" ]; then
     export OFFICIAL="Official Mac Netinst"
+elif [ "$INSTALLER_CD" = "G" ]; then
+    export OFFICIAL="Official Debian-Edu Multi-Arch Netinst"
+elif [ "$INSTALLER_CD" = "H" ]; then
+    export OFFICIAL="Official Debian-Edu Multi-Arch Image"
+elif [ "$INSTALLER_CD" = "I" ]; then
+    export OFFICIAL="Unofficial DVD including firmware"
+elif [ "$INSTALLER_CD" = "J" ]; then
+    export OFFICIAL="Unofficial Multi-Arch DVD including firmware"
 fi
 
 rm -rf "$OUT"
@@ -155,33 +172,31 @@ else
     SUMS_EXTENSION=".${INSTALLER_CD}"
 fi
 
+if [ "$FORCE_FIRMWARE"x = "1"x ] ; then
+    if [ "${DI}" = "sid" ] ; then
+	ARCHDIR=$OUT_FW_SID/$OUTARCH
+    else
+	ARCHDIR=$OUT_FW_TST/$OUTARCH
+    fi
+else # non-FW build
+    if [ "${DI}" = "sid" ] ; then
+	ARCHDIR=$OUT_FREE_SID/$OUTARCH
+    else
+	ARCHDIR=$OUT_FREE_TST/$OUTARCH
+    fi
+fi
+
 # Do the actual building
 START=`now`
 if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
     # if it went ok get things ready for publishing
     # we treat the daily netinst images in a different way
-    if [ "$INSTALLER_CD" = "1" ] || \
-       [ "$INSTALLER_CD" = "2" ] || \
-       [ "$INSTALLER_CD" = "C" ] || \
-       [ "$INSTALLER_CD" = "F" ] ; then
+    if [ "$DISKTYPE" = "NETINST" ] || \
+       [ "$DISKTYPE" = "BC" ] ; then
 
         ##################################
         # NETINST STUFF
         ##################################
-
-	if [ "$INSTALLER_CD" = "C" ] ; then
-	    if [ "${DI}" = "sid" ] ; then
-		ARCHDIR=$OUT_FW_SID/$OUTARCH
-	    else
-		ARCHDIR=$OUT_FW_TST/$OUTARCH
-	    fi
-	else # non-FW build
-	    if [ "${DI}" = "sid" ] ; then
-		ARCHDIR=$OUT_FREE_SID/$OUTARCH
-	    else
-		ARCHDIR=$OUT_FREE_TST/$OUTARCH
-	    fi
-	fi
 
 	mkdir -p $ARCHDIR/list-cd $ARCHDIR/jigdo-cd $ARCHDIR/iso-cd
         # put the isos and jigdos in their place
@@ -223,19 +238,19 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 	    fi
         done
 
-        mkdir -p "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
-        mv "$OUT"/*.template "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
-        mv "$OUT"/*.jigdo    "$PUBDIRJIG"/$OUTARCH/jigdo-${OUT_TYPE}
+        mkdir -p $ARCHDIR/jigdo-${OUT_TYPE}
+        mv "$OUT"/*.template $ARCHDIR/jigdo-${OUT_TYPE}
+        mv "$OUT"/*.jigdo    $ARCHDIR/jigdo-${OUT_TYPE}
 
-        mkdir -p "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
+        mkdir -p $ARCHDIR/iso-${OUT_TYPE}
 	for file in "$OUT"/*.iso; do
 	    if [ -e $file ] ; then 
-                mv $file    "$PUBDIRJIG"/$OUTARCH/iso-${OUT_TYPE}
+                mv $file    $ARCHDIR/iso-${OUT_TYPE}
             fi
         done
 
-        mkdir -p "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}
-	mv "$OUT"/*list*gz "$PUBDIRJIG"/$OUTARCH/list-${OUT_TYPE}
+        mkdir -p $ARCHDIR/list-${OUT_TYPE}
+	mv "$OUT"/*list*gz $ARCHDIR/list-${OUT_TYPE}
 
         END=`now`
         echo -e "start=$START\nend=$END\nerror=0\nlogfile=$RUN\n" > "$PUBDIRJIG"/$OUTARCH/$TRACEFILE

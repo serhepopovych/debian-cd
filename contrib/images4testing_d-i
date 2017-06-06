@@ -1,2 +1,2 @@
-DI_DIST=jessie
+DI_DIST=stretch
 DI_CODENAME=$DI_DIST

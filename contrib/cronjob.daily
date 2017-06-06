@@ -11,7 +11,7 @@ export TOPDIR
 BUILDLOCK=$HOME/.debian-cd.lock
 export PUBDIRJIG=$PUBDIR/daily-builds
 export DATE_BUILD="$DATE-$BUILDNUM"
-export TESTING_SUITE=jessie
+export TESTING_SUITE=stretch
 BUILDS_RUNNING=""
 
 export NI_WANTED=1
@@ -34,7 +34,7 @@ else
     export OUT_FW_SID=""
     export RSYNC_TARGET_FREE=/mnt/nfs-cdimage/.${RELEASE_BUILD}
     export RSYNC_TARGET_FIRMWARE=/mnt/nfs-cdimage/unofficial/non-free/cd-including-firmware/.${RELEASE_BUILD}
-    export CONF=~/build.jessie/CONF.sh.${RELEASE_BUILD}
+    export CONF=~/build.stretch/CONF.sh.${RELEASE_BUILD}
     export RELEASE_BUILD=$RELEASE_BUILD
     export EXTENSION=".small"
 fi
@@ -74,14 +74,14 @@ finalise_arch_dir () {
 	    cd $ARCH_DIR
 	    # Only make torrent files for release builds
 	    if [ "$RELEASE_BUILD"x != ""x ] ; then
-		~/build.jessie/mktorrent iso-cd/*iso
+		~/build.stretch/mktorrent iso-cd/*iso
 		cp iso-cd/*SUMS* bt-cd
 	    fi
 	    if [ "$RELEASE_BUILD"x = ""x ] ; then
 		echo "Signing checksums files using the automatic key"
-		~/build.jessie/sign-images $OUT_DIR $ARCH
+		~/build.stretch/sign-images $OUT_DIR $ARCH
 	    fi
-	    ~/build.jessie/mklist iso-cd/*iso
+	    ~/build.stretch/mklist iso-cd/*iso
 	    cd $TOPDIR
 	fi
     done
@@ -128,6 +128,7 @@ if lockfile -r0 $BUILDLOCK ; then
 			    TASK=debian-installer+kernel LOGAPPEND="-1" \
 			    MAXISOS=ALL MAXJIGDOS=ALL \
 			    DI=sid DI_DIST="$DI_DIST" VARIANTS=xen \
+			    DI_DIR="$ARCH_DI_DIR" \
 			    DI_WWW_HOME=default ./testingcds "amd64 i386" &
 		    fi
 		fi
@@ -154,6 +155,7 @@ if lockfile -r0 $BUILDLOCK ; then
 			TASK=debian-installer+kernel LOGAPPEND="-1" \
 			MAXISOS=ALL MAXJIGDOS=ALL \
 			DI=sid DI_DIST="$DI_DIST" VARIANTS=xen \
+			DI_DIR="$ARCH_DI_DIR" \
 			DI_WWW_HOME=default ./testingcds "amd64 i386" &
 		fi
 	    fi
@@ -186,7 +188,8 @@ if lockfile -r0 $BUILDLOCK ; then
 			    FORCE_FIRMWARE=1 CDNAME=firmware \
 			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
 			    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
-			    DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
+			    DI=sid DI_WWW_HOME=default \
+			    DI_DIR="$ARCH_DI_DIR" \
 			    ./testingcds "$arch" &
 		    fi
 		fi
@@ -210,7 +213,8 @@ if lockfile -r0 $BUILDLOCK ; then
 		    OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
 			NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
 			TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
-			DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
+			DI=sid DI_WWW_HOME=default \
+			DI_DIR="$ARCH_DI_DIR" \
 			./testingcds "$arch" &
 		fi
 	    fi
@@ -227,7 +231,7 @@ if lockfile -r0 $BUILDLOCK ; then
 	    fi
 
 	    # Special Mac-only builds
-            if [ "$arch" = "i386" ] ; then
+	    if [ "$arch" = "i386" ] || [ "$arch" = "amd64" ] ; then
 		if [ "$SID_WANTED" = "1" ] ; then
 		    if [ "$NI_WANTED" = "1" ] ; then
 			build_started SIDMACNI
@@ -235,7 +239,8 @@ if lockfile -r0 $BUILDLOCK ; then
 			    NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=F \
 			    TASK=debian-installer+kernel MAXISOS=ALL MAXJIGDOS=ALL \
 			    BOOT_METHODS=BIOS CDNAME="debian-mac" \
-			    DI=sid DI_WWW_HOME=default DI_DIR="$ARCH_DI_DIR" \
+			    DI=sid DI_WWW_HOME=default \
+			    DI_DIR="$ARCH_DI_DIR" \
 			    ./testingcds "$arch" &
 		    fi
 		fi
