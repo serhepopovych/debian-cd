@@ -8,6 +8,12 @@
 /* Packages that should really be on CD1 */
 #include <debian-installer+kernel>
 #include <forcd1>
+
+/* Force some important packages up the dependency order */
+network-manager-gnome
+synaptic
+firefox-esr
+
 #include <task-essential-xfce>
 
 /* Other interesting packages */
