@@ -51,7 +51,9 @@ if [ "$OMIT_MANUAL" != 1 ]; then
 	done
 fi
 
-if [ "$OMIT_RELEASE_NOTES" != 1 ]; then
+if [ "$OMIT_RELEASE_NOTES"x = "1"x ]; then
+	echo "Omitting release notes, as requested"
+else
 	for ARCH in $ARCHES
 	do
 		if [ $ARCH != source ] ; then
