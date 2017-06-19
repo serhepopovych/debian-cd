@@ -178,14 +178,14 @@ $(DB_DIR): $(LATEST_DB)
 	fi
 endif
 
-# Make sure unstable/sid points to testing/wheezy, as there is no build
+# Make sure unstable/sid points to testing/buster, as there is no build
 # rule for unstable/sid.
 unstable-map:
 	$(Q)if [ ! -d $(BASEDIR)/data/sid ] ; then \
-		ln -s stretch $(BASEDIR)/data/sid ; \
+		ln -s buster $(BASEDIR)/data/sid ; \
 	fi
 	$(Q)if [ ! -d $(BASEDIR)/tools/boot/sid ] ; then \
-		ln -s stretch $(BASEDIR)/tools/boot/sid ; \
+		ln -s buster $(BASEDIR)/tools/boot/sid ; \
 	fi
 
 #################

@@ -184,19 +184,19 @@
 # endif
 # if (OFFICIAL_VAL == 2)
 #  if OMIT_RELEASE_NOTES
-    <p>The Release Notes for "stretch" are available on the
-    <a href="http://www.debian.org/releases/stretch/releasenotes">Debian web
+    <p>The Release Notes for "buster" are available on the
+    <a href="http://www.debian.org/releases/buster/releasenotes">Debian web
     site</a>.</p>
 #  else
 #   if DISKNUM == 1
-    <p>The Release Notes for Debian DEBIAN_KERNEL "stretch" are included on this disc
+    <p>The Release Notes for Debian DEBIAN_KERNEL "buster" are included on this disc
     in <a href=%%""doc/release-notes/%%"">/doc/release-notes/</a>, in
     several languages. Additional translations and updated versions for
     the Release Notes may be available from the
-    <a href="http://www.debian.org/releases/stretch/releasenotes">Debian web
+    <a href="http://www.debian.org/releases/buster/releasenotes">Debian web
     site</a>.</p>
 #   else
-    <p>See the first disc in this set for the "stretch" Release Notes.</p>
+    <p>See the first disc in this set for the "buster" Release Notes.</p>
 #   endif
 #  endif
 # endif
@@ -236,7 +236,7 @@
 # if (OFFICIAL_VAL == 2)
 # if OMIT_MANUAL
     <p>An <b>Installation Guide</b> for this disc is available from
-    <a href="http://www.debian.org/releases/stretch/installmanual">the
+    <a href="http://www.debian.org/releases/buster/installmanual">the
     Debian web site</a>.</p>
 # else
     <p>An <b>Installation Guide</b> is included on this disc at
@@ -249,13 +249,13 @@
 
     <p>Note: additional translations, other formats (like PDF and TXT) and
     updated versions for the Installation Guide are available from
-    <a href="http://www.debian.org/releases/stretch/installmanual">the Debian web site</a>.
+    <a href="http://www.debian.org/releases/buster/installmanual">the Debian web site</a>.
     </p>
 # endif
 # else
-    <p>As this is not an official stretch release disc, then the
+    <p>As this is not an official buster release disc, then the
     installation guide many not be released yet. It will appear on <a
-    href="http://www.debian.org/releases/stretch/installmanual">the
+    href="http://www.debian.org/releases/buster/installmanual">the
     Debian web site</a> when ready, but before then you could try <a
     href="http://d-i.alioth.debian.org/manual/">the development
     version of the manual</a>.

@@ -51,7 +51,7 @@ if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
 fi
 
 # Some custom etc files
-cp -f -p $BASEDIR/data/stretch/sparc/silo.conf $inst/boot/
+cp -f -p $BASEDIR/data/${CODENAME}/sparc/silo.conf $inst/boot/
 if [ -n "$KERNEL_PARAMS" ]; then
 	# Add KERNEL_PARAMS to any existing append line
 	sed -i "/^[[:space:]]*append=\"/ s|append=\"|append=\"$KERNEL_PARAMS |" \
@@ -62,12 +62,12 @@ if [ -n "$KERNEL_PARAMS" ]; then
 			$inst/boot/silo.conf
 	fi
 fi
-cat $BASEDIR/data/stretch/sparc/debian.txt \
+cat $BASEDIR/data/${CODENAME}/sparc/debian.txt \
  | sed "s/\${MEDIA_TYPE}/CDROM/" \
  | sed "s/\${DEBIAN_VERSION}/${CODENAME}/g" \
  | sed "s/\${BUILD_DATE}/${BUILD_DATE}/g" \
  > $inst/boot/debian.txt
-cp $BASEDIR/data/stretch/sparc/notsupported.txt $inst/boot/
+cp $BASEDIR/data/${CODENAME}/sparc/notsupported.txt $inst/boot/
 
 # Sparc64 kernel is so big, that uncompressing it corrupts SILO memory, so
 # uncompress it before hand.
