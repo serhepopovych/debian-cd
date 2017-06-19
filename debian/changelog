@@ -4,8 +4,9 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Tweak tasks/stretch/Debian-xfce: force some important packages up the
     dependency order so they're guaranteed to fit (firefox,
     network-manager-gnome, synaptic)
+  * Start buster, simply copying stretch for now
 
- -- Steve McIntyre <93sam@debian.org>  Tue, 06 Jun 2017 13:12:21 +0100
+ -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
 debian-cd (3.1.20) unstable; urgency=medium
 
