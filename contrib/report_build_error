@@ -11,7 +11,7 @@ ARCH=$3
 RESULTS=$4
 
 OUTFILE=$OUTDIR/$ARCH/HEADER.html
-INLOGS="/org/cdbuilder.debian.org/dst/deb-cd/log"
+INLOGS="/srv/cdbuilder.debian.org/dst/deb-cd/log"
 OUTLOGS="build-logs/$DATE"
 
 grep -q WARNING $OUTFILE

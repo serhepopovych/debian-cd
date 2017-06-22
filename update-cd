@@ -14,8 +14,8 @@ set -e
 # Configuration goes here.
 
 # Where is your mirror?
-MIRROR_NORM=/org/cdbuilder.debian.org/src/ftp/debian
-MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
+MIRROR_NORM=/srv/cdbuilder.debian.org/src/ftp/debian
+MIRROR_AMD64=/srv/cdbuilder.debian.org/src/ftp/debian-amd64/debian
 
 # Do you want non-free? 1 for yes, 0 for no
 NONFREE=0
@@ -37,13 +37,13 @@ JTE=1
 BT=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-work
+TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-work
 
 # Building squeeze cd set ...
 CODENAME=squeeze
 
 # Path where the images will be written
-OUT=/org/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-out
+OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'

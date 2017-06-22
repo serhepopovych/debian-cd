@@ -5,13 +5,13 @@ STATE=/home/stevem/watch-state
 R_HOST=cd-builder.debian.net
 R_LOC=testing/weekly-builds
 R_WEBROOT=$R_LOC
-R_RSYNCROOT=/org/cdimage.debian.org/www/$R_LOC
+R_RSYNCROOT=/srv/cdimage.debian.org/www/$R_LOC
 R_USER=steve
 
-CACHE_DIR=/org/jigdo-snapshots
-OUT_DIR=/org/jigdo-area/testing
-MIRROR=/org/ftp/debian
-SNAP_AREA=/org/jigdo-area/snapshot
+CACHE_DIR=/srv/jigdo-snapshots
+OUT_DIR=/srv/jigdo-area/testing
+MIRROR=/srv/ftp/debian
+SNAP_AREA=/srv/jigdo-area/snapshot
 LOCK=$STATE/lock
 
 # Check to see if another sync is in progress
