@@ -66,6 +66,12 @@ ifndef DEBOOTSTRAP_OPTS
 DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
 
+## Port architectures need their archive keyring
+UNRELEASED_PORT_ARCHITECTURES=alpha hppa hurd-i386 m68k ppc64 powerpcspe sh4 sparc64 x32
+ifneq (,$(filter $(UNRELEASED_PORT_ARCHITECTURES),$(ARCHES)))
+export BASE_INCLUDE := $(BASEDIR)/data/base_include_port_architectures $(BASE_INCLUDE)
+endif
+
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
 check_backports_packages=$(BASEDIR)/tools/check_backports_packages
@@ -392,7 +398,7 @@ $(BDIR)/rawlist:
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		if [ _$(INSTALLER_CD) != _1 ]; then \
 			for ARCH in $(ARCHES_NOSRC); do \
-				BINCLUDE=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_INCLUDE) | tr "\n" "," | sed 's!,$$!!g'`; \
+				BINCLUDE=`[ -n "$(BASE_INCLUDE)" ] && cat $(BASE_INCLUDE) | sort -u | tr "\n" "," | sed 's!,$$!!g'`; \
 				[ -z "$$BINCLUDE" ] || BINCLUDE="--include=$$BINCLUDE"; \
 				BEXCLUDE=`[ -n "$(BASE_EXCLUDE)" ] && cat $(BASE_EXCLUDE) | tr "\n" "," | sed 's!,$$!!g'`; \
 				[ -z "$$BEXCLUDE" ] || BEXCLUDE="--exclude=$$BEXCLUDE"; \

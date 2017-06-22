@@ -6,6 +6,10 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
     network-manager-gnome, synaptic)
   * Start buster, simply copying stretch for now
 
+  [ JH Chatenet ]
+  * Include debian-ports-archive-keyring on non released architectures
+    Closes: #865470
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
 debian-cd (3.1.20) unstable; urgency=medium
