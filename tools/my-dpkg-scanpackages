@@ -24,6 +24,7 @@ $version="1.9.17"; # diverted from dpkg 1.9.17
             'Filename',
             'Size',
             'MD5sum',
+            'SHA256',
             'Description');
 
 $written=0;
@@ -131,6 +132,12 @@ while (<F>) {
     /^[0-9a-f]{32}/ or die "Strange text from \`md5sum < $fn': \`$_'\n";
     s/\ .*$//;
     $tv{'MD5sum'}= $_;
+
+    open(C,"sha256sum $fn |") || die "$fn $!";
+    chop($_=<C>); close(C); $? and die "\`sha256sum < $fn' exited with $?\n";
+    /^[0-9a-f]{32}/ or die "Strange text from \`sha256sum < $fn': \`$_'\n";
+    s/\ .*$//;
+    $tv{'SHA256'}= $_;
 
     @stat= stat($fn) or die "Couldn't stat $fn: $!\n";
     $stat[7] or die "$fn is empty\n";

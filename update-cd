@@ -1,9 +1,7 @@
 #!/bin/bash
 #
-# $Id$
-# 
-# (c) Steve McIntyre <stevem@chiark.greenend.org.uk> Released under
-# GNU GPL v2 1st January 2001
+# (c) Steve McIntyre <steve@einval.com> 2001-2017
+# GNU GPL v2
 #
 # Quick and dirty script to create update CDs for people to upgrade
 # from an initial stable release (r0) to the latest point release level
@@ -14,14 +12,13 @@ set -e
 # Configuration goes here.
 
 # Where is your mirror?
-MIRROR_NORM=/org/cdbuilder.debian.org/src/ftp/debian
-MIRROR_AMD64=/org/cdbuilder.debian.org/src/ftp/debian-amd64/debian
+MIRROR_NORM=/srv/cdbuilder.debian.org/src/ftp/debian
 
 # Do you want non-free? 1 for yes, 0 for no
 NONFREE=0
 
 # What release version is this?
-VER=6.0.2.1
+VER=9.1.0
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -37,13 +34,13 @@ JTE=1
 BT=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/org/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-work
+TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-work
 
-# Building squeeze cd set ...
-CODENAME=squeeze
+# Building stretch cd set ...
+CODENAME=stretch
 
 # Path where the images will be written
-OUT=/org/cdbuilder.debian.org/src/deb-cd/tmp/squeeze-update/cd-out
+OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
@@ -69,7 +66,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/debian-cd/lists/squeeze/r0-r2.diff
+DIFF=/home/debian-cd/lists/stretch/r0-r2.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=644 # megabytes, leaving space for metadata
@@ -93,7 +90,7 @@ CAPCODE=`perl -e "print ucfirst("$CODENAME")"`
 export FIRSTVER CAPCODE
 
 if [ "$ARCHLIST"x = ""x ] ; then
-    ARCHLIST="arm64 armel armhf amd64 i386 mips mipsel powerpc s390x source kfreebsd-amd64 kfreebsd-i386" # amd64 # all dealt with specially
+    ARCHLIST="arm64 armel armhf amd64 i386 mips mipsel mips64el s390x source" # amd64 # -all dealt with specially
 fi
 
 export TDIR NONFREE VER MIRROR CODENAME OUT BASEDIR
