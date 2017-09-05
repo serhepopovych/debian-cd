@@ -11,6 +11,9 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Include debian-ports-archive-keyring on non released architectures
     Closes: #865470
 
+  [ John Paul Adrian Glaubitz ]
+  * Add list of packages required for debian-installer on m68k.
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
 debian-cd (3.1.20) unstable; urgency=medium
