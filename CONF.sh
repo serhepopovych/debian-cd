@@ -20,6 +20,7 @@ unset LOCAL             || true
 unset LOCALDEBS         || true
 unset SECURITY          || true
 unset PROPOSED_UPDATES  || true
+unset UNRELEASED        || true
 unset BOOTDIR           || true
 unset SYMLINK           || true
 unset COPYLINK          || true
@@ -165,6 +166,9 @@ export CONTRIB=1
 # from the released archive or from proposed updates archive.
 # NOTE: intended to be used for pre-release testing, not for publication!
 #export PROPOSED_UPDATES=$CODENAME-proposed-updates
+
+# Include packages from Debian Ports unreleased
+#export UNRELEASED=1
 
 # Sparc only : bootdir (location of cd.b and second.b)
 # export BOOTDIR=/boot

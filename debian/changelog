@@ -13,6 +13,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
 
   [ John Paul Adrian Glaubitz ]
   * Add list of packages required for debian-installer on m68k.
+  * Add support for unreleased packages from Debian Ports.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 

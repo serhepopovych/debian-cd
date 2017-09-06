@@ -99,6 +99,12 @@ if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 		>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
+	# Debian Ports unreleased packages ...
+	if [ -n "$UNRELEASED" ]; then
+		echo "$ADEB file:$MIRROR unreleased main" \
+			>> $APTTMP/$THIS_PKGSET/apt/sources.list
+	fi
+
 	# Debian-installer
 	if [ $ARCH != source ] ; then
 		if [ -e "$MIRROR/dists/$DI_CODENAME/main/debian-installer" ]; then
