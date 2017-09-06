@@ -86,7 +86,7 @@ else
 fi
 
 if [ ! -e "$DI_DIR"/initrd.gz ] ; then
-    DI_DIR="$DI_DIR"/2.6
+    DI_DIR="$DI_DIR"/cdrom
 fi
 cp "$DI_DIR"/initrd.gz "$inst/boot/initrd.gz"
 #cp "$DI_DIR"/vmlinuz-*-sparc32 "$inst/boot/sparc32"

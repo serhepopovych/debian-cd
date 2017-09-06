@@ -16,6 +16,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Add support for unreleased packages from Debian Ports.
   * Remove special handling for palo, silo and yaboot in which_deb.
   * Fix relative d-i path for kernel images and initrd in boot-hppa.
+  * Fix relative d-i path for kernel images and initrd in boot-sparc64.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
