@@ -137,20 +137,13 @@ my $bin_deb = "";
 my $pkgdata = "";
 my $srcname = "";
 
-if ($pkg eq "silo") {
-    $pkgdata = grab_bin_info($pth, "sparc64", $pkg);
-
-} elsif ($pkg eq "syslinux") {
+if ($pkg eq "syslinux") {
     first { $pkgdata = grab_bin_info($pth, $_, "syslinux-common") } @ARCHES;
     if (length($pkgdata) < 3) {
         first { $pkgdata = grab_bin_info($pth, $_, "syslinux") } @ARCHES;
     }
-} elsif ($pkg eq "yaboot") {
-    $pkgdata = grab_bin_info($pth, "powerpc", $pkg);
 } elsif ($pkg eq "delo") {
     $pkgdata = grab_bin_info($pth, "mipsel", $pkg);
-} elsif ($pkg eq "palo") {
-    $pkgdata = grab_bin_info($pth, "hppa", $pkg);
 } else { # Fallthrough for all other packages
     first { $pkgdata = grab_bin_info($pth, $_, $pkg) } @ARCHES;
 }
