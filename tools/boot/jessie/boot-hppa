@@ -47,12 +47,12 @@ else
 	$WGET -r -nd --no-parent -P "$DI_DIR" "$DI_WWW_HOME"
 fi
 	
-K32=$(basename "$DI_DIR"/vmlinux-*-parisc)
-K64=$(basename "$DI_DIR"/vmlinux-*-parisc64*)
+K32=$(basename "$DI_DIR"/cdrom/2.6/vmlinux-*-parisc)
+K64=$(basename "$DI_DIR"/cdrom/2.6/vmlinux-*-parisc64*)
 
-cp "$DI_DIR"/$K32  "$CDROOT/install"/$K32
-cp "$DI_DIR"/$K64  "$CDROOT/install"/$K64
-cp "$DI_DIR"/initrd.gz "$CDROOT/install"
+cp "$DI_DIR"/cdrom/2.6/$K32  "$CDROOT/install"/$K32
+cp "$DI_DIR"/cdrom/2.6/$K64  "$CDROOT/install"/$K64
+cp "$DI_DIR"/cdrom/2.6/initrd.gz "$CDROOT/install"
 
 install_languages "$CDROOT"
 
