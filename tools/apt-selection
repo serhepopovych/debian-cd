@@ -111,6 +111,10 @@ if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 			echo "$ADEB file:$MIRROR $DI_CODENAME main/debian-installer" \
 				>> $APTTMP/$THIS_PKGSET/apt/sources.list
 		fi
+		if [ -n "$UNRELEASED" ]; then
+			echo "$ADEB file:$MIRROR unreleased main/debian-installer" \
+				>> $APTTMP/$THIS_PKGSET/apt/sources.list
+		fi
 		if [ -n "$LOCAL" ] && [ -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
 			echo "$ADEB file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
 				>> $APTTMP/$THIS_PKGSET/apt/sources.list
