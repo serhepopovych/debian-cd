@@ -67,7 +67,7 @@ for image in initrd.gz vmlinuz; do
 		if [ ! "$DI_DIR" ];then
 		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom"
 		fi
-		ab_file=`ls "$DI_DIR"/$image* | tail -1`
+		ab_file=`ls "$DI_DIR"/cdrom/$image* | tail -1`
 		cp "$ab_file" .
 	else
 		$WGET "$DI_WWW_HOME/$image"
