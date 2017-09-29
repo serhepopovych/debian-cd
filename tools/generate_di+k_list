@@ -255,6 +255,7 @@ linux-image-m68k
 
 #ifdef ARCH_powerpc
 initramfs-tools
+grub-ieee1275
 busybox
 laptop-detect
 quik

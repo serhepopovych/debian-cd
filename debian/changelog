@@ -20,6 +20,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Add support for unreleased debian-installer packages from Debian Ports.
   * Fix relative d-i path for kernel images and initrd in boot-alpha.
   * Strip "images/cdrom" suffix from mirror DI_DIR path in boot-alpha.
+  * Add grub-ieee1275 to tools/generate_di+k_list on powerpc.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
