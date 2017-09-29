@@ -229,6 +229,7 @@ grub-efi-arm64-bin
 
 #ifdef ARCH_sparc
 initramfs-tools
+grub-ieee1275
 busybox
 silo
 libc6-sparcv9b
@@ -241,6 +242,7 @@ linux-image-sparc64-smp
 
 #ifdef ARCH_sparc64
 initramfs-tools
+grub-ieee1275
 busybox
 silo
 linux-image-sparc64
