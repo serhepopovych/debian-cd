@@ -65,7 +65,7 @@ for image in initrd.gz vmlinuz; do
     if [ ! -e "$image" ]; then
 	if [ ! "$DI_WWW_HOME" ];then
 		if [ ! "$DI_DIR" ];then
-		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images/cdrom"
+		   DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current"
 		fi
 		ab_file=`ls "$DI_DIR"/cdrom/$image* | tail -1`
 		cp "$ab_file" .
