@@ -81,7 +81,7 @@ if [ -d tools/amiga ]; then
 	if [ -d $INSTALLDIR/tools ]; then
 		cp tools/amiga/amiga.info  $INSTALLDIR/tools.info
 	fi
-	mv tools/amiga/amiga.info  .
+	mv tools/amiga/amiga.info  tools/
 fi
 
 cd $INSTALLDIR
