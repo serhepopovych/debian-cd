@@ -271,6 +271,17 @@ linux-image-powerpc64
 linux-image-prep
 #endif
 
+#ifdef ARCH_ppc64
+initramfs-tools
+grub-ieee1275
+busybox
+yaboot
+hfsutils
+powerpc-utils
+powerpc-ibm-utils
+linux-image-powerpc64
+#endif
+
 #ifdef ARCH_ppc64el
 initramfs-tools
 grub-ieee1275
