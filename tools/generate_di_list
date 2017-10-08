@@ -43,6 +43,7 @@ my $mirror_path = "$ENV{MIRROR}/dists/$ENV{DI_CODENAME}";
 my @components = qw(main);
 push @components, 'contrib' if $ENV{CONTRIB};
 push @components, 'non-free' if $ENV{NONFREE};
+push @components, 'unreleased' if $ENV{UNRELEASED};
 push @components, 'local' if $ENV{LOCAL};
 
 foreach my $arch (@ARCHES) {
@@ -51,6 +52,10 @@ foreach my $arch (@ARCHES) {
     for my $component ( @components ) {
         my $pgz="$mirror_path/$component/debian-installer/binary-$arch/Packages.gz";
         my $pxz="$mirror_path/$component/debian-installer/binary-$arch/Packages.xz";
+        if ( $component eq 'unreleased' and $ENV{UNRELEASED} ) {
+            $pgz="$ENV{MIRROR}/dists/unreleased/main/debian-installer/binary-$arch/Packages.gz";
+            $pxz="$ENV{MIRROR}/dists/unreleased/main/debian-installer/binary-$arch/Packages.xz";
+        }
         if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
             $pgz="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.gz";
             $pxz="$ENV{LOCALDEBS}/dists/$ENV{DI_CODENAME}/local/debian-installer/binary-$arch/Packages.xz";
