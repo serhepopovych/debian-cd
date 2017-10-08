@@ -23,6 +23,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Add grub-ieee1275 to tools/generate_di+k_list on powerpc.
   * Add grub-ieee1275 to tools/generate_di+k_list on sparc and sparc64.
   * Fix install location of amiga.info icon file.
+  * Clone powerpc udeb lists for ppc64.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
