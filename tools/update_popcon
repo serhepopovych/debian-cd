@@ -63,7 +63,15 @@ dl_file () {
 }
 
 MAIN_DATE=`dl_file main`
+error=$?
+if [ $error -ne 0 ]; then
+    exit $error
+fi
 CONTRIB_DATE=`dl_file contrib`
+error=$?
+if [ $error -ne 0 ]; then
+    exit $error
+fi
 
 OUT=$1
 rm -f $OUT
@@ -81,3 +89,7 @@ echo "" >> $OUT
 cat $TDIR/main $TDIR/contrib | \
     egrep -v '(^#|Total|-----|kernel-source)' | \
     sort -rn -k3,3 -k7,7 -k4,4 | awk '{print $2}' >> $OUT
+
+if [ $? -ne 0 ]; then
+    exit $?
+fi
