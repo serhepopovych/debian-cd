@@ -64,7 +64,7 @@ variant_enabled() {
 # Wrapper around which_deb which looks in all relevant distributions
 find_pkg_file() {
     local pkgfile
-    for dist in unreleased $DI_CODENAME $CODENAME ${UNRELEASED/1/unreleased}; do
+    for dist in $DI_CODENAME $CODENAME ${UNRELEASED/1/unreleased}; do
         pkgfile=$($BASEDIR/tools/which_deb $MIRROR $dist "$@")
         [ -n "$pkgfile" ] && break
     done
