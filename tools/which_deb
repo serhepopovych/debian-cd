@@ -123,14 +123,12 @@ sub grab_src_info {
 	}
 	while (defined($match = <PFILE>)) {
 	    if (($match =~ /^Package: \Q$pkgname\E$/m)) {
-		$result = $match;
-		close PFILE;
-		return $result;
+		$result = "$result" . $match;
 	    }
 	}
 	close PFILE;
     }
-    return "";
+    return $result;
 }
 
 my $bin_deb = "";
