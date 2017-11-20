@@ -7,6 +7,11 @@
 
 DATE=`date`
 
+dir=/etc/ssl/ca-debian
+if [ -d $dir ]; then
+    capath="--capath $dir"
+fi
+
 # Determine temp dir to use
 if [ "$BDIR"x = ""x ] ; then
     if [ "$TMPDIR"x != ""x ] ; then
@@ -33,7 +38,7 @@ dl_file () {
     DIST=$1
     SITE="http://popcon.debian.org/"
 
-    curl -s --head $SITE/$DIST/by_inst > $TDIR/$DIST.head
+    curl -L $capath -s --head $SITE/$DIST/by_inst > $TDIR/$DIST.head
     error=$?
     if [ $error -ne 0 ] ; then
         echo "Failed to download correctly: curl error $error on HEAD" >&2
@@ -42,7 +47,7 @@ dl_file () {
     HEAD_SIZE=`cat $TDIR/$DIST.head | \
                awk '/^Content-Length/ {gsub("\r","");print $2}'`
 
-    curl -s $SITE/$DIST/by_inst > $TDIR/$DIST
+    curl -L $capath -s $SITE/$DIST/by_inst > $TDIR/$DIST
     error=$?
     DL_SIZE=`stat -c %s $TDIR/$DIST`
     if [ $error -ne 0 ] ; then

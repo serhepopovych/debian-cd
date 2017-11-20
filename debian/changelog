@@ -6,6 +6,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
     network-manager-gnome, synaptic)
   * Start buster, simply copying stretch for now
   * Add SHA256 checksums to Packages files for update images
+  * Make update_popcon deal with https on popcon.d.o
 
   [ JH Chatenet ]
   * Include debian-ports-archive-keyring on non released architectures
