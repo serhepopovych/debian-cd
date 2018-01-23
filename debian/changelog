@@ -28,6 +28,9 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Clone powerpc udeb lists for ppc64.
   * Add initial set of packages to tools/generate_di+k_list on ppc64.
 
+  [ Marcin Kulisz]
+  * removing lynx-cur from binary conditional dependency (Closes: #888107)
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
 debian-cd (3.1.20) unstable; urgency=medium
