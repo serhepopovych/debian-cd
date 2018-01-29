@@ -8,6 +8,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Add SHA256 checksums to Packages files for update images
   * Make update_popcon deal with https on popcon.d.o
   * Depend on wget instead of just Recommending it.
+  * Update references to point to salsa.d.o for git repo
 
   [ JH Chatenet ]
   * Include debian-ports-archive-keyring on non released architectures

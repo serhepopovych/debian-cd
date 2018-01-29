@@ -6,8 +6,8 @@ Uploaders: Raphaël Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <mant
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: tofrodos
 Standards-Version: 3.9.6
-Vcs-Git: git://anonscm.debian.org/debian-cd/debian-cd.git
-Vcs-Browser: http://anonscm.debian.org/git/debian-cd/debian-cd.git;a=summary
+Vcs-Git: https://salsa.debian.org/images-team/debian-cd.git
+Vcs-Browser: https://salsa.debian.org/images-team/debian-cd
 
 Package: debian-cd
 Architecture: all
