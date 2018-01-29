@@ -17,4 +17,4 @@ Description: Tools for building (Official) Debian CD set
  Debian-cd is the official tool for building Debian CD set since the potato
  release. It was formerly called YACS (for Yet Another CD Script).
  .
- Its goal is to facilitate the creation of customized Debian CD set.
+ Its goal is to facilitate the creation of customized Debian CD sets.
