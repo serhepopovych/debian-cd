@@ -11,6 +11,8 @@ debian-cd (3.1.21) unstable; urgency=medium
   * Update references to point to salsa.d.o for git repo
   * Fix isolinux config parsing. Thanks to Philipp Hahn for the
     patch. Closes: #886655
+  * Minor packaging updates:
+    + Remove the executable bit from various shell function files
 
   [ JH Chatenet ]
   * Include debian-ports-archive-keyring on non released architectures

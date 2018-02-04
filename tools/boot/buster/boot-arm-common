@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # Do common install stuff for armel/armhf, including making bootable CDs
 # Works with debian-installer
 #
