@@ -14,6 +14,7 @@ debian-cd (3.1.21) unstable; urgency=medium
   * Minor packaging updates:
     + Remove the executable bit from various shell function files
     + Update the debhelper dependency to version 10
+    + Stop using dh_clean -k
 
   [ JH Chatenet ]
   * Include debian-ports-archive-keyring on non released architectures
