@@ -34,6 +34,9 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   [ Marcin Kulisz]
   * removing lynx-cur from binary conditional dependency (Closes: #888107)
 
+  [ Vagrant Cascadian ]
+  * Support KERNEL_PARAMS in arm64 (Closes: #884552)
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
 
 debian-cd (3.1.20) unstable; urgency=medium

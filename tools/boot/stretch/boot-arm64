@@ -155,6 +155,9 @@ if [ -d boot$N/grub ] ; then
     # in case they're still there
     sed -i "s,\%install\%,$INSTALLDIR,g" $CDDIR/boot/grub/grub.cfg
 
+    # Substitute custom KERNEL_PARAMS into grub.cfg
+    sed -i "s,/vmlinuz ,/vmlinuz $KERNEL_PARAMS ,g" $CDDIR/boot/grub/grub.cfg
+
 else
     echo "  No EFI boot code for $ARCH on CD$N"
 fi
