@@ -1,4 +1,4 @@
-debian-cd (3.1.21) UNRELEASED; urgency=medium
+debian-cd (3.1.21) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Tweak tasks/stretch/Debian-xfce: force some important packages up the
@@ -37,7 +37,7 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   [ Vagrant Cascadian ]
   * Support KERNEL_PARAMS in arm64 (Closes: #884552)
 
- -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:59:36 +0100
+ -- Steve McIntyre <93sam@debian.org>  Sun, 04 Feb 2018 00:44:46 +0000
 
 debian-cd (3.1.20) unstable; urgency=medium
 
