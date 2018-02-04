@@ -1,6 +1,6 @@
 Source: debian-cd
 Section: admin
-Priority: extra
+Priority: optional
 Maintainer: Debian CD Group <debian-cd@lists.debian.org>
 Uploaders: Raphaël Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty@debian.org>, Steve McIntyre <93sam@debian.org>
 Build-Depends: debhelper (>= 10)
