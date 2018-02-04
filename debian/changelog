@@ -9,6 +9,8 @@ debian-cd (3.1.21) UNRELEASED; urgency=medium
   * Make update_popcon deal with https on popcon.d.o
   * Depend on wget instead of just Recommending it.
   * Update references to point to salsa.d.o for git repo
+  * Fix isolinux config parsing. Thanks to Philipp Hahn for the
+    patch. Closes: #886655
 
   [ JH Chatenet ]
   * Include debian-ports-archive-keyring on non released architectures
