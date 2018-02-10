@@ -16,19 +16,19 @@ OPTS=
 
 case "$ARCH" in
   i386) 
-    OPTS="-J --joliet-long"
+    OPTS="-J -joliet-long"
     ;;
   amd64) 
-    OPTS="-J --joliet-long"
+    OPTS="-J -joliet-long"
     ;;
   alpha)
-    OPTS="-J --joliet-long"
+    OPTS="-J -joliet-long"
     ;;
   arm*)
-    OPTS="-J --joliet-long"
+    OPTS="-J -joliet-long"
     ;;
   s390*)
-    OPTS="-J --joliet-long"
+    OPTS="-J -joliet-long"
     ;;
   *)
     #No options by default - don't know about other arches
