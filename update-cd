@@ -158,7 +158,7 @@ make_cd () {
 
     if [ $JTE = 1 ] ; then
 	set +e
-        ${MKISOFS} -J --joliet-long -r -V "Debian $VER update $TYPEUP" -o \
+        ${MKISOFS} -J -joliet-long -r -V "Debian $VER update $TYPEUP" -o \
             ${ISODIR}/${BASENAME}.iso \
             -jigdo-jigdo ${JIGDODIR}/${BASENAME}.jigdo \
             -jigdo-template ${JIGDODIR}/${BASENAME}.template \
@@ -200,7 +200,7 @@ make_cd () {
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
     else
 	set +e
-        ${MKISOFS} -J --joliet-long -r -V "Debian $VER update $TYPEUP" -o \
+        ${MKISOFS} -J -joliet-long -r -V "Debian $VER update $TYPEUP" -o \
             $OUT/iso-$TYPE/${BASENAME}.iso \
             $UPD/CD$CDNUM 2>&1 | grep "extents written"
 	if [ $? -ne 0 ] ; then
