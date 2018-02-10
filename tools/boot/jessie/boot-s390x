@@ -27,7 +27,6 @@ CDDIR=$2
 cd $CDDIR/..
 
 if [ $N != "1" ] && [ $N != "1_NONUS" ] ; then
-    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
     exit 0
 fi
 
@@ -90,5 +89,4 @@ perl -e "print pack('N', -s '$imagedir/root.bin')" >"$imagedir/root.siz"
 cp $BASEDIR/data/$CODENAME/$ARCH/README.boot "boot$N/"
 
 # Include the boot$N/-tree into the iso-image
-add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
