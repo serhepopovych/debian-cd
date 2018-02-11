@@ -3,6 +3,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Ensure that in all places where we use -J we also use
     -joliet-long. Thanks to Thomas Schmitt again for a clear bug report!
+  * List jigdo and template files in SUMS files too
 
  -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
 
