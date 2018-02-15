@@ -26,14 +26,14 @@ for SUM in $CHECKSUMS; do
 	:> $FILE
 done
 
-# 2 calls to find here to get the ordering right - we *really* want to
-# get the jigdo files first
-for file in $(find * -name \*.jigdo -o -name \*.template -o -name \*.iso); do
+# Ordering is important in the "find" call here - we *really* want to
+# get the jigdo files before the iso files, so we can use the
+# checksums there first instead of re-calculating them
+for file in $(find * \
+                   -name '*.jigdo' -o -name '*.template' \
+                   -o -name '*.iso' -o -name '*.torrent'); do
     iso=""
     case $file in
-        *.template)
-            JIGDO=1
-            ;;
         *.jigdo)
             iso=${file%%.jigdo}.iso
             JIGDO=1
@@ -41,6 +41,8 @@ for file in $(find * -name \*.jigdo -o -name \*.template -o -name \*.iso); do
         *.iso)
             iso=$file
             JIGDO=0
+            ;;
+        *.template|*.torrent)
             ;;
         *)
             echo "Found unexpected file $file!"
@@ -73,12 +75,13 @@ for file in $(find * -name \*.jigdo -o -name \*.template -o -name \*.iso); do
 		    fi
 		fi
 
-		# Also add the template file and jigdo file to the SUMS, if they exist
-		case $file in
-		    *.template|*.jigdo)
-			$CMD $file >> $FILE
-			grep $file $FILE
-			;;
-		esac
-	done
+        # Also add the template, jigdo and torrent files to the SUMS,
+        # if they exist
+        case $file in
+            *.template|*.jigdo|*.torrent)
+                $CMD $file >> $FILE
+                grep $file $FILE
+                ;;
+        esac
+    done
 done
