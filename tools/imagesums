@@ -18,12 +18,12 @@ if [ "$CHECKSUMS"x = ""x ] ; then
 fi
 
 for SUM in $CHECKSUMS; do
-	UPSUM=$(echo $SUM | tr 'a-z' 'A-Z')
-	FILE=$UPSUM"SUMS"$EXT
-	if [ $VERBOSE -eq 1 ] ; then
-	    echo "Clearing $PWD/$FILE"
-	fi
-	:> $FILE
+    UPSUM=$(echo $SUM | tr 'a-z' 'A-Z')
+    FILE=$UPSUM"SUMS"$EXT
+    if [ $VERBOSE -eq 1 ] ; then
+        echo "Clearing $PWD/$FILE"
+    fi
+    :> $FILE
 done
 
 # Ordering is important in the "find" call here - we *really* want to
@@ -50,30 +50,30 @@ for file in $(find * \
             ;;
     esac
 
-	for SUM in $CHECKSUMS; do
-		UPSUM=$(echo $SUM | tr 'a-z' 'A-Z')
-		FILE=$UPSUM"SUMS"$EXT
-		CMD="$SUM"sum
+    for SUM in $CHECKSUMS; do
+        UPSUM=$(echo $SUM | tr 'a-z' 'A-Z')
+        FILE=$UPSUM"SUMS"$EXT
+        CMD="$SUM"sum
 
-		if [ "$iso"x != ""x ]; then
-		    grep -q $iso $FILE
-		    if [ $? -ne 0 ] ; then
-			CKSUM=""
-			if [ "$JIGDO" == 1 ] ; then
-			    CKSUM=$(zcat -f $file | \
-					grep -i "Image Hex $CMD" | \
-			                awk '{print $5}')
-			fi
-			if [ "$CKSUM"x != ""x ] ; then
-			    echo "$CKSUM  $iso" >> $FILE
-			    grep $iso $FILE
-			else
-			    echo "No Jigdo help for $SUM, doing it the long way with $CMD"
-			    $CMD $iso >> $FILE
-			    grep $iso $FILE
-			fi
-		    fi
-		fi
+        if [ "$iso"x != ""x ]; then
+            grep -q $iso $FILE
+            if [ $? -ne 0 ] ; then
+                CKSUM=""
+                if [ "$JIGDO" == 1 ] ; then
+                    CKSUM=$(zcat -f $file | \
+                                grep -i "Image Hex $CMD" | \
+                                awk '{print $5}')
+                fi
+                if [ "$CKSUM"x != ""x ] ; then
+                    echo "$CKSUM  $iso" >> $FILE
+                    grep $iso $FILE
+                else
+                    echo "No Jigdo help for $SUM, doing it the long way with $CMD"
+                    $CMD $iso >> $FILE
+                    grep $iso $FILE
+                fi
+            fi
+        fi
 
         # Also add the template, jigdo and torrent files to the SUMS,
         # if they exist
