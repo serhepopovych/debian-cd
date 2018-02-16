@@ -4,6 +4,8 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * Ensure that in all places where we use -J we also use
     -joliet-long. Thanks to Thomas Schmitt again for a clear bug report!
   * List jigdo, template and torrent files in SUMS files too
+  * Tweak the date used for snapshot.d.o references - use *tomorrow*
+    rather than today, to allow time for the snapshot to be updated.
 
  -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
 
