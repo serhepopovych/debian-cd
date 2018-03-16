@@ -18,14 +18,14 @@ MIRROR_NORM=/srv/cdbuilder.debian.org/src/ftp/debian
 NONFREE=0
 
 # What release version is this?
-VER=9.1.0
+VER=9.4.0
 
 # Is this an official CD?
 OFFICIAL=Official
 # OFFICIAL="Unofficial snapshot"
 
 # Path to use with mkisofs/mkhybrid
-MKISOFS="$PWD/../genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
+MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
 
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
@@ -66,7 +66,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/debian-cd/lists/stretch/r0-r2.diff
+DIFF=/home/debian-cd/lists/stretch/r0-r4.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=644 # megabytes, leaving space for metadata
