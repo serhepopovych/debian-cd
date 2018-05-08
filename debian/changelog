@@ -10,6 +10,9 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   [ David Kalnischkies ]
   * Provide hashes for uncompressed Translation-* again. Closes: #767253
 
+  [ John Paul Adrian Glaubitz ]
+  * Use compressed kernel image by default in boot-hppa.
+
  -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
 
 debian-cd (3.1.21) unstable; urgency=medium
