@@ -12,6 +12,9 @@ debian-cd (3.1.21-stretch) UNRELEASED; urgency=medium
     + Tweak the date used for snapshot.d.o references - use *tomorrow*
       rather than today, to allow time for the snapshot to be updated.
     + Provide hashes for uncompressed Translation-* again. Closes: #767253
+    + Updates for update-cd:
+      - Grab checksums from the binary-all Packages.gz too when building
+      - Generate checksums for torrents and jigdo files too if desired
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:39:58 +0100
 
