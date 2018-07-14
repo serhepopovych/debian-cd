@@ -166,6 +166,7 @@ make_cd () {
             -jigdo-force-md5 /pool/ \
             -md5-list $UPD/md5-check \
             $UPD/CD$CDNUM 2>&1 | grep "extents written"
+#            $UPD/CD$CDNUM
 	if [ $? -ne 0 ] ; then
 	    echo "${MKISOFS} failed, error $?"
 	    exit 1
@@ -184,7 +185,12 @@ make_cd () {
             awk '/Image Hex MD5Sum/ {print $5}'`
         echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
         echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
-        [ $BT = 1 ] && echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
+	(cd ${JIGDODIR} && md5sum ${BASENAME}.jigdo ${BASENAME}.template >> MD5SUMS.update)
+        if [ $BT = 1 ]; then
+            ~/build.${CODENAME}/mktorrent ${ISODIR}/${BASENAME}.iso
+            echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
+            (cd ${BTDIR} && md5sum ${BASENAME}.iso.torrent >> MD5SUMS.update)
+        fi
         for SHA_SIZE in 1 256 512; do
             SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
                 awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
@@ -194,7 +200,11 @@ make_cd () {
             fi
             echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
             echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
-            [ $BT = 1 ] && echo "$SHA  ${BASENAME}.iso" >> ${BTDIR}/SHA${SHA_SIZE}SUMS.update
+            (cd ${JIGDODIR} && sha${SHA_SIZE}sum ${BASENAME}.jigdo ${BASENAME}.template >> SHA${SHA_SIZE}SUMS.update)
+            if [ $BT = 1 ]; then
+                echo "$SHA  ${BASENAME}.iso" >> ${BTDIR}/SHA${SHA_SIZE}SUMS.update
+                (cd ${BTDIR} && sha${SHA_SIZE}sum ${BASENAME}.iso.torrent >> SHA${SHA_SIZE}SUMS.update)
+            fi
         done
         gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
@@ -277,7 +287,7 @@ if [ "$NONFREE"x != "1"x ] ; then
     mv -f $UPD/list1 $UPD/list
 fi
 
-$GRAB_MD5 $MIRROR_NORM "$ARCHLIST" $CODENAME $CODENAME $UPD/md5-check
+$GRAB_MD5 $MIRROR_NORM "$ARCHLIST all" $CODENAME $CODENAME $UPD/md5-check
 
 for THISARCH in $ARCHLIST
 do

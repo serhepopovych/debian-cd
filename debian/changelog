@@ -6,6 +6,10 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * List jigdo, template and torrent files in SUMS files too
   * Tweak the date used for snapshot.d.o references - use *tomorrow*
     rather than today, to allow time for the snapshot to be updated.
+  * [update-cd] Grab checksums from the binary-all Packages.gz too when
+    building
+  * [update-cd] Generate checksums for torrents and jigdo files too if
+    desired.
 
   [ David Kalnischkies ]
   * Provide hashes for uncompressed Translation-* again. Closes: #767253
