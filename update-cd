@@ -25,7 +25,7 @@ OFFICIAL=Official
 # OFFICIAL="Unofficial snapshot"
 
 # Path to use with mkisofs/mkhybrid
-MKISOFS="$PWD/../genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
+MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
 
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
