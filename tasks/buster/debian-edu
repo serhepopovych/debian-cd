@@ -3,3 +3,5 @@ debian-edu-config
 debian-edu-install
 debian-edu-profile-udeb
 ltsp-client-builder
+exim4-daemon-heavy
+sudo-ldap
