@@ -169,6 +169,10 @@ ifeq ($(FORCE_FIRMWARE),1)
 	# Generate firmware task file using the contents of the archive
 	$(Q)$(BASEDIR)/tools/generate_firmware_task "$(ARCHES)" $(TASKDIR)/firmware
 endif
+ifeq ($(DEBIAN_EDU),1)
+	# Generate Debian Edu task file containing (almost) all of Debian Edu's packages
+	$(Q)$(BASEDIR)/tools/generate_debian-edu_task $(TASKDIR)/debian-edu-full
+endif
 endif
 $(BDIR)/DATE:
 	$(Q)date -u '+%Y%m%d' > $(BDIR)/DATE

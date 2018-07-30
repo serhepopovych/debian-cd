@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+
+$apt = $BASEDIR/tools/apt-selection
+
+# include all the education packages except education-development
+$apt list 'education-*' 2>/dev/null | cut -d '/' -f1 | grep -v education-development > $1
