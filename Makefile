@@ -2,7 +2,7 @@
 
 # Main Makefile for debian-cd
 #
-# Copyright 1999 Rapha?l Hertzog <hertzog@debian.org>
+# Copyright 1999 Raphaël Hertzog <hertzog@debian.org>
 # See the README file for the license
 #
 # Significantly modified 2005-2006 Steve McIntyre <93sam@debian.org>
