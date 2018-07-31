@@ -4,8 +4,7 @@
  *
  */
 
-/* Packages that should really be on CD1 */
-#include <Debian-all>
+#include <debian-installer+kernel>
 
 #include <debian-edu>
 #include <debian-edu-full>
