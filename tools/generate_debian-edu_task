@@ -71,9 +71,6 @@ while (defined($_ = <INPKG>)) {
         next;
     elsif ($pkg =~ /^education-desktop-lxde/) {
         next;
-    elsif ($pkg =~ /^education-desktop-other/) {
-        next;
-   }
 
     print OUT "$pkg\n";
 }
