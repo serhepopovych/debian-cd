@@ -5,7 +5,7 @@
  */
 
 /* Packages that should really be on CD1 */
-#include <debian-all>
+#include <Debian-all>
 
 #include <debian-edu>
 #include <debian-edu-full>
