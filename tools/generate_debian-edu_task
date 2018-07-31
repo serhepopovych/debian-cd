@@ -65,7 +65,15 @@ while (defined($_ = <INPKG>)) {
     # sorts of things that end users won't want/need
     if ($pkg =~ /^education-development/) {
         next;
-    }
+    elsif ($pkg =~ /^education-desktop-gnome/) {
+        next;
+    elsif ($pkg =~ /^education-desktop-kde/) {
+        next;
+    elsif ($pkg =~ /^education-desktop-lxde/) {
+        next;
+    elsif ($pkg =~ /^education-desktop-other/) {
+        next;
+   }
 
     print OUT "$pkg\n";
 }
