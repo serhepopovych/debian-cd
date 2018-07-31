@@ -171,7 +171,7 @@ ifeq ($(FORCE_FIRMWARE),1)
 endif
 ifeq ($(DEBIAN_EDU),1)
 	# Generate Debian Edu task file containing (almost) all of Debian Edu's packages
-	$(Q)$(BASEDIR)/tools/generate_debian-edu_task $(TASKDIR)/debian-edu-full
+	$(Q)$(BASEDIR)/tools/generate_debian-edu_task "$(ARCHES)" $(TASKDIR)/debian-edu-full
 endif
 endif
 $(BDIR)/DATE:
