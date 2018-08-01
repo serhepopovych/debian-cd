@@ -52,6 +52,14 @@ print OUT " */\n";
 open (INPKG, "\$BASEDIR/tools/catz $pkgfiles |") or die "Can't read input package files: $!\n";
 $/ = ''; # Browse by paragraph
 
+# Ignore a few tasks that we don't want, e.g. education-development,
+# it's too big and pulls in all sorts of things that end users won't
+# want/need
+my @ignore_list = ('education-development',
+		   'education-desktop-gnome',
+		   'education-desktop-kde',
+		   'education-desktop-lxde');
+
 while (defined($_ = <INPKG>)) {
     m/^Package: (\S+)/m and $pkg = $1;
     m/^Filename: (\S+)/m and $filename = $1;
@@ -61,16 +69,10 @@ while (defined($_ = <INPKG>)) {
         next;
     }
 
-    # *Except* education-development, it's too big and pulls in all
-    # sorts of things that end users won't want/need
-    if ($pkg =~ /^education-development/) {
-        next;
-    elsif ($pkg =~ /^education-desktop-gnome/) {
-        next;
-    elsif ($pkg =~ /^education-desktop-kde/) {
-        next;
-    elsif ($pkg =~ /^education-desktop-lxde/) {
-        next;
+    # Except things on the ignore list
+    if (grep {$_ eq $pkg} @ignore_list) {
+	next;
+    }
 
     print OUT "$pkg\n";
 }
