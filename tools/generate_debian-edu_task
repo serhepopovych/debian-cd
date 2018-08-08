@@ -56,9 +56,7 @@ $/ = ''; # Browse by paragraph
 # it's too big and pulls in all sorts of things that end users won't
 # want/need
 my @ignore_list = ('education-development',
-		   'education-desktop-gnome',
-		   'education-desktop-kde',
-		   'education-desktop-lxde');
+		   'education-video');
 
 while (defined($_ = <INPKG>)) {
     m/^Package: (\S+)/m and $pkg = $1;
