@@ -3,8 +3,3 @@ debian-edu-config
 debian-edu-install
 debian-edu-profile-udeb
 ltsp-client-builder
-
-/* see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=846006#92 for
- * why the next two are needed */
-exim4-daemon-heavy
-sudo-ldap
