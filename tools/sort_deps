@@ -32,7 +32,7 @@ my $codename = $ENV{'CODENAME'};
 my $backports_list = read_env('BACKPORTS', "");
 my $backports = 1;
 if ($backports_list =~ /^$/) {
-    $backports = 0;;
+    $backports = 0;
 }
 
 my $apt = "$ENV{'BASEDIR'}/tools/apt-selection";
