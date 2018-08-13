@@ -41,7 +41,7 @@ print "Checking for desired backports in $backports_list\n";
 open (LISTIN, "< $listin") or die "ERROR: Can't read the current list file $listin: $!\n";
 open (LISTOUT, "> $listout") or die "ERROR: Can't write to $listout: $!\n";
 
-# For any packages in out input list that are listed in the backports
+# For any packages in our input list that are listed in the backports
 # file, switch to $pkg/backports
 while (defined($_=<LISTIN>)) {
     chomp;
