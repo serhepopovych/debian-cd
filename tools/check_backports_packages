@@ -46,9 +46,20 @@ open (LISTOUT, "> $listout") or die "ERROR: Can't write to $listout: $!\n";
 while (defined($_=<LISTIN>)) {
     chomp;
     if (exists $backports{$_}) {
-	delete $backports{$_};
-	print LISTOUT "$_/$codename-backports\n";
-	print "  Replaced $_ with $_/$codename-backports in $listout\n";
+	# Horrible to hard-code stuff here, but for now I don't see a
+	# better way. Keep the normal kernel on media *as well as* a
+	# backports kernel. d-i will install the normal one first,
+	# then later upgrade it.
+	if (m/^linux-image-/) {
+	    print LISTOUT "$_/$codename-backports\n";
+	    print LISTOUT "$_\n";
+	    print "  Keeping both  $_ and $_/$codename-backports in $listout\n";
+	    delete $backports{$_};
+	} else {
+	    print LISTOUT "$_/$codename-backports\n";
+	    print "  Replaced $_ with $_/$codename-backports in $listout\n";
+	    delete $backports{$_};
+	}
     } else {
 	print LISTOUT "$_\n";	
     }
