@@ -16,15 +16,17 @@
 
 use strict;
 
-my ($mirror, $codename, $archlist, $outfile, $localdebs);
+my ($mirror, $codename, $archlist, $outfile, $localdebs, $backports);
 my $date;
 my $pkgfiles = "";
+my $bp_pkgfiles = "";
 my ($pkg, $filename, $arch);
 my %seen;
 
 $codename = $ENV{'CODENAME'};
 $mirror = $ENV{'MIRROR'};
 $localdebs = $ENV{'LOCALDEBS'};
+$backports = $ENV{'BACKPORTS'};
 $archlist = shift;
 $outfile = shift;
 
@@ -34,12 +36,20 @@ if (!defined($codename) || !defined($mirror) ||
 }
 
 foreach $arch (split(' ', $archlist)) {
+    if (defined($backports)) {
+	$bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/*/binary-$arch/Packages.gz";
+	$bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/*/binary-$arch/Packages.xz";
+    }
     $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
     $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.xz";
 }
 
 if (defined($localdebs)) {
     foreach $arch (split(' ', $archlist)) {
+	if (defined($backports)) {
+	    $bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/*/binary-$arch/Packages.gz";
+	    $bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/*/binary-$arch/Packages.xz";
+	}
         $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
         $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.xz";
     }
@@ -58,9 +68,6 @@ print OUT " */\n";
 
 print "$0: Checking for firmware packages:\n";
 
-open (INPKG, "\$BASEDIR/tools/catz $pkgfiles |") or die "Can't read input package files: $!\n";
-$/ = ''; # Browse by paragraph
-
 sub contains_firmware($$) {
     my $count = 0;
     open (PKGLISTING, "dpkg --contents $mirror/$filename | grep ' ./lib/firmware/' |") or
@@ -75,22 +82,40 @@ sub contains_firmware($$) {
     }
 }
 
-while (defined($_ = <INPKG>)) {
-    m/^Package: (\S+)/m and $pkg = $1;
-    m/^Filename: (\S+)/m and $filename = $1;
+sub check_packages($$) {
+    my $use_bp = shift;
+    my $packages = shift;
 
-    if (! ($pkg =~ /(microcode|firmware)/)) {
-        next;
-    }
+    open (INPKG, "\$BASEDIR/tools/catz $packages |") or die "Can't read input package files: $!\n";
+    $/ = ''; # Browse by paragraph
 
-    if (!exists $seen{$filename}) {
-        $seen{$filename} = 1;
-        if (contains_firmware($mirror, $filename)) {
-            print "  $pkg ($filename)\n";
-            print OUT "$pkg\n";
-        }
+    while (defined($_ = <INPKG>)) {
+	m/^Package: (\S+)/m and $pkg = $1;
+	m/^Filename: (\S+)/m and $filename = $1;
+
+	if (! ($pkg =~ /(microcode|firmware)/)) {
+	    next;
+	}
+
+	if (!exists $seen{$filename}) {
+	    $seen{$filename} = 1;
+	    if (contains_firmware($mirror, $filename)) {
+		print "  $pkg ($filename)\n";
+		if ($use_bp) {
+		    print OUT "$pkg/$codename-backports\n";
+		} else {
+		    print OUT "$pkg\n";
+		}
+	    }
+	}
     }
+    close INPKG;
 }
 
-close INPKG;
+if (defined($backports)) {
+    check_packages(1, $bp_pkgfiles);
+}
+check_packages(0, $pkgfiles);
+
 close OUT;
+
