@@ -152,6 +152,8 @@ grub-pc
 grub-efi
 grub-efi-amd64
 grub-efi-amd64-bin
+grub-efi-amd64-signed
+shim-signed
 laptop-detect
 lilo
 linux-image-amd64
