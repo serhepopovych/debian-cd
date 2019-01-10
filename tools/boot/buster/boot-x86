@@ -457,7 +457,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
 
     # Move GRUB files to the right place.
     mkdir -p $CDDIR/efi/boot
-    mcopy -n -i boot$N/isolinux/grub/efi.img '::efi/boot/boot*.efi' $CDDIR/efi/boot
+    mcopy -n -s -v -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/efi
     mkdir -p $CDDIR/boot/grub
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
@@ -483,8 +483,8 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     cluster_sectors=4 # -s
     cluster_bytes=$((sector_bytes * cluster_sectors))
 
-    clusters=2 # 1 cluster for each sub-directory
-    for file in $CDDIR/efi/boot/boot*.efi; do
+    clusters=4 # 1 cluster for each sub-directory
+    for file in $CDDIR/efi/*/*; do
         [ -f "$file" ] || continue
         clusters=$(($clusters + (($(stat -c %s "$file") + $cluster_bytes - 1) / $cluster_bytes)))
     done
@@ -514,9 +514,8 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
 
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
-    mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
-    mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
-        "::efi/boot"
+    mcopy -o -s -v -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/* \
+        "::efi"
 
     if [ $BOOT_EFI = 2 ] ; then
 	# We're being added alongside (after) a BIOS boot record. Tell
