@@ -199,7 +199,25 @@ if [ $DISKNUM = 1 ] ; then
             fi
         fi
     else
-        echo "not_complete" > $CDDIR/.disk/cd_type
+        if [ $DISKTYPE = DVD ] || [ $DISKTYPE = DLDVD ]; then
+            if [ "$MAXCDS"x = "1"x ]; then
+                echo "dvd/single/not_complete" > $CDDIR/.disk/cd_type
+            else
+                echo "dvd/not_complete" > $CDDIR/.disk/cd_type
+            fi
+        elif [ $DISKTYPE = BD ] || [ $DISKTYPE = DLBD ]; then
+            if [ "$MAXCDS"x = "1"x ]; then
+                echo "bluray/single/not_complete" > $CDDIR/.disk/cd_type
+            else
+                echo "bluray/not_complete" > $CDDIR/.disk/cd_type
+            fi
+        else
+            if [ "$MAXCDS"x = "1"x ]; then
+                echo "cd/single/not_complete" > $CDDIR/.disk/cd_type
+            else
+                echo "cd/not_complete" > $CDDIR/.disk/cd_type
+            fi
+        fi
     fi
 
     if [ $NUM_ARCHES -gt 1 ]; then
