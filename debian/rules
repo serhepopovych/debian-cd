@@ -37,7 +37,7 @@ install-stamp: build-stamp
 	cd debian/debian-cd/usr/share/debian-cd/contrib && chmod 755 cronjob.* ftp.cron \
 		generate_firmware_images iso_run jigdo-watcher \
 		merge-sums mkjigsnap mklist mktorrent \
-		report_build_error testingcds 
+		report_build_error testingcds
 
 	touch install-stamp
 

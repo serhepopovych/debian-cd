@@ -593,7 +593,7 @@ debian-cd (3.1.7) unstable; urgency=low
     tools/generate_firmware_task.
   * Add apt-offline to tasks/wheezy/forcd1 to bring it onto CD#1.
     Closes: #630805
-  * Add links to snapshot.debian.org into jigdo files. 
+  * Add links to snapshot.debian.org into jigdo files.
 
   [ Aurelien Jarno ]
   * Add support for hurd-i386. Closes: #619211
@@ -886,7 +886,7 @@ debian-cd (3.1.0) unstable; urgency=low
   [ Raphael Hertzog ]
   * Don't try to copy sbm on etch CD images as it got removed.
   * Also extract isolinux.bin from the syslinux package in the case of etch
-    CD images (since it's no more provided by debian-cd itself). 
+    CD images (since it's no more provided by debian-cd itself).
 
   [ Frans Pop ]
   * Rework the way tasks are handled:
@@ -1001,7 +1001,7 @@ debian-cd (3.0.5) unstable; urgency=low
     should update tasks/debian-installer+kernel-etch (instead of -sid), and
     that file should have '#include <debian-installer-sid>'. This means we'll
     no longer have to modify the Debian_* tasks in such cases.
- 
+
   [ Raphael Hertzog ]
   * Switch debhelper compatibility level to 5 and use debian/compat
     instead of DH_COMPAT.
@@ -1018,7 +1018,7 @@ debian-cd (3.0.5) unstable; urgency=low
   * tools/update_tasks: Significant streamlining to make a huge difference in
     runtime. Now feasible to run this automatically per-build rather than
     cronning it.
-  
+
   [ Joey Hess ]
   * Update isolinux to version 3.63+dfsg-2 (featuring 'menu default64'
     support).
@@ -1280,7 +1280,7 @@ debian-cd (3.0.3) unstable; urgency=low
     if new ones not available.
   * Remove Build-Dep-Indep on sysutils. Closes: #437497
   * In build.sh, use $DI_CODENAME for installer task files rather than
-    $CODENAME - allows for sid builds more easily etc.	
+    $CODENAME - allows for sid builds more easily etc.
   * Recompress the Packages files separately just before generating
     Release files. Closes: #423835, thanks to fjp for the patch.
   * Check if required base packages might also be supplied by a local
@@ -1596,7 +1596,7 @@ debian-cd (3.0.0) unstable; urgency=medium
     than "CD" in many places.
   * Fix whitespace issue in boot-amd64. Closes: #406320. Thanks to Matthew
     King for the patch.
-  
+
   [ Joey Hess ]
   * Added an update-tasks target to the Makefile and moved the code out of
     file header comments to there. Fix some bugs in passing.
@@ -2188,7 +2188,7 @@ debian-cd (2.2.21) unstable; urgency=low
     - Sparc daily builds moved.
   * Bdale Garbee
     - update tasks and tools to make 2.6.8 kernels primary on hppa
-    - add ramdisk_size=16384 to palo call in post-boot-hppa 
+    - add ramdisk_size=16384 to palo call in post-boot-hppa
   * Colin Watson
     - Disable CD timeout on powerpc.
     - Add localechooser to exclude-udebs.
@@ -2257,7 +2257,7 @@ debian-cd (2.2.20) unstable; urgency=medium
     - Add ramdisk_size=16384 to silo.conf. closes: #274958
   * Steve McIntyre
     - Another upload before sarge.
-	
+
  -- Steve McIntyre <93sam@debian.org>  Fri,  22 Oct 2004 21:12:15 +0100
 
 debian-cd (2.2.19) unstable; urgency=medium
@@ -2469,7 +2469,7 @@ debian-cd (2.2.17) unstable; urgency=low
     - Add the debian-edu udebs to the exclude list for netinst CDs, and
       remove the deleted di-utils-devicefiles.
     - Update boot/sarge/boot-i386 to use the new d-i image names.
-    - Use d-i boot screens from the debian-cd_info.tar.gz. 
+    - Use d-i boot screens from the debian-cd_info.tar.gz.
       Closes: #220612, #221186
     - Remove the netboot initrd from netinst CDs, since d-i builds a mini-iso
       with this initrd on it, and since the d-i help screen does not mention
@@ -2759,7 +2759,7 @@ debian-cd (2.2.4) unstable; urgency=medium
     Closes: #79902
   * Include a new interactive boot.bat. Closes: #83471
   * Corrected tools/apt-selection. Closes: #79903
-  * Does correctly manage pools wrt Packages files. 
+  * Does correctly manage pools wrt Packages files.
   * Now depends on grep-dctrl.
   * Now creates a $CODENAME-secured tree with Release and Release.gpg
     files from the archive. Closes: #93612
@@ -2772,7 +2772,7 @@ debian-cd (2.2.4) unstable; urgency=medium
     "Useful CD 1 Project". More info in tasks/README.
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat, 28 Apr 2001 23:56:14 +0200
- 
+
 debian-cd (2.2.3) unstable; urgency=low
 
   * Fixes several bug caused by changes in the way binary-all packages
@@ -2787,10 +2787,10 @@ debian-cd (2.2.3) unstable; urgency=low
     detecting headers. Closes: #70838
   * Documentation updates about the SIZELIMIT stuff and bootable CDs.
     Closes: #72067, #68913
-  * There's still no good reasons to remove the unstable symlink. 
+  * There's still no good reasons to remove the unstable symlink.
     Closes: #68477
   * OUT doesn't have to be a relative path. In fact, the default shipped
-    in the CONF.sh file is an absolute path and it does work. 
+    in the CONF.sh file is an absolute path and it does work.
     Closes: #75406
 
  -- Raphael Hertzog <hertzog@debian.org>  Sat,  4 Nov 2000 15:36:10 +0100
@@ -2798,13 +2798,13 @@ debian-cd (2.2.3) unstable; urgency=low
 debian-cd (2.2.2) frozen unstable; urgency=low
 
   * Still targeted to frozen. Documentations (README.html on the CD) updates
-    & other little changes. 
+    & other little changes.
   * Fixed targets bin-image and src-image to use CD$(CD) instead of $(CD).
   * Added "." after -F argument for symlink farm user. Closes: #66599
   * Misc changes for woody i386 bootdisks --jwest
   * Fixed the patch from Joey. :) ${LOCALDEBS:-$MIRROR} instead of
     ${LOCALDEBS:-MIRROR}. s/CODNAME/CODENAME/ too. Closes: #66737
-  * This bug is unreproducable and the submitter didn't respond. 
+  * This bug is unreproducable and the submitter didn't respond.
     Probably a local configuration error. Closes: #66526
 
  -- Raphael Hertzog <hertzog@debian.org>  Fri, 30 Jun 2000 17:50:16 +0200
@@ -2818,7 +2818,7 @@ debian-cd (2.2.1) frozen unstable; urgency=low
   * Include upgrade-{i386,sparc,alpha,m68k} dir when available.
   * Updated README.html.in (new version provided by Anne Bezemer).
   * Added EXTRANONFREE support. It allows to generate an extra non-free CD.
-    The first CDs are totally free and the last(s) CD(s) contains 
+    The first CDs are totally free and the last(s) CD(s) contains
     only non-free and possibly some files from contrib.
   * Added extra file to help fine tune the CD sizes per archs
   * Edited boot-alpha to work (I hope) based on what was available in the
@@ -2848,9 +2848,9 @@ debian-cd (2.2.0) frozen unstable; urgency=low
   * Updates to woody/boot-i386 --jwest
   * Add powerpc support for potato (dan).
   * Incorporated some documentation (courtesy of J.A. Bezemer) :
-    README.html & README.txt 
+    README.html & README.txt
   * Make translated documentation more easily available. Closes: #64276
-  * Added arm support (easy, they don't have bootable CD). 
+  * Added arm support (easy, they don't have bootable CD).
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 18 May 2000 23:59:49 +0200
 
@@ -2938,7 +2938,7 @@ debian-cd (2.1.90-1) unstable; urgency=low
   * New status file for potato i386.
   * When including packages listed in the status file check that they
     exist before.
-  * Call dpkg-scansources for generating Sources.gz file on the source 
+  * Call dpkg-scansources for generating Sources.gz file on the source
     CD. And depends on dpkg-dev (>= 1.4.1.6) to be sure that we have it.
   * Add dependency to libdigest-md5-perl.
   * list2cds: try to select all suggested/recommended packages not only from
@@ -2948,7 +2948,7 @@ debian-cd (2.1.90-1) unstable; urgency=low
     file (in the temp dir).
   * YACS 0.3 :
   * ----------
-  * This version has herited nothing from the previous debian-cd 
+  * This version has herited nothing from the previous debian-cd
     package only the changelog has been added.
   * It can now build sources CD.
   * This package does now replace slink_cd and the old debian-cd.
@@ -2959,7 +2959,7 @@ debian-cd (2.1.90-1) unstable; urgency=low
   * Added the good dependencies. Closes: #25710, #36109, #27758
   * Some bugs are no more applicable. Closes: #24708, #25195, #31044, #24418
     Closes: #36115, #36228
-  * No source URL in copyright file since this is a Debian native 
+  * No source URL in copyright file since this is a Debian native
     package. Closes: #36111
   * Full GPL isn't included. Closes: #36113
   * Missing newlines added. Closes: #36114
@@ -2971,7 +2971,7 @@ debian-cd (2.1.90-1) unstable; urgency=low
     it, you can do it yourself with the hook system. Closes: #36116
   * Internationalization is a boot-floppies problem. Closes: #25210
   * Tried miniunz but it lacks important feature like -L ... still
-    uses unzip. And recommends it. 
+    uses unzip. And recommends it.
 
  -- Raphael Hertzog <hertzog@debian.org>  Thu, 29 Jul 1999 18:26:09 +0200
 
@@ -2979,7 +2979,7 @@ debian-cd (2.0.2) unstable; urgency=low
 
   * get rid of .html from the errata URL
   * add contents to README.official
-    
+
  -- Philip Hands <phil@hands.com>  Fri, 24 Jul 1998 00:09:22 +0100
 
 debian-cd (2.0.1) unstable; urgency=low
@@ -3089,7 +3089,7 @@ debian-cd (0.1.6) frozen unstable; urgency=low
 
 debian-cd (0.1.5) frozen unstable; urgency=low
 
-  * Put vars.sh in debian/conffiles, so that a user's altered one 
+  * Put vars.sh in debian/conffiles, so that a user's altered one
     will not be over-written.
 
   * boot.bat was broken.
@@ -3108,19 +3108,19 @@ debian-cd (0.1.4) frozen unstable; urgency=low
 debian-cd (0.1.3) frozen unstable; urgency=low
 
   * Add SOURCE.txt, a readme about source-code availability, to the
-    binary CD. Make distribution both frozen and unstable. 
+    binary CD. Make distribution both frozen and unstable.
 
  -- Bruce Perens <bruce@debian.org>  Wed, 23 Apr 1997 23:22:37 -0700
 
 debian-cd (0.1.2) unstable; urgency=low
 
-  * Add El Torito bootable-CD patches from Helmut Geyer. 
+  * Add El Torito bootable-CD patches from Helmut Geyer.
 
  -- Bruce Perens <bruce@debian.org>  Sun, 23 Apr 2000 10:31:08 -0700
 
 debian-cd (0.1.1) unstable; urgency=low
 
-  * Change architecture to "all". 
+  * Change architecture to "all".
 
  -- Bruce Perens <bruce@debian.org>  Fri, 18 Apr 1997 22:51:36 -0700
 
