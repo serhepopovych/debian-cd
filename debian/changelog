@@ -46,6 +46,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     - don't recommend syslinux-utils twice, thanks lintian.
     - bump standards version to 4.3.0, no changes needed.
     - add "Rules-Requires-Root: no" to support building as non-root.
+  * d/rules: use the awesome "dh $@" simplification.
   * Add lintian override for missing-depends-on-sensible-utils as
     sensible-editor is merely mentioned in the README.
   * d/copyright: explicitly refer to /usr/share/common-licenses/GPL-2.
