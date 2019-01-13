@@ -21,6 +21,7 @@ install-stamp: build-stamp
 	dh_testroot
 	dh_prep
 	dh_installdirs
+	dh_lintian
 
 	# Add here commands to install the package into debian/tmp.
 	cp -r contrib tools tasks data Makefile README README.devel build.sh \
