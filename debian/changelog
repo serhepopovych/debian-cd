@@ -1,20 +1,32 @@
 debian-cd (3.1.22) UNRELEASED; urgency=medium
 
+  * Team upload.
+
   [ Steve McIntyre ]
   * Ensure that in all places where we use -J we also use
     -joliet-long. Thanks to Thomas Schmitt again for a clear bug report!
-  * List jigdo, template and torrent files in SUMS files too
+  * List jigdo, template and torrent files in SUMS files too. Closes: #887830
   * Tweak the date used for snapshot.d.o references - use *tomorrow*
     rather than today, to allow time for the snapshot to be updated.
-  * [update-cd] Grab checksums from the binary-all Packages.gz too when
-    building
-  * [update-cd] Generate checksums for torrents and jigdo files too if
-    desired.
+  * update-cd:
+    - add ppc64el to arch list.
+    - grab checksums from the binary-all Packages.gz too when building.
+    - generate checksums for torrents and jigdo files too if desired.
+    - normalize path to genisoimage.
+  * tasks/buster/debian-edu: Update the debian-edu task definition.
+  * tools/generate_debian-edu_task:
+    - replace generate_debian-edu_task with a perl script.
+  * tools/generate_firmware_task: add proper backports support.
+  * tools/check_backports_packages: hard-code linux-image=* for now.
+  * tools/boot/buster/boot-x86: Munge the EFI boot support code to make Secure
+    Boot work.
+  * tools/generate_di+k_list: explicitly bring in the signed shim and grub
+    bootloaders.
   * Add initial support for generating media including packages from
     backports.
   * Update boot-x86 to handle UEFI Secure Boot better (minimal changes,
     real work is in d-i). Closes: #821054
-  * Also include shim-signed and grub-efi-amd64-signed for amd64 media
+  * Also include shim-signed and grub-efi-amd64-signed for amd64 media.
 
   [ David Kalnischkies ]
   * Provide hashes for uncompressed Translation-* again. Closes: #767253
@@ -23,9 +35,25 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * Use compressed kernel image by default in boot-hppa.
 
   [ Holger Levsen ]
+  * Create a debian-edu task to be able to build an offline installation image
+    for Debian Edu.
+  * Drop unused script edu-build.sh.
+  * data/buster: add Debian Edu installer logo from src:debian-edu-artwork
+    2.10.2-1.
+  * d/control:
+    - upgrade to use debhelper-compat(=11), drop d/compat.
+    - drop ancient version-req on dependency on apt
+    - don't recommend syslinux-utils twice, thanks lintian.
   * Add lintian override for missing-depends-on-sensible-utils as
     sensible-editor is merely mentioned in the README.
   * d/copyright: explicitly refer to /usr/share/common-licenses/GPL-2.
+  * Makefile: fix Raphaël Hertzog's name.
+  * Cleanup white spaces & empty lines, in d/changelog, d/control and d/rules,
+    thanks lintian.
+
+  [ Wolfang Schweer ]
+  * Reviewed, tested and proposed many of the Debian Edu related changes.
+    Closes: #846006
 
  -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
 
