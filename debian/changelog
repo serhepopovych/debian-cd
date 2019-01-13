@@ -13,7 +13,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * Add initial support for generating media including packages from
     backports.
   * Update boot-x86 to handle UEFI Secure Boot better (minimal changes,
-    real work is in d-i)
+    real work is in d-i). Closes: #821054
   * Also include shim-signed and grub-efi-amd64-signed for amd64 media
 
   [ David Kalnischkies ]
