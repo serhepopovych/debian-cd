@@ -113,7 +113,6 @@ ca-certificates
 #ifdef ARCH_i386
 initramfs-tools
 busybox
-grub-legacy
 grub-pc
 grub-efi
 grub-efi-ia32
@@ -147,7 +146,6 @@ linux-headers-686
 #ifdef ARCH_amd64
 initramfs-tools
 busybox
-grub-legacy
 grub-pc
 grub-efi
 grub-efi-amd64
