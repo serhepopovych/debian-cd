@@ -457,7 +457,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
 
     # Move GRUB files to the right place.
     mkdir -p $CDDIR/efi/boot
-    mcopy -n -s -v -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/efi
+    mcopy -n -s -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/efi
     mkdir -p $CDDIR/boot/grub
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
@@ -514,7 +514,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
 
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
-    mcopy -o -s -v -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/* \
+    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/* \
         "::efi"
 
     if [ $BOOT_EFI = 2 ] ; then
