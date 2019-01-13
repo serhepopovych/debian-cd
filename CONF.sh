@@ -85,10 +85,9 @@ fi
 # for the daily d-i builds. If not set, uses the official d-i images from
 # the Debian mirror.
 #export DI_WWW_HOME=default
-export DI_WWW_HOME=http://jack/d-i/
 
 # Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="10.0-SBHACK"
+export DEBVERSION="9.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
@@ -238,7 +237,7 @@ ATTEMPT_FALLBACK=yes
 # STICK4GB:          4GB USB stick or similar
 # STICK8GB:          8GB USB stick or similar
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
-#export DISKTYPE=CD
+export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
 #export CUSTOMSIZE=XXXX
 # If you want to over-ride this choice (e.g. to make a larger version of a given disk),
