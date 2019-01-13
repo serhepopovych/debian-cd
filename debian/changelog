@@ -20,6 +20,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   [ Holger Levsen ]
   * Add lintian override for missing-depends-on-sensible-utils as
     sensible-editor is merely mentioned in the README.
+  * d/copyright: explicitly refer to /usr/share/common-licenses/GPL-2.
 
  -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
 
