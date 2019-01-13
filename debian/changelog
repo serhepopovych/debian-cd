@@ -10,6 +10,11 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     building
   * [update-cd] Generate checksums for torrents and jigdo files too if
     desired.
+  * Add initial support for generating media including packages from
+    backports.
+  * Update boot-x86 to handle UEFI Secure Boot better (minimal changes,
+    real work is in d-i)
+  * Also include shim-signed and grub-efi-amd64-signed for amd64 media
 
   [ David Kalnischkies ]
   * Provide hashes for uncompressed Translation-* again. Closes: #767253
