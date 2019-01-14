@@ -1,7 +1,5 @@
 debian-cd (3.1.22) UNRELEASED; urgency=medium
 
-  * Team upload.
-
   [ Steve McIntyre ]
   * Ensure that in all places where we use -J we also use
     -joliet-long. Thanks to Thomas Schmitt again for a clear bug report!
@@ -46,6 +44,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     - don't recommend syslinux-utils twice, thanks lintian.
     - bump standards version to 4.3.0, no changes needed.
     - add "Rules-Requires-Root: no" to support building as non-root.
+    - add myself to uploaders.
   * d/rules:
     - use the awesome "dh $@" simplification.
     - use debian/debian-cd.docs.

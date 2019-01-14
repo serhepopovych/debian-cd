@@ -2,7 +2,10 @@ Source: debian-cd
 Section: admin
 Priority: optional
 Maintainer: Debian CD Group <debian-cd@lists.debian.org>
-Uploaders: Raphaël Hertzog <hertzog@debian.org>, Santiago Garcia Mantinan <manty@debian.org>, Steve McIntyre <93sam@debian.org>
+Uploaders: Raphaël Hertzog <hertzog@debian.org>,
+ Santiago Garcia Mantinan <manty@debian.org>,
+ Steve McIntyre <93sam@debian.org>,
+ Holger Levsen <holger@debian.org>
 Build-Depends: debhelper-compat (= 11)
 Build-Depends-Indep: tofrodos
 Standards-Version: 4.3.0
