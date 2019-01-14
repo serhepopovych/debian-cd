@@ -11,6 +11,5 @@ override_dh_auto_clean:
 
 override_dh_auto_install:
 	dh_install
+	# dh_install cannot rename files
 	cp CONF.sh debian/debian-cd/etc/debian-cd/conf.sh
-	ln -sf /etc/debian-cd/conf.sh \
-               debian/debian-cd/usr/share/debian-cd/CONF.sh

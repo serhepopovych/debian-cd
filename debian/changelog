@@ -50,6 +50,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     - use the awesome "dh $@" simplification.
     - use debian/debian-cd.docs.
     - use debian/debian-cd.install.
+    - use debian/debian-cd.links.
   * Add lintian override for missing-depends-on-sensible-utils as
     sensible-editor is merely mentioned in the README.
   * d/copyright: explicitly refer to /usr/share/common-licenses/GPL-2.
