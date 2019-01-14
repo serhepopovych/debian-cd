@@ -1,0 +1,12 @@
+contrib usr/share/debian-cd/
+tools usr/share/debian-cd/
+tasks usr/share/debian-cd/
+data usr/share/debian-cd/
+Makefile usr/share/debian-cd/
+README usr/share/debian-cd/
+README.devel usr/share/debian-cd/
+build.sh usr/share/debian-cd/
+build_all.sh usr/share/debian-cd/
+update-cd usr/share/debian-cd/
+easy-build.sh usr/share/debian-cd/
+README.easy-build usr/share/debian-cd/

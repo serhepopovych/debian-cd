@@ -48,7 +48,8 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     - add "Rules-Requires-Root: no" to support building as non-root.
   * d/rules:
     - use the awesome "dh $@" simplification.
-    - add debian/debian-cd.docs and use that.
+    - use debian/debian-cd.docs.
+    - use debian/debian-cd.install.
   * Add lintian override for missing-depends-on-sensible-utils as
     sensible-editor is merely mentioned in the README.
   * d/copyright: explicitly refer to /usr/share/common-licenses/GPL-2.
