@@ -24,6 +24,3 @@ override_dh_auto_install:
 		generate_firmware_images iso_run jigdo-watcher \
 		merge-sums mkjigsnap mklist mktorrent \
 		report_build_error testingcds
-
-override_dh_installdocs:
-	dh_installdocs README* DEDICATION.txt
