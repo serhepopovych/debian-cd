@@ -456,8 +456,8 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     echo "  Adding EFI boot code for $ARCH on CD$N"
 
     # Move GRUB files to the right place.
-    mkdir -p $CDDIR/efi/boot
-    mcopy -n -s -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/efi
+    mkdir -p $CDDIR/EFI/boot
+    mcopy -n -s -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/EFI
     mkdir -p $CDDIR/boot/grub
     mv boot$N/isolinux/grub/* $CDDIR/boot/grub/
     rmdir boot$N/isolinux/grub
@@ -484,7 +484,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     cluster_bytes=$((sector_bytes * cluster_sectors))
 
     clusters=4 # 1 cluster for each sub-directory
-    for file in $CDDIR/efi/*/*; do
+    for file in $CDDIR/EFI/*/*; do
         [ -f "$file" ] || continue
         clusters=$(($clusters + (($(stat -c %s "$file") + $cluster_bytes - 1) / $cluster_bytes)))
     done
@@ -514,7 +514,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
 
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
-    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/* \
+    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/EFI/* \
         "::efi"
 
     if [ $BOOT_EFI = 2 ] ; then
