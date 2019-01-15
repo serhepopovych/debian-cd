@@ -54,16 +54,19 @@ $/ = ''; # Browse by paragraph
 
 # Ignore a few tasks that we don't want, e.g. education-development,
 # it's too big and pulls in all sorts of things that end users won't
-# want/need
+# want/need, also ignore cinnamon desktop (no Debian Edu support).
 my @ignore_list = ('education-development',
-		   'education-video');
+		   'education-video',
+		   'task-cinnamon-desktop');
 
 while (defined($_ = <INPKG>)) {
     m/^Package: (\S+)/m and $pkg = $1;
     m/^Filename: (\S+)/m and $filename = $1;
 
-    # We want all packages matching "^education-"
-    if (! ($pkg =~ /^education-/)) {
+    # We want all packages matching "^education-" and "^debian-edu-".
+    # Also wanted: all tasks; these are supposed to pull in localization related
+    # packages. Add otherwise missing gimp-help and thunderbird localization.
+    if (! ($pkg =~ /^education-|^debian-edu-|^task-|^gimp-help-|thunderbird-l10n-all/)) {
         next;
     }
 
