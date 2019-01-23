@@ -935,6 +935,7 @@ sub msg_ap {
     if (!$log_opened) {
         open(AP_LOG, ">> $tdir/$codename/add_packages.log")
             || die "Can't write in $tdir/add_packages.log!\n";
+	$log_opened = 1;
     }
     print AP_LOG @_;
 }
