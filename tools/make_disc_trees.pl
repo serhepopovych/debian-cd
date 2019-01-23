@@ -9,6 +9,7 @@ use Digest::MD5;
 use Digest::SHA;
 use File::stat;
 use File::Find;
+use File::Path qw(make_path remove_tree);
 use File::Basename;
 use Compress::Zlib;
 
@@ -585,7 +586,7 @@ sub check_base_installable {
         print LOG "Debootstrap reported error: $error_string\n";
         die "Debootstrap reported error: $error_string\n";
     }
-	system("rm -rf $tdir/debootstrap_tmp");
+	remove_tree("$tdir/debootstrap_tmp");
 	return $ok;
 }
 
@@ -865,7 +866,8 @@ sub finish_disc {
 			$ok += $archok;
 		}
 		if ($ok == 0) {
-			system("touch $cddir/.disk/base_installable");
+			open(my $fh, ">>", "$cddir/.disk/base_installable");
+			close($fh);
 			print "  Found all files needed for debootstrap for all binary arches\n";
 		} else {
 			print "  $ok files missing for debootstrap, not creating base_installable\n";
@@ -910,7 +912,7 @@ sub finish_disc {
 	# And sort; it should make things faster for people checking
 	# the md5sums, as ISO9660 dirs are sorted alphabetically
 	system("LANG=C sort -uk2 md5sum.txt | grep -v \./md5sum.txt > md5sum.txt.tmp");
-	system("mv -f md5sum.txt.tmp md5sum.txt");
+	rename("md5sum.txt.tmp", "md5sum.txt");
 	chdir $bdir;
 
 	if (defined($ENV{'DISC_END_HOOK'})) {
@@ -1011,7 +1013,7 @@ sub add_Packages_entry {
     msg_ap(0, "  Adding $p to $pkgfile(.gz)\n");
     
     if (! -d $pdir) {
-        system("mkdir -p $pdir");
+        make_path($pdir);
         $blocks_added++;
     }	
 
@@ -1063,7 +1065,7 @@ sub add_trans_desc_entry {
     $idir = Packages_dir($dir, $file, $section, $in_backports) . "/i18n";
 
     if (! -d $idir) {
-        system("mkdir -p $idir");
+        make_path($idir);
         $blocks_added++;
     }	
 
