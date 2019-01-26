@@ -11,6 +11,8 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
     - grab checksums from the binary-all Packages.gz too when building.
     - generate checksums for torrents and jigdo files too if desired.
     - normalize path to genisoimage.
+    - Tweak the code ordering in update-cd so the jigdo file checksums
+      are generated after they're compressed.
   * tasks/buster/debian-edu: Update the debian-edu task definition.
   * tools/generate_debian-edu_task:
     - replace generate_debian-edu_task with a perl script.
