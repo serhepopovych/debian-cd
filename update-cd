@@ -178,10 +178,12 @@ make_cd () {
             $OUT ${BASENAME}.template \
             "Debian ${DEBIAN_KERNEL} $VER - $OFFICIAL $THISARCH $FIRSTVER->$VER update $TYPEUP #$THISNUM"
         echo $SNAPSHOT >> ${JIGDODIR}/${BASENAME}.jigdo
-        # Make sure that the ISO is as new/newer than the jigdo file; #587774
-        touch ${ISODIR}/${BASENAME}.iso
 
-        MD5=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
+	# Make sure we compres the jigdo file *before* we checksum it
+        gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
+        mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
+
+        MD5=`zcat ${JIGDODIR}/${BASENAME}.jigdo | \
             awk '/Image Hex MD5Sum/ {print $5}'`
         echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
         echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
@@ -192,7 +194,7 @@ make_cd () {
             (cd ${BTDIR} && md5sum ${BASENAME}.iso.torrent >> MD5SUMS.update)
         fi
         for SHA_SIZE in 1 256 512; do
-            SHA=`cat ${JIGDODIR}/${BASENAME}.jigdo | \
+            SHA=`zcat ${JIGDODIR}/${BASENAME}.jigdo | \
                 awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
             if [ "$SHA"x = ""x ] ; then
                 echo "SHA fail"
@@ -206,8 +208,9 @@ make_cd () {
                 (cd ${BTDIR} && sha${SHA_SIZE}sum ${BASENAME}.iso.torrent >> SHA${SHA_SIZE}SUMS.update)
             fi
         done
-        gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
-        mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
+
+        # Make sure that the ISO is as new/newer than the jigdo file; #587774
+        touch ${ISODIR}/${BASENAME}.iso
     else
 	set +e
         ${MKISOFS} -J -joliet-long -r -V "Debian $VER update $TYPEUP" -o \
