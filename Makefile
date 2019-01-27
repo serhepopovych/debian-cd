@@ -66,7 +66,7 @@ ifndef DEBOOTSTRAP_OPTS
 DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
 
-## Port architectures need their archive keyring
+## Additional packages required for Debian Ports
 DEBIAN_PORTS_ARCHES=alpha hppa hurd-i386 m68k powerpcspe ppc64 sh4 sparc64 x32
 ifneq (,$(filter $(DEBIAN_PORTS_ARCHES),$(ARCHES)))
 export BASE_INCLUDE := $(BASEDIR)/data/debian_ports $(BASE_INCLUDE)
