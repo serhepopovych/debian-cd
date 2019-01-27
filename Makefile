@@ -67,8 +67,8 @@ DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
 
 ## Port architectures need their archive keyring
-UNRELEASED_PORT_ARCHITECTURES=alpha hppa hurd-i386 m68k ppc64 powerpcspe sh4 sparc64 x32
-ifneq (,$(filter $(UNRELEASED_PORT_ARCHITECTURES),$(ARCHES)))
+DEBIAN_PORTS_ARCHES=alpha hppa hurd-i386 m68k ppc64 powerpcspe sh4 sparc64 x32
+ifneq (,$(filter $(DEBIAN_PORTS_ARCHES),$(ARCHES)))
 export BASE_INCLUDE := $(BASEDIR)/data/debian_ports $(BASE_INCLUDE)
 endif
 

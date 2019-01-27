@@ -34,6 +34,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   [ John Paul Adrian Glaubitz ]
   * Use compressed kernel image by default in boot-hppa.
   * Rename data/base_include_port_architectures to data/debian_ports.
+  * Makefile: Rename UNRELEASED_PORT_ARCHITECTURES to DEBIAN_PORTS_ARCHES.
 
   [ Holger Levsen ]
   * Create a debian-edu task to be able to build an offline installation image
