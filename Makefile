@@ -69,7 +69,7 @@ endif
 ## Port architectures need their archive keyring
 UNRELEASED_PORT_ARCHITECTURES=alpha hppa hurd-i386 m68k ppc64 powerpcspe sh4 sparc64 x32
 ifneq (,$(filter $(UNRELEASED_PORT_ARCHITECTURES),$(ARCHES)))
-export BASE_INCLUDE := $(BASEDIR)/data/base_include_port_architectures $(BASE_INCLUDE)
+export BASE_INCLUDE := $(BASEDIR)/data/debian_ports $(BASE_INCLUDE)
 endif
 
 ## Internal variables  
