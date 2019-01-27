@@ -37,6 +37,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * Makefile: Rename UNRELEASED_PORT_ARCHITECTURES to DEBIAN_PORTS_ARCHES.
   * Makefile: Reorder architecture list in DEBIAN_PORTS_ARCHES.
   * Makefile: Rephrase comment on package list for Debian Ports.
+  * Makefile: Add ia64, powerpc, riscv64 and sparc to DEBIAN_PORTS_ARCHES.
 
   [ Holger Levsen ]
   * Create a debian-edu task to be able to build an offline installation image
