@@ -1,4 +1,4 @@
-debian-cd (3.1.22) UNRELEASED; urgency=medium
+debian-cd (3.1.22) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Ensure that in all places where we use -J we also use
@@ -68,7 +68,7 @@ debian-cd (3.1.22) UNRELEASED; urgency=medium
   * Reviewed, tested and proposed many of the Debian Edu related changes.
     Closes: #846006
 
- -- Steve McIntyre <93sam@debian.org>  Sat, 10 Feb 2018 00:26:46 +0000
+ -- Holger Levsen <holger@debian.org>  Sat, 02 Feb 2019 23:38:07 +0100
 
 debian-cd (3.1.21) unstable; urgency=medium
 
