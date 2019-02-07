@@ -142,6 +142,26 @@ cpp.
 
 #    if defined(ARCHi386)
 
+       <p>The <code>edu netinst</code> CD here is a special version of
+       the netinst CD image that is targeted specifically at 32-bit
+       Intel machines. It provides a menu to install the Debian Edu Pure
+       Blend. See the <a href="https://wiki.debian.org/DebianEdu/">
+       Debian Wiki</a> for more information.</p>
+
+#    endif
+
+#    if defined(ARCHamd64)
+
+       <p>The <code>edu netinst</code> CD here is a special version of
+       the netinst CD image that is targeted specifically at 64-bit
+       Intel machines. It provides a menu to install the Debian Edu Pure
+       Blend. See the <a href="https://wiki.debian.org/DebianEdu/">
+       Debian Wiki</a> for more information.</p>
+
+#    endif
+
+#    if defined(ARCHi386)
+
        <p>The <code>mac netinst</code> CD here is a special version of
        the netinst CD image that is targeted specifically at 32-bit
        Intel Macintosh machines. It will likely work on most other
