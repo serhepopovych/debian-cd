@@ -137,6 +137,14 @@ sub create_theme_file {
     }
     close(IN);
     close(OUT);
+    open(IN, "<", "$theme_dir/$filename");
+    open(OUT, ">", "$theme_dir/dark-$filename");
+    while (<IN>) {
+	next if ($_ =~ /^desktop-image:/);
+	print OUT "$_";
+    }
+    close(IN);
+    close(OUT);
 }
 
 make_path($theme_dir);
@@ -152,6 +160,7 @@ $menu_title[$menudepth] = $menu{"title"};
 
 my %kernel;
 my $in_kernel = 0;
+my $in_dark = 0;
 my $new_menu = 0;
 
 $menudepth++;
@@ -172,6 +181,9 @@ foreach my $line(@lines) {
 	}
 	$menu{"number"} = $mn_string;
 	$menu{"label"} = $1;
+	if ($menu{"label"} eq "dark") {
+	    $in_dark = 1;
+	}
 	if ($in_kernel) {
 	    print_kernel(\%kernel);
 	    undef %kernel;
@@ -192,6 +204,7 @@ foreach my $line(@lines) {
 	    $pre = "... ";
 	} else {
 	    $pre = "";
+	    $in_dark = 0;
 	}	    
     } elsif ($line =~ /^\s*menu title (.*$)/) {
 	if ($in_kernel) {
@@ -215,9 +228,18 @@ foreach my $line(@lines) {
 		$pre = "";
 	    }	    
 	    debug();
-	    print_indent "set menu_color_normal=cyan/blue\n";
-	    print_indent "set menu_color_highlight=white/blue\n";
-	    print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
+	    if ($in_dark) {
+		print_indent "set menu_color_normal=white/black\n";
+		print_indent "set menu_color_highlight=yellow/black\n";
+		print_indent "set color_normal=white/black\n";
+		print_indent "set color_highlight=yellow/black\n";
+		print_indent "background_image\n";
+		print_indent "set theme=/boot/grub/theme/dark-" . $menu{"number"} . "\n";
+	    } else {
+		print_indent "set menu_color_normal=cyan/blue\n";
+		print_indent "set menu_color_highlight=white/blue\n";
+		print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
+	    }
 	    create_theme_file($menu{"number"});
 	    $new_menu = 0;
 	}
