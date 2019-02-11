@@ -215,6 +215,9 @@ busybox
 flash-kernel
 linux-image-armmp
 linux-image-armmp-lpae
+grub-efi
+grub-efi-arm
+grub-efi-arm-bin
 #endif
 
 #ifdef ARCH_arm64
