@@ -11,6 +11,9 @@ debian-cd (3.1.23) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Add grub-efi packages to armhf media
 
+  [ Samuel Thibault ]
+  * Support dark theme boot entries.
+
  -- Holger Levsen <holger@debian.org>  Thu, 07 Feb 2019 15:53:42 +0100
 
 debian-cd (3.1.22) unstable; urgency=medium
