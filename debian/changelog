@@ -6,7 +6,7 @@ debian-cd (3.1.23) UNRELEASED; urgency=medium
 
   [ Wolfgang Schweer ]
   * tools/start_new_disc: set adjusted cd_type for incomplete BD image for
-    offline usable Edu BDs.
+    offline usable Edu BDs. Closes: #769589
   * contrib/HEADER.html.in: add paragraphs describing the Debian Edu netinst
     images for amd64 and i386.
 
