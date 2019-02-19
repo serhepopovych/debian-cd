@@ -1,9 +1,4 @@
-debian-cd (3.1.23) UNRELEASED; urgency=medium
-
-  [ Holger Levsen ]
-  * data/buster: update Debian Edu installer logo and syslinux splash image
-    from src:debian-edu-artwork 2.10.5-1.
-  * contrib: updated from setup.git/buster/.
+debian-cd (3.1.23) unstable; urgency=medium
 
   [ Wolfgang Schweer ]
   * tools/start_new_disc: set adjusted cd_type for incomplete BD image for
@@ -17,7 +12,12 @@ debian-cd (3.1.23) UNRELEASED; urgency=medium
   [ Samuel Thibault ]
   * Support dark theme boot entries.
 
- -- Holger Levsen <holger@debian.org>  Thu, 07 Feb 2019 15:53:42 +0100
+  [ Holger Levsen ]
+  * data/buster: update Debian Edu installer logo and syslinux splash image
+    from src:debian-edu-artwork 2.10.5-1.
+  * contrib: updated from setup.git/buster/.
+
+ -- Holger Levsen <holger@debian.org>  Tue, 19 Feb 2019 19:08:26 +0100
 
 debian-cd (3.1.22) unstable; urgency=medium
 
