@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -62,6 +62,8 @@ if [ -f "$TRACE" ] ; then
 
             cp "$MYCOPY" "$MYCOPY".building
 
+	    BUILD_DONE=0
+
             # "Daily" builds
             # Only run certain builds, otherwise we're just wasting
             # time reproducing identical results:
@@ -79,6 +81,7 @@ if [ -f "$TRACE" ] ; then
                 echo "Not running even-numbered daily build #$BUILDNUM"
             else
 		echo "Running daily build #$BUILDNUM."
+		BUILD_DONE=1
 		if [ "$FORCE"x = "1"x ] ; then
 		    echo "Build forced by hand"
 		else
@@ -99,9 +102,13 @@ if [ -f "$TRACE" ] ; then
                     mail_list "$HOSTNAME BAILING OUT OF WEEKLY BUILD"
                 else
                     $TOPDIR/cronjob.weekly
+		    BUILD_DONE=1
                 fi
             fi
 	    cd $HOME && ./bin/cdbuilder_log_analyser > build/log/analysis.html
+	    if [ "$BUILD_DONE"x = "1"x ]; then
+		/usr/local/bin/static-update-component cdbuilder-logs.debian.org
+	    fi
             exit 0
         fi
     fi

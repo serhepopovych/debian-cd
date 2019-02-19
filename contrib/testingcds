@@ -13,13 +13,13 @@
 #set -x
 
 if [ "$CONF"x = ""x ] ; then
-    CONF=~/build.stretch/CONF.sh
+    CONF=~/build.${CODENAME}/CONF.sh
 fi
 export CF=$CONF
+
 if [ "$DCD_DIR"x = ""x ] ; then
-    DCD_DIR=~/build.stretch/debian-cd
+    DCD_DIR=~/build.${CODENAME}/debian-cd
 fi
-export CF=$CONF
 
 now () {
     date -u +%F:%H:%M:%S
@@ -60,7 +60,7 @@ export LOGFILE="$LOG/$RUN"
 case "$INSTALLER_CD" in
     1)
         export DISKTYPE=BC;;
-    2|7|8|C|F|G)
+    2|7|8|C|F|G|H)
         export DISKTYPE=NETINST;;
     3|6|I|J)
         export OUT_TYPE=dvd
@@ -73,7 +73,7 @@ case "$INSTALLER_CD" in
         export DISKTYPE=lxde-CD;;
     B)
         export DISKTYPE=xfce+lxde-CD;;
-    9)
+    9|K|L)
         export OUT_TYPE=bd
         export DISKTYPE=BD;;
     D)
@@ -81,9 +81,6 @@ case "$INSTALLER_CD" in
         export DISKTYPE=DLBD;;
     E)
         export DISKTYPE=gnome-CD;;
-    H)
-        export OUT_TYPE=bd
-        export DISKTYPE=BD;;
     *)  export DISKTYPE=CD;;
 esac
 
@@ -106,12 +103,10 @@ if [ "$OUT"x = ""x ] ; then
 fi
 
 if [ "$BUILDNAME"x = ""x ] ; then
-    TRACEFILE="$OUT_TYPE-trace"
-    echo "  Making $ARCH ${DISKTYPE} in $OUT"
-else
-    TRACEFILE="$BUILDNAME-trace"
-    echo "  Making $ARCH ${DISKTYPE} (${BUILDNAME}) in $OUT"
+    BUILDNAME="$OUT_TYPE"
 fi
+TRACEFILE="$BUILDNAME-trace"
+echo "  Making $ARCH ${DISKTYPE} (${BUILDNAME}) in $OUT"
 
 if [ "$INSTALLER_CD" = "1" ] ; then
     export OFFICIAL="Official BusinessCard Snapshot"
@@ -138,13 +133,17 @@ elif [ "$INSTALLER_CD" = "E" ]; then
 elif [ "$INSTALLER_CD" = "F" ]; then
     export OFFICIAL="Official Mac Netinst"
 elif [ "$INSTALLER_CD" = "G" ]; then
-    export OFFICIAL="Official Debian-Edu Multi-Arch Netinst"
+    export OFFICIAL="Official Debian-Edu Netinst"
 elif [ "$INSTALLER_CD" = "H" ]; then
-    export OFFICIAL="Official Debian-Edu Multi-Arch Image"
+    export OFFICIAL="Unofficial Debian-Edu Netinst including firmware"
 elif [ "$INSTALLER_CD" = "I" ]; then
     export OFFICIAL="Unofficial DVD including firmware"
 elif [ "$INSTALLER_CD" = "J" ]; then
     export OFFICIAL="Unofficial Multi-Arch DVD including firmware"
+elif [ "$INSTALLER_CD" = "K" ]; then
+    export OFFICIAL="Debian-Edu Full USB image"
+elif [ "$INSTALLER_CD" = "L" ]; then
+    export OFFICIAL="Unofficial Debian-Edu Full USB image including firmware"
 fi
 
 rm -rf "$OUT"
@@ -273,7 +272,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
 
     for i in $MYEMAIL
     do
-        grep -e "extents written" -e "Written to medi." "$LOGFILE"|mail -s "$RELEASE_BUILD testingcds $RUN ($OUTARCH $DISKTYPE) went ok" "$i"
+        grep -e "extents written" -e "Written to medi." "$LOGFILE"|mail -s "$RELEASE_BUILD testingcds $RUN ($OUTARCH $BUILDNAME) went ok" "$i"
     done
     overview "$RUN" success
 
@@ -287,7 +286,7 @@ else
     for i in $MYEMAIL
     do
         (echo Error when trying to create cds for $RUN ; cat $LOGFILE) | \
-            mail -s "$RELEASE_BUILD testingcds $RUN has failed; log included" "$i"
+            mail -s "$RELEASE_BUILD testingcds $RUN ($OUTARCH $BUILDNAME) has failed; log included" "$i"
     done
     overview "$RUN" failed
     END=`now`

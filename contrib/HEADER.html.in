@@ -87,12 +87,12 @@ cpp.
      writeable dual-layer Blu-Ray media
 #  endif
 
-   at a minimum, but may be written to larger media if needed.
+   at a minimum, but may be written to larger media if needed.</p>
 
 #  ifdef ISOHYBRID
 
-     For <strong>extra</strong> convenience, these images may also be
-     written directly to a USB stick. So long as your computer will
+     <p>For extra convenience, <strong>these images may also be written
+     directly to a USB stick</strong>. So long as your computer will
      boot directly from that USB stick, it should start the Debian
      installer that way.
 
@@ -116,23 +116,29 @@ cpp.
      complete set. Most typical users only need a small subset of
      those software packages.</p>
 
-     <p>Initially, you will only need to download and use
-     the <strong>first</strong> image of a set (labelled as
-     <code>debian-<i>something</i>-1</code> to be able to start the
-     Debian installer and set up Debian on your computer. If there are
-     more images available here
-     (labelled <code>debian-<i>something</i>-2</code>,
-     <code>debian-<i>something</i>-3</code>, etc.), they contain the
-     extra packages that can be installed on a Debian system (as
-     mentioned previously). They will <strong>not</strong> be bootable
-     and are entirely optional. If you have a fast Internet
-     connection, you're most likely better off installing any desired
-     extra packages directly from the Debian mirrors on the Internet
-     instead of by using these extra images.</p>
+#    if !defined(TYPEcd)
+
+       <p>Initially, you will only need to download and use
+       the <strong>first</strong> image of a set (labelled as
+       <code>debian-<i>something</i>-1</code> to be able to start the
+       Debian installer and set up Debian on your computer. If there are
+       more images available here
+       (labelled <code>debian-<i>something</i>-2</code>,
+       <code>debian-<i>something</i>-3</code>, etc.), they contain the
+       extra packages that can be installed on a Debian system (as
+       mentioned previously). They will <strong>not</strong> be
+       bootable and are entirely optional. If you have a fast Internet
+       connection, you're most likely better off installing any
+       desired extra packages directly from the Debian mirrors on the
+       Internet instead of by using these extra images.</p>
+
+#    endif
 
 #  endif
 
 #  if defined(TYPEcd) && !defined(ARCHsource) && !defined(STYLElist)
+
+     <h2>What is a netinst image?</h2>
 
      <p>The <code>netinst</code> CD here is a small CD image that
      contains just the core Debian installer code and a small core set
@@ -141,6 +147,8 @@ cpp.
      Internet connection or some other Debian CD/DVD images.</p>
 
 #    if defined(ARCHi386)
+
+       <h2>What is an edu netinst image?</h2>
 
        <p>The <code>edu netinst</code> CD here is a special version of
        the netinst CD image that is targeted specifically at 32-bit
@@ -151,6 +159,8 @@ cpp.
 #    endif
 
 #    if defined(ARCHamd64)
+
+       <h2>What is an edu netinst image?</h2>
 
        <p>The <code>edu netinst</code> CD here is a special version of
        the netinst CD image that is targeted specifically at 64-bit
@@ -162,26 +172,65 @@ cpp.
 
 #    if defined(ARCHi386)
 
+       <h2>What is a mac netinst image?</h2>
+
        <p>The <code>mac netinst</code> CD here is a special version of
-       the netinst CD image that is targeted specifically at 32-bit
-       Intel Macintosh machines. It will likely work on most other
-       i386 machines too, but it does not contain UEFI boot files that
-       some people need.</p>
+       the netinst CD image that is targeted specifically at older
+       32-bit Intel Macintosh machines. It will likely work on most
+       other i386 machines too, but it does not contain UEFI boot
+       files that some people
+       need. See <a href="https://wiki.debian.org/MacMiniIntel#Macmini_1.2C1">
+       the Debian Wiki</a> for more information.</p>
 
 #    endif
 
 #    if defined(ARCHamd64)
 
+       <h2>What is a mac netinst image?</h2>
+
        <p>The <code>mac netinst</code> CD here is a special version of
-       the netinst CD image that is targeted specifically at older 64-bit
-       Intel Macintosh machines. It will likely work on most other
-       amd64 machines too, but it does not contain UEFI boot files that
-       some people need.</p>
+       the netinst CD image that is targeted specifically at older
+       64-bit Intel Macintosh machines. It will likely work on most
+       other amd64 machines too, but it does not contain UEFI boot
+       files that some people
+       need. See <a href="https://wiki.debian.org/MacMiniIntel#Macmini_2.2C1">
+       the Debian Wiki</a> for more information.</p>
 
 #    endif
 
 #  endif
       
+#  if defined(TYPEbd) && !defined(ARCHsource) && !defined(STYLElist)
+
+     <p>The <code>BD</code> image here is a special large image that
+     contains the core Debian installer code and a specific set of
+     programs. Depending on the purpose you'll also need an Internet
+     connection.</p>
+
+#    if defined(ARCHi386)
+
+       <p>The <code>edu-usb</code> BD here is a special version of
+       the BD image that is targeted specifically at 32-bit Intel machines.
+       It provides a menu to install the Debian Edu Pure Blend without the
+       need of an Internet connection. See the
+       <a href="https://wiki.debian.org/DebianEdu/">Debian Wiki</a> for
+       more information.</p>
+
+#    endif
+
+#    if defined(ARCHamd64)
+
+       <p>The <code>edu-usb</code> BD here is a special version of
+       the BD image that is targeted specifically at 64-bit Intel machines.
+       It provides a menu to install the Debian Edu Pure Blend without the
+       need of an Internet connection. See the
+       <a href="https://wiki.debian.org/DebianEdu/">Debian Wiki</a> for
+       more information.</p>
+
+#    endif
+
+#  endif
+
 #  ifdef UPDATES
 
      <p>The <code>update</code> files here are extra convenience files
@@ -207,6 +256,18 @@ cpp.
 
    <p>For more information about how to do these steps, read
    the <a href="https://www.debian.org/CD/verify">verification guide</a>.
+
+#endif
+
+#if !defined(ONEonly) && !defined(FIRMWARE) && (defined(STYLEbt) || defined(STYLEiso))
+
+  <h2>Only the first few images are available! Where are the rest?</h2>
+
+   <p>We don't store/serve the full set of ISO images for all
+   architectures, to reduce the amount of space taken up on the
+   mirrors. You can
+   <a href="https://www.debian.org/CD/faq/#why-jigdo">use the jigdo
+   tool</a> to recreate the missing ISO images instead.</p>
 
 #endif
 

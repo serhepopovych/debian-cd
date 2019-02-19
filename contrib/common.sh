@@ -120,14 +120,49 @@ catch_parallel_builds () {
     echo "$arch build started at $arch_start, ended at $arch_end (took $arch_time), error(s) $arch_error"
 }
 
+# Slightly complicated setup
+# iso-*   dirs have checksums for ISO files only
+# bt-*    dirs have checksums for ISO and torrrent files only
+# jigdo-* dirs have checksums for ISO and jigdo files only
+#
+# Uses the imagesums tool from debian-cd to grab pre-calculated ISO
+# checksums from the jigdo files where possible, to save a lot of time
 generate_checksums_for_arch () {
     ARCH=$1
     JIGDO_DIR=$2
     ISO_DIR=$(echo $JIGDO_DIR | sed 's,jigdo-,iso-,g')
+    BT_DIR=$(echo $JIGDO_DIR | sed 's,jigdo-,bt-,g')
 
-    echo "$ARCH: Generating checksum files for the builds in $JIGDO_DIR"
-    $TOPDIR/debian-cd/tools/imagesums $JIGDO_DIR $EXTENSION > /dev/null
-    cp $JIGDO_DIR/*SUMS*${EXTENSION} $ISO_DIR
+    # Do the torrents first, if they exist
+    if [ -e $BT_DIR ]; then
+	$TOPDIR/debian-cd/tools/imagesums $BT_DIR $EXTENSION > /dev/null
+    fi
+
+    # Now do the jigdos, if they exist
+    if [ -e $JIGDO_DIR ]; then
+	$TOPDIR/debian-cd/tools/imagesums $JIGDO_DIR $EXTENSION > /dev/null
+	# And grep out the .iso checksums from there to the iso directory
+	for file in $JIGDO_DIR/*SUMS*${EXTENSION}; do
+	    out=$ISO_DIR/$(basename $file)
+	    grep \\.iso $file > $out
+	done
+	if [ -e $BT_DIR ]; then
+	    # Ditto for the bt directory
+	    for file in $JIGDO_DIR/*SUMS*${EXTENSION}; do
+		out=$BT_DIR/$(basename $file)
+		grep \\.iso $file >> $out
+	    done
+	fi
+    else
+	# No jigdos, so do the ISOs by hand
+	$TOPDIR/debian-cd/tools/imagesums $ISO_DIR $EXTENSION > /dev/null
+	if [ -e $BT_DIR ]; then
+	    for file in $ISO_DIR/*SUMS*${EXTENSION}; do
+		out=$BT_DIR/$(basename $file)
+		grep \\.iso $file >> $out
+	    done
+	fi
+    fi
 }
 
 catch_live_builds () {
@@ -169,3 +204,16 @@ get_archive_serial () {
         echo 'unknown'
     fi
 }
+
+rsync_to_pettersson () {
+    LOCAL=$1
+    REMOTE=$2
+    OPTIONS="$3"
+    rsync -az --delete $OPTIONS $LOCAL sync-to-pettersson:$REMOTE
+}
+
+publish_on_pettersson () {
+    TARGETS="$@"
+    echo "$TARGETS" | ssh publish-on-pettersson ./bin/receive_from_casulana
+}
+

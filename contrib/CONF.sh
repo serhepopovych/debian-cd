@@ -47,8 +47,8 @@ unset BASE_EXCLUDE      || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building stretch cd set ...
-export CODENAME=stretch
+# Building buster cd set ...
+export CODENAME=buster
 
 if [ ! "$DI_CODENAME" ]
 then
@@ -70,7 +70,7 @@ export OFFICIAL="Official Snapshot"
 # ... for arch  
 if [ ! "$ARCH" ]
 then
-  export ARCH=`dpkg --print-installation-architecture`
+  export ARCH=`dpkg --print-architecture`
 fi
 
 # IMPORTANT : The 4 following paths must be on the same partition/device.
@@ -150,7 +150,11 @@ export CONTRIB=1
 #export MKISOFS_OPTS="-joliet-long -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512" #-checksum_algorithm_iso md5,sha1"
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
-export MKISOFS="/home/93sam/xorriso"
+if [ $(which xorriso)""x = "/usr/bin/xorriso"x ]; then
+    export MKISOFS="xorriso"
+else
+    export MKISOFS="/home/93sam/xorriso"
+fi
 export MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
 
 # Override for i386,amd64,multi to use xorriso.

@@ -1,14 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
-OUT=/mnt/nfs-cdimage/unofficial/non-free/firmware
-TOPDIR=~/build
-SUITE=$1
+TOPDIR=$(dirname $0)
+if [ "$TOPDIR" = "." ] ; then
+    TOPDIR=`pwd`
+fi
+export TOPDIR
 
 . $TOPDIR/CONF.sh
+. $TOPDIR/settings.sh
+. $TOPDIR/common.sh
 
-if [ "$SUITE"x = ""x ] ; then
+OUT=${OUT_BASE}/unofficial/non-free/firmware
+RELEASE=$1
+
+if [ "$RELEASE"x = ""x ] ; then
     echo "Need to know what to produce!"
     exit 1
 fi
@@ -17,28 +24,34 @@ fi
 export TDIR=/srv/cdbuilder.debian.org/dst/deb-cd/tmp/firmware
 export BASEDIR=$TOPDIR/debian-cd
 mkdir -p $TDIR
-fakeroot $BASEDIR/tools/make-firmware-image $MIRROR $SUITE $TDIR
+fakeroot $BASEDIR/tools/make-firmware-image $MIRROR $RELEASE $TDIR
 
 DATE=`date +%Y%m%d`
-mkdir -p $OUT/$SUITE/$DATE
-mv $TDIR/firmware*.* $TDIR/*SUMS $OUT/$SUITE/$DATE/
+mkdir -p $OUT/$RELEASE/$DATE
+mv $TDIR/firmware*.* $TDIR/*SUMS $OUT/$RELEASE/$DATE/
 
 if [ "$RELEASE_BUILD"x = ""x ] ; then
     echo "Signing firmware checksums files using the automatic key"
-    ~/build.stretch/sign-images $OUT/$SUITE/$DATE ""
+    ~/build.${CODENAME}/sign-images $OUT/$RELEASE/$DATE ""
 fi
 
-# Update the current link, and delete the old surplus builds. Keep up
-# to 3
-cd $OUT/$SUITE
-rm -f current
-ln -sf $DATE current
+if [ $(hostname) = casulana ]; then
+    # Sync to pettersson
+    rsync_to_pettersson ${OUT_BASE}/unofficial/non-free/firmware/$RELEASE/${DATE}/ unofficial/non-free/firmware/${RELEASE}/${DATE}/
+    publish_on_pettersson unofficial/non-free/firmware/${RELEASE}/${DATE}/
+else
+    # Update the current link, and delete the old surplus builds. Keep up
+    # to 3
+    cd $OUT/$RELEASE
+    rm -f current
+    ln -sf $DATE current
 
-echo "Removing old firmware directories:"
-NUM=`ls -d 20*/ 2>/dev/null |wc -l`
-NUM=$(($NUM-6))
-if [ "$NUM" -gt "0" ] ; then
-    REMOVE=`ls -1d 20* 2>/dev/null|head -n $NUM`
-    echo "  $REMOVE"
-    rm -rf $REMOVE
+    echo "Removing old firmware directories:"
+    NUM=`ls -d 20*/ 2>/dev/null |wc -l`
+    NUM=$(($NUM-6))
+    if [ "$NUM" -gt "0" ] ; then
+	REMOVE=`ls -1d 20* 2>/dev/null|head -n $NUM`
+	echo "  $REMOVE"
+	rm -rf $REMOVE
+    fi
 fi

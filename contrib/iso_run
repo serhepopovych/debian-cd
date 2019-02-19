@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Helper for image creation
 #
 PUBDIRJIG=$1
 RSYNC_TARGET=$2
 ARCH=$3
+FIRMWARE=$4
 
-LOG=~/build.stretch/log/$ARCH.iso_run
+LOG=~/build.${CODENAME}/log/$ARCH.iso_run
 HOSTNAME=`hostname -f`
 LOCK=~/iso_run.lock
 START=`date -u +%H:%M:%S`
+. $TOPDIR/common.sh
 
 # Check to see if another sync is in progress
 if lockfile -! -l 43200 -r-1 "$LOCK"; then  
@@ -21,24 +23,6 @@ trap "rm -f $LOCK > /dev/null 2>&1" exit
 COPY_START=`date -u +%H:%M:%S`
 
 rm -f $LOG
-
-# Given an ISO image:
-# 1. create the torrent file if desired (only for release builds)
-# 2. copy all of them into place
-process_iso() {
-    FILE=$1
-    OUTDIR=$2
-
-    echo $OUTDIR/$FILE >> $LOG
-    cp -a $FILE $OUTDIR/$FILE
-
-    if [ "$RELEASE_BUILD"x != ""x ] ; then
-	~/build.stretch/mktorrent $FILE >> $LOG
-	BTFILE=`echo $FILE.torrent | sed 's/iso-/bt-/'`
-	echo $OUTDIR/$BTFILE >> $LOG
-	cp -a $BTFILE $OUTDIR/$BTFILE
-    fi
-}
 
 # Poor man's rsync, but with some local optimisations
 copy_files() {
@@ -60,40 +44,26 @@ copy_files() {
     do
         for DISKTYPE in $DISKTYPES; do
             for DIRTYPE in $DIRTYPES; do
-                mkdir -p -m775 $TARGET/$ARCH.tmp/$DIRTYPE-$DISKTYPE
+		if [ -d $ARCH/$DIRTYPE-$DISKTYPE ]; then
+                    mkdir -p -m775 $TARGET/$ARCH.tmp/$DIRTYPE-$DISKTYPE
+		fi
             done
         done
 
+	# Copy the specific files across that we want in the
+	# publishing dir
         cd $ARCH
         find . -name '*.jigdo' -o -name '*.template' \
+	    -o -name '*.iso' \
+	    -o -name '*.torrent' \
 	    -o -name '*.list.gz' -o -name '*SUMS*' | \
             xargs tar cf - | (cd $TARGET/$ARCH.tmp/ && tar xvf -) >> $LOG
 	
-        # Only make torrent files and dirs for release builds
-        rm -rf bt-*
-        for DISKTYPE in $DISKTYPES; do
-	    if [ "$RELEASE_BUILD"x != ""x ] ; then
-		mkdir bt-$DISKTYPE
-	    fi
-	    for FILE in iso-$DISKTYPE/*.iso; do
-		if [ -e $FILE ] ; then
-		    process_iso $FILE $TARGET/$ARCH.tmp
-		fi
-	    done
-	    if [ "$RELEASE_BUILD"x != ""x ] ; then
-		for FILE in $TARGET/$ARCH.tmp/iso-$DISKTYPE/*SUMS*; do
-		    if [ -e $FILE ] ; then
-			cp -al $FILE $TARGET/$ARCH.tmp/bt-$DISKTYPE/
-		    fi
-		done
-	    fi
-	done
-
 	if [ "$RELEASE_BUILD"x = ""x ] ; then
 	    # Only populate the HEADER.html file for regular weekly
 	    # builds; we don't want it for releases
             HUM_DATE=`date -u`
-            sed "s/ARCH/$ARCH/g;s/DATE/$HUM_DATE/g" ~/build.stretch/weekly.html \
+            sed "s/ARCH/$ARCH/g;s/DATE/$HUM_DATE/g" ~/build.${CODENAME}/weekly.html \
 		> $TARGET/$ARCH.tmp/HEADER.html
 	fi
 
@@ -129,6 +99,23 @@ rm -rf $RSYNC_TARGET/$ARCH.old &
 mkdir -p $RSYNC_TARGET/trace
 date -u > $RSYNC_TARGET/trace/cdimage.debian.org
 
+# Generate the HEADER.html files in the subdirectories
+~/build.${CODENAME}/generate_headers ~/build.${CODENAME}/HEADER.html.in $RSYNC_TARGET/$ARCH $ARCH $FIRMWARE
+
 END=`date -u +%H:%M:%S`
 echo "$ARCH synced across to $RSYNC_TARGET; started at $START, copying started at $COPY_START, ended at $END"
+
+# If we're on casulana, push things to pettersson here
+if [ $(hostname) = casulana ]; then
+    START=`date -u +%H:%M:%S`
+    PETOUT=${RSYNC_TARGET##${OUT_BASE}/}
+    echo "$START: Starting $ARCH sync from $RSYNC_TARGET/$ARCH to pettersson" >> $LOG
+    (cd $RSYNC_TARGET/$ARCH && find . -name '*.iso' > .iso-wanted)
+    rsync_to_pettersson $RSYNC_TARGET/$ARCH/ ${PETOUT}/$ARCH/ '--exclude *.iso'
+    rsync_to_pettersson $RSYNC_TARGET/trace/ ${PETOUT}/trace/
+    publish_on_pettersson ${PETOUT}/$ARCH ${PETOUT}/trace
+    END=`date -u +%H:%M:%S`
+    echo "$RSYNC_TARGET/$ARCH synced across to pettersson; started at $START, ended at $END"
+fi
+
 echo "$END: Finished" >> $LOG

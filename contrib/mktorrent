@@ -1,27 +1,45 @@
-#!/bin/sh
+#!/bin/bash
 
-HTTPBASE="http://cdimage.debian.org/cdimage"
+HTTPBASE="https://cdimage.debian.org/cdimage"
+NFHTTPBASE="https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/"
+
+MKTORRENT=btmakemetafile.bittornado
 
 for FILE in $@; do
-    MKTORRENT=btmakemetafile.bittornado
     ISODIR=`dirname $FILE`
     BTDIR=`echo $ISODIR | sed 's/iso-/bt-/;s/usb-/bt-/'`
     if [ ! -d $BTDIR ] ; then
         mkdir -p $BTDIR
     fi
 
-    # Add 2 http seeds: the release path *and* the archive path -
-    # hopefully clients will use whichever is available!
+    # Add multiple http seeds: the release path *and* the archive path
+    # for both the free images and the non-free images - hopefully
+    # clients will use whichever is available!
     case ${FILE} in
+	*live+nonfree*)
+            VER=$(echo ${FILE} | sed 's,^.*/debian-\(live-\)*,,;s,-.*$,,')"-live+nonfree"
+	    FREE=0
+            ;;
 	*live*)
             VER=$(echo ${FILE} | sed 's,^.*/debian-\(live-\)*,,;s,-.*$,,')"-live"
+	    FREE=1
+            ;;
+	*firmware*)
+            VER=$(echo ${FILE} | sed 's,^.*/firmware-,,;s,-.*$,,')"+nonfree"
+	    FREE=0
             ;;
 	*)
             VER=$(echo ${FILE} | sed 's,^.*/debian-*,,;s,-.*$,,')
+	    FREE=1
             ;;
     esac
-    HTTP1="${HTTPBASE}/release/${VER}/${FILE}"
-    HTTP2="${HTTPBASE}/archive/${VER}/${FILE}"
+    if [ $FREE -eq 1 ]; then
+	HTTP1="${HTTPBASE}/release/${VER}/${FILE}"
+	HTTP2="${HTTPBASE}/archive/${VER}/${FILE}"
+    else
+	HTTP1="${NFHTTPBASE}/${VER}/${FILE}"
+	HTTP2="${NFHTTPBASE}/archive/${VER}/${FILE}"
+    fi
     $MKTORRENT http://bttracker.debian.org:6969/announce \
         --comment '"Debian CD from cdimage.debian.org"' \
 	--httpseeds ${HTTP1}\|${HTTP2} \

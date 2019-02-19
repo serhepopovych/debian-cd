@@ -1,5 +1,22 @@
 #!/bin/bash
 
+TOPDIR=$(dirname $0)
+if [ "$TOPDIR" = "." ] ; then
+    TOPDIR=`pwd`
+fi
+export TOPDIR
+
+. $TOPDIR/settings.sh
+. $TOPDIR/common.sh
+
+export WEEKLY_LIVE=${OUT_BASE}/weekly-live-builds
+export NF_WEEKLY_LIVE=${CD_I_F}/weekly-live-builds
+export WEEKLY_OPENSTACK=${OUT_BASE}/openstack/testing
+
+if [ "$RELEASE_BUILD"x != ""x ] ; then
+    RELEASE_OUT=${OUT_BASE}/.${RELEASE_BUILD}
+fi
+
 now () {
     date -u +%F:%H:%M:%S
 }
@@ -12,20 +29,56 @@ if [ "$NOLIVE"x = ""x ] ; then
     ERROR=$?
     if [ $ERROR -eq 0 ] ; then
 	if [ "$RELEASE_BUILD"x = ""x ] ; then
-	    ~/build.stretch/sign-images /mnt/nfs-cdimage/.live/new/free ""
-	    mv -f /mnt/nfs-cdimage/weekly-live-builds /mnt/nfs-cdimage/weekly-live-builds.old
-	    mv /mnt/nfs-cdimage/.live/new/free/ /mnt/nfs-cdimage/weekly-live-builds
-	    rm -rf /mnt/nfs-cdimage/weekly-live-builds.old
+	    ~/build.${CODENAME}/sign-images ${LIVE_OUT}/new/free ""
+	    mv -f ${WEEKLY_LIVE} ${WEEKLY_LIVE}.old
+	    mv ${LIVE_OUT}/new/free/ ${WEEKLY_LIVE}
+	    rm -rf ${WEEKLY_LIVE}.old
 
-	    ~/build.stretch/sign-images /mnt/nfs-cdimage/.live/new/non-free ""
-	    mv -f ${CD_I_F}/weekly-live-builds ${CD_I_F}/weekly-live-builds.old
-	    mv /mnt/nfs-cdimage/.live/new/non-free ${CD_I_F}/weekly-live-builds
-	    rm -rf ${CD_I_F}/weekly-live-builds.old
+	    ~/build.${CODENAME}/sign-images ${LIVE_OUT}/new/non-free ""
+	    mv -f ${NF_WEEKLY_LIVE} ${NF_WEEKLY_LIVE}.old
+	    mv ${LIVE_OUT}/new/non-free ${NF_WEEKLY_LIVE}
+	    rm -rf ${NF_WEEKLY_LIVE}.old
+
+	    # Generate HEADER.html files
+	    for ARCH in amd64 i386 source; do
+		~/build.${CODENAME}/generate_headers \
+			~/build.${CODENAME}/live-header.html.in \
+			${WEEKLY_LIVE}/$ARCH $ARCH ""
+		~/build.${CODENAME}/generate_headers \
+			~/build.${CODENAME}/HEADER.html.in \
+			${NF_WEEKLY_LIVE}/$ARCH $ARCH firmware
+	    done
+
+	    # If we're on casulana, push things to pettersson here
+	    if [ $(hostname) = casulana ]; then
+		rsync_to_pettersson ${WEEKLY_LIVE}/ weekly-live-builds/
+		rsync_to_pettersson ${NF_WEEKLY_LIVE}/ unofficial/non-free/images-including-firmware/weekly-live-builds/
+		publish_on_pettersson weekly-live-builds unofficial/non-free/images-including-firmware/weekly-live-builds
+	    fi
+
 	else
-	    mkdir -p /mnt/nfs-cdimage/.${RELEASE_BUILD}/
-	    rm -rf /mnt/nfs-cdimage/.${RELEASE_BUILD}/live-*
-	    mv /mnt/nfs-cdimage/.live/new/free/ /mnt/nfs-cdimage/.${RELEASE_BUILD}/live-free
-	    mv /mnt/nfs-cdimage/.live/new/non-free /mnt/nfs-cdimage/.${RELEASE_BUILD}/live-non-free
+	    mkdir -p ${RELEASE_OUT}/
+	    rm -rf ${RELEASE_OUT}/live-*
+	    mv ${LIVE_OUT}/new/free/ ${RELEASE_OUT}/live-free
+	    mv ${LIVE_OUT}/new/non-free ${RELEASE_OUT}/live-non-free
+
+	    # Generate HEADER.html files
+	    for ARCH in amd64 i386 source; do
+		~/build.${CODENAME}/generate_headers \
+			~/build.${CODENAME}/live-header.html.in \
+			${RELEASE_OUT}/live-free/$ARCH $ARCH ""
+		~/build.${CODENAME}/generate_headers \
+			~/build.${CODENAME}/HEADER.html.in \
+			${RELEASE_OUT}/live-non-free/$ARCH $ARCH firmware
+	    done
+
+	    # If we're on casulana, push things to pettersson here
+	    if [ $(hostname) = casulana ]; then
+		rsync_to_pettersson ${RELEASE_OUT}/live-free/ .${RELEASE_BUILD}/live-free/
+		rsync_to_pettersson ${RELEASE_OUT}/live-non-free/ .${RELEASE_BUILD}/live-non-free/
+		publish_on_pettersson .${RELEASE_BUILD}/live-free .${RELEASE_BUILD}/live-non-free
+	    fi
+
 	fi
     fi
     # Wait for the KVM to shut down cleanly
@@ -53,20 +106,32 @@ if [ "$NOOPENSTACK"x = ""x ] ; then
 	sleep 30
     fi
     if [ $ERROR -eq 0 ] ; then
-	mkdir -p /mnt/nfs-cdimage/.live/new/openstack-stretch
-	mv -v /mnt/nfs-cdimage/.live/new/openstack-stretch-*/*.* /mnt/nfs-cdimage/.live/new/openstack-stretch
+	rm -rf ${LIVE_OUT}/new/openstack-${CODENAME}
+	mkdir -p ${LIVE_OUT}/new/openstack-${CODENAME}
+	mv -v ${LIVE_OUT}/new/openstack-${CODENAME}-*/*.* ${LIVE_OUT}/new/openstack-${CODENAME}
 	for SUM in MD5 SHA1 SHA256 SHA512; do
-	    cat /mnt/nfs-cdimage/.live/new/openstack-stretch-*/${SUM}SUMS > /mnt/nfs-cdimage/.live/new/openstack-stretch/${SUM}SUMS
+	    cat ${LIVE_OUT}/new/openstack-${CODENAME}-*/${SUM}SUMS > ${LIVE_OUT}/new/openstack-${CODENAME}/${SUM}SUMS
 	done
 	if [ "$RELEASE_BUILD"x = ""x ] ; then
-	    ~/build.stretch/sign-images /mnt/nfs-cdimage/.live/new/openstack-stretch ""
-	    mv /mnt/nfs-cdimage/.live/new/openstack-stretch/* /mnt/nfs-cdimage/openstack/testing
-	    cp ~/build.stretch/openstack-header.html /mnt/nfs-cdimage/openstack/testing/HEADER.html
+	    ~/build.${CODENAME}/sign-images ${LIVE_OUT}/new/openstack-${CODENAME} ""
+	    mv ${LIVE_OUT}/new/openstack-${CODENAME}/* ${WEEKLY_OPENSTACK}
+	    cp ~/build.${CODENAME}/openstack-header.html ${WEEKLY_OPENSTACK}/HEADER.html
+
+	    # If we're on casulana, push things to pettersson here
+	    if [ $(hostname) = casulana ]; then
+		rsync_to_pettersson ${WEEKLY_OPENSTACK}/ openstack/testing/
+		publish_on_pettersson openstack/testing
+	    fi
 	else
-	    mkdir -p /mnt/nfs-cdimage/.${RELEASE_BUILD}
-	    rm -rf /mnt/nfs-cdimage/.${RELEASE_BUILD}/openstack
-	    mv /mnt/nfs-cdimage/.live/new/openstack-stretch /mnt/nfs-cdimage/.${RELEASE_BUILD}/openstack
-	    cp ~/build.stretch/openstack-header.html /mnt/nfs-cdimage/.${RELEASE_BUILD}/openstack/HEADER.html
+	    mkdir -p ${RELEASE_OUT}
+	    rm -rf ${RELEASE_OUT}/openstack
+	    mv ${LIVE_OUT}/new/openstack-${CODENAME} ${RELEASE_OUT}/openstack
+	    cp ~/build.${CODENAME}/openstack-header.html ${RELEASE_OUT}/openstack/HEADER.html
+	    # If we're on casulana, push things to pettersson here
+	    if [ $(hostname) = casulana ]; then
+		rsync_to_pettersson ${RELEASE_OUT}/openstack/ .${RELEASE_BUILD}/openstack/
+		publish_on_pettersson .${RELEASE_BUILD}/openstack
+	    fi
 	fi
     fi
 fi

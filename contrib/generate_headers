@@ -1,64 +1,105 @@
 #!/bin/bash
+#
+# Tool to generate HEADER.html in various directories with
+# context-specific documentation
+#
+# Call as:
+# 
+# generate_headers $INPUT_FILE $OUTPUT_DIR $ARCH [firmware]
 
-. ~/build.stretch/settings.sh
-. ~/build.stretch/common.sh
+set -e
 
-INPUT=~/build.stretch/HEADER.html.in
+TOPDIR=$(dirname $0)
+if [ "$TOPDIR" = "." ] ; then
+    TOPDIR=`pwd`
+fi
+export TOPDIR
+
+. ${TOPDIR}/CONF.sh
+. ${TOPDIR}/settings.sh
+. ${TOPDIR}/common.sh
+
 CPP="cpp -traditional -undef -P -C -nostdinc"
 
 if [ "$1"x = ""x ] ; then
+   echo "$0: Need to be told what input file to use!"
+   exit 1
+fi
+INPUT=$1
+
+if [ "$2"x = ""x ] ; then
    echo "$0: Need to be told which directory to target!"
    exit 1
 fi
+WORK=$2
 
-if [ "$2"x = "firmware"x ] ; then
+if [ "$3"x = ""x ] ; then
+   echo "$0: Need to be told which architecture to target!"
+   exit 1
+fi
+INARCH=$3
+
+if [ "$4"x = "firmware"x ] ; then
     FIRMWARE="-DFIRMWARE"
     IN_FW=1
 fi
 
-cd $1
-for DIR in *; do
-    if [ -d $DIR ] && [ $DIR != trace ] ; then
-	ARCH=$DIR
-	if [ "$IN_FW"x = ""x ]; then
-	    if $(arch_has_firmware $ARCH) ; then
-		FIRMWARE="-DARCH_HAS_FIRMWARE"
-	    else
-		FIRMWARE=""
-	    fi
+if [ "$IN_FW"x = ""x ]; then
+    if $(arch_has_firmware $INARCH) ; then
+	FIRMWARE="-DARCH_HAS_FIRMWARE"
+    else
+	FIRMWARE=""
+    fi
+fi
+
+case $INARCH in
+    i386|amd64|arm64)
+	EXTRAS="-DISOHYBRID"
+	ARCH=$INARCH
+	;;
+    multi-arch)
+	EXTRAS="-DISOHYBRID -DONEonly"
+	ARCH="multi"
+	;;
+    *)            
+	ARCH=$INARCH
+	EXTRAS=""
+	;;
+esac
+
+case $WORK in
+    *daily*)
+	# for daily builds, don't mention large sets - we're only
+	# making netinsts...
+	EXTRAS="$EXTRAS -DONEonly"
+	;;
+esac
+
+case $ARCH in
+    kfreebsd*)
+	KERNEL="kFreeBSD"
+	;;
+    hurd*)
+	KERNEL="Hurd"
+	;;
+    *)
+	KERNEL="Linux"
+	;;
+esac
+
+cd $WORK
+for DIR1 in *-* tar; do
+    STYLE=$(echo $DIR1 | sed 's,^.*/,,g;s,-.*$,,g')
+    TYPE=$(echo $DIR1 | sed 's,^.*-,,g')
+    if [ -d $DIR1 ]; then
+	UPDATES=""
+	if (ls -l $DIR1 | grep -q update); then
+	    UPDATES="-DUPDATES"
 	fi
-	case $ARCH in
-	    i386|amd64|arm64)
-		EXTRAS="-DISOHYBRID"
-		;;
-	    multi-arch)
-		EXTRAS="-DISOHYBRID -DONEonly"
-		ARCH="multi"
-		;;
-	    *)            
-		EXTRAS=""
-		;;
-	esac
-	case $ARCH in
-	    kfreebsd*)
-		KERNEL="kFreeBSD"
-		;;
-	    hurd*)
-		KERNEL="Hurd"
-		;;
-	    *)
-		KERNEL="Linux"
-		;;
-	esac
-	for DIR1 in $DIR/*-* ; do
-	    STYLE=$(echo $DIR1 | sed 's,^.*/,,g;s,-.*$,,g')
-	    TYPE=$(echo $DIR1 | sed 's,^.*-,,g')
-	    ls -l $DIR1 | grep -q update
-	    if [ $? -eq 0 ] ; then
-		UPDATES="-DUPDATES"
-	    fi
-	    #echo "Found directory $DIR (ARCH $ARCH, STYLE $STYLE, TYPE $TYPE)"
-	    $CPP -DARCH=${ARCH} -DARCH${ARCH} -DKERNEL=${KERNEL} -DSTYLE${STYLE} -DSTYLE=${STYLE} -DTYPE${TYPE} $UPDATES $EXTRAS $FIRMWARE $INPUT > $DIR1/HEADER.html
-	done
+	#echo "Found directory $DIR (ARCH $ARCH, STYLE $STYLE, TYPE $TYPE)"
+	$CPP -DARCH=${ARCH} -DARCH${ARCH} -DKERNEL=${KERNEL} -DSTYLE${STYLE} -DSTYLE=${STYLE} -DTYPE${TYPE} $UPDATES $EXTRAS $FIRMWARE $INPUT > $DIR1/HEADER.html
+	if [ -e $DIR1/.errata.html ]; then
+	    $CPP -DARCH=${ARCH} -DARCH${ARCH} -DKERNEL=${KERNEL} -DSTYLE${STYLE} -DSTYLE=${STYLE} -DTYPE${TYPE} $UPDATES $EXTRAS $FIRMWARE $DIR1/.errata.html >> $DIR1/HEADER.html
+	fi
     fi
 done

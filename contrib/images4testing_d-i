@@ -1,2 +1,2 @@
-DI_DIST=stretch
+DI_DIST=buster
 DI_CODENAME=$DI_DIST
