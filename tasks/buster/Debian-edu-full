@@ -8,3 +8,8 @@
 
 #include <debian-edu>
 #include <debian-edu-full>
+
+/* force missing packages (Recommends of recommended packages) onto the BD  */
+nbd-server
+squashfs-tools
+ltspfs
