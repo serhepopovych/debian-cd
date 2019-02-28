@@ -273,7 +273,7 @@ if [ -e boot$N/win32-loader.ini ]; then
 fi
 
 cp -f $CDDIR/../syslinux/usr/lib/syslinux/isolinux.bin boot$N/isolinux/
-cp -f $CDDIR/../syslinux/usr/lib/syslinux/vesamenu.c32 boot$N/isolinux/
+cp -f $CDDIR/../syslinux/usr/lib/syslinux/menu.c32 boot$N/isolinux/
 if [ -e $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 ]; then
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/ldlinux.c32 boot$N/isolinux/
 	cp -f $CDDIR/../syslinux/usr/lib/syslinux/libcom32.c32 boot$N/isolinux/
@@ -346,6 +346,7 @@ sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 if [ -n "$KERNEL_PARAMS" ]; then
 	# Substitute custom kernel params into the isolinux config file(s)
 	for file in boot$N/isolinux/*.cfg boot$N/isolinux/desktop/*.cfg; do
+		[ -f "$file" ] || continue
 		case "$(basename $file)" in
 			instsel.cfg)
 				continue ;;
