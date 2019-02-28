@@ -291,7 +291,7 @@ if [ "$BOOT_BIOS" = 1 ] ; then
     add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/ISOLINUX/isohdpfx.bin"
 
     cp -f $CDDIR/../syslinux/usr/lib/ISOLINUX/isolinux.bin boot$N/isolinux/
-    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/vesamenu.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/menu.c32 boot$N/isolinux/
     cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ldlinux.c32 boot$N/isolinux/
     cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libcom32.c32 boot$N/isolinux/
     cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libutil.c32 boot$N/isolinux/
@@ -416,6 +416,7 @@ sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 if [ -n "$KERNEL_PARAMS" ]; then
     # Substitute custom kernel params into the isolinux config file(s)
     for file in boot$N/isolinux/*.cfg; do
+        [ -f "$file" ] || continue
         case "$(basename $file)" in
             instsel.cfg)
                 continue ;;

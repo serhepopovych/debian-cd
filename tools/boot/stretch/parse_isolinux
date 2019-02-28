@@ -17,7 +17,7 @@ my $grub_theme = shift or die "Need input file location for base grub theme!\n";
 my $tl_distro= shift or die "Need a top-level distro name (e.g. Debian)\n";
 my $tl_kernel= shift or die "Need a top-level kernel (e.g. GNU/Linux)\n";
 my $tl_version= shift or die "Need a top-level version (e.g. 7.0)\n";
-my $theme_dir = "$outdir/boot/grub/theme";
+#my $theme_dir = "$outdir/boot/grub/theme";
 my @cpp_and_opts = ('cpp',
 		    '-traditional',
 		    '-undef',
@@ -97,21 +97,36 @@ sub print_indent {
 sub print_kernel {
     my $t = shift;
     my %k = %{$t};
-    my $initrd;
+    my $label = $k{"label"};
     my $hotkey = "";
+    my $localboot = $k{"localboot"};
+    my $kernel = $k{"kernel"};
+    my $initrd = $k{"initrd"};
+    my $append = $k{"append"};
 
-    if ($k{"label"} =~ m,\^(\S),) {
+    if ($label =~ m,\^(\S),) {
 	$hotkey = lc "--hotkey=$1 ";
-	$k{"label"} =~ s/\^//;
+	$label =~ s/\^//;
     }
-    if ($k{"append"} =~ s? (initrd=\S+)??) {
-	$initrd = $1;
-	$initrd =~ s?^.*initrd=??;
+    if ($append) {
+	not $initrd or die "both initrd append and initrd used";
+	if ($append =~ s?\s*(initrd=\S+)??) {
+	    $initrd = $1;
+	    $initrd =~ s?^.*initrd=??;
+	}
     }
-    print_indent "menuentry $hotkey'$pre" . $k{"label"} . "' {\n";
+    print_indent "menuentry $hotkey'$pre" . $label . "' {\n";
     print_indent "    set background_color=black\n";
-    print_indent "    linux    " . $k{"kernel"} . " " . $k{"append"} . "\n";
-    print_indent "    initrd   $initrd\n";
+    if ($localboot) {
+	not $kernel and not $initrd or die "kernel/initrd cannot be used with localboot";
+	print_indent "    exit\n";
+    }
+    if ($kernel) {
+	print_indent "    linux    " . $kernel . " " . $append . "\n";
+    }
+    if ($initrd) {
+	print_indent "    initrd   " . $initrd . "\n";
+    }
     print_indent "}\n";
 }
 
@@ -120,29 +135,29 @@ sub debug {
 #	" '" . $menu{"title"} . "'\n";
 }
 
-sub create_theme_file {
-    my $filename = shift;
-    my @args;
-    push(@args, @cpp_and_opts);
-    push(@args, "-DTITLE=\"$tl_distro $tl_kernel $tl_version\"");
-    for (my $i = 0; $i < $menudepth; $i++) {
-	push(@args, "-DMENU$i=\"" . $menu_title[$i] . "\"");
-    }
-    push(@args, "$grub_theme");
-    open(IN, "-|", @args) or die "Can't open cpp input: $!\n";
-    open(OUT, ">", "$theme_dir/$filename")
-	or die "Can't create theme file $theme_dir/$filename: $!\n";
-    while (<IN>) {
-	print OUT "$_";
-    }
-    close(IN);
-    close(OUT);
-}
+#sub create_theme_file {
+#    my $filename = shift;
+#    my @args;
+#    push(@args, @cpp_and_opts);
+#    push(@args, "-DTITLE=\"$tl_distro $tl_kernel $tl_version\"");
+#    for (my $i = 0; $i < $menudepth; $i++) {
+#	push(@args, "-DMENU$i=\"" . $menu_title[$i] . "\"");
+#    }
+#    push(@args, "$grub_theme");
+#    open(IN, "-|", @args) or die "Can't open cpp input: $!\n";
+#    open(OUT, ">", "$theme_dir/$filename")
+#	or die "Can't create theme file $theme_dir/$filename: $!\n";
+#    while (<IN>) {
+#	print OUT "$_";
+#    }
+#    close(IN);
+#    close(OUT);
+#}
 
-make_path($theme_dir);
-if (! -d $theme_dir) {
-    die "Can't make theme dir $theme_dir: $!\n";
-}
+#make_path($theme_dir);
+#if (! -d $theme_dir) {
+#    die "Can't make theme dir $theme_dir: $!\n";
+#}
 parse_file("isolinux.cfg");
 
 $menu{"number"} = "1";
@@ -153,11 +168,13 @@ $menu_title[$menudepth] = $menu{"title"};
 my %kernel;
 my $in_kernel = 0;
 my $new_menu = 0;
+my $default = -1;
+my $label_no = 0;
 
 $menudepth++;
 debug();
-print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
-create_theme_file($menu{"number"});
+#print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
+#create_theme_file($menu{"number"});
 
 foreach my $line(@lines) {
     if ($line =~ /^\s*menu begin\ (\S+)/) {
@@ -193,7 +210,7 @@ foreach my $line(@lines) {
 	} else {
 	    $pre = "";
 	}	    
-    } elsif ($line =~ /^\s*menu title (.*$)/) {
+    } elsif ($line =~ /^\s*menu title (.*)$/) {
 	if ($in_kernel) {
 	    print_kernel(\%kernel);
 	    undef %kernel;
@@ -216,16 +233,17 @@ foreach my $line(@lines) {
 	    }	    
 	    debug();
 	    print_indent "set menu_color_normal=cyan/blue\n";
-	    print_indent "set menu_color_highlight=white/blue\n";
-	    print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
-	    print_indent "set gfxpayload=keep\n";
-	    create_theme_file($menu{"number"});
+	    print_indent "set menu_color_highlight=blue/light-gray\n";
+#	    print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
+#	    print_indent "set gfxpayload=keep\n";
+#	    create_theme_file($menu{"number"});
 	    $new_menu = 0;
 	}
-    } elsif ($line =~ /^[ \t]*label (\S*(rescue|install|auto|expert)\S*)/) {
+    } elsif ($line =~ /^\s*label (\S*(install.*|expert.*|rescue.*|exit)\S*)/) {
 	if ($in_kernel) {
 	    print_kernel(\%kernel);
 	    undef %kernel;
+	    $label_no++;
 	}
 	$kernel{"ref"} = $1;
 	$in_kernel = 1;
@@ -234,11 +252,17 @@ foreach my $line(@lines) {
     } elsif ($line =~ /menu label (.*)$/) {
 	$menu{"label"} = $1;
     } elsif ($line =~ /menu default/ && $in_kernel) {
-	$kernel{"default"} = 1;
+	if ($default < 0) {
+	    $default = $label_no - 1;
+	}
     } elsif ($line =~ /kernel (.*)$/ && $in_kernel) {
 	$kernel{"kernel"} = $1;
+    } elsif ($line =~ /initrd (.*)$/ && $in_kernel) {
+	$kernel{"initrd"} = $1;
     } elsif ($line =~ /append (.*)$/ && $in_kernel) {
 	$kernel{"append"} = $1;
+    } elsif ($line =~ /localboot (.*)$/ && $in_kernel) {
+	$kernel{"localboot"} = $1;
     } else {
 	#print "$line\n";
     }
@@ -246,4 +270,7 @@ foreach my $line(@lines) {
 if ($in_kernel) {
     print_kernel(\%kernel);
     undef %kernel;
+}
+if ($default > 0) {
+    print_indent "set default=\"$default\"\n";
 }
