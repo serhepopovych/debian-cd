@@ -305,7 +305,7 @@ if lockfile -r0 $BUILDLOCK ; then
 			    # USB "BD" image
 			    build_started EDUUSB
 			    NORECOMMENDS=0 COMPLETE=0 INSTALLER_CD=K \
-				    CDNAME=debian-edu-usb \
+				    CDNAME=debian-edu \
 				    DEBIAN_EDU=1 \
 				    KERNEL_PARAMS="modules=debian-edu-install-udeb" \
 				    DESKTOP=xfce VARIANTS=xen \
@@ -319,7 +319,7 @@ if lockfile -r0 $BUILDLOCK ; then
 			    build_started EDUUSBFIRMWARE
 			    NORECOMMENDS=0 COMPLETE=0 INSTALLER_CD=L \
 				    FORCE_FIRMWARE=1 \
-				    CDNAME=firmware-edu-usb \
+				    CDNAME=firmware-edu \
 				    DEBIAN_EDU=1 \
 				    KERNEL_PARAMS="modules=debian-edu-install-udeb" \
 				    DESKTOP=xfce VARIANTS=xen \
