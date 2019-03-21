@@ -157,3 +157,42 @@ xorriso_version() {
 	    print ver[1]*10000+ver[2]*100+ver[3]
 	}'
 }
+
+# Work out how many blocks we need for a FAT filesystem to hold all
+# the EFI boot files
+calculate_efi_image_size() {
+    CDDIR=$1
+
+    sector_bytes=512 # -S
+    cluster_sectors=4 # -s
+    cluster_bytes=$((sector_bytes * cluster_sectors))
+
+    clusters=4 # 1 cluster for each sub-directory
+    for file in $CDDIR/EFI/*/*; do
+        [ -f "$file" ] || continue
+        clusters=$(($clusters + (($(stat -c %s "$file") + $cluster_bytes - 1) / $cluster_bytes)))
+    done
+    reserved_sectors=1 # boot-sector -R
+    reserved_bytes=$(($reserved_sectors * $sector_bytes))
+    fat_copies=2 # -f
+    if [ "$clusters" -le $(((1 << 12) - 2)) ]; then
+        fat_entry_bytes=3/2 # -F
+    elif [ "$clusters" -le $(((1 << 16) - 2)) ]; then
+        fat_entry_bytes=2 # -F
+    else
+        fat_entry_bytes=4 # -F
+    fi
+    fat_bytes=$((($clusters * $fat_entry_bytes + $sector_bytes - 1) / $sector_bytes * $sector_bytes))
+    root_entries=512 # -r
+    root_entry_bytes=32
+    root_bytes=$(($root_entries * root_entry_bytes))
+    size=$(($reserved_bytes + $fat_copies * $fat_bytes + $root_bytes + $clusters * $cluster_bytes))
+
+    track_sectors=32
+    track_bytes=$((sector_bytes * $track_sectors))
+    tracks=$((($size + $track_bytes - 1) / $track_bytes))
+    block_bytes=1024
+    blocks=$(($tracks * $track_bytes / $block_bytes))
+
+    echo $blocks
+}

@@ -81,58 +81,26 @@ if [ -d boot$N/grub ] ; then
     echo "  Adding EFI boot code for $ARCH on CD$N"
 
     # Move GRUB files to the right place.
-    mkdir -p $CDDIR/efi/boot
-    mcopy -i boot$N/grub/efi.img ::efi/boot/bootaa64.efi $CDDIR/efi/boot/bootaa64.efi
+    mkdir -p $CDDIR/EFI/boot
+    mcopy -n -s -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/EFI
     mkdir -p $CDDIR/boot/grub
     mv boot$N/grub/* $CDDIR/boot/grub/
     rmdir boot$N/grub
 
     # Stuff the EFI boot files into a FAT filesystem, making it as
-    # small as possible.  24KiB headroom seems to be enough;
-    # (x+31)/32*32 rounds up to multiple of 32.
-    # This is the same as in efi-image, but we need to redo it here in
-    # the case of a multi-arch image
-
-    # Stuff the EFI boot files into a FAT filesystem, making it as
     # small as possible.
 
-    sector_bytes=512 # -S
-    cluster_sectors=4 # -s
-    cluster_bytes=$((sector_bytes * cluster_sectors))
+    # First, work out how many blocks we need
+    blocks=$(calculate_efi_image_size $CDDIR)
 
-    clusters=2 # 1 cluster for each sub-directory
-    for file in $CDDIR/efi/boot/boot*.efi; do
-        [ -f "$file" ] || continue
-        clusters=$(($clusters + (($(stat -c %s "$file") + $cluster_bytes - 1) / $cluster_bytes)))
-    done
-    reserved_sectors=1 # boot-sector -R
-    reserved_bytes=$(($reserved_sectors * $sector_bytes))
-    fat_copies=2 # -f
-    if [ "$clusters" -le $(((1 << 12) - 2)) ]; then
-        fat_entry_bytes=3/2 # -F
-    elif [ "$clusters" -le $(((1 << 16) - 2)) ]; then
-        fat_entry_bytes=2 # -F
-    else
-        fat_entry_bytes=4 # -F
-    fi
-    fat_bytes=$((($clusters * $fat_entry_bytes + $sector_bytes - 1) / $sector_bytes * $sector_bytes))
-    root_entries=512 # -r
-    root_entry_bytes=32
-    root_bytes=$(($root_entries * root_entry_bytes))
-    size=$(($reserved_bytes + $fat_copies * $fat_bytes + $root_bytes + $clusters * $cluster_bytes))
-
-    track_sectors=32
-    track_bytes=$((sector_bytes * $track_sectors))
-    tracks=$((($size + $track_bytes - 1) / $track_bytes))
-    block_bytes=1024
-    blocks=$(($tracks * $track_bytes / $block_bytes))
-
+    # Now make a new image to contain the files
     rm -f $CDDIR/boot/grub/efi.img
     mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+
+    # And copy them into place
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
-    mmd -i "$CDDIR/boot/grub/efi.img" ::efi/boot
-    mcopy -o -i "$CDDIR/boot/grub/efi.img" $CDDIR/efi/boot/boot*.efi \
-        "::efi/boot"
+    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/EFI/* \
+        "::efi"
 
     # Ugh - different code here depending on the version of xorriso we've got
     if [ $XORRISO_VER -le 10202 ] ; then
