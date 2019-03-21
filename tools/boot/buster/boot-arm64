@@ -42,7 +42,7 @@ case "$MKISOFS" in
         XORRISO_VER=$(xorriso_version)
         ;;
     *)
-        echo "ERROR: debian-cd depends on xorriso for making arm64 bootable CDs."
+        echo "ERROR: debian-cd depends on xorriso for making $ARCH bootable CDs."
         exit 1;
         ;;
 esac
@@ -104,7 +104,7 @@ if [ -d boot$N/grub ] ; then
 
     # Ugh - different code here depending on the version of xorriso we've got
     if [ $XORRISO_VER -le 10202 ] ; then
-        echo "ERROR: debian-cd depends on xorriso > 1.2.2 for making arm64 bootable CDs."
+        echo "ERROR: debian-cd depends on xorriso > 1.2.2 for making $ARCH bootable CDs."
         exit 1;
     elif [ $XORRISO_VER -gt 10202 ] ; then
         echo "Using newer EFI support in xorriso $XORRISO_VER"
@@ -117,7 +117,7 @@ if [ -d boot$N/grub ] ; then
 
 	# And force alignment
 	add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_cyl_align all"
-    fi      
+    fi
 
     # Finally, belt and braces - fix up the %install% entries in grub
     # in case they're still there

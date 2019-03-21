@@ -21,6 +21,8 @@ debian-cd (3.1.23) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Add grub-efi packages to armhf media.
+  * Add EFI boot support for armhf media
+  * Factor ESP size calculation for the various platforms
 
   [ Samuel Thibault ]
   * Support dark theme boot entries.
