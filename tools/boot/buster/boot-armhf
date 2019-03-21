@@ -7,6 +7,8 @@
 
 . $BASEDIR/tools/boot/$DI_CODENAME/common.sh
 
+set -e
+
 N=$1
 CDDIR=$2
 INSTALLDIR="install.ahf"
