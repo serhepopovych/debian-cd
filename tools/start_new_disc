@@ -281,26 +281,6 @@ if [ $DISKNUM = 1 ] ; then
         $BASEDIR/tools/$CODENAME/installtools.sh $CDDIR "$ARCHES"
     fi
 
-    for ARCH in $ARCHES
-    do
-        if [ -e $MIRROR/dists/$DI_CODENAME/main/disks-$ARCH ] ; then
-            echo "  Adding disks-$ARCH stuff ..."
-            mkdir -p $CDDIR/dists/$DI_CODENAME/main/disks-$ARCH
-            $BASEDIR/tools/add_files $CDDIR/dists/$DI_CODENAME/main/disks-$ARCH $MIRROR/dists/$DI_CODENAME/main/disks-$ARCH . 
-            touch $CDDIR/.disk/kernel_installable
-            cd $CDDIR/dists/$DI_CODENAME/main/disks-$ARCH
-            rm -rf base-images-*
-            if [ -L current ] ; then
-                CURRENT_LINK=`readlink current`
-                mv $CURRENT_LINK .tmp_link
-                rm -rf [0123456789]*
-                mv .tmp_link $CURRENT_LINK
-            elif [ -d current ] ; then
-                rm -rf [0123456789]* 
-            fi
-        fi
-    done
-
     # See if we had to remove anything because it was too big. Warn the user.
     if [ -s $BDIR/sourcetoobig ] ; then
         echo "  Adding README.excluded (some source files were too big)"
