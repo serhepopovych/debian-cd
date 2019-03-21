@@ -256,6 +256,8 @@ if [ $DISKNUM = 1 ] ; then
     if [ "$OMIT_DOC_TOOLS" != "1" ]; then
         echo "  Adding docs to CD1"
         $BASEDIR/tools/add_files $CDDIR $MIRROR doc
+
+	echo "  Removing old dedications"
         DEBMAINVER="`echo $DEBVERSION | sed -e 's/[ _r].*//;s/\..*//'`"
         find $CDDIR/doc -name "dedication-*" | grep -v "$DEBMAINVER" | xargs rm -vf
         find $CDDIR/doc -name "debian-keyring.tar.gz" | xargs rm -f
