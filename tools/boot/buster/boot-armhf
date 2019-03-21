@@ -83,13 +83,14 @@ if [ -d boot$N/grub ] ; then
 
     # Move GRUB files to the right place.
     mkdir -p $CDDIR/EFI/boot
-    mcopy -n -s -i boot$N/isolinux/grub/efi.img '::efi/*' $CDDIR/EFI
+    mcopy -n -s -i boot$N/grub/efi.img '::efi/*' $CDDIR/EFI
     mkdir -p $CDDIR/boot/grub
     mv boot$N/grub/* $CDDIR/boot/grub/
     rmdir boot$N/grub
 
     # Stuff the EFI boot files into a FAT filesystem, making it as
-    # small as possible.
+    # small as possible. We end up re-packing like this in case we're
+    # making a multi-arch image
 
     # First, work out how many blocks we need
     blocks=$(calculate_efi_image_size $CDDIR)

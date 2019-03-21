@@ -479,7 +479,8 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     echo "    CD$N/boot/grub/grub.cfg has $NUM_ENTRIES boot entries defined"
 
     # Stuff the EFI boot files into a FAT filesystem, making it as
-    # small as possible.
+    # small as possible. We end up re-packing like this in case we're
+    # making a multi-arch image
 
     # First, work out how many blocks we need
     blocks=$(calculate_efi_image_size $CDDIR)
