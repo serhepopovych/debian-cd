@@ -505,7 +505,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     # Ugh - different code here depending on the version of xorriso we've got
     if [ $XORRISO_VER -le 10202 ] ; then
         # 1.2.2 shipping in Wheezy
-        echo "Using older EFI command line for xorriso $XORRISO_VER"
+        echo "    Using older EFI command line for xorriso $XORRISO_VER"
 
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "--efi-boot boot/grub/efi.img"
         # Add the efi image as a FAT partition too, so our CD image will

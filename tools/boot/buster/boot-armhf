@@ -111,7 +111,7 @@ if [ -d boot$N/grub ] ; then
         echo "ERROR: debian-cd depends on xorriso > 1.2.2 for making $ARCH bootable CDs."
         exit 1;
     elif [ $XORRISO_VER -gt 10202 ] ; then
-        echo "Using newer EFI support in xorriso $XORRISO_VER"
+        echo "    Using newer EFI support in xorriso $XORRISO_VER"
 
 	# Location of the EFI boot image, and don't emulate a floppy or HD
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
