@@ -130,7 +130,7 @@ if [ "$N" = "1" ]; then
         if [ -e "$MIRROR/tools" ] && \
            [ ! -e $CDDIR/tools ] && \
            [ "$OMIT_DOC_TOOLS" != "1" ] ; then
-                echo "  Adding tools to CD1"
+                echo "    Adding tools to CD1"
                 $BASEDIR/tools/add_files $CDDIR $MIRROR tools
                 # Remove the win32-loader/ subdirectory from tools, as d-i already installs setup.exe
                 rm -Rf $CDDIR/tools/win32-loader
@@ -156,7 +156,7 @@ extra_image () {
         for doppelganger in $doppelgangers ; do
                 if [ -f "$CDDIR/$INSTALLDIR/$dir/$doppelganger" ] &&
                         cmp -s $CDDIR/$INSTALLDIR/"$image" $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" ; then
-                        echo "  $image identical to $doppelganger. Linking"
+                        echo "    $image identical to $doppelganger. Linking"
                         ln -nf $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" $CDDIR/$INSTALLDIR/"$image"
                         break
                 fi
@@ -204,8 +204,10 @@ cat cdrom/debian-cd_info.tar.gz | (cd boot$N/isolinux/; tar zx)
 
 # Not everything in the tarball is isolinux stuff
 if [ -e boot$N/isolinux/win32-loader.ini ] ; then
+    echo "  Moving extra loader files into place:"
     for file in boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe boot$N/isolinux/win32-loader.ini; do
         if [ -e $file ] ; then
+	    printf "    "
             mv -v $file CD$N/
         fi
     done
@@ -511,7 +513,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-append_partition 2 0x01 $CDDIR/boot/grub/efi.img"
 
     elif [ $XORRISO_VER -gt 10202 ] ; then
-        echo "Using newer EFI support in xorriso $XORRISO_VER"
+        echo "    Using newer EFI support in xorriso $XORRISO_VER"
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
         add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-gpt-basdat -isohybrid-apm-hfsplus"
     fi	
