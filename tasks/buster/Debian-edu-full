@@ -19,7 +19,7 @@
  * Please note: the libpam-krb5 package had to be added manually!
  * Sort of cleaned up from already included packages and amd64 specific ones.
  *
- * Generated: 2019-03-06
+ * Generated: 2019-03-23
  */
 accountsservice
 accountwizard
@@ -222,20 +222,6 @@ chromium
 chromium-common
 chromium-sandbox
 cifs-utils
-cinnamon
-cinnamon-common
-cinnamon-control-center
-cinnamon-control-center-data
-cinnamon-core
-cinnamon-desktop-data
-cinnamon-desktop-environment
-cinnamon-l10n
-cinnamon-screensaver
-cinnamon-screensaver-x-plugin
-cinnamon-session
-cinnamon-session-common
-cinnamon-settings-daemon
-cjs
 cli-common
 clipit
 clock-setup
@@ -407,6 +393,7 @@ fcitx-frontend-gtk2
 fcitx-frontend-gtk3
 fcitx-frontend-qt4
 fcitx-frontend-qt5
+fcitx-googlepinyin
 fcitx-m17n
 fcitx-module-dbus
 fcitx-module-kimpanel
@@ -414,9 +401,11 @@ fcitx-module-lua
 fcitx-modules
 fcitx-module-x11
 fcitx-pinyin
+fcitx-sunpinyin
 fcitx-table
 fcitx-table-amharic
 fcitx-table-malayalam-phonetic
+fcitx-table-wubi
 fdisk
 fdisk-udeb
 feathernotes
@@ -448,9 +437,14 @@ firefox-esr-l10n-el
 firefox-esr-l10n-en-gb
 firefox-esr-l10n-en-za
 firefox-esr-l10n-eo
+firefox-esr-l10n-es-ar
+firefox-esr-l10n-es-cl
+firefox-esr-l10n-es-es
+firefox-esr-l10n-es-mx
 firefox-esr-l10n-et
 firefox-esr-l10n-eu
 firefox-esr-l10n-fa
+firefox-esr-l10n-fr
 firefox-esr-l10n-ga-ie
 firefox-esr-l10n-gl
 firefox-esr-l10n-gu-in
@@ -475,6 +469,7 @@ firefox-esr-l10n-ne-np
 firefox-esr-l10n-nl
 firefox-esr-l10n-nn-no
 firefox-esr-l10n-pa-in
+firefox-esr-l10n-pl
 firefox-esr-l10n-pt-br
 firefox-esr-l10n-pt-pt
 firefox-esr-l10n-ro
@@ -489,10 +484,11 @@ firefox-esr-l10n-ta
 firefox-esr-l10n-te
 firefox-esr-l10n-th
 firefox-esr-l10n-tr
+firefox-esr-l10n-uk
 firefox-esr-l10n-vi
+firefox-esr-l10n-zh-cn
 firefox-esr-l10n-zh-tw
 firmware-linux-free
-five-or-more
 flac
 fluid-soundfont-gm
 fluidsynth
@@ -650,7 +646,8 @@ foomatic-db-engine
 fortune-mod
 fortunes-debian-hints
 fortunes-it
-four-in-a-row
+fotoxx
+fotoxx-common
 fping
 frameworkintegration
 freebirth
@@ -679,7 +676,6 @@ gcompris-qt-data
 gcr
 gdb-minimal
 gdbm-l10n
-gdebi
 gdebi-core
 gdis
 gdis-data
@@ -731,13 +727,10 @@ gir1.2-caja
 gir1.2-caja-2.0
 gir1.2-caribou-1.0
 gir1.2-champlain-0.12
-gir1.2-cinnamondesktop-3.0
 gir1.2-clutter-1.0
 gir1.2-clutter-gst-3.0
-gir1.2-cmenu-3.0
 gir1.2-cogl-1.0
 gir1.2-coglpango-1.0
-gir1.2-cvc-1.0
 gir1.2-dazzle-1.0
 gir1.2-evince-3.0
 gir1.2-freedesktop
@@ -749,10 +742,8 @@ gir1.2-gdkpixbuf-2.0
 gir1.2-gdm-1.0
 gir1.2-geoclue-2.0
 gir1.2-geocodeglib-1.0
-gir1.2-gepub-0.6
 gir1.2-gfbgraph-0.2
 gir1.2-ggit-1.0
-gir1.2-gkbd-3.0
 gir1.2-glib-2.0
 gir1.2-gmenu-3.0
 gir1.2-gnomebluetooth-1.0
@@ -776,7 +767,6 @@ gir1.2-matedesktop-2.0
 gir1.2-mate-panel
 gir1.2-matepanelapplet-4.0
 gir1.2-mediaart-2.0
-gir1.2-meta-muffin-0.0
 gir1.2-mutter-3
 gir1.2-nm-1.0
 gir1.2-nma-1.0
@@ -798,10 +788,7 @@ gir1.2-upowerglib-1.0
 gir1.2-vte-2.91
 gir1.2-webkit2-4.0
 gir1.2-wnck-3.0
-gir1.2-xapp-1.0
-gir1.2-xkl-1.0
 gir1.2-zpj-0.0
-gist
 git
 git-man
 gjs
@@ -816,7 +803,6 @@ gnome-bluetooth
 gnome-calculator
 gnome-calendar
 gnome-characters
-gnome-chess
 gnome-clocks
 gnome-color-manager
 gnome-contacts
@@ -827,21 +813,15 @@ gnome-desktop3-data
 gnome-disk-utility
 gnome-documents
 gnome-font-viewer
-gnome-games
 gnome-getting-started-docs
 gnome-icon-theme
 gnome-keyring
-gnome-klotski
 gnome-logs
-gnome-mahjongg
 gnome-maps
 gnome-menus
-gnome-mines
 gnome-music
-gnome-nibbles
 gnome-online-accounts
 gnome-online-miners
-gnome-robots
 gnome-screenshot
 gnome-session
 gnome-session-bin
@@ -855,14 +835,11 @@ gnome-shell-extensions
 gnome-software
 gnome-software-common
 gnome-sound-recorder
-gnome-sudoku
 gnome-sushi
 gnome-system-monitor
 gnome-system-tools
-gnome-taquin
 gnome-terminal
 gnome-terminal-data
-gnome-tetravex
 gnome-themes-extra
 gnome-themes-extra-data
 gnome-todo
@@ -872,7 +849,6 @@ gnome-user-docs
 gnome-user-share
 gnome-video-effects
 gnome-weather
-gnote
 gnucap
 gnuchess
 gnugo
@@ -888,6 +864,7 @@ gnuplot-qt
 gnustep-base-common
 gnustep-base-runtime
 gnustep-common
+goldendict
 goplay
 gosa
 gosa-desktop
@@ -979,8 +956,6 @@ hexchat-perl
 hexchat-plugins
 hexchat-python3
 hicolor-icon-theme
-hitori
-hoichess
 hostname
 hplip
 hplip-data
@@ -1043,7 +1018,6 @@ hunspell-te
 hunspell-th
 hunspell-uk
 hunspell-vi
-hwdata
 hwinfo
 hydrogen
 hydrogen-data
@@ -1053,7 +1027,6 @@ hyphen-hr
 hyphen-hu
 hyphen-lt
 i965-va-driver
-iagno
 iamerican
 ibrazilian
 ibritish
@@ -1100,7 +1073,6 @@ inorwegian
 inputattach
 install-info
 intel-media-va-driver
-inxi
 iotop
 ipolish
 iportuguese
@@ -1118,7 +1090,6 @@ isc-dhcp-server-ldap
 isenkram
 isenkram-cli
 iso-codes
-iso-flags-png-320x240
 isolinux
 ispanish
 ispell
@@ -1189,10 +1160,12 @@ kde-l10n-de
 kde-l10n-el
 kde-l10n-engb
 kde-l10n-eo
+kde-l10n-es
 kde-l10n-et
 kde-l10n-eu
 kde-l10n-fa
 kde-l10n-fi
+kde-l10n-fr
 kde-l10n-ga
 kde-l10n-gl
 kde-l10n-he
@@ -1212,16 +1185,18 @@ kde-l10n-nb
 kde-l10n-nl
 kde-l10n-nn
 kde-l10n-pa
+kde-l10n-pl
 kde-l10n-pt
 kde-l10n-ptbr
 kde-l10n-ro
 kde-l10n-ru
 kde-l10n-sk
 kde-l10n-sl
-kde-l10n-sr
 kde-l10n-sv
 kde-l10n-tr
 kde-l10n-ug
+kde-l10n-uk
+kde-l10n-zhcn
 kde-l10n-zhtw
 kdelibs5-data
 kdelibs5-plugins
@@ -1339,7 +1314,6 @@ ldapvi
 ldm
 ldm-server
 ldm-themes
-leafpad
 less
 liba52-0.7.4
 libaa1
@@ -1380,6 +1354,7 @@ libapt-inst2.0
 libapt-pkg5.0
 libapt-pkg-perl
 libarchive13
+libarchive-zip-perl
 libargon2-1
 libargon2-1-udeb
 libaribb24-0
@@ -1532,10 +1507,6 @@ libchewing3-data
 libchm1
 libcholmod3
 libchromaprint1
-libcinnamon-control-center1
-libcinnamon-desktop4
-libcinnamon-menu-3-0
-libcjs0
 libc-l10n
 libclass-c3-perl
 libclass-data-inheritable-perl
@@ -1580,14 +1551,12 @@ libcryptsetup12-udeb
 libcrypt-smbhash-perl
 libcryptui0a
 libcrystalhd3
-libcscreensaver0
 libcue2
 libcups2
 libcupsfilters1
 libcupsimage2
 libcurl3-gnutls
 libcurl4
-libcvc0
 libdaemon0
 libdata-optlist-perl
 libdate-manip-perl
@@ -1624,7 +1593,6 @@ libdhash1
 libdigest-bubblebabble-perl
 libdigest-hmac-perl
 libdigest-md4-perl
-libdiscid0
 libdist-checkconflicts-perl
 libdjvulibre21
 libdjvulibre-text
@@ -1655,6 +1623,7 @@ libdvdread4
 libdw1
 libdynaloader-functions-perl
 libeatmydata1
+libeb16
 libebackend-1.2-10
 libebml4v5
 libe-book-0.1-1
@@ -1823,7 +1792,6 @@ libgeoclue-2-0
 libgeocode-glib0
 libgeoip1
 libgeomview-1.9.5
-libgepub-0.6-0
 libgettextpo0
 libgexiv2-2
 libgfbgraph-0.2-0
@@ -1880,6 +1848,7 @@ libgom-1.0-0
 libgomp1
 libgoocanvas-2.0-9
 libgoocanvas-2.0-common
+libgooglepinyin0
 libgpg-error0
 libgpg-error0-udeb
 libgpgme11
@@ -1994,6 +1963,7 @@ libieee1284-3
 libigdgmm5
 libijs-0.35
 libilmbase23
+libimage-exiftool-perl
 libimagequant0
 libimlib2
 libimobiledevice6
@@ -2079,9 +2049,9 @@ libjs-requirejs
 libjs-requirejs-text
 libjs-scriptaculous
 libjs-sphinxdoc
+libjs-term.js
 libjs-text-encoding
 libjs-underscore
-libjs-xterm
 libjte1
 libk3b7
 libk5crypto3
@@ -2492,6 +2462,7 @@ libmetis5
 libmhash2
 libmicrodns0
 libmikmod3
+libmime-charset-perl
 libminizip1
 libmjpegutils-2.1-0
 libmm-glib0
@@ -2516,7 +2487,7 @@ libmono-system-xml4.0-cil
 libmotif-common
 libmount1
 libmount1-udeb
-libmozjs-52-0
+libmozjs-60-0
 libmp3lame0
 libmpc3
 libmpcdec6
@@ -2533,7 +2504,6 @@ libmtdev1-udeb
 libmtp9
 libmtp-common
 libmtp-runtime
-libmuffin0
 libmuparser2v5
 libmusicbrainz5-2
 libmusicbrainz5cc2v5
@@ -2551,7 +2521,6 @@ libnb-org-openide-util-lookup-java
 libncurses6
 libncursesw6
 libndp0
-libnemo-extension1
 libneon27-gnutls
 libnet1
 libnetcdf13
@@ -2725,6 +2694,7 @@ libpopt0-udeb
 libportaudio2
 libportmidi0
 libportsmf0
+libposix-strptime-perl
 libpostproc55
 libpotrace0
 libpowerdevilcore2
@@ -2776,7 +2746,6 @@ libqimageblitz4
 libqjson0
 libqmobipocket2
 libqpdf21
-libqqwing2v5
 libqrencode4
 libqt4-dbus
 libqt4-declarative
@@ -2887,9 +2856,11 @@ libreoffice-help-dz
 libreoffice-help-el
 libreoffice-help-en-gb
 libreoffice-help-en-us
+libreoffice-help-es
 libreoffice-help-et
 libreoffice-help-eu
 libreoffice-help-fi
+libreoffice-help-fr
 libreoffice-help-gl
 libreoffice-help-hi
 libreoffice-help-hu
@@ -2898,11 +2869,13 @@ libreoffice-help-ja
 libreoffice-help-km
 libreoffice-help-ko
 libreoffice-help-nl
+libreoffice-help-pl
 libreoffice-help-pt
 libreoffice-help-ru
 libreoffice-help-sk
 libreoffice-help-sl
 libreoffice-help-sv
+libreoffice-help-zh-cn
 libreoffice-help-zh-tw
 libreoffice-impress
 libreoffice-kde5
@@ -2922,10 +2895,12 @@ libreoffice-l10n-el
 libreoffice-l10n-en-gb
 libreoffice-l10n-en-za
 libreoffice-l10n-eo
+libreoffice-l10n-es
 libreoffice-l10n-et
 libreoffice-l10n-eu
 libreoffice-l10n-fa
 libreoffice-l10n-fi
+libreoffice-l10n-fr
 libreoffice-l10n-ga
 libreoffice-l10n-gl
 libreoffice-l10n-gu
@@ -2950,6 +2925,7 @@ libreoffice-l10n-ne
 libreoffice-l10n-nl
 libreoffice-l10n-nn
 libreoffice-l10n-pa-in
+libreoffice-l10n-pl
 libreoffice-l10n-pt
 libreoffice-l10n-pt-br
 libreoffice-l10n-ro
@@ -2964,8 +2940,10 @@ libreoffice-l10n-te
 libreoffice-l10n-th
 libreoffice-l10n-tr
 libreoffice-l10n-ug
+libreoffice-l10n-uk
 libreoffice-l10n-vi
 libreoffice-l10n-xh
+libreoffice-l10n-zh-cn
 libreoffice-l10n-zh-tw
 libreoffice-math
 libreoffice-report-builder-bin
@@ -2985,6 +2963,8 @@ librsvg2-2
 librsvg2-bin
 librsvg2-common
 librsync1
+librtaudio6
+librtmidi4
 librtmp1
 librubberband2
 libruby2.5
@@ -3047,6 +3027,7 @@ libsnmp-base
 libsocket6-perl
 libsodium23
 libsolid4
+libsombok3
 libsord-0-0
 libsoundtouch1
 libsoup2.4-1
@@ -3081,6 +3062,7 @@ libstartup-notification0
 libstatgrab10
 libstdc++6
 libstemmer0d
+libstk-4.5.0
 libstoken1
 libsub-exporter-perl
 libsub-exporter-progressive-perl
@@ -3090,6 +3072,7 @@ libsub-name-perl
 libsub-quote-perl
 libsuil-0-0
 libsuitesparseconfig5
+libsunpinyin3v5
 libswitch-perl
 libswresample3
 libswscale5
@@ -3173,6 +3156,7 @@ libuim-custom2
 libuim-scm0
 libumfpack5
 libunbound8
+libunicode-linebreak-perl
 libunique-1.0-0
 libunistring2
 libunwind8
@@ -3272,7 +3256,6 @@ libx2go-utils-perl
 libx86-1
 libx86emu2
 libxapian30
-libxapp1
 libxatracker2
 libxau6
 libxaw3dxft6
@@ -3386,13 +3369,13 @@ libzzip-0-13
 lightdm
 lightdm-gtk-greeter
 light-locker
-lightsoff
 lightspeed
 lilo-installer
 lingot
 links
 linux-base
-lmemory
+lmms
+lmms-common
 load-media
 locales
 lockfile-progs
@@ -3572,7 +3555,6 @@ menu-xdg
 mesa-utils
 mesa-va-drivers
 mesa-vdpau-drivers
-metacity-common
 meteo-qt
 milou
 mime-support
@@ -3609,8 +3591,6 @@ mtools
 mtpaint
 mtr-tiny
 mueller7-dict
-muffin
-muffin-common
 multipath-udeb
 munin
 munin-common
@@ -3626,9 +3606,11 @@ mutter
 mutter-common
 mypy
 myspell-bg
+myspell-cs
 myspell-da
 myspell-el-gr
 myspell-eo
+myspell-es
 myspell-et
 myspell-fa
 myspell-ga
@@ -3637,17 +3619,21 @@ myspell-hr
 myspell-hy
 myspell-nb
 myspell-nn
+myspell-pl
 myspell-pt-br
 myspell-pt-pt
 myspell-sk
 myspell-sq
+myspell-uk
 mysql-common
 mythes-cs
 mythes-de
 mythes-de-ch
 mythes-en-us
+mythes-fr
 mythes-it
 mythes-ne
+mythes-pl
 mythes-ru
 mythes-sk
 nagios-images
@@ -3665,9 +3651,6 @@ ncurses-base
 ncurses-bin
 ncurses-term
 ndisc6-udeb
-nemo
-nemo-data
-nemo-fileroller
 netbase
 netcat
 netcat-traditional
@@ -3982,7 +3965,6 @@ python3-notebook
 python3-numpy
 python3-opengl
 python3-packaging
-python3-pampy
 python3-pandocfilters
 python3-parso
 python3-pexpect
@@ -4000,7 +3982,6 @@ python3-py
 python3-pyatspi
 python3-pycurl
 python3-pygments
-python3-pyinotify
 python3-pymol
 python3-pyparsing
 python3-pyperclip
@@ -4043,7 +4024,6 @@ python3-venv
 python3-wcwidth
 python3-webencodings
 python3-wrapt
-python3-xapp
 python3-xdg
 python3-xlib
 python3-zmq
@@ -4084,7 +4064,6 @@ python-gtk2
 python-html5lib
 python-html5-parser
 python-hyperlink
-python-idna
 python-incremental
 python-ipaddress
 python-ldb
@@ -4195,7 +4174,6 @@ qterminal-l10n
 qtermwidget5-data
 qttranslations5-l10n
 qtwayland5
-quadrapassel
 quodlibet
 rake
 rdate-udeb
@@ -4229,7 +4207,6 @@ ruby
 ruby2.5
 ruby-did-you-mean
 rubygems-integration
-ruby-json
 ruby-minitest
 ruby-net-telnet
 ruby-power-assert
@@ -4298,7 +4275,6 @@ software-properties-gtk
 software-properties-kde
 solfege
 sonnet-plugins
-sound-juicer
 sound-theme-freedesktop
 sox
 speech-dispatcher
@@ -4328,15 +4304,16 @@ standardskriver
 stellarium
 stellarium-data
 step
+stk
 strace
 strace-udeb
 sudo
 sudo-ldap
+sunpinyin-data
 swaks
 swath
 swath-data
 sweeper
-swell-foop
 swh-plugins
 switcheroo-control
 synaptic
@@ -4354,7 +4331,6 @@ sysvinit-utils
 t1-cyrillic
 t1-teams
 t1utils
-tali
 tango-icon-theme
 tar
 tasksel
@@ -4387,6 +4363,8 @@ timgm6mb-soundfont
 timidity
 tipa
 tix
+tk
+tk8.6
 tk8.6-blt2.5
 tmispell-voikko
 totem
@@ -4510,7 +4488,6 @@ x2goserver-fmbindings
 x2goserver-printing
 x2goserver-x2goagent
 x2goserver-xsession
-xapps-common
 xarchiver
 xauth
 xbitmaps
@@ -4638,3 +4615,4 @@ zhcon-data
 zip
 zlib1g
 zlib1g-udeb
+zynaddsubfx-data
