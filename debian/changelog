@@ -12,7 +12,6 @@ debian-cd (3.1.24) UNRELEASED; urgency=medium
   [ John Paul Adrian Glaubitz ]
   * Add grub-efi{,{-ia64,{-bin}}} to tools/generate_di+k_list on ia64
   * Remove elilo from tools/generate_di+k_list on {i386,ia64}
-  * Include debian-ports-archive-keyring-udeb in Debian Ports package list
 
  -- Holger Levsen <holger@debian.org>  Wed, 20 Feb 2019 14:12:16 +0100
 
