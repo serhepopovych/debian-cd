@@ -119,7 +119,6 @@ grub-efi-ia32
 grub-efi-ia32-bin
 laptop-detect
 lilo
-elilo
 libc6-i686
 /* Note that we do not have to include every optimised kernel flavor for
  * i386, but this does control what kernels are available on the netinst CD.
@@ -168,7 +167,6 @@ linux-image-itanium
 linux-image-itanium-smp
 linux-image-mckinley
 linux-image-mckinley-smp
-elilo
 #endif
 
 #ifdef ARCH_mips
