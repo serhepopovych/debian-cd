@@ -161,6 +161,9 @@ linux-headers-amd64
 #ifdef ARCH_ia64
 initramfs-tools
 busybox
+grub-efi
+grub-efi-ia64
+grub-efi-ia64-bin
 linux-image-itanium
 linux-image-itanium-smp
 linux-image-mckinley

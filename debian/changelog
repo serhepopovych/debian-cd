@@ -9,6 +9,9 @@ debian-cd (3.1.24) UNRELEASED; urgency=medium
     "usb" is both wrong as well as redundant as 'BD' is also part of the
     generated filenames.
 
+  [ John Paul Adrian Glaubitz ]
+  * Add grub-efi{,{-ia64,{-bin}}} to tools/generate_di+k_list on ia64
+
  -- Holger Levsen <holger@debian.org>  Wed, 20 Feb 2019 14:12:16 +0100
 
 debian-cd (3.1.23) unstable; urgency=medium
