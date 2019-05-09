@@ -247,7 +247,6 @@ linux-image-sparc64-smp
 initramfs-tools
 grub-ieee1275
 busybox
-silo
 linux-image-sparc64
 linux-image-sparc64-smp
 #endif
