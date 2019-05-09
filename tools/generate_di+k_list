@@ -265,7 +265,6 @@ grub-ieee1275
 busybox
 laptop-detect
 quik
-yaboot
 powerpc-utils
 hfsutils
 mkvmlinuz
