@@ -278,7 +278,6 @@ linux-image-prep
 initramfs-tools
 grub-ieee1275
 busybox
-yaboot
 hfsutils
 powerpc-utils
 powerpc-ibm-utils
