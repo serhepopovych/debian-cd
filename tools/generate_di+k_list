@@ -235,7 +235,6 @@ grub-efi-arm64-bin
 initramfs-tools
 grub-ieee1275
 busybox
-silo
 libc6-sparcv9b
 libc6-sparcv9
 linux-image-sparc32
