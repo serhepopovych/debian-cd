@@ -475,6 +475,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
     $BASEDIR/tools/boot/$DI_CODENAME/parse_isolinux \
         boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "$DISKINFO_DISTRO" "$DEBIAN_KERNEL" "$DEBVERSION" \
         >> $CDDIR/boot/grub/grub.cfg
+    cp -v $BASEDIR/data/$DI_CODENAME/hl*png $CDDIR/boot/grub/theme
     NUM_ENTRIES=$(grep menuentry $CDDIR/boot/grub/grub.cfg | wc -l)
     echo "    CD$N/boot/grub/grub.cfg has $NUM_ENTRIES boot entries defined"
 
