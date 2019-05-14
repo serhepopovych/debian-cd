@@ -40,22 +40,22 @@ cat $jigdo | awk -v ISO="$iso" -v TEMPLATE="$template" -v DISCINFO="$discinfo" -
 ' > $jigdo.1
 mv -f $jigdo.1 $jigdo
 
-# Snapshot URL
-if [ "$snapurl"x != ""x ] ; then
-    echo "$snapurl" >> $jigdo
-fi
-
 # If some fallbacks were specified, output a servers section with the
 # URLs. The entries of the variable are expected to be already of the
 # form "Label=http://some.url/"
 if test -n "$JIGDOFALLBACKURLS"; then
     for url in "$JIGDOFALLBACKURLS"
     do
-        # The --try-last switch assigns a lower priority to the URL,
-        # so it will only be used if other server entries (without the
-        # --try-last) have already been tried without success.
-        echo "$url --try-last" >> $jigdo
+        echo "$url" >> $jigdo
     done
+fi
+
+# Snapshot URL - use last
+if [ "$snapurl"x != ""x ] ; then
+    # The --try-last switch assigns a lower priority to the URL,
+    # so it will only be used if other server entries (without the
+    # --try-last) have already been tried without success.
+    echo "$snapurl --try-last" >> $jigdo
 fi
 
 # Create a snapshot tree if we've been told where to create one
