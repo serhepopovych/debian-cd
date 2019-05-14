@@ -17,6 +17,8 @@ debian-cd (3.1.21-stretch) UNRELEASED; urgency=medium
       - Generate checksums for torrents and jigdo files too if desired
       - Tweak the code ordering in update-cd so the jigdo file checksums
         are generated after they're compressed.
+      - Tweak ordering of snapshot URLs - put snapshot.d.o last in the list in
+        jigdo files, to reduce load on the service.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:39:58 +0100
 
