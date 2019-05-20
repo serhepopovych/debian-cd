@@ -117,6 +117,7 @@ grub-pc
 grub-efi
 grub-efi-ia32
 grub-efi-ia32-bin
+shim-signed
 laptop-detect
 lilo
 libc6-i686
