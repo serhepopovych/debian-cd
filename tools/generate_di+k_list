@@ -119,7 +119,6 @@ grub-efi-ia32
 grub-efi-ia32-bin
 shim-signed
 laptop-detect
-lilo
 libc6-i686
 /* Note that we do not have to include every optimised kernel flavor for
  * i386, but this does control what kernels are available on the netinst CD.
@@ -155,7 +154,6 @@ grub-efi-amd64-bin
 grub-efi-amd64-signed
 shim-signed
 laptop-detect
-lilo
 linux-image-amd64
 linux-headers-amd64
 #endif
