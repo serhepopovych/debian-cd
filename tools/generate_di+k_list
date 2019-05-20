@@ -125,8 +125,6 @@ libc6-i686
  * Kernel headers are included as third party modules are commonly
  * used on this architecture.
  */
-linux-image-686-pae
-linux-headers-686-pae
 #ifndef ARCH_i386_EXCLUDE_486_KERNEL
 linux-image-486
 linux-headers-486
@@ -138,6 +136,10 @@ linux-headers-586
 #ifndef ARCH_i386_EXCLUDE_686_KERNEL
 linux-image-686
 linux-headers-686
+#endif
+#ifndef ARCH_i386_EXCLUDE_686_PAE_KERNEL
+linux-image-686-pae
+linux-headers-686-pae
 #endif
 
 #endif
