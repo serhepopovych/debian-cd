@@ -21,6 +21,8 @@ debian-cd (3.1.24) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Tweak ordering of snapshot URLs - put snapshot.d.o last in the list in
     jigdo files, to reduce load on the service.
+  * Don't include -686-pae udebs on media - we may not have a kernel
+    to use with them anyway
 
  -- Holger Levsen <holger@debian.org>  Wed, 20 Feb 2019 14:12:16 +0100
 

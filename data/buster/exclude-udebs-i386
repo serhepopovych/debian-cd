@@ -27,8 +27,8 @@ speakup-modules-*
 usb-modules-*
 usb-serial-modules-*
 usb-storage-modules-*
-# 686-bigmem kernel udebs are only used for the Xen netboot image
-*-686-bigmem-di !xen
+# 686-pae kernel udebs are only used for the Xen netboot image
+*-686-pae-di !xen
 # Not used on i386
 console-keymaps-acorn
 console-keymaps-amiga
