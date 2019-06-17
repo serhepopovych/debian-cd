@@ -236,6 +236,7 @@ ATTEMPT_FALLBACK=yes
 # STICK2GB:          2GB USB stick or similar
 # STICK4GB:          4GB USB stick or similar
 # STICK8GB:          8GB USB stick or similar
+# STICK16GB:         16GB USB stick or similar
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
 export DISKTYPE=CD
 #export DISKTYPE=CUSTOM

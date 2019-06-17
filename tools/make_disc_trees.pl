@@ -769,6 +769,9 @@ sub get_disc_size {
     } elsif ($chosen_disk eq "STICK8GB") {
         $maxdiskblocks = int(8 * $GB / $blocksize) - $reserved;
         $diskdesc = "8GB STICK";
+    } elsif ($chosen_disk eq "STICK16GB") {
+        $maxdiskblocks = int(16 * $GB / $blocksize) - $reserved;
+        $diskdesc = "16GB STICK";
     } elsif ($chosen_disk eq "CUSTOM") {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'} - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";
