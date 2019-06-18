@@ -757,21 +757,9 @@ sub get_disc_size {
 		# Useable capacity, found by checking some disks
         $maxdiskblocks = 23652352 - $reserved;
         $diskdesc = "50GB DLBD";
-    } elsif ($chosen_disk eq "STICK1GB") {
-        $maxdiskblocks = int(1 * $GB / $blocksize) - $reserved;
-        $diskdesc = "1GB STICK";
-    } elsif ($chosen_disk eq "STICK2GB") {
-        $maxdiskblocks = int(2 * $GB / $blocksize) - $reserved;
-        $diskdesc = "2GB STICK";
-    } elsif ($chosen_disk eq "STICK4GB") {
-        $maxdiskblocks = int(4 * $GB / $blocksize) - $reserved;
-        $diskdesc = "4GB STICK";
-    } elsif ($chosen_disk eq "STICK8GB") {
-        $maxdiskblocks = int(8 * $GB / $blocksize) - $reserved;
-        $diskdesc = "8GB STICK";
-    } elsif ($chosen_disk eq "STICK16GB") {
-        $maxdiskblocks = int(16 * $GB / $blocksize) - $reserved;
-        $diskdesc = "16GB STICK";
+    } elsif ($chosen_disk =~ /STICK(\d+)GB/) {
+        $maxdiskblocks = int($1 * $GB / $blocksize) - $reserved;
+        $diskdesc = "$1GB STICK";
     } elsif ($chosen_disk eq "CUSTOM") {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'} - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";

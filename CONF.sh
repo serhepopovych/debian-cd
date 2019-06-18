@@ -232,11 +232,7 @@ ATTEMPT_FALLBACK=yes
 # DLDVD:             standard 8.5 GB dual-layer DVD
 # BD:                standard 25 GB blu-ray
 # DLBD:              standard 50 GB dual-layer blu-ray
-# STICK1GB:          1GB USB stick or similar
-# STICK2GB:          2GB USB stick or similar
-# STICK4GB:          4GB USB stick or similar
-# STICK8GB:          8GB USB stick or similar
-# STICK16GB:         16GB USB stick or similar
+# STICK<X>GB:        <X>GB USB stick or similar
 # CUSTOM:            up to you - specify a size to go with it (in 2K blocks)
 export DISKTYPE=CD
 #export DISKTYPE=CUSTOM
