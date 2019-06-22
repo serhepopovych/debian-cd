@@ -88,7 +88,7 @@ if [ -f "$TRACE" ] ; then
 		    echo "Triggered by mirror pulse:"
 		    cat "$TRACE"
 		fi
-                $TOPDIR/cronjob.daily
+                $TOPDIR/cronjob.daily 2>&1 | tee ~/build/log/cronjob.daily-$DATE-$BUILDNUM.log
                 cp "$MYCOPY" "$MYCOPY".lastbuild
                 if ! /usr/bin/cmp -s "$MYCOPY".lastbuild "$TRACE" ; then
                     mail_list "testingcds has detected a pulse while we were building dailies"
@@ -101,7 +101,7 @@ if [ -f "$TRACE" ] ; then
                     echo "BAILING OUT OF WEEKLY BUILD"
                     mail_list "$HOSTNAME BAILING OUT OF WEEKLY BUILD"
                 else
-                    $TOPDIR/cronjob.weekly
+                    $TOPDIR/cronjob.weekly 2>&1 | tee ~/build/log/cronjob.weekly-$DATE.log
 		    BUILD_DONE=1
                 fi
             fi

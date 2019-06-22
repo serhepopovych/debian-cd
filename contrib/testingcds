@@ -81,6 +81,9 @@ case "$INSTALLER_CD" in
         export DISKTYPE=DLBD;;
     E)
         export DISKTYPE=gnome-CD;;
+    M|N)
+        export OUT_TYPE=16G
+        export DISKTYPE=STICK16GB;;
     *)  export DISKTYPE=CD;;
 esac
 
@@ -144,6 +147,10 @@ elif [ "$INSTALLER_CD" = "K" ]; then
     export OFFICIAL="Debian-Edu Full USB image"
 elif [ "$INSTALLER_CD" = "L" ]; then
     export OFFICIAL="Unofficial Debian-Edu Full USB image including firmware"
+elif [ "$INSTALLER_CD" = "M" ]; then
+    export OFFICIAL="Official 16G USB image"
+elif [ "$INSTALLER_CD" = "N" ]; then
+    export OFFICIAL="Unofficial 16G USB image including firmware"
 fi
 
 rm -rf "$OUT"

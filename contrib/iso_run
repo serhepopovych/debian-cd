@@ -30,7 +30,7 @@ copy_files() {
     TARGET=$2
     ARCHES=$3
 
-    DISKTYPES="cd dvd bd dlbd"
+    DISKTYPES="cd dvd bd dlbd 16G"
     DIRTYPES="iso jigdo list"
 
     # Only make torrent files and dirs for release builds

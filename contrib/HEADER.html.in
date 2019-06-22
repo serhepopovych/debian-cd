@@ -83,6 +83,8 @@ cpp.
      writeable DVD media
 #  elif TYPEbd
      writeable Blu-Ray media
+#  elif TYPE16G
+     16GB USB media
 #  elif TYPEdlbd
      writeable dual-layer Blu-Ray media
 #  endif
@@ -202,14 +204,11 @@ cpp.
       
 #  if defined(TYPEbd) && !defined(ARCHsource) && !defined(STYLElist)
 
-     <p>The <code>BD</code> image here is a special large image that
-     contains the core Debian installer code and a specific set of
-     programs. Depending on the purpose you'll also need an Internet
-     connection.</p>
-
 #    if defined(ARCHi386)
 
-       <p>The <code>edu-usb</code> BD here is a special version of
+       <h2>What is an edu BD image?</h2>
+
+       <p>The <code>edu</code> BD here is a special version of
        the BD image that is targeted specifically at 32-bit Intel machines.
        It provides a menu to install the Debian Edu Pure Blend without the
        need of an Internet connection. See the
@@ -220,7 +219,9 @@ cpp.
 
 #    if defined(ARCHamd64)
 
-       <p>The <code>edu-usb</code> BD here is a special version of
+       <h2>What is an edu BD image?</h2>
+
+       <p>The <code>edu</code> BD here is a special version of
        the BD image that is targeted specifically at 64-bit Intel machines.
        It provides a menu to install the Debian Edu Pure Blend without the
        need of an Internet connection. See the
