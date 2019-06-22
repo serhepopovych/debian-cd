@@ -209,6 +209,27 @@ if lockfile -r0 $BUILDLOCK ; then
                 esac
             fi
 
+            # 16G USB image
+            if [ "$NOUSB"x = ""x ] ; then
+		unset DESKTOP
+                export MAX_PKG_SIZE=999999999999
+                case $arch in
+                    i386|amd64)
+                        export MAXISOS=0
+                        export MAXJIGDOS=1
+                        export DESKTOP=all
+			export VARIANTS=xen
+			build_started USB16G
+                        INSTALLER_CD=M TASK=Debian-all \
+                            KERNEL_PARAMS='desktop=all' \
+                            ./testingcds "$arch" &
+                        ;;
+                    *)
+                        echo "  Not running USB16G build for $arch"
+                        ;;
+                esac
+            fi
+
             # individual desktop cd #1: xfce only these days
             if [ "$arch"x != "source"x ] && [ "$NOCD"x = ""x ] ; then
                 if [ "$NOXFCECD"x = ""x ] ; then
@@ -345,7 +366,8 @@ if lockfile -r0 $BUILDLOCK ; then
                 OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
                     NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=2 \
                     KERNEL_PARAMS="desktop=all" \
-                    DESKTOP=all VARIANTS=xen \
+                    DESKTOP=all \
+		    EXCLUDE_686_PAE_KERNEL=1 \
                     TASK=debian-installer+kernel \
                     MAXISOS=ALL MAXJIGDOS=ALL \
                     DI=${DI} DI_DIST=${DI} \
@@ -353,15 +375,18 @@ if lockfile -r0 $BUILDLOCK ; then
 
 		if $(arch_has_firmware $arch) ; then
                     build_started NIFIRMWARE
+		    export FORCE_CD_SIZE1=CD700
                     OMIT_RELEASE_NOTES=1 OMIT_MANUAL=1 NORECOMMENDS=1 \
                         NOSUGGESTS=1 COMPLETE=0 INSTALLER_CD=C \
                         FORCE_FIRMWARE=1 CDNAME=firmware \
                         KERNEL_PARAMS="desktop=all" \
-                        DESKTOP=all VARIANTS=xen \
+                        DESKTOP=all \
+			EXCLUDE_686_PAE_KERNEL=1 \
                         TASK=debian-installer+kernel \
                         MAXISOS=ALL MAXJIGDOS=ALL \
                         DI=${DI} DI_DIST=${DI} \
                         ./testingcds "amd64 i386" &
+		    unset FORCE_CD_SIZE1
                 fi
 
 	    fi

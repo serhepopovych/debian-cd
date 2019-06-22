@@ -24,6 +24,7 @@ debian-cd (3.1.24) UNRELEASED; urgency=medium
   * Don't include -686-pae udebs on media - we may not have a kernel
     to use with them anyway
   * Add support for USB sticks any integer multiple of 1GB in size.
+  * Copy in the updated buster cronjobs to match current state.
 
  -- Holger Levsen <holger@debian.org>  Wed, 20 Feb 2019 14:12:16 +0100
 
