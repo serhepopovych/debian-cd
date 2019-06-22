@@ -1,4 +1,4 @@
-debian-cd (3.1.24) UNRELEASED; urgency=medium
+debian-cd (3.1.24) unstable; urgency=medium
 
   [ Wolfgang Schweer ]
   * tasks/buster/Debian-edu-full: Force missing packages onto the Edu BD.
@@ -26,7 +26,7 @@ debian-cd (3.1.24) UNRELEASED; urgency=medium
   * Add support for USB sticks any integer multiple of 1GB in size.
   * Copy in the updated buster cronjobs to match current state.
 
- -- Holger Levsen <holger@debian.org>  Wed, 20 Feb 2019 14:12:16 +0100
+ -- Steve McIntyre <93sam@debian.org>  Sat, 22 Jun 2019 18:19:21 +0100
 
 debian-cd (3.1.23) unstable; urgency=medium
 
