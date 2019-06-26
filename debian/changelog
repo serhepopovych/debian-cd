@@ -1,3 +1,11 @@
+debian-cd (3.1.25) unstable; urgency=medium
+
+  [ Steve McIntyre ]
+  * Fix for stupid bug in 3.1.24 - rebuild without my locally-hacked
+    CONF.sh in the package build. :-(
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 26 Jun 2019 18:26:02 +0100
+
 debian-cd (3.1.24) unstable; urgency=medium
 
   [ Wolfgang Schweer ]
