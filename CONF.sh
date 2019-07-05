@@ -91,7 +91,7 @@ export DEBVERSION="10.0.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
-# ON THE OFFICIAL DEBIAN CD WEBSITE http://cdimage.debian.org
+# ON THE OFFICIAL DEBIAN CD WEBSITE https://cdimage.debian.org
 export OFFICIAL="Unofficial"
 #export OFFICIAL="Official"
 #export OFFICIAL="Official Beta"
@@ -273,7 +273,7 @@ export IMAGESUMS=1
 # sources) available somewhere, list it here so that README.source
 # can point to it. Note that your mirror must have repositories of
 # source packages if you enable this option.
-# export ARCHIVE_EXTRACTED_SOURCES="http://cdimage.debian.org/cdimage/cd-sources/"
+# export ARCHIVE_EXTRACTED_SOURCES="https://cdimage.debian.org/cdimage/cd-sources/"
 
 # Produce iso/jigdo files: specify how many iso/jigdo files should be
 # produced in your set. If not set or when the value is "ALL" they will
@@ -308,7 +308,7 @@ export IMAGESUMS=1
 # The included files are used to provide an up-to-date list of Debian
 # mirrors to the jigdo _GUI_application_ (_jigdo-lite_ doesn't support
 # "[Include ...]").
-export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigdo"
+export JIGDOINCLUDEURLS="https://cdimage.debian.org/debian-cd/debian-servers.jigdo"
 #
 # $JIGDOTEMPLATEURL and $JIGDOINCLUDEURLS are passed to
 # "tools/jigdo_header", which is used by default to generate the
@@ -320,7 +320,7 @@ export JIGDOINCLUDEURLS="http://cdimage.debian.org/debian-cd/debian-servers.jigd
 # A couple of things used only by publish_cds, so it can tweak the
 # jigdo files, and knows where to put the results.
 # You need to run publish_cds manually, it is not run by the Makefile.
-export PUBLISH_URL="http://cdimage.debian.org/jigdo-area"
+export PUBLISH_URL="https://cdimage.debian.org/jigdo-area"
 export PUBLISH_PATH="/home/jigdo-area/"
 
 # Specify files and directories to *exclude* from jigdo processing. These
@@ -349,7 +349,7 @@ done
 # Base link for snapshot.debian.org or similar
 # "SNAPDATETIME" will be replaced at runtime with the correct data
 # Leave this unset to not add this entry
-export SNAPURL=Debian=http://snapshot.debian.org/archive/debian/SNAPDATETIME/
+export SNAPURL=Debian=https://snapshot.debian.org/archive/debian/SNAPDATETIME/
 
 # File with list of packages to include when fetching modules for the
 # first stage installer (debian-installer). One package per line.
@@ -402,7 +402,7 @@ export SNAPURL=Debian=http://snapshot.debian.org/archive/debian/SNAPDATETIME/
 export OMIT_RELEASE_NOTES=1
 
 # Set this to override the default location
-#export RELEASE_NOTES_LOCATION="http://www.debian.org/releases/$CODENAME"
+#export RELEASE_NOTES_LOCATION="https://www.debian.org/releases/$CODENAME"
 
 # Set to 1 to not include the doc/tools directories on CD1
 # Useful to save space and avoids failures if you have a mirror

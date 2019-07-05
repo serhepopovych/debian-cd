@@ -15,7 +15,7 @@ iso="$2"      # The name to give to the .iso
 dirpath="$3"  # The disc build tree
 template="$4" # URL for .template file, can be relative URL
 discinfo="$5" # e.g. "Debian GNU/Linux 3.0 r1 "Woody" - Unofficial i386 Binary-1"
-snapurl="$6"  # URL for snapshot.d.o. e.g. http://snapshot.debian.org/archive/debian/20110630T000000Z/
+snapurl="$6"  # URL for snapshot.d.o. e.g. https://snapshot.debian.org/archive/debian/20110630T000000Z/
 # any further parameters are fallback URLs
 info="Generated on "`date -R`
 
@@ -42,7 +42,7 @@ mv -f $jigdo.1 $jigdo
 
 # If some fallbacks were specified, output a servers section with the
 # URLs. The entries of the variable are expected to be already of the
-# form "Label=http://some.url/"
+# form "Label=https://some.url/"
 if test -n "$JIGDOFALLBACKURLS"; then
     for url in "$JIGDOFALLBACKURLS"
     do

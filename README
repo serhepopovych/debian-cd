@@ -2,7 +2,7 @@ debian-cd
 =========
 
 Copyright 1999-2001 Raphaël Hertzog <hertzog@debian.org> and others,
-2004-2010 Steve McIntyre <steve@einval.com>
+2004-2019 Steve McIntyre <steve@einval.com>
 This set of tools is licensed under the General Public License version
 2 or any later version. You can find it in
 /usr/share/common-licenses/GPL on a Debian GNU system.
@@ -266,7 +266,7 @@ Jigdo
 -----
 You may also want to make the CD images available in jigdo format.
 Jigsaw Download, the successor to the Pseudo-Image Kit.
-See http://www.debian.org/CD/jigdo-cd/ for more information on jigdo.
+See https://www.debian.org/CD/jigdo-cd/ for more information on jigdo.
 
 Set the DOJIGDO and related variables in CONF.sh. This is no separate target
 for jigdo, merely a modification of the "images" targets. You can choose
@@ -332,4 +332,4 @@ images. Don't use it for ISO images that will used by many users.
 
 Note that you will also need a patched mkhybrid that does support the
 -F option. Have a look here about it :
-http://www.chiark.greenend.org.uk/~stevem/DebianCD/
+https://www.chiark.greenend.org.uk/~stevem/DebianCD/

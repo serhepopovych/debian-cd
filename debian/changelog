@@ -1,3 +1,10 @@
+debian-cd (3.1.25) UNRELEASED; urgency=medium
+
+  [ Steve McIntyre ]
+  * Change a load of http URLs to use https instead,
+
+ -- Steve McIntyre <93sam@debian.org>  Wed, 26 Jun 2019 18:26:02 +0100
+
 debian-cd (3.1.25) unstable; urgency=medium
 
   [ Steve McIntyre ]

@@ -387,7 +387,7 @@ $(BDIR)/rawlist:
 # Dirty workaround for saving space, we add some hints to break ties.
 # This is just a temporal solution, sort_deps should be a little bit less
 # silly so that this is not needed. For more info have a look at
-# http://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
+# https://lists.debian.org/debian-cd/2004/debian-cd-200404/msg00093.html
 	$(Q)if [ "$(SOURCEONLY)"x != "yes"x ] ; then \
 		if [ "$(INSTALLER_CD)"x = "1"x ] ; then \
 			: ; \

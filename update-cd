@@ -43,7 +43,7 @@ CODENAME=stretch
 OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-out
 
 # Location(s) for the snapshot(s)
-SNAPSHOT='Debian=http://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
+SNAPSHOT='Debian=https://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
 
 # Type of disc image, cd or dvd (lower case)
 if [ "$1"x = ""x ] ; then

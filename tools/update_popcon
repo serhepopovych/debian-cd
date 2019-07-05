@@ -36,7 +36,7 @@ dl_file () {
     # We've had problems in the past with download failures causing issues,
     # so let's make sure that we get the complete file in each case
     DIST=$1
-    SITE="http://popcon.debian.org/"
+    SITE="https://popcon.debian.org/"
 
     curl -L $capath -s --head $SITE/$DIST/by_inst > $TDIR/$DIST.head
     error=$?
