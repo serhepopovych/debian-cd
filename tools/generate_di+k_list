@@ -230,6 +230,8 @@ linux-image-arm64
 grub-efi
 grub-efi-arm64
 grub-efi-arm64-bin
+grub-efi-arm64-signed
+shim-signed
 #endif
 
 #ifdef ARCH_sparc
