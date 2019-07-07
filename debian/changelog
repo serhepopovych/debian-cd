@@ -2,6 +2,8 @@ debian-cd (3.1.25) UNRELEASED; urgency=medium
 
   [ Steve McIntyre ]
   * Change a load of http URLs to use https instead,
+  * Add shim-signed and grub-efi-arm64-signed to the arm64 package
+    list
 
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Jun 2019 18:26:02 +0100
 
