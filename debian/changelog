@@ -7,6 +7,9 @@ debian-cd (3.1.25) UNRELEASED; urgency=medium
   * Start bullseye development, copy the buster dirs to bullseye as a
     start.
 
+  [ Holger Levsen ]
+  * Bump standards version to 4.4.0, no changes needed.
+
  -- Steve McIntyre <93sam@debian.org>  Wed, 26 Jun 2019 18:26:02 +0100
 
 debian-cd (3.1.25) unstable; urgency=medium
