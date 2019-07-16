@@ -25,7 +25,7 @@ OFFICIAL=Official
 # OFFICIAL="Unofficial snapshot"
 
 # Path to use with mkisofs/mkhybrid
-MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
+MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso sha256,sha512"
 
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
@@ -183,17 +183,7 @@ make_cd () {
         gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
 
-        MD5=`zcat ${JIGDODIR}/${BASENAME}.jigdo | \
-            awk '/Image Hex MD5Sum/ {print $5}'`
-        echo "$MD5  ${BASENAME}.iso" >> ${JIGDODIR}/MD5SUMS.update
-        echo "$MD5  ${BASENAME}.iso" >> ${ISODIR}/MD5SUMS.update
-	(cd ${JIGDODIR} && md5sum ${BASENAME}.jigdo ${BASENAME}.template >> MD5SUMS.update)
-        if [ $BT = 1 ]; then
-            ~/build.${CODENAME}/mktorrent ${ISODIR}/${BASENAME}.iso
-            echo "$MD5  ${BASENAME}.iso" >> ${BTDIR}/MD5SUMS.update
-            (cd ${BTDIR} && md5sum ${BASENAME}.iso.torrent >> MD5SUMS.update)
-        fi
-        for SHA_SIZE in 1 256 512; do
+        for SHA_SIZE in 256 512; do
             SHA=`zcat ${JIGDODIR}/${BASENAME}.jigdo | \
                 awk "/Image Hex SHA${SHA_SIZE}Sum/ {print \\$5}"`
             if [ "$SHA"x = ""x ] ; then

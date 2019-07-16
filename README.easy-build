@@ -110,7 +110,7 @@ The following variables that define paths *must* be set in CONF.sh:
 
 You may also want to change the following variables:
 - CONTRIB: comment out if you only want to include packages from main
-- IMAGESUMS: comment out to skip creating MD5/SHA5 sums for images
+- IMAGESUMS: comment out to skip creating checksums for images
 - OMIT_MANUAL
 - OMIT_RELEASE_NOTES / RELEASE_NOTES_LOCATION
 

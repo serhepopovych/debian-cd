@@ -6,6 +6,7 @@ debian-cd (3.1.25) UNRELEASED; urgency=medium
     list
   * Start bullseye development, copy the buster dirs to bullseye as a
     start.
+  * Stop producing MD5SUMS and SHA1SUMS files by default
 
   [ Holger Levsen ]
   * Bump standards version to 4.4.0, no changes needed.

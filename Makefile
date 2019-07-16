@@ -23,7 +23,7 @@ endif
 ifndef MKISOFS
 ifneq (,$(filter i386 amd64 arm64 hppa,$(ARCHES)))
 export MKISOFS=xorriso
-export MKISOFS_OPTS=-as mkisofs -r -checksum_algorithm_iso md5,sha1
+export MKISOFS_OPTS=-as mkisofs -r -checksum_algorithm_iso sha256,sha512
 else
 export MKISOFS=$(shell which genisoimage mkisofs | head -1)
 endif
@@ -497,7 +497,7 @@ check-number-given:
 # Generate only one image number $(CD)
 image: check-number-given images
 
-# Calculate the md5sums for the images (if available), or get from templates
+# Calculate the checksums for the images (if available), or get from templates
 imagesums:
 	$(Q)$(BASEDIR)/tools/imagesums $(OUT) $(SUMS_EXTENSION)
 

@@ -14,7 +14,7 @@ if [ "$2"x != ""x ] ; then
 fi
 
 if [ "$CHECKSUMS"x = ""x ] ; then
-    CHECKSUMS="sha1 md5 sha512 sha256"
+    CHECKSUMS="sha512 sha256"
 fi
 
 for SUM in $CHECKSUMS; do

@@ -42,7 +42,5 @@ cd ..
 find firmware | cpio --quiet -o -H newc | gzip -9 > firmware.cpio.gz
 ls -l $PWD/firmware.cpio.gz $PWD/firmware.tar.gz $PWD/firmware.zip
 
-md5sum firmware.* > MD5SUMS
-sha1sum firmware.* > SHA1SUMS
 sha256sum firmware.* > SHA256SUMS
 sha512sum firmware.* > SHA512SUMS

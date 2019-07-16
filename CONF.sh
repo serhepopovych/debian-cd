@@ -191,9 +191,9 @@ export CONTRIB=1
 # that will burn correctly onto a CD and also can be written raw to a
 # USB stick. xorriso 0.6.5 and later has working support for this.
 #export i386_MKISOFS="xorriso"
-#export i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+#export i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso sha256,sha512"
 #export amd64_MKISOFS="xorriso"
-#export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1"
+#export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso sha256,sha512"
 
 # Keyring (defaults):
 #ARCHIVE_KEYRING_PACKAGE=debian-archive-keyring
@@ -261,12 +261,12 @@ export VARIANTS=
 # package on the CD.  The default is 'true'.
 # export NOSUGGESTS=1
 
-# Set to 1 to generate MD5/SHA1/SHA256/SHA512 sums for generated images
+# Set to 1 to generate checksum files for generated images
 export IMAGESUMS=1
 
 # And define the set of checksum algorithms you want here. Default is
-# all of: md5 sha1 sha512 sha256
-# export CHECKSUMS="md5 sha1 sha512 sha256"
+# sha512 sha256
+# export CHECKSUMS="sha512 sha256"
 
 # We may have to extract files from packages to put them onto the CD
 # (e.g. bootloader files). If you make those packages (and their
