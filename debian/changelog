@@ -1,4 +1,4 @@
-debian-cd (3.1.25) UNRELEASED; urgency=medium
+debian-cd (3.1.26) UNRELEASED; urgency=medium
 
   [ Steve McIntyre ]
   * Change a load of http URLs to use https instead,
