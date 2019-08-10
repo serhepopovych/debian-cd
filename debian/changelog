@@ -1,19 +1,19 @@
-debian-cd (3.1.26) UNRELEASED; urgency=medium
+debian-cd (3.1.26) unstable; urgency=medium
 
   [ Steve McIntyre ]
-  * Change a load of http URLs to use https instead,
-  * Add shim-signed and grub-efi-arm64-signed to the arm64 package
-    list
   * Start bullseye development, copy the buster dirs to bullseye as a
     start.
-  * Stop producing MD5SUMS and SHA1SUMS files by default
+  * Stop producing MD5SUMS and SHA1SUMS files by default.
+  * Add shim-signed and grub-efi-arm64-signed to the arm64 package
+    list.
+  * Change a load of http URLs to use https instead.
 
   [ Holger Levsen ]
   * d/control:
     - bump standards version to 4.4.0, no changes needed.
     - bump debhelper-compat to 12.
 
- -- Steve McIntyre <93sam@debian.org>  Wed, 26 Jun 2019 18:26:02 +0100
+ -- Holger Levsen <holger@debian.org>  Sat, 10 Aug 2019 11:50:47 +0200
 
 debian-cd (3.1.25) unstable; urgency=medium
 
