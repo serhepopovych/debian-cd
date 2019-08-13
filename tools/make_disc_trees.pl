@@ -1083,6 +1083,7 @@ sub add_trans_desc_entry {
                 # so, we'll need to uncompress again on entry here.
 
                 if (-f "$trans_file.gz") {
+                    system("rm -f $trans_file");
                     system("gunzip $trans_file.gz");
                 }
 
@@ -1254,6 +1255,7 @@ sub remove_trans_desc_entry {
             # Keeping files in .gz format is expensive - see comment
             # in add_trans_desc_entry() above.
             if (-f "$trans_file.gz") {
+                system("rm -f $trans_file");
                 system("gunzip $trans_file.gz");
             }
             $st = stat("$trans_file") || die "unable to stat $trans_file\n";
