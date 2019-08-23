@@ -1,4 +1,11 @@
-debian-cd (3.1.25) UNRELEASED; urgency=medium
+debian-cd (3.1.26-buster) UNRELEASED; urgency=medium
+
+  * Backports of fixes from debian-cd in unstable
+    + Keep grub resolution in EFI boot, to avoid tiny fonts (closes: #935546).
+
+ -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
+
+debian-cd (3.1.26) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Change a load of http URLs to use https instead,
