@@ -3,6 +3,9 @@ debian-cd (3.1.27) UNRELEASED; urgency=medium
   [ Samuel Thibault ]
   * Keep grub resolution in EFI boot, to avoid tiny fonts (closes: #935546).
 
+  [ Steve McIntyre ]
+  * Update arch lists in build_all.sh, remove arches not in bullseye
+
  -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
 
 debian-cd (3.1.26) unstable; urgency=medium
