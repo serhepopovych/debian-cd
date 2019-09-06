@@ -218,7 +218,7 @@ foreach my $line(@lines) {
 	    print_indent "set menu_color_normal=cyan/blue\n";
 	    print_indent "set menu_color_highlight=white/blue\n";
 	    print_indent "set theme=/boot/grub/theme/" . $menu{"number"} . "\n";
-	    print_indent "set gfxpayload=keep";
+	    print_indent "set gfxpayload=keep\n";
 	    create_theme_file($menu{"number"});
 	    $new_menu = 0;
 	}
