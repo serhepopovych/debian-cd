@@ -26,12 +26,16 @@ for SUM in $CHECKSUMS; do
     :> $FILE
 done
 
-# Ordering is important in the "find" call here - we *really* want to
-# get the jigdo files before the iso files, so we can use the
-# checksums there first instead of re-calculating them
-for file in $(find * \
-                   -name '*.jigdo' -o -name '*.template' \
-                   -o -name '*.iso' -o -name '*.torrent'); do
+# Ordering is important, so we do separate "find" calls here - we
+# *really* want to get the jigdo files before the iso files, so we can
+# use the checksums there first instead of re-calculating them
+FILES=""
+FILES="$FILES "$(find * -name '*.jigdo')
+FILES="$FILES "$(find * -name '*.template')
+FILES="$FILES "$(find * -name '*.iso')
+FILES="$FILES "$(find * -name '*.torrent')
+
+for file in $FILES; do
     iso=""
     case $file in
         *.jigdo)
@@ -68,7 +72,7 @@ for file in $(find * \
                     echo "$CKSUM  $iso" >> $FILE
                     grep $iso $FILE
                 else
-                    echo "No Jigdo help for $SUM, doing it the long way with $CMD"
+                    echo "$JIGDO cannot provide jigdo help for $SUM for $iso, doing it the long way with $CMD"
                     $CMD $iso >> $FILE
                     grep $iso $FILE
                 fi
