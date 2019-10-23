@@ -1,4 +1,4 @@
-debian-cd (3.1.27) UNRELEASED; urgency=medium
+debian-cd (3.1.27) unstable; urgency=medium
 
   [ Samuel Thibault ]
   * Keep grub resolution in EFI boot, to avoid tiny fonts (closes: #935546).
@@ -8,10 +8,10 @@ debian-cd (3.1.27) UNRELEASED; urgency=medium
   * Update ordering of checksumming in imagesums
 
   [ Holger Levsen ]
-  * d/control: Bump standards version to 4.4.1, no changes needed.
   * contrib: Updated from setup.git/bullseye/.
+  * d/control: Bump standards version to 4.4.1, no changes needed.
 
- -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
+ -- Holger Levsen <holger@debian.org>  Wed, 23 Oct 2019 18:06:41 +0200
 
 debian-cd (3.1.26) unstable; urgency=medium
 
