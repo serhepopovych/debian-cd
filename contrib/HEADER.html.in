@@ -245,10 +245,10 @@ cpp.
    <h2>How can I verify my download is correct and exactly what has
    been created by Debian?</h2>
 
-   <p>There are files here (SHA1SUMS, SHA256SUMS, etc.) which contain
-   checksums of the images. These checksum files are also signed - see
-   SHA1SUMS.sign, SHA256SUMS.sign, etc. Once you've downloaded an image,
-   you can check:</p>
+   <p>There are files here (SHA512SUMS, etc.) which contain checksums
+   of the images. These checksum files are also signed - see the
+   matching .sign files. Once you've downloaded an image, you can
+   check:</p>
 
    <ul>
       <li>that its checksum matches that expected from the checksum file; and

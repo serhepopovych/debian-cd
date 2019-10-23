@@ -88,9 +88,11 @@ build_finished () {
     fi
     case $BUILDNAME in
 	*FIRMWARE*)
+	    mkdir -p $PUBDIRJIG-firmware/$ARCH
 	    cp log/$logfile $PUBDIRJIG-firmware/$ARCH/$BUILDNAME.log
 	    ;;
 	*)
+	    mkdir -p $PUBDIRJIG/$ARCH
 	    cp log/$logfile $PUBDIRJIG/$ARCH/$BUILDNAME.log
 	    ;;
     esac

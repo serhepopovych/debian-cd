@@ -47,8 +47,8 @@ unset BASE_EXCLUDE      || true
 # Where I am (hoping I'm in the debian-cd dir)
 export BASEDIR=`pwd`
 
-# Building buster cd set ...
-export CODENAME=buster
+# Building bullseye cd set ...
+export CODENAME=bullseye
 
 if [ ! "$DI_CODENAME" ]
 then
@@ -150,26 +150,12 @@ export CONTRIB=1
 #export MKISOFS_OPTS="-joliet-long -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512" #-checksum_algorithm_iso md5,sha1"
 # export MKISOFS_OPTS="-r"		#For normal users
 # export MKISOFS_OPTS="-r -F ."	#For symlink farmers
-if [ $(which xorriso)""x = "/usr/bin/xorriso"x ]; then
-    export MKISOFS="xorriso"
-else
-    export MKISOFS="/home/93sam/xorriso"
-fi
-export MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
+export MKISOFS="xorriso"
+export MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso sha256,sha512"
 
-# Override for i386,amd64,multi to use xorriso.
-# BE AWARE: for multi-arch the order of the arches here will have to
-# match the order they're declared in the build
-#export i386_MKISOFS="/home/93sam/xorriso"
-#export i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
-#export amd64_MKISOFS="/home/93sam/xorriso"
-#export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
-#export amd64_i386_MKISOFS="/home/93sam/xorriso"
-#export amd64_i386_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
-#export i386_amd64_source_MKISOFS="/home/93sam/xorriso"
-#export i386_amd64_source_MKISOFS_OPTS="-as mkisofs -joliet-long -r -checksum_algorithm_iso md5,sha1,sha256,sha512"
+# Override specifically for powerpc builds
 export powerpc_MKISOFS="$BASEDIR/../genisoimage"
-export powerpc_MKISOFS_OPTS="-joliet-long -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha1,sha256,sha512" #-checksum_algorithm_iso md5,sha1"
+export powerpc_MKISOFS_OPTS="-joliet-long -jigdo-template-compress bzip2 -r -checksum_algorithm_iso sha256,sha512" #-checksum_algorithm_iso md5,sha1"
 
 # ISOLinux support for multiboot on CD1 for i386
 export ISOLINUX=1
@@ -213,7 +199,7 @@ export NORECOMMENDS=0
 # package on the CD.  The default is 'true'.
 #export NOSUGGESTS=1
 
-# Set to 1 to generate MD5 and SHA1 sums for generated images
+# Set to 1 to generate checksum files for generated images
 export IMAGESUMS=1
 
 # We may have to extract files from packages to put them onto the CD

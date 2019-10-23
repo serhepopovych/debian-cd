@@ -1,2 +1,2 @@
-DI_DIST=buster
+DI_DIST=bullseye
 DI_CODENAME=$DI_DIST

@@ -109,7 +109,7 @@ if [ "$NOOPENSTACK"x = ""x ] ; then
 	rm -rf ${LIVE_OUT}/new/openstack-${CODENAME}
 	mkdir -p ${LIVE_OUT}/new/openstack-${CODENAME}
 	mv -v ${LIVE_OUT}/new/openstack-${CODENAME}-*/*.* ${LIVE_OUT}/new/openstack-${CODENAME}
-	for SUM in MD5 SHA1 SHA256 SHA512; do
+	for SUM in SHA256 SHA512; do
 	    cat ${LIVE_OUT}/new/openstack-${CODENAME}-*/${SUM}SUMS > ${LIVE_OUT}/new/openstack-${CODENAME}/${SUM}SUMS
 	done
 	if [ "$RELEASE_BUILD"x = ""x ] ; then
