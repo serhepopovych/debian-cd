@@ -7,6 +7,9 @@ debian-cd (3.1.27) UNRELEASED; urgency=medium
   * Update arch lists in build_all.sh, remove arches not in bullseye
   * Update ordering of checksumming in imagesums
 
+  [ Holger Levsen ]
+  * d/control: Bump standards version to 4.4.1, no changes needed.
+
  -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
 
 debian-cd (3.1.26) unstable; urgency=medium
