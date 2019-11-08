@@ -55,12 +55,17 @@ if [ $NUM_ARCHES = 1 ] ; then
         *)
             BINARYDISK=1
 	    DISKNUMSTRING="$DISKNUM"
-            export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-$DISKNUM $BUILD_DATE"
+	    if [ "$FORCE_FIRMWARE"x = "1"x ] ; then
+	        FIRMWARE_TEXT=" with firmware"
+	    else
+	        FIRMWARE_TEXT=""
+	    fi
+            export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-${DISKNUM}${FIRMWARE_TEXT} $BUILD_DATE"
 	    if [ $DISKTYPE = NETINST ]; then
 		# Use "n" as a "disknum" here, #858031
 		DISKNUMSTRING="n"
 		# Don't need a disknum here - only one netinst
-		export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE $BUILD_DATE"
+		export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE${FIRMWARE_TEXT} $BUILD_DATE"
 	    fi
             case "$ARCHES" in
                 powerpc)
