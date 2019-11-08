@@ -44,6 +44,12 @@ if [ "$DISKINFO_DISTRO"x = ""x ] ; then
 fi
 export DISKINFO_DISTRO
 
+if [ "$FORCE_FIRMWARE"x = "1"x ] ; then
+    FIRMWARE_TEXT=" with firmware"
+else
+    FIRMWARE_TEXT=""
+fi
+
 if [ $NUM_ARCHES = 1 ] ; then
     case $ARCHES in
         source)
@@ -55,11 +61,6 @@ if [ $NUM_ARCHES = 1 ] ; then
         *)
             BINARYDISK=1
 	    DISKNUMSTRING="$DISKNUM"
-	    if [ "$FORCE_FIRMWARE"x = "1"x ] ; then
-	        FIRMWARE_TEXT=" with firmware"
-	    else
-	        FIRMWARE_TEXT=""
-	    fi
             export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE Binary-${DISKNUM}${FIRMWARE_TEXT} $BUILD_DATE"
 	    if [ $DISKTYPE = NETINST ]; then
 		# Use "n" as a "disknum" here, #858031
@@ -90,7 +91,7 @@ else
         *source*) SOURCEDISK=1;;
     esac
     export ARCHDEF=`echo $ARCHES | sed 's? ?/?g'`
-    export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE #$DISKNUM $BUILD_DATE"
+    export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL Multi-architecture $ARCHDEF $DISKTYPE${FIRMWARE_TEXT} #$DISKNUM $BUILD_DATE"
     export VOLID="$VOLID_BASE M-A $DISKNUM"
 fi
 
