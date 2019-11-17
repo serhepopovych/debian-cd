@@ -6,6 +6,7 @@ debian-cd (3.1.28) UNRELEASED; urgency=medium
 
   [ Samuel Thibault ]
   * Drop support for xorriso versions before 1.2.2
+  * Add hurd-i386 EFI support.
 
  -- Holger Levsen <holger@debian.org>  Wed, 23 Oct 2019 18:06:41 +0200
 
