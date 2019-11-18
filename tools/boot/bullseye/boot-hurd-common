@@ -12,6 +12,26 @@
 set -e
 #set -x
 
+# Have we been told to use just one boot method? If none listed,
+# assume all are desired. Order also matters. Possible values are
+# "BIOS", "EFI" and "BIOS EFI". We'll also accept "EFI BIOS" for
+# completeness, but we will switch the order.
+if [ "$BOOT_METHODS"x = ""x ] \
+    || [ "$BOOT_METHODS"x = "BIOS EFI"x ] \
+    || [ "$BOOT_METHODS"x = "EFI BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=2
+elif [ "$BOOT_METHODS"x = "BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=0
+elif [ "$BOOT_METHODS"x = "EFI"x ] ; then
+    BOOT_EFI=1
+    BOOT_BIOS=0
+else
+    echo "ERROR: Unrecognized boot method choice $BOOT_METHODS"
+    exit 1
+fi
+
 N=$1
 CDDIR=$2
 INSTALLDIR="install"
@@ -103,5 +123,45 @@ fi
 
 # Cleanup
 rm -rf cdrom
+
+if [ $BOOT_EFI -ne 0 ] ; then
+    echo "  Adding EFI boot code for $ARCH on CD$N"
+
+    # Move GRUB files to the right place.
+    mkdir -p $CDDIR/EFI/boot
+    mcopy -n -s -i boot$N/grub/efi.img '::efi/*' $CDDIR/EFI
+    mkdir -p $CDDIR/boot/grub
+    mv boot$N/grub/* $CDDIR/boot/grub/
+    rmdir boot$N/grub
+
+    # Stuff the EFI boot files into a FAT filesystem, making it as
+    # small as possible. We end up re-packing like this in case we're
+    # making a multi-arch image
+
+    # First, work out how many blocks we need
+    blocks=$(calculate_efi_image_size $CDDIR)
+
+    # Now make a new image to contain the files
+    rm -f $CDDIR/boot/grub/efi.img
+    mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+
+    # And copy them into place
+    mmd -i "$CDDIR/boot/grub/efi.img" ::efi
+    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/EFI/* \
+        "::efi"
+
+    if [ $BOOT_EFI = 2 ] ; then
+	# We're being added alongside (after) a BIOS boot record. Tell
+	# xorriso to create a (secondary) ElTorito boot record for the
+	# EFI bootloader. Otherwise, xorriso will create it as the
+	# primary.
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot"
+    fi
+
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-gpt-basdat -isohybrid-apm-hfsplus"
+else
+    echo "  No EFI boot code for $ARCH on CD$N"
+fi
 
 # done
