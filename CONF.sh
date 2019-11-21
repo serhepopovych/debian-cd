@@ -181,6 +181,12 @@ export CONTRIB=1
 # partition than your source files.
 # export COPYLINK=1
 
+# Choose the checksum algorithm used in jigdo and template
+# files. Older jigdo tools can only support md5; but we want to move
+# to sha256 as a better checksum. Depends on xorriso 1.5.3+ to support
+# sha256
+export JIGDO_CHECKSUM="md5"
+
 # Options
 # export MKISOFS=mkisofs
 # export MKISOFS_OPTS="-r"		#For normal users

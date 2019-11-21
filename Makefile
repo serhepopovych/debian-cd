@@ -78,7 +78,7 @@ check_backports_packages=$(BASEDIR)/tools/check_backports_packages
 sort_deps=$(BASEDIR)/tools/sort_deps
 md5sum=md5sum
 jigdo_cleanup=$(BASEDIR)/tools/jigdo_cleanup
-grab_md5=$(BASEDIR)/tools/grab_md5
+grab_checksums=$(BASEDIR)/tools/grab_checksums
 make_image=$(BASEDIR)/tools/make_image
 merge_package_lists=$(BASEDIR)/tools/merge_package_lists
 update_popcon=$(BASEDIR)/tools/update_popcon
@@ -208,7 +208,7 @@ dir-clean:
 	$(Q)rm -rf $(BDIR)/CD[1234567890]*
 	$(Q)rm -rf $(TASKDIR)
 	$(Q)rm -f $(BDIR)/*.filelist*
-	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/upgrade-stamp $(BDIR)/md5-check
+	$(Q)rm -f  $(BDIR)/packages-stamp $(BDIR)/upgrade-stamp $(BDIR)/checksum-check
 
 # Completely cleans the current arch tree
 realclean: distclean
@@ -488,7 +488,7 @@ image-trees: ok genlist
 	fi
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" "$(MKISOFS)" "$(MKISOFS_OPTS) $(JIGDO_OPTS)"
 
-images: ok $(OUT) $(BDIR)/md5-check
+images: ok $(OUT) $(BDIR)/checksum-check
 	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
@@ -503,14 +503,14 @@ imagesums:
 
 ## MISC TARGETS ##
 
-$(BDIR)/md5-check: mirrorcheck	
+$(BDIR)/checksum-check: mirrorcheck
 
 mirrorcheck: ok
-	$(Q)$(grab_md5) $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check
+	$(Q)$(grab_checksums) ${JIGDO_CHECKSUM} $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/checksum-check
 	$(Q)for ARCH in $(ARCHES); do \
 		if [ -e $(BASEDIR)/data/$(CODENAME)/$$ARCH/extra-sources ]; then \
-			echo "Extra dedicated source added; need to grab source MD5 info too"; \
-			$(grab_md5) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/md5-check; \
+			echo "Extra dedicated source added; need to grab source checksum info too"; \
+			$(grab_checksums) $(JIGDO_CHECKSUM) $(MIRROR) source $(CODENAME) $(DI_CODENAME) $(BDIR)/checksum-check; \
 		fi; \
 	done
 

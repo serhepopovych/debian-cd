@@ -42,6 +42,15 @@ last_minute_update () {
     done
 }
 
+# Grab the xorriso version and turn it into a number we can use
+xorriso_version() {
+    $MKISOFS --version 2>&1 | awk '
+	/^xorriso version/ {
+	    split($4, ver, ".")
+	    print ver[1]*10000+ver[2]*100+ver[3]
+	}'
+}
+
 for file in $FILES
 do
     dir=${file%%.volid}
@@ -82,8 +91,36 @@ do
         JIGDO_WANTED=0
     fi
 
+    # Work out common jigdo options if needed
+    if [ $JIGDO_WANTED = 1 ]; then
+	XOR_VER=$(xorriso_version)
+	if [ $XOR_VER -lt 10502 ]; then
+	    # Only supports jigdo format v1
+	    case "$JIGDO_CHECKSUM"x in
+		"md5"x|x)
+		    JIGDO_CHECKSUM_OPTS="-md5-list $DIR/checksum-check \
+		    			 -jigdo-force-md5 /pool/"
+		    ;;
+		*)
+		    echo "Older xorriso version $XOR_VER does not support jigdo checksum algorithm $JIGDO_CHECKSUM"
+		    exit 1
+		    ;;
+	    esac
+	else
+	    JIGDO_CHECKSUM_OPTS="-checksum-list $DIR/checksum-check \
+	                         -jigdo-checksum-algorithm $JIGDO_CHECKSUM \
+				 -jigdo-force-checksum /pool/"
+	fi
+
+	JIGDO_OPTS="$JIGDO_CHECKSUM_OPTS $JIGDO_OPTS \
+            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
+            -jigdo-template $OUT/$OUTFILE.template \
+            -jigdo-map Debian=$MIRROR/ \
+            -jigdo-exclude boot$n"
+    fi
+
     # Actually make the ISO/jigdo images. Long command lines
-    # here... :-(
+    # here, with lots of stuff included :-(
     CMD=
     if [ $JIGDO_WANTED = 0 ] && [ $ISO_WANTED = 1 ] ; then
 
@@ -94,22 +131,12 @@ do
 
         CMD="$MKISOFS $MKISOFS_OPTS -V '$volid' \
             -o $OUT/$OUTFILE.iso \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
             $JIGDO_OPTS $opts $dirs CD$n"
 
     elif [ $JIGDO_WANTED = 1 ] && [ $ISO_WANTED = 0 ] ; then
 
         CMD="$MKISOFS $MKISOFS_OPTS -V '$volid' \
             -o /dev/null \
-            -jigdo-jigdo $OUT/$OUTFILE.jigdo \
-            -jigdo-template $OUT/$OUTFILE.template \
-            -jigdo-map Debian=$MIRROR/ \
-            -jigdo-exclude boot$n \
-            -md5-list $DIR/md5-check \
             $JIGDO_OPTS $opts $dirs CD$n"
 
     else

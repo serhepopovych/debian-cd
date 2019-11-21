@@ -4,6 +4,13 @@ debian-cd (3.1.28) UNRELEASED; urgency=medium
   * Add a "with firmware" text to the DISKINFO string when appropriate
     Closes: #944207
 
+  * Major changes to jigdo support - add support for the new
+    sha256-based v2 format so we can think about phasing out
+    dependencies on md5. Will still build using md5 stuff for
+    compatibility for now - we need a new xorriso release (1.5.3?) to
+    hit the archive and (more importantly!) users to get current jigdo
+    clients too before we can switch.
+
   [ Samuel Thibault ]
   * Drop support for xorriso versions before 1.2.2
   * Add hurd-i386 EFI support.

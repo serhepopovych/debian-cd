@@ -45,6 +45,8 @@ OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-out
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=https://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
 
+JIGOO_CHECKSUM=md5
+
 # Type of disc image, cd or dvd (lower case)
 if [ "$1"x = ""x ] ; then
     TYPE=cd
@@ -81,7 +83,7 @@ DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
 SECTS="main non-free contrib"
 VERBOSE=2
-GRAB_MD5=$BASEDIR/tools/grab_md5
+GRAB_CHECKSUMS=$BASEDIR/tools/grab_checksums
 export VERBOSE BASEDIR SECTS
 
 FIRSTVER=`echo $VER | cut -c 1-4`0
@@ -164,7 +166,7 @@ make_cd () {
             -jigdo-template ${JIGDODIR}/${BASENAME}.template \
             -jigdo-map Debian=$MIRROR/ \
             -jigdo-force-md5 /pool/ \
-            -md5-list $UPD/md5-check \
+            -checksum-list $UPD/checksum-check \
             $UPD/CD$CDNUM 2>&1 | grep "extents written"
 #            $UPD/CD$CDNUM
 	if [ $? -ne 0 ] ; then
@@ -280,7 +282,7 @@ if [ "$NONFREE"x != "1"x ] ; then
     mv -f $UPD/list1 $UPD/list
 fi
 
-$GRAB_MD5 $MIRROR_NORM "$ARCHLIST all" $CODENAME $CODENAME $UPD/md5-check
+$GRAB_CHECKSUMS $JIGOO_CHECKSUM $MIRROR_NORM "$ARCHLIST all" $CODENAME $CODENAME $UPD/checksum-check
 
 for THISARCH in $ARCHLIST
 do

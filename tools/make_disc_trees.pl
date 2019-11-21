@@ -203,9 +203,8 @@ while (defined (my $pkg = <INLIST>)) {
             $mkisofs_opts = "";
         }
         if ($disknum <= $maxjigdos) {
-            $mkisofs_opts = "$mkisofs_opts -jigdo-jigdo /dev/null";
-            $mkisofs_opts = "$mkisofs_opts -jigdo-template /dev/null";
-            $mkisofs_opts = "$mkisofs_opts -md5-list /dev/null";
+	    # Set things to /dev/null - we're only doing a
+	    # sizing run here
             $mkisofs_opts = "$mkisofs_opts -o /dev/null";
         }
         if ( -e "$bdir/$disknum.mkisofs_dirs" ) {
