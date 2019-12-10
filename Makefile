@@ -68,6 +68,9 @@ endif
 ifndef DEBOOTSTRAP_OPTS
 DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
+ifeq (,$(DEBVER))
+DEBVER := $(DEBVERSION)
+endif
 
 ## Additional packages required for Debian Ports
 DEBIAN_PORTS_ARCHES=alpha hppa ia64 hurd-i386 m68k powerpc powerpcspe ppc64 riscv64 sh4 sparc sparc64 x32
@@ -495,7 +498,7 @@ image-trees: ok genlist
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" "$(MKISOFS)" "$(MKISOFS_OPTS) $(JIGDO_OPTS)"
 
 images: ok $(OUT) $(BDIR)/checksum-check
-	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVER)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 parallel_images: $(subst volid,image,$(notdir $(wildcard $(BDIR)/*.volid)))
 	echo $^

@@ -8,7 +8,7 @@ set -e
 DIR=$1
 ARCHES="$2"
 OUT=$3
-DEBVERSION=$4
+DEBVER=$4
 MIRROR=$5
 MKISOFS=$6
 MKISOFS_OPTS=$7
@@ -66,7 +66,7 @@ do
     opts=`cat $DIR/$n.mkisofs_opts` || true
     dirs=`cat $DIR/$n.mkisofs_dirs` || true
     volid=`cat $DIR/$n.volid`
-    relname=`echo $DEBVERSION | sed -e 's/ //g'`
+    relname=`echo $DEBVER | sed -e 's/ //g'`
     DISKINFO=`cat $DIR/$n.diskinfo`
 
     ARCHLIST=`echo "$ARCHES" | tr ' ' '-'`
