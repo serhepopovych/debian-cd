@@ -65,6 +65,9 @@ endif
 ifndef DEBOOTSTRAP_OPTS
 DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
+ifeq (,$(DEBVER))
+DEBVER := $(DEBVERSION)
+endif
 
 ## Internal variables  
 apt=$(BASEDIR)/tools/apt-selection
@@ -476,7 +479,7 @@ image-trees: ok genlist
 	$(Q)$(BASEDIR)/tools/make_disc_trees.pl $(BASEDIR) $(MIRROR) $(TDIR) $(CODENAME) "$(ARCHES)" "$(MKISOFS)" "$(MKISOFS_OPTS) $(JIGDO_OPTS)"
 
 images: ok $(OUT) $(BDIR)/md5-check
-	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVER)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
