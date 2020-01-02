@@ -202,9 +202,9 @@ export JIGDO_CHECKSUM="md5"
 #export amd64_MKISOFS_OPTS="-as mkisofs -r -checksum_algorithm_iso sha256,sha512"
 
 # Keyring (defaults):
-#ARCHIVE_KEYRING_PACKAGE=debian-archive-keyring
+#export ARCHIVE_KEYRING_PACKAGE=debian-archive-keyring
 # The path to the keyring file relative to $TDIR/archive-keyring/
-#ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
+#export ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
 
 # By default we use debootstrap --no-check-gpg to find out the minimal set
 # of packages because there's no reason to not trust the local mirror. But
