@@ -1124,11 +1124,11 @@ sub add_missing {
 					# package that is
 					# added successfully
 					# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
-					push (@{$list}, $pkg);
-					if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $parents, $check_backports)) {
+					push (@{$list}, \%t);
+					if (add_missing ($list, $packages{$pkgname}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
 					    $or_ok = 1;
-					    remove_entry($pkg, $list);
-					    push @{$list}, $pkg;
+					    remove_entry(\%t, $list);
+					    push @{$list}, \%t;
 					    last;
 					} else {
 					    pop @{$list};
