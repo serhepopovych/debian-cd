@@ -1172,7 +1172,10 @@ sub add_missing {
 				next;
 			}
 			push @{$list}, \%t;
-			if (not add_missing ($list, $packages{$t{"Package"}}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
+			if (add_missing ($list, $packages{$t{"Package"}}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
+				remove_entry(\%t, $list);
+				push @{$list}, \%t;
+			} else {
 				my $pkgname = $pkgin{"Package"};
 				msg(1, "couldn't add $pt ...\n");
 				if ($soft_depend) {
@@ -1184,8 +1187,6 @@ sub add_missing {
 					$ok = 0;
 				}
 			}
-			remove_entry(\%t, $list);
-			push @{$list}, \%t;
 		}
 	}
 	# If a problem has come up, then restore the original list
