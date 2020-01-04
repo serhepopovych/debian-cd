@@ -900,7 +900,7 @@ sub add_package {
 
 	if ($add_rec) {
 		#TODO: Look for recommends (not yet included !!)
-		add_recommends (\@dep, $p, $check_backports);
+		add_recommends (\@dep, $p, $add_sug, $check_backports);
 		msg(3, "  \@dep after add_recommends = " . dump_depend(\@dep) . "\n");
 		# Check again but doesn't fail if one of the package cannot be
 		# installed, just ignore it (it will be removed from @dep)
@@ -914,7 +914,7 @@ sub add_package {
 
 	if ($add_sug) {
 		#TODO: Look for suggests (not yet included !!)
-		add_suggests (\@dep, $p, $check_backports);
+		add_suggests (\@dep, $p, $add_rec, $check_backports);
 		msg(3, "  \@dep after add_suggests = " . dump_depend(\@dep) . "\n");
 		# Check again but doesn't fail if one of the package cannot be
 		# installed, just ignore it (it will be removed from @dep)
@@ -944,6 +944,7 @@ sub accepted {
 sub add_suggests {
 	my $deps_list = shift;
 	my $pkg = shift;
+	my $add_rec = shift; # Do we look for recommends
 	my $check_backports = shift;
 	my @parents = ($pkg);
 	my $p; # = shift;
@@ -952,13 +953,15 @@ sub add_suggests {
 	foreach $p (@copy) {
 		my %t = %$p;
 		my $pn = $t{"Package"};
-		add_missing($deps_list, $packages{$pn}{"Suggests"}, \%t, 1, \@parents, $check_backports);
+		add_missing($deps_list, $packages{$pn}{"Suggests"}, \%t, 1,
+			    \@parents, $add_rec, 1, $check_backports);
 	}
 }
 
 sub add_recommends {
 	my $deps_list = shift;
 	my $pkg = shift;
+	my $add_sug = shift; # Do we look for suggests
 	my $check_backports = shift;
 	my @parents = ($pkg);
 	my $p; # = shift;
@@ -967,7 +970,8 @@ sub add_recommends {
 	foreach $p (@copy) {
 		my %t = %$p;
 		my $pn = $t{"Package"};
-		add_missing($deps_list, $packages{$pn}{"Recommends"}, \%t, 1, \@parents, $check_backports);
+		add_missing($deps_list, $packages{$pn}{"Recommends"}, \%t, 1,
+			    \@parents, 1, $add_sug, $check_backports);
 	}
 }
 
@@ -982,7 +986,8 @@ sub get_missing {
 	$t{"CmpOp"} = "";
 	$t{"Version"} = "";
 
-	if (add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0, \@parents, $check_backports)) {
+	if (add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0,
+			 \@parents, 0, 0, $check_backports)) {
 		# Explicitly move the package itself to the end of the list,
 		# i.e. *after* all its dependencies
 		remove_entry(\%t, \@deps_list);
@@ -1000,6 +1005,8 @@ sub add_missing {
 	die "add_missing passed a non-hash" unless "HASH" eq ref($pkgin);
 	my $soft_depend = shift;
 	my $parents = shift;
+	my $add_rec = shift; # Do we look for recommends
+	my $add_sug = shift; # Do we look for suggests
 	my $check_backports = shift;
 
 	my $pkgname = $pkgin->{"Package"};
@@ -1111,7 +1118,13 @@ sub add_missing {
 					# added successfully
 					# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
 					push (@{$list}, \%t);
-					if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
+					if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, 0, 0, $check_backports)) {
+					    if ($add_rec) {
+						add_recommends($list, \%t, $add_sug, $check_backports);
+					    }
+					    if ($add_sug) {
+						add_suggests($list, \%t, $add_rec, $check_backports);
+					    }
 					    $or_ok = 1;
 					    remove_entry(\%t, $list);
 					    push @{$list}, \%t;
@@ -1159,7 +1172,13 @@ sub add_missing {
 			my %t = %$thisdep;
 
 			push @{$list}, \%t;
-			if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
+			if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, 0, 0, $check_backports)) {
+				if ($add_rec) {
+					add_recommends($list, \%t, $add_sug, $check_backports);
+				}
+				if ($add_sug) {
+					add_suggests($list, \%t, $add_rec, $check_backports);
+				}
 				remove_entry(\%t, $list);
 				push @{$list}, \%t;
 			} else {
