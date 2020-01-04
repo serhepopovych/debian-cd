@@ -1156,7 +1156,6 @@ sub add_missing {
 				msg(1, "  $pt doesn't exist...\n");
 				if ($soft_depend) {
 					msg(1, "  soft dep: $pkgname ok, despite missing dep on $pt\n");
-					$ok = 1;
 				} else {
 					msg(1, "  $pkgname failed, couldn't satisfy dep on $pt\n");
 					$ok = 0;
@@ -1180,11 +1179,10 @@ sub add_missing {
 				msg(1, "couldn't add $pt ...\n");
 				if ($soft_depend) {
 					msg(1, "soft dep: $pkgname ok, despite missing dep on $pt\n");
-					$ok = 1;
 				} else {
 					msg(1, "$pkgname failed, couldn't satisfy dep on $pt\n");
-					pop @{$list};
 					$ok = 0;
+					last;
 				}
 			}
 		}
