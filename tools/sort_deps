@@ -202,7 +202,7 @@ while (@list) {
 		"end of deptree from '$p'\n");
 	    die "sort_deps failed! :-(\n";
 	}
-	$p = lc $1;
+	$p = $1;
 	$i++;
 	msg(2, "  Dependency tree of `$p' ...\n");
 	read_depends (\$i, \@res, $p);
@@ -228,7 +228,7 @@ if ($backports) {
 		    "end of deptree from '$p'\n");
 		die "sort_deps failed! :-(\n";
 	    }
-	    $p = lc $1;
+	    $p = $1;
 	    $i++;
 	    msg(2, "  Dependency tree of `$p/$codename-backports' ...\n");
 	    read_depends (\$i, \@res, "$p/$codename-backports");
@@ -313,18 +313,18 @@ if ($complete) {
     # Try to sort them by section even if packages from
     # other sections will get in through dependencies
     # With some luck, most of them will already be here
-    foreach my $p (sort { ($packages{lc $a}{"Section"} cmp $packages{lc $b}{"Section"})
-                       || (lc $a cmp lc $b) }
+    foreach my $p (sort { ($packages{$a}{"Section"} cmp $packages{$b}{"Section"})
+                       || ($a cmp $b) }
              grep { not ($included{$_} or $excluded{$_}) } keys %packages) {
 	# At this point, we should *not* be adding any more udebs,
 	# as they're no use to anybody.
-	if ($packages{lc $p}{"IsUdeb"}) {
+	if ($packages{$p}{"IsUdeb"}) {
 	    msg(2, "  Ignoring udeb $p ...\n");
 	} else {
 	    if ($p =~ /\/$codename-backports$/i) {
-		add_package (lc $p, 0, 0, 1);
+		add_package ($p, 0, 0, 1);
 	    } else {
-		add_package (lc $p, 0, 0, 0);
+		add_package ($p, 0, 0, 0);
 	    }
 	}
     }
@@ -348,9 +348,9 @@ if ($extranonfree and (! $nonfree))
 	foreach $p (@toinclude)
 	{
 	    if ($p =~ /\/$codename-backports$/i) {
-		add_package (lc $p, 1, 1, 1);
+		add_package ($p, 1, 1, 1);
 	    } else {
-		add_package (lc $p, 1, 1, 0);
+		add_package ($p, 1, 1, 0);
 	    }
 	}
 
@@ -363,21 +363,19 @@ if ($extranonfree and (! $nonfree))
 		chomp;
 		next if m/^\s*$/;
 		next if $included{$_};
-		next if $included{lc $_};
 		next if $excluded{$_};
-		next if $excluded{lc $_};
-		if (not exists $packages{$_} && not exists $packages{lc $_}) { 
+		if (not exists $packages{$_}) {
 		  msg(1, "WARNING: '$_' does not appear to be available ... " . 
 	          	 "(ignored)\n");
 		  next;
 		}
-		if ($packages{lc $p}{"IsUdeb"}) {
+		if ($packages{$p}{"IsUdeb"}) {
 			msg(2, "  Ignoring udeb $p ...\n");
 		} else {
 		    if ($_ =~ /\/$codename-backports$/i) {
-			add_package (lc $_, 1, 1, 1);
+			add_package ($_, 1, 1, 1);
 		    } else {
-			add_package (lc $_, 1, 1, 0);
+			add_package ($_, 1, 1, 0);
 		    }
 		}
 	}
@@ -392,13 +390,13 @@ if ($extranonfree and (! $nonfree))
 			grep { not ($included{$_} or $excluded{$_}) } 
 			keys %packages) 
 	    {
-			if ($packages{lc $p}{"IsUdeb"}) {
+			if ($packages{$p}{"IsUdeb"}) {
 				msg(2, "  Ignoring udeb $p ...\n");
 			} else {
 			    if ($p =~ /\/$codename-backports$/i) {
-				add_package (lc $p, 0, 0, 1);
+				add_package ($p, 0, 0, 1);
 			    } else {
-				add_package (lc $p, 0, 0, 0);
+				add_package ($p, 0, 0, 0);
 			    }
 			}
 		}
@@ -694,7 +692,7 @@ sub fix_backport_depends {
 	    my @new_or_list;
 	    foreach my $pkg (@{$thisdep}) {
 		my %t = %$pkg;
-		my $pkgname = lc $t{"Package"};
+		my $pkgname = $t{"Package"};
 		# Does the package exist?
 		if (exists $excluded{$pkgname} &&
 		    check_versions($t{"Version"}, $t{"CmpOp"}, $packages{$pkgname}{"Version"})) {
@@ -719,7 +717,7 @@ sub fix_backport_depends {
 	} else {
 	    # It's virtual or a normal package
 	    my %t = %{$thisdep};
-	    my $pkgname = lc $t{"Package"};
+	    my $pkgname = $t{"Package"};
 	    # Does the package exist?
 	    if (exists $excluded{$pkgname} &&
 		check_versions($t{"Version"}, $t{"CmpOp"}, $packages{$pkgname}{"Version"})) {
@@ -1047,7 +1045,7 @@ sub add_missing {
 			# recursion. If *any* one of them is already installed, it
 			# will do.
 			foreach my $pkg (@{$thisdep}) {
-				my $pn = lc $pkg->{"Package"};
+				my $pn = $pkg->{"Package"};
 
 				if (exists $packages{$pn} &&
 				    ($packages{$pn}{"Size"} > $max_pkg_size)) {
@@ -1143,7 +1141,7 @@ sub add_missing {
 			my $pt = dump_depend($thisdep);
 
 			msg(1, "  Looking at adding $pt to satisfy dep\n");
-			if (not exists $packages{lc $pn}) {
+			if (not exists $packages{$pn}) {
 				msg(1, "  $pt doesn't exist...\n");
 				if ($soft_depend) {
 					msg(1, "  soft dep: $pkgname ok, despite missing dep on $pt\n");
