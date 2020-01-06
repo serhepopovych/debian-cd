@@ -472,47 +472,30 @@ sub parse_package {
 }
 
 sub dump_depend {
-    my $tmpin = shift;
-    my %d;
-    my $ret = "";
+	my $tmpin = shift;
+	my $ret;
 
-    if ("ARRAY" eq ref($tmpin)) {
-        my @array = @{$tmpin};
-        foreach (@array) {
-            %d = %$_;
-            $ret .= $d{"Package"};
-            if ($d{"CmpOp"} ne "") {
-                $ret .= " (" . $d{"CmpOp"} . " " . $d{"Version"} . ")";
-            }
-            $ret .= " ";
-        }
-    } elsif ("HASH" eq ref($tmpin)) {
-        %d = %$tmpin;
-        $ret .= $d{"Package"};
-        if ($d{"CmpOp"} ne "") {
-            $ret .= " (" . $d{"CmpOp"} . " " . $d{"Version"} . ")";
-        }
-    } else {
-        die "dump_depend: $tmpin is neither an array nor a hash!\n";
-    }
-
-    return $ret;
-}
-
-sub dump_or_list {
-	my $out_type = shift;
-	my $elt = shift;
-	my @or = @$elt;
-
-	if (scalar @or == 1) {
-		msg(1, "    $out_type: " . dump_depend($or[0]) . "\n");
-	} else {
-		msg(1, "    $out_type: OR (");
-		foreach my $t (@or) {
-			msg(1, dump_depend($t) . " ");
+	if ("HASH" eq ref($tmpin)) {
+		my $pn = $tmpin->{"Package"};
+		$ret = $_[0] ? ", " . $pn : $pn;
+		my $op = $tmpin->{"CmpOp"};
+		if ($op ne "") {
+			my $pv = $tmpin->{"Version"};
+			$ret .= " (" . $op . " " . $pv . ")";
 		}
-		msg(1, ")\n");
+	} elsif ("ARRAY" eq ref($tmpin)) {
+		$ret = "";
+		foreach my $d (@{$tmpin}) {
+			$ret .= dump_depend($d, $ret);
+		}
+		if (scalar(@{$tmpin}) > 1) {
+			$ret = "OR (" . $ret . ")";
+		}
+	} else {
+		die "dump_depend: $tmpin is neither an array nor a hash!\n";
 	}
+
+	return $ret;
 }
 
 sub read_depends {
@@ -544,7 +527,7 @@ sub read_depends {
 		# Check the kind of depends : or, virtual, normal
 		if ($or eq '|') {
 			my $elt = read_ordepends ($i, $lines);
-			dump_or_list($out_type, \@$elt);
+			msg(1, "    $out_type: " . dump_depend($elt) . "\n");
 			push @{$packages{$pkg}{$out_type}}, $elt;
 		} elsif ($lines->[$$i] =~ m/^\s\s$type: <([^>]+)>/) {
 			my $elt = read_virtualdepends ($i, $lines);
@@ -583,7 +566,7 @@ sub read_depends {
 					$$i++;
 				}
 			}
-			dump_or_list($out_type, \@or);
+			msg(1, "    $out_type: " . dump_depend(\@or) . "\n");
 			push @{$packages{$pkg}{$out_type}}, \@or;
 		} else {
 			msg(0, "ERROR: Unknown depends line : $lines->[$$i]\n");
@@ -991,25 +974,10 @@ sub add_missing {
 	#msg(3, "   add_missing: parents atm @{$parents}\n");
 	# Check all dependencies 
 	foreach my $thisdep (@{$new}) {
-		my $textout = "";
+		my $textout = dump_depend($thisdep);
 
 		# Print out status
-		if ("ARRAY" eq ref($thisdep)) {
-			if (scalar(@{$thisdep} > 1)) {
-				$textout = "(OR ";
-			}
-			foreach my $orpkg (@{$thisdep}) {
-				$textout .= dump_depend($orpkg) . " ";
-			}
-			if (scalar(@{$thisdep} > 1)) {
-				$textout .= ")";
-			}
-		} elsif ("HASH" eq ref($thisdep)) {
-			$textout = dump_depend($thisdep);
-		} else {
-			die "add_missing: $thisdep should be an array or hash!\n";
-		}
-		msg(3, "    $pkgname Dep: $textout soft_depend $soft_depend\n");
+		msg(3, "    $pkgname Dep: $textout, soft_depend $soft_depend\n");
 
 		# Still work to do...
 		# If it's an OR
@@ -1030,7 +998,7 @@ sub add_missing {
 
 				# Already included?
 				if (dep_pkg_included($pkg, $check_backports, $need_udeb)) {
-					msg(3, "    OR relationship already included: " . dump_depend($pkg) . "\n");
+					msg(3, "    " . dump_depend($pkg) . " relationship already included\n");
 					$or_ok = 1;
 					last;
 				}
@@ -1039,7 +1007,7 @@ sub add_missing {
 				# depth-first search? (yes, we have to cope with
 				# circular dependencies here...)
 				if (is_in_dep_list ($pkg, $parents)) {
-					msg(3, "    OR relationship already satisfied by parent " . dump_depend($pkg) . "\n");
+					msg(3, "    " . dump_depend($pkg) . " relationship already satisfied by parent\n");
 					$or_ok = 1;
 					last;
 				}
@@ -1113,25 +1081,24 @@ sub add_missing {
 		# Else it's a simple dependency
 		} else {
 			my $pn = $thisdep->{"Package"};
-			my $pt = dump_depend($thisdep);
 
-			msg(1, "  Looking at adding $pt to satisfy dep\n");
+			msg(1, "  Looking at adding $textout to satisfy dep\n");
 			if (not exists $packages{$pn}) {
-				msg(1, "  $pt doesn't exist...\n");
+				msg(1, "  $textout doesn't exist...\n");
 				if ($soft_depend) {
-					msg(1, "  soft dep: $pkgname ok, despite missing dep on $pt\n");
+					msg(1, "  soft dep: $pkgname ok, despite missing dep on $textout\n");
 				} else {
-					msg(1, "  $pkgname failed, couldn't satisfy dep on $pt\n");
+					msg(1, "  $pkgname failed, couldn't satisfy dep on $textout\n");
 					$ok = 0;
 					last;
 				}
 			}
 			if (dep_pkg_included($thisdep, $check_backports, $need_udeb)) {
-				msg(1, "    $pt already included\n");
+				msg(1, "    $textout already included\n");
 				next; # Already included, don't worry
 			}
 			if (is_in_dep_list($thisdep, $list)) {
-				msg(1, "    $pt already in dep list\n");
+				msg(1, "    $textout already in dep list\n");
 				next;
 			}
 
@@ -1148,11 +1115,11 @@ sub add_missing {
 				remove_entry(\%t, $list);
 				push @{$list}, \%t;
 			} else {
-				msg(1, "couldn't add $pt ...\n");
+				msg(1, "couldn't add $textout ...\n");
 				if ($soft_depend) {
-					msg(1, "soft dep: $pkgname ok, despite missing dep on $pt\n");
+					msg(1, "soft dep: $pkgname ok, despite missing dep on $textout\n");
 				} else {
-					msg(1, "$pkgname failed, couldn't satisfy dep on $pt\n");
+					msg(1, "$pkgname failed, couldn't satisfy dep on $textout\n");
 					$ok = 0;
 					last;
 				}
