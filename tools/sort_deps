@@ -742,26 +742,6 @@ sub fix_backport_depends {
     return \@new_dep_list;
 }
 
-# Check to see if a dependency is satisfied, either a direct
-# dependency or any one of an OR array
-sub dep_satisfied {
-    my $p = shift;
-    my $check_backports = shift;
-    my $need_udeb = shift;
-    
-    if ("ARRAY" eq ref $p) {
-	foreach (@{$p}) {
-	    if (dep_pkg_included($_, $check_backports, $need_udeb)) {
-		return 1;
-	    }
-	}
-    } elsif ("HASH" eq ref $p) {
-	return dep_pkg_included($p, $check_backports, $need_udeb);
-    } else {
-    }
-    return 0;
-}
-
 sub read_ordepends {
 	my $i = shift;
 	my $lines = shift;
@@ -1031,11 +1011,6 @@ sub add_missing {
 		}
 		msg(3, "    $pkgname Dep: $textout soft_depend $soft_depend\n");
 
-		# Bail out early if we can!
-		if (dep_satisfied ($thisdep, $check_backports, $need_udeb)) {
-			next;
-		}
-
 		# Still work to do...
 		# If it's an OR
 		if ("ARRAY" eq ref($thisdep)) {
@@ -1053,9 +1028,9 @@ sub add_missing {
 					$excluded{$pn} = 'toobig';
 				}
 
-				# Already installed?
-				if (dep_satisfied($pkg, $check_backports, $need_udeb)) {
-					msg(3, "    OR relationship already installed: " . dump_depend($pkg) . "\n");
+				# Already included?
+				if (dep_pkg_included($pkg, $check_backports, $need_udeb)) {
+					msg(3, "    OR relationship already included: " . dump_depend($pkg) . "\n");
 					$or_ok = 1;
 					last;
 				}
@@ -1151,7 +1126,7 @@ sub add_missing {
 					last;
 				}
 			}
-			if (dep_satisfied($thisdep, $check_backports, $need_udeb)) {
+			if (dep_pkg_included($thisdep, $check_backports, $need_udeb)) {
 				msg(1, "    $pt already included\n");
 				next; # Already included, don't worry
 			}
