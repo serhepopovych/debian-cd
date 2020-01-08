@@ -1126,14 +1126,17 @@ sub add_missing {
 			}
 		}
 	}
+	pop (@{$parents});
+
 	# If a problem has come up, then restore the original list
-	if (not $ok) {
+	if ($ok) {
+		if (not is_in_dep_list($pkgin, $list)) {
+			push @{$list}, $pkgin;
+		}
+	} else {
 		@{$list} = @backup;
 	}
-	if (not is_in_dep_list($pkgin, $list)) {
-		push @{$list}, $pkgin;
-	}
-	pop (@{$parents});
+
 	return $ok;
 }
 
