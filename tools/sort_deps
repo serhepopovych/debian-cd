@@ -1042,7 +1042,7 @@ sub add_missing {
 				    }
 
 				    # Check we don't already have the package
-				    if (is_in_dep_list($pkg, $list)) {
+				    if (is_in_dep_list(\%t, $list)) {
 					$or_ok = 1;
 					last;
 					# Otherwise try to add it
