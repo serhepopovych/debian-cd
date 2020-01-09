@@ -824,7 +824,6 @@ sub add_package {
 	my $add_rec = shift; # Do we look for recommends
 	my $add_sug = shift; # Do we look for suggests
 	my $check_backports = shift;
-	my ($ok, $reasons);
 
 	msg(2, "+ Trying to add $p...\n");
 	if ($included{$p}) {
@@ -833,63 +832,22 @@ sub add_package {
 	}
 
 	# Get all dependencies (not yet included) of each package
-	my ($deps, $parents) = (get_missing ($p, $check_backports));
+	my $deps = [];
+	my $parents = [];
+	my $t = { "Package" => $p, "CmpOp" => '', "Version" => '' };
 
 	# Stop here if apt failed
-	if (not scalar(@{$deps})) {
-		msg(2, "Can't add $p ... dependency problem.\n");
-		return;
-	}
-
-	if ($packages{$p}{"Size"} > $max_pkg_size) {
-		msg(2, "Can't add $p ... too big!\n");
-		$excluded{$p} = 'toobig';
-		return;
-	}
-
-	msg(3, "  \$deps before checklist = " . dump_depend($deps) . "\n");
-
-	# Check if all packages are allowed (fail if one cannot)
-	($ok, $reasons) = check_list ($deps, 1, $check_backports);
-	if (not $ok) {
-		msg(2, "Can't add $p ... one of the packages needed has " .
-		       "been refused. Reasons: $reasons\n"); 
-		return;
-	}
-
-	msg(3, "  \$deps after checklist = " . dump_depend($deps) . "\n");
-
-	if ($add_rec) {
-		#TODO: Look for recommends (not yet included !!)
-		add_recommends ($deps, $parents, $add_sug, $check_backports);
-		msg(3, "  \$deps after add_recommends = " . dump_depend($deps) . "\n");
-		# Check again but doesn't fail if one of the package cannot be
-		# installed, just ignore it (it will be removed from $deps)
-		($ok, $reasons) = check_list ($deps, 0, $check_backports);
-		if (not $ok) {
-			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-			return;
+	my $ok = get_missing($deps, $t, 0,
+			     $parents, $add_rec, $add_sug, $check_backports);
+	if ($ok > 0) {
+		# All packages are ok, now list them out and add sizes
+		foreach $t (@{$deps}) {
+			add_to_output($t->{"Package"});
 		}
-		msg(3, "  \$deps after checklist2 = " . dump_depend($deps) . "\n");
-	}
-
-	if ($add_sug) {
-		#TODO: Look for suggests (not yet included !!)
-		add_suggests ($deps, $parents, $add_rec, $check_backports);
-		msg(3, "  \$deps after add_suggests = " . dump_depend($deps) . "\n");
-		# Check again but doesn't fail if one of the package cannot be
-		# installed, just ignore it (it will be removed from $deps)
-		($ok, $reasons) = check_list ($deps, 0, $check_backports);
-		if (not $ok) {
-			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-			return;
+	} else {
+		if ($ok == 0) {
+			msg(2, "Can't add $p ... dependency problem.\n");
 		}
-		msg(3, "  \$deps after checklist3 = " . dump_depend($deps) . "\n");
-	}
-
-	# All packages are ok, now list them out and add sizes
-	foreach my $t (@{$deps}) {
-		add_to_output($t->{"Package"});
 	}
 }
 
@@ -902,54 +860,66 @@ sub accepted {
 	return 0;
 }
 
-sub add_suggests {
-	my $deps_list = shift;
+sub get_missing {
+	my $deps = shift;
+	my $t = shift;
+	my $soft_depends = shift;
 	my $parents = shift;
 	my $add_rec = shift; # Do we look for recommends
-	my $check_backports = shift;
-	my $p; # = shift;
-	my @copy = @{$deps_list}; # A copy is needed since I'll modify the array
-
-	foreach $p (@copy) {
-		my %t = %$p;
-		my $pn = $t{"Package"};
-		add_missing($deps_list, $packages{$pn}{"Suggests"}, \%t, 1,
-			    $parents, $add_rec, 1, $check_backports);
-	}
-}
-
-sub add_recommends {
-	my $deps_list = shift;
-	my $parents = shift;
 	my $add_sug = shift; # Do we look for suggests
 	my $check_backports = shift;
-	my $p; # = shift;
-	my @copy = @{$deps_list}; # A copy is needed since I'll modify the array
 
-	foreach $p (@copy) {
-		my %t = %$p;
-		my $pn = $t{"Package"};
-		add_missing($deps_list, $packages{$pn}{"Recommends"}, \%t, 1,
+	my $pn = $t->{"Package"};
+	my $pkg = $packages{$pn};
+
+	if (exists $packages{$pn} && $pkg->{"Size"} > $max_pkg_size) {
+		msg(2, "Can't add $pn ... too big! Mark it as excluded\n");
+		$excluded{$pn} = 'toobig';
+		return -1;
+	}
+
+	if (not add_missing($deps, $pkg->{"Depends"}, $t, $soft_depends,
+			    $parents, $add_rec, $add_sug, $check_backports)) {
+		return 0;
+	}
+
+	# Check if all packages are allowed (fail if one cannot)
+	msg(3, "  \$deps before checklist = ", dump_depend($deps), "\n");
+	my ($ok, $reasons) = check_list ($deps, 1, $check_backports);
+	if (not $ok) {
+		msg(2, "Can't add $pn ... one of the packages needed has ",
+		       "been refused. Reasons: $reasons\n");
+		return 0;
+	}
+	msg(3, "  \$deps after checklist = ", dump_depend($deps), "\n");
+
+	if ($add_rec) {
+		add_missing($deps, $pkg->{"Recommends"}, $t, 1,
 			    $parents, 1, $add_sug, $check_backports);
-	}
-}
-
-sub get_missing {
-	my $p = shift;
-	my $check_backports = shift;
-	my $deps_list = [];
-	my $parents = [];
-	my $t = { "Package" => $p, "CmpOp" => '', "Version" => '' };
-
-	if (add_missing ($deps_list, $packages{$p}{"Depends"}, $t, 0,
-			 $parents, 0, 0, $check_backports)) {
-		# Explicitly move the package itself to the end of the list,
-		# i.e. *after* all its dependencies
-		remove_entry($t, $deps_list);
-		push (@{$deps_list}, $t);
+		# Check again but doesn't fail if one of the package cannot be
+		# installed, just ignore it (it will be removed from $deps)
+		msg(3, "  \$deps after add_recommends = ", dump_depend($deps), "\n");
+		($ok, $reasons) = check_list ($deps, 0, $check_backports);
+		if (not $ok) {
+			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
+		}
+		msg(3, "  \$deps after checklist2 = ", dump_depend($deps), "\n");
 	}
 
-	return ($deps_list, $parents);
+	if ($add_sug) {
+		add_missing($deps, $pkg->{"Suggests"}, $t, 1,
+			    $parents, $add_rec, 1, $check_backports);
+		# Check again but doesn't fail if one of the package cannot be
+		# installed, just ignore it (it will be removed from $deps)
+		msg(3, "  \$deps after add_suggests = ", dump_depend($deps), "\n");
+		($ok, $reasons) = check_list ($deps, 0, $check_backports);
+		if (not $ok) {
+			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
+		}
+		msg(3, "  \$deps after checklist3 = ", dump_depend($deps), "\n");
+	}
+
+	return scalar(@{$deps});
 }
 
 # Recursive function adding packages to our list
@@ -989,12 +959,6 @@ sub add_missing {
 			# will do.
 			foreach my $pkg (@{$thisdep}) {
 				my $pn = $pkg->{"Package"};
-
-				if (exists $packages{$pn} &&
-				    ($packages{$pn}{"Size"} > $max_pkg_size)) {
-					msg(2, "    $pn is too big, mark it as excluded\n");
-					$excluded{$pn} = 'toobig';
-				}
 
 				# Already included?
 				if (dep_pkg_included($pkg, $check_backports, $need_udeb)) {
@@ -1052,13 +1016,7 @@ sub add_missing {
 					# added successfully
 					# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
 					push (@{$list}, \%t);
-					if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, 0, 0, $check_backports)) {
-					    if ($add_rec) {
-						add_recommends($list, $parents, $add_sug, $check_backports);
-					    }
-					    if ($add_sug) {
-						add_suggests($list, $parents, $add_rec, $check_backports);
-					    }
+					if (get_missing ($list, \%t, $soft_depend, $parents, $add_rec, $add_sug, $check_backports) > 0) {
 					    $or_ok = 1;
 					    remove_entry(\%t, $list);
 					    push @{$list}, \%t;
@@ -1105,13 +1063,7 @@ sub add_missing {
 			my %t = %$thisdep;
 
 			push @{$list}, \%t;
-			if (add_missing ($list, $packages{$pn}{"Depends"}, \%t, $soft_depend, $parents, 0, 0, $check_backports)) {
-				if ($add_rec) {
-					add_recommends($list, $parents, $add_sug, $check_backports);
-				}
-				if ($add_sug) {
-					add_suggests($list, $parents, $add_rec, $check_backports);
-				}
+			if (get_missing ($list, \%t, $soft_depend, $parents, $add_rec, $add_sug, $check_backports) > 0) {
 				remove_entry(\%t, $list);
 				push @{$list}, \%t;
 			} else {
