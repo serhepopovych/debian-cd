@@ -870,11 +870,25 @@ sub get_missing {
 	my $check_backports = shift;
 
 	my $pn = $t->{"Package"};
+
+	if (not exists $packages{$pn}) {
+		msg(2, "$pn doesn't exist...\n");
+		return -1;
+	}
+
 	my $pkg = $packages{$pn};
 
-	if (exists $packages{$pn} && $pkg->{"Size"} > $max_pkg_size) {
-		msg(2, "Can't add $pn ... too big! Mark it as excluded\n");
+	if ($pkg->{"Size"} > $max_pkg_size) {
+		msg(2, "$pn too big... mark it as excluded\n");
 		$excluded{$pn} = 'toobig';
+		return -1;
+	}
+
+	my $op = $t->{"CmpOp"};
+	my $pv = $t->{"Version"};
+
+	if (not check_versions($pv, $op, $pkg->{"Version"})) {
+		msg(2, "$pn $op $pv isn't available...\n");
 		return -1;
 	}
 
