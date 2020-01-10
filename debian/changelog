@@ -23,6 +23,7 @@ debian-cd (3.1.28) UNRELEASED; urgency=medium
   * Fix a quoting bug that leads to failure in start_new_disc
     when CODENAME is kali-last-snapshot.
   * Add symlinks for kali-last-snapshot in data/, tasks/ and tools/boot/.
+  * Add a default value to JIGDO_CHECKSUM.
 
  -- Holger Levsen <holger@debian.org>  Wed, 23 Oct 2019 18:06:41 +0200
 

@@ -43,6 +43,9 @@ endif
 ifndef ARCHIVE_KEYRING_FILE
 ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
 endif
+ifndef JIGDO_CHECKSUM
+JIGDO_CHECKSUM=md5
+endif
 
 export BUILD_DATE=$(shell date -u +%Y%m%d-%H:%M)
 export ARCHES_NOSRC=$(shell echo $(ARCHES) | sed 's/source//')
@@ -506,7 +509,7 @@ imagesums:
 $(BDIR)/checksum-check: mirrorcheck
 
 mirrorcheck: ok
-	$(Q)$(grab_checksums) ${JIGDO_CHECKSUM} $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/checksum-check
+	$(Q)$(grab_checksums) $(JIGDO_CHECKSUM) $(MIRROR) "$(ARCHES)" $(CODENAME) $(DI_CODENAME) $(BDIR)/checksum-check
 	$(Q)for ARCH in $(ARCHES); do \
 		if [ -e $(BASEDIR)/data/$(CODENAME)/$$ARCH/extra-sources ]; then \
 			echo "Extra dedicated source added; need to grab source checksum info too"; \
