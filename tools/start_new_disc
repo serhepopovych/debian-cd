@@ -22,7 +22,7 @@ CDDIR=$BDIR/CD${DISKNUM}
 DATE=`cat $BDIR/DATE`
 DI_DATA_DIR=$BASEDIR/data/$DI_CODENAME
 
-CAPCODENAME=`perl -e "print ucfirst("$CODENAME")"`
+CAPCODENAME=`perl -e "print ucfirst('$CODENAME')"`
 
 NUM_ARCHES=`echo $ARCHES | wc -w`
 case "$ARCHES" in
