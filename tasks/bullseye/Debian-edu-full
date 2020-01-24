@@ -325,6 +325,7 @@ dmraid-udeb
 dmsetup
 dmsetup-udeb
 dmz-cursor-theme
+dnsmasq
 dns-root-data
 dnsutils
 docbook-xml
@@ -1311,9 +1312,6 @@ ldap2zone
 ldapscripts
 ldap-utils
 ldapvi
-ldm
-ldm-server
-ldm-themes
 less
 liba52-0.7.4
 libaa1
@@ -3388,13 +3386,7 @@ lsb-release
 lshw
 lsof
 lsscsi
-ltsp-client
-ltsp-client-builder
-ltsp-client-core
-ltspfs
-ltspfsd
-ltspfsd-core
-ltsp-server
+ltsp
 lua-bitop
 lua-expat
 lua-json
@@ -3404,7 +3396,6 @@ lv
 lvm2
 lvm2-udeb
 lvmcfg-utils
-lwm
 lxappearance
 lxappearance-obconf
 lxde
@@ -4481,6 +4472,7 @@ x11-utils
 x11-xfs-utils
 x11-xkb-utils
 x11-xserver-utils
+x2goclient
 x2goserver
 x2goserver-common
 x2goserver-extensions
@@ -4488,6 +4480,10 @@ x2goserver-fmbindings
 x2goserver-printing
 x2goserver-x2goagent
 x2goserver-xsession
+x2gothinclient-cdmanager
+x2gothinclient-displaymanager
+x2gothinclient-minidesktop
+x2gothinclient-usbmount
 xarchiver
 xauth
 xbitmaps
