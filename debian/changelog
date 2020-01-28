@@ -1,4 +1,4 @@
-debian-cd (3.1.28) UNRELEASED; urgency=medium
+debian-cd (3.1.28) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Add a "with firmware" text to the DISKINFO string when appropriate
@@ -9,7 +9,7 @@ debian-cd (3.1.28) UNRELEASED; urgency=medium
     dependencies on md5. Will still build using md5 stuff for
     compatibility for now - we need a new xorriso release (1.5.3?) to
     hit the archive and (more importantly!) users to get current jigdo
-    clients too before we can switch.
+    clients too before we can switch. Closes: #949965
 
   [ Samuel Thibault ]
   * Drop support for xorriso versions before 1.2.2
@@ -25,7 +25,7 @@ debian-cd (3.1.28) UNRELEASED; urgency=medium
   * Add symlinks for kali-last-snapshot in data/, tasks/ and tools/boot/.
   * Add a default value to JIGDO_CHECKSUM.
 
- -- Holger Levsen <holger@debian.org>  Wed, 23 Oct 2019 18:06:41 +0200
+ -- Steve McIntyre <93sam@debian.org>  Tue, 28 Jan 2020 12:53:41 +0000
 
 debian-cd (3.1.27) unstable; urgency=medium
 
