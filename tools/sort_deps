@@ -648,13 +648,20 @@ sub check_versions {
 sub dep_pkg_included {
 	my $p = shift;
 	my $check_backports = shift;
+	my $need_udeb = shift;
 	my %d = %$p;
 	my $pn = $d{"Package"};
 
 	if ($included{$pn}) {
 		if (check_versions($d{"Version"}, $d{"CmpOp"}, $packages{$pn}{"Version"})) {
-			msg(1, "      $pn is included already, acceptable version " . $packages{$pn}{"Version"} . "\n");
-			return 1;
+			if ($packages{$pn}{"IsUdeb"} == $need_udeb) {
+				msg(1, "      $pn is included already, acceptable version " . $packages{$pn}{"Version"} . "\n");
+				return 1;
+			} else {
+				my $explanation = "it's a udeb instead of regular deb";
+				$explanation = "it's a deb instead of an udeb" if $need_udeb;
+				msg(1, "      $pn is included already, but $explanation\n");
+			}
 		} else {
 			msg(1, "      $pn is included already, but invalid version " . $packages{$pn}{"Version"} . "\n");
 		}
@@ -665,8 +672,14 @@ sub dep_pkg_included {
 	    msg(1, "    Checking $pn too:\n");
 	    if ($included{$pn}) {
 		if (check_versions($d{"Version"}, $d{"CmpOp"}, $packages{$pn}{"Version"})) {
-		    msg(1, "      $pn is included already, acceptable version " . $packages{$pn}{"Version"} . "\n");
-		    return 1;
+		    if ($packages{$pn}{"IsUdeb"} == $need_udeb) {
+			msg(1, "      $pn is included already, acceptable version " . $packages{$pn}{"Version"} . "\n");
+			return 1;
+		    } else {
+			my $explanation = "it's a udeb instead of regular deb";
+			$explanation = "it's a deb instead of an udeb" if $need_udeb;
+			msg(1, "      $pn is included already, but $explanation\n");
+		    }
 		} else {
 		    msg(1, "      $pn is included already, but invalid version " . $packages{$pn}{"Version"} . "\n");
 		}
@@ -742,15 +755,16 @@ sub fix_backport_depends {
 sub dep_satisfied {
     my $p = shift;
     my $check_backports = shift;
+    my $need_udeb = shift;
     
     if ("ARRAY" eq ref $p) {
 	foreach (@{$p}) {
-	    if (dep_pkg_included($_, $check_backports)) {
+	    if (dep_pkg_included($_, $check_backports, $need_udeb)) {
 		return 1;
 	    }
 	}
     } elsif ("HASH" eq ref $p) {
-	return dep_pkg_included($p, $check_backports);
+	return dep_pkg_included($p, $check_backports, $need_udeb);
     } else {
     }
     return 0;
@@ -1008,6 +1022,8 @@ sub add_missing {
 		die "add_missing passed a non-hash";
 	}
 
+	my $need_udeb = $packages{$pkgin{"Package"}}{"IsUdeb"};
+
 	push(@{$parents}, $pkgin{"Package"});
 	#msg(3, "   add_missing: parents atm @{$parents}\n");
 	# Check all dependencies 
@@ -1034,7 +1050,7 @@ sub add_missing {
 		msg(3, "    $pkgname Dep: $textout soft_depend $soft_depend\n");
 
 		# Bail out early if we can!
-		if (dep_satisfied ($thisdep, $check_backports)) {
+		if (dep_satisfied ($thisdep, $check_backports, $need_udeb)) {
 			next;
 		}
 
@@ -1057,7 +1073,7 @@ sub add_missing {
 				}
                                
 				# Already installed?
-				if (dep_satisfied($pkg, $check_backports)) {
+				if (dep_satisfied($pkg, $check_backports, $need_udeb)) {
 					msg(3, "    OR relationship already installed: " . dump_depend($pkg) . "\n");
 					$or_ok = 1;
 					last;
@@ -1147,7 +1163,7 @@ sub add_missing {
 					last;
 				}
 			}
-			if (dep_satisfied(\%t, $check_backports)) {
+			if (dep_satisfied(\%t, $check_backports, $need_udeb)) {
 				msg(1, "    $pt already included\n");
 				next; # Already included, don't worry
 			}
