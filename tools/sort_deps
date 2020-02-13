@@ -1222,7 +1222,7 @@ sub remove_entry {
 		my $tmp2 = @{$array}[$i];
 		my %t2 = %$tmp2;
 		if ($t1{"Package"} eq $t2{"Package"}) {
-            splice(@{$array}, $i, 1);
+			splice(@{$array}, $i, 1);
 			$i--;
 			$entries--;
 		}
@@ -1248,22 +1248,22 @@ sub check_list {
 			next;
 		}
 		if (not accepted($pkgname)) {
-		    my $text = $excluded{"$pkgname"};
-		    msg(1,"  $pkgname has been refused because of $text ...\n");
-		    $ok = 0;
-		    push @to_remove, $thispkg;
-		    $reasons = $reasons . " " . $excluded{$pkgname};
-		    next;
+			my $text = $excluded{"$pkgname"};
+			msg(1,"  $pkgname has been refused because of $text ...\n");
+			$ok = 0;
+			push @to_remove, $thispkg;
+			$reasons = $reasons . " " . $excluded{$pkgname};
+			next;
 		}
 		if ($check_backports &&
 		    ($pkgname !~ /\/$codename-backports/) &&
 		    (not accepted("$pkgname/$codename-backports"))) {
-		    my $text = $excluded{"$pkgname/$codename-backports"};
-		    msg(1,"  $pkgname/$codename-backports has been refused because of $text} ...\n");
-		    $ok = 0;
-		    push @to_remove, $thispkg;
-		    $reasons = $reasons . " " . $excluded{$pkgname};
-		    next;
+			my $text = $excluded{"$pkgname/$codename-backports"};
+			msg(1,"  $pkgname/$codename-backports has been refused because of $text} ...\n");
+			$ok = 0;
+			push @to_remove, $thispkg;
+			$reasons = $reasons . " " . $excluded{$pkgname};
+			next;
 		}
 		if ($included{$pkgname}) {
 			msg(1, "  $pkgname has already been included.\n");
