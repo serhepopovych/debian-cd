@@ -1,7 +1,11 @@
 debian-cd (3.1.29) UNRELEASED; urgency=medium
 
+  [ Raphaël Hertzog ]
   * Fix tools/sort_deps to not accept udeb as solutions to dependencies of
     regular deb (and vice-versa).
+
+  [ Holger Levsen ]
+  * Drop myself from uploaders.
 
  -- Raphaël Hertzog <raphael@offensive-security.com>  Thu, 13 Feb 2020 15:07:42 +0100
 

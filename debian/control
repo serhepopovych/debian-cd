@@ -5,7 +5,6 @@ Maintainer: Debian CD Group <debian-cd@lists.debian.org>
 Uploaders: Raphaël Hertzog <hertzog@debian.org>,
  Santiago Garcia Mantinan <manty@debian.org>,
  Steve McIntyre <93sam@debian.org>,
- Holger Levsen <holger@debian.org>
 Build-Depends: debhelper-compat (= 12)
 Build-Depends-Indep: tofrodos
 Standards-Version: 4.4.1
