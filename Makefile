@@ -269,6 +269,9 @@ $(ADIR)/status:
 	$(Q)for ARCH in $(ARCHES); do \
 		mkdir -p $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
 		ln -s $(TDIR)/archive-keyring/$(ARCHIVE_KEYRING_FILE) $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d; \
+		for key in $(ARCHIVE_EXTRA_KEYS); do \
+			gpg --export -a $$key >> $(ADIR)/$(CODENAME)-$$ARCH/apt/trusted.gpg.d/$$key.asc; \
+		done; \
 		if [ "$$BACKPORTS"x != ""x ] ; then \
 			mkdir -p $(ADIR)/$(CODENAME)-backports-$$ARCH/apt/trusted.gpg.d; \
 			ln -s $(TDIR)/archive-keyring/$(ARCHIVE_KEYRING_FILE) $(ADIR)/$(CODENAME)-backports-$$ARCH/apt/trusted.gpg.d; \

@@ -7,6 +7,10 @@ debian-cd (3.1.29) UNRELEASED; urgency=medium
   [ Holger Levsen ]
   * Drop myself from uploaders.
 
+  [ Steve McIntyre ]
+  * Add easier support for extra archive signing keys - list
+    fingerprints in ARCHIVE_EXTRA_KEYS
+
  -- Raphaël Hertzog <raphael@offensive-security.com>  Thu, 13 Feb 2020 15:07:42 +0100
 
 debian-cd (3.1.28) unstable; urgency=medium

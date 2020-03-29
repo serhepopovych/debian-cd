@@ -206,6 +206,11 @@ export JIGDO_CHECKSUM="md5"
 # The path to the keyring file relative to $TDIR/archive-keyring/
 #export ARCHIVE_KEYRING_FILE=usr/share/keyrings/debian-archive-keyring.gpg
 
+# Extra keys that you might want apt to trust. List their fingerprints
+# here and debian-cd will grab them from the user's keyring as needed
+# (The example here is the buster release key)
+#export ARCHIVE_EXTRA_KEYS="80D15823B7FD1561F9F7BCDDDC30D7C23CBBABEE"
+
 # By default we use debootstrap --no-check-gpg to find out the minimal set
 # of packages because there's no reason to not trust the local mirror. But
 # you can be paranoid and then you need to indicate the keyring to use to
