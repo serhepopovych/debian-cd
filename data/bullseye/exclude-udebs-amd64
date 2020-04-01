@@ -40,6 +40,3 @@ partconf-mkfstab
 # Not needed on arches that use partman
 mdcfg
 lvmcfg
-# We only support grub these days, drop lile and elilo
-lilo-installer
-elilo-installer

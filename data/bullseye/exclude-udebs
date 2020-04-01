@@ -138,3 +138,6 @@ nbd-client-udeb
 pwgen-udeb
 # Eh?
 gnumach-udeb
+# We only support grub these days, drop lilo and elilo
+lilo-installer
+elilo-installer
