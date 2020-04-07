@@ -53,11 +53,9 @@ open (INPKG, "\$BASEDIR/tools/catz $pkgfiles |") or die "Can't read input packag
 $/ = ''; # Browse by paragraph
 
 # Ignore a few tasks that we don't want, e.g. education-development,
-# it's too big and pulls in all sorts of things that end users won't
-# want/need, also ignore cinnamon desktop (no Debian Edu support).
-my @ignore_list = ('education-development',
-		   'education-video',
-		   'task-cinnamon-desktop');
+# it's too big and pulls in all sorts of things that most end users won't
+# want/need.
+my @ignore_list = ('education-development', 'education-video');
 
 while (defined($_ = <INPKG>)) {
     m/^Package: (\S+)/m and $pkg = $1;

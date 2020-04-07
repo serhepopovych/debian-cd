@@ -16,9 +16,9 @@
  * patched debian-cd version (see #601203, message #20); also, some tweaking
  * has been needed to work around problems (virtual packages, unavailable
  * recommended packages in task files) to be able to generate the BD image.
- * Please note: the libpam-krb5 and icinga2-ido-mysql packages had to be added
- * manually because they are installed via scripts during system setup (as
- * opposed to be installed automatically as Recommends).
+ * Please note: the libpam-krb5, dnsmasq and icinga2-ido-mysql packages had to
+ * be added manually because they are installed via scripts during system setup
+ * (as opposed to be installed automatically as Recommends).
  * Sort of cleaned up from already included packages and amd64 specific ones.
  *
  * Generated: 2020-03-27
@@ -321,6 +321,7 @@ dmraid-udeb
 dmsetup
 dmsetup-udeb
 dns-root-data
+dnsmasq
 dnsutils
 docbook-xml
 docbook-xsl
