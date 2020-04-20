@@ -73,6 +73,10 @@ mkdir -p $CDDIR/$INSTALLDIR
 cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
 
+# Try to add graphical installer build too
+extra_image gtk/vmlinuz   "../vmlinuz" || true
+extra_image gtk/initrd.gz "../initrd.gz" || true
+
 # Boot setup including config and help files comes from d-i.
 mkdir -pv $PWD/boot$N
 cat cdrom/debian-cd_info.tar.gz | (cd boot$N/; tar zx)

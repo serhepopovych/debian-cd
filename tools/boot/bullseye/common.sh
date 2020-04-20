@@ -196,3 +196,29 @@ calculate_efi_image_size() {
 
     echo $blocks
 }
+
+extra_image () {
+    image=$1
+    doppelgangers="$2"
+    dir=$(dirname "$image")
+
+    mkdir -p $CDDIR/$INSTALLDIR/$dir
+    if [ ! -e $CDDIR/$INSTALLDIR/"$image" ] ; then
+        if [ ! "$DI_WWW_HOME" ] ; then
+            if [ ! "$DI_DIR" ] ; then
+                DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+            fi
+            cp "$DI_DIR/cdrom/$image" $CDDIR/$INSTALLDIR/"$image"
+        else
+            $WGET "$DI_WWW_HOME/cdrom/$image" -O $CDDIR/$INSTALLDIR/"$image"
+        fi
+    fi
+    for doppelganger in $doppelgangers ; do
+        if [ -f "$CDDIR/$INSTALLDIR/$dir/$doppelganger" ] &&
+               cmp -s $CDDIR/$INSTALLDIR/"$image" $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" ; then
+            echo "    $image identical to $doppelganger. Linking"
+            ln -nf $CDDIR/$INSTALLDIR/"$dir"/"$doppelganger" $CDDIR/$INSTALLDIR/"$image"
+            break
+        fi
+    done
+}
