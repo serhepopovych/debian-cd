@@ -1,4 +1,4 @@
-debian-cd (3.1.29) UNRELEASED; urgency=medium
+debian-cd (3.1.29) unstable; urgency=medium
 
   [ Raphaël Hertzog ]
   * Fix tools/sort_deps to not accept udeb as solutions to dependencies of
@@ -6,7 +6,7 @@ debian-cd (3.1.29) UNRELEASED; urgency=medium
 
   [ Steve McIntyre ]
   * Add easier support for extra archive signing keys - list
-    fingerprints in ARCHIVE_EXTRA_KEYS
+    fingerprints in ARCHIVE_EXTRA_KEYS.
   * Exclude lilo-installer (and elilo-installer) for all arches, not
     just amd64. This was an oversight before.
   * Enable graphical installer for arm64 too, now that d-i builds
@@ -15,17 +15,17 @@ debian-cd (3.1.29) UNRELEASED; urgency=medium
   [ John Paul Adrian Glaubitz ]
   * Remove leftover yaboot directory for buster and bullseye.
 
-  [ Holger Levsen ]
-  * Bump standards version to 4.5.0, no changes needed.
-  * Bump debhelper-compat to 13.
-
   [ Wolfgang Schweer ]
   * Adjust Debian Edu list of packages:
     - tasks/bullseye/Debian-edu-full: updated after major setup rework.
     - tools/generate_debian-edu_task: no longer exclude Cinnamon desktop
       environment.
 
- -- Raphaël Hertzog <raphael@offensive-security.com>  Thu, 13 Feb 2020 15:07:42 +0100
+  [ Holger Levsen ]
+  * Bump standards version to 4.5.0, no changes needed.
+  * Bump debhelper-compat to 13.
+
+ -- Holger Levsen <holger@debian.org>  Tue, 26 May 2020 16:10:35 +0200
 
 debian-cd (3.1.28) unstable; urgency=medium
 
