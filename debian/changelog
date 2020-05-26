@@ -19,6 +19,12 @@ debian-cd (3.1.29) UNRELEASED; urgency=medium
   * Bump standards version to 4.5.0, no changes needed.
   * Bump debhelper-compat to 13.
 
+  [ Wolfgang Schweer ]
+  * Adjust Debian Edu list of packages:
+    - tasks/bullseye/Debian-edu-full: updated after major setup rework.
+    - tools/generate_debian-edu_task: no longer exclude Cinnamon desktop
+      environment.
+
  -- Raphaël Hertzog <raphael@offensive-security.com>  Thu, 13 Feb 2020 15:07:42 +0100
 
 debian-cd (3.1.28) unstable; urgency=medium
