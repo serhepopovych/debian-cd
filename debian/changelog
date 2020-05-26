@@ -4,9 +4,6 @@ debian-cd (3.1.29) UNRELEASED; urgency=medium
   * Fix tools/sort_deps to not accept udeb as solutions to dependencies of
     regular deb (and vice-versa).
 
-  [ Holger Levsen ]
-  * Drop myself from uploaders.
-
   [ Steve McIntyre ]
   * Add easier support for extra archive signing keys - list
     fingerprints in ARCHIVE_EXTRA_KEYS
