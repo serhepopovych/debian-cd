@@ -363,7 +363,7 @@ if [ -e "$MIRROR/dists/$CODENAME/Release" ] ; then
     sed -e "s/^Architectures: .*$/Architectures: $ARCHES/" \
         $MIRROR/dists/$CODENAME/Release | \
         sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
-        perl -ne 'if (/^(MD5Sum|SHA1|SHA256):/i) { $f=1; next } 
+        perl -ne 'if (/^(MD5Sum|SHA1|SHA256|SHA512):/i) { $f=1; next }
     if ($f) { 
         unless (/^ /) { print; $f=0 }
     } else { print }' > dists/$CODENAME/Release
@@ -390,7 +390,7 @@ if [ "$BACKPORTS"x != ""x ]; then
 	sed -e "s/^Architectures: .*$/Architectures: $ARCHES/" \
             $MIRROR/dists/$CODENAME-backports/Release | \
             sed -e "s|^Components: .*$|Components: $SECTIONS|" | \
-            perl -ne 'if (/^(MD5Sum|SHA1|SHA256):/i) { $f=1; next } 
+            perl -ne 'if (/^(MD5Sum|SHA1|SHA256|SHA512):/i) { $f=1; next }
     if ($f) { 
         unless (/^ /) { print; $f=0 }
     } else { print }' > dists/$CODENAME-backports/Release

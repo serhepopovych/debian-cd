@@ -17,7 +17,10 @@ debian-cd (3.1.32) UNRELEASED; urgency=medium
   [ Steev Klimaszewski ]
   * Fix sed delimiters in various scripts
 
- -- Steve McIntyre <93sam@debian.org>  sat, 12 Dec 2020 03:12:36 +0100
+  [ Samuel Thibault ]
+  * Make tools/start_new_disc also cleanup SHA512 checksums.
+
+ -- Steve McIntyre <93sam@debian.org>  Sat, 12 Dec 2020 03:12:36 +0100
 
 debian-cd (3.1.31) unstable; urgency=medium
 
