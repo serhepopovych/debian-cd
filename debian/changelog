@@ -21,6 +21,8 @@ debian-cd (3.1.21-stretch) UNRELEASED; urgency=medium
         jigdo files, to reduce load on the service.
     + Fix up ordering in imagesums
     + Add a "with firmware" text to the DISKINFO string when appropriate
+    + tools/update_popcon: cope with lower-case HTTP headers too; Debian
+      just enabled http2 so this broke
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 19 Jun 2017 13:39:58 +0100
 
