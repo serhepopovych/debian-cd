@@ -45,7 +45,7 @@ dl_file () {
         exit 1
     fi
     HEAD_SIZE=`cat $TDIR/$DIST.head | \
-               awk '/^Content-Length/ {gsub("\r","");print $2}'`
+               awk '/^.ontent-.ength/ {gsub("\r","");print $2}'`
 
     curl -L $capath -s $SITE/$DIST/by_inst > $TDIR/$DIST
     error=$?
@@ -55,14 +55,14 @@ dl_file () {
         exit 1
     fi
 
-    if [ $DL_SIZE != $HEAD_SIZE ] ; then
+    if [ "$DL_SIZE"x != "$HEAD_SIZE"x ] ; then
         echo "Failed to download correctly: expected $HEAD_SIZE bytes, but got $DL_SIZE bytes" >&2
         exit 1
     fi
 
-    LASTMOD=`awk '/^Last-Modified:/ {
+    LASTMOD=`awk '/^.ast-.odified:/ {
                  gsub("\r","")
-                 gsub("^Last-Modified: ","")
+                 gsub("^.ast-.odified: ","")
                  print $0}' $TDIR/$DIST.head`
     echo "$LASTMOD"
 }
