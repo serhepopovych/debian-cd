@@ -1,13 +1,13 @@
-debian-cd (3.1.30) UNRELEASED; urgency=medium
+debian-cd (3.1.30) unstable; urgency=medium
 
   [ Steve McIntyre ]
-  * tools/update_popcon: cope with lower-case HTTP headers too; Debian
-    just enabled http2 so this broke
+  * tools/update_popcon: cope with lower-case HTTP headers too; recently
+    Debian enabled http2 so this broke.
 
   [ Holger Levsen ]
   * Convert README to UTF-8.
 
- -- Steve McIntyre <93sam@debian.org>  Sat, 01 Aug 2020 12:43:04 +0100
+ -- Holger Levsen <holger@debian.org>  Wed, 23 Sep 2020 17:18:38 +0200
 
 debian-cd (3.1.29) unstable; urgency=medium
 
