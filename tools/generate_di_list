@@ -144,23 +144,28 @@ foreach my $arch (@ARCHES) {
 	    }
 	}
 	close PZ;
-	$output .= "/* First, generic udebs */\n";
-	foreach my $udeb (@output_udebs) {
-	    $output .= "$udeb\n";
+	$output .= "/* Udebs found in $pz: */\n";
+	if (scalar (@output_udebs) > 0) {
+	    $output .= "/* Non-kernel udebs */\n";
+	    foreach my $udeb (@output_udebs) {
+		$output .= "$udeb\n";
+	    }
 	}
-	my $num_this_abi = scalar (@{ $driver_udebs{$highest_kernel_ver}});
-	$output .= "/* Next: $num_this_abi udebs for kernel/ABI version ";
-	$output .= number_to_di_ker_abi($highest_kernel_ver);
-	$output .= " */\n";
-	foreach my $udeb (@{ $driver_udebs{$highest_kernel_ver}}) {
-	    $output .= "$udeb\n";
-	}
-	foreach my $key (keys (%driver_udebs)) {
-	    if ($key != $highest_kernel_ver) {
-		$num_this_abi = scalar (@{ $driver_udebs{$key}});
-		$output .= "/* IGNORING $num_this_abi udebs for kernel/ABI version ";
-		$output .= number_to_di_ker_abi($key);
-		$output .= " */\n";
+	if ($highest_kernel_ver != 0) {
+	    my $num_this_abi = scalar (@{ $driver_udebs{$highest_kernel_ver}});
+	    $output .= "/* Next: $num_this_abi udebs for kernel/ABI version ";
+	    $output .= number_to_di_ker_abi($highest_kernel_ver);
+	    $output .= " */\n";
+	    foreach my $udeb (@{ $driver_udebs{$highest_kernel_ver}}) {
+		$output .= "$udeb\n";
+	    }
+	    foreach my $key (keys (%driver_udebs)) {
+		if ($key != $highest_kernel_ver) {
+		    $num_this_abi = scalar (@{ $driver_udebs{$key}});
+		    $output .= "/* IGNORING $num_this_abi udebs for kernel/ABI version ";
+		    $output .= number_to_di_ker_abi($key);
+		    $output .= " */\n";
+		}
 	    }
 	}
     }
