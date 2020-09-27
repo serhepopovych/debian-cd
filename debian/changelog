@@ -1,3 +1,12 @@
+debian-cd (3.1.31) UNRELEASED; urgency=medium
+
+  [ Steve McIntyre ]
+  * tools/generate_di_list: Only include kernel udebs for the highest
+    ABI we know about. Don't waste space on new installation media
+    with older udebs from the archive.
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 27 Sep 2020 01:10:07 +0100
+
 debian-cd (3.1.30) unstable; urgency=medium
 
   [ Steve McIntyre ]
