@@ -1,4 +1,4 @@
-debian-cd (3.1.31) UNRELEASED; urgency=medium
+debian-cd (3.1.31) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * tools/generate_di_list: Only include kernel udebs for the highest
@@ -11,7 +11,7 @@ debian-cd (3.1.31) UNRELEASED; urgency=medium
       for usr/share/debian-cd/(contrib|data|tasks).
     - drop unused missing-depends-on-sensible-utils.
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 27 Sep 2020 01:10:07 +0100
+ -- Holger Levsen <holger@debian.org>  Wed, 14 Oct 2020 16:34:41 +0200
 
 debian-cd (3.1.30) unstable; urgency=medium
 
