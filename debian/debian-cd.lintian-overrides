@@ -1,1 +1,4 @@
 debian-cd binary: missing-depends-on-sensible-utils usr/share/debian-cd/README
+debian-cd binary: package-contains-documentation-outside-usr-share-doc usr/share/debian-cd/contrib/*
+debian-cd binary: package-contains-documentation-outside-usr-share-doc usr/share/debian-cd/data/*
+debian-cd binary: package-contains-documentation-outside-usr-share-doc usr/share/debian-cd/tasks/*

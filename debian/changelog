@@ -5,6 +5,11 @@ debian-cd (3.1.31) UNRELEASED; urgency=medium
     ABI we know about. Don't waste space on new installation media
     with older udebs from the archive.
 
+  [ Holger Levsen ]
+  * lintian-overrides: add overrides for
+    package-contains-documentation-outside-usr-share-doc
+    for usr/share/debian-cd/(contrib|data|tasks)
+
  -- Steve McIntyre <93sam@debian.org>  Sun, 27 Sep 2020 01:10:07 +0100
 
 debian-cd (3.1.30) unstable; urgency=medium
