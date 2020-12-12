@@ -80,7 +80,12 @@ else
 fi
 echo "Building $NUMJIGDOS jigdos and $NUMISOS isos for $ARCHES $DISKTYPE"
 
-make $IMAGETARGET
+if [ "$IMAGETARGET" = "official_images" ] && [ ! -z "$PARALLEL_MAKE_IMAGE" ]; then
+    make ok init packagelists image-trees
+    make -j $PARALLEL_MAKE_IMAGE parallel_images
+else
+    make $IMAGETARGET
+fi
 
 if [ "$IMAGESUMS"x = 1x ]; then
 	make imagesums
