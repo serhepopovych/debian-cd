@@ -428,6 +428,11 @@ if [ -d "/etc/ssl/ca-debian" ]; then
 fi
 export WGET="wget $WGET_OPTS"
 
+# Run the make_image step in parallel? Specify the number of calls to
+# use in parallel here if desired. Don't go too high - this *will*
+# thrash your IO!
+#export PARALLEL_MAKE_IMAGE=4
+
 # Set this to force the Release file(s) to say "stable". Used in first
 # Etch builds to allow us to build before the archive updated
 #EARLY_BUILD_HACK=1

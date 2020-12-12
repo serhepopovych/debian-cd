@@ -491,6 +491,12 @@ image-trees: ok genlist
 images: ok $(OUT) $(BDIR)/md5-check
 	$(Q)$(make_image) "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
+parallel_images: $(subst volid,image,$(notdir $(wildcard $(BDIR)/*.volid)))
+	echo $^
+
+%.image: ok $(OUT) $(BDIR)/checksum-check
+	$(Q)CD=$(subst .image,,$@) $(make_image)  "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
+
 check-number-given:
 	@test -n "$(CD)" || (echo "Give me a CD=<num> parameter !" && false)
 
