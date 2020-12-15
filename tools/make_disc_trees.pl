@@ -654,6 +654,7 @@ sub recompress {
 		! ($filename =~ m/\/.*\/i18n\/(Translation.*gz)$/o)) {
 		system("rm -f $_.gz");
 		system("gzip -9c < $_ >$_.gz");
+		system("rm -f $_");
 	}
 }	
 
