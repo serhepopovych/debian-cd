@@ -494,7 +494,7 @@ images: ok $(OUT) $(BDIR)/md5-check
 parallel_images: $(subst volid,image,$(notdir $(wildcard $(BDIR)/*.volid)))
 	echo $^
 
-%.image: ok $(OUT) $(BDIR)/checksum-check
+%.image: ok $(OUT) $(BDIR)/md5-check
 	$(Q)CD=$(subst .image,,$@) $(make_image)  "$(BDIR)" "$(ARCHES)" "$(OUT)" "$(DEBVERSION)" "$(MIRROR)" "$(MKISOFS)" "$(MKISOFS_OPTS)" "$(JIGDO_OPTS)" "$(jigdo_cleanup)"
 
 check-number-given:
