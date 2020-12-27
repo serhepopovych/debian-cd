@@ -18,10 +18,13 @@
  * recommended packages in task files) to be able to generate the BD image.
  * Please note: the libpam-krb5, dnsmasq and icinga2-ido-mysql packages had to
  * be added manually because they are installed via scripts during system setup
- * (as opposed to be installed automatically as Recommends).
+ * (as opposed to be installed automatically as Recommends). Also, the winbind
+ * and freeradius packages have been added in case someone wants to install and
+ * configure the freeRADIUS server in offline mode (via a script shipped with
+ * the debian-edu-config package).
  * Sort of cleaned up from already included packages and amd64 specific ones.
  *
- * Generated: 2020-03-27
+ * Generated: 2020-12-27
  */
 accountsservice
 accountwizard
@@ -634,6 +637,7 @@ freebirth
 freebirth-data
 freeglut3
 freepats
+freeradius
 freerdp2-x11
 fritzing
 fritzing-data
@@ -4432,6 +4436,7 @@ wget
 wget-udeb
 whiptail
 wide-dhcpv6-client-udeb
+winbind
 wireless-tools
 wireless-tools-udeb
 witalian
