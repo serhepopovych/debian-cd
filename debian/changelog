@@ -17,6 +17,7 @@ debian-cd (3.1.26-buster) UNRELEASED; urgency=medium
       parallel.
     + tools/make_disc_trees.pl: When compressing translations, remove
       the uncompressed version
+    + Fix sed delimiters in various scripts
 
  -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
 

@@ -126,7 +126,7 @@ if [ -d boot$N/grub ] ; then
 
     # Finally, belt and braces - fix up the %install% entries in grub
     # in case they're still there
-    sed -i "s,\%install\%,$INSTALLDIR,g" $CDDIR/boot/grub/grub.cfg
+    sed -i "s|\%install\%|$INSTALLDIR|g" $CDDIR/boot/grub/grub.cfg
 
 else
     echo "  No EFI boot code for $ARCH on CD$N"
