@@ -54,6 +54,11 @@ if ($backports_list =~ /^$/) {
     $backports = 0;;
 }
 
+my $disktype = read_env('DISKTYPE', "");
+if ($disktype =~ /^$/) {
+    die "make_disc_trees.pl: DISKTYPE not set, aborting\n";
+}
+
 # MAXCDS is the hard limit on the MAXIMUM number of images to
 # make. MAXJIGDOS and MAXISOS can only make this number smaller; we
 # will use the higher of those 2 numbers as the last image to go to,
@@ -123,7 +128,6 @@ my $blocksize = 2048;
 my ($maxdiskblocks, $diskdesc);
 my $cddir;
 
-my $disktype = $ENV{'DISKTYPE'};
 my $size_swap_check;
 my $hfs_extra = 0;
 my $hfs_mult = 1;
@@ -766,6 +770,8 @@ sub get_disc_size {
         $maxdiskblocks = $ENV{'CUSTOMSIZE'} - $reserved || 
             die "Need to specify a custom size for the CUSTOM disktype\n";
         $diskdesc = "User-supplied size";
+    } else {
+	die "make_disc_trees.pl: Unknown disk type \"$chosen_disk\" specified; ABORT\n";
     }
 
     $ENV{'MAXDISKBLOCKS'} = $maxdiskblocks;
