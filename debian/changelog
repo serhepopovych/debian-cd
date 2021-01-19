@@ -1,12 +1,12 @@
-debian-cd (3.1.32) UNRELEASED; urgency=medium
-
-  [ Holger Levsen ]
-  * Update standards version to 4.5.1, no changes needed.
+debian-cd (3.1.32) unstable; urgency=medium
 
   [ Steve McIntyre ]
+  * Update default config - we're building for bullseye (11) now.
   * Add support for running the final make_image step in parallel to
     make best use of larger machines with SSD storage. Use
     PARALLEL_MAKE_IMAGE=<n> to specify how many to build in parallel.
+  * Be more explicit if DISKTYPE is not specified, or unrecognised.
+  * When compressing translations, remove the uncompressed version.
 
   [ Wolfgang Schweer ]
   * data/bullseye: Update Debian Edu installer logo and syslinux splash image
@@ -15,12 +15,15 @@ debian-cd (3.1.32) UNRELEASED; urgency=medium
     packages.
 
   [ Steev Klimaszewski ]
-  * Fix sed delimiters in various scripts
+  * Fix sed delimiters in various scripts.
 
   [ Samuel Thibault ]
   * Make tools/start_new_disc also cleanup SHA512 checksums.
 
- -- Steve McIntyre <93sam@debian.org>  Sat, 12 Dec 2020 03:12:36 +0100
+  [ Holger Levsen ]
+  * Update standards version to 4.5.1, no changes needed.
+
+ -- Holger Levsen <holger@debian.org>  Tue, 19 Jan 2021 14:45:59 +0100
 
 debian-cd (3.1.31) unstable; urgency=medium
 
