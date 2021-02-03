@@ -451,6 +451,12 @@ do
             sed -i "s/^Archive:.*$/Archive: stable/" dists/$CODENAME/main/debian-installer/binary-$ARCH/Release
         fi
     fi
+
+    if [ -n "$LOCAL"  -a -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer/binary-$ARCH/Release" ] ; then
+        mkdir -p dists/$CODENAME/local/debian-installer/binary-$ARCH
+        cp "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer/binary-$ARCH/Release" \
+            dists/$CODENAME/local/debian-installer/binary-$ARCH/
+    fi
 done
 
 # Copying individual release files for backports

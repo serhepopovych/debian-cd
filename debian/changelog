@@ -7,6 +7,8 @@ debian-cd (3.1.33) UNRELEASED; urgency=medium
   [ Holger Levsen ]
   * tools/which_deb: Apply patch by JH Chatenet to fix problems with local xz
     compressed Packages files. Closes: #968668
+  * tools/start_new_disc: Apply patch by JH Chatenet to include local Release
+    file for debian-installer. Closes: #968671
 
  -- Wolfgang Schweer <wschweer@arcor.de>  Tue, 02 Feb 2021 13:36:04 +0100
 
