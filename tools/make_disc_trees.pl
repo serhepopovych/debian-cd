@@ -602,11 +602,15 @@ sub add_missing_Packages {
 	$filename = $File::Find::name;
 
 	if ((-d "$_") && ($filename =~ m/\/main\/binary-[^\/]*$/)) {
-		if ((-f "$_/Packages") && (! -d "../local/$_/")) {
-			mkdir "../local/$_/" || die "Error creating directory local/$_: $!\n";
-			open(LPFILE, ">../local/$_/Packages") or die "Error creating local/$_/Packages: $!\n";
-			close LPFILE;
-			print "  Created empty Packages file for local/$_\n";
+		if (-f "$_/Packages") {
+			if (! -d "../local/$_/") {
+				mkdir "../local/$_/" || die "Error creating directory local/$_: $!\n";
+			}
+			if ( ! -f "../local/$_/Packages" ) {
+				open(LPFILE, ">../local/$_/Packages") or die "Error creating local/$_/Packages: $!\n";
+				close LPFILE;
+				print "  Created empty Packages file for local/$_\n";
+			}
 		}
 	}
 }
