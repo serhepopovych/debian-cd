@@ -76,7 +76,7 @@ sub grab_bin_info {
         }
         my $pxz = "$pth/$component/binary-$arch/Packages.xz";
         if ( $component eq 'local' and $ENV{LOCALDEBS} ) {
-            $pgz = "$ENV{LOCALDEBS}/dists/$codename/local/binary-$arch/Packages.xz";
+            $pxz = "$ENV{LOCALDEBS}/dists/$codename/local/binary-$arch/Packages.xz";
         }
         if (-e $pgz) {
             open(PFILE, "zcat $pgz |") or
