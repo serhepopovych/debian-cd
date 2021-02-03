@@ -1,4 +1,4 @@
-debian-cd (3.1.33) UNRELEASED; urgency=medium
+debian-cd (3.1.33) unstable; urgency=medium
 
   [ Wolfgang Schweer ]
   * data/bullseye: Update Debian Edu syslinux splash image from
@@ -12,7 +12,7 @@ debian-cd (3.1.33) UNRELEASED; urgency=medium
   * tools/make_disc_trees: Apply patch by Daniel Dickinson to create Packages
     files for local/debian-installer. Closes: #523017
 
- -- Wolfgang Schweer <wschweer@arcor.de>  Tue, 02 Feb 2021 13:36:04 +0100
+ -- Holger Levsen <holger@debian.org>  Wed, 03 Feb 2021 19:45:22 +0100
 
 debian-cd (3.1.32) unstable; urgency=medium
 
