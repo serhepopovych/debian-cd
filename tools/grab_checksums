@@ -85,7 +85,7 @@ do
                 }' | sort | uniq >> $OUT
             ;;
         *)
-            FILES=`find $LOCATIONS -name Packages.gz \
+            FILES=`find $LOCATIONS -follow -name Packages.gz \
                    -o -name Packages.xz | grep binary-$ARCH`
             echo "Using $CHECKSUM sums from Packages files:"
             echo $FILES
