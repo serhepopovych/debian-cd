@@ -47,7 +47,7 @@ do
 
     case $ARCH in
         source)
-            FILES=`find $LOCATIONS -name Sources.gz -o -name Sources.xz`
+            FILES=`find $LOCATIONS -follow -name Sources.gz -o -name Sources.xz`
             echo "Using $CHECKSUM sums from Sources files:"
             echo $FILES
             $BASEDIR/tools/catz $FILES | \
