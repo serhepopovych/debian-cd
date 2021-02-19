@@ -36,6 +36,9 @@ do
     if [ "$BACKPORTS"x != ""x ] ; then
 	LOCATIONS="$LOCATIONS $MIRROR/dists/$CODENAME-backports/"
     fi
+    if [ "$UNRELEASED" = 1 ] ; then
+	LOCATIONS="$LOCATIONS $MIRROR/dists/unreleased/"
+    fi
     echo "Looking in $LOCATIONS"
 
     for LOCATION in $LOCATIONS; do
