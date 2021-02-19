@@ -18,7 +18,6 @@ show_usage() {
 export CF=./CONF.sh
 . $CF
 export DEBIAN_CD_CONF_SOURCED=true
-unset UPDATE_LOCAL
 
 
 ## Parse the parameters passed to the script
