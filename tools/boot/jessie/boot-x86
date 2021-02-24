@@ -387,11 +387,7 @@ else
 fi
 
 if [ "$SPLASHPNG" ] ; then
-    # Insert our own splash screen.  Color index 0 is background, and
-    # index 7 is foreground.  Set to black and white respecively
-    pngtopnm < $SPLASHPNG | ppmquant 16 | \
-        ppmtolss16 "#ffffff=7" "#000000=0" > boot$N/isolinux/splash.rle
-    pngtopnm < $SPLASHPNG | ppmquant 16 | pnmtopng  > boot$N/isolinux/splash.png
+    cp $SPLASHPNG boot$N/isolinux/splash.png
 fi
 
 # used by Debian Edu

@@ -2,6 +2,12 @@ debian-cd (3.1.34) UNRELEASED; urgency=medium
 
   * data/bullseye: Update Debian Edu installer logo and syslinux splash image
     from src:debian-edu-artwork 2.11.5-1.
+  * tools/boot/*/boot-x86: Prevent custom splash images from being modified.
+    The related code seems to have been useful a long time ago (the need to use
+    an RLE file and to reduce the number of colours to 16 has been dropped as of
+    syslinux version 3.62). So replace obsolete code with a simple cp command.
+  * debian/control: Drop Recommends: on netpbm and syslinux-utils. These are no
+    longer needed now that custom splash images are used unmodified.
 
  -- Wolfgang Schweer <wschweer@arcor.de>  Fri, 12 Feb 2021 22:07:27 +0100
 

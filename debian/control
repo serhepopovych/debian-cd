@@ -16,7 +16,7 @@ Vcs-Browser: https://salsa.debian.org/images-team/debian-cd
 Package: debian-cd
 Architecture: all
 Depends: ${misc:Depends}, curl, perl, dpkg-dev, cpp, libdigest-md5-perl, libdigest-sha-perl, tofrodos, apt, make, xorriso | genisoimage, lynx, grep-dctrl, bc, libcompress-zlib-perl, bzip2, libdpkg-perl, wget
-Recommends: hfsutils, netpbm, isolinux, syslinux-common, syslinux-utils, mtools, dosfstools
+Recommends: hfsutils, isolinux, syslinux-common, mtools, dosfstools
 Description: Tools for building (Official) Debian CD set
  Debian-cd is the official tool for building Debian CD set since the potato
  release. It was formerly called YACS (for Yet Another CD Script).
