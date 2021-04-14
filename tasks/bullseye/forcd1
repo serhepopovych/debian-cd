@@ -23,3 +23,6 @@ pppconfig
 /* #861288 - make it easier for users to report installation problems */
 reportbug
 
+/* ensure eatmydata-udeb can speed up offline installs too */
+eatmydata
+libeatmydata1
