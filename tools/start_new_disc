@@ -69,6 +69,8 @@ if [ $NUM_ARCHES = 1 ] ; then
 		export DISKINFO="$DISKINFO_DISTRO ${DEBIAN_KERNEL} $DEBVERSION \"$CAPCODENAME\" - $OFFICIAL $ARCHES $DISKTYPE${FIRMWARE_TEXT} $BUILD_DATE"
 	    fi
             case "$ARCHES" in
+                ppc64el)
+                    export VOLID="$VOLID_BASE p64el $DISKNUMSTRING" ;;
                 powerpc)
                     export VOLID="$VOLID_BASE ppc $DISKNUMSTRING" ;;
                 mips64el)

@@ -13,6 +13,10 @@ debian-cd (3.1.34) UNRELEASED; urgency=medium
   [ Petter Reinholdtse ]
   * Include eatmydata deb for d-i to use offline. Closes: #986772
 
+  [ Steve McIntyre ]
+  * Shorten "ppc64el" to "p64el" in the volume ID. The bullseye d-i
+    RC1 build failed as the volume ID was too long.
+
  -- Wolfgang Schweer <wschweer@arcor.de>  Fri, 12 Feb 2021 22:07:27 +0100
 
 debian-cd (3.1.33) unstable; urgency=medium
