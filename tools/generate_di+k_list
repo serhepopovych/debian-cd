@@ -93,6 +93,12 @@ locales
 /* Needed for some languages with bi-directional support */
 libfribidi0
 
+/* Accessibility stuff that is installed by base-installer
+ * in certain situations. */
+alsa-utils
+brltty
+espeakup
+
 /* Needed for rootless installs. */
 sudo
 
