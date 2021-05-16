@@ -2,7 +2,7 @@ debian-cd (3.1.35) UNRELEASED; urgency=medium
 
   [ Steve McIntyre ]
   * Add brltty and espeakup to all images from netinst up, for blind
-    users.
+    users. Closes: #678065
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 16 May 2021 15:36:53 +0100
 
