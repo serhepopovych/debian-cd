@@ -17,14 +17,22 @@ use strict;
 use warnings;
 
 use File::Slurp;
+use Getopt::Long;
 use YAML::XS;
+
+my $output_dir = '.';
+my $verbose;
+GetOptions( "output-dir=s" => \$output_dir,
+            "verbose"      => \$verbose )
+    or die "Error in command line arguments";
 
 process_components($_) for @ARGV;
 
 sub process_components {
     my $input = shift;
     my $content;
-    print STDERR "processing $input\n";
+    print STDERR "processing $input\n"
+        if $verbose;
 
     if ($input =~ /\.gz$/) {
         $content = `zcat $input`;
@@ -42,6 +50,8 @@ sub process_components {
         next if not defined $array->{Provides};
         next if not defined $array->{Provides}->{modaliases};
 
+        print STDERR "found modaliases entries for firmware package ", $array->{Package}, "\n"
+            if $verbose;
 
         # XXX: Support output directory
         my $pattern_file = $array->{Package} . ".pattern";
