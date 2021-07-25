@@ -133,24 +133,30 @@ if (! grep { $_ eq $SOF } @all_packages) {
 	#      kernel/sound/soc/intel/boards/snd-soc-sof*.ko pattern.
 
 	my @sof_aliases = qw(
-            pci:v00008086d000002C8sv*sd*bc*sc*i*
+	    pci:v00008086d000002C8sv*sd*bc*sc*i*
 	    pci:v00008086d000006C8sv*sd*bc*sc*i*
 	    pci:v00008086d0000119Asv*sd*bc*sc*i*
-            pci:v00008086d00001A98sv*sd*bc*sc*i*
-            pci:v00008086d00003198sv*sd*bc*sc*i*
-            pci:v00008086d000034C8sv*sd*bc*sc*i*
-            pci:v00008086d000038C8sv*sd*bc*sc*i*
-            pci:v00008086d00003DC8sv*sd*bc*sc*i*
-            pci:v00008086d000043C8sv*sd*bc*sc*i*
-            pci:v00008086d00004B55sv*sd*bc*sc*i*
-            pci:v00008086d00004B58sv*sd*bc*sc*i*
-            pci:v00008086d00004DC8sv*sd*bc*sc*i*
-            pci:v00008086d00005A98sv*sd*bc*sc*i*
-            pci:v00008086d00009DC8sv*sd*bc*sc*i*
-            pci:v00008086d0000A0C8sv*sd*bc*sc*i*
-            pci:v00008086d0000A348sv*sd*bc*sc*i*
-            pci:v00008086d0000A3F0sv*sd*bc*sc*i*
-            platform:sof-audio
+	    pci:v00008086d00001A98sv*sd*bc*sc*i*
+	    pci:v00008086d00003198sv*sd*bc*sc*i*
+	    pci:v00008086d000034C8sv*sd*bc*sc*i*
+	    pci:v00008086d000038C8sv*sd*bc*sc*i*
+	    pci:v00008086d00003DC8sv*sd*bc*sc*i*
+	    pci:v00008086d000043C8sv*sd*bc*sc*i*
+	    pci:v00008086d00004B55sv*sd*bc*sc*i*
+	    pci:v00008086d00004B58sv*sd*bc*sc*i*
+	    pci:v00008086d00004DC8sv*sd*bc*sc*i*
+	    pci:v00008086d00005A98sv*sd*bc*sc*i*
+	    pci:v00008086d00009DC8sv*sd*bc*sc*i*
+	    pci:v00008086d0000A0C8sv*sd*bc*sc*i*
+	    pci:v00008086d0000A348sv*sd*bc*sc*i*
+	    pci:v00008086d0000A3F0sv*sd*bc*sc*i*
+	    platform:jsl_rt5682_max98360a
+	    platform:jsl_rt5682_rt1015
+	    platform:sof-audio
+	    platform:sof_rt5682
+	    platform:sof_sdw
+	    platform:tgl_max98357a_rt5682
+	    platform:tgl_max98373_rt5682
 	);
 
 	print STDERR "deploying manual workaround for $SOF\n"
