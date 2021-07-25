@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # © 2021 Cyril Brulebois <kibi@debian.org>
 #
-# Generate ready-to-use pattern files so that one can use grep to
+# Generate ready-to-use .patterns files so that one can use grep to
 # perform hardware to firmware-package lookups in the installer
 # (see MODALIAS= lines in `udevadm info --export-db`), see the
 # hw-detect component.
@@ -69,14 +69,14 @@ sub process_components {
         print STDERR "found modaliases entries for firmware package ", $array->{Package}, "\n"
             if $verbose;
 
-        my $pattern_file = $output_dir . "/" . $array->{Package} . ".pattern";
+        my $patterns_file = $output_dir . "/" . $array->{Package} . ".patterns";
         printf STDERR "writing %d entries to %s\n",
             (scalar @{ $array->{Provides}->{modaliases} }),
-            $pattern_file;
+            $patterns_file;
 
         # For each alias, anchor the pattern on the left (^) and on
         # the right ($), and replace each '*' with '.*':
-        write_file($pattern_file,
+        write_file($patterns_file,
                    map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" }
                    @{ $array->{Provides}->{modaliases} });
     }
