@@ -6,7 +6,7 @@ debian-cd (3.1.35) UNRELEASED; urgency=medium
 
   [ Cyril Brulebois ]
   * Add script to generate firmware metadata from appdata metadata,
-    and use it when building a media tree
+    and use it when building a media tree. See: #989863
 
  -- Steve McIntyre <93sam@debian.org>  Sun, 25 Jul 2021 15:36:53 +0100
 
