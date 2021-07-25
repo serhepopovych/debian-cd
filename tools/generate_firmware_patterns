@@ -40,6 +40,9 @@ if (! -d $output_dir) {
     make_path($output_dir, { verbose => $verbose });
 }
 
+write_file("$output_dir/README.txt",
+           "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
+
 process_components($_) for @ARGV;
 
 sub process_components {
