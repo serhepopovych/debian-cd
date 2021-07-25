@@ -51,6 +51,7 @@ sub process_components {
         die "only gz and xz suffixes are supported";
     }
 
+    my @packages;
     foreach my $array (Load $content) {
         # XXX: Drop the condition once we have the required metadata
         # in the archive.
@@ -74,7 +75,9 @@ sub process_components {
         write_file($patterns_file,
                    map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" }
                    @{ $array->{Provides}->{modaliases} });
+        push @packages, $array->{Package};
     }
+    return @packages;
 }
 
 
@@ -90,6 +93,11 @@ write_file("$output_dir/README.txt",
 
 # Generate a .patterns file for each firmware package found in
 # Components-* files:
+my @all_packages;
 foreach my $component (@ARGV) {
-    process_components($component);
+    my @packages = process_components($component);
+    push @all_packages, @packages;
 }
+@all_packages = sort @all_packages;
+print STDERR "all firmware packages found across all components: @all_packages\n"
+    if $verbose;
