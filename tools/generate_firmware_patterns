@@ -16,6 +16,7 @@
 use strict;
 use warnings;
 
+use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use YAML::XS;
@@ -25,6 +26,12 @@ my $verbose;
 GetOptions( "output-dir=s" => \$output_dir,
             "verbose"      => \$verbose )
     or die "Error in command line arguments";
+
+if (! -d $output_dir) {
+    print STDERR "creating output directory $output_dir\n"
+        if $verbose;
+    make_path($output_dir, { verbose => $verbose });
+}
 
 process_components($_) for @ARGV;
 
@@ -53,8 +60,10 @@ sub process_components {
         print STDERR "found modaliases entries for firmware package ", $array->{Package}, "\n"
             if $verbose;
 
-        # XXX: Support output directory
-        my $pattern_file = $array->{Package} . ".pattern";
+        my $pattern_file = $output_dir . "/" . $array->{Package} . ".pattern";
+        printf STDERR "writing %d entries to %s\n",
+            (scalar @{ $array->{Provides}->{modaliases} }),
+            $pattern_file;
 
         # For each alias, anchor the pattern on the left (^) and on
         # the right ($), and replace each '*' with '.*':
