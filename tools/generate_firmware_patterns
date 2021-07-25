@@ -35,6 +35,11 @@ GetOptions( "output-dir=s" => \$output_dir,
     or die "Error in command line arguments";
 
 
+sub format_alias {
+    return map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" } @_;
+}
+
+
 sub process_components {
     my $input = shift;
     my $content;
@@ -73,8 +78,7 @@ sub process_components {
         # For each alias, anchor the pattern on the left (^) and on
         # the right ($), and replace each '*' with '.*':
         write_file($patterns_file,
-                   map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" }
-                   @{ $array->{Provides}->{modaliases} });
+                   format_alias( @{ $array->{Provides}->{modaliases} } ));
         push @packages, $array->{Package};
     }
     return @packages;
