@@ -172,6 +172,7 @@ if ($archlist =~ /m68k/ || $archlist =~ /powerpc/) {
 
 print "Starting to lay out packages into images:\n";
 
+# Read in the list of packages that we're expecting to include
 if (-e "$bdir/firmware-packages") {
     open(FWLIST, "$bdir/firmware-packages") or die "Unable to read firmware-packages file!\n";
     while (defined (my $pkg = <FWLIST>)) {
@@ -1431,6 +1432,11 @@ sub add_packages {
             if (!($arch eq "source")) {
                 $total_blocks -= remove_trans_desc_entry($dir, $arch, $in_backports, $package_info);
             }
+
+	    if ($firmware_package{$pkgname}) {
+		msg_ap(0, "Remove symlink for fw package $pkgname in /firmware\n");
+		unlink("$dir/firmware/" . basename($file));
+	    }
         
             foreach my $file (@files) {
                 my $missing = 0;
