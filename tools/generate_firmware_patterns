@@ -119,6 +119,9 @@ if (! grep { $_ eq $SOF } @all_packages) {
     # aliases, so stick to the top-level directory for sof:
     #
     #     for x in $(dpkg -L linux-image-5.10.0-8-amd64 | grep kernel/sound/soc/sof/.*\.ko$); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort
+    #
+    # XXX: If that's not enough, there are other modules matching the
+    #      kernel/sound/soc/intel/boards/snd-soc-sof*.ko pattern.
     my @sof_aliases = qw(
         pci:v00008086d000002C8sv*sd*bc*sc*i*
         pci:v00008086d000006C8sv*sd*bc*sc*i*
