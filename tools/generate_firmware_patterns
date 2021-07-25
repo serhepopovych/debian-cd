@@ -10,8 +10,10 @@
 #
 # We're limiting ourselves to packages announcing Type: firmware, and
 # they need to include such information in their metadata, e.g.
-# src:firmware-nonfree
-# (https://salsa.debian.org/kernel-team/firmware-nonfree/-/merge_requests/19).
+# src:firmware-nonfree; the --test option can be used until such
+# packages appear in the archive.
+#
+# See: https://salsa.debian.org/kernel-team/firmware-nonfree/-/merge_requests/19
 
 use strict;
 use warnings;
