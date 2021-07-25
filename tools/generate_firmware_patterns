@@ -21,9 +21,14 @@ use File::Slurp;
 use Getopt::Long;
 use YAML::XS;
 
+
+# XXX: Drop support for --test once we have the required metadata in
+# the archive.
 my $output_dir = '.';
+my $test;
 my $verbose;
 GetOptions( "output-dir=s" => \$output_dir,
+            "test"         => \$test,
             "verbose"      => \$verbose )
     or die "Error in command line arguments";
 
@@ -52,8 +57,12 @@ sub process_components {
     }
 
     foreach my $array (Load $content) {
-        next if not defined $array->{Type};
-        next if $array->{Type} ne 'firmware';
+        # XXX: Drop the condition once we have the required metadata
+        # in the archive.
+        if (! $test) {
+            next if not defined $array->{Type};
+            next if $array->{Type} ne 'firmware';
+        }
         next if not defined $array->{Provides};
         next if not defined $array->{Provides}->{modaliases};
 
