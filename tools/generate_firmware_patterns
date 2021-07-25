@@ -34,16 +34,6 @@ GetOptions( "output-dir=s" => \$output_dir,
             "verbose"      => \$verbose )
     or die "Error in command line arguments";
 
-if (! -d $output_dir) {
-    print STDERR "creating output directory $output_dir\n"
-        if $verbose;
-    make_path($output_dir, { verbose => $verbose });
-}
-
-write_file("$output_dir/README.txt",
-           "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
-
-process_components($_) for @ARGV;
 
 sub process_components {
     my $input = shift;
@@ -85,4 +75,21 @@ sub process_components {
                    map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" }
                    @{ $array->{Provides}->{modaliases} });
     }
+}
+
+
+# Prepare output directory:
+if (! -d $output_dir) {
+    print STDERR "creating output directory $output_dir\n"
+        if $verbose;
+    make_path($output_dir, { verbose => $verbose });
+}
+
+write_file("$output_dir/README.txt",
+           "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
+
+# Generate a .patterns file for each firmware package found in
+# Components-* files:
+foreach my $component (@ARGV) {
+    process_components($component);
 }
