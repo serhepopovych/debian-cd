@@ -105,3 +105,46 @@ foreach my $component (@ARGV) {
 @all_packages = sort @all_packages;
 print STDERR "all firmware packages found across all components: @all_packages\n"
     if $verbose;
+
+# Workaround for firmware-sof-signed, which doesn't advertise firmware
+# files it might need through the MODULE_FIRMWARE() macro (meaning no
+# chance to generate DEP-11 info from there): alias info manually
+# extracted on 2021-07-25 (linux-image-5.10.0-8-amd64, 5.10.46-2).
+#
+# XXX: To be kept in sync!
+my $SOF = 'firmware-sof-signed';
+if (! grep { $_ eq $SOF } @all_packages) {
+    # Extract on amd64, from the installed package, with the following
+    # command. Note that descending under intel/ would lead to no
+    # aliases, so stick to the top-level directory for sof:
+    #
+    #     for x in $(dpkg -L linux-image-5.10.0-8-amd64 | grep kernel/sound/soc/sof/.*\.ko$); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort
+    my @sof_aliases = qw(
+        pci:v00008086d000002C8sv*sd*bc*sc*i*
+        pci:v00008086d000006C8sv*sd*bc*sc*i*
+        pci:v00008086d0000119Asv*sd*bc*sc*i*
+        pci:v00008086d00001A98sv*sd*bc*sc*i*
+        pci:v00008086d00003198sv*sd*bc*sc*i*
+        pci:v00008086d000034C8sv*sd*bc*sc*i*
+        pci:v00008086d000038C8sv*sd*bc*sc*i*
+        pci:v00008086d00003DC8sv*sd*bc*sc*i*
+        pci:v00008086d000043C8sv*sd*bc*sc*i*
+        pci:v00008086d00004B55sv*sd*bc*sc*i*
+        pci:v00008086d00004B58sv*sd*bc*sc*i*
+        pci:v00008086d00004DC8sv*sd*bc*sc*i*
+        pci:v00008086d00005A98sv*sd*bc*sc*i*
+        pci:v00008086d00009DC8sv*sd*bc*sc*i*
+        pci:v00008086d0000A0C8sv*sd*bc*sc*i*
+        pci:v00008086d0000A348sv*sd*bc*sc*i*
+        pci:v00008086d0000A3F0sv*sd*bc*sc*i*
+        platform:sof-audio
+    );
+    my $sof_file = $output_dir . "/" . $SOF . ".patterns";
+    printf STDERR "writing %d entries to %s\n",
+        (scalar @sof_aliases),
+        $sof_file;
+
+    write_file($sof_file,
+               format_alias(@sof_aliases));
+    push @all_packages, $SOF;
+}
