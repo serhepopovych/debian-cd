@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+# © 2021 Cyril Brulebois <kibi@debian.org>
+#
+# Generate ready-to-use pattern files so that one can use grep to
+# perform hardware to firmware-package lookups in the installer
+# (see MODALIAS= lines in `udevadm info --export-db`), see the
+# hw-detect component.
+#
+# Parameters: dists/<suite>/*/dep11/Components-<arch>.yml.(gz|xz)
+#
+# We're limiting ourselves to packages announcing Type: firmware, and
+# they need to include such information in their metadata, e.g.
+# src:firmware-nonfree
+# (https://salsa.debian.org/kernel-team/firmware-nonfree/-/merge_requests/19).
+
+use strict;
+use warnings;
+
+use File::Slurp;
+use YAML::XS;
+
+process_components($_) for @ARGV;
+
+sub process_components {
+    my $input = shift;
+    my $content;
+    print STDERR "processing $input\n";
+
+    if ($input =~ /\.gz$/) {
+        $content = `zcat $input`;
+    }
+    elsif ($input =~ /\.xz$/) {
+        $content = `xzcat $input`;
+    }
+    else {
+        die "only gz and xz suffixes are supported";
+    }
+
+    foreach my $array (Load $content) {
+        next if not defined $array->{Type};
+        next if $array->{Type} ne 'firmware';
+        next if not defined $array->{Provides};
+        next if not defined $array->{Provides}->{modaliases};
+
+
+        # XXX: Support output directory
+        my $pattern_file = $array->{Package} . ".pattern";
+
+        # For each alias, anchor the pattern on the left (^) and on
+        # the right ($), and replace each '*' with '.*':
+        write_file($pattern_file,
+                   map { $a = $_; $a =~ s/[*]/.*/g; "^$a\$\n" }
+                   @{ $array->{Provides}->{modaliases} });
+    }
+}
