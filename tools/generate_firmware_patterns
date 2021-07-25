@@ -139,6 +139,10 @@ if (! grep { $_ eq $SOF } @all_packages) {
         pci:v00008086d0000A3F0sv*sd*bc*sc*i*
         platform:sof-audio
     );
+
+    print STDERR "deploying manual workaround for $SOF\n"
+        if $verbose;
+
     my $sof_file = $output_dir . "/" . $SOF . ".patterns";
     printf STDERR "writing %d entries to %s\n",
         (scalar @sof_aliases),
