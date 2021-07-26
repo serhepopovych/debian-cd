@@ -1,4 +1,4 @@
-debian-cd (3.1.35) UNRELEASED; urgency=medium
+debian-cd (3.1.35) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Add brltty and espeakup to all images from netinst up, for blind
@@ -8,7 +8,7 @@ debian-cd (3.1.35) UNRELEASED; urgency=medium
   * Add script to generate firmware metadata from appdata metadata,
     and use it when building a media tree. See: #989863
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 25 Jul 2021 15:36:53 +0100
+ -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
 debian-cd (3.1.34) unstable; urgency=medium
 
