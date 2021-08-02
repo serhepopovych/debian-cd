@@ -5,7 +5,7 @@ debian-cd (3.1.35) unstable; urgency=medium
     users. Closes: #678065
 
   [ Cyril Brulebois ]
-  * Add script to generate firmware metadata from appdata metadata,
+  * Add script to generate firmware metadata from AppStream metadata,
     and use it when building a media tree. See: #989863
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
