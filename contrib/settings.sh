@@ -1,6 +1,6 @@
 export HOSTNAME=`hostname -f`
 
-export CODENAME=bullseye
+export CODENAME=bookworm
 export OUT_BASE=~/publish
 export CD_I_F=${OUT_BASE}/unofficial/non-free/images-including-firmware
 export TRACE=/srv/cdbuilder.debian.org/src/ftp/debian/project/trace/$(hostname).debian.org
