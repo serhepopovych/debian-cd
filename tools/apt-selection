@@ -95,7 +95,12 @@ if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 
 	# Security mirror ...
 	if [ -n "$SECURITY" ]; then
-		echo "$ADEB file:${SECURITY:-$MIRROR} $CODENAME/updates $sections" \
+		case $CODENAME in
+			stretch|buster) SEC=$CODENAME/updates;;
+			*)		SEC=$CODENAME-security;;
+		esac
+
+		echo "$ADEB file:${SECURITY:-$MIRROR} $SEC $sections" \
 		>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
