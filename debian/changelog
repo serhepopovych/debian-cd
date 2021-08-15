@@ -1,3 +1,13 @@
+debian-cd (3.1.35+deb11u1) UNRELEASED; urgency=medium
+
+  [ Steve McIntyre ]
+  Backports from master for bullseye builds:
+
+  * Use $CODENAME/updates for security pre-bullseye, or
+    $CODENAME-security for bullseye onwards.
+
+ -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
+
 debian-cd (3.1.35) unstable; urgency=medium
 
   [ Steve McIntyre ]
