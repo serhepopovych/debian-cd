@@ -65,6 +65,7 @@ btrfs-progs
 ufsutils
 zfsutils
 cryptsetup
+cryptsetup-initramfs
 loop-aes-utils
 dmraid
 open-iscsi

@@ -11,6 +11,10 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * generate_firmware_patterns: Drop support for the temporary --test
     option.
 
+  [ Raphaël Hertzog ]
+  * Add cryptsetup-initramfs to tools/generate_di+k_list as cryptsetup 2.4.0
+    dropped the recommends on the package and it's needed by d-i.
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
 debian-cd (3.1.35) unstable; urgency=medium
