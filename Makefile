@@ -191,14 +191,14 @@ $(DB_DIR): $(LATEST_DB)
 	fi
 endif
 
-# Make sure unstable/sid points to testing/buster, as there is no build
+# Make sure unstable/sid points to testing/bookworm, as there is no build
 # rule for unstable/sid.
 unstable-map:
 	$(Q)if [ ! -d $(BASEDIR)/data/sid ] ; then \
-		ln -s buster $(BASEDIR)/data/sid ; \
+		ln -s bookworm $(BASEDIR)/data/sid ; \
 	fi
 	$(Q)if [ ! -d $(BASEDIR)/tools/boot/sid ] ; then \
-		ln -s buster $(BASEDIR)/tools/boot/sid ; \
+		ln -s bookworm $(BASEDIR)/tools/boot/sid ; \
 	fi
 
 #################
