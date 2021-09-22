@@ -70,7 +70,7 @@ if [ -z "$DI_CODENAME" ]; then
 	export DI_CODENAME=$CODENAME
 fi
 # If you want backported d-i (e.g. by setting
-# DI_CODENAME=jessie-backports, then you'll almost definitely also
+# DI_CODENAME=bookworm-backports, then you'll almost definitely also
 # want to enable BACKPORTS below as well
 
 # Should we include some packages from backports? If so, point at a
@@ -86,8 +86,8 @@ fi
 # the Debian mirror.
 #export DI_WWW_HOME=default
 
-# Version number, "2.2 r0", "2.2 r1" etc.
-export DEBVERSION="11.0.0"
+# Version number, "10.11.0", "11.1.0", "testing", etc
+export DEBVERSION="12.0.0"
 
 # Official or non-official set.
 # NOTE: THE "OFFICIAL" DESIGNATION IS ONLY ALLOWED FOR IMAGES AVAILABLE
@@ -208,8 +208,8 @@ export JIGDO_CHECKSUM="md5"
 
 # Extra keys that you might want apt to trust. List their fingerprints
 # here and debian-cd will grab them from the user's keyring as needed
-# (The example here is the buster release key)
-#export ARCHIVE_EXTRA_KEYS="80D15823B7FD1561F9F7BCDDDC30D7C23CBBABEE"
+# (The example here is the bullseye release key)
+#export ARCHIVE_EXTRA_KEYS="1F89983E0081FDE018F3CC9673A4F27B8DD47936"
 
 # By default we use debootstrap --no-check-gpg to find out the minimal set
 # of packages because there's no reason to not trust the local mirror. But

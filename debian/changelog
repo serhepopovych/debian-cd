@@ -3,7 +3,6 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   [ Steve McIntyre ]
   * Start bookworm development, copy the bullseye dirs to bookworm as
     a start
-
   * Use $CODENAME/updates for security pre-bullseye, or
     $CODENAME-security for bullseye onwards.
 
@@ -18,6 +17,10 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   [ Wolfgang Schweer ]
   * data/bookworm: Use Debian Edu 12 installer logo and syslinux splash image
     from src:debian-edu-artwork 2.12.0.1-1 (showing version number 12).
+
+  [ Daniel Lewart ]
+  * Update default CODENAME to bookworm in various places.
+    Closes: #994121
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
