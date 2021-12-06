@@ -1534,6 +1534,9 @@ sub add_packages {
                 unlink ("$dir/$file") || msg_ap(0, "Couldn't delete file $dir/$file\n");
                 msg_ap(0, "  Rollback: removed $dir/$file\n");
             }
+	    # Try to remove the directory; will silently fail if there
+	    # are still files there, which is OK.
+	    rmdir ($dir);
         } else {
             $total_blocks += add_Packages_entry($dir, $arch, $in_backports, $package_info);
             $total_blocks += add_md5_entry($dir, $arch, $in_backports, $package_info);
