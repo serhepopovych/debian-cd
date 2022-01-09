@@ -458,7 +458,7 @@ if [ -d boot$N/isolinux/grub ] && [ $BOOT_EFI -ne 0 ] ; then
 
     # Now make a new image to contain the files
     rm -f $CDDIR/boot/grub/efi.img
-    mkfs.msdos -v -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+    mkfs.msdos --invariant -v -i deb00001 -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
 
     # And copy them into place
     mmd -i "$CDDIR/boot/grub/efi.img" ::efi
