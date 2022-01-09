@@ -656,13 +656,13 @@ sub recompress {
 	# Packages and Sources files; workaround for bug #402482
 	if ($filename =~ m/\/.*\/(Packages|Sources)$/o) {
 		system("rm -f $_.gz");
-		system("gzip -9c < $_ >$_.gz");
+		system("gzip --no-name -9c < $_ >$_.gz");
 	}
 	# Translation files need to be compressed in .gz format on CD?
 	if ($filename =~ m/\/.*\/i18n\/(Translation.*)$/o &&
 		! ($filename =~ m/\/.*\/i18n\/(Translation.*gz)$/o)) {
 		system("rm -f $_.gz");
-		system("gzip -9c < $_ >$_.gz");
+		system("gzip --no-name -9c < $_ >$_.gz");
 		system("rm -f $_");
 	}
 }	
