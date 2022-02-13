@@ -27,6 +27,10 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * Avoid embedding timestamps into gzipped Packages and Translations files.
   * Pass --invariant and -i deb00001 to mkfs.msdos
 
+  [ Samuel Thibault ]
+  * On firmware images, include the sound firmwares in the espeakup-enabled
+    initrd itself. Closes: #992699
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
 debian-cd (3.1.35) unstable; urgency=medium

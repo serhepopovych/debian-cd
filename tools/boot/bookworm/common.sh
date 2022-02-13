@@ -222,3 +222,27 @@ extra_image () {
         fi
     done
 }
+
+install_firmwares_initrd () {
+    initrd=$1
+    regex="$2"
+    if [ "$FORCE_FIRMWARE"x = "1"x ]; then
+        FILES=`$BASEDIR/tools/catz ${MIRROR}/dists/${DI_DIST}/*/binary-${ARCH}/Packages.gz | \
+            grep-dctrl -Pe "$regex" -sFilename -n`
+        if [ -n "${FILES}" ]; then
+            echo "    Adding firmwares from" ${FILES}
+
+            initrdgz=$initrd.gz
+            FWDIR=$TDIR/firmware
+
+            zcat $initrdgz > $initrd
+            rm -f $initrdgz
+            for FILE in $FILES; do
+                dpkg -x "${MIRROR}/${FILE}" ${FWDIR}
+            done
+            (cd ${FWDIR} ; find lib/firmware | cpio -oA -H newc -F $initrd)
+            gzip -9 $initrd
+            rm -fr $FWDIR
+        fi
+    fi
+}

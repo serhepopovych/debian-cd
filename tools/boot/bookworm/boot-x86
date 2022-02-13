@@ -407,6 +407,13 @@ if [ "$LOGOPNG" ] ; then
     rm -rf $INITRDDIR
 fi
 
+# Include sound firmware in initrd so they can be loaded before espeakup starts
+if [ -n "boot$N/isolinux/spk.cfg ]; then
+    install_firmwares_initrd "$CDDIR/$INSTALLDIR/initrd" "firmware-sof-signed"
+elif [ -n "boot$N/isolinux/spkgtk.cfg ]; then
+    install_firmwares_initrd "$CDDIR/$INSTALLDIR/gtk/initrd" "firmware-sof-signed"
+fi
+
 sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
 
 if [ -n "$KERNEL_PARAMS" ]; then
