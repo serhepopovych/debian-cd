@@ -328,7 +328,7 @@
     &lsquo;aptitude&rsquo; programs.</p>
 
     <p>You can install packages from the commandline using
-    apt-get. For example, if you want to install the
+    apt. For example, if you want to install the
     packages &lsquo;commprog&rsquo; and &lsquo;maxgame&rsquo;, you can give the
     command:</p>
 
@@ -336,7 +336,7 @@
 #if OUTPUTtext
       &nbsp;
 #endif
-      <code>apt-get install commprog maxgame</code>
+      <code>apt install commprog maxgame</code>
     </p>
 
     <p>Note that you don't have to enter the complete path, or the
