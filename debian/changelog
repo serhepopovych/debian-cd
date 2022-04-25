@@ -31,6 +31,9 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * On firmware images, include the sound firmwares in the espeakup-enabled
     initrd itself. Closes: #992699
 
+  [ John Paul Adrian Glaubitz ]
+  * Remove leftover files of silo bootloader on sparc
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
 debian-cd (3.1.35) unstable; urgency=medium
