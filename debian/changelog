@@ -14,6 +14,8 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * Add cryptsetup-initramfs to tools/generate_di+k_list as cryptsetup 2.4.0
     dropped the recommends on the package and it's needed by d-i.
   * Fix install_firmwares_initrd to not fail when the firmware is not found.
+  * Implement recursive lookup of Recommends and Suggests in sort_deps.
+    Closes: #601203
 
   [ Wolfgang Schweer ]
   * data/bookworm: Use Debian Edu 12 installer logo and syslinux splash image

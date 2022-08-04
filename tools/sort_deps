@@ -984,12 +984,25 @@ sub get_missing {
 	my @parents = ();
 	my %t;
 	my $dep_text;
+	my $found_missing = 0;
 
 	$t{"Package"} = $p;
 	$t{"CmpOp"} = "";
 	$t{"Version"} = "";
 
-	if (not add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0, \@parents, $check_backports)) {
+	if (add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0, \@parents, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if ($add_rec and add_missing (\@deps_list, $packages{$p}{"Recommends"}, \%t, 1, \@parents, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if ($add_sug and add_missing (\@deps_list, $packages{$p}{"Suggests"}, \%t, 1, \@parents, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if (not $found_missing) {
 		return ();
 	}
 
@@ -1125,6 +1138,12 @@ sub add_missing {
 					push (@{$list}, $pkg);
 					if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $parents, $check_backports)) {
 					    $or_ok = 1;
+					    if ($add_rec) {
+						add_missing ($list, $packages{$pkgname}{"Recommends"}, $pkg, 1, $parents, $check_backports);
+					    }
+					    if ($add_sug) {
+						add_missing ($list, $packages{$pkgname}{"Suggests"}, $pkg, 1, $parents, $check_backports);
+					    }
 					    remove_entry($pkg, $list);
 					    push @{$list}, $pkg;
 					    last;
@@ -1181,6 +1200,13 @@ sub add_missing {
 					pop @{$list};
 					$ok = 0;
 				}
+			} else {
+			    if ($add_rec) {
+				add_missing ($list, $packages{$t{"Package"}}{"Recommends"}, \%t, 1, $parents, $check_backports);
+			    }
+			    if ($add_sug) {
+				add_missing ($list, $packages{$t{"Package"}}{"Suggests"}, \%t, 1, $parents, $check_backports);
+			    }
 			}
 			remove_entry(\%t, $list);
 			push @{$list}, \%t;
