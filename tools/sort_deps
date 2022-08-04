@@ -24,8 +24,8 @@ my $extranonfree = read_env('EXTRANONFREE', 0);
 my $force_firmware = read_env('FORCE_FIRMWARE', 0);
 my $local = read_env('LOCAL', 0);
 my $complete = read_env('COMPLETE', 0);
-my $norecommends = read_env('NORECOMMENDS', 1);
-my $nosuggests = read_env('NOSUGGESTS', 1);
+my $add_rec = ! read_env('NORECOMMENDS', 1);
+my $add_sug = ! read_env('NOSUGGESTS', 1);
 my $verbose = read_env('VERBOSE', 0);
 my $max_pkg_size = read_env('MAX_PKG_SIZE', 9999999999999);
 my $codename = $ENV{'CODENAME'};
@@ -87,10 +87,10 @@ msg(1, "Include non-free packages: ");
 msg(1, yesno($nonfree)."\n");
 msg(1, "Force inclusion of firmware packages: ");
 msg(1, yesno($force_firmware)."\n");
-msg(1, "Ignore Recommends: ");
-msg(1, yesno($norecommends)."\n");
-msg(1, "Ignore Suggests: ");
-msg(1, yesno($nosuggests)."\n");
+msg(1, "Include Recommends: ");
+msg(1, yesno($add_rec)."\n");
+msg(1, "Include Suggests: ");
+msg(1, yesno($add_sug)."\n");
 msg(1, "Maximum allowed package size: $max_pkg_size bytes\n");
 msg(1, "======================================================================
 ");
@@ -265,9 +265,9 @@ while (defined($_ = <STATUS>)) {
     }
     next if $excluded{$p};
     if ($p =~ /\/$codename-backports$/) {
-	add_package($p, ! $norecommends, ! $nosuggests, 1);
+	add_package($p, 1);
     } else {
-	add_package($p, ! $norecommends, ! $nosuggests, 0);
+	add_package($p, 0);
     }
 }
 close STATUS;
@@ -297,9 +297,9 @@ while (defined($_=<LIST>)) {
 	add_to_output($_);
     } else {
 	if ($_ =~ /\/$codename-backports$/) {
-	    add_package($_, ! $norecommends, ! $nosuggests, 1);
+	    add_package($_, 1);
 	} else {
-	    add_package($_, ! $norecommends, ! $nosuggests, 0);
+	    add_package($_, 0);
 	}
     }
 }
@@ -322,9 +322,9 @@ if ($complete) {
 	    msg(2, "  Ignoring udeb $p ...\n");
 	} else {
 	    if ($p =~ /\/$codename-backports$/i) {
-		add_package (lc $p, 0, 0, 1);
+		add_package (lc $p, 1);
 	    } else {
-		add_package (lc $p, 0, 0, 0);
+		add_package (lc $p, 0);
 	    }
 	}
     }
@@ -348,9 +348,9 @@ if ($extranonfree and (! $nonfree))
 	foreach $p (@toinclude)
 	{
 	    if ($p =~ /\/$codename-backports$/i) {
-		add_package (lc $p, 1, 1, 1);
+		add_package (lc $p, 1);
 	    } else {
-		add_package (lc $p, 1, 1, 0);
+		add_package (lc $p, 0);
 	    }
 	}
 
@@ -375,9 +375,9 @@ if ($extranonfree and (! $nonfree))
 			msg(2, "  Ignoring udeb $p ...\n");
 		} else {
 		    if ($_ =~ /\/$codename-backports$/i) {
-			add_package (lc $_, 1, 1, 1);
+			add_package (lc $_, 1);
 		    } else {
-			add_package (lc $_, 1, 1, 0);
+			add_package (lc $_, 0);
 		    }
 		}
 	}
@@ -396,9 +396,9 @@ if ($extranonfree and (! $nonfree))
 				msg(2, "  Ignoring udeb $p ...\n");
 			} else {
 			    if ($p =~ /\/$codename-backports$/i) {
-				add_package (lc $p, 0, 0, 1);
+				add_package (lc $p, 1);
 			    } else {
-				add_package (lc $p, 0, 0, 0);
+				add_package (lc $p, 0);
 			    }
 			}
 		}
@@ -866,8 +866,6 @@ sub read_virtualdepends {
 
 sub add_package {
 	my $p = shift;
-	my $add_rec = shift; # Do we look for recommends
-	my $add_sug = shift; # Do we look for suggests
 	my $check_backports = shift;
 	my ($ok, $reasons);
 	
