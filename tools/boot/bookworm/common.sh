@@ -228,7 +228,7 @@ install_firmwares_initrd () {
     regex="$2"
     if [ "$FORCE_FIRMWARE"x = "1"x ]; then
         FILES=`$BASEDIR/tools/catz ${MIRROR}/dists/${DI_DIST}/*/binary-${ARCH}/Packages.gz | \
-            grep-dctrl -Pe "$regex" -sFilename -n`
+            grep-dctrl -Pe "$regex" -sFilename -n || true`
         if [ -n "${FILES}" ]; then
             echo "    Adding firmwares from" ${FILES}
 
@@ -243,6 +243,8 @@ install_firmwares_initrd () {
             (cd ${FWDIR} ; find lib/firmware | cpio -oA -H newc -F $initrd)
             gzip -9 $initrd
             rm -fr $FWDIR
+	else
+	    echo "    WARNING: Could not find firmware package(s) matching $regex"
         fi
     fi
 }
