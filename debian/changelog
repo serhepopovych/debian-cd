@@ -5,6 +5,9 @@ debian-cd (3.1.35+deb11u1) UNRELEASED; urgency=medium
 
   * Use $CODENAME/updates for security pre-bullseye, or
     $CODENAME-security for bullseye onwards.
+  * Tweak grub boot menu highlight graphics to work again - switch
+    from greyscale to colour, as newer grub has removed greyscale PNG
+    support.. Closes: #1013079, #1013432.
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
