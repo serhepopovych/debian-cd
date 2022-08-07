@@ -18,6 +18,9 @@ debian-cd (3.1.26-buster) UNRELEASED; urgency=medium
     + tools/make_disc_trees.pl: When compressing translations, remove
       the uncompressed version
     + Fix sed delimiters in various scripts
+    + Tweak grub boot menu highlight graphics to work again - switch
+      from greyscale to colour, as newer grub has removed greyscale PNG
+      support.. Closes: #1013079, #1013432.
 
  -- Samuel Thibault <sthibault@debian.org>  Fri, 23 Aug 2019 21:51:50 +0200
 
