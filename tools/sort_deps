@@ -902,40 +902,12 @@ sub add_package {
 	
 	msg(3, "  \@dep after checklist = " . dump_depend(\@dep) . "\n");
 	
-	if ($add_rec) {
-		#TODO: Look for recommends (not yet included !!)
-		add_recommends (\@dep, $p, $check_backports);
-		msg(3, "  \@dep after add_recommends = " . dump_depend(\@dep) . "\n");
-		# Check again but doesn't fail if one of the package cannot be
-		# installed, just ignore it (it will be removed from @dep)
-		($ok, $reasons) = check_list (\@dep, 0, $check_backports);
-		if (not $ok) {
-			msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-			return;
-		}
-		msg(3, "  \@dep after checklist2 = " . dump_depend(\@dep) . "\n");
-	}
-
-	if ($add_sug) {
-	    #TODO: Look for suggests (not yet included !!)
-		add_suggests (\@dep, $p, $check_backports);
-		msg(3, "  \@dep after add_suggests = " . dump_depend(\@dep) . "\n");
-        # Check again but doesn't fail if one of the package cannot be
-        # installed, just ignore it (it will be removed from @dep)
-        ($ok, $reasons) = check_list (\@dep, 0, $check_backports);
-        if (not $ok) {
-            msg(0, "UNEXPECTED: It shouldn't fail here !\n");
-            return;
-        }
-		msg(3, "  \@dep after checklist3 = " . dump_depend(\@dep) . "\n");
-	}
-	
 	# All packages are ok, now list them out and add sizes
 	foreach my $t (@dep) {
 		my %t = %$t;
 		my $pkgname = $t{"Package"};
 		add_to_output($pkgname);
-    }
+        }
 }
 
 sub accepted {
@@ -947,49 +919,31 @@ sub accepted {
 	return 0;
 }
 
-sub add_suggests {
-	my $deps_list = shift;
-	my $pkg = shift;
-	my $check_backports = shift;
-	my @parents = ($pkg);
-	my $p; # = shift;
-	my @copy = @{$deps_list}; # A copy is needed since I'll modify the array
-	
-	foreach $p (@copy) {
-		my %t = %$p;
-		my $pkgname = $t{"Package"};
-		add_missing($deps_list, $packages{$pkgname}{"Suggests"}, \%t, 1, \@parents, $check_backports);
-	}
-}
-
-sub add_recommends {
-	my $deps_list = shift;
-	my $pkg = shift;
-	my $check_backports = shift;
-	my @parents = ($pkg);
-	my $p; # = shift;
-	my @copy = @{$deps_list}; # A copy is needed since I'll modify the array
-	
-	foreach $p (@copy) {
-		my %t = %$p;
-		my $pkgname = $t{"Package"};
-		add_missing($deps_list, $packages{$pkgname}{"Recommends"}, \%t, 1, \@parents, $check_backports);
-	}
-}
-
 sub get_missing {
 	my $p = shift;
 	my $check_backports = shift;
 	my @deps_list = ();
-	my @parents = ();
 	my %t;
 	my $dep_text;
+	my $found_missing = 0;
 
 	$t{"Package"} = $p;
 	$t{"CmpOp"} = "";
 	$t{"Version"} = "";
 
-	if (not add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0, \@parents, $check_backports)) {
+	if (add_missing (\@deps_list, $packages{$p}{"Depends"}, \%t, 0, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if ($add_rec and add_missing (\@deps_list, $packages{$p}{"Recommends"}, \%t, 1, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if ($add_sug and add_missing (\@deps_list, $packages{$p}{"Suggests"}, \%t, 1, $check_backports)) {
+		$found_missing = 1;
+	}
+
+	if (not $found_missing) {
 		return ();
 	}
 
@@ -1009,9 +963,7 @@ sub add_missing {
 	my @backup = @{$list};
 	my $ok = 1;
 	my $soft_depend = shift;
-	my $parents = shift;
 	my $check_backports = shift;
-	my $pkgname;
 	my (%pkgin);
 
 	if (ref $pkgin eq "HASH") {
@@ -1021,13 +973,11 @@ sub add_missing {
 	}
 
 	my $need_udeb = $packages{$pkgin{"Package"}}{"IsUdeb"};
+	my $pkgname = $pkgin{"Package"};
 
-	push(@{$parents}, $pkgin{"Package"});
-	#msg(3, "   add_missing: parents atm @{$parents}\n");
 	# Check all dependencies 
 	foreach my $thisdep (@{$new}) {
 		my $textout = "";
-		$pkgname = $pkgin{"Package"};
 
 		# Print out status
 		if ("ARRAY" eq ref($thisdep)) {
@@ -1080,9 +1030,8 @@ sub add_missing {
 				# Pulled in already somewhere above us in the
 				# depth-first search? (yes, we have to cope with
 				# circular dependencies here...)
-				if (is_in ($t{"Package"}, $parents) &&
-					check_versions($t{"Version"}, $t{"CmpOp"}, $packages{$pkgname}{"Version"})) {
-					msg(3, "    OR relationship already satisfied by parent " . dump_depend($pkg) . "\n");
+				if (is_in_dep_list($pkg, $list, $soft_depend)) {
+					msg(3, "    OR relationship already satisfied by current list " . dump_depend($pkg) . "\n");
 					$or_ok = 1;
 					last;
 				}
@@ -1113,7 +1062,7 @@ sub add_missing {
 					}
 				    }
 				    # Check we don't already have the package
-				    if (is_in_dep_list($pkg, $list)) {
+				    if (is_in_dep_list($pkg, $list, $soft_depend)) {
 					$or_ok = 1;
 					last;
 					# Otherwise try to add it
@@ -1123,8 +1072,14 @@ sub add_missing {
 					# added successfully
 					# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
 					push (@{$list}, $pkg);
-					if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $parents, $check_backports)) {
+					if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $check_backports)) {
 					    $or_ok = 1;
+					    if ($add_rec) {
+						add_missing ($list, $packages{$pkgname}{"Recommends"}, $pkg, 1, $check_backports);
+					    }
+					    if ($add_sug) {
+						add_missing ($list, $packages{$pkgname}{"Suggests"}, $pkg, 1, $check_backports);
+					    }
 					    remove_entry($pkg, $list);
 					    push @{$list}, $pkg;
 					    last;
@@ -1165,12 +1120,12 @@ sub add_missing {
 				msg(1, "    $pt already included\n");
 				next; # Already included, don't worry
 			}
-			if (is_in_dep_list(\%t, $list)) {
+			if (is_in_dep_list(\%t, $list, $soft_depend)) {
 				msg(1, "    $pt already in dep list\n");
 				next;
 			}
 			push @{$list}, \%t;
-			if (not add_missing ($list, $packages{$t{"Package"}}{"Depends"}, \%t, $soft_depend, $parents, $check_backports)) {
+			if (not add_missing ($list, $packages{$t{"Package"}}{"Depends"}, \%t, $soft_depend, $check_backports)) {
 				my $pkgname = $pkgin{"Package"};
 				msg(1, "couldn't add $pt ...\n");
 				if ($soft_depend) {
@@ -1181,6 +1136,13 @@ sub add_missing {
 					pop @{$list};
 					$ok = 0;
 				}
+			} else {
+			    if ($add_rec) {
+				add_missing ($list, $packages{$t{"Package"}}{"Recommends"}, \%t, 1, $check_backports);
+			    }
+			    if ($add_sug) {
+				add_missing ($list, $packages{$t{"Package"}}{"Suggests"}, \%t, 1, $check_backports);
+			    }
 			}
 			remove_entry(\%t, $list);
 			push @{$list}, \%t;
@@ -1190,7 +1152,7 @@ sub add_missing {
 	if (not $ok) {
 		@{$list} = @backup;
 	}
-	if (not is_in_dep_list(\%pkgin, $list)) {
+	if (not is_in_dep_list(\%pkgin, $list, $soft_depend)) {
 		push @{$list}, \%pkgin;
 	}
 	return $ok;
@@ -1210,13 +1172,18 @@ sub is_in {
 sub is_in_dep_list {
 	my $hash = shift;
 	my $array = shift;
+	my $soft_dep = shift // 0;  # When analyzing recommends
 	my %t = %$hash;
 
 	foreach my $key (@{$array}) {
 		my %a = %$key;
 		if ($a{"Package"} eq $t{"Package"}) {
 			my $pn = $a{"Package"};
-			if (check_versions($t{"Version"}, $t{"CmpOp"}, $packages{$pn}{"Version"})) {
+			if ($soft_dep) {
+				# We don't have to ensure exact version when we analyze
+				# Recommends/Suggests
+				return 1;
+			} elsif (check_versions($t{"Version"}, $t{"CmpOp"}, $packages{$pn}{"Version"})) {
 				return 1;
 			}
 		}
