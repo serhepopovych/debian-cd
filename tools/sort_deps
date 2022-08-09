@@ -978,22 +978,22 @@ sub add_missing {
 	# Check all dependencies 
 	foreach my $thisdep (@{$new}) {
 		my $textout = "";
+		my $type_rel = "simple";
+
+		if ("ARRAY" ne ref($thisdep)) {
+			die "add_missing: $thisdep should be an array!\n";
+		}
 
 		# Print out status
-		if ("ARRAY" eq ref($thisdep)) {
-			if (scalar(@{$thisdep} > 1)) {
-				$textout = "(OR ";
-			}
-			foreach my $orpkg (@{$thisdep}) {
-				$textout .= dump_depend($orpkg) . " ";
-			}
-			if (scalar(@{$thisdep} > 1)) {
-				$textout .= ")";
-			}
-		} elsif ("HASH" eq ref($thisdep)) {
-			$textout = dump_depend($thisdep);
-		} else {
-			die "add_missing: $thisdep should be an array or hash!\n";
+		if (scalar(@{$thisdep} > 1)) {
+			$textout = "(OR ";
+			$type_rel = "OR";
+		}
+		foreach my $orpkg (@{$thisdep}) {
+			$textout .= dump_depend($orpkg) . " ";
+		}
+		if (scalar(@{$thisdep} > 1)) {
+			$textout .= ")";
 		}
 		msg(3, "    $pkgname Dep: $textout soft_depend $soft_depend\n");
 
@@ -1003,149 +1003,93 @@ sub add_missing {
 		}
 
 		# Still work to do...
-		# If it's an OR
-		if ("ARRAY" eq ref($thisdep)) {
-			my $or_ok = 0;
+		my $or_ok = 0;
 
-			# First check all the OR packages up-front with no
-			# recursion. If *any* one of them is already installed, it
-			# will do.
+		# First check all the OR packages up-front with no
+		# recursion. If *any* one of them is already installed, it
+		# will do.
+		foreach my $pkg (@{$thisdep}) {
+			my %t = %$pkg;
+			my $pkgname = lc $t{"Package"};
+
+			if (exists $packages{$pkgname} &&
+			    ($packages{$pkgname}{"Size"} > $max_pkg_size)) {
+			    msg(2, "    $pkgname is too big, mark it as excluded\n");
+			    $excluded{$pkgname} = 'toobig';
+			}
+
+			# Already installed?
+			if (dep_satisfied($pkg, $check_backports, $need_udeb)) {
+				msg(3, "    $type_rel relationship already installed: " . dump_depend($pkg) . "\n");
+				$or_ok = 1;
+				last;
+			}
+
+			# Pulled in already somewhere above us in the
+			# depth-first search? (yes, we have to cope with
+			# circular dependencies here...)
+			if (is_in_dep_list($pkg, $list, $soft_depend)) {
+				msg(3, "    $type_rel relationship already satisfied by current list " . dump_depend($pkg) . "\n");
+				$or_ok = 1;
+				last;
+			}
+			# else
+			msg(3, "      " . dump_depend($pkg) . " not already installed\n");
+		}
+
+		# If we don't have any of the OR packages, then start
+		# again and try them in order. We always add the first
+		# package in the OR to allow APT to figure out which is
+		# the better one to install for any combination of
+		# packages that have similar alternative dependencies, but
+		# in different order. Having the first alternative
+		# available should be good enough for all cases we care
+		# about.
+		if (not $or_ok) {
+			msg(3, "    $type_rel relationship not already satisfied, looking at alternatives in order, check_backports $check_backports\n");
+
 			foreach my $pkg (@{$thisdep}) {
 				my %t = %$pkg;
-				my $pkgname = lc $t{"Package"};
-
-				if (exists $packages{$pkgname} && 
-				    ($packages{$pkgname}{"Size"} > $max_pkg_size)) {
-				    msg(2, "    $pkgname is too big, mark it as excluded\n");
-				    $excluded{$pkgname} = 'toobig';
-				}
-                               
-				# Already installed?
-				if (dep_satisfied($pkg, $check_backports, $need_udeb)) {
-					msg(3, "    OR relationship already installed: " . dump_depend($pkg) . "\n");
-					$or_ok = 1;
-					last;
-				}
-
-				# Pulled in already somewhere above us in the
-				# depth-first search? (yes, we have to cope with
-				# circular dependencies here...)
-				if (is_in_dep_list($pkg, $list, $soft_depend)) {
-					msg(3, "    OR relationship already satisfied by current list " . dump_depend($pkg) . "\n");
-					$or_ok = 1;
-					last;
-				}
-				# else
-				msg(3, "      " . dump_depend($pkg) . " not already installed\n");
-			}
-
-			# If we don't have any of the OR packages, then start
-			# again and try them in order. We always add the first
-			# package in the OR to allow APT to figure out which is
-			# the better one to install for any combination of
-			# packages that have similar alternative dependencies, but
-			# in different order. Having the first alternative
-			# available should be good enough for all cases we care
-			# about.
-			if (not $or_ok) {
-				msg(3, "    OR relationship not already satisfied, looking at alternatives in order, check_backports $check_backports\n");
-				
-				foreach my $pkg (@{$thisdep}) {
-				    my %t = %$pkg;
-				    my $pkgname = $t{"Package"};
-				    if (not accepted($pkgname)) {
-					if ($check_backports && accepted("$pkgname/$codename-backports")) {
-					    $pkgname = "$pkgname/$codename-backports";
-					    $t{"Package"} = $pkgname;
-					} else {
-					    next;
-					}
-				    }
-				    # Check we don't already have the package
-				    if (is_in_dep_list($pkg, $list, $soft_depend)) {
-					$or_ok = 1;
-					last;
-					# Otherwise try to add it
+				my $pkgname = $t{"Package"};
+				if (not accepted($pkgname)) {
+				    if ($check_backports && accepted("$pkgname/$codename-backports")) {
+					$pkgname = "$pkgname/$codename-backports";
+					$t{"Package"} = $pkgname;
 				    } else {
-					# Stop after the first
-					# package that is
-					# added successfully
-					# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
-					push (@{$list}, $pkg);
-					if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $check_backports)) {
-					    $or_ok = 1;
-					    if ($add_rec) {
-						add_missing ($list, $packages{$pkgname}{"Recommends"}, $pkg, 1, $check_backports);
-					    }
-					    if ($add_sug) {
-						add_missing ($list, $packages{$pkgname}{"Suggests"}, $pkg, 1, $check_backports);
-					    }
-					    remove_entry($pkg, $list);
-					    push @{$list}, $pkg;
-					    last;
-					} else {
-					    pop @{$list};
-					}
+					next;
 				    }
 				}
-			}
-			$ok &&= $or_ok;
-			if (not $ok) {
-				$pkgname = $pkgin{"Package"};
-				if ($soft_depend) {
-					msg(1, "  $pkgname failed, couldn't satisfy OR dep (but it's a soft dep, so ignoring...)\n");
-					$ok = 1;
-				} else {
-					msg(1, "  $pkgname failed, couldn't satisfy OR dep\n");
-				}
-			}				
-		# Else it's a simple dependency
-		} else {
-			my %t = %{$thisdep};
-			my $pt = dump_depend(\%t);
-			msg(1, "  Looking at adding $pt to satisfy dep\n");
 
-			if (not exists $packages{lc $t{"Package"}}) {
-				msg(1, "  $pt doesn't exist...\n");
-				if ($soft_depend) {
-					msg(1, "  soft dep: $pkgname ok, despite missing dep on $pt\n");
-					$ok = 1;
+				# Stop after the first
+				# package that is
+				# added successfully
+				# FIXME! NEED TO CHECK IF VERSION DEPS ARE SATISFIED, FALL BACK TO BPO VERSION
+				push (@{$list}, $pkg);
+				if (add_missing ($list, $packages{$pkgname}{"Depends"}, $pkg, $soft_depend, $check_backports)) {
+				    $or_ok = 1;
+				    if ($add_rec) {
+					add_missing ($list, $packages{$pkgname}{"Recommends"}, $pkg, 1, $check_backports);
+				    }
+				    if ($add_sug) {
+					add_missing ($list, $packages{$pkgname}{"Suggests"}, $pkg, 1, $check_backports);
+				    }
+				    remove_entry($pkg, $list);
+				    push @{$list}, $pkg;
+				    last;
 				} else {
-					msg(1, "  $pkgname failed, couldn't satisfy dep on $pt\n");
-					$ok = 0;
-					last;
+				    pop @{$list};
 				}
 			}
-			if (dep_satisfied(\%t, $check_backports, $need_udeb)) {
-				msg(1, "    $pt already included\n");
-				next; # Already included, don't worry
-			}
-			if (is_in_dep_list(\%t, $list, $soft_depend)) {
-				msg(1, "    $pt already in dep list\n");
-				next;
-			}
-			push @{$list}, \%t;
-			if (not add_missing ($list, $packages{$t{"Package"}}{"Depends"}, \%t, $soft_depend, $check_backports)) {
-				my $pkgname = $pkgin{"Package"};
-				msg(1, "couldn't add $pt ...\n");
-				if ($soft_depend) {
-					msg(1, "soft dep: $pkgname ok, despite missing dep on $pt\n");
-					$ok = 1;
-				} else {
-					msg(1, "$pkgname failed, couldn't satisfy dep on $pt\n");
-					pop @{$list};
-					$ok = 0;
-				}
+		}
+		$ok &&= $or_ok;
+		if (not $ok) {
+			$pkgname = $pkgin{"Package"};
+			if ($soft_depend) {
+				msg(1, "  $pkgname failed, couldn't satisfy $type_rel dep (but it's a soft dep, so ignoring...)\n");
+				$ok = 1;
 			} else {
-			    if ($add_rec) {
-				add_missing ($list, $packages{$t{"Package"}}{"Recommends"}, \%t, 1, $check_backports);
-			    }
-			    if ($add_sug) {
-				add_missing ($list, $packages{$t{"Package"}}{"Suggests"}, \%t, 1, $check_backports);
-			    }
+				msg(1, "  $pkgname failed, couldn't satisfy $type_rel dep\n");
 			}
-			remove_entry(\%t, $list);
-			push @{$list}, \%t;
 		}
 	}
 	# If a problem has come up, then restore the original list
