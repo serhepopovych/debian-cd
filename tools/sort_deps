@@ -885,7 +885,8 @@ sub add_package {
 	}
 
 	if ($packages{$p}{"Size"} > $max_pkg_size) {
-		msg(2, "Can't add $p ... too big!\n");
+	        $size = $packages{$p}{"Size"};
+		msg(2, "Can't add $p ... too big! ($size > $max_pkg_size)\n");
 		$excluded{$p} = 'toobig';
 		return;
 	}
