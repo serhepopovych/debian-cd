@@ -8,6 +8,9 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * Tweak grub boot menu highlight graphics to work again - switch
     from greyscale to colour, as newer grub has removed greyscale PNG
     support.. Closes: #1013079, #1013432.
+  * Add non-free-firmware support
+    + Add an extra config variable NONFREE_COMPONENTS to declare where
+      to look for non-free packages.
 
   [ Cyril Brulebois ]
   * generate_firmware_patterns: Drop support for the temporary --test

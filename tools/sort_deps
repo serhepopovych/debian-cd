@@ -22,6 +22,7 @@ my $listfile = shift;
 my $nonfree = read_env('NONFREE', 0);
 my $extranonfree = read_env('EXTRANONFREE', 0);
 my $force_firmware = read_env('FORCE_FIRMWARE', 0);
+my @nonfree_components = split /\ /, read_env('NONFREE_COMPONENTS', 'non-free');
 my $local = read_env('LOCAL', 0);
 my $complete = read_env('COMPLETE', 0);
 my $add_rec = ! read_env('NORECOMMENDS', 1);
@@ -85,6 +86,10 @@ msg(1, "Complete selected packages with all the rest: ");
 msg(1, yesno($complete)."\n");
 msg(1, "Include non-free packages: ");
 msg(1, yesno($nonfree)."\n");
+msg(1, "Non-free components:\n");
+foreach my $cmp (@nonfree_components) {
+    msg(1, "  - $cmp\n");
+}
 msg(1, "Force inclusion of firmware packages: ");
 msg(1, yesno($force_firmware)."\n");
 msg(1, "Include Recommends: ");
@@ -154,14 +159,18 @@ my $count_excl = 0;
 
 # Now exclude packages because of the non-free rules
 if (not $nonfree) {
-    foreach (grep { $packages{$_}{"Section"} =~ /non-free/ }
-	     (keys %packages)) {
-        if ($force_firmware and $packages{$_}{"IsFirmware"}) {
-            msg(1, "force_firmware: keeping non-free package $_\n");
-        } else {
-            $excluded{$_} = 'nonfree';
-            $count_excl++;
-        }
+    foreach my $cmp (@nonfree_components) {
+	msg(1, "Checking for $cmp packages to exclude\n");
+	foreach (grep { $packages{$_}{"Section"} =~ /$cmp\//}
+		 (keys %packages)) {
+	    if ($force_firmware and $packages{$_}{"IsFirmware"}) {
+		msg(1, " - force_firmware: keeping $cmp package $_\n");
+	    } else {
+		msg(1, " - excluding $cmp package $_\n");
+		$excluded{$_} = 'nonfree';
+		$count_excl++;
+	    }
+	}
     }
 }
 
@@ -335,7 +344,7 @@ if ($extranonfree and (! $nonfree))
 {
 	my ($p, @toinclude);
 	
-	msg(0, "  Adding non-free packages now\n");
+	msg(0, "  Adding non-free* packages now\n");
 
 	# Finally accept non-free packages ...
 	foreach $p (grep { $excluded{$_} eq "nonfree" } (keys %excluded))
@@ -466,6 +475,8 @@ sub parse_package {
 		$packages{$p}{"Component"} = "contrib";
 	} elsif ($packages{$p}{"Section"} =~ /non-free\//) {
 		$packages{$p}{"Component"} = "non-free";
+	} elsif ($packages{$p}{"Section"} =~ /non-free-firmware\//) {
+		$packages{$p}{"Component"} = "non-free-firmware";
 	} elsif ($packages{$p}{"IsUdeb"}) {
 		$packages{$p}{"Component"} = "main-installer";
 	} else {

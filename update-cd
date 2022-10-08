@@ -16,6 +16,7 @@ MIRROR_NORM=/srv/cdbuilder.debian.org/src/ftp/debian
 
 # Do you want non-free? 1 for yes, 0 for no
 NONFREE=0
+NONFREE_FIRMWARE=1
 
 # What release version is this?
 VER=9.1.0
@@ -81,7 +82,7 @@ CLOG=dists/$CODENAME/ChangeLog
 UPD=$TDIR/$CODENAME-update
 DATE=`date +%Y%m%d`
 BASEDIR=`pwd`
-SECTS="main non-free contrib"
+SECTS="main non-free non-free-firmware contrib"
 VERBOSE=2
 GRAB_CHECKSUMS=$BASEDIR/tools/grab_checksums
 export VERBOSE BASEDIR SECTS
@@ -95,7 +96,7 @@ if [ "$ARCHLIST"x = ""x ] ; then
     ARCHLIST="arm64 armel armhf amd64 i386 mips mipsel mips64el ppc64el s390x source" # amd64 # -all dealt with specially
 fi
 
-export TDIR NONFREE VER MIRROR CODENAME OUT BASEDIR
+export TDIR NONFREE NONFREE_FIRMWARE VER MIRROR CODENAME OUT BASEDIR
 
 CDSIZE=$(($CDSIZE * 1024))
 
@@ -278,7 +279,12 @@ fi
 cp $DIFF $UPD/list
 if [ "$NONFREE"x != "1"x ] ; then
     echo "Removing non-free files from the list"
-    grep -v non-free $UPD/list > $UPD/list1
+    grep -v non-free/ $UPD/list > $UPD/list1
+    mv -f $UPD/list1 $UPD/list
+fi
+if [ "$NONFREE_FIRMWARE"x != "1"x ] ; then
+    echo "Removing non-free-firmware files from the list"
+    grep -v non-free-firmware/ $UPD/list > $UPD/list1
     mv -f $UPD/list1 $UPD/list
 fi
 

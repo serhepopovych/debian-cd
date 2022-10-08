@@ -133,12 +133,15 @@ The process of building a CD is composed of the following steps:
 
   You can change the behaviour of this command with the following
   variables:
-  - if NONFREE is set, then packages from non-free will be allowed
-    (NONFREE must be exported to all sub-shells)
-  - if EXTRANONFREE is set, then non-free packages will be included
-    on an extra CD (the last CD in fact). Don't use NONFREE and
-    EXTRANONFREE at the same time!
-    (EXTRANONFREE must be exported to all sub-shells)
+
+  - if NONFREE is set, then packages from the components defined in
+    NONFREE_COMPONENTS will be allowed (NONFREE must be exported to
+    all sub-shells)
+  - if EXTRANONFREE is set, then similarly non-free packages will be
+    included on an extra CD (the last CD in fact). Don't use NONFREE
+    and EXTRANONFREE at the same time! (EXTRANONFREE must be exported
+    to all sub-shells)
+  - if FORCE_FIRMWARE=1
   - if COMPLETE is set, all packages that are not listed in the
     selected task file will be included at the end
   - setting INSTALLER_CD will use an appropriate task file for

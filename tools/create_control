@@ -31,7 +31,7 @@ PREFIX=`echo $CDDIR | sed "s?$BDIR/CD?$BDIR/?"`
 
 NUM=${PREFIX##$BDIR/}
 if [ -n "$NONFREE" -o -n "$EXTRANONFREE" ]; then
-    SECTIONS="main contrib non-free"
+    SECTIONS="main contrib $NONFREE_COMPONENTS"
 else
     SECTIONS="main contrib"
 fi

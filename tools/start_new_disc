@@ -343,7 +343,7 @@ cd $CDDIR
 
 SECTIONS="main"
 if [ "${NONFREE:-0}" != "0" -o "${EXTRANONFREE:-0}" != "0" ] ; then
-    SECTIONS="${SECTIONS} non-free"
+    SECTIONS="${SECTIONS} $NONFREE_COMPONENTS"
 fi
 if [ "${CONTRIB:-0}" != "0" ] ; then
     SECTIONS="${SECTIONS} contrib"

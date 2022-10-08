@@ -19,7 +19,7 @@ my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
 my $mkisofs_base_opts = "";
 my $mkisofs_opts = "";
 my $mkisofs_dirs = "";
-my (@arches, @arches_nosrc, @overflowlist, @pkgs_added);
+my (@arches, @arches_nosrc, @overflowlist, @pkgs_added, @nonfree_components);
 my (@exclude_packages, @unexclude_packages, @excluded_package_list);
 my %firmware_package;
 my $current_checksum_type = "";
@@ -88,6 +88,7 @@ if ($maxisos < $maxcds) {
 }
 
 $extranonfree = read_env('EXTRANONFREE', 0);
+@nonfree_components = split /\ /, read_env('NONFREE_COMPONENTS', 'non-free');
 $nonfree = read_env('NONFREE', 0);
 $contrib = read_env('CONTRIB', 0);
 $use_local = read_env('LOCAL', 0);
@@ -265,7 +266,7 @@ while (defined (my $pkg = <INLIST>)) {
     if (should_exclude_package($pkg)) {
         push(@excluded_package_list, $pkg);
     } elsif (should_start_extra_nonfree($pkg)) {
-        print LOG "Starting on extra non-free CDs\n";
+        print LOG "Starting on extra non-free image(s)\n";
         finish_disc($cddir, "");
         # And reset, to start the next disc
         $size = 0;
@@ -417,7 +418,9 @@ sub load_all_descriptions {
 	    load_descriptions("contrib", $use_backports);
 	}
 	if ($nonfree || $extranonfree) {
-	    load_descriptions("non-free", $use_backports);
+	    foreach my $component (@nonfree_components) {
+		load_descriptions($component, $use_backports);
+	    }
 	}
 	if ($use_local) {
 	    load_descriptions("local", $use_backports);
@@ -490,12 +493,15 @@ sub should_start_extra_nonfree {
     my $pkg = shift;
     my ($arch, $component, $pkgname, $pkgsize) = split /:/, $pkg;
 
-	if ( ($component eq "non-free") && $extranonfree) {
+    if ($extranonfree) {
+	foreach my $nf_comp (@nonfree_components) {
+	    if ($component eq $nf_comp) {
 		$extranonfree = 0; # Flag that we don't need to start new next time!
 		return 1;
+	    }
 	}
-	
-	return 0;
+    }
+    return 0;
 }
 
 sub should_exclude_package {
@@ -967,6 +973,8 @@ sub Packages_dir {
         $dist = "contrib";
     } elsif ($file =~ /\/non-free\//) {
         $dist = "non-free";
+    } elsif ($file =~ /\/non-free-firmware\//) {
+        $dist = "non-free-firmware";
     } else {
         $dist = "local";
     }	
@@ -1186,6 +1194,8 @@ sub add_firmware_stuff {
         $dist = "contrib";
     } elsif ($file =~ /\/non-free\//) {
         $dist = "non-free";
+    } elsif ($file =~ /\/non-free-firmware\//) {
+        $dist = "non-free-firmware";
     } else {
         $dist = "local";
     }

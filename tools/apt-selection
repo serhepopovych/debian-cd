@@ -46,7 +46,7 @@ options=" -q -o Dir::State::status=$APTTMP/$THIS_PKGSET/status \
 
 sections=main
 if [ "${NONFREE:-0}" != "0" ] || [ "${EXTRANONFREE:-0}" != "0" ] || [ "${FORCE_FIRMWARE:-0}" != "0" ]; then
-	sections="$sections non-free"
+	sections="$sections $NONFREE_COMPONENTS"
 fi
 if [ "${CONTRIB:-0}" != "0" ]; then
 	sections="$sections contrib"

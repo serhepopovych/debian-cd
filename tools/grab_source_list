@@ -17,6 +17,11 @@ awk -v max_size=$MAX_PKG_SIZE '
 				  next
 				}
 
+	/^Section: non-free-firmware/ {
+				  component[srcname]="non-free-firmware"
+				  next
+				}
+
 	/^Section: contrib/ {
 				  component[srcname]="contrib"
 				  next
@@ -58,11 +63,16 @@ awk -v max_size=$MAX_PKG_SIZE '
 if [ "$NONFREE"x = "1"x ] ; then
     grep -v SRCTOOBIG $BDIR/list.mid > $OUT
 else
-    grep -v -e :non-free: -e SRCTOOBIG $BDIR/list.mid > $OUT
+    grep -v \
+	 -e :non-free: \
+	 -e :non-free-firmware: \
+	 -e SRCTOOBIG $BDIR/list.mid > $OUT
 fi
 
 if [ "$EXTRANONFREE"x = "1"x ] ; then 
-	grep :non-free: $BDIR/list.mid | grep -v SRCTOOBIG >> $OUT
+	for COMPONENT in $NONFREE_COMPONENTS; do
+		grep :"$COMPONENT": $BDIR/list.mid | grep -v SRCTOOBIG >> $OUT
+	done
 fi
 
 awk -F : '
