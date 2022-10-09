@@ -1188,6 +1188,8 @@ sub add_firmware_stuff {
     m/^Section: (\S+)/m and $section = $1;
     m/^Filename: (\S+)/mi and $file = $1;
 
+    my $base_file = basename($file);
+
     if ($file =~ /\/main\//) {
         $dist = "main";
     } elsif ($file =~ /\/contrib\//) {
@@ -1206,7 +1208,7 @@ sub add_firmware_stuff {
     }
 
     msg_ap(0, "Symlink fw package $p into /firmware\n");
-    symlink("../$file", "$dir/firmware/" . basename($file));
+    symlink("../$file", "$dir/firmware/$base_file");
     msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
     if (! -d "$dir/firmware") {
 	mkdir "$dir/firmware" or die "mkdir $dir/firmware failed $!\n";
@@ -1227,6 +1229,28 @@ sub add_firmware_stuff {
     if (-f "$dir/firmware/dep11/$p.patterns") {
 	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.patterns");
     }
+
+    # Find the current size of the firmware Contents file
+    my $contents_blocks_old = 0;
+    my $cont_file = "$dir/firmware/Contents-firmware";
+    if (-f "$cont_file") {
+	$contents_blocks_old = get_file_blocks("$cont_file");
+    }
+    # Add new contents stuff, and count it
+    open(OFILE, ">> $cont_file");
+    open(DPKGC, "dpkg --contents $dir/firmware/$base_file |")
+	or die "Can't find contents of $dir/firmware/$base_file: $!";
+    while (defined(my $line = <DPKGC>)) {
+	chomp $line;
+	if ($line =~ m,^[-|l]\S+\s+\S+\s+\d+\s+\S+\s+\S+\s+./(\S+/firmware/\S+)$,) {
+	    printf OFILE "%-55s %s\n", $1, $base_file;
+	}
+    }
+    close DPKGC;
+    close OFILE;
+
+    my $contents_blocks_new = get_file_blocks($cont_file);
+    $blocks_added += $contents_blocks_new - $contents_blocks_old;
 
     return $blocks_added;
 }
@@ -1441,14 +1465,37 @@ sub remove_firmware_stuff {
     m/^Package: (\S+)/mi and $p = $1;
     m/^Filename: (\S+)/mi and $file = $1;
 
+    my $base_file = basename($file);
+
     msg_ap(0, "Remove symlink for fw package $p in /firmware\n");
-	unlink("$dir/firmware/" . basename($file));
+	unlink("$dir/firmware/$base_file");
 
     if (-f "$dir/firmware/dep11/$p.patterns") {
 	$blocks_removed += get_file_blocks("$dir/firmware/dep11/$p.patterns");
 	msg_ap(0, "Remove $dir/firmware/dep11/$p.patterns\n");
 	unlink("$dir/firmware/dep11/$p.patterns");
     }
+
+    # Find the current size of the firmware Contents file, and grep
+    # out from the current data
+    my $contents_blocks_old = 0;
+    my $cont_file = "$dir/firmware/Contents-firmware";
+    open(OFILE, "> $cont_file.1");
+    if (-f $cont_file) {
+	$contents_blocks_old = get_file_blocks($cont_file);
+	open(IFILE, "< $cont_file");
+	while (defined(my $line = <IFILE>)) {
+	    chomp $line;
+	    if ($line !~ /\b$base_file$/) {
+		print OFILE "$line\n";
+	    }
+	}
+	close IFILE;
+    }
+    close OFILE;
+    rename "$cont_file.1", "$cont_file";
+    my $contents_blocks_new = get_file_blocks($cont_file);
+    $blocks_removed += $contents_blocks_new - $contents_blocks_old;
 
     return $blocks_removed;
 }

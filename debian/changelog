@@ -11,6 +11,8 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * Add non-free-firmware support
     + Add an extra config variable NONFREE_COMPONENTS to declare where
       to look for non-free packages.
+  * Add a Contents-firmware file to help with looking up firmware
+    packages in d-i.
 
   [ Cyril Brulebois ]
   * generate_firmware_patterns: Drop support for the temporary --test
