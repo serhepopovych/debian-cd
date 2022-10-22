@@ -49,6 +49,10 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   * Remove leftover files of silo bootloader on sparc
   * Remove leftover files of silo bootloader on sparc64
 
+  [ Debian Janitor ]
+  * Update lintian override info to new format on line 1, 2, 3.
+  * Update standards version to 4.6.1, no changes needed.
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
 
 debian-cd (3.1.35) unstable; urgency=medium

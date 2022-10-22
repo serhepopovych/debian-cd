@@ -8,7 +8,7 @@ Uploaders: Raphaël Hertzog <hertzog@debian.org>,
  Holger Levsen <holger@debian.org>
 Build-Depends: debhelper-compat (= 13)
 Build-Depends-Indep: tofrodos
-Standards-Version: 4.5.1
+Standards-Version: 4.6.1
 Rules-Requires-Root: no
 Vcs-Git: https://salsa.debian.org/images-team/debian-cd.git
 Vcs-Browser: https://salsa.debian.org/images-team/debian-cd
