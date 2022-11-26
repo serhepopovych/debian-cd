@@ -91,6 +91,8 @@ if [ -d boot$N/grub ] ; then
     mv boot$N/grub/* $CDDIR/boot/grub/
     rmdir boot$N/grub
 
+    change_grub_cfg_uuid $CDDIR
+
     # Stuff the EFI boot files into a FAT filesystem, making it as
     # small as possible. We end up re-packing like this in case we're
     # making a multi-arch image

@@ -91,6 +91,8 @@ if [ -d boot$N/grub ] ; then
     # small as possible. We end up re-packing like this in case we're
     # making a multi-arch image
 
+    change_grub_cfg_uuid $CDDIR
+
     # First, work out how many blocks we need
     blocks=$(calculate_efi_image_size $CDDIR)
 
