@@ -13,6 +13,9 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
       to look for non-free packages.
   * Add a Contents-firmware file to help with looking up firmware
     packages in d-i.
+  * Change how we find the installer when booting via grub-efi:
+    instead of looking for the .disk/info file, use .disk/id/$UUID
+    instead. Closes: #1024346, #1024720.
 
   [ Cyril Brulebois ]
   * generate_firmware_patterns: Drop support for the temporary --test
