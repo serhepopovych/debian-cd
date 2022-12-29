@@ -202,54 +202,6 @@ if [ $ARCH = amd64 ]; then
     mv boot$N/isolinux/grub boot$N/isolinux/grub-i386
 fi
 
-# Not everything in the tarball is isolinux stuff
-if [ -e boot$N/isolinux/win32-loader.ini ] ; then
-    echo "  Moving extra loader files into place:"
-    for file in boot$N/isolinux/g2ldr* boot$N/isolinux/setup.exe boot$N/isolinux/win32-loader.ini; do
-        if [ -e $file ] ; then
-	    printf "    "
-            mv -v $file CD$N/
-        fi
-    done
-    # Modify win32-loader.ini for the "current" arch
-    sed -i "s|install/|$INSTALLDIR/|" CD$N/win32-loader.ini
-    if [ "${DESKTOP}" ] ; then
-        sed -i "s|^\(default_desktop\)=.*|\1=${DESKTOP}|" CD$N/win32-loader.ini
-    fi
-fi
-
-# Add autorun
-if [ -f CD$N/setup.exe ]; then
-# when win32-loader is present, use that (it already checks for README.html)
-    todos > $CDDIR/autorun.inf <<EOF
-[autorun]
-open=setup.exe
-icon=setup.exe,0
-label=Install Debian GNU/Linux
-
-[Content]
-MusicFiles=false
-PictureFiles=false
-VideoFiles=false
-EOF
-elif [ -f $CDDIR/README.html ]; then
-    todos > $CDDIR/autorun.inf <<EOF
-[autorun]
-open=autorun.bat
-label=Install Debian GNU/Linux
-
-[Content]
-MusicFiles=false
-PictureFiles=false
-VideoFiles=false
-EOF
-    todos > $CDDIR/autorun.bat <<EOF
-@echo Starting "README.html"...
-@start README.html
-@exit
-EOF
-fi
-
 # Common mkisofs options when creating CDs
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
 add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
