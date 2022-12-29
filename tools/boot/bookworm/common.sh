@@ -257,10 +257,12 @@ change_grub_cfg_uuid () {
     # reliable - see #1024346 and #1024720 for examples where this
     # fails. Instead, let's generate a UUID here and use that as a
     # flag file.
-    if [ -f $CDDIR/EFI/debian/grub.cfg ]; then
+    FILE=$CDDIR/EFI/debian/grub.cfg
+    if [ -f $FILE ]; then
 	UUID=$(uuidgen)
 	mkdir -p $CDDIR/.disk/id
 	touch $CDDIR/.disk/id/$UUID
-	sed -i "/search --file --set=root/s,.disk/info,.disk/id/$UUID," $CDDIR/EFI/debian/grub.cfg
+	sed -i "/search --file --set=root/s,.disk/info,.disk/id/$UUID," $FILE
+	sed -i '/^source.*grub.cfg$/s,^.*$,source $prefix/${grub_cpu}-efi/grub.cfg,' $FILE
     fi
 }
