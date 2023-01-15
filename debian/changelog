@@ -1,13 +1,13 @@
-debian-cd (3.1.36) UNRELEASED; urgency=medium
+debian-cd (3.1.36) unstable; urgency=medium
 
   [ Steve McIntyre ]
   * Start bookworm development, copy the bullseye dirs to bookworm as
-    a start
+    a start.
   * Use $CODENAME/updates for security pre-bullseye, or
     $CODENAME-security for bullseye onwards.
   * Tweak grub boot menu highlight graphics to work again - switch
     from greyscale to colour, as newer grub has removed greyscale PNG
-    support.. Closes: #1013079, #1013432.
+    support. Closes: #1013079, #1013432.
   * Add non-free-firmware support
     + Add an extra config variable NONFREE_COMPONENTS to declare where
       to look for non-free packages.
@@ -32,7 +32,7 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
     Closes: #601203
   * Remove tools/sort_deps_edu since its only purpose was to try to implement
     the above recursive lookup.
-  * Remove dead code in sort_deps and improve generated log messages
+  * Remove dead code in sort_deps and improve generated log messages.
 
   [ Wolfgang Schweer ]
   * data/bookworm: Use Debian Edu 12 installer logo and syslinux splash image
@@ -52,8 +52,8 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
     initrd itself. Closes: #992699
 
   [ John Paul Adrian Glaubitz ]
-  * Remove leftover files of silo bootloader on sparc
-  * Remove leftover files of silo bootloader on sparc64
+  * Remove leftover files of silo bootloader on sparc.
+  * Remove leftover files of silo bootloader on sparc64.
 
   [ Debian Janitor ]
   * Update lintian override info to new format on line 1, 2, 3.
@@ -62,7 +62,7 @@ debian-cd (3.1.36) UNRELEASED; urgency=medium
   [ Holger Levsen ]
   * Update standards version to 4.6.2, no changes needed.
 
- -- Steve McIntyre <93sam@debian.org>  Mon, 26 Jul 2021 01:02:03 +0100
+ -- Holger Levsen <holger@debian.org>  Sun, 15 Jan 2023 13:11:24 +0100
 
 debian-cd (3.1.35) unstable; urgency=medium
 
