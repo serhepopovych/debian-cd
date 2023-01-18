@@ -116,7 +116,7 @@ if (! grep { $_ eq $SOF } @all_packages) {
         # command. Note that descending under intel/ would lead to no
         # aliases, so stick to the top-level directory for sof:
         #
-        #     for x in $(dpkg -L linux-image-6.1.0-1-amd64 | egrep '(kernel/sound/soc/sof/.*\.ko|/snd-soc-.*sof.*\.ko)$'); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort
+        #     for x in $(dpkg -L linux-image-6.1.0-1-amd64 | egrep '(kernel/sound/soc/sof/.*\.ko|/snd-soc-.*sof.*\.ko)$'); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort -u
 
         my @sof_aliases = qw(
             auxiliary:snd_sof.hda-probes
