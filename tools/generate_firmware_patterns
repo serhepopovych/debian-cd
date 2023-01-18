@@ -116,10 +116,7 @@ if (! grep { $_ eq $SOF } @all_packages) {
         # command. Note that descending under intel/ would lead to no
         # aliases, so stick to the top-level directory for sof:
         #
-        #     for x in $(dpkg -L linux-image-5.10.0-8-amd64 | grep kernel/sound/soc/sof/.*\.ko$); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort
-        #
-        # XXX: If that's not enough, there are other modules matching the
-        #      kernel/sound/soc/intel/boards/snd-soc-sof*.ko pattern.
+        #     for x in $(dpkg -L linux-image-5.10.0-18-amd64 | egrep '(kernel/sound/soc/sof/.*\.ko|/snd-soc-sof.*\.ko)$'); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort
 
         my @sof_aliases = qw(
             pci:v00008086d000002C8sv*sd*bc*sc*i*
@@ -140,11 +137,16 @@ if (! grep { $_ eq $SOF } @all_packages) {
             pci:v00008086d0000A348sv*sd*bc*sc*i*
             pci:v00008086d0000A3F0sv*sd*bc*sc*i*
             platform:jsl_rt5682_max98360a
+            platform:jsl_rt5682_max98360a
+            platform:jsl_rt5682_rt1015
             platform:jsl_rt5682_rt1015
             platform:sof-audio
             platform:sof_rt5682
+            platform:sof_rt5682
             platform:sof_sdw
             platform:tgl_max98357a_rt5682
+            platform:tgl_max98357a_rt5682
+            platform:tgl_max98373_rt5682
             platform:tgl_max98373_rt5682
         );
 
