@@ -104,9 +104,9 @@ print STDERR "firmware packages found across all components: @all_packages\n"
 # Workaround for firmware-sof-signed, which doesn't advertise firmware
 # files it might need through the MODULE_FIRMWARE() macro (meaning no
 # chance to generate DEP-11 info from there): alias info manually
-# extracted on 2021-07-25 (linux-image-5.10.0-8-amd64, 5.10.46-2).
+# extracted on 2023-01-18 (linux-image-6.1.0-1-amd64, 6.1.4-1).
 #
-# XXX: To be kept in sync!
+# XXX: To be kept in sync! (#1029175)
 my $SOF = 'firmware-sof-signed';
 if (! grep { $_ eq $SOF } @all_packages) {
 
