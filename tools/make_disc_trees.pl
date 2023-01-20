@@ -1207,15 +1207,16 @@ sub add_firmware_stuff {
 	$dep11_dir = "$mirror/dists/$codename-backports/$dist/dep11";
     }
 
-    msg_ap(0, "Symlink fw package $p into /firmware\n");
-    symlink("../$file", "$dir/firmware/$base_file")
-	or die "unable to create $dir/firmware/$base_file symlink: $!";
-    msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
     if (! -d "$dir/firmware") {
 	mkdir "$dir/firmware" or die "mkdir $dir/firmware failed $!\n";
 	mkdir "$dir/firmware/dep11" or die "mkdir $dir/firmware/dep11 failed $!\n";
 	$blocks_added += 2;
     }
+
+    msg_ap(0, "Symlink fw package $p into /firmware\n");
+    symlink("../$file", "$dir/firmware/$base_file")
+	or die "unable to create $dir/firmware/$base_file symlink: $!";
+    msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
 
     # Cope with maybe having the patterns file already
     # (e.g. multi-arch), in which case we'll replace it here
