@@ -1208,7 +1208,8 @@ sub add_firmware_stuff {
     }
 
     msg_ap(0, "Symlink fw package $p into /firmware\n");
-    symlink("../$file", "$dir/firmware/$base_file");
+    symlink("../$file", "$dir/firmware/$base_file")
+	or die "unable to create $dir/firmware/$base_file symlink: $!";
     msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
     if (! -d "$dir/firmware") {
 	mkdir "$dir/firmware" or die "mkdir $dir/firmware failed $!\n";
