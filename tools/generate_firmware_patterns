@@ -94,6 +94,8 @@ write_file("$output_dir/README.txt",
 # Components-* files:
 my @all_packages;
 foreach my $component (@ARGV) {
+    die "missing metadata file $component"
+        if ! -f $component;
     my @packages = process_components($component);
     push @all_packages, @packages;
 }
