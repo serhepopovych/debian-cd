@@ -1245,7 +1245,7 @@ sub add_firmware_stuff {
     while (defined(my $line = <DPKGC>)) {
 	chomp $line;
 	if ($line =~ m,^[-|l]\S+\s+\S+\s+\d+\s+\S+\s+\S+\s+./(\S+/firmware/\S+)$,) {
-	    printf OFILE "%-55s %s\n", "/$1", $base_file;
+	    printf OFILE "%-55s %s %s\n", "/$1", $base_file, $component;
 	}
     }
     close DPKGC;
