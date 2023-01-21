@@ -1230,6 +1230,11 @@ sub add_firmware_stuff {
     system(@args) == 0 or die "generate_firmware_patterns failed: $?";
     if (-f "$dir/firmware/dep11/$p.patterns") {
 	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.patterns");
+	# Make sure apt-setup can be configured appropriately:
+	open(CFILE, ">$dir/firmware/dep11/$p.component");
+	print CFILE $component;
+	close CFILE;
+	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.component");
     }
 
     # Find the current size of the firmware Contents file
