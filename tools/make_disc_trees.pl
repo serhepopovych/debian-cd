@@ -965,26 +965,26 @@ sub Packages_dir {
     my $section = shift;
     my $in_backports = shift;
 
-    my ($pdir, $dist);
+    my ($pdir, $component);
 
     if ($file =~ /\/main\//) {
-        $dist = "main";
+        $component = "main";
     } elsif ($file =~ /\/contrib\//) {
-        $dist = "contrib";
+        $component = "contrib";
     } elsif ($file =~ /\/non-free\//) {
-        $dist = "non-free";
+        $component = "non-free";
     } elsif ($file =~ /\/non-free-firmware\//) {
-        $dist = "non-free-firmware";
+        $component = "non-free-firmware";
     } else {
-        $dist = "local";
+        $component = "local";
     }	
 
-    $pdir = "$dir/dists/$codename/$dist";
+    $pdir = "$dir/dists/$codename/$component";
     if ($in_backports) {
-	$pdir = "$dir/dists/$codename-backports/$dist";
+	$pdir = "$dir/dists/$codename-backports/$component";
     }	
     if ($section and $section eq "debian-installer") {
-        $pdir = "$dir/dists/$codename/$dist/debian-installer";
+        $pdir = "$dir/dists/$codename/$component/debian-installer";
 	# Don't attempt to put d-i components into backports, as d-i
 	# won't look for them there.
     }
@@ -1179,7 +1179,7 @@ sub add_firmware_stuff {
     my $arch = shift;
     my $in_backports = shift;
     local $_ = shift;
-    my ($p, $file, $section, $dist, $dep11_dir);
+    my ($p, $file, $section, $component, $dep11_dir);
     my $blocks_added = 0;
     my @args = ("$basedir/tools/generate_firmware_patterns",
 		"--output-dir", "$dir/firmware/dep11");
@@ -1191,20 +1191,20 @@ sub add_firmware_stuff {
     my $base_file = basename($file);
 
     if ($file =~ /\/main\//) {
-        $dist = "main";
+        $component = "main";
     } elsif ($file =~ /\/contrib\//) {
-        $dist = "contrib";
+        $component = "contrib";
     } elsif ($file =~ /\/non-free\//) {
-        $dist = "non-free";
+        $component = "non-free";
     } elsif ($file =~ /\/non-free-firmware\//) {
-        $dist = "non-free-firmware";
+        $component = "non-free-firmware";
     } else {
-        $dist = "local";
+        $component = "local";
     }
 
-    $dep11_dir = "$mirror/dists/$codename/$dist/dep11";
+    $dep11_dir = "$mirror/dists/$codename/$component/dep11";
     if ($in_backports) {
-	$dep11_dir = "$mirror/dists/$codename-backports/$dist/dep11";
+	$dep11_dir = "$mirror/dists/$codename-backports/$component/dep11";
     }
 
     if (! -d "$dir/firmware") {
