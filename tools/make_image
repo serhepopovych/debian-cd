@@ -151,7 +151,7 @@ do
 	    fi
 
         # Generate our listfile while we have the information to hand easily
-        find CD$n/pool -type f | sed 's?^.*/??g' | gzip -9 > $OUT/$OUTFILE.list.gz
+        find CD$n/pool -type f | sed 's?^.*/??g' | pigz -9nm > $OUT/$OUTFILE.list.gz
     fi
 
     # If we've made jigdo files, tweak them with extra info now

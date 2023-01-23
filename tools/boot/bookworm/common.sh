@@ -241,7 +241,7 @@ install_firmwares_initrd () {
                 dpkg -x "${MIRROR}/${FILE}" ${FWDIR}
             done
             (cd ${FWDIR} ; find lib/firmware | cpio -oA -H newc -F $initrd)
-            gzip -9 $initrd
+            pigz -9nm $initrd
             rm -fr $FWDIR
 	else
 	    echo "    WARNING: Could not find firmware package(s) matching $regex"

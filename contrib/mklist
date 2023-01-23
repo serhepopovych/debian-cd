@@ -14,7 +14,7 @@ for FILE in $@; do
 	isoinfo -fR -i $FILE | perl -e '
         while (<>) {
             chomp;m,^/pool/[^/]+/[^/]+/[^/]+/(.*), and print "$1\n";
-        }' | sort | gzip -9 > $LISTFILE
+        }' | sort | pigz -9nm > $LISTFILE
 	mv $LISTFILE $LISTDIR
     fi
 done

@@ -183,7 +183,7 @@ make_cd () {
         echo $SNAPSHOT >> ${JIGDODIR}/${BASENAME}.jigdo
 
 	# Make sure we compres the jigdo file *before* we checksum it
-        gzip -9 ${JIGDODIR}/${BASENAME}.jigdo
+        pigz -9nm ${JIGDODIR}/${BASENAME}.jigdo
         mv ${JIGDODIR}/${BASENAME}.jigdo.gz ${JIGDODIR}/${BASENAME}.jigdo
 
         for SHA_SIZE in 256 512; do
@@ -215,7 +215,7 @@ make_cd () {
 	fi
 	set -e
     fi
-    find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | gzip -9 > ${LISTDIR}/${BASENAME}.list.gz
+    find $UPD/CD$CDNUM/pool -type f | sed 's?^.*/??g' | pigz -9nm > ${LISTDIR}/${BASENAME}.list.gz
 }
 
 add_file () {

@@ -406,7 +406,7 @@ if [ "$LOGOPNG" ] ; then
         cp $LOGOPNG $INITRDDIR/usr/share/graphics/logo_debian.png
         echo usr/share/graphics/logo_debian.png | \
             cpio -oA -H newc -F $GTKINITRD
-        gzip -9 $GTKINITRD
+        pigz -9nm $GTKINITRD
     )
     rm -rf $INITRDDIR
 fi
