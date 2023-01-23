@@ -89,7 +89,7 @@ if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 
 	# Local packages ...
 	if [ -n "$LOCAL" ]; then
-		echo "$ADEB file:${LOCALDEBS:-$MIRROR} $CODENAME local" \
+		echo "$ADEB [trusted=yes] file:${LOCALDEBS:-$MIRROR} $CODENAME local" \
 			>> $APTTMP/$THIS_PKGSET/apt/sources.list
 	fi
 
@@ -121,7 +121,7 @@ if [ ! -e "$APTTMP/$THIS_PKGSET/apt/sources.list" ]; then
 				>> $APTTMP/$THIS_PKGSET/apt/sources.list
 		fi
 		if [ -n "$LOCAL" ] && [ -e "${LOCALDEBS:-$MIRROR}/dists/$DI_CODENAME/local/debian-installer" ]; then
-			echo "$ADEB file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
+			echo "$ADEB [trusted=yes] file:${LOCALDEBS:-$MIRROR} $DI_CODENAME local/debian-installer" \
 				>> $APTTMP/$THIS_PKGSET/apt/sources.list
 		fi
 	fi
