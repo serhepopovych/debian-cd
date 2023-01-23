@@ -33,4 +33,15 @@ else
 fi
 [ -d $repo ] || mkdir -p $repo
 echo Creating Packages file for $repo...
-apt-ftparchive packages $repo | pigz -9nm >$repo/Packages.gz
+apt-ftparchive packages $repo > $repo/Packages
+
+# Fun fact, at least when building bookworm images on bullseye:
+#  - a missing Release file is fine, but maybe downloads follow;
+#  - a present Release file means uncompressed Packages must be present.
+echo Creating Release file for dists/$distr...
+(
+	cd dists/$distr
+	rm -f Release*
+	(echo "Codename: $distr"; apt-ftparchive release .) > Release.tmp
+	mv -f Release.tmp Release
+)
