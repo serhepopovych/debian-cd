@@ -33,4 +33,4 @@ else
 fi
 [ -d $repo ] || mkdir -p $repo
 echo Creating Packages file for $repo...
-apt-ftparchive packages $repo | gzip >$repo/Packages.gz
+apt-ftparchive packages $repo | pigz -9nm >$repo/Packages.gz

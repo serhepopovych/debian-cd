@@ -213,7 +213,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
             mv $OUT/$BASE.iso $ARCHDIR/iso-cd/$NETINSTNAME.iso
             cat $OUT/$BASE.jigdo | \
                 sed 's/-BC-1/-businesscard/g;s/-NETINST-1/-netinst/g' | \
-                gzip --best --no-name > $ARCHDIR/jigdo-cd/$NETINSTNAME.jigdo
+                pigz -9nm > $ARCHDIR/jigdo-cd/$NETINSTNAME.jigdo
             rm $OUT/$BASE.jigdo
             mv $OUT/$BASE.template $ARCHDIR/jigdo-cd/$NETINSTNAME.template
             # Make sure that the ISO is as new/newer than the jigdo file; #587774
@@ -232,7 +232,7 @@ if ./build.sh "$ARCH" >>"$LOGFILE" 2>&1 ; then
         #######################################
 
         # finish up the jigdos (compress & move them)
-        gzip --best --no-name "$OUT"/*.jigdo
+        pigz -9nm "$OUT"/*.jigdo
         for i in "$OUT"/*.jigdo.gz; do
             mv $i ${i%.gz}
         done

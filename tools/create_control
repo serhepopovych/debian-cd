@@ -59,7 +59,7 @@ case $ARCH in
 		mkdir -p dists/$CODENAME/$SECT/source
 		dpkg-scansources pool/$SECT > dists/$CODENAME/$SECT/source/Sources
 		if [ -f dists/$CODENAME/$SECT/source/Sources ] ; then
-		    gzip --best dists/$CODENAME/$SECT/source/Sources
+		    pigz -9nm dists/$CODENAME/$SECT/source/Sources
 		fi
 	    fi
 	done
@@ -86,7 +86,7 @@ case $ARCH in
             mkdir -p dists/$CODENAME/$SECT/binary-$ARCH
 	    grep-dctrl -FFilename -e "/$SECT/" $PREFIX.Packages | \
 		grep -v ^X-Medium > dists/$CODENAME/$SECT/binary-$ARCH/Packages
-	    gzip --best -c < dists/$CODENAME/$SECT/binary-$ARCH/Packages \
+	    pigz -9nm -c < dists/$CODENAME/$SECT/binary-$ARCH/Packages \
 		> dists/$CODENAME/$SECT/binary-$ARCH/Packages.gz
 	    cp $MIRROR/dists/$CODENAME/$SECT/binary-$ARCH/Release \
    		dists/$CODENAME/$SECT/binary-$ARCH/
