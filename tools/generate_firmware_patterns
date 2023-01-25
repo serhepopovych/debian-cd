@@ -21,10 +21,11 @@ use File::Slurp;
 use Getopt::Long;
 use YAML::XS;
 
+my $SOF = 'firmware-sof-signed';
 
 my $output_dir = '.';
 my $verbose;
-my $pkgname = "ALL";
+my $pkgname;
 
 GetOptions( "output-dir=s" => \$output_dir,
             "verbose"      => \$verbose,
@@ -37,7 +38,7 @@ sub format_alias {
 }
 
 
-sub process_components {
+sub generate_patterns_from_components {
     my $input = shift;
     my $content;
     print STDERR "processing $input\n"
@@ -53,7 +54,6 @@ sub process_components {
         die "only gz and xz suffixes are supported";
     }
 
-    my @packages;
     foreach my $array (Load $content) {
         next if not defined $array->{Provides};
         next if not defined $array->{Provides}->{modaliases};
@@ -61,21 +61,100 @@ sub process_components {
         print STDERR "found modaliases entries for firmware package ", $array->{Package}, "\n"
             if $verbose;
 
-        if ($pkgname eq "ALL" or $pkgname eq $array->{Package}) {
+        next if $pkgname ne $array->{Package};
 
-            my $patterns_file = $output_dir . "/" . $array->{Package} . ".patterns";
-            printf STDERR "writing %d entries to %s\n",
-                (scalar @{ $array->{Provides}->{modaliases} }),
-                $patterns_file;
+        my $patterns_file = "$output_dir/$pkgname.patterns";
+        printf STDERR "writing %d entries to %s\n",
+            (scalar @{ $array->{Provides}->{modaliases} }),
+            $patterns_file;
 
-            # For each alias, anchor the pattern on the left (^) and on
-            # the right ($), and replace each '*' with '.*':
-            write_file($patterns_file,
-                       format_alias( @{ $array->{Provides}->{modaliases} } ));
-            push @packages, $array->{Package};
-        }
+        # For each alias, anchor the pattern on the left (^) and on
+        # the right ($), and replace each '*' with '.*':
+        write_file($patterns_file,
+                   format_alias( @{ $array->{Provides}->{modaliases} } ));
+        return 1;
     }
-    return @packages;
+    return 0;
+}
+
+
+# Workaround for firmware-sof-signed, which doesn't advertise firmware
+# files it might need through the MODULE_FIRMWARE() macro (meaning no
+# chance to generate DEP-11 info from there): alias info manually
+# extracted on 2023-01-18 (linux-image-6.1.0-1-amd64, 6.1.4-1).
+#
+# XXX: To be kept in sync! (#1029175)
+sub generate_patterns_for_firmware_sof_intel_workaround {
+    # Extract on amd64, from the installed package, with the following
+    # command. Note that descending under intel/ would lead to no
+    # aliases, so stick to the top-level directory for sof:
+    #
+    #     for x in $(dpkg -L linux-image-6.1.0-1-amd64 | egrep '(kernel/sound/soc/sof/.*\.ko|/snd-soc-.*sof.*\.ko)$'); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort -u
+
+    my @sof_aliases = qw(
+        auxiliary:snd_sof.hda-probes
+        pci:v00008086d000002C8sv*sd*bc*sc*i*
+        pci:v00008086d000006C8sv*sd*bc*sc*i*
+        pci:v00008086d0000119Asv*sd*bc*sc*i*
+        pci:v00008086d00001A98sv*sd*bc*sc*i*
+        pci:v00008086d00003198sv*sd*bc*sc*i*
+        pci:v00008086d000034C8sv*sd*bc*sc*i*
+        pci:v00008086d000038C8sv*sd*bc*sc*i*
+        pci:v00008086d00003DC8sv*sd*bc*sc*i*
+        pci:v00008086d000043C8sv*sd*bc*sc*i*
+        pci:v00008086d00004B55sv*sd*bc*sc*i*
+        pci:v00008086d00004B58sv*sd*bc*sc*i*
+        pci:v00008086d00004DC8sv*sd*bc*sc*i*
+        pci:v00008086d000051C8sv*sd*bc*sc*i*
+        pci:v00008086d000051C9sv*sd*bc*sc*i*
+        pci:v00008086d000051CAsv*sd*bc*sc*i*
+        pci:v00008086d000051CBsv*sd*bc*sc*i*
+        pci:v00008086d000051CCsv*sd*bc*sc*i*
+        pci:v00008086d000051CDsv*sd*bc*sc*i*
+        pci:v00008086d000051CEsv*sd*bc*sc*i*
+        pci:v00008086d000051CFsv*sd*bc*sc*i*
+        pci:v00008086d000054C8sv*sd*bc*sc*i*
+        pci:v00008086d00005A98sv*sd*bc*sc*i*
+        pci:v00008086d00007A50sv*sd*bc*sc*i*
+        pci:v00008086d00007AD0sv*sd*bc*sc*i*
+        pci:v00008086d00007E28sv*sd*bc*sc*i*
+        pci:v00008086d00009D70sv*sd*bc*sc*i*
+        pci:v00008086d00009D71sv*sd*bc*sc*i*
+        pci:v00008086d00009DC8sv*sd*bc*sc*i*
+        pci:v00008086d0000A0C8sv*sd*bc*sc*i*
+        pci:v00008086d0000A348sv*sd*bc*sc*i*
+        pci:v00008086d0000A3F0sv*sd*bc*sc*i*
+        platform:adl_es83x6_c1_h02
+        platform:adl_max98390_rt5682
+        platform:adl_mx98357_rt5682
+        platform:adl_mx98360_rt5682
+        platform:adl_mx98373_rt5682
+        platform:adl_rt1019_rt5682s
+        platform:adl_rt5682
+        platform:cml_rt1015_rt5682
+        platform:jsl_rt5682_mx98360
+        platform:jsl_rt5682_rt1015
+        platform:jsl_rt5682_rt1015p
+        platform:mtl_mx98357_rt5682
+        platform:sof-audio
+        platform:sof-essx8336
+        platform:sof_rt5682
+        platform:sof_sdw
+        platform:tgl_mx98357_rt5682
+        platform:tgl_mx98373_rt5682
+        platform:tgl_rt1011_rt5682
+    );
+
+    print STDERR "deploying manual workaround for $SOF\n"
+        if $verbose;
+
+    my $sof_file = $output_dir . "/" . $SOF . ".patterns";
+    printf STDERR "writing %d entries to %s (using the workaround)\n",
+        (scalar @sof_aliases),
+        $sof_file;
+
+    write_file($sof_file,
+               format_alias(@sof_aliases));
 }
 
 
@@ -86,100 +165,16 @@ die "missing output directory $output_dir"
 write_file("$output_dir/README.txt",
            "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
 
-# Generate .patterns file to match firmware packages found in
-# Components-* files:
-my @all_packages;
-foreach my $component (@ARGV) {
-    die "missing metadata file $component"
-        if ! -f $component;
-    my @packages = process_components($component);
-    push @all_packages, @packages;
+# Search for the specified package in the Components-* files, and
+# generate patterns when it's found:
+my $done;
+foreach my $components (@ARGV) {
+    die "missing metadata file $components"
+        if ! -f $components;
+    $done = generate_patterns_from_components($components);
+    last if $done;
 }
-@all_packages = sort @all_packages;
-print STDERR "firmware packages found across all components: @all_packages\n"
-    if $verbose;
 
-# Workaround for firmware-sof-signed, which doesn't advertise firmware
-# files it might need through the MODULE_FIRMWARE() macro (meaning no
-# chance to generate DEP-11 info from there): alias info manually
-# extracted on 2023-01-18 (linux-image-6.1.0-1-amd64, 6.1.4-1).
-#
-# XXX: To be kept in sync! (#1029175)
-my $SOF = 'firmware-sof-signed';
-if (! grep { $_ eq $SOF } @all_packages) {
-
-    if ($pkgname eq 'ALL' or $pkgname eq 'firmware-sof-signed') {
-
-        # Extract on amd64, from the installed package, with the following
-        # command. Note that descending under intel/ would lead to no
-        # aliases, so stick to the top-level directory for sof:
-        #
-        #     for x in $(dpkg -L linux-image-6.1.0-1-amd64 | egrep '(kernel/sound/soc/sof/.*\.ko|/snd-soc-.*sof.*\.ko)$'); do /usr/sbin/modinfo $x | awk '/^alias:/ { print $2 }'; done | sort -u
-
-        my @sof_aliases = qw(
-            auxiliary:snd_sof.hda-probes
-            pci:v00008086d000002C8sv*sd*bc*sc*i*
-            pci:v00008086d000006C8sv*sd*bc*sc*i*
-            pci:v00008086d0000119Asv*sd*bc*sc*i*
-            pci:v00008086d00001A98sv*sd*bc*sc*i*
-            pci:v00008086d00003198sv*sd*bc*sc*i*
-            pci:v00008086d000034C8sv*sd*bc*sc*i*
-            pci:v00008086d000038C8sv*sd*bc*sc*i*
-            pci:v00008086d00003DC8sv*sd*bc*sc*i*
-            pci:v00008086d000043C8sv*sd*bc*sc*i*
-            pci:v00008086d00004B55sv*sd*bc*sc*i*
-            pci:v00008086d00004B58sv*sd*bc*sc*i*
-            pci:v00008086d00004DC8sv*sd*bc*sc*i*
-            pci:v00008086d000051C8sv*sd*bc*sc*i*
-            pci:v00008086d000051C9sv*sd*bc*sc*i*
-            pci:v00008086d000051CAsv*sd*bc*sc*i*
-            pci:v00008086d000051CBsv*sd*bc*sc*i*
-            pci:v00008086d000051CCsv*sd*bc*sc*i*
-            pci:v00008086d000051CDsv*sd*bc*sc*i*
-            pci:v00008086d000051CEsv*sd*bc*sc*i*
-            pci:v00008086d000051CFsv*sd*bc*sc*i*
-            pci:v00008086d000054C8sv*sd*bc*sc*i*
-            pci:v00008086d00005A98sv*sd*bc*sc*i*
-            pci:v00008086d00007A50sv*sd*bc*sc*i*
-            pci:v00008086d00007AD0sv*sd*bc*sc*i*
-            pci:v00008086d00007E28sv*sd*bc*sc*i*
-            pci:v00008086d00009D70sv*sd*bc*sc*i*
-            pci:v00008086d00009D71sv*sd*bc*sc*i*
-            pci:v00008086d00009DC8sv*sd*bc*sc*i*
-            pci:v00008086d0000A0C8sv*sd*bc*sc*i*
-            pci:v00008086d0000A348sv*sd*bc*sc*i*
-            pci:v00008086d0000A3F0sv*sd*bc*sc*i*
-            platform:adl_es83x6_c1_h02
-            platform:adl_max98390_rt5682
-            platform:adl_mx98357_rt5682
-            platform:adl_mx98360_rt5682
-            platform:adl_mx98373_rt5682
-            platform:adl_rt1019_rt5682s
-            platform:adl_rt5682
-            platform:cml_rt1015_rt5682
-            platform:jsl_rt5682_mx98360
-            platform:jsl_rt5682_rt1015
-            platform:jsl_rt5682_rt1015p
-            platform:mtl_mx98357_rt5682
-            platform:sof-audio
-            platform:sof-essx8336
-            platform:sof_rt5682
-            platform:sof_sdw
-            platform:tgl_mx98357_rt5682
-            platform:tgl_mx98373_rt5682
-            platform:tgl_rt1011_rt5682
-        );
-
-        print STDERR "deploying manual workaround for $SOF\n"
-            if $verbose;
-
-        my $sof_file = $output_dir . "/" . $SOF . ".patterns";
-        printf STDERR "writing %d entries to %s\n",
-            (scalar @sof_aliases),
-            $sof_file;
-
-        write_file($sof_file,
-                   format_alias(@sof_aliases));
-        push @all_packages, $SOF;
-    }
-}
+# Only apply the workaround when relevant:
+generate_patterns_for_firmware_sof_intel_workaround()
+    if ! $done and $pkgname eq $SOF;
