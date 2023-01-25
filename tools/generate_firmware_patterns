@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# © 2021 Cyril Brulebois <kibi@debian.org>
+# © 2021-2023 Cyril Brulebois <kibi@debian.org>
 #
 # Generate ready-to-use .patterns files so that one can use grep to
 # perform hardware to firmware-package lookups in the installer
@@ -17,7 +17,6 @@
 use strict;
 use warnings;
 
-use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use YAML::XS;
@@ -80,12 +79,9 @@ sub process_components {
 }
 
 
-# Prepare output directory:
-if (! -d $output_dir) {
-    print STDERR "creating output directory $output_dir\n"
-        if $verbose;
-    make_path($output_dir, { verbose => $verbose });
-}
+# Make sure the output directory exists:
+die "missing output directory $output_dir"
+    if ! -d $output_dir;
 
 write_file("$output_dir/README.txt",
            "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
