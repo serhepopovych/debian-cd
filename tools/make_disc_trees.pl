@@ -1238,9 +1238,8 @@ sub add_firmware_stuff {
     if (-f "$dir/firmware/dep11/$p.patterns") {
 	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.patterns");
 	# Make sure apt-setup can be configured appropriately:
-	open(CFILE, ">$dir/firmware/dep11/$p.component");
-	print CFILE $component;
-	close CFILE;
+	write_file("$dir/firmware/dep11/$p.component", $component)
+	    or die "unable to create $dir/firmware/dep11/$p.component";
 	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.component");
     }
 
