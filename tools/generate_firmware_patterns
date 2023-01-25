@@ -162,9 +162,6 @@ sub generate_patterns_for_firmware_sof_intel_workaround {
 die "missing output directory $output_dir"
     if ! -d $output_dir;
 
-write_file("$output_dir/README.txt",
-           "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n");
-
 # Search for the specified package in the Components-* files, and
 # generate patterns when it's found:
 my $done;

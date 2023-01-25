@@ -12,6 +12,7 @@ use File::Find;
 use File::Path qw(make_path remove_tree);
 use File::Basename;
 use Compress::Zlib;
+use File::Slurp;
 
 my %pkginfo;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
@@ -1211,6 +1212,12 @@ sub add_firmware_stuff {
 	mkdir "$dir/firmware" or die "mkdir $dir/firmware failed $!\n";
 	mkdir "$dir/firmware/dep11" or die "mkdir $dir/firmware/dep11 failed $!\n";
 	$blocks_added += 2;
+
+	# In case anyone wonders about those files:
+	write_file("$dir/firmware/dep11/README.txt",
+		   "These files help Debian Installer detect helpful firmware packages (via hw-detect).\n")
+	    or die "unable to create $dir/firmware/dep11/README.txt";
+	$blocks_added += get_file_blocks("$dir/firmware/dep11/README.txt");
     }
 
     msg_ap(0, "Symlink fw package $p into /firmware\n");
