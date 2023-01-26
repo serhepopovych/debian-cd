@@ -14,6 +14,7 @@ fi
 
 # Unset all optional variables first to start from a clean state
 unset NONFREE           || true
+unset NONFREE_COMPONENTS|| true
 unset CONTRIB           || true
 unset EXTRANONFREE      || true
 unset LOCAL             || true
