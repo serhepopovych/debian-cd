@@ -146,9 +146,9 @@ export NONFREE_COMPONENTS="non-free non-free-firmware"
 # WARNING: Don't use NONFREE and EXTRANONFREE at the same time !
 # export EXTRANONFREE=1
 
-# Do I want to force (potentially non-free) firmware packages to be
-# placed on disc 1? Will make installation much easier if systems
-# contain hardware that depends on this firmware
+# Do I want to force (potentially non-free, depending on the NONFREE_COMPONENTS
+# setting) firmware packages to be placed on disc 1? Will make installation
+# much easier if systems contain hardware that depends on this firmware
 export FORCE_FIRMWARE=1
 
 # If you have a $MIRROR/dists/$CODENAME/local/binary-$ARCH dir with 
