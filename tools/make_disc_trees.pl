@@ -1488,6 +1488,10 @@ sub remove_firmware_stuff {
 	$blocks_removed += get_file_blocks("$dir/firmware/dep11/$p.patterns");
 	msg_ap(0, "Remove $dir/firmware/dep11/$p.patterns\n");
 	unlink("$dir/firmware/dep11/$p.patterns");
+
+	$blocks_removed += get_file_blocks("$dir/firmware/dep11/$p.component");
+	msg_ap(0, "Remove $dir/firmware/dep11/$p.component\n");
+	unlink("$dir/firmware/dep11/$p.component");
     }
 
     # Find the current size of the firmware Contents file, and grep
