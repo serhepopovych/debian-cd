@@ -19,8 +19,7 @@ use strict;
 
 my ($mirror, $codename, $archlist, $outfile, $localdebs, $backports);
 my $date;
-my $pkgfiles = "";
-my $bp_pkgfiles = "";
+my (@pkgfiles, @bp_pkgfiles);
 my ($pkg, $filename, $arch);
 my %seen;
 my @components;
@@ -40,39 +39,39 @@ sub contains_firmware($$) {
     }
 }
 
-sub check_packages($$$) {
-    my $use_bp = shift;
-    my $orig_mode = shift;
-    my $packages = shift;
+sub check_packages($$@) {
+    my ($use_bp, $orig_mode, @pkgfiles) = @_;
 
-    open (INPKG, "\$BASEDIR/tools/catz $packages |") or die "Can't read input package files: $!\n";
-    $/ = ''; # Browse by paragraph
+    for my $pkgfile (@pkgfiles) {
+	open (INPKG, "\$BASEDIR/tools/catz $pkgfile |") or die "Can't read input package files: $!\n";
+	$/ = ''; # Browse by paragraph
 
-    while (defined($_ = <INPKG>)) {
-	m/^Package: (\S+)/m and $pkg = $1;
-	m/^Filename: (\S+)/m and $filename = $1;
+	while (defined($_ = <INPKG>)) {
+	    m/^Package: (\S+)/m and $pkg = $1;
+	    m/^Filename: (\S+)/m and $filename = $1;
 
-	if (! ($pkg =~ /(microcode|firmware)/)) {
-	    next;
-	}
+	    if (! ($pkg =~ /(microcode|firmware)/)) {
+		next;
+	    }
 
-	if (!exists $seen{$filename}) {
-	    $seen{$filename} = 1;
-	    if (contains_firmware($mirror, $filename)) {
-		print STDERR "  $pkg ($filename)\n";
-		if ($orig_mode) {
-		    if ($use_bp) {
-			print OUT "$pkg/$codename-backports\n";
+	    if (!exists $seen{$filename}) {
+		$seen{$filename} = 1;
+		if (contains_firmware($mirror, $filename)) {
+		    print STDERR "  $pkg ($filename)\n";
+		    if ($orig_mode) {
+			if ($use_bp) {
+			    print OUT "$pkg/$codename-backports\n";
+			} else {
+			    print OUT "$pkg\n";
+			}
 		    } else {
-			print OUT "$pkg\n";
+			print "$filename\n";
 		    }
-		} else {
-		    print "$filename\n";
 		}
 	    }
 	}
+	close INPKG;
     }
-    close INPKG;
 }
 
 
@@ -117,11 +116,11 @@ if (!defined($codename) || !defined($mirror) ||
 foreach $arch (split(' ', $archlist)) {
     for my $component (@components) {
 	if (defined($backports)) {
-	    $bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/$component/binary-$arch/Packages.gz";
-	    $bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/$component/binary-$arch/Packages.xz";
+	    push @bp_pkgfiles, "$mirror/dists/$codename-backports/$component/binary-$arch/Packages.gz";
+	    push @bp_pkgfiles, "$mirror/dists/$codename-backports/$component/binary-$arch/Packages.xz";
 	}
-	$pkgfiles = "$pkgfiles $mirror/dists/$codename/$component/binary-$arch/Packages.gz";
-	$pkgfiles = "$pkgfiles $mirror/dists/$codename/$component/binary-$arch/Packages.xz";
+	push @pkgfiles, "$mirror/dists/$codename/$component/binary-$arch/Packages.gz";
+	push @pkgfiles, "$mirror/dists/$codename/$component/binary-$arch/Packages.xz";
     }
 }
 
@@ -129,11 +128,11 @@ if (defined($localdebs)) {
     for my $component (@components) {
 	foreach $arch (split(' ', $archlist)) {
 	    if (defined($backports)) {
-		$bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/$component/binary-$arch/Packages.gz";
-		$bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/$component/binary-$arch/Packages.xz";
+		push @bp_pkgfiles, "$localdebs/dists/$codename-backports/$component/binary-$arch/Packages.gz";
+		push @bp_pkgfiles, "$localdebs/dists/$codename-backports/$component/binary-$arch/Packages.xz";
 	    }
-	    $pkgfiles = "$pkgfiles $localdebs/dists/$codename/$component/binary-$arch/Packages.gz";
-	    $pkgfiles = "$pkgfiles $localdebs/dists/$codename/$component/binary-$arch/Packages.xz";
+	    push @pkgfiles, "$localdebs/dists/$codename/$component/binary-$arch/Packages.gz";
+	    push @pkgfiles, "$localdebs/dists/$codename/$component/binary-$arch/Packages.xz";
 	}
     }
 }
@@ -160,9 +159,9 @@ if ($orig_mode) {
 # Those function calls will either write the task to OUT (historical mode) or
 # filenames to stdout (for make-firmware-image):
 if (defined($backports)) {
-    check_packages(1, $orig_mode, $bp_pkgfiles);
+    check_packages(1, $orig_mode, @bp_pkgfiles);
 }
-check_packages(0, $orig_mode, $pkgfiles);
+check_packages(0, $orig_mode, @pkgfiles);
 
 if ($orig_mode) {
     close OUT;
