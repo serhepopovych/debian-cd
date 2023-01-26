@@ -141,7 +141,9 @@ The process of building a CD is composed of the following steps:
     included on an extra CD (the last CD in fact). Don't use NONFREE
     and EXTRANONFREE at the same time! (EXTRANONFREE must be exported
     to all sub-shells)
-  - if FORCE_FIRMWARE=1
+  - if FORCE_FIRMWARE=1, then firmware packages are included on the
+    first disc (most useful if NONFREE_COMPONENTS is set and exported
+    to all sub-shells)
   - if COMPLETE is set, all packages that are not listed in the
     selected task file will be included at the end
   - setting INSTALLER_CD will use an appropriate task file for
