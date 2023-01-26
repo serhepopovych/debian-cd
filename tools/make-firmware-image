@@ -30,18 +30,41 @@ mkdir -p $TMPDIR/firmware
 case $CODENAME in
 	bullseye)
 		export FIRMWARE_COMPONENTS="main contrib non-free"
+		GENERATE_DEP11=0
 		;;
 	*)
 		# FIXME: drop non-free when we no longer need it
 		export FIRMWARE_COMPONENTS="main non-free non-free-firmware"
+		GENERATE_DEP11=1
 		;;
 esac
 
-# This tool requires environment variables (exported earlier) and two
-# parameters; the second one has a special value for us to use:
-FILES=$($BASEDIR/tools/generate_firmware_task '*' --list-filenames)
-for FILE in $FILES; do
-	cp ${MIRROR}/${FILE} $TMPDIR/firmware
+# Initialize metadata directory:
+if [ $GENERATE_DEP11 = 1 ]; then
+	FW_DEP11_DIR=$TMPDIR/firmware/dep11
+	mkdir $FW_DEP11_DIR
+	echo "These files help Debian Installer detect helpful firmware packages (via hw-detect)." > $FW_DEP11_DIR/README.txt
+fi
+
+# This tool requires environment variables (exported earlier) and two parameters; the second one has
+# a special value for us to use. Deduplication should happen there, but uniquify to make sure:
+$BASEDIR/tools/generate_firmware_task '*' --list-filenames-and-indices | sort -u | while read FILE INDICES; do
+	cp ${MIRROR}/$FILE $TMPDIR/firmware
+
+	# Adding metadata for bullseye might be helpful but disruptive, be careful:
+	[ $GENERATE_DEP11 = 0 ] && continue
+
+	# Beware of variable interpolation when using the INDICES variable, it
+	# contains 'binary-*'!
+	COMPONENT=$(echo "$INDICES"|sed 's,/binary-.*,,'|xargs basename)
+	DEP11_DIR=$(echo "$INDICES"|sed 's,/binary-.*,,')/dep11
+	PACKAGE=$(dpkg -f $MIRROR/$FILE Package)
+
+	# Mimic make_disc_trees.pl, except it only passes a single Components-<arch>.yml.gz while
+	# we pass all of them. Differences are unlikely though, as interesting firmware packages
+	# are "Architecture: all".
+	$BASEDIR/tools/generate_firmware_patterns --output-dir $FW_DEP11_DIR --package $PACKAGE $DEP11_DIR/Components-*.yml.gz
+	[ -f $FW_DEP11_DIR/$PACKAGE.patterns ] && printf $COMPONENT > $FW_DEP11_DIR/$PACKAGE.component
 done
 
 cd $TMPDIR/firmware

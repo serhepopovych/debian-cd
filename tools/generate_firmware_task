@@ -65,7 +65,7 @@ sub check_packages($$@) {
 			    print OUT "$pkg\n";
 			}
 		    } else {
-			print "$filename\n";
+			print "$filename $pkgfile\n";
 		    }
 		}
 	    }
@@ -141,7 +141,7 @@ if (defined($localdebs)) {
 # caller (top-level Makefile) from tools/make-firmware-image which should use
 # the same logic, but is interested in the Filename for interesting firmware
 # packages:
-my $orig_mode = $outfile ne '--list-filenames' ? 1 : 0;
+my $orig_mode = $outfile ne '--list-filenames-and-indices' ? 1 : 0;
 if ($orig_mode) {
     # Prepare the output file:
     open (OUT, "> $outfile") or die "Can't open outfile for writing: $!\n";
