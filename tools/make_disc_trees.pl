@@ -13,7 +13,6 @@ use File::Path qw(make_path remove_tree);
 use File::Basename;
 use Compress::Zlib;
 use File::Slurp;
-use feature 'state';
 
 my %pkginfo;
 my ($basedir, $mirror, $tdir, $codename, $archlist, $mkisofs, $maxcds,
@@ -1207,18 +1206,6 @@ sub add_firmware_stuff {
     $dep11_dir = "$mirror/dists/$codename/$component/dep11";
     if ($in_backports) {
 	$dep11_dir = "$mirror/dists/$codename-backports/$component/dep11";
-    }
-
-    # Workaround for currently-missing dep11 directory for non-free-firmware
-    # in bookworm, until that's fixed on appstream.debian.org and synchronized
-    # into the archive:
-    if ($codename eq 'bookworm' and $component eq 'non-free-firmware' and not -d $dep11_dir) {
-	state $warned = 0;
-	if ($warned == 0) {
-	    print "*** APPLYING WORKAROUND for missing $dep11_dir, replacing $codename with sid ***\n";
-	    $warned = 1;
-	}
-	$dep11_dir = "$mirror/dists/sid/$component/dep11";
     }
 
     if (! -d "$dir/firmware") {
