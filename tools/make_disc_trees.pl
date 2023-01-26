@@ -1229,6 +1229,7 @@ sub add_firmware_stuff {
     # (e.g. multi-arch), in which case we'll replace it here
     if (-f "$dir/firmware/dep11/$p.patterns") {
 	$blocks_added -= get_file_blocks("$dir/firmware/dep11/$p.patterns");
+	$blocks_added -= get_file_blocks("$dir/firmware/dep11/$p.component");
     }
 
     msg_ap(0, "(Maybe) generate fw pattern file $dir/firmware/dep11/$p.patterns\n");
