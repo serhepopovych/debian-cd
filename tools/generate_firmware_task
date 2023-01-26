@@ -25,6 +25,52 @@ my ($pkg, $filename, $arch);
 my %seen;
 my @components;
 
+
+sub contains_firmware($$) {
+    my $count = 0;
+    open (PKGLISTING, "dpkg --contents $mirror/$filename | grep ' ./lib/firmware/' |") or
+	die "Can't check package file $filename: $!\n";
+    while ($_ = <PKGLISTING>) {
+	$count++;
+    }
+    if ($count) {
+	return 1;
+    } else {
+	return 0;
+    }
+}
+
+sub check_packages($$) {
+    my $use_bp = shift;
+    my $packages = shift;
+
+    open (INPKG, "\$BASEDIR/tools/catz $packages |") or die "Can't read input package files: $!\n";
+    $/ = ''; # Browse by paragraph
+
+    while (defined($_ = <INPKG>)) {
+	m/^Package: (\S+)/m and $pkg = $1;
+	m/^Filename: (\S+)/m and $filename = $1;
+
+	if (! ($pkg =~ /(microcode|firmware)/)) {
+	    next;
+	}
+
+	if (!exists $seen{$filename}) {
+	    $seen{$filename} = 1;
+	    if (contains_firmware($mirror, $filename)) {
+		print "  $pkg ($filename)\n";
+		if ($use_bp) {
+		    print OUT "$pkg/$codename-backports\n";
+		} else {
+		    print OUT "$pkg\n";
+		}
+	    }
+	}
+    }
+    close INPKG;
+}
+
+
 # Either the caller tells us explicitly which components to use, or we make this
 # determination on our own, based on various environment variables:
 sub read_env {
@@ -51,7 +97,6 @@ if (!@components) {
 	push @components, (split / /, read_env('NONFREE_COMPONENTS', ''));
     }
 }
-
 $codename = $ENV{'CODENAME'};
 $mirror = $ENV{'MIRROR'};
 $localdebs = $ENV{'LOCALDEBS'};
@@ -101,54 +146,9 @@ print OUT " */\n";
 
 print "$0: Checking for firmware packages:\n";
 
-sub contains_firmware($$) {
-    my $count = 0;
-    open (PKGLISTING, "dpkg --contents $mirror/$filename | grep ' ./lib/firmware/' |") or
-        die "Can't check package file $filename: $!\n";
-    while ($_ = <PKGLISTING>) {
-        $count++;
-    }
-    if ($count) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-sub check_packages($$) {
-    my $use_bp = shift;
-    my $packages = shift;
-
-    open (INPKG, "\$BASEDIR/tools/catz $packages |") or die "Can't read input package files: $!\n";
-    $/ = ''; # Browse by paragraph
-
-    while (defined($_ = <INPKG>)) {
-	m/^Package: (\S+)/m and $pkg = $1;
-	m/^Filename: (\S+)/m and $filename = $1;
-
-	if (! ($pkg =~ /(microcode|firmware)/)) {
-	    next;
-	}
-
-	if (!exists $seen{$filename}) {
-	    $seen{$filename} = 1;
-	    if (contains_firmware($mirror, $filename)) {
-		print "  $pkg ($filename)\n";
-		if ($use_bp) {
-		    print OUT "$pkg/$codename-backports\n";
-		} else {
-		    print OUT "$pkg\n";
-		}
-	    }
-	}
-    }
-    close INPKG;
-}
-
 if (defined($backports)) {
     check_packages(1, $bp_pkgfiles);
 }
 check_packages(0, $pkgfiles);
 
 close OUT;
-
