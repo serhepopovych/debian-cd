@@ -40,8 +40,9 @@ sub contains_firmware($$) {
     }
 }
 
-sub check_packages($$) {
+sub check_packages($$$) {
     my $use_bp = shift;
+    my $orig_mode = shift;
     my $packages = shift;
 
     open (INPKG, "\$BASEDIR/tools/catz $packages |") or die "Can't read input package files: $!\n";
@@ -58,11 +59,15 @@ sub check_packages($$) {
 	if (!exists $seen{$filename}) {
 	    $seen{$filename} = 1;
 	    if (contains_firmware($mirror, $filename)) {
-		print "  $pkg ($filename)\n";
-		if ($use_bp) {
-		    print OUT "$pkg/$codename-backports\n";
+		print STDERR "  $pkg ($filename)\n";
+		if ($orig_mode) {
+		    if ($use_bp) {
+			print OUT "$pkg/$codename-backports\n";
+		    } else {
+			print OUT "$pkg\n";
+		    }
 		} else {
-		    print OUT "$pkg\n";
+		    print "$filename\n";
 		}
 	    }
 	}
@@ -133,22 +138,32 @@ if (defined($localdebs)) {
     }
 }
 
-open (OUT, "> $outfile") or die "Can't open outfile for writing: $!\n";
+# This special filename is an crude but easy way to distinguish the historical
+# caller (top-level Makefile) from tools/make-firmware-image which should use
+# the same logic, but is interested in the Filename for interesting firmware
+# packages:
+my $orig_mode = $outfile ne '--list-filenames' ? 1 : 0;
+if ($orig_mode) {
+    # Prepare the output file:
+    open (OUT, "> $outfile") or die "Can't open outfile for writing: $!\n";
 
-$date = `date -u`;
-chomp $date;
+    $date = `date -u`;
+    chomp $date;
 
-print OUT "/*\n";
-print OUT " * 'firmware' task file; generated automatically by generate_firmware_task\n";
-print OUT " * for \"$archlist\" on $date\n";
-print OUT " * Do not edit - changes will not be preserved\n";
-print OUT " */\n";
-
-print "$0: Checking for firmware packages:\n";
-
-if (defined($backports)) {
-    check_packages(1, $bp_pkgfiles);
+    print OUT "/*\n";
+    print OUT " * 'firmware' task file; generated automatically by generate_firmware_task\n";
+    print OUT " * for \"$archlist\" on $date\n";
+    print OUT " * Do not edit - changes will not be preserved\n";
+    print OUT " */\n";
 }
-check_packages(0, $pkgfiles);
 
-close OUT;
+# Those function calls will either write the task to OUT (historical mode) or
+# filenames to stdout (for make-firmware-image):
+if (defined($backports)) {
+    check_packages(1, $orig_mode, $bp_pkgfiles);
+}
+check_packages(0, $orig_mode, $pkgfiles);
+
+if ($orig_mode) {
+    close OUT;
+}
