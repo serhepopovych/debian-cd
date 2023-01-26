@@ -10,6 +10,7 @@
 # 3. For those that do, output the package name into the firmware task
 #
 # Copyright Steve McIntyre <93sam@debian.org> 2011
+# Copyright Cyril Brulebois <kibi@debian.org> 2023
 #
 # GPL 2
 #
@@ -22,6 +23,34 @@ my $pkgfiles = "";
 my $bp_pkgfiles = "";
 my ($pkg, $filename, $arch);
 my %seen;
+my @components;
+
+# Either the caller tells us explicitly which components to use, or we make this
+# determination on our own, based on various environment variables:
+sub read_env {
+    my $env_var = shift;
+    my $default = shift;
+
+    if (exists($ENV{$env_var})) {
+	return $ENV{$env_var};
+    }
+    # else
+    return $default;
+}
+
+# Either the caller tells us explicitly which components to use, or we make this
+# determination on our own, based on various environment variables, just like
+# tools/apt-selection does:
+@components = split /\ /, read_env('FIRMWARE_COMPONENTS', '');
+if (!@components) {
+    @components = qw(main);
+    if (read_env('CONTRIB', 0) == 1) {
+	push @components, qw(contrib);
+    }
+    if (read_env('NONFREE', 0) == 1 or read_env('EXTRANONFREE', 0) == 1 or read_env('FORCE_FIRMWARE', 0) == 1) {
+	push @components, (split / /, read_env('NONFREE_COMPONENTS', ''));
+    }
+}
 
 $codename = $ENV{'CODENAME'};
 $mirror = $ENV{'MIRROR'};
@@ -36,22 +65,26 @@ if (!defined($codename) || !defined($mirror) ||
 }
 
 foreach $arch (split(' ', $archlist)) {
-    if (defined($backports)) {
-	$bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/*/binary-$arch/Packages.gz";
-	$bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/*/binary-$arch/Packages.xz";
+    for my $component (@components) {
+	if (defined($backports)) {
+	    $bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/$component/binary-$arch/Packages.gz";
+	    $bp_pkgfiles = "$pkgfiles $mirror/dists/$codename-backports/$component/binary-$arch/Packages.xz";
+	}
+	$pkgfiles = "$pkgfiles $mirror/dists/$codename/$component/binary-$arch/Packages.gz";
+	$pkgfiles = "$pkgfiles $mirror/dists/$codename/$component/binary-$arch/Packages.xz";
     }
-    $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.gz";
-    $pkgfiles = "$pkgfiles $mirror/dists/$codename/*/binary-$arch/Packages.xz";
 }
 
 if (defined($localdebs)) {
-    foreach $arch (split(' ', $archlist)) {
-	if (defined($backports)) {
-	    $bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/*/binary-$arch/Packages.gz";
-	    $bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/*/binary-$arch/Packages.xz";
+    for my $component (@components) {
+	foreach $arch (split(' ', $archlist)) {
+	    if (defined($backports)) {
+		$bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/$component/binary-$arch/Packages.gz";
+		$bp_pkgfiles = "$pkgfiles $localdebs/dists/$codename-backports/$component/binary-$arch/Packages.xz";
+	    }
+	    $pkgfiles = "$pkgfiles $localdebs/dists/$codename/$component/binary-$arch/Packages.gz";
+	    $pkgfiles = "$pkgfiles $localdebs/dists/$codename/$component/binary-$arch/Packages.xz";
 	}
-        $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.gz";
-        $pkgfiles = "$pkgfiles $localdebs/dists/$codename/*/binary-$arch/Packages.xz";
     }
 }
 
