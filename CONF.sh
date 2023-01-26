@@ -136,7 +136,7 @@ export APTTMP=/srv/mirror/tmp/apt
 # export NONFREE=1
 
 # Do I want to have CONTRIB merged in the CD set?
-export CONTRIB=1
+# export CONTRIB=1
 
 # Where should I look for non-free packages?
 export NONFREE_COMPONENTS="non-free non-free-firmware"
