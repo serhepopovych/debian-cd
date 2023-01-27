@@ -985,9 +985,13 @@ sub Packages_dir {
 	$pdir = "$dir/dists/$codename-backports/$component";
     }	
     if ($section and $section eq "debian-installer") {
-        $pdir = "$dir/dists/$codename/$component/debian-installer";
 	# Don't attempt to put d-i components into backports, as d-i
 	# won't look for them there.
+	#
+	# Also, merge local udebs into main, as d-i uses a single
+	# Packages file anyway:
+	my $dstcomponent = $component ne 'local' ? $component : 'main';
+	$pdir = "$dir/dists/$codename/$dstcomponent/debian-installer";
     }
     return $pdir;
 }
