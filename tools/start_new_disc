@@ -134,12 +134,6 @@ if [ "$BACKPORTS"x != ""x ] ; then
     fi
 fi
 
-# Commodity link for tools which want local in dists/local/local ...
-if [ -n "$LOCAL" ]
-then
-    ln -sf $CODENAME $CDDIR/dists/local
-fi
-
 if [ ! -d $CDDIR/.disk ] ; then
     mkdir $CDDIR/.disk
 fi
