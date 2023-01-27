@@ -157,8 +157,25 @@ export FORCE_FIRMWARE=1
 # export LOCAL=1
 
 # If your local packages are not under $MIRROR, but somewhere else, 
-# you can uncomment this line and edit to to point to a directory
-# containing dists/$CODENAME/local/binary-$ARCH
+# you can uncomment this line and edit it to point to a directory
+# containing:
+#  - dists/$CODENAME/local/binary-$ARCH/*.deb
+#  - dists/$CODENAME/local/debian-installer/binary-$ARCH/*.udeb
+#
+# Some metadata must exist for those packages to be considered:
+#  - dists/$CODENAME/local/binary-$ARCH/Packages.(gz|xz)
+#  - dists/$CODENAME/local/debian-installer/binary-$ARCH/Packages.(gz|xz)
+#
+# and apt will likely want a top-level Release file as well, and
+# possibly uncompressed Packages files as well in each directory:
+#  - dists/$CODENAME/Release
+#  - dists/$CODENAME/local/binary-$ARCH/Packages
+#  - dists/$CODENAME/local/debian-installer/binary-$ARCH/Packages
+#
+# At least that's what was observed while updating easy-build.sh (which
+# has an UPDATE_LOCAL=1 setting, controlling whether to run Packages-gen)
+# for year 2023, good luck! -- kibi
+#
 # export LOCALDEBS=/home/joey/debian/va/debian
 
 # Where to find the security patches.  This directory should be the
