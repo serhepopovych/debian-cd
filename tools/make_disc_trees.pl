@@ -860,6 +860,17 @@ sub finish_disc {
 	my $hook;
 	my $error = 0;
 
+	# Fix possible inconsistency (LOCAL enabled, no packages getting included in the
+	# local component, breaking debootstrap which is passed --components=main,local):
+	if (! -d "$cddir/dists/$codename/local") {
+		my $base_components = "$cddir/.disk/base_components";
+		my @components = read_file($base_components);
+		if (grep { $_ eq "local\n" } @components) {
+			print "  Removing local from base_components (no such component under $codename)\n";
+			write_file($base_components, grep { $_ ne "local\n" } @components);
+		}
+	}
+
 	if (defined($ENV{'DISC_FINISH_HOOK'})) {
 		$hook = $ENV{'DISC_FINISH_HOOK'};
 		print "  Calling disc_finish hook: $hook\n";
