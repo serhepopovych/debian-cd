@@ -41,7 +41,7 @@ sub format_alias {
 sub generate_patterns_from_components {
     my $input = shift;
     my $content;
-    print STDERR "processing $input\n"
+    print STDERR "  processing $input\n"
         if $verbose;
 
     if ($input =~ /\.gz$/) {
@@ -58,13 +58,13 @@ sub generate_patterns_from_components {
         next if not defined $array->{Provides};
         next if not defined $array->{Provides}->{modaliases};
 
-        print STDERR "found modaliases entries for firmware package ", $array->{Package}, "\n"
+        print STDERR "  found modaliases entries for firmware package ", $array->{Package}, "\n"
             if $verbose;
 
         next if $pkgname ne $array->{Package};
 
         my $patterns_file = "$output_dir/$pkgname.patterns";
-        printf STDERR "writing %d entries to %s\n",
+        printf STDERR "  writing %4d entries to %s\n",
             (scalar @{ $array->{Provides}->{modaliases} }),
             $patterns_file;
 
@@ -145,11 +145,11 @@ sub generate_patterns_for_firmware_sof_intel_workaround {
         platform:tgl_rt1011_rt5682
     );
 
-    print STDERR "deploying manual workaround for $SOF\n"
+    print STDERR "  deploying manual workaround for $SOF\n"
         if $verbose;
 
     my $sof_file = $output_dir . "/" . $SOF . ".patterns";
-    printf STDERR "writing %d entries to %s (using the workaround)\n",
+    printf STDERR "  writing %4d entries to %s (using the workaround)\n",
         (scalar @sof_aliases),
         $sof_file;
 
