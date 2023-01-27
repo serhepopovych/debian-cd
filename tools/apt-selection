@@ -45,11 +45,11 @@ options=" -q -o Dir::State::status=$APTTMP/$THIS_PKGSET/status \
 		  -o Acquire::Languages=none"
 
 sections=main
-if [ "${NONFREE:-0}" != "0" ] || [ "${EXTRANONFREE:-0}" != "0" ] || [ "${FORCE_FIRMWARE:-0}" != "0" ]; then
-	sections="$sections $NONFREE_COMPONENTS"
-fi
 if [ "${CONTRIB:-0}" != "0" ]; then
 	sections="$sections contrib"
+fi
+if [ "${NONFREE:-0}" != "0" ] || [ "${EXTRANONFREE:-0}" != "0" ] || [ "${FORCE_FIRMWARE:-0}" != "0" ]; then
+	sections="$sections $NONFREE_COMPONENTS"
 fi
 
 # Check for the necessary dirs and files ...
