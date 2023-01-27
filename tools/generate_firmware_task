@@ -57,7 +57,7 @@ sub check_packages($$@) {
 	    if (!exists $seen{$filename}) {
 		$seen{$filename} = 1;
 		if (contains_firmware($mirror, $filename)) {
-		    print STDERR "  $pkg ($filename)\n";
+		    printf STDERR "  %-35s (%s)\n", $pkg, $filename;
 		    if ($orig_mode) {
 			if ($use_bp) {
 			    print OUT "$pkg/$codename-backports\n";
