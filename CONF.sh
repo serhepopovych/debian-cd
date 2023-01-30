@@ -140,7 +140,7 @@ export APTTMP=/srv/mirror/tmp/apt
 # export CONTRIB=1
 
 # Where should I look for non-free packages?
-export NONFREE_COMPONENTS="non-free non-free-firmware"
+export NONFREE_COMPONENTS="non-free-firmware"
 
 # Do I want to have NONFREE on separate image(s) at the end set?
 # WARNING: Don't use NONFREE and EXTRANONFREE at the same time !
