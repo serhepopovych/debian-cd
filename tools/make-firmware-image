@@ -33,8 +33,7 @@ case $CODENAME in
 		GENERATE_DEP11=0
 		;;
 	*)
-		# FIXME: drop non-free when we no longer need it
-		export FIRMWARE_COMPONENTS="main non-free non-free-firmware"
+		export FIRMWARE_COMPONENTS="main non-free-firmware"
 		GENERATE_DEP11=1
 		;;
 esac
