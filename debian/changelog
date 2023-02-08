@@ -1,3 +1,91 @@
+debian-cd (3.2.0) UNRELEASED; urgency=medium
+
+  [ Cyril Brulebois — high-level summary ]
+  * This release implements many changes related to the 2022 General
+    Resolution about non-free firmware. In particular, this means adding
+    metadata related to firmware packages, allowing hw-detect to configure
+    apt-setup according to firmware packages getting deployed. In the
+    general case, systems installed using netinst should only get main and
+    non-free-firmware (if such firmware packages are needed) configured,
+    without contrib or non-free.
+  * Builds involving local packages (LOCAL and LOCALDEBS settings) were
+    also reworked. This feature is not used for official builds, and some
+    catch-up was needed (apt becomes stricter over time). The expected
+    layout for local packages was clarified (see comments in CONF.sh), and
+    while it is expected to be clearer and better than it was, it might
+    require some local adjustments.
+
+  [ Cyril Brulebois ]
+  * CONF.sh (and README):
+     + Clarify expected layout below the LOCALDEBS directory.
+     + Clarify relationships between NONFREE, NONFREE_COMPONENTS, and
+       FORCE_FIRMWARE.
+     + Keep only non-free-firmware in NONFREE_COMPONENTS, as the
+       interesting firmware packages have been moved from non-free to
+       non-free-firmware.
+     + Unset CONTRIB for consistency: NONFREE is unset, and packages in
+       contrib are usually there because they depend on packages in
+       non-free.
+  * apt-selection:
+     + Annotate local repositories with [trusted=yes].
+  * easy-build.sh (and Packages-gen):
+     + Create top-level Release files for local packages, allowing apt to
+       validate Packages files (when UPDATE_LOCAL=1 is set).
+     + Create both compressed and uncompress Packages files: apt is
+       unhappy if uncompressed files are missing; the package indexing
+       done in various places is unhappy if compressed files are missing.
+  * generate_firmware_patterns:
+     + Refresh modalias information for the firmware-sof-signed package
+       (using linux-image-6.1.0-1-amd64 version 6.1.4-1).
+     + Make sure dep11 metadata files are present.
+     + Rewrite to work on a single package at once (working on ALL was
+       mostly interesting during early development).
+  * generate_firmware_tasks:
+     + Search for firmware packages only in the configured components,
+       instead of searching in all available components. This means main
+       in any case, while contrib, non-free, and non-free-firmware depend
+       on the CONTRIB, NONFREE, NONFREE_COMPONENTS, and related variables.
+     + Implement support for pseudo-option --list-filenames, making the
+       firmware package search reusable.
+  * make-firmware-image:
+     + Use generate_firmware_task to find firmware packages.
+     + Implement firmware/dep11 generation for bookworm and later. This
+       tool is responsible for generating the firmware tarball, zip, and
+       cpio archives that can be used to extend installation media which
+       don't contain firmware packages. This allows hw-detect to benefit
+       from the same metadata as found in e.g. the netinst image.
+  * make_disc_trees.pl:
+     + Add leading / to paths in Contents-firmware indices, making it
+       easier to use by hw-detect.
+     + Add component column to Contents-firmware indices, making it
+       possible for hw-detect to set the right apt-setup/$component
+       parameters.
+     + Store $package.component files alongside $package.patterns files
+       for firmware packages, also to help hw-detect.
+     + Create /firmware before adding symlinks, and error out if symlink
+       creation fails.
+     + Improve block calculation for firmware-related metadata files.
+     + Merge “local” udebs into “main” explicitly.
+     + Rewrite .disk/base_components if needed: setting LOCAL=1 results
+       in debootstrap's being called with --components=main,local while
+       there might be no debs on the image (depending on the contents of
+       the LOCALDEBS directory)… in that case, rewrite base_components
+       without “local”.
+  * start_new_disc:
+     + Remove /dists/local commodity symlink: it's unclear what it is or
+       was useful for, and it generated a lot of confusion during this
+       development cycle (local = component or codename?!), masking other
+       shortcomings.
+  * Replace all gzip -9 variations with pigz -9nm ones.
+  * Add pigz to Depends accordingly.
+  * Add uuid-runtime to Depends (missed in 3.1.36).
+
+  [ Samuel Thibault ]
+  * Fix missing %install% replacements, fixing support for automatically
+    starting a specific entry when a timeout is reached.
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 08 Feb 2023 10:44:19 +0100
+
 debian-cd (3.1.36) unstable; urgency=medium
 
   [ Steve McIntyre ]
