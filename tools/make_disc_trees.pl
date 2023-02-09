@@ -901,10 +901,12 @@ sub finish_disc {
 		# Otherwise ensure not to pass --components=main,local to
 		# debootstrap:
 		my $base_components = ".disk/base_components";
-		my @components = read_file($base_components);
-		if (grep { $_ eq "local\n" } @components) {
-			print "  Removing local from base_components (no such component under $codename)\n";
-			write_file($base_components, grep { $_ ne "local\n" } @components);
+		if (-f $base_components) {
+			my @components = read_file($base_components);
+			if (grep { $_ eq "local\n" } @components) {
+				print "  Removing local from base_components (no such component under $codename)\n";
+				write_file($base_components, grep { $_ ne "local\n" } @components);
+			}
 		}
 	}
 
