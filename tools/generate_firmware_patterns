@@ -158,6 +158,9 @@ sub generate_patterns_for_firmware_sof_intel_workaround {
 }
 
 
+print STDERR "Looking up patterns for package $pkgname\n"
+    if $verbose;
+
 # Make sure the output directory exists:
 die "missing output directory $output_dir"
     if ! -d $output_dir;
@@ -175,3 +178,6 @@ foreach my $components (@ARGV) {
 # Only apply the workaround when relevant:
 generate_patterns_for_firmware_sof_intel_workaround()
     if ! $done and $pkgname eq $SOF;
+
+print STDERR "Done with package $pkgname\n"
+    if $verbose;

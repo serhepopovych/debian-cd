@@ -62,8 +62,12 @@ $BASEDIR/tools/generate_firmware_task '*' --list-filenames-and-indices | sort -u
 	# Mimic make_disc_trees.pl, except it only passes a single Components-<arch>.yml.gz while
 	# we pass all of them. Differences are unlikely though, as interesting firmware packages
 	# are "Architecture: all".
-	$BASEDIR/tools/generate_firmware_patterns --output-dir $FW_DEP11_DIR --package $PACKAGE $DEP11_DIR/Components-*.yml.gz
-	[ -f $FW_DEP11_DIR/$PACKAGE.patterns ] && printf $COMPONENT > $FW_DEP11_DIR/$PACKAGE.component
+	$BASEDIR/tools/generate_firmware_patterns \
+		-v --output-dir $FW_DEP11_DIR \
+		--package $PACKAGE $DEP11_DIR/Components-*.yml.gz
+	if [ -f $FW_DEP11_DIR/$PACKAGE.patterns ]; then
+        	printf "%s\n" $COMPONENT > $FW_DEP11_DIR/$PACKAGE.component
+	fi
 done
 
 cd $TMPDIR/firmware
