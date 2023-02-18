@@ -928,7 +928,11 @@ sub finish_disc {
 	print "  Finishing off md5sum.txt\n";
 	# Just md5 the bits we won't have seen already
 	open(MD5LIST, ">>md5sum.txt") or die "Failed to open md5sum.txt file: $!\n";
-	find (\&md5_files_for_md5sum, ("./.disk", "./dists", "./firmware/dep11"));
+	foreach my $dir ("./.disk", "./dists", "./firmware/dep11") {
+	    if (-d $dir) {
+		find (\&md5_files_for_md5sum, $dir);
+	    }
+	}
 	close(MD5LIST);
 
 	# And sort; it should make things faster for people checking
