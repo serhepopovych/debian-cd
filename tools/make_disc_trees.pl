@@ -1275,7 +1275,7 @@ sub add_firmware_stuff {
 	or die "Can't find contents of $dir/firmware/$base_file: $!";
     while (defined(my $line = <DPKGC>)) {
 	chomp $line;
-	if ($line =~ m,^[-|l]\S+\s+\S+\s+\d+\s+\S+\s+\S+\s+./(\S+/firmware/\S+)$,) {
+	if ($line =~ m,^[-|l]\S+\s+\S+\s+\d+\s+\S+\s+\S+\s+./(\S+/firmware/\S+),) {
 	    printf OFILE "%-55s %s %s\n", "/$1", $base_file, $component;
 	}
     }
