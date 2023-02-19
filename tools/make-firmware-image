@@ -68,6 +68,12 @@ $BASEDIR/tools/generate_firmware_task '*' --list-filenames-and-indices | sort -u
 	if [ -f $FW_DEP11_DIR/$PACKAGE.patterns ]; then
         	printf "%s\n" $COMPONENT > $FW_DEP11_DIR/$PACKAGE.component
 	fi
+
+	# XXX: Keep in line with make_disc_trees.pl!
+	BASEFILE=$(basename $FILE)
+	dpkg --contents ${MIRROR}/$FILE | \
+		perl -ne 'printf "%-55s %s %s\n", "/$1", "'$BASEFILE'", "'$COMPONENT'"
+			if m,^[-|l]\S+\s+\S+\s+\d+\s+\S+\s+\S+\s+./(\S+/firmware/\S+),' >> $TMPDIR/firmware/Contents-firmware
 done
 
 cd $TMPDIR/firmware
