@@ -79,6 +79,7 @@ done
 cd $TMPDIR/firmware
 tar czf ../firmware.tar.gz .
 zip -9rq ../firmware.zip .
+find . -type f | gzip -9 > ../firmware.list.gz
 cd ..
 find firmware | cpio --quiet -o -H newc | pigz -9nm > firmware.cpio.gz
 ls -l $PWD/firmware.cpio.gz $PWD/firmware.tar.gz $PWD/firmware.zip

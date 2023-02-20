@@ -84,6 +84,10 @@ debian-cd (3.2.0) UNRELEASED; urgency=medium
   * Fix missing %install% replacements, fixing support for automatically
     starting a specific entry when a timeout is reached.
 
+  [ Steve McIntyre ]
+  * make-firmware-image: Add a list file to show what's included in
+    the firmware archives.
+
  -- Cyril Brulebois <kibi@debian.org>  Wed, 08 Feb 2023 10:44:19 +0100
 
 debian-cd (3.1.36) unstable; urgency=medium
