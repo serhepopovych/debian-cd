@@ -89,6 +89,8 @@ debian-cd (3.2.0) UNRELEASED; urgency=medium
     the firmware archives.
   * Add new config option DISABLE_UEFI_32 to control mixed-mode EFI on
     x86 builds. Closes: #1031424
+  * Add iucode-tool to the list of base packages wanted for amd64 and
+    i386, so we will have it available for installing CPU microcode.
 
  -- Cyril Brulebois <kibi@debian.org>  Wed, 08 Feb 2023 10:44:19 +0100
 

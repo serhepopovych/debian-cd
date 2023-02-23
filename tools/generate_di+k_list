@@ -118,6 +118,7 @@ ca-certificates
 #endif
 
 #ifdef ARCH_i386
+iucode-tool
 initramfs-tools
 busybox
 grub-pc
@@ -153,6 +154,7 @@ linux-headers-686-pae
 #endif
 
 #ifdef ARCH_amd64
+iucode-tool
 initramfs-tools
 busybox
 grub-pc
