@@ -35,6 +35,11 @@ else
     exit 1
 fi
 
+# amd64 builds will also include 32-bit UEFI files by default, to
+# allow for booting on weird machines with 64-bit CPUs but 32-bit
+# firmware like Baytrail or some models of Apple iMac. Set
+# DISABLE_UEFI_32=1 in your config to disable this.
+
 N=$1
 CDDIR=$2
 BOOTDIR=
@@ -79,10 +84,16 @@ else
         INSTALLDIR="$INSTALLDIR_i386"
 fi
 
-if [ $ARCH = i386 ]; then
-    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_i386"
+if [ $ARCH = amd64 ]; then
+    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_amd64 "
+    if [ "$DISABLE_UEFI_32"x = "1"x ]; then
+	echo "    NOT retrieving i386 EFI files"
+    else
+	echo "    Retrieving i386 EFI files also on amd64 build"
+	BOOT_IMAGES="$BOOT_IMAGES cdrom/cd_info_i386"
+    fi
 else
-    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_i386 cdrom/cd_info_amd64 "
+    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_i386"
 fi
 
 # Download boot images.
@@ -196,8 +207,9 @@ mkdir -p boot$N/isolinux
 # Isolinux setup including config and help files comes from d-i.
 cat cdrom/cd_info_$ARCH | (cd boot$N/isolinux/; tar zx)
 mv boot$N/isolinux/grub boot$N/isolinux/grub-$ARCH
-if [ $ARCH = amd64 ]; then
+if [ $ARCH = amd64 ] && [ "$DISABLE_UEFI_32"x != "1"x ]; then
     # Also extract i386 grub files, for Bay Trail etc.
+    echo "    Extracting i386 EFI files also on amd64 build"
     cat cdrom/cd_info_i386 | (cd boot$N/isolinux/; tar zx ./grub)
     mv boot$N/isolinux/grub boot$N/isolinux/grub-i386
 fi
@@ -410,7 +422,6 @@ set_default_desktop
 rm -rf cdrom
 
 if [ -d boot$N/isolinux/grub-$ARCH ] && [ $BOOT_EFI -ne 0 ] ; then
-    echo "  Adding EFI boot code for $ARCH on CD$N"
 
     # Move GRUB files to the right places
     mkdir -p $CDDIR/EFI/boot
@@ -423,6 +434,8 @@ if [ -d boot$N/isolinux/grub-$ARCH ] && [ $BOOT_EFI -ne 0 ] ; then
 	if [ ! -f $dir/efi.img ]; then
 	    continue
 	fi
+
+	    echo "  Adding EFI boot code for $grub_arch on CD$N"
 
 	mcopy -n -s -i $dir/efi.img '::efi/*' $CDDIR/EFI
 
