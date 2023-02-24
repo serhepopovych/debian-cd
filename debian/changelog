@@ -1,4 +1,4 @@
-debian-cd (3.2.0) UNRELEASED; urgency=medium
+debian-cd (3.2.0) unstable; urgency=medium
 
   [ Cyril Brulebois — high-level summary ]
   * This release implements many changes related to the 2022 General
@@ -92,7 +92,7 @@ debian-cd (3.2.0) UNRELEASED; urgency=medium
   * Add iucode-tool to the list of base packages wanted for amd64 and
     i386, so we will have it available for installing CPU microcode.
 
- -- Cyril Brulebois <kibi@debian.org>  Wed, 08 Feb 2023 10:44:19 +0100
+ -- Cyril Brulebois <kibi@debian.org>  Fri, 24 Feb 2023 17:04:14 +0100
 
 debian-cd (3.1.36) unstable; urgency=medium
 
