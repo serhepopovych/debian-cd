@@ -35,19 +35,19 @@ sub good_link ($$) {
 		if ($symlink_farm) {
 			print "Symlink: $dest => $src\n" if ($link_verbose >= 3);
 			if (not symlink ($src, $dest)) {
-				print STDERR "Symlink from $src to $dest failed: $!\n";
+				die "Symlink from $src to $dest failed: $!\n";
 			}
 		} elsif ($link_copy) {
 			print "Copy: $dest => $src\n" if ($link_verbose >= 3);
 			if (system("cp -ap $src $dest")) {
 				my $err_num = $? >> 8;
 				my $sig_num = $? & 127;
-				print STDERR "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
+			        die "Copy from $src to $dest failed: cp exited with error code $err_num, signal $sig_num\n";
 			}
 		} else {
 			print "Hardlink: $dest => $src\n" if ($link_verbose >= 3);
 			if (not link ($src, $dest)) {
-				print STDERR "Link from $src to $dest failed: $!\n";
+				die "Link from $src to $dest failed: $!\n";
 			}
 		}
 	}
@@ -64,7 +64,7 @@ sub real_file ($) {
 		if ($to = readlink($link)) {
 			$link = $dir . $to;
 		} else {
-			print STDERR "Can't readlink $link: $!\n";
+			die "Can't readlink $link: $!\n";
 		}
 	}
 
