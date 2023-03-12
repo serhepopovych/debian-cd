@@ -1239,10 +1239,9 @@ sub add_firmware_stuff {
 	$blocks_added += get_file_blocks("$dir/firmware/dep11/README.txt");
     }
 
-    msg_ap(0, "Symlink fw package $p into /firmware\n");
-    symlink("../$file", "$dir/firmware/$base_file")
-	or die "unable to create $dir/firmware/$base_file symlink: $!";
-    msg_ap(0, "Symlink ../$file $dir/firmware/.\n");
+    msg_ap(0, "Link fw package $p into /firmware\n");
+    $blocks_added += good_link("$dir/firmware/../$file", "$dir/firmware/$base_file");
+    msg_ap(0, "Link ../$file $dir/firmware/.\n");
 
     # Cope with maybe having the patterns file already
     # (e.g. multi-arch), in which case we'll replace it here
