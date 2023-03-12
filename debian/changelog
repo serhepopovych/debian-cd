@@ -1,3 +1,10 @@
+debian-cd (3.2.1) UNRELEASED; urgency=medium
+
+  [ James Addison ]
+  * firmware: use hard links rather than symlinks. Closes: #1031696
+
+ -- Steve McIntyre <93sam@debian.org>  Sun, 12 Mar 2023 18:43:21 +0000
+
 debian-cd (3.2.0) unstable; urgency=medium
 
   [ Cyril Brulebois — high-level summary ]
