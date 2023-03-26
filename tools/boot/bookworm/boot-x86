@@ -157,14 +157,6 @@ if [ "$N" = "1" ]; then
                         cp -lf $disk $CDDIR/$INSTALLDIR/$dir
                 fi
         done
-
-        if [ -e "$MIRROR/tools" ] && \
-           [ ! -e $CDDIR/tools ] && \
-           [ "$OMIT_DOC_TOOLS" != "1" ] ; then
-                echo "    Adding tools to CD1"
-                $BASEDIR/tools/add_files $CDDIR $MIRROR tools
-                # Remove the win32-loader/ subdirectory from tools, as d-i already installs setup.exe
-                rm -Rf $CDDIR/tools/win32-loader
         fi
 fi
 
@@ -187,9 +179,6 @@ KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | sed -r "s/desktop=[^ ]* ?//")"
 mkdir -p $CDDIR/$INSTALLDIR
 cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
 cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
-if [ -e $CDDIR/tools/loadlin.exe ]; then
-        echo "\\tools\\loadlin.exe vmlinuz initrd=initrd.gz" | todos > $CDDIR/$INSTALLDIR/install.bat
-fi
 
 # In case of a multi-arch CD the script will be called two times. The
 # first time the isolinux dir gets set up for single arch; if it is
