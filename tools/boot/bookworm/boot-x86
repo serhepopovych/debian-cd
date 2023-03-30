@@ -157,7 +157,6 @@ if [ "$N" = "1" ]; then
                         cp -lf $disk $CDDIR/$INSTALLDIR/$dir
                 fi
         done
-        fi
 fi
 
 case "$DESKTOP" in
