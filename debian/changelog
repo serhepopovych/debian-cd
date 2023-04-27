@@ -8,6 +8,11 @@ debian-cd (3.2.1) UNRELEASED; urgency=medium
     /tools directory from the mirror, as that's all that's left there
     now.
 
+  [ Cyril Brulebois ]
+  * tools/generate_di+k_list: Add zstd alongside initramfs-tools and
+    busybox, since it's now getting installed by base-installer (starting
+    with 1.212).
+
  -- Steve McIntyre <93sam@debian.org>  Sun, 12 Mar 2023 18:43:21 +0000
 
 debian-cd (3.2.0) unstable; urgency=medium
