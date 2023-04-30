@@ -1,4 +1,4 @@
-debian-cd (3.2.1) UNRELEASED; urgency=medium
+debian-cd (3.2.1) unstable; urgency=medium
 
   [ James Addison ]
   * firmware: use hard links rather than symlinks. Closes: #1031696
@@ -13,7 +13,7 @@ debian-cd (3.2.1) UNRELEASED; urgency=medium
     busybox, since it's now getting installed by base-installer (starting
     with 1.212).
 
- -- Steve McIntyre <93sam@debian.org>  Sun, 12 Mar 2023 18:43:21 +0000
+ -- Cyril Brulebois <kibi@debian.org>  Sun, 30 Apr 2023 18:11:17 +0200
 
 debian-cd (3.2.0) unstable; urgency=medium
 
