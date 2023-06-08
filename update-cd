@@ -31,9 +31,6 @@ MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso s
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
 
-# Set up torrents too?
-BT=1
-
 # The working directory to use. MUST be on the same partition as the mirror.
 TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/bookworm-update/cd-work
 
@@ -143,7 +140,6 @@ make_cd () {
     ISODIR=$OUT/$THISARCH/iso-$TYPE
     JIGDODIR=$OUT/$THISARCH/jigdo-$TYPE
     LISTDIR=$OUT/$THISARCH/list-$TYPE
-    BTDIR=$OUT/$THISARCH/bt-$TYPE
 
     if [ ! -d ${ISODIR} ] ; then
         mkdir -p ${ISODIR}
@@ -153,9 +149,6 @@ make_cd () {
     fi
     if [ ! -d ${LISTDIR} ] ; then
         mkdir -p ${LISTDIR}
-    fi
-    if [ $BT = 1 ] && [ ! -d ${BTDIR} ] ; then
-        mkdir -p ${BTDIR}
     fi
 
     if [ $JTE = 1 ] ; then
@@ -195,10 +188,6 @@ make_cd () {
             echo "$SHA  ${BASENAME}.iso" >> ${JIGDODIR}/SHA${SHA_SIZE}SUMS.update
             echo "$SHA  ${BASENAME}.iso" >> ${ISODIR}/SHA${SHA_SIZE}SUMS.update
             (cd ${JIGDODIR} && sha${SHA_SIZE}sum ${BASENAME}.jigdo ${BASENAME}.template >> SHA${SHA_SIZE}SUMS.update)
-            if [ $BT = 1 ]; then
-                echo "$SHA  ${BASENAME}.iso" >> ${BTDIR}/SHA${SHA_SIZE}SUMS.update
-                (cd ${BTDIR} && sha${SHA_SIZE}sum ${BASENAME}.iso.torrent >> SHA${SHA_SIZE}SUMS.update)
-            fi
         done
 
         # Make sure that the ISO is as new/newer than the jigdo file; #587774
