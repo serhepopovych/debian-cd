@@ -77,7 +77,6 @@ else
     CDSIZE=4300 # megabytes, leaving space for metadata
 fi
 
-REL=Debian"$VER"
 CLOG=dists/$CODENAME/ChangeLog
 UPD=$TDIR/$CODENAME-update
 DATE=`date +%Y%m%d`
