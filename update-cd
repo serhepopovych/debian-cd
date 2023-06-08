@@ -18,7 +18,7 @@ MIRROR_NORM=/srv/cdbuilder.debian.org/src/ftp/debian
 NONFREE=0
 
 # What release version is this?
-VER=9.1.0
+VER=11.7.0
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -68,7 +68,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/debian-cd/lists/stretch/r0-r2.diff
+DIFF=/home/debian-cd/lists/bullseye/r0-r7.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=644 # megabytes, leaving space for metadata
