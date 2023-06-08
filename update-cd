@@ -34,13 +34,13 @@ JTE=1
 BT=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-work
+TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/bullseye-update/cd-work
 
 # Building stretch cd set ...
-CODENAME=stretch
+CODENAME=bullseye
 
 # Path where the images will be written
-OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-out
+OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/bullseye-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=https://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
