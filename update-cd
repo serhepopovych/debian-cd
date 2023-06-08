@@ -26,7 +26,7 @@ OFFICIAL=Official
 # OFFICIAL="Unofficial snapshot"
 
 # Path to use with mkisofs/mkhybrid
-MKISOFS="genisoimage -jigdo-template-compress bzip2 -r -checksum_algorithm_iso sha256,sha512"
+MKISOFS="xorriso -as mkisofs -jigdo-template-compress bzip2 -r -checksum_algorithm_iso md5,sha256,sha512"
 
 # Use JTE extensions to mkisofs to make jigdo files?
 JTE=1
@@ -159,9 +159,9 @@ make_cd () {
             -jigdo-template ${JIGDODIR}/${BASENAME}.template \
             -jigdo-map Debian=$MIRROR/ \
             -jigdo-force-md5 /pool/ \
-            -checksum-list $UPD/checksum-check \
-            $UPD/CD$CDNUM 2>&1 | grep "extents written"
-#            $UPD/CD$CDNUM
+            -md5-list $UPD/checksum-check \
+            $UPD/CD$CDNUM
+#            $UPD/CD$CDNUM 2>&1 | grep "extents written"
 	if [ $? -ne 0 ] ; then
 	    echo "${MKISOFS} failed, error $?"
 	    exit 1
