@@ -19,7 +19,7 @@ NONFREE=0
 NONFREE_FIRMWARE=1
 
 # What release version is this?
-VER=9.1.0
+VER=12.1.0
 
 # Is this an official CD?
 OFFICIAL=Official
@@ -35,13 +35,13 @@ JTE=1
 BT=1
 
 # The working directory to use. MUST be on the same partition as the mirror.
-TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-work
+TDIR=/srv/cdbuilder.debian.org/src/deb-cd/tmp/bookworm-update/cd-work
 
-# Building stretch cd set ...
-CODENAME=stretch
+# Building bookworm cd set ...
+CODENAME=bookworm
 
 # Path where the images will be written
-OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/stretch-update/cd-out
+OUT=/srv/cdbuilder.debian.org/src/deb-cd/tmp/bookworm-update/cd-out
 
 # Location(s) for the snapshot(s)
 SNAPSHOT='Debian=https://us.cdimage.debian.org/cdimage/snapshot/Debian/ --try-last'
@@ -69,7 +69,7 @@ esac
 # Location of the diff file to use to determine the changes. If you leave
 # this blank, we'll try to determine the changes from the ChangeLog files,
 # which is probably less accurate. 
-DIFF=/home/debian-cd/lists/stretch/r0-r2.diff
+DIFF=/home/debian-cd/lists/bookworm/r0-r1.diff
 
 if [ "$TYPE" = "cd" ] ; then
     CDSIZE=644 # megabytes, leaving space for metadata
