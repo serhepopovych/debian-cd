@@ -1,0 +1,508 @@
+# This script gets sourced from boot-i386 and boot-amd64.
+#
+# Do install stuff for x86, including making bootable CDs
+# Works with debian-installer
+#
+# $1 is the CD number
+# $2 is the temporary CD build dir
+
+. $BASEDIR/tools/boot/$DI_CODENAME/common.sh
+. $BASEDIR/tools/boot/$DI_CODENAME/x86-desktop.sh
+
+set -e
+#set -x
+
+# Workaround for #823881:
+export MTOOLS_SKIP_CHECK=1
+
+# Have we been told to use just one boot method? If none listed,
+# assume all are desired. Order also matters. Possible values are
+# "BIOS", "EFI" and "BIOS EFI". We'll also accept "EFI BIOS" for
+# completeness, but we will switch the order.
+if [ "$BOOT_METHODS"x = ""x ] \
+    || [ "$BOOT_METHODS"x = "BIOS EFI"x ] \
+    || [ "$BOOT_METHODS"x = "EFI BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=2
+elif [ "$BOOT_METHODS"x = "BIOS"x ] ; then
+    BOOT_BIOS=1
+    BOOT_EFI=0
+elif [ "$BOOT_METHODS"x = "EFI"x ] ; then
+    BOOT_EFI=1
+    BOOT_BIOS=0
+else
+    echo "ERROR: Unrecognized boot method choice $BOOT_METHODS"
+    exit 1
+fi
+
+# amd64 builds will also include 32-bit UEFI files by default, to
+# allow for booting on weird machines with 64-bit CPUs but 32-bit
+# firmware like Baytrail or some models of Apple iMac. Set
+# DISABLE_UEFI_32=1 in your config to disable this.
+
+N=$1
+CDDIR=$2
+BOOTDIR=
+if [ "$DI_WWW_HOME" = "default" ]; then
+    # Tempting as it might be to merge these two definitions using $ARCH,
+    # do *not* do that - these defs are parsed out by other scripts that
+    # won't cope with that
+    if [ "$ARCH" = amd64 ]; then
+        DI_WWW_HOME="https://d-i.debian.org/daily-images/amd64/daily"
+    else
+        DI_WWW_HOME="https://d-i.debian.org/daily-images/i386/daily"
+    fi
+    try_di_image_cache
+else
+    DI_WWW_HOME=$(echo $DI_WWW_HOME | sed "s,%ARCH%,$ARCH,")
+fi
+DI_WWW_HOME_i386=$(echo $DI_WWW_HOME | sed 's/amd64/i386/g')
+DI_WWW_HOME_amd64=$(echo $DI_WWW_HOME | sed 's/i386/amd64/g')
+
+case "$MKISOFS" in
+    *xorriso*)
+        XORRISO_VER=$(xorriso_version)
+        ;;
+    *)
+        echo "ERROR: debian-cd now depends on xorriso for making x86 bootable CDs."
+        exit 1;
+        ;;
+esac
+
+cd $CDDIR/..
+
+# This script is called with $1 (now $N) as the CD to make bootable.
+# Exit if this is not a boot disk
+if [ $N != 1 ] ; then exit 0; fi
+
+INSTALLDIR_amd64="install.amd"
+INSTALLDIR_i386="install.386"
+
+if [ "$ARCH" = amd64 ]; then
+        INSTALLDIR="$INSTALLDIR_amd64"
+else
+        INSTALLDIR="$INSTALLDIR_i386"
+fi
+
+if [ $ARCH = amd64 ]; then
+    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_amd64 "
+    if [ "$DISABLE_UEFI_32"x = "1"x ]; then
+	echo "    NOT retrieving i386 EFI files"
+    else
+	echo "    Retrieving i386 EFI files also on amd64 build"
+	BOOT_IMAGES="$BOOT_IMAGES cdrom/cd_info_i386"
+    fi
+else
+    BOOT_IMAGES="cdrom/initrd.gz cdrom/vmlinuz cdrom/cd_info_i386"
+fi
+
+# Download boot images.
+for image in $BOOT_IMAGES; do
+    if [ ! -e "$image" ]; then
+        dir=$(dirname $image)
+        mkdir -p $dir
+	case $image in
+	    *cd_info_*)
+		THIS_ARCH=${image##cdrom/cd_info_}
+		image_in=cdrom/debian-cd_info.tar.gz
+		;;
+	    *)
+		THIS_ARCH=$ARCH
+		image_in=$image
+		;;
+	esac
+
+        if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$THIS_ARCH/current/images/$image_in" ]; then
+            cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$THIS_ARCH/current/images/$image_in" "$image"
+        elif [ ! "$DI_WWW_HOME" ];then
+            if [ ! "$DI_DIR" ];then
+                DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$THIS_ARCH/current/images"
+            fi
+	    DI_DIR_i386=$(echo $DI_DIR | sed 's/amd64/i386/g')
+	    DI_DIR_amd64=$(echo $DI_DIR | sed 's/i386/amd64/g')
+	    THIS_DI_DIR=DI_DIR_${THIS_ARCH}
+            cp "${!THIS_DI_DIR}/$image_in" "$image"
+        else
+	    THIS_DI_WWW_HOME="DI_WWW_HOME_${THIS_ARCH}"
+            $WGET "${!THIS_DI_WWW_HOME}/$image_in" -O "$image"
+        fi
+    fi
+done
+
+# Images that are not really required or may be unavailable.
+for image in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
+    if [ ! -e "$image" ]; then
+        dir=$(dirname $image)
+        mkdir -p $dir
+        if [ -n "$LOCAL"  -a -f "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" ]; then
+            cp "${LOCALDEBS:-$MIRROR}/dists/$DI_DIST/local/installer-$ARCH/current/images/$image" "$image"
+        elif [ ! "$DI_WWW_HOME" ];then
+            if [ ! "$DI_DIR" ];then
+                DI_DIR="$MIRROR/dists/$DI_DIST/main/installer-$ARCH/current/images"
+            fi
+            cp "$DI_DIR/$image" "$image" || true
+        else
+            $WGET "$DI_WWW_HOME/$image" -O "$image" || rm -f "$image"
+        fi
+    fi
+done
+
+# Only disk one gets the extra files installed
+if [ "$N" = "1" ]; then
+        # populate the install directory as well
+        for disk in $DISK_IMAGES $EXTRA_DISK_IMAGES; do
+                if [ -e "$disk" ]; then
+                        dir=$(dirname $disk)
+                        mkdir -p $CDDIR/$INSTALLDIR/$dir
+                        cp -lf $disk $CDDIR/$INSTALLDIR/$dir
+                fi
+        done
+fi
+
+case "$DESKTOP" in
+    $UNSPEC_DESKTOP_DEFAULT)
+        # default from tasksel 
+        DESKTOP=
+        ;;
+    all)
+        # default from tasksel 
+        DESKTOP=
+        ;;
+    light)
+        DESKTOP=xfce
+        ;;
+esac
+# desktop boot parameter gets set separately through DESKTOP variable
+KERNEL_PARAMS="$(echo "$KERNEL_PARAMS" | sed -r "s/desktop=[^ ]* ?//")"
+
+mkdir -p $CDDIR/$INSTALLDIR
+cp -lf cdrom/vmlinuz $CDDIR/$INSTALLDIR/
+cp -lf cdrom/initrd.gz $CDDIR/$INSTALLDIR/
+
+# In case of a multi-arch CD the script will be called two times. The
+# first time the isolinux dir gets set up for single arch; if it is
+# called a second time the isolinux dir already exists and we know it
+# will be multi-arch. We then throw away the first version and just
+# configure things from scratch for multi-arch.
+
+MULTIARCH=
+if [ -e boot$N/isolinux/isolinux.cfg ]; then
+        MULTIARCH=1
+        rm -r boot$N/isolinux
+fi
+
+mkdir -p boot$N/isolinux
+# Isolinux setup including config and help files comes from d-i.
+cat cdrom/cd_info_$ARCH | (cd boot$N/isolinux/; tar zx)
+mv boot$N/isolinux/grub boot$N/isolinux/grub-$ARCH
+if [ $ARCH = amd64 ] && [ "$DISABLE_UEFI_32"x != "1"x ]; then
+    # Also extract i386 grub files, for Bay Trail etc.
+    echo "    Extracting i386 EFI files also on amd64 build"
+    cat cdrom/cd_info_i386 | (cd boot$N/isolinux/; tar zx ./grub)
+    mv boot$N/isolinux/grub boot$N/isolinux/grub-i386
+fi
+
+# Common mkisofs options when creating CDs
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-J -joliet-long"
+add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-cache-inodes"
+
+# BIOS-boot specific stuff. Even when we're *not* doing BIOS boot, we
+# still create all the isolinux config files as they're parsed and
+# used later. We just don't grab all the syslinux files, then make
+# sure that we *don't* set up BIOS boot on the xorriso command line.
+if [ "$BOOT_BIOS" = 1 ] ; then
+    echo "  Adding BIOS boot code for $ARCH on CD$N"
+    mkdir -p $CDDIR/../syslinux
+    SYSLINUXDEB=$(find_pkg_file syslinux)
+    if [ -z "$SYSLINUXDEB" ]; then
+        echo "ERROR: syslinux package is required" >&2
+        exit 1
+    fi
+    (dpkg --fsys-tarfile "$MIRROR/$SYSLINUXDEB" | \
+        tar xf - -C $CDDIR/../syslinux ./usr/lib)
+
+    if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
+        echo $SYSLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+        find_pkg_file syslinux source >> $CDDIR/../$N.pkgs_extracted
+    fi
+
+    ISOLINUXDEB=$(find_pkg_file isolinux)
+    if [ -z "$ISOLINUXDEB" ]; then
+        echo "ERROR: isolinux package is required" >&2
+        exit 1
+    fi
+    (dpkg --fsys-tarfile "$MIRROR/$ISOLINUXDEB" | \
+        tar xf - -C $CDDIR/../syslinux ./usr/lib)
+    
+    if [ -n "$ARCHIVE_EXTRACTED_SOURCES" ]; then
+        echo $ISOLINUXDEB >> $CDDIR/../$N.pkgs_extracted
+        find_pkg_file isolinux source >> $CDDIR/../$N.pkgs_extracted
+    fi
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-mbr syslinux/usr/lib/ISOLINUX/isohdpfx.bin"
+
+    cp -f $CDDIR/../syslinux/usr/lib/ISOLINUX/isolinux.bin boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/vesamenu.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ldlinux.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libcom32.c32 boot$N/isolinux/
+    cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/libutil.c32 boot$N/isolinux/
+
+    if [ ! -z "$MULTIARCH" ]; then
+        # Mandatory for 64bits capability detection
+        if [ -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 ] ; then
+            cp -f $CDDIR/../syslinux/usr/lib/syslinux/modules/bios/ifcpu64.c32 boot$N/isolinux/
+        else
+            cp -f $CDDIR/../syslinux/usr/lib/syslinux/ifcpu64.c32 boot$N/isolinux/
+        fi
+    fi
+
+    # If we don't have grub stuff from d-i, tell xorriso to add a
+    # partition offset for the isohybrid code
+    if [ ! -d boot$N/isolinux/grub-$ARCH ] || [ $BOOT_EFI = 0 ] ; then
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-partition_offset 16"
+    fi
+
+    # Add the normal options to make an ElTorito bootable CD/DVD using isolinux
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-b isolinux/isolinux.bin"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-c isolinux/boot.cat"
+    bls=4 # Specify 4 for BIOS boot, don't calculate it
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-load-size $bls"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-boot-info-table"    
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-no-emul-boot"
+
+    # We explicitly put the boot bits in boot$N (as opposed to CD$N)
+    # and list it first on the eventual mkisofs command line. That
+    # means they'll be placed nearer the front of the eventual image;
+    # some older BIOSes apparently have a limitation on what they'll
+    # boot here.
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_dirs "boot$N"
+else
+    echo "  No BIOS boot code for $ARCH on CD$N"
+fi
+
+di_syslinux_ver="$(di_syslinux_version)"
+case "$di_syslinux_ver" in
+    2.0)
+        : ;;
+    1.*)
+        echo "Error: syslinux config versions before 2.0 are not supported"
+        exit 1 ;;
+    *)
+        echo "Error: unrecognized syslinux config version '$di_syslinux_ver'"
+        exit 1 ;;
+esac
+
+if [ -e boot$N/isolinux/f3.txt.withgtk ]; then
+    extra_image gtk/vmlinuz         "../vmlinuz"
+    extra_image gtk/initrd.gz       "../initrd.gz"
+    mv boot$N/isolinux/f3.txt.withgtk boot$N/isolinux/f3.txt
+    mv boot$N/isolinux/f4.txt.withgtk boot$N/isolinux/f4.txt
+    if [ -e boot$N/isolinux/isolinux.cfg.withgtk ]; then
+        mv boot$N/isolinux/isolinux.cfg.withgtk boot$N/isolinux/isolinux.cfg
+    fi
+    if [ -e $CDDIR/tools/loadlin.exe ]; then
+        echo "\\tools\\loadlin.exe \\$INSTALLDIR\\vmlinuz initrd=initrd.gz vga=788" | todos > $CDDIR/$INSTALLDIR/gtk/install.bat
+    fi
+fi
+rm -f boot$N/isolinux/isolinux.cfg.with*
+
+if variant_enabled "xen" ; then
+    extra_image xen/vmlinuz         "../vmlinuz   ../gtk/vmlinuz"
+    extra_image xen/initrd.gz       "../initrd.gz ../gtk/initrd.gz"
+    extra_image xen/debian.cfg || extra_image xen/xm-debian.cfg
+fi
+
+if [ -z "$MULTIARCH" ]; then
+    # Set up isolinux dir for only the current arch
+    grep -lr '%install%' boot$N/isolinux/* | xargs -r sed -i "s|%install%|$INSTALLDIR|g"
+    
+    # Remove the x86*.cfg files to avoid them being loaded on a disc
+    # that does not have both amd64 and i386 dirs.
+    find boot$N/isolinux/ -name "x86*.cfg" -delete
+else
+    # Use the syslinux.cfg with architecture detection
+    mv boot$N/isolinux/x86syslinux.cfg boot$N/isolinux/isolinux.cfg
+
+    # Set up isolinux dir for multi-arch
+    grep -lr '%install[-x86]*%' boot$N/isolinux/* | \
+        xargs -r sed -i -e "s|%install%|$INSTALLDIR_amd64|g" \
+                        -e "s|%install-x86%|$INSTALLDIR_i386|g"
+
+    for file in boot$N/isolinux/f3.txt* boot$N/isolinux/f4.txt*; do
+        sed -i "4 s/^$/(note: amd64 is default; prepend 'x86-' to use an i386 kernel instead)/" $file
+    done
+
+    if [ -e CD$N/win32-loader.ini ]; then
+        # Modify win32-loader.ini to also cover the "other" arch
+        if [ "$ARCH" = amd64 ]; then
+            sed -i -e "/^arch=/d
+                       /^amd64\//p; s/^amd64/i386/; s/=$INSTALLDIR_amd64/=$INSTALLDIR_i386/g" \
+                           CD$N/win32-loader.ini
+        else
+            sed -i -e "/^arch=/d
+                       /^i386\//p; s/^i386/amd64/; s/=$INSTALLDIR_i386/=$INSTALLDIR_amd64/g" \
+                           CD$N/win32-loader.ini
+        fi
+    fi
+
+    if [ "$BOOT_BIOS" = 1 ] ; then
+        # Add another ifcpu64.c32 launch to let the 'enter' in help menus work correctly
+        sed -i "/^include menu.cfg/ a\include instsel.cfg" \
+                boot$N/isolinux/prompt.cfg
+        cat >boot$N/isolinux/instsel.cfg <<EOF
+default install-select
+label install-select
+    kernel ifcpu64.c32
+    append installgui -- x86-installgui
+EOF
+    fi
+fi
+
+if [ "$SPLASHPNG" ] ; then
+    cp $SPLASHPNG boot$N/isolinux/splash.png
+fi
+
+# used by Debian Edu
+if [ "$LOGOPNG" ] ; then
+    # Add custom logo to the initrd.gz file, replacing old image
+    GTKINITRD=$CDDIR/$INSTALLDIR/gtk/initrd
+    GTKINITRDGZ=$GTKINITRD.gz
+    echo "info: Adding $LOGOPNG to $GTKINITRD"
+    INITRDDIR=$TDIR/initrd-$$
+    # Repack initrd with new image
+    mkdir -p $INITRDDIR
+    (
+        cd $INITRDDIR
+	# There may be multiple hardlinks to the initrd.gz, so
+	# explicitly break the links here
+        zcat $GTKINITRDGZ > $GTKINITRD
+	rm -f $GTKINITRDGZ
+        mkdir -p $INITRDDIR/usr/share/graphics
+        cp $LOGOPNG $INITRDDIR/usr/share/graphics/logo_debian.png
+        echo usr/share/graphics/logo_debian.png | \
+            cpio -oA -H newc -F $GTKINITRD
+	pigz -9nm $GTKINITRD
+    )
+    rm -rf $INITRDDIR
+fi
+
+# Include sound firmware in initrd so they can be loaded before espeakup starts
+if [ -n "boot$N/isolinux/spk.cfg ]; then
+    install_firmwares_initrd "$CDDIR/$INSTALLDIR/initrd" "firmware-sof-signed"
+elif [ -n "boot$N/isolinux/spkgtk.cfg ]; then
+    install_firmwares_initrd "$CDDIR/$INSTALLDIR/gtk/initrd" "firmware-sof-signed"
+fi
+
+sed -i "s|built on|built $BUILD_DATE; d-i|" boot$N/isolinux/f1.txt
+
+if [ -n "$KERNEL_PARAMS" ]; then
+    # Substitute custom kernel params into the isolinux config file(s)
+    for file in boot$N/isolinux/*.cfg; do
+        case "$(basename $file)" in
+            instsel.cfg)
+                continue ;;
+        esac
+        sed -i "/^[[:space:]]\+append .*---/ s|append|append $KERNEL_PARAMS|" \
+            $file
+    done
+fi
+
+set_default_desktop
+rm -rf cdrom
+
+if [ -d boot$N/isolinux/grub-$ARCH ] && [ $BOOT_EFI -ne 0 ] ; then
+
+    # Move GRUB files to the right places
+    mkdir -p $CDDIR/EFI/boot
+    mkdir -p $CDDIR/boot/grub
+
+    for grub_arch in amd64 i386; do
+	SB=0
+	dir=boot$N/isolinux/grub-${grub_arch}
+
+	if [ ! -f $dir/efi.img ]; then
+	    continue
+	fi
+
+	    echo "  Adding EFI boot code for $grub_arch on CD$N"
+
+	mcopy -n -s -i $dir/efi.img '::efi/*' $CDDIR/EFI
+
+	# Save space. if we have both files, that means we have shim
+	# *and* grub and we're doing secure boot. Don't copy all the
+	# grub modules into place in that case, as we're never going
+	# to use them anyway.
+	case $grub_arch in
+	    amd64)
+		if [ -f $CDDIR/EFI/boot/bootx64.efi ] \
+		       && [ -f $CDDIR/EFI/boot/grubx64.efi ]; then
+		    SB=1
+		fi;;
+	    i386)
+		if [ -f $CDDIR/EFI/boot/bootia32.efi ] \
+		       && [ -f $CDDIR/EFI/boot/grubia32.efi ]; then
+		    SB=1
+		fi;;
+	esac
+
+	cp -a $dir/*-efi $dir/*.pf2 $dir/*.cfg $CDDIR/boot/grub
+	if [ $SB = 1 ]; then
+	    echo "  Removing non-SB grub files and config for $grub_arch"
+	    rm -f $CDDIR/boot/grub/*-efi/*.mod $CDDIR/boot/grub/*-efi/*.lst
+	    # Let's not have errors from trying to insmod modules that
+	    # aren't there...
+	    sed -i '/^insmod/d' $CDDIR/boot/grub/*-efi/*.cfg
+	fi
+
+    done
+
+    rm -rf boot$N/isolinux/grub*
+
+    # If we're only doing EFI, copy the splash file from the BIOS boot dir
+    if [ $BOOT_EFI = 1 ] ; then
+        mkdir -p $CDDIR/isolinux
+        cp boot$N/isolinux/splash.png $CDDIR/isolinux
+    fi
+
+    # Create grub menu entries to match the isolinux ones
+    sed -i '/^menuentry/Q' $CDDIR/boot/grub/grub.cfg;
+    $BASEDIR/tools/boot/$DI_CODENAME/parse_isolinux \
+        boot$N/isolinux $CDDIR $BASEDIR/data/$DI_CODENAME/grub-theme.in "$DISKINFO_DISTRO" "$DEBIAN_KERNEL" "$DEBVERSION" \
+        >> $CDDIR/boot/grub/grub.cfg
+    cp $BASEDIR/data/$DI_CODENAME/hl*png $CDDIR/boot/grub/theme
+    NUM_ENTRIES=$(grep menuentry $CDDIR/boot/grub/grub.cfg | wc -l)
+    echo "    CD$N/boot/grub/grub.cfg has $NUM_ENTRIES boot entries defined"
+
+    change_grub_cfg_uuid $CDDIR
+
+    # Stuff the EFI boot files into a FAT filesystem, making it as
+    # small as possible. We end up re-packing like this in case we're
+    # making a multi-arch image
+
+    # First, work out how many blocks we need
+    blocks=$(calculate_efi_image_size $CDDIR)
+
+    # Now make a new image to contain the files
+    rm -f $CDDIR/boot/grub/efi*.img
+    mkfs.msdos --invariant -v -i deb00001 -C "$CDDIR/boot/grub/efi.img" $blocks >/dev/null
+
+    # And copy them into place
+    mmd -i "$CDDIR/boot/grub/efi.img" ::efi
+    mcopy -o -s -i "$CDDIR/boot/grub/efi.img" $CDDIR/EFI/* \
+        "::efi"
+
+    if [ $BOOT_EFI = 2 ] ; then
+	# We're being added alongside (after) a BIOS boot record. Tell
+	# xorriso to create a (secondary) ElTorito boot record for the
+	# EFI bootloader. Otherwise, xorriso will create it as the
+	# primary.
+        add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-eltorito-alt-boot"
+    fi
+
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-e boot/grub/efi.img -no-emul-boot"
+    add_mkisofs_opt $CDDIR/../$N.mkisofs_opts "-isohybrid-gpt-basdat -isohybrid-apm-hfsplus"
+else
+    echo "  No EFI boot code for $ARCH on CD$N"
+fi
+
+# th,th, thats all
+
