@@ -57,13 +57,13 @@ sub check_packages($$@) {
 		next;
 	    }
 
-	    # Don't include packages that we're told to exclude
-	    if ($excluded{$pkg}) {
-		print STDERR "  Ignoring $pkg\n";
-		next;
-	    }
-
 	    if (!exists $seen{$filename}) {
+		# Don't include packages that we're told to exclude
+		if ($excluded{$pkg}) {
+		    print STDERR "  Ignoring $pkg\n";
+		    next;
+		}
+
 		$seen{$filename} = 1;
 		if (contains_firmware($mirror, $filename)) {
 		    printf STDERR "  %-35s (%s)\n", $pkg, $filename;
