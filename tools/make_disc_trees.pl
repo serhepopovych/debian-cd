@@ -795,59 +795,68 @@ sub get_disc_size {
 }
 
 sub start_disc {
-	my $error = 0;
+    my $error = 0;
 
-	$error = system("$basedir/tools/start_new_disc $basedir $mirror $tdir $codename \"$archlist\" $disknum");
-	if ($error != 0) {
-		die "    Failed to start disc $disknum, error $error\n";
-	}
+    $error = system("$basedir/tools/start_new_disc $basedir $mirror $tdir $codename \"$archlist\" $disknum");
+    if ($error != 0) {
+	die "    Failed to start disc $disknum, error $error\n";
+    }
 
-	get_disc_size();
+    get_disc_size();
 
     print "Starting new \"$archlist\" $disktype $disknum at $basedir/$codename/CD$disknum\n";
     print "  Specified size for this image: $diskdesc, $maxdiskblocks 2K-blocks maximum\n";
-	# Grab all the early stuff, apart from dirs that will change later
-	print "  Starting the md5sum.txt file\n";
-	chdir $cddir;
-	system("find . -type f | grep -v -e ^\./\.disk -e ^\./dists | xargs md5sum >> md5sum.txt");
-	chdir $bdir;
+    # Grab all the early stuff, apart from dirs that will change later
+    print "  Starting the md5sum.txt file\n";
+    chdir $cddir;
+    system("find . -type f | grep -v -e ^\./\.disk -e ^\./dists | xargs md5sum >> md5sum.txt");
+    chdir $bdir;
 
-	$mkisofs_opts = "";
-	$mkisofs_dirs = "";
+    $mkisofs_opts = "";
+    $mkisofs_dirs = "";
 
-    undef @exclude_packages;
-    undef @unexclude_packages;
+    @exclude_packages = ();
+    @unexclude_packages = ();
 
+    # Change of interface here - exclude/unexclude files are now a
+    # colon-separated list
     if (defined ($ENV{"EXCLUDE"})) {
-        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"EXCLUDE"};
-        print LOG "Adding excludes from $excl_file\n";
-        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
-        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
-            chomp $excl_pkg;
-            push(@exclude_packages, $excl_pkg);
-        }
-        close (EXCLUDE_FILE);
+	add_excludes_from_files($ENV{"EXCLUDE"}, "exclude", \@exclude_packages)
     }
     if (defined ($ENV{"EXCLUDE$disknum"})) {
-        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"EXCLUDE$disknum"};
-        print LOG "Adding excludes from $excl_file\n";
-        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
-        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
-            chomp $excl_pkg;
-            push(@exclude_packages, $excl_pkg);
-        }
-        close (EXCLUDE_FILE);
+	add_excludes_from_files($ENV{"EXCLUDE$disknum"}, "exclude", \@exclude_packages)
     }
     if (defined ($ENV{"UNEXCLUDE$disknum"})) {
-        my $excl_file = $ENV{"TASKDIR"} . "/" . $ENV{"UNEXCLUDE$disknum"};
-        print LOG "Adding unexcludes from $excl_file\n";
-        open (EXCLUDE_FILE, "< $excl_file") || die "Can't open unexclude file $excl_file: $!\n";
-        while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
-            chomp $excl_pkg;
-            push(@unexclude_packages, $excl_pkg);
-        }
-        close (EXCLUDE_FILE);
+	add_excludes_from_files($ENV{"UNEXCLUDE$disknum"}, "unexclude", \@unexclude_packages)
     }
+}
+
+sub add_excludes_from_files {
+    my $files_list = shift;
+    my $verb = shift;
+    my $listref = shift;
+
+    foreach my $entry (split(':', $files_list)) {
+	my $excl_file = $ENV{"TASKDIR"} . "/" . $entry;
+	parse_exclude_file($excl_file, $verb, $listref)
+    }
+}
+
+sub parse_exclude_file {
+    my $excl_file = shift;
+    my $verb = shift;
+    my $listref = shift;
+    my @list = @$listref;
+
+    print "  Adding packages to $verb list from $excl_file\n";
+    print LOG "Adding packages to $verb list from $excl_file\n";
+    open (EXCLUDE_FILE, "< $excl_file") || die "Can't open exclude file $excl_file: $!\n";
+    while (defined (my $excl_pkg = <EXCLUDE_FILE>)) {
+	chomp $excl_pkg;
+	push(@exclude_packages, $excl_pkg);
+	print LOG "  $excl_pkg\n";
+    }
+    close (EXCLUDE_FILE);
 }
 
 sub finish_disc {
