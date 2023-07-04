@@ -170,7 +170,7 @@ ifneq ($(ARCHES),source)
 		$(BASEDIR)/tools/generate_di+k_list
 ifeq ($(FORCE_FIRMWARE),1)
 	# Generate firmware task file using the contents of the archive
-	$(Q)$(BASEDIR)/tools/generate_firmware_task "$(ARCHES)" $(TASKDIR)/firmware
+	$(Q)$(BASEDIR)/tools/generate_firmware_task "$(ARCHES)" $(TASKDIR)/exclude-firmware $(TASKDIR)/firmware
 endif
 ifeq ($(DEBIAN_EDU),1)
 	# Generate Debian Edu task file containing (almost) all of Debian Edu's packages

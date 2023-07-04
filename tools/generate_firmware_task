@@ -16,14 +16,17 @@
 #
 
 use strict;
+use File::Basename;
 
-my ($mirror, $codename, $archlist, $outfile, $localdebs, $backports);
+my ($mirror, $codename, $archlist, $excludelist, $outfile, $localdebs, $backports);
 my $date;
+my $tasksdir;
 my (@pkgfiles, @bp_pkgfiles);
 my ($pkg, $filename, $arch);
 my %seen;
 my @components;
-
+my $cpp_command;
+my %excluded;
 
 sub contains_firmware($$) {
     my $count = 0;
@@ -51,6 +54,12 @@ sub check_packages($$@) {
 	    m/^Filename: (\S+)/m and $filename = $1;
 
 	    if (! ($pkg =~ /(microcode|firmware)/)) {
+		next;
+	    }
+
+	    # Don't include packages that we're told to exclude
+	    if ($excluded{$pkg}) {
+		print STDERR "  Ignoring $pkg\n";
 		next;
 	    }
 
@@ -106,12 +115,17 @@ $mirror = $ENV{'MIRROR'};
 $localdebs = $ENV{'LOCALDEBS'};
 $backports = $ENV{'BACKPORTS'};
 $archlist = shift;
+$excludelist = shift;
 $outfile = shift;
 
 if (!defined($codename) || !defined($mirror) ||
+    !defined($excludelist) ||
     !defined($archlist) || !defined($outfile)) {
     die "Error in arguments\n";
 }
+
+$tasksdir = dirname($outfile);
+$cpp_command = "cpp -traditional -undef -P -C -Wall -nostdinc -I$tasksdir";
 
 foreach $arch (split(' ', $archlist)) {
     for my $component (@components) {
@@ -122,6 +136,7 @@ foreach $arch (split(' ', $archlist)) {
 	push @pkgfiles, "$mirror/dists/$codename/$component/binary-$arch/Packages.gz";
 	push @pkgfiles, "$mirror/dists/$codename/$component/binary-$arch/Packages.xz";
     }
+    $cpp_command .= " -DARCH$arch";
 }
 
 if (defined($localdebs)) {
@@ -136,6 +151,15 @@ if (defined($localdebs)) {
 	}
     }
 }
+
+# Build the hash of excluded packages
+open (EXLIST, "$cpp_command $excludelist |") or
+    die "Can't parse exclude list: $!\n";
+while (defined (my $exc = <EXLIST>)) {
+    chomp $exc;
+    $excluded{$exc} = 1;
+}
+close EXLIST;
 
 # This special filename is an crude but easy way to distinguish the historical
 # caller (top-level Makefile) from tools/make-firmware-image which should use

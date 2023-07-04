@@ -1,0 +1,26 @@
+/* 
+ * List the n-f-f packages that we do *not* want to include on media.
+ * Parsed using cpp, so C-style comments will work here.
+ */
+
+/* Always exclude these packages: only useful with non-free drivers
+   that we can't and won't ship */
+firmware-nvidia-gsp
+firmware-nvidia-tesla-gsp
+
+/* If we don't have an arm* architecture, exclude these */
+#if !defined(ARCHarm64) && !defined(ARCHarmel) && !defined(ARCHarmhf)
+arm-trusted-firmware-tools
+crust-firmware
+firmware-qcom-soc
+firmware-samsung
+raspi-firmware
+#endif
+
+/* If we don't have an x86 architecture, exclude these */
+#if !defined(ARCHamd64) && !defined(ARCHi386)
+amd64-microcode
+firmware-intel-sound
+firmware-sof-signed
+intel-microcode
+#endif

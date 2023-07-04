@@ -47,7 +47,7 @@ fi
 
 # This tool requires environment variables (exported earlier) and two parameters; the second one has
 # a special value for us to use. Deduplication should happen there, but uniquify to make sure:
-$BASEDIR/tools/generate_firmware_task '*' --list-filenames-and-indices | sort -u | while read FILE INDICES; do
+$BASEDIR/tools/generate_firmware_task '*' /dev/null --list-filenames-and-indices | sort -u | while read FILE INDICES; do
 	cp ${MIRROR}/$FILE $TMPDIR/firmware
 
 	# Adding metadata for bullseye might be helpful but disruptive, be careful:
