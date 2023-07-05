@@ -5,7 +5,7 @@ debian-cd (3.2.2) UNRELEASED; urgency=medium
   * Remove old config and data for jessie and stretch
   * Add a way to exclude named firmware packages from media, so we can
     control which packages are included - see
-    tasks/$codename/firmware-exclude
+    tasks/$codename/firmware-exclude. Closes: #1032071
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 12 Jun 2023 08:36:50 +0100
 

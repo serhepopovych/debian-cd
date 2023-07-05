@@ -14,6 +14,7 @@ arm-trusted-firmware-tools
 crust-firmware
 firmware-qcom-soc
 firmware-samsung
+firmware-ti-connectivity
 raspi-firmware
 #endif
 
