@@ -58,13 +58,14 @@ sub check_packages($$@) {
 	    }
 
 	    if (!exists $seen{$filename}) {
+		$seen{$filename} = 1;
+
 		# Don't include packages that we're told to exclude
 		if ($excluded{$pkg}) {
 		    print STDERR "  Ignoring $pkg\n";
 		    next;
 		}
 
-		$seen{$filename} = 1;
 		if (contains_firmware($mirror, $filename)) {
 		    printf STDERR "  %-35s (%s)\n", $pkg, $filename;
 		    if ($orig_mode) {
