@@ -768,12 +768,12 @@ sub get_disc_size {
         $maxdiskblocks = int(8500 * $MB / $blocksize) - $reserved;
         $diskdesc = "8.5GB DVD";
     } elsif ($chosen_disk eq "BD") {
-		# Useable capacity, found by checking some disks
-        $maxdiskblocks = 11230000 - $reserved;
+	# Leave some space for potential formatting/spares on BD
+	$maxdiskblocks = int(24000 * $MB / $blocksize) - $reserved;
         $diskdesc = "25GB BD";
     } elsif ($chosen_disk eq "DLBD") {
-		# Useable capacity, found by checking some disks
-        $maxdiskblocks = 23652352 - $reserved;
+	# Leave some space for potential formatting/spares on BD
+	$maxdiskblocks = int(48000 * $MB / $blocksize) - $reserved;
         $diskdesc = "50GB DLBD";
     } elsif ($chosen_disk =~ /STICK(\d+)GB/) {
         $maxdiskblocks = int($1 * $GB / $blocksize) - $reserved;
