@@ -21,6 +21,8 @@ Software:
 - make
 - cpp
 - mkisofs/genisoimage
+- dpkg-dev
+- wget
 - the perl Digest::MD5 module
 - the perl Compress::Zlib module
 - lynx (for text version of README.html) and todos from sysutils
