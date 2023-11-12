@@ -81,6 +81,8 @@ if [ $NUM_ARCHES = 1 ] ; then
                     export VOLID="$VOLID_BASE f-amd64 $DISKNUMSTRING" ;;
                 hurd-i386)
                     export VOLID="$VOLID_BASE h-i386 $DISKNUMSTRING" ;;
+                hurd-amd64)
+                    export VOLID="$VOLID_BASE h-amd64 $DISKNUMSTRING" ;;
                 *)
                     export VOLID="$VOLID_BASE $ARCHES $DISKNUMSTRING" ;;
             esac

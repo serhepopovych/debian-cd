@@ -70,7 +70,7 @@ DEBOOTSTRAP_OPTS=--no-check-gpg
 endif
 
 ## Additional packages required for Debian Ports
-DEBIAN_PORTS_ARCHES=alpha hppa ia64 hurd-i386 m68k powerpc powerpcspe ppc64 riscv64 sh4 sparc sparc64 x32
+DEBIAN_PORTS_ARCHES=alpha hppa ia64 hurd-amd64 hurd-i386 m68k powerpc powerpcspe ppc64 riscv64 sh4 sparc sparc64 x32
 ifneq (,$(filter $(DEBIAN_PORTS_ARCHES),$(ARCHES)))
 export BASE_INCLUDE := $(BASEDIR)/data/debian_ports $(BASE_INCLUDE)
 endif

@@ -12,6 +12,9 @@ debian-cd (3.2.2) UNRELEASED; urgency=medium
   * Update DebianEdu installer banner and syslinux splash image
     for bookworm
 
+  [ Samuel Thibault ]
+  * Add hurd-amd64 case.
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 12 Jun 2023 08:36:50 +0100
 
 debian-cd (3.2.1) unstable; urgency=medium
