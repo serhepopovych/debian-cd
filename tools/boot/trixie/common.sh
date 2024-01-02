@@ -240,7 +240,7 @@ install_firmwares_initrd () {
             for FILE in $FILES; do
                 dpkg -x "${MIRROR}/${FILE}" ${FWDIR}
             done
-            (cd ${FWDIR} ; find lib/firmware | cpio -oA -H newc -F $initrd)
+            (cd ${FWDIR} ; find lib/firmware -o usr/lib/firmware | cpio -oA -H newc -F $initrd)
             pigz -9nm $initrd
             rm -fr $FWDIR
 	else

@@ -7,6 +7,8 @@ debian-cd (3.2.2) UNRELEASED; urgency=medium
     control which packages are included - see
     tasks/$codename/firmware-exclude. Closes: #1032071
   * Tweak sizes slightly for BD media.
+  * Look for firmware in /usr/lib/firmware as well as /lib/firmware.
+    Closes: #1059858
 
   [ Guido Berhoerster ]
   * Update DebianEdu installer banner and syslinux splash image
