@@ -570,7 +570,7 @@ sub check_base_installable {
 		close ELIST;
 	}
 		
-	open (DLIST, "debootstrap --arch $arch --print-debs $codename $tdir/debootstrap_tmp file:$mirror $debootstrap_script 2>/dev/null | tr ' ' '\n' |")
+	open (DLIST, "debootstrap --arch $arch --print-debs $codename $tdir/debootstrap_tmp file:$mirror $debootstrap_script 2>/dev/null | grep -v ^I: | tr ' ' '\n' |")
 		 || die "Can't fork debootstrap : $!\n";
 	while (defined($p = <DLIST>)) {
         if ($p =~ m/^E:/) {
