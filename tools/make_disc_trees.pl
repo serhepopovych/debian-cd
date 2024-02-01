@@ -93,7 +93,9 @@ $extranonfree = read_env('EXTRANONFREE', 0);
 $nonfree = read_env('NONFREE', 0);
 $contrib = read_env('CONTRIB', 0);
 $use_local = read_env('LOCAL', 0);
-	
+
+my $dep11 = read_env('DEP11', 1);
+
 my $list = "$tdir/list";
 my $bdir = "$tdir/$codename";
 my $log = "$bdir/make_disc_tree.log";
@@ -1210,8 +1212,6 @@ sub add_firmware_stuff {
     local $_ = shift;
     my ($p, $file, $section, $component, $dep11_dir);
     my $blocks_added = 0;
-    my @args = ("$basedir/tools/generate_firmware_patterns",
-		"--output-dir", "$dir/firmware/dep11");
 
     m/^Package: (\S+)/m and $p = $1;
     m/^Section: (\S+)/m and $section = $1;
@@ -1259,16 +1259,21 @@ sub add_firmware_stuff {
 	$blocks_added -= get_file_blocks("$dir/firmware/dep11/$p.component");
     }
 
-    msg_ap(0, "(Maybe) generate fw pattern file $dir/firmware/dep11/$p.patterns\n");
-    push(@args, "--package", "$p");
-    push(@args, "$dep11_dir/Components-$arch.yml.gz");
-    system(@args) == 0 or die "generate_firmware_patterns failed: $?";
-    if (-f "$dir/firmware/dep11/$p.patterns") {
-	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.patterns");
-	# Make sure apt-setup can be configured appropriately:
-	write_file("$dir/firmware/dep11/$p.component", $component)
-	    or die "unable to create $dir/firmware/dep11/$p.component";
-	$blocks_added += get_file_blocks("$dir/firmware/dep11/$p.component");
+    # Do only if dep11 is enabled
+    if ($dep11) {
+	msg_ap(0, "(Maybe) generate fw pattern file $dir/firmware/dep11/$p.patterns\n");
+	my @args = ("$basedir/tools/generate_firmware_patterns",
+		    "--output-dir", "$dir/firmware/dep11");
+	push(@args, "--package", "$p");
+	push(@args, "$dep11_dir/Components-$arch.yml.gz");
+	system(@args) == 0 or die "generate_firmware_patterns failed: $?";
+	if (-f "$dir/firmware/dep11/$p.patterns") {
+	    $blocks_added += get_file_blocks("$dir/firmware/dep11/$p.patterns");
+	    # Make sure apt-setup can be configured appropriately:
+	    write_file("$dir/firmware/dep11/$p.component", $component)
+		or die "unable to create $dir/firmware/dep11/$p.component";
+	    $blocks_added += get_file_blocks("$dir/firmware/dep11/$p.component");
+	}
     }
 
     # Find the current size of the firmware Contents file
