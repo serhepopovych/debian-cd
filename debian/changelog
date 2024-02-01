@@ -17,6 +17,9 @@ debian-cd (3.2.2) UNRELEASED; urgency=medium
   [ Samuel Thibault ]
   * Add hurd-amd64 case.
 
+  [ Arnaud Rebillout ]
+  * Don't generate fw pattern file if DEP11 is set to 0
+
  -- Steve McIntyre <93sam@debian.org>  Mon, 12 Jun 2023 08:36:50 +0100
 
 debian-cd (3.2.1) unstable; urgency=medium
