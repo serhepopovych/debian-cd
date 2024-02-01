@@ -19,6 +19,7 @@ debian-cd (3.2.2) UNRELEASED; urgency=medium
 
   [ Arnaud Rebillout ]
   * Don't generate fw pattern file if DEP11 is set to 0
+  * Support a fonts directory, and make *.pf2 optional
 
  -- Steve McIntyre <93sam@debian.org>  Mon, 12 Jun 2023 08:36:50 +0100
 
