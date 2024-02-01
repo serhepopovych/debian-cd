@@ -444,7 +444,13 @@ if [ -d boot$N/isolinux/grub-$ARCH ] && [ $BOOT_EFI -ne 0 ] ; then
 		fi;;
 	esac
 
-	cp -a $dir/*-efi $dir/*.pf2 $dir/*.cfg $CDDIR/boot/grub
+	cp -a $dir/*-efi $dir/*.cfg $CDDIR/boot/grub
+	if ls $dir/*.pf2 >/dev/null 2>&1; then
+	    cp -a $dir/*.pf2 $CDDIR/boot/grub
+	fi
+	if [ -e $dir/fonts/ ]; then
+	    cp -a $dir/fonts/ $CDDIR/boot/grub
+	fi
 	if [ $SB = 1 ]; then
 	    echo "  Removing non-SB grub files and config for $grub_arch"
 	    rm -f $CDDIR/boot/grub/*-efi/*.mod $CDDIR/boot/grub/*-efi/*.lst
