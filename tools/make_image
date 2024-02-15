@@ -19,13 +19,11 @@ NUM_ARCHES=`echo $ARCHES | wc -w`
 
 if [ "$CD"x = ""x ] ; then
     echo "Generating the $ARCHES iso/jigdo images ..."
-    FILES=$DIR/*.volid
 else
     echo "Generating $ARCHES iso/jigdo image number $CD ..."
-    FILES=$DIR/$CD.volid
 fi
 
-NUM_CDS=`ls -1 $FILES | wc -l`
+NUM_CDS=$(ls -1 $DIR/*.volid | wc -l)
 
 last_minute_update () {
     echo "  Last-minute updates:"
