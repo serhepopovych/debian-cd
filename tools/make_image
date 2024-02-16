@@ -23,7 +23,8 @@ else
     echo "Generating $ARCHES iso/jigdo image number $CD ..."
 fi
 
-NUM_CDS=$(ls -1 $DIR/*.volid | wc -l)
+FILES=$DIR/*.volid
+NUM_CDS=$(ls -1 $FILES | wc -l)
 
 last_minute_update () {
     echo "  Last-minute updates:"
